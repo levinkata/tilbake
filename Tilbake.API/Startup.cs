@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tilbake.Infrastructure.Data.Context;
+using Tilbake.Infrastructure.IoC;
 
 namespace Tilbake.API
 {
@@ -24,6 +25,8 @@ namespace Tilbake.API
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
 
             services.AddControllers();
+
+            RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +48,11 @@ namespace Tilbake.API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            DependencyContainer.RegisterServices(services);
         }
     }
 }

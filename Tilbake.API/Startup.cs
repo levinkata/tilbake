@@ -24,6 +24,7 @@ namespace Tilbake.API
             services.AddDbContext<TilbakeDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
 
+            services.AddCors();
             services.AddControllers();
 
             RegisterServices(services);
@@ -37,6 +38,12 @@ namespace Tilbake.API
                 app.UseDeveloperExceptionPage();
             }
 
+
+            app.UseCors(builder =>
+                builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+            );
 
             app.UseHttpsRedirection();
 

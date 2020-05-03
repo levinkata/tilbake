@@ -12,10 +12,16 @@ namespace Tilbake.Infrastructure.IoC
         {
 
             //  Application Layer
+            services.AddScoped<IBankService, BankService>();
+            services.AddScoped<IBankBranchService, BankBranchService>();
             services.AddScoped<IInsurerService, InsurerService>();
+            services.AddScoped<IOccupationService, OccupationService>();
 
             //  Infrastructure Data Layer
+            services.AddScoped<IBankRepository, BankRepository>();
+            services.AddScoped<IBankBranchRepository, BankBranchRepository>();
             services.AddScoped<IInsurerRepository, InsurerRepository>();
+            services.AddScoped<IOccupationRepository, OccupationRepository>();
         }
 
 

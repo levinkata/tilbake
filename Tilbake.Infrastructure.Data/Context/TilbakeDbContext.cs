@@ -17,7 +17,10 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<BodyType> BodyTypes { get; set; }
         public DbSet<CoverType> CoverTypes { get; set; }
         public DbSet<Insurer> Insurers { get; set; }
+        public DbSet<Klient> Klients { get; set; }
+        public DbSet<Land> Lands { get; set; }
         public DbSet<Occupation> Occupations { get; set; }
+        public DbSet<Title> Titles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,7 +34,10 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<BodyType>().ToTable("BodyType");
             builder.Entity<CoverType>().ToTable("CoverType");
             builder.Entity<Insurer>().ToTable("Insurer");
+            builder.Entity<Klient>().ToTable("Klient");
+            builder.Entity<Land>().ToTable("Land");
             builder.Entity<Occupation>().ToTable("Occupation");
+            builder.Entity<Title>().ToTable("Title");
         }
     }
 }

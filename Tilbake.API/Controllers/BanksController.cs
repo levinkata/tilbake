@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.ViewModels;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Data.Context;
 
 namespace Tilbake.API.Controllers
 {

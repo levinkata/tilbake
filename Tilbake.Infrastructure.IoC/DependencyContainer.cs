@@ -17,6 +17,7 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IKlientService, KlientService>();
             services.AddScoped<ILandService, LandService>();
             services.AddScoped<IOccupationService, OccupationService>();
+            services.AddScoped<IPortfolioService, PortfolioService>();
             services.AddScoped<ITitleService, TitleService>();
 
             //  Infrastructure Data Layer
@@ -26,6 +27,7 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IKlientRepository, KlientRepository>();
             services.AddScoped<ILandRepository, LandRepository>();
             services.AddScoped<IOccupationRepository, OccupationRepository>();
+            services.AddScoped<IPortfolioRepository, PortfolioRepository>();
             services.AddScoped<ITitleRepository, TitleRepository>();
         }
     }

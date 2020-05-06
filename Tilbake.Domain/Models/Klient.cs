@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tilbake.Domain.Enums;
 
@@ -70,5 +71,7 @@ namespace Tilbake.Domain.Models
         public virtual Land Land { get; private set; }
         public virtual Title Title { get; private set; }
         public virtual Occupation Occupation { get; private set; }
+
+        public virtual IReadOnlyCollection<PortfolioKlient> PortfolioKlients { get; set; } = new HashSet<PortfolioKlient>();
     }
 }

@@ -24,27 +24,7 @@ namespace Tilbake.API.Controllers
         public async Task<IActionResult> GetKlients()
         {
             KlientsViewModel model = await _klientService.GetAllAsync().ConfigureAwait(true);
-            var klients = from k in model.Klients
-                          select new {
-                                        k.ID,
-                                        Title = k.Title.Name,
-                                        k.KlientNumber,
-                                        k.KlientType,
-                                        k.FirstName,
-                                        k.LastName,
-                                        k.BirthDate,
-                                        k.Gender,
-                                        k.IDNumber,
-                                        k.Phone,
-                                        k.Mobile,
-                                        k.Fax,
-                                        k.Email,
-                                        k.Carrier,
-                                        Occupation = k.Occupation.Name,
-                                        Land = k.Land.Name
-                                     };
-
-            return await Task.Run(() => Ok(klients)).ConfigureAwait(true);
+            return await Task.Run(() => Ok(model.Klients)).ConfigureAwait(true);
         }
 
         // GET: api/Klients/5

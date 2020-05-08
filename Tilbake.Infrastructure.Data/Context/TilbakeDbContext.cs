@@ -18,6 +18,7 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<CoverType> CoverTypes { get; set; }
         public DbSet<Insurer> Insurers { get; set; }
         public DbSet<Klient> Klients { get; set; }
+        public DbSet<KlientNumberGenerator> KlientNumberGenerators { get; set; }
         public DbSet<Land> Lands { get; set; }
         public DbSet<Occupation> Occupations { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
@@ -37,6 +38,13 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<CoverType>().ToTable("CoverType");
             builder.Entity<Insurer>().ToTable("Insurer");
             builder.Entity<Klient>().ToTable("Klient");
+
+            builder.Entity<KlientNumberGenerator>(p =>
+            {
+                p.ToTable("KlientNumberGenerator");
+                p.HasKey(r => r.KlientNumber).HasName("PK_KlientNumber");
+            });
+
             builder.Entity<Land>().ToTable("Land");
             builder.Entity<Occupation>().ToTable("Occupation");
             builder.Entity<Portfolio>().ToTable("Portfolio");

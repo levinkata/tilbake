@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Data.Context;
+using Tilbake.Infrastructure.Data.Generators;
 
 namespace Tilbake.Infrastructure.Data.Repositories
 {
@@ -31,9 +32,33 @@ namespace Tilbake.Infrastructure.Data.Repositories
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var klientNumber = KlientNumbers.Get(_context);
 
-                klient.ID = Guid.NewGuid();
-                await _context.Klients.AddAsync((Klient)klient).ConfigureAwait(true);
+                await Task.Run(async () =>
+                {
+                    klient.ID = Guid.NewGuid();
+                    klient.KlientNumber = klientNumber;
+                    await _context.Klients.AddAsync((Klient)klient).ConfigureAwait(true);
+
+                    if (portfolioId != Guid.Empty)
+                    {
+                        PortfolioKlient portfolioKlient = new PortfolioKlient()
+                        {
+                            ID = Guid.NewGuid(),
+                            PortfolioID = portfolioId,
+                            KlientID = klient.ID
+                        };
+                        await _context.PortfolioKlients.AddAsync((PortfolioKlient)portfolioKlient).ConfigureAwait(true);
+                    }
+
+                    KlientNumberGenerator klientNumberGenerator = new KlientNumberGenerator
+                    {
+                        KlientNumber = klientNumber
+                    };
+                    await _context.KlientNumberGenerators.AddAsync(klientNumberGenerator).ConfigureAwait(true);
+
+                }).ConfigureAwait(true);
+
                 return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)

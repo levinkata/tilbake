@@ -18,7 +18,7 @@ namespace Tilbake.API.Controllers
             var genders = Enum.GetValues(typeof(Gender))
                                                 .Cast<Gender>().Select(c => new
                                                 {
-                                                    ID = c.ToString(),
+                                                    ID = (int)c,
                                                     Name = c.GetDisplayName()
                                                 });
             return await Task.Run(() => Ok(genders)).ConfigureAwait(true);
@@ -26,12 +26,12 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Genders/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGender(string id)
+        public async Task<IActionResult> GetGender(int id)
         {
             var gender = Enum.GetValues(typeof(Gender))
                                                 .Cast<Gender>().Select(c => new
                                                 {
-                                                    ID = c.ToString(),
+                                                    ID = (int)c,
                                                     Name = c.GetDisplayName()
                                                 }).Where(c => c.ID == id);
 

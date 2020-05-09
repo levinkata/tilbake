@@ -18,7 +18,7 @@ namespace Tilbake.API.Controllers
             var carriers = Enum.GetValues(typeof(Carrier))
                                                 .Cast<Carrier>().Select(c => new
                                                 {
-                                                    ID = c.ToString(),
+                                                    ID = (int)c,
                                                     Name = c.GetDisplayName()
                                                 });
             return await Task.Run(() => Ok(carriers)).ConfigureAwait(true);
@@ -26,12 +26,12 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Carriers/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCarrier(string id)
+        public async Task<IActionResult> GetCarrier(int id)
         {
             var carrier = Enum.GetValues(typeof(Carrier))
                                                 .Cast<Carrier>().Select(c => new
                                                 {
-                                                    ID = c.ToString(),
+                                                    ID = (int)c,
                                                     Name = c.GetDisplayName()
                                                 }).Where(c => c.ID == id);
             

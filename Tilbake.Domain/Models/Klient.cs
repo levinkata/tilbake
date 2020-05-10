@@ -17,7 +17,7 @@ namespace Tilbake.Domain.Models
 
         [Display(Name = "Client Type")]
         [EnumDataType(typeof(KlientType))]
-        public KlientType KlientType { get; set; }
+        public string KlientType { get; set; }
 
         [Display(Name = "First Name"), StringLength(50)]
         public string FirstName { get; set; }
@@ -36,7 +36,7 @@ namespace Tilbake.Domain.Models
 
         [Display(Name = "Gender")]
         [EnumDataType(typeof(Gender))]
-        public Gender Gender { get; set; }
+        public string Gender { get; set; }
 
         [Display(Name = "ID Number"), StringLength(50)]
         [Required(ErrorMessage = "ID Number is required")]
@@ -58,7 +58,7 @@ namespace Tilbake.Domain.Models
 
         [Display(Name = "Notification Delivery")]
         [EnumDataType(typeof(Carrier))]
-        public Carrier Carrier { get; set; }
+        public string Carrier { get; set; }
 
         [Display(Name = "Occupation")]
         public Guid OccupationID { get; set; }
@@ -66,12 +66,9 @@ namespace Tilbake.Domain.Models
         [Display(Name = "Nationality")]
         public Guid LandID { get; set; }
 
-        public int BulkNumber { get; set; }
-
         public virtual Land Land { get; private set; }
         public virtual Title Title { get; private set; }
         public virtual Occupation Occupation { get; private set; }
-
         public virtual IReadOnlyCollection<PortfolioKlient> PortfolioKlients { get; set; } = new HashSet<PortfolioKlient>();
     }
 }

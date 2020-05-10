@@ -10,8 +10,8 @@ using Tilbake.Infrastructure.Data.Context;
 namespace Tilbake.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TilbakeDbContext))]
-    [Migration("20200508053852_AddKlientNumber")]
-    partial class AddKlientNumber
+    [Migration("20200510090710_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,11 +125,8 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("BulkNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Carrier")
-                        .HasColumnType("int");
+                    b.Property<string>("Carrier")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -144,8 +141,8 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IDNumber")
                         .IsRequired()
@@ -155,8 +152,8 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.Property<int>("KlientNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("KlientType")
-                        .HasColumnType("int");
+                    b.Property<string>("KlientType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("LandID")
                         .HasColumnType("uniqueidentifier");
@@ -190,12 +187,6 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.HasIndex("TitleID");
 
                     b.ToTable("Klient");
-
-                    b.HasCheckConstraint("CK_Klient_Carrier_Enum_Constraint", "[Carrier] IN(1, 2, 3)");
-
-                    b.HasCheckConstraint("CK_Klient_Gender_Enum_Constraint", "[Gender] IN(1, 2, 3)");
-
-                    b.HasCheckConstraint("CK_Klient_KlientType_Enum_Constraint", "[KlientType] IN(1, 2)");
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.KlientNumberGenerator", b =>

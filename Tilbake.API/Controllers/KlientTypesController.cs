@@ -18,7 +18,7 @@ namespace Tilbake.API.Controllers
             var klientTypes = Enum.GetValues(typeof(KlientType))
                                                 .Cast<KlientType>().Select(c => new
                                                 {
-                                                    ID = (int)c,
+                                                    ID = c.ToString(),
                                                     Name = c.GetDisplayName()
                                                 });
             return await Task.Run(() => Ok(klientTypes)).ConfigureAwait(true);
@@ -26,12 +26,12 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientTypes/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetKlientType(int id)
+        public async Task<IActionResult> GetKlientType(string id)
         {
             var klientType = Enum.GetValues(typeof(KlientType))
                                                 .Cast<KlientType>().Select(c => new
                                                 {
-                                                    ID = (int)c,
+                                                    ID = c.ToString(),
                                                     Name = c.GetDisplayName()
                                                 }).Where(c => c.ID == id);
 

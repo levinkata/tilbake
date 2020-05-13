@@ -21,22 +21,27 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<Component> Components { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<CoverType> CoverTypes { get; set; }
+        public DbSet<DriverType> DriverTypes { get; set; }
         public DbSet<Glass> Glasses { get; set; }
         public DbSet<Incident> Incidents { get; set; }
         public DbSet<Insurer> Insurers { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
+        public DbSet<InvoiceNumberGenerator> InvoiceNumberGenerators { get; set; }
         public DbSet<InvoiceStatus> InvoiceStatuses { get; set; }
         public DbSet<Klient> Klients { get; set; }
         public DbSet<KlientBankAccount> KlientBankAccounts { get; set; }
         public DbSet<KlientDocument> KlientDocuments { get; set; }
         public DbSet<KlientNumberGenerator> KlientNumberGenerators { get; set; }
-        public DbSet<KlientRisk> KlientRisk { get; set; }
+        public DbSet<KlientRisk> KlientRisks { get; set; }
         public DbSet<Krav> Kravs { get; set; }
         public DbSet<KravStatus> KravStatuses { get; set; }
         public DbSet<Land> Lands { get; set; }
         public DbSet<Motor> Motors { get; set; }
         public DbSet<MotorImprovement> MotorImprovements { get; set; }
+        public DbSet<MotorMake> MotorMakes { get; set; }
+        public DbSet<MotorModel> MotorModels { get; set; }
+        public DbSet<MotorUse> MotorUses { get; set; }
         public DbSet<Occupation> Occupations { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<PolitikkStatus> PolicyStatuses { get; set; }
@@ -49,6 +54,7 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<PremiumType> PremiumTypes { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<QuoteItem> QuoteItems { get; set; }
+        public DbSet<QuoteNumberGenerator> QuoteNumberGenerators { get; set; }
         public DbSet<QuoteStatus> QuoteStatuses { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<Risk> Risks { get; set; }
@@ -71,11 +77,19 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<Component>().ToTable("Component");
             builder.Entity<Content>().ToTable("Content");
             builder.Entity<CoverType>().ToTable("CoverType");
+            builder.Entity<DriverType>().ToTable("DriverType");
             builder.Entity<Glass>().ToTable("Glass");
             builder.Entity<Incident>().ToTable("Incident");
             builder.Entity<Insurer>().ToTable("Insurer");
             builder.Entity<Invoice>().ToTable("Invoice");
             builder.Entity<InvoiceItem>().ToTable("InvoiceItem");
+
+            builder.Entity<InvoiceNumberGenerator>(p =>
+            {
+                p.ToTable("InvoiceNumberGenerator");
+                p.HasKey(r => r.InvoiceNumber).HasName("PK_InvoiceNumber");
+            });
+
             builder.Entity<InvoiceStatus>().ToTable("InvoiceStatus");
             builder.Entity<Klient>().ToTable("Klient");
             
@@ -105,6 +119,9 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<Land>().ToTable("Land");
             builder.Entity<Motor>().ToTable("Motor");
             builder.Entity<MotorImprovement>().ToTable("MotorImprovement");
+            builder.Entity<MotorMake>().ToTable("MotorMake");
+            builder.Entity<MotorModel>().ToTable("MotorModel");
+            builder.Entity<MotorUse>().ToTable("MotorUse");
             builder.Entity<Occupation>().ToTable("Occupation");
             builder.Entity<PolitikkStatus>().ToTable("PolicyStatus");
             builder.Entity<Politikk>().ToTable("Politikk");
@@ -121,6 +138,14 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<PortfolioKlient>().ToTable("PortfolioKlient");
             builder.Entity<Premium>().ToTable("Premium");
             builder.Entity<PremiumType>().ToTable("PremiumType");
+
+            builder.Entity<QuoteNumberGenerator>(p =>
+            {
+                p.ToTable("QuoteNumberGenerator");
+                p.HasKey(r => r.QuoteNumber).HasName("PK_QuoteNumber");
+            });
+
+            builder.Entity<QuoteItem>().ToTable("QuoteItem");
             builder.Entity<QuoteStatus>().ToTable("QuoteStatus");
             builder.Entity<Region>().ToTable("Region");
             builder.Entity<Risk>().ToTable("Risk");

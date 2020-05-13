@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientDocuments
         [HttpGet]
-        public async Task<ActionResult<KlientDocumentsViewModel>> GetKlientDocuments(Guid klientId)
+        public async Task<ActionResult> GetKlientDocuments(Guid klientId)
         {
             KlientDocumentsViewModel model = await _klientDocumentService.GetAllAsync(klientId).ConfigureAwait(true);
             return await Task.Run(() => Ok(model.KlientDocuments)).ConfigureAwait(true);

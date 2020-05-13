@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Portfolios
         [HttpGet]
-        public async Task<ActionResult<PortfoliosViewModel>> GetPortfolios()
+        public async Task<ActionResult> GetPortfolios()
         {
             PortfoliosViewModel model = await _portfolioService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Portfolios)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Portfolios/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Portfolio>> GetPortfolio(Guid id)
+        public async Task<ActionResult> GetPortfolio(Guid id)
         {
             PortfolioViewModel model = await _portfolioService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Portfolios
         [HttpPost]
-        public async Task<ActionResult<PortfolioViewModel>> PostPortfolio(Portfolio portfolio)
+        public async Task<ActionResult> PostPortfolio(Portfolio portfolio)
         {
             PortfolioViewModel model = new PortfolioViewModel()
             {

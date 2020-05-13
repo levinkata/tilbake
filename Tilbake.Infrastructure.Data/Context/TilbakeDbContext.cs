@@ -18,7 +18,6 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<BankBranch> BankBranches { get; set; }
         public DbSet<BodyType> BodyTypes { get; set; }
         public DbSet<City> Cities { get; set; }
-        public DbSet<Component> Components { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<CoverType> CoverTypes { get; set; }
         public DbSet<DriverType> DriverTypes { get; set; }
@@ -48,7 +47,8 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<Politikk> Politikks { get; set; }
         public DbSet<PolitikkRisk> PolitikkRisks { get; set; }
         public DbSet<PolitikkRiskExtension> PolitikkRiskExtensions { get; set; }
-        public DbSet<PolitikkType> PolicyTypes { get; set; }
+        public DbSet<PolitikkStatus> PolitikkStatuses { get; set; }
+        public DbSet<PolitikkType> PolitikkTypes { get; set; }
         public DbSet<PortfolioKlient> PortfolioKlients { get; set; }
         public DbSet<Premium> Premiums { get; set; }
         public DbSet<PremiumType> PremiumTypes { get; set; }
@@ -58,6 +58,8 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<QuoteStatus> QuoteStatuses { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<Risk> Risks { get; set; }
+        public DbSet<RiskItem> RiskItems { get; set; }
+        public DbSet<SalesType> SalesTypes { get; set; }
         public DbSet<Title> Titles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -74,7 +76,6 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<BankBranch>().ToTable("BankBranch");
             builder.Entity<BodyType>().ToTable("BodyType");
             builder.Entity<City>().ToTable("City");
-            builder.Entity<Component>().ToTable("Component");
             builder.Entity<Content>().ToTable("Content");
             builder.Entity<CoverType>().ToTable("CoverType");
             builder.Entity<DriverType>().ToTable("DriverType");
@@ -133,7 +134,8 @@ namespace Tilbake.Infrastructure.Data.Context
                 p.HasKey(r => new { r.PolitikkRiskID, r.ExtensionID }).HasName("PK_PolitikkRiskExtension");
             });
 
-            builder.Entity<PolitikkType>().ToTable("PolicyType");
+            builder.Entity<PolitikkType>().ToTable("PolitikkType");
+            builder.Entity<PolitikkStatus>().ToTable("PolitikkStatus");
             builder.Entity<Portfolio>().ToTable("Portfolio");
             builder.Entity<PortfolioKlient>().ToTable("PortfolioKlient");
             builder.Entity<Premium>().ToTable("Premium");
@@ -149,6 +151,8 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<QuoteStatus>().ToTable("QuoteStatus");
             builder.Entity<Region>().ToTable("Region");
             builder.Entity<Risk>().ToTable("Risk");
+            builder.Entity<RiskItem>().ToTable("RiskItem");
+            builder.Entity<SalesType>().ToTable("SalesType");
             builder.Entity<Title>().ToTable("Title");
         }
     }

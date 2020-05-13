@@ -155,7 +155,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .SingleOrDefaultAsync(e => e.RegNumber == regNumber)).ConfigureAwait(true);
         }
 
-        public async Task<Motor> GetMotorAsync(Guid id)
+        public async Task<Motor> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();

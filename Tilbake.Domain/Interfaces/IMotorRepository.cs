@@ -11,7 +11,7 @@ namespace Tilbake.Domain.Interfaces
         Task<Motor> GetByRegNumberAsync(string regNumber);
         Task<Motor> GetByEngineNumberAsync(string engineNumber);
         Task<Motor> GetByChassissNumberAsync(string chassissNumber);
-        Task<Motor> GetMotorAsync(Guid id);
+        Task<Motor> GetAsync(Guid id);
         Task<int> AddAsync(Guid klientId, Motor motor);
         Task<int> UpdateAsync(Motor motor);
         Task<int> DeleteAsync(Guid id);

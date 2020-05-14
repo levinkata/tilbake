@@ -29,11 +29,11 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
                 insurer.ID = Guid.NewGuid();
-                await _context.Insurers.AddAsync((Insurer)insurer).ConfigureAwait(true);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                await context.Insurers.AddAsync((Insurer)insurer).ConfigureAwait(true);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {
@@ -44,27 +44,27 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<int> DeleteAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            Insurer insurer = await _context.Insurers.FindAsync(id).ConfigureAwait(true);
-            _context.Insurers.Remove((Insurer)insurer);
-            return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+            Insurer insurer = await context.Insurers.FindAsync(id).ConfigureAwait(true);
+            context.Insurers.Remove((Insurer)insurer);
+            return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<Insurer>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Insurers.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+            return await Task.Run(() => context.Insurers.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
         public async Task<Insurer> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Insurers.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+            return await Task.Run(() => context.Insurers.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
         public async Task<int> UpdateAsync(Insurer insurer)
@@ -77,10 +77,10 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                _context.Insurers.Update((Insurer)insurer);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                context.Insurers.Update((Insurer)insurer);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {

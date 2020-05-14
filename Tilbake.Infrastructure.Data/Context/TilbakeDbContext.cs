@@ -57,10 +57,13 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<QuoteNumberGenerator> QuoteNumberGenerators { get; set; }
         public DbSet<QuoteStatus> QuoteStatuses { get; set; }
         public DbSet<Region> Regions { get; set; }
+        public DbSet<ResidenceType> ResidenceTypes { get; set; }        
         public DbSet<Risk> Risks { get; set; }
         public DbSet<RiskItem> RiskItems { get; set; }
+        public DbSet<RoofType> RoofTypes { get; set; }
         public DbSet<SalesType> SalesTypes { get; set; }
         public DbSet<Title> Titles { get; set; }
+        public DbSet<WallType> WallTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -150,10 +153,13 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<QuoteItem>().ToTable("QuoteItem");
             builder.Entity<QuoteStatus>().ToTable("QuoteStatus");
             builder.Entity<Region>().ToTable("Region");
+            builder.Entity<ResidenceType>().ToTable("ResidenceType");            
             builder.Entity<Risk>().ToTable("Risk");
             builder.Entity<RiskItem>().ToTable("RiskItem");
+            builder.Entity<RoofType>().ToTable("RoofType");            
             builder.Entity<SalesType>().ToTable("SalesType");
             builder.Entity<Title>().ToTable("Title");
+            builder.Entity<WallType>().ToTable("WallType");
         }
     }
 }

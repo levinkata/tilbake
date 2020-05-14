@@ -10,20 +10,20 @@ using Tilbake.Infrastructure.Data.Context;
 
 namespace Tilbake.Infrastructure.Data.Repositories
 {
-    public class IncidentRepository : IIncidentRepository
+    public class RegionRepository : IRegionRepository
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public IncidentRepository(IServiceScopeFactory serviceScopeFactory)
+        public RegionRepository(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
         }
         
-        public async Task<int> AddAsync(Incident incident)
+        public async Task<int> AddAsync(Region region)
         {
-            if (incident == null)
+            if (region == null)
             {
-                throw new ArgumentNullException(nameof(incident));
+                throw new ArgumentNullException(nameof(region));
             }
 
             try
@@ -31,8 +31,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                incident.ID = Guid.NewGuid();
-                await context.Incidents.AddAsync((Incident)incident).ConfigureAwait(true);
+                region.ID = Guid.NewGuid();
+                await context.Regions.AddAsync((Region)region).ConfigureAwait(true);
                 return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
@@ -46,32 +46,32 @@ namespace Tilbake.Infrastructure.Data.Repositories
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            Incident incident = await context.Incidents.FindAsync(id).ConfigureAwait(true);
-            context.Incidents.Remove((Incident)incident);
+            Region region = await context.Regions.FindAsync(id).ConfigureAwait(true);
+            context.Regions.Remove((Region)region);
             return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Incident>> GetAllAsync()
+        public async Task<IEnumerable<Region>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => context.Incidents.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+            return await Task.Run(() => context.Regions.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
-        public async Task<Incident> GetAsync(Guid id)
+        public async Task<Region> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => context.Incidents.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+            return await Task.Run(() => context.Regions.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
-        public async Task<int> UpdateAsync(Incident incident)
+        public async Task<int> UpdateAsync(Region region)
         {
-            if (incident == null)
+            if (region == null)
             {
-                throw new ArgumentNullException(nameof(incident));
+                throw new ArgumentNullException(nameof(region));
             }
 
             try
@@ -79,7 +79,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                context.Incidents.Update((Incident)incident);
+                context.Regions.Update((Region)region);
                 return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)

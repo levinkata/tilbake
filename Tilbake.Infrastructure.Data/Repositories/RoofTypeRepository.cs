@@ -10,20 +10,20 @@ using Tilbake.Infrastructure.Data.Context;
 
 namespace Tilbake.Infrastructure.Data.Repositories
 {
-    public class IncidentRepository : IIncidentRepository
+    public class RoofTypeRepository : IRoofTypeRepository
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public IncidentRepository(IServiceScopeFactory serviceScopeFactory)
+        public RoofTypeRepository(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
         }
         
-        public async Task<int> AddAsync(Incident incident)
+        public async Task<int> AddAsync(RoofType roofType)
         {
-            if (incident == null)
+            if (roofType == null)
             {
-                throw new ArgumentNullException(nameof(incident));
+                throw new ArgumentNullException(nameof(roofType));
             }
 
             try
@@ -31,8 +31,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                incident.ID = Guid.NewGuid();
-                await context.Incidents.AddAsync((Incident)incident).ConfigureAwait(true);
+                roofType.ID = Guid.NewGuid();
+                await context.RoofTypes.AddAsync((RoofType)roofType).ConfigureAwait(true);
                 return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
@@ -46,32 +46,32 @@ namespace Tilbake.Infrastructure.Data.Repositories
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            Incident incident = await context.Incidents.FindAsync(id).ConfigureAwait(true);
-            context.Incidents.Remove((Incident)incident);
+            RoofType roofType = await context.RoofTypes.FindAsync(id).ConfigureAwait(true);
+            context.RoofTypes.Remove((RoofType)roofType);
             return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Incident>> GetAllAsync()
+        public async Task<IEnumerable<RoofType>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => context.Incidents.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+            return await Task.Run(() => context.RoofTypes.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
-        public async Task<Incident> GetAsync(Guid id)
+        public async Task<RoofType> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => context.Incidents.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+            return await Task.Run(() => context.RoofTypes.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
-        public async Task<int> UpdateAsync(Incident incident)
+        public async Task<int> UpdateAsync(RoofType roofType)
         {
-            if (incident == null)
+            if (roofType == null)
             {
-                throw new ArgumentNullException(nameof(incident));
+                throw new ArgumentNullException(nameof(roofType));
             }
 
             try
@@ -79,7 +79,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                context.Incidents.Update((Incident)incident);
+                context.RoofTypes.Update((RoofType)roofType);
                 return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)

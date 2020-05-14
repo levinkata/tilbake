@@ -36,15 +36,15 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
                 await Task.Run(async () =>
                 {
-                    var quoteNumber = QuoteNumbers.Get(_context);
+                    var quoteNumber = QuoteNumbers.Get(context);
 
                     quote.ID = Guid.NewGuid();
                     quote.QuoteNumber = quoteNumber;
-                    await _context.Quotes.AddAsync((Quote)quote).ConfigureAwait(true);
+                    await context.Quotes.AddAsync((Quote)quote).ConfigureAwait(true);
 
                     foreach (var c in quoteItems)
                     {
@@ -59,18 +59,18 @@ namespace Tilbake.Infrastructure.Data.Repositories
                             Premium = c.Premium,
                             Excess = c.Excess
                         };
-                        await _context.QuoteItems.AddAsync((QuoteItem)quoteItem).ConfigureAwait(true);
+                        await context.QuoteItems.AddAsync((QuoteItem)quoteItem).ConfigureAwait(true);
                     }
 
                     QuoteNumberGenerator quoteNumberGenerator = new QuoteNumberGenerator
                     {
                         QuoteNumber = quoteNumber
                     };
-                    await _context.QuoteNumberGenerators.AddAsync(quoteNumberGenerator).ConfigureAwait(true);
+                    await context.QuoteNumberGenerators.AddAsync(quoteNumberGenerator).ConfigureAwait(true);
 
                 }).ConfigureAwait(true);
 
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {
@@ -81,19 +81,19 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<int> DeleteAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            Quote quote = await _context.Quotes.FindAsync(id).ConfigureAwait(true);
-            _context.Quotes.Remove((Quote)quote);
-            return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+            Quote quote = await context.Quotes.FindAsync(id).ConfigureAwait(true);
+            context.Quotes.Remove((Quote)quote);
+            return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<Quote>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Quotes
+            return await Task.Run(() => context.Quotes
                                                 .Include(q => q.QuoteStatus)
                                                 .Include(d => d.QuoteItems)
                                                     .ThenInclude(p => p.CoverType)
@@ -106,9 +106,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<Quote> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Quotes
+            return await Task.Run(() => context.Quotes
                                                 .Include(q => q.QuoteStatus)
                                                 .Include(d => d.QuoteItems)
                                                     .ThenInclude(p => p.CoverType)
@@ -121,9 +121,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<Quote> GetByQuoteNumberAsync(int quoteNumber)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Quotes
+            return await Task.Run(() => context.Quotes
                                                 .Include(q => q.QuoteStatus)
                                                 .Include(d => d.QuoteItems)
                                                     .ThenInclude(p => p.CoverType)
@@ -136,9 +136,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<IEnumerable<Quote>> GetklientAsync(Guid klientId)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Quotes
+            return await Task.Run(() => context.Quotes
                                                 .Include(q => q.QuoteStatus)
                                                 .Include(d => d.QuoteItems)
                                                     .ThenInclude(p => p.CoverType)
@@ -159,10 +159,10 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                _context.Quotes.Update((Quote)quote);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                context.Quotes.Update((Quote)quote);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {

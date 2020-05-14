@@ -45,6 +45,5 @@ namespace Tilbake.Application.Services
         {
             return await Task.Run(() => _incidentRepository.UpdateAsync(model.Incident)).ConfigureAwait(true);
         }
-        
     }
 }

@@ -30,11 +30,11 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
                 occupation.ID = Guid.NewGuid();
-                await _context.Occupations.AddAsync((Occupation)occupation).ConfigureAwait(true);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                await context.Occupations.AddAsync((Occupation)occupation).ConfigureAwait(true);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {
@@ -45,27 +45,30 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<int> DeleteAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            Occupation occupation = await _context.Occupations.FindAsync(id).ConfigureAwait(true);
-            _context.Occupations.Remove((Occupation)occupation);
-            return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+            Occupation occupation = await context.Occupations.FindAsync(id).ConfigureAwait(true);
+            context.Occupations.Remove((Occupation)occupation);
+            return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<Occupation>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Occupations.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+            return await Task.Run(() => context.Occupations
+                                                .OrderBy(n => n.Name)
+                                                .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
         public async Task<Occupation> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Occupations.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+            return await Task.Run(() => context.Occupations
+                                                .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
         public async Task<int> UpdateAsync(Occupation occupation)
@@ -78,10 +81,10 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                _context.Occupations.Update((Occupation)occupation);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                context.Occupations.Update((Occupation)occupation);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {

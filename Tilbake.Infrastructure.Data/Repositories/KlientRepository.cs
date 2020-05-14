@@ -31,14 +31,14 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
-                var klientNumber = KlientNumbers.Get(_context);
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var klientNumber = KlientNumbers.Get(context);
 
                 await Task.Run(async () =>
                 {
                     klient.ID = Guid.NewGuid();
                     klient.KlientNumber = klientNumber;
-                    await _context.Klients.AddAsync((Klient)klient).ConfigureAwait(true);
+                    await context.Klients.AddAsync((Klient)klient).ConfigureAwait(true);
 
                     if (portfolioId != Guid.Empty)
                     {
@@ -48,18 +48,18 @@ namespace Tilbake.Infrastructure.Data.Repositories
                             PortfolioID = portfolioId,
                             KlientID = klient.ID
                         };
-                        await _context.PortfolioKlients.AddAsync((PortfolioKlient)portfolioKlient).ConfigureAwait(true);
+                        await context.PortfolioKlients.AddAsync((PortfolioKlient)portfolioKlient).ConfigureAwait(true);
                     }
 
                     KlientNumberGenerator klientNumberGenerator = new KlientNumberGenerator
                     {
                         KlientNumber = klientNumber
                     };
-                    await _context.KlientNumberGenerators.AddAsync(klientNumberGenerator).ConfigureAwait(true);
+                    await context.KlientNumberGenerators.AddAsync(klientNumberGenerator).ConfigureAwait(true);
 
                 }).ConfigureAwait(true);
 
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {
@@ -70,19 +70,19 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<int> DeleteAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            Klient klient = await _context.Klients.FindAsync(id).ConfigureAwait(true);
-            _context.Klients.Remove((Klient)klient);
-            return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+            Klient klient = await context.Klients.FindAsync(id).ConfigureAwait(true);
+            context.Klients.Remove((Klient)klient);
+            return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<Klient>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Klients
+            return await Task.Run(() => context.Klients
                                                 .Include(b => b.Land)
                                                 .Include(b => b.Occupation)
                                                 .Include(b => b.Title)
@@ -93,9 +93,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<Klient> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Klients
+            return await Task.Run(() => context.Klients
                                                 .Include(b => b.Land)
                                                 .Include(b => b.Occupation)
                                                 .Include(b => b.Title)
@@ -105,9 +105,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<Klient> GetByIdNumberAsync(string idNumber)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Klients
+            return await Task.Run(() => context.Klients
                                                 .Include(b => b.Land)
                                                 .Include(b => b.Occupation)
                                                 .Include(b => b.Title)
@@ -117,9 +117,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<Klient> GetByKlientNumberAsync(int klientNumber)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Klients
+            return await Task.Run(() => context.Klients
                                                 .Include(b => b.Land)
                                                 .Include(b => b.Occupation)
                                                 .Include(b => b.Title)
@@ -129,9 +129,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<IEnumerable<Klient>> GetByNameAsync(string klientName)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.Klients
+            return await Task.Run(() => context.Klients
                                                 .Include(b => b.Land)
                                                 .Include(b => b.Occupation)
                                                 .Include(b => b.Title)
@@ -150,10 +150,10 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                _context.Klients.Update((Klient)klient);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                context.Klients.Update((Klient)klient);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {

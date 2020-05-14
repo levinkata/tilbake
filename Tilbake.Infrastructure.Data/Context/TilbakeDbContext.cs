@@ -20,6 +20,7 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<City> Cities { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<CoverType> CoverTypes { get; set; }
+        public DbSet<DocumentType> DocumentTypes { get; set; }        
         public DbSet<DriverType> DriverTypes { get; set; }
         public DbSet<Glass> Glasses { get; set; }
         public DbSet<Incident> Incidents { get; set; }
@@ -45,6 +46,7 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<PolitikkStatus> PolicyStatuses { get; set; }
         public DbSet<Politikk> Politikks { get; set; }
+        public DbSet<PolitikkNumberGenerator> PolitikkNumberGenerators { get; set; }
         public DbSet<PolitikkRisk> PolitikkRisks { get; set; }
         public DbSet<PolitikkRiskExtension> PolitikkRiskExtensions { get; set; }
         public DbSet<PolitikkStatus> PolitikkStatuses { get; set; }
@@ -81,6 +83,7 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<City>().ToTable("City");
             builder.Entity<Content>().ToTable("Content");
             builder.Entity<CoverType>().ToTable("CoverType");
+            builder.Entity<DocumentType>().ToTable("DocumentType");            
             builder.Entity<DriverType>().ToTable("DriverType");
             builder.Entity<Glass>().ToTable("Glass");
             builder.Entity<Incident>().ToTable("Incident");
@@ -129,6 +132,13 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<Occupation>().ToTable("Occupation");
             builder.Entity<PolitikkStatus>().ToTable("PolicyStatus");
             builder.Entity<Politikk>().ToTable("Politikk");
+
+            builder.Entity<PolitikkNumberGenerator>(p =>
+            {
+                p.ToTable("PolitikkNumberGenerator");
+                p.HasKey(r => r.PolitikkNumber).HasName("PK_PolitikkNumber");
+            });
+
             builder.Entity<PolitikkRisk>().ToTable("PolitikkRisk");
             
             builder.Entity<PolitikkRiskExtension>(p =>

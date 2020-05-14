@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Models;
@@ -30,11 +29,11 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
                 bodyType.ID = Guid.NewGuid();
-                await _context.BodyTypes.AddAsync((BodyType)bodyType).ConfigureAwait(true);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                await context.BodyTypes.AddAsync((BodyType)bodyType).ConfigureAwait(true);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {
@@ -45,19 +44,19 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<int> DeleteAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            BodyType bodyType = await _context.BodyTypes.FindAsync(id).ConfigureAwait(true);
-            _context.BodyTypes.Remove((BodyType)bodyType);
-            return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+            BodyType bodyType = await context.BodyTypes.FindAsync(id).ConfigureAwait(true);
+            context.BodyTypes.Remove((BodyType)bodyType);
+            return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<BodyType>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.BodyTypes
+            return await Task.Run(() => context.BodyTypes
                                                 .OrderBy(n => n.Name)
                                                 .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
@@ -65,9 +64,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
         public async Task<BodyType> GetAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => _context.BodyTypes
+            return await Task.Run(() => context.BodyTypes
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
@@ -81,10 +80,10 @@ namespace Tilbake.Infrastructure.Data.Repositories
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                _context.BodyTypes.Update((BodyType)bodyType);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
+                context.BodyTypes.Update((BodyType)bodyType);
+                return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)
             {

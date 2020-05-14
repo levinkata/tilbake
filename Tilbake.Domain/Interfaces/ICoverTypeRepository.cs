@@ -5,7 +5,7 @@ using Tilbake.Domain.Models;
 
 namespace Tilbake.Domain.Interfaces
 {
-    public interface ICoverTypeRespository
+    public interface ICoverTypeRepository
     {
         Task<IEnumerable<CoverType>> GetAllAsync();
         Task<CoverType> GetAsync(Guid id);

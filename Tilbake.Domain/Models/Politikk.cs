@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tilbake.Domain.Attributes;
 using Tilbake.Domain.Enums;
@@ -53,5 +54,7 @@ namespace Tilbake.Domain.Models
         public virtual PolitikkType PolitikkType { get; private set; }
         public virtual PortfolioKlient PortfolioKlient { get; private set; }
         public virtual SalesType SalesType { get; private set; }
+
+        public virtual IReadOnlyCollection<PolitikkRisk> PolitikkRisks { get; set; } = new HashSet<PolitikkRisk>();
     }
 }

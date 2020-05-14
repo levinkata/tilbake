@@ -14,10 +14,13 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBankBranchService, BankBranchService>();
             services.AddScoped<IBodyTypeService, BodyTypeService>();
+            services.AddScoped<ICoverTypeService, CoverTypeService>();
+            services.AddScoped<IDocumentTypeService, DocumentTypeService>();
             services.AddScoped<IDriverTypeService, DriverTypeService>();
             services.AddScoped<IIncidentService, IncidentService>();
             services.AddScoped<IInsurerService, InsurerService>();            
             services.AddScoped<IKlientService, KlientService>();
+            services.AddScoped<IKlientBankAccountService, KlientBankAccountService>();
             services.AddScoped<IKlientDocumentService, KlientDocumentService>();
             services.AddScoped<ILandService, LandService>();
             services.AddScoped<IMotorService, MotorService>();
@@ -25,20 +28,29 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IMotorModelService, MotorModelService>();
             services.AddScoped<IMotorUseService, MotorUseService>();
             services.AddScoped<IOccupationService, OccupationService>();
+            services.AddScoped<IPolitikkService, PolitikkService>();
+            services.AddScoped<IPolitikkRiskService, PolitikkRiskService>();
             services.AddScoped<IPortfolioService, PortfolioService>();
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<IQuoteStatusService, QuoteStatusService>();
+            services.AddScoped<IRegionService, RegionService>();            
+            services.AddScoped<IResidenceTypeService, ResidenceTypeService>();
             services.AddScoped<IRiskItemService, RiskItemService>();
+            services.AddScoped<IRoofTypeService, RoofTypeService>();
             services.AddScoped<ITitleService, TitleService>();
-
+            services.AddScoped<IWallTypeService, WallTypeService>();
+            
             //  Infrastructure Data Layer
             services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<IBankBranchRepository, BankBranchRepository>();
             services.AddScoped<IBodyTypeRepository, BodyTypeRepository>();
+            services.AddScoped<ICoverTypeRepository, CoverTypeRepository>();
+            services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
             services.AddScoped<IDriverTypeRepository, DriverTypeRepository>();
             services.AddScoped<IIncidentRepository, IncidentRepository>();
             services.AddScoped<IInsurerRepository, InsurerRepository>();
             services.AddScoped<IKlientRepository, KlientRepository>();
+            services.AddScoped<IKlientBankAccountRepository, KlientBankAccountRepository>();
             services.AddScoped<IKlientDocumentRepository, KlientDocumentRepository>();
             services.AddScoped<ILandRepository, LandRepository>();
             services.AddScoped<IMotorRepository, MotorRepository>();
@@ -46,11 +58,17 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IMotorModelRepository, MotorModelRepository>();
             services.AddScoped<IMotorUseRepository, MotorUseRepository>();
             services.AddScoped<IOccupationRepository, OccupationRepository>();
+            services.AddScoped<IPolitikkRepository, PolitikkRepository>();
+            services.AddScoped<IPolitikkRiskRepository, PolitikkRiskRepository>();
             services.AddScoped<IPortfolioRepository, PortfolioRepository>();
             services.AddScoped<IQuoteRepository, QuoteRepository>();
             services.AddScoped<IQuoteStatusRepository, QuoteStatusRepository>();
+            services.AddScoped<IRegionRepository, RegionRepository>();             
+            services.AddScoped<IResidenceTypeRepository, ResidenceTypeRepository>();            
             services.AddScoped<IRiskItemRepository, RiskItemRepository>();
+            services.AddScoped<IRoofTypeRepository, RoofTypeRepository>();            
             services.AddScoped<ITitleRepository, TitleRepository>();
+            services.AddScoped<IWallTypeRepository, WallTypeRepository>();
         }
     }
 }

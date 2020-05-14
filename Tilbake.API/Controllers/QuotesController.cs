@@ -65,7 +65,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Quotes
         [HttpPost]
-        public async Task<ActionResult> PostQuote(Quote quote, List<QuoteItem> quoteItems)
+        public async Task<ActionResult> PostQuote(Quote quote, [FromBodyAttribute] List<QuoteItem> quoteItems)
         {
             QuoteViewModel model = new QuoteViewModel()
             {

@@ -9,11 +9,11 @@ namespace Tilbake.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuoteStatussController : ControllerBase
+    public class QuoteStatusesController : ControllerBase
     {
         private readonly IQuoteStatusService _quoteStatusService;
 
-        public QuoteStatussController(IQuoteStatusService quoteStatusService)
+        public QuoteStatusesController(IQuoteStatusService quoteStatusService)
         {
             _quoteStatusService = quoteStatusService;
         }

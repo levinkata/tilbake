@@ -23,6 +23,7 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<DocumentType> DocumentTypes { get; set; }        
         public DbSet<DriverType> DriverTypes { get; set; }
         public DbSet<Glass> Glasses { get; set; }
+        public DbSet<House> Houses { get; set; }
         public DbSet<Incident> Incidents { get; set; }
         public DbSet<Insurer> Insurers { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
@@ -35,6 +36,7 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<KlientNumberGenerator> KlientNumberGenerators { get; set; }
         public DbSet<KlientRisk> KlientRisks { get; set; }
         public DbSet<Krav> Kravs { get; set; }
+        public DbSet<KravNumberGenerator> KravNumberGenerators { get; set; }
         public DbSet<KravStatus> KravStatuses { get; set; }
         public DbSet<Land> Lands { get; set; }
         public DbSet<Motor> Motors { get; set; }
@@ -86,6 +88,7 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<DocumentType>().ToTable("DocumentType");            
             builder.Entity<DriverType>().ToTable("DriverType");
             builder.Entity<Glass>().ToTable("Glass");
+            builder.Entity<House>().ToTable("House");
             builder.Entity<Incident>().ToTable("Incident");
             builder.Entity<Insurer>().ToTable("Insurer");
             builder.Entity<Invoice>().ToTable("Invoice");
@@ -120,6 +123,12 @@ namespace Tilbake.Infrastructure.Data.Context
             {
                 p.ToTable("Krav");
                 p.HasKey(r => r.KravNumber).HasName("PK_Krav");
+            });
+
+            builder.Entity<KravNumberGenerator>(p =>
+            {
+                p.ToTable("KravNumberGenerator");
+                p.HasKey(r => r.KravNumber).HasName("PK_KravNumber");
             });
 
             builder.Entity<KravStatus>().ToTable("KravStatus");

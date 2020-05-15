@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Tilbake.Domain.Models
 {
@@ -16,6 +17,8 @@ namespace Tilbake.Domain.Models
         public virtual Glass Glass { get; private set; }
         public virtual House House { get; private set; }
         public virtual Motor Motor { get; private set; }
+
+        public virtual IReadOnlyCollection<KlientRisk> KlientRisks { get; set; } = new HashSet<KlientRisk>();
     }
 
 }

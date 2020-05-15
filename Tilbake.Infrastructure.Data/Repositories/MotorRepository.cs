@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Models;
@@ -107,6 +106,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
+                                                .Include(m => m.Risks)
+                                                    .ThenInclude(k => k.KlientRisks)
                                                 .OrderBy(n => n.RegNumber).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
@@ -122,6 +123,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
+                                                .Include(m => m.Risks)
+                                                    .ThenInclude(k => k.KlientRisks)
                                                 .SingleOrDefaultAsync(e => e.ChassisNumber == chassissNumber)).ConfigureAwait(true);
         }
 
@@ -137,6 +140,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
+                                                .Include(m => m.Risks)
+                                                    .ThenInclude(k => k.KlientRisks)
                                                 .SingleOrDefaultAsync(e => e.EngineNumber == engineNumber)).ConfigureAwait(true);
         }
 
@@ -152,6 +157,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
+                                                .Include(m => m.Risks)
+                                                    .ThenInclude(k => k.KlientRisks)
                                                 .SingleOrDefaultAsync(e => e.RegNumber == regNumber)).ConfigureAwait(true);
         }
 
@@ -167,6 +174,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
+                                                .Include(m => m.Risks)
+                                                    .ThenInclude(k => k.KlientRisks)
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 

@@ -33,7 +33,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
-                var politikkNumber = PolitikkNumber.Get(context);
+                var politikkNumber = PolitikkNumbers.Get(context);
 
                 await Task.Run(async () =>
                 {

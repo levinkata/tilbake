@@ -4,7 +4,7 @@ using Tilbake.Infrastructure.Data.Context;
 
 namespace Tilbake.Infrastructure.Data.Generators
 {
-    public static class PolitikkNumber
+    public static class PolitikkNumbers
     {
         public static int Get(TilbakeDbContext context)
         {

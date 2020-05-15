@@ -8,10 +8,10 @@ namespace Tilbake.Domain.Models
     {
         public Guid ID { get; set; }
 
-        [Display(Name = "Component")]
-        public Guid ComponentID { get; set; }
+        [Display(Name = "Description")]
+        public Guid RiskItemID { get; set; }
 
-        public virtual RiskItem Component { get; private set; }
+        public virtual RiskItem RiskItem { get; private set; }
         public virtual IReadOnlyCollection<Risk> Risks { get; set; } = new HashSet<Risk>();
     }
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.ViewModels;
@@ -28,11 +25,11 @@ namespace Tilbake.Application.Services
             return await Task.Run(() => _bankBranchRepository.DeleteAsync(id)).ConfigureAwait(true);
         }
 
-        public async Task<BankBranchesViewModel> GetAllAsync(Guid bankId)
+        public async Task<BankBranchesViewModel> GetAllAsync()
         {
             return new BankBranchesViewModel()
             {
-                BankBranches = await Task.Run(() => _bankBranchRepository.GetAllAsync(bankId)).ConfigureAwait(true)
+                BankBranches = await Task.Run(() => _bankBranchRepository.GetAllAsync()).ConfigureAwait(true)
             };
         }
 
@@ -41,6 +38,14 @@ namespace Tilbake.Application.Services
             return new BankBranchViewModel()
             {
                 BankBranch = await Task.Run(() => _bankBranchRepository.GetAsync(id)).ConfigureAwait(true)
+            };
+        }
+
+        public async Task<BankBranchesViewModel> GetByBankAsync(Guid bankId)
+        {
+            return new BankBranchesViewModel()
+            {
+                BankBranches = await Task.Run(() => _bankBranchRepository.GetByBankAsync(bankId)).ConfigureAwait(true)
             };
         }
 

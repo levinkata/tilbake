@@ -20,9 +20,22 @@ namespace Tilbake.API.Controllers
 
         // GET: api/BankBranches
         [HttpGet]
-        public async Task<IActionResult> GetBankBranches(Guid bankId)
+        public async Task<IActionResult> GetBankBranches()
         {
-            BankBranchesViewModel model = await _bankBranchService.GetAllAsync(bankId).ConfigureAwait(true);
+            BankBranchesViewModel model = await _bankBranchService.GetAllAsync().ConfigureAwait(true);
+            return await Task.Run(() => Ok(model.BankBranches)).ConfigureAwait(true);
+        }
+
+        // GET: api/BankBranches/?bankId=5
+        [HttpGet("{motorMakeId}")]
+        public async Task<ActionResult> GetByBank(Guid bankId)
+        {
+            BankBranchesViewModel model = await _bankBranchService.GetByBankAsync(bankId).ConfigureAwait(true);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
             return await Task.Run(() => Ok(model.BankBranches)).ConfigureAwait(true);
         }
 

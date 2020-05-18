@@ -57,6 +57,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
             return await Task.Run(() => _context.MotorModels
+                                                .Include(m => m.MotorMake)
                                                 .OrderBy(n => n.Name)
                                                 .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
@@ -67,6 +68,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
             return await Task.Run(() => _context.MotorModels
+                                                .Include(m => m.MotorMake)
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
@@ -75,6 +77,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
             return await Task.Run(() => _context.MotorModels
+                                                .Include(m => m.MotorMake)
                                                 .Where(e => e.MotorMakeID == motorMakeId)
                                                 .OrderBy(n => n.Name)
                                                 .AsNoTracking().ToListAsync()).ConfigureAwait(true);

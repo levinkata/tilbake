@@ -7,7 +7,8 @@ namespace Tilbake.Domain.Interfaces
 {
     public interface IBankBranchRepository
     {
-        Task<IEnumerable<BankBranch>> GetAllAsync(Guid bankId);
+        Task<IEnumerable<BankBranch>> GetAllAsync();
+        Task<IEnumerable<BankBranch>> GetByBankAsync(Guid bankId);
         Task<BankBranch> GetAsync(Guid id);
         Task<int> AddAsync(BankBranch bankBranch);
         Task<int> UpdateAsync(BankBranch bankBranch);

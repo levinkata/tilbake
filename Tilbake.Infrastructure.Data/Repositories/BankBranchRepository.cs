@@ -52,14 +52,13 @@ namespace Tilbake.Infrastructure.Data.Repositories
             return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<BankBranch>> GetAllAsync(Guid bankId)
+        public async Task<IEnumerable<BankBranch>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
             return await Task.Run(() => _context.BankBranches
                                                 .Include(b => b.Bank)
-                                                .Where(e => e.BankID == bankId)
                                                 .OrderBy(n => n.Name)
                                                 .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
@@ -72,6 +71,18 @@ namespace Tilbake.Infrastructure.Data.Repositories
             return await Task.Run(() => _context.BankBranches
                                                 .Include(b => b.Bank)
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+        }
+
+        public async Task<IEnumerable<BankBranch>> GetByBankAsync(Guid bankId)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+
+            return await Task.Run(() => _context.BankBranches
+                                                .Include(b => b.Bank)
+                                                .Where(b => b.BankID == bankId)
+                                                .OrderBy(n => n.Name)
+                                                .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
         public async Task<int> UpdateAsync(BankBranch bankBranch)

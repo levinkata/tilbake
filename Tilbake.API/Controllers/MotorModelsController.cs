@@ -26,8 +26,8 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => Ok(model.MotorModels)).ConfigureAwait(true);
         }
 
-        // GET: api/MotorModels/GetByMotorMake?5
-        [HttpGet]
+        // GET: api/MotorModels/?motorMakeId=5
+        [HttpGet("{motorMakeId}")]
         public async Task<ActionResult> GetByMotorMake(Guid motorMakeId)
         {
             MotorModelsViewModel model = await _motorModelService.GetByMotorMakeAsync(motorMakeId).ConfigureAwait(true);

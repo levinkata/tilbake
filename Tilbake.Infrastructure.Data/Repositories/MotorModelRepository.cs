@@ -70,6 +70,16 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
+        public async Task<IEnumerable<MotorModel>> GetByMotorMakeAsync(Guid motorMakeId) {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+
+            return await Task.Run(() => _context.MotorModels
+                                                .Where(e => e.MotorMakeID == motorMakeId)
+                                                .OrderBy(n => n.Name)
+                                                .AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        }
+
         public async Task<int> UpdateAsync(MotorModel motorModel)
         {
             if (motorModel == null)

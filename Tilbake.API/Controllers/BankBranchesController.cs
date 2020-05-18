@@ -26,8 +26,8 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => Ok(model.BankBranches)).ConfigureAwait(true);
         }
 
-        // GET: api/BankBranches/?bankId=5
-        [HttpGet("{motorMakeId}")]
+        // GET: api/BankBranches/Bank/5
+        [HttpGet("Bank/{bankId}")]
         public async Task<ActionResult> GetByBank(Guid bankId)
         {
             BankBranchesViewModel model = await _bankBranchService.GetByBankAsync(bankId).ConfigureAwait(true);

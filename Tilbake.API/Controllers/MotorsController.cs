@@ -75,8 +75,8 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => NoContent()).ConfigureAwait(true);
         }
 
-        // POST: api/Motors
-        [HttpPost]
+        // POST: api/Motors/6
+        [HttpPost("{klientId}")]
         public async Task<ActionResult> PostMotor(Guid klientId, Motor motor)
         {
             MotorViewModel model = new MotorViewModel()

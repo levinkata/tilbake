@@ -6,11 +6,11 @@ namespace Tilbake.Domain.Models
     public class Risk
     {
         public Guid ID { get; set; }
-        public Guid AllRiskID { get; set; }        
-        public Guid ContentID { get; set; }
-        public Guid GlassID { get; set; }
-        public Guid HouseID { get; set; }
-        public Guid MotorID { get; set; }
+        public Guid? AllRiskID { get; set; }        
+        public Guid? ContentID { get; set; }
+        public Guid? GlassID { get; set; }
+        public Guid? HouseID { get; set; }
+        public Guid? MotorID { get; set; }
 
         public virtual AllRisk AllRisk { get; private set; }
         public virtual Content Content { get; private set; }

@@ -210,5 +210,23 @@ namespace Tilbake.Infrastructure.Data.Repositories
                 return e.HResult;
             }
         }
+
+        public async Task<IEnumerable<Motor>> GetByKlientAsync(Guid klientId)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+
+            return await Task.Run(() => _context.Motors
+                                                .Include(m => m.BodyType)
+                                                .Include(m => m.MotorMake)
+                                                    .ThenInclude(m => m.MotorModels)
+                                                .Include(m => m.DriverType)
+                                                .Include(m => m.MotorUse)
+                                                .Include(m => m.MotorImprovements)
+                                                .Include(m => m.Risks)
+                                                    .ThenInclude(k => k.KlientRisks)
+                                                .Where(k => k.Risks.Any(r => r.KlientRisks.Any(k => k.KlientID == klientId)))
+                                                .OrderBy(n => n.RegNumber).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Interfaces
     public interface IMotorRepository
     {
         Task<IEnumerable<Motor>> GetAllAsync();
+        Task<IEnumerable<Motor>> GetByKlientAsync(Guid klientId);
         Task<Motor> GetByRegNumberAsync(string regNumber);
         Task<Motor> GetByEngineNumberAsync(string engineNumber);
         Task<Motor> GetByChassissNumberAsync(string chassissNumber);

@@ -26,6 +26,19 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => Ok(model.Motors)).ConfigureAwait(true);
         }
 
+        // GET: api/Motors/Klient/5
+        [HttpGet("Klient/{klientId}")]
+        public async Task<ActionResult> GetByBank(Guid klientId)
+        {
+            MotorsViewModel model = await _motorService.GetByKlientAsync(klientId).ConfigureAwait(true);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return await Task.Run(() => Ok(model.Motors)).ConfigureAwait(true);
+        }
+
         // GET: api/Motors/5
         [HttpGet("{id}")]
         public async Task<ActionResult> GetMotor(Guid id)

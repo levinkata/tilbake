@@ -21,7 +21,7 @@ namespace Tilbake.Domain.Models
         public Guid MotorMakeID { get; set; }
 
         [Display(Name = "Model")]
-        public Guid MotorModeID { get; set; }
+        public Guid MotorModelID { get; set; }
 
         [Display(Name = "Year")]
         public int RegYear { get; set; }

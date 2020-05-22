@@ -87,5 +87,13 @@ namespace Tilbake.Application.Services
         {
             return await Task.Run(() => _motorRepository.UpdateAsync(model.Motor)).ConfigureAwait(true);
         }
+
+        public async Task<MotorsViewModel> GetByKlientAsync(Guid klientId)
+        {
+            return new MotorsViewModel()
+            {
+                Motors = await _motorRepository.GetByKlientAsync(klientId).ConfigureAwait(true)
+            };
+        }
     }
 }

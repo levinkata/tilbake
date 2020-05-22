@@ -7,6 +7,7 @@ namespace Tilbake.Application.Interfaces
     public interface IMotorService
     {
         Task<MotorsViewModel> GetAllAsync();
+        Task<MotorsViewModel> GetByKlientAsync(Guid klientId);
         Task<MotorViewModel> GetByRegNumberAsync(string regNumber);
         Task<MotorViewModel> GetByEngineNumberAsync(string engineNumber);
         Task<MotorViewModel> GetByChassissNumberAsync(string chassissNumber);

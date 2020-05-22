@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tilbake.Domain.Models
 {
@@ -11,7 +8,7 @@ namespace Tilbake.Domain.Models
     {
         public Guid ID { get; set; }
 
-        [Display(Name = "Registrion Number"), Required, StringLength(50)]
+        [Display(Name = "Registration Number"), Required, StringLength(50)]
         public string RegNumber { get; set; }
 
         [Display(Name = "Body Type")]

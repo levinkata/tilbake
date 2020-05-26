@@ -18,15 +18,15 @@ namespace Tilbake.API.Controllers
             _kravStatusService = kravStatusService ?? throw new ArgumentNullException(nameof(kravStatusService));
         }
 
-        // GET: api/KravStatuss
+        // GET: api/KravStatuses
         [HttpGet]
-        public async Task<ActionResult> GetKravStatuss()
+        public async Task<ActionResult> GetKravStatuses()
         {
             KravStatusesViewModel model = await _kravStatusService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.KravStatuses)).ConfigureAwait(true);
         }
 
-        // GET: api/KravStatuss/5
+        // GET: api/KravStatuses/5
         [HttpGet("{id}")]
         public async Task<ActionResult> GetKravStatus(Guid id)
         {
@@ -39,7 +39,7 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => Ok(model.KravStatus)).ConfigureAwait(true);
         }
 
-        // PUT: api/KravStatuss/5
+        // PUT: api/KravStatuses/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutKravStatus(Guid id, KravStatus kravStatus)
         {
@@ -62,7 +62,7 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => NoContent()).ConfigureAwait(true);
         }
 
-        // POST: api/KravStatuss
+        // POST: api/KravStatuses
         [HttpPost]
         public async Task<ActionResult> PostKravStatus(KravStatus kravStatus)
         {
@@ -75,7 +75,7 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => NoContent()).ConfigureAwait(true);
         }
 
-        // DELETE: api/KravStatuss/5
+        // DELETE: api/KravStatuses/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteKravStatus(Guid id)
         {

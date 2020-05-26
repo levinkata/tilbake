@@ -56,7 +56,9 @@ namespace Tilbake.Infrastructure.Data.Repositories
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => context.Insurers.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+            return await Task.Run(() => context.Insurers
+                                                .OrderBy(n => n.Name)
+                                                .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
         public async Task<Insurer> GetAsync(Guid id)
@@ -64,7 +66,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => context.Insurers.FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+            return await Task.Run(() => context.Insurers
+                                                .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
         public async Task<int> UpdateAsync(Insurer insurer)

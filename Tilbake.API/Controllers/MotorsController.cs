@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Motors/Klient/5
         [HttpGet("Klient/{klientId}")]
-        public async Task<ActionResult> GetByBank(Guid klientId)
+        public async Task<ActionResult> GetByKlient(Guid klientId)
         {
             MotorsViewModel model = await _motorService.GetByKlientAsync(klientId).ConfigureAwait(true);
             if (model == null)

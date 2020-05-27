@@ -7,6 +7,7 @@ namespace Tilbake.Application.Interfaces
     public interface IHouseService
     {
         Task<HousesViewModel> GetAllAsync();
+        Task<HousesViewModel> GetByKlientAsync(Guid klientId);
         Task<HouseViewModel> GetAsync(Guid id);
         Task<int> AddAsync(HouseViewModel model);
         Task<int> UpdateAsync(HouseViewModel model);

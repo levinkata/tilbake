@@ -103,6 +103,21 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
+        public async Task<IEnumerable<House>> GetByKlientAsync(Guid klientId)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+
+            return await Task.Run(() => _context.Houses
+                                                .Include(m => m.ResidenceType)
+                                                .Include(m => m.RoofType)
+                                                .Include(m => m.WallType)
+                                                .Include(m => m.Risks)
+                                                    .ThenInclude(k => k.KlientRisks)
+                                                .Where(k => k.Risks.Any(r => r.KlientRisks.Any(k => k.KlientID == klientId)))
+                                                .OrderBy(n => n.Location).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        }
+
         public async Task<int> UpdateAsync(House house)
         {
             if (house == null)

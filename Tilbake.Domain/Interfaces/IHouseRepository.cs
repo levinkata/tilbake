@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Interfaces
     public interface IHouseRepository
     {
         Task<IEnumerable<House>> GetAllAsync();
+        Task<IEnumerable<House>> GetByKlientAsync(Guid klientId);
         Task<House> GetAsync(Guid id);
         Task<int> AddAsync(Guid klientId, House house);
         Task<int> UpdateAsync(House house);

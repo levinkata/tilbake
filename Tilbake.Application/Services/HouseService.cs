@@ -41,6 +41,14 @@ namespace Tilbake.Application.Services
             };
         }
 
+        public async Task<HousesViewModel> GetByKlientAsync(Guid klientId)
+        {
+            return new HousesViewModel()
+            {
+                Houses = await _houseRepository.GetByKlientAsync(klientId).ConfigureAwait(true)
+            };
+        }
+
         public async Task<int> UpdateAsync(HouseViewModel model)
         {
             return await Task.Run(() => _houseRepository.UpdateAsync(model.House)).ConfigureAwait(true);

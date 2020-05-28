@@ -14,9 +14,6 @@ namespace Tilbake.Domain.Models
         [Display(Name = "Body Type")]
         public Guid BodyTypeID { get; set; }
 
-        [Display(Name = "Make")]
-        public Guid MotorMakeID { get; set; }
-
         [Display(Name = "Model")]
         public Guid MotorModelID { get; set; }
 
@@ -45,7 +42,7 @@ namespace Tilbake.Domain.Models
         public bool SecurityFitting { get; set; }
 
         public virtual BodyType BodyType { get; private set; }
-        public virtual MotorMake MotorMake { get; private set; }
+        public virtual MotorModel MotorModel { get; private set; }
         public virtual DriverType DriverType { get; private set; }
         public virtual MotorUse MotorUse { get; private set; }
         public virtual IReadOnlyCollection<MotorImprovement> MotorImprovements { get; set; } = new HashSet<MotorImprovement>();

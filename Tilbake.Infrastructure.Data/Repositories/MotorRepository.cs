@@ -101,8 +101,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.Motors
                                                 .Include(m => m.BodyType)
-                                                .Include(m => m.MotorMake)
-                                                    .ThenInclude(m => m.MotorModels)
+                                                .Include(m => m.MotorModel)
+                                                    .ThenInclude(m => m.MotorMake)
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
@@ -118,8 +118,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.Motors
                                                 .Include(m => m.BodyType)
-                                                .Include(m => m.MotorMake)
-                                                    .ThenInclude(m => m.MotorModels)
+                                                .Include(m => m.MotorModel)
+                                                    .ThenInclude(m => m.MotorMake)
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
@@ -135,8 +135,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.Motors
                                                 .Include(m => m.BodyType)
-                                                .Include(m => m.MotorMake)
-                                                    .ThenInclude(m => m.MotorModels)
+                                                .Include(m => m.MotorModel)
+                                                    .ThenInclude(m => m.MotorMake)
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
@@ -152,8 +152,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.Motors
                                                 .Include(m => m.BodyType)
-                                                .Include(m => m.MotorMake)
-                                                    .ThenInclude(m => m.MotorModels)
+                                                .Include(m => m.MotorModel)
+                                                    .ThenInclude(m => m.MotorMake)
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
@@ -169,8 +169,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.Motors
                                                 .Include(m => m.BodyType)
-                                                .Include(m => m.MotorMake)
-                                                    .ThenInclude(m => m.MotorModels)
+                                                .Include(m => m.MotorModel)
+                                                    .ThenInclude(m => m.MotorMake)
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)
@@ -218,8 +218,8 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.Motors
                                                 .Include(m => m.BodyType)
-                                                .Include(m => m.MotorMake)
-                                                    .ThenInclude(m => m.MotorModels)
+                                                .Include(m => m.MotorModel)
+                                                    .ThenInclude(m => m.MotorMake)
                                                 .Include(m => m.DriverType)
                                                 .Include(m => m.MotorUse)
                                                 .Include(m => m.MotorImprovements)

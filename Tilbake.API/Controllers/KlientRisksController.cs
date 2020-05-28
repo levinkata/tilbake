@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.ViewModels;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.API.Controllers
 {
@@ -20,7 +19,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientRisks
         [HttpGet]
-        public async Task<ActionResult> GetKlientRisks()
+        public async Task<IActionResult> GetKlientRisks()
         {
             KlientRisksViewModel model = await _klientRiskService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.KlientRisks)).ConfigureAwait(true);
@@ -28,7 +27,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientRisks/Klient/5
         [HttpGet("Klient/{klientId}")]
-        public async Task<ActionResult> GetKlientRiskByKlient(Guid klientId)
+        public async Task<IActionResult> GetKlientRiskByKlient(Guid klientId)
         {
             KlientRisksViewModel model = await _klientRiskService.GetKlientRisks(klientId).ConfigureAwait(true);
             if (model == null)
@@ -41,7 +40,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientRisks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetKlientRisk(Guid id)
+        public async Task<IActionResult> GetKlientRisk(Guid id)
         {
             KlientRiskViewModel model = await _klientRiskService.GetAsync(id).ConfigureAwait(true);
             if (model == null)

@@ -51,7 +51,6 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IRoofTypeService, RoofTypeService>();
             services.AddScoped<ISalesTypeService, SalesTypeService>();
             services.AddScoped<ITitleService, TitleService>();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWallTypeService, WallTypeService>();
 
             //  Infrastructure Data Layer

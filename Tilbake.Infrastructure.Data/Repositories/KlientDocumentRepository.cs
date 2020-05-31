@@ -31,7 +31,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             if (DocumentFiles == null)
             {
-                throw new ArgumentNullException(nameof(klientDocument));
+                throw new ArgumentNullException(nameof(DocumentFiles));
             }
 
             try

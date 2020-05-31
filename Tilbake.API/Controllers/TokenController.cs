@@ -43,62 +43,55 @@ namespace Tilbake.API.Controllers
 
         private async Task<IActionResult> GetToken(TokenRequestViewModel model)
         {
-            try
+            //  Check if there's a user with the given username
+            var user = await UserManager.FindByNameAsync(model.Username).ConfigureAwait(true);
+
+            //  Fallback to support email address instead of username
+            if (user == null && model.Username.Contains("@", StringComparison.OrdinalIgnoreCase))
+                user = await UserManager.FindByEmailAsync(model.Username).ConfigureAwait(true);
+
+            if (user == null || !await UserManager.CheckPasswordAsync(user, model.Password).ConfigureAwait(true))
             {
-                //  Check if there's a user with the given username
-                var user = await UserManager.FindByNameAsync(model.Username).ConfigureAwait(true);
-
-                //  Fallback to support email address instead of username
-                if (user == null && model.Username.Contains("@", StringComparison.OrdinalIgnoreCase))
-                    user = await UserManager.FindByEmailAsync(model.Username).ConfigureAwait(true);
-
-                if (user == null || !await UserManager.CheckPasswordAsync(user, model.Password).ConfigureAwait(true))
-                {
-                    //  user does not exists or password mismatch
-                    return new UnauthorizedResult();
-                }
-
-                //  Username & password matches: create and return the Jwt token.
-                DateTime now = DateTime.UtcNow;
-
-                //  Add the registered claims JWT (RFC7519).
-                var claims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeSeconds().ToString(CultureInfo.CurrentCulture))
-                    //  TODO: Add additional claims here
-                };
-
-                var tokenExpirationMins = Configuration.GetValue<int>("Auth:Jwt:TokenExpirationInMinutes");
-                var issuerSigningkey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"]));
-
-                var token = new JwtSecurityToken(
-                    issuer: Configuration["Auth:Jwt:Issuer"],
-                    audience: Configuration["Auth:Jwt:Audience"],
-                    claims: claims,
-                    notBefore: now,
-                    expires:
-                    now.Add(TimeSpan.FromMinutes(tokenExpirationMins)),
-                    signingCredentials: new SigningCredentials(issuerSigningkey,
-                    SecurityAlgorithms.HmacSha256)
-                    );
-
-                var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
-
-                //Build & return the response
-                var response = new TokenResponseViewModel()
-                {
-                    Token = encodedToken,
-                    Expiration = tokenExpirationMins
-                };
-                return Ok(response);
-            }
-            catch (Exception)
-            {
+                //  user does not exists or password mismatch
                 return new UnauthorizedResult();
             }
+
+            //  Username & password matches: create and return the Jwt token.
+            DateTime now = DateTime.UtcNow;
+
+            //  Add the registered claims JWT (RFC7519).
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeSeconds().ToString(CultureInfo.CurrentCulture))
+                //  TODO: Add additional claims here
+            };
+
+            var tokenExpirationMins = Configuration.GetValue<int>("Auth:Jwt:TokenExpirationInMinutes");
+            var issuerSigningkey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"]));
+
+            var token = new JwtSecurityToken(
+                issuer: Configuration["Auth:Jwt:Issuer"],
+                audience: Configuration["Auth:Jwt:Audience"],
+                claims: claims,
+                notBefore: now,
+                expires:
+                now.Add(TimeSpan.FromMinutes(tokenExpirationMins)),
+                signingCredentials: new SigningCredentials(issuerSigningkey,
+                SecurityAlgorithms.HmacSha256)
+                );
+
+            var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            //Build & return the response
+            var response = new TokenResponseViewModel()
+            {
+                Token = encodedToken,
+                Expiration = tokenExpirationMins
+            };
+            return Ok(response);
         }
     }
 }

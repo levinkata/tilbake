@@ -8,7 +8,7 @@ namespace Tilbake.Domain.Interfaces
     public interface IQuoteRepository
     {
         Task<IEnumerable<Quote>> GetAllAsync();
-        Task<IEnumerable<Quote>> GetklientAsync(Guid klientId);
+        Task<IEnumerable<Quote>> GetKlientAsync(Guid klientId);
         Task<Quote> GetAsync(Guid id);
         Task<Quote> GetByQuoteNumberAsync(int quoteNumber);
         Task<int> AddAsync(Quote quote, List<QuoteItem> quoteItems);

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.ViewModels;
@@ -52,11 +49,11 @@ namespace Tilbake.Application.Services
             };
         }
 
-        public async Task<QuotesViewModel> GetklientAsync(Guid klientId)
+        public async Task<QuotesViewModel> GetKlientAsync(Guid klientId)
         {
             return new QuotesViewModel()
             {
-                Quotes = await Task.Run(() => _quoteRepository.GetklientAsync(klientId)).ConfigureAwait(true)
+                Quotes = await Task.Run(() => _quoteRepository.GetKlientAsync(klientId)).ConfigureAwait(true)
             };
         }
 

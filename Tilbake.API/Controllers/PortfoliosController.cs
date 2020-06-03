@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
@@ -9,6 +10,7 @@ namespace Tilbake.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PortfoliosController : ControllerBase
     {
         private readonly IPortfolioService _portfolioService;

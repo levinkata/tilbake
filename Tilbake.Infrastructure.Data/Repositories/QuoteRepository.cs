@@ -133,7 +133,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .SingleOrDefaultAsync(e => e.QuoteNumber == quoteNumber)).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Quote>> GetklientAsync(Guid klientId)
+        public async Task<IEnumerable<Quote>> GetKlientAsync(Guid klientId)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();

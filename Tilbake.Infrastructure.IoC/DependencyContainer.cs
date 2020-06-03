@@ -22,6 +22,7 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IHouseService, HouseService>();
             services.AddScoped<IIncidentService, IncidentService>();
             services.AddScoped<IInsurerService, InsurerService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IInvoiceStatusService, InvoiceStatusService>();
             services.AddScoped<IKlientService, KlientService>();
             services.AddScoped<IKlientBankAccountService, KlientBankAccountService>();
@@ -66,6 +67,7 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IGlassRepository, GlassRepository>();
             services.AddScoped<IIncidentRepository, IncidentRepository>();
             services.AddScoped<IInsurerRepository, InsurerRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IInvoiceStatusRepository, InvoiceStatusRepository>();
             services.AddScoped<IKlientRepository, KlientRepository>();
             services.AddScoped<IKlientBankAccountRepository, KlientBankAccountRepository>();

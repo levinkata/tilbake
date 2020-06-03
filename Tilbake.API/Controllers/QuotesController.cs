@@ -40,6 +40,32 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => Ok(model.Quote)).ConfigureAwait(true);
         }
 
+        // GET: api/Quotes/Klient/6
+        [HttpGet("Klient/{klientId}")]
+        public async Task<ActionResult> GetKlientAsync(Guid klientId)
+        {
+            QuotesViewModel model = await _quoteService.GetKlientAsync(klientId).ConfigureAwait(true);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return await Task.Run(() => Ok(model.Quotes)).ConfigureAwait(true);
+        }
+
+        // GET: api/Quotes/Quote/6
+        [HttpGet("Quote/{quoteNumber}")]
+        public async Task<ActionResult> GetByQuoteNumberAsync(int quoteNumber)
+        {
+            QuoteViewModel model = await _quoteService.GetByQuoteNumberAsync(quoteNumber).ConfigureAwait(true);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return await Task.Run(() => Ok(model.Quote)).ConfigureAwait(true);
+        }
+
         // PUT: api/Quotes/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutQuote(Guid id, Quote quote)

@@ -32,7 +32,7 @@ namespace Tilbake.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetPortfolio(Guid id)
         {
-            PortfolioViewModel model = await _portfolioService.GetAsync(id).ConfigureAwait(true);
+            PortfolioViewModel model = await _portfolioService.GetAsync(id, false).ConfigureAwait(true);
             if (model == null)
             {
                 return NotFound();
@@ -81,7 +81,7 @@ namespace Tilbake.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePortfolio(Guid id)
         {
-            PortfolioViewModel model = await _portfolioService.GetAsync(id).ConfigureAwait(true);
+            PortfolioViewModel model = await _portfolioService.GetAsync(id, false).ConfigureAwait(true);
             if (model == null)
             {
                 return NotFound();

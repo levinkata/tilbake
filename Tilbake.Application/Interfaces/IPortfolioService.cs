@@ -7,7 +7,7 @@ namespace Tilbake.Application.Interfaces
     public interface IPortfolioService
     {
         Task<PortfoliosViewModel> GetAllAsync();
-        Task<PortfolioViewModel> GetAsync(Guid id);
+        Task<PortfolioViewModel> GetAsync(Guid id, bool includeRelated);
         Task<int> AddAsync(PortfolioViewModel model);
         Task<int> UpdateAsync(PortfolioViewModel model);
         Task<int> DeleteAsync(Guid id);

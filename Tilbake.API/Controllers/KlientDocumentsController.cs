@@ -20,15 +20,28 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientDocuments
         [HttpGet]
-        public async Task<ActionResult> GetKlientDocuments(Guid klientId)
+        public async Task<ActionResult> GetAll()
         {
-            KlientDocumentsViewModel model = await _klientDocumentService.GetAllAsync(klientId).ConfigureAwait(true);
+            KlientDocumentsViewModel model = await _klientDocumentService.GetAllAsync().ConfigureAwait(true);
+            return await Task.Run(() => Ok(model.KlientDocuments)).ConfigureAwait(true);
+        }
+
+        // GET: api/KlientDocuments/Klient/5
+        [HttpGet("Klient/{klientId}")]
+        public async Task<ActionResult> GetByKlient(Guid klientId)
+        {
+            KlientDocumentsViewModel model = await _klientDocumentService.GetByKlientAsync(klientId).ConfigureAwait(true);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
             return await Task.Run(() => Ok(model.KlientDocuments)).ConfigureAwait(true);
         }
 
         // GET: api/KlientDocuments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetKlientDocument(Guid id)
+        public async Task<ActionResult> Get(Guid id)
         {
             KlientDocumentViewModel model = await _klientDocumentService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -41,7 +54,7 @@ namespace Tilbake.API.Controllers
 
         // PUT: api/KlientDocuments/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutKlientDocument(Guid id, KlientDocument klientDocument)
+        public async Task<IActionResult> Put(Guid id, KlientDocument klientDocument)
         {
             if (klientDocument == null)
             {
@@ -64,12 +77,8 @@ namespace Tilbake.API.Controllers
 
         // POST: api/KlientDocuments
         [HttpPost]
-        public async Task<ActionResult> PostKlientDocument(KlientDocument klientDocument)
+        public async Task<ActionResult> Post(FileUpLoadViewModel model)
         {
-            KlientDocumentViewModel model = new KlientDocumentViewModel()
-            {
-                KlientDocument = klientDocument
-            };
 
             await _klientDocumentService.AddAsync(model).ConfigureAwait(true);
             return await Task.Run(() => NoContent()).ConfigureAwait(true);
@@ -77,7 +86,7 @@ namespace Tilbake.API.Controllers
 
         // DELETE: api/KlientDocuments/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteKlientDocument(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             KlientDocumentViewModel model = await _klientDocumentService.GetAsync(id).ConfigureAwait(true);
             if (model == null)

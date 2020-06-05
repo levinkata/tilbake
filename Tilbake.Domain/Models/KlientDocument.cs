@@ -9,9 +9,6 @@ namespace Tilbake.Domain.Models
         public Guid ID { get; set; }
         public Guid KlientID { get; set; }
 
-        [Display(Name = "Name"), Required, StringLength(50)]
-        public string Name { get; set; }
-
         [Display(Name = "Description"), Required, StringLength(150)]
         public string Description { get; set; }        
 
@@ -27,6 +24,7 @@ namespace Tilbake.Domain.Models
         [Display(Name = "Document")]
         private readonly List<byte> document = new List<byte>();
         public List<byte> Document { get { return document; } }
+
         public virtual Klient Klient { get; private set; }
         public virtual DocumentType DocumentType { get; private set; }  
     }

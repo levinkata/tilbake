@@ -63,14 +63,18 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
-        public async Task<Portfolio> GetAsync(Guid id)
+        public async Task<Portfolio> GetAsync(Guid id, bool includeRelated)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
+            if (includeRelated)
+                return await Task.Run(() => _context.Portfolios
+                                    .Include(p => p.PortfolioKlients)
+                                        .ThenInclude(k => k.Klient)
+                                    .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+
             return await Task.Run(() => _context.Portfolios
-                                                .Include(p => p.PortfolioKlients)
-                                                    .ThenInclude(k => k.Klient)
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 

@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Models;
@@ -22,55 +19,29 @@ namespace Tilbake.Infrastructure.Data.Repositories
             _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
         }
 
-        public async Task<int> AddAsync(Guid klientId, KlientDocument klientDocument, List<IFormFile> DocumentFiles)
+        public async Task<int> AddAsync(KlientDocument klientDocument)
         {
             if (klientDocument == null)
             {
                 throw new ArgumentNullException(nameof(klientDocument));
             }
-
-            if (DocumentFiles == null)
-            {
-                throw new ArgumentNullException(nameof(klientDocument));
-            }
-
+            
             try
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                int numOfFiles = DocumentFiles.Count;
-                int version = 0;
-                string DocumentName = klientDocument.Name;
-
                 await Task.Run(async () =>
                 {
-                    if (numOfFiles > 1)
-                    {
-                        version = 1;
-                    }
-
                     klientDocument.ID = Guid.NewGuid();
-                    klientDocument.KlientID = klientId;
 
-                    foreach (var formFile in DocumentFiles)
-                    {
-                        if (version > 0)
-                        {
-                            klientDocument.Name = DocumentName + "-" + version;
-                            version++;
-                        }
-                        else
-                            klientDocument.Name = DocumentName;
+                    ////  To change the file name if storing on disk and avoid malicious file names being loaded
+                    ////  var fileName = Guid.NewGuid().ToString() + Path.GetExtension(document.FileName);
 
-                        long size = formFile.Length;
-                        if (size > 0)
-                        {
-                            using var memoryStream = new MemoryStream();
-                            await formFile.CopyToAsync(memoryStream).ConfigureAwait(true);
-                            klientDocument.Document.AddRange(memoryStream.ToArray());
-                        }
-                    }
+                    //using var memoryStream = new MemoryStream();
+                    //await document.CopyToAsync(memoryStream).ConfigureAwait(true);
+                    //klientDocument.Document.AddRange(memoryStream.ToArray());
+                    
                     await _context.KlientDocuments.AddAsync((KlientDocument)klientDocument).ConfigureAwait(true);
 
                 }).ConfigureAwait(true);
@@ -93,7 +64,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
             return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<KlientDocument>> GetAllAsync(Guid klientId)
+        public async Task<IEnumerable<KlientDocument>> GetAllAsync()
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
@@ -101,7 +72,6 @@ namespace Tilbake.Infrastructure.Data.Repositories
             return await Task.Run(() => _context.KlientDocuments
                                                 .Include(b => b.Klient)
                                                 .Include(b => b.DocumentType)
-                                                .OrderBy(n => n.Name)
                                                 .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
@@ -114,6 +84,17 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(b => b.Klient)
                                                 .Include(b => b.DocumentType)
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+        }
+
+        public async Task<IEnumerable<KlientDocument>> GetByKlientAsync(Guid klientId)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+
+            return await Task.Run(() => _context.KlientDocuments
+                                                .Include(b => b.Klient)
+                                                .Include(b => b.DocumentType)
+                                                .Where(e => e.KlientID == klientId)).ConfigureAwait(true);
         }
 
         public async Task<int> UpdateAsync(KlientDocument klientDocument)

@@ -8,7 +8,7 @@ namespace Tilbake.Domain.Interfaces
     public interface IPortfolioRepository
     {
         Task<IEnumerable<Portfolio>> GetAllAsync();
-        Task<Portfolio> GetAsync(Guid id);
+        Task<Portfolio> GetAsync(Guid id, bool includeRelated);
         Task<int> AddAsync(Portfolio portfolio);
         Task<int> UpdateAsync(Portfolio portfolio);
         Task<int> DeleteAsync(Guid id);

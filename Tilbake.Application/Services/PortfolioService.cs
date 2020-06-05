@@ -36,11 +36,11 @@ namespace Tilbake.Application.Services
             };
         }
 
-        public async Task<PortfolioViewModel> GetAsync(Guid id)
+        public async Task<PortfolioViewModel> GetAsync(Guid id, bool includeRelated)
         {
             return new PortfolioViewModel()
             {
-                Portfolio = await Task.Run(() => _portfolioRepository.GetAsync(id)).ConfigureAwait(true)
+                Portfolio = await Task.Run(() => _portfolioRepository.GetAsync(id, includeRelated)).ConfigureAwait(true)
             };
         }
 

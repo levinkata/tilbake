@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Tilbake.API.Binders;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.ViewModels;
 using Tilbake.Domain.Models;
@@ -77,8 +79,19 @@ namespace Tilbake.API.Controllers
 
         // POST: api/KlientDocuments
         [HttpPost]
-        public async Task<ActionResult> Post(FileUpLoadViewModel model)
+        public async Task<ActionResult> Post([ModelBinder(BinderType = typeof(JsonModelBinder))] UploadFileParamsViewModel fileParams,
+            IFormFile file)
         {
+            if (file == null)
+            {
+                return BadRequest($"File must be attached to complete this operation.");
+            }
+
+            FileUpLoadViewModel model = new FileUpLoadViewModel()
+            {
+                FileParams = fileParams,
+                File = file
+            };
 
             await _klientDocumentService.AddAsync(model).ConfigureAwait(true);
             return await Task.Run(() => NoContent()).ConfigureAwait(true);

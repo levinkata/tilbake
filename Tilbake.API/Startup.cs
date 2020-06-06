@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Tilbake.API.Binders;
 using Tilbake.Infrastructure.Data.Context;
 using Tilbake.Infrastructure.IoC;
 
@@ -28,17 +29,16 @@ namespace Tilbake.API
 
             services.AddCors();
             services.AddControllers()
-                    .AddNewtonsoftJson(options => {
-                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    });
+                .AddNewtonsoftJson(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             // 1. Add Authentication Services
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
+            }).AddJwtBearer(options => {
                 options.Authority = "https://dev-me55aatm.auth0.com/";
                 options.Audience = "https://api.tilbake.com";
             });

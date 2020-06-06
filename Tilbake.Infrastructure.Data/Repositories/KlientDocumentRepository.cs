@@ -34,14 +34,6 @@ namespace Tilbake.Infrastructure.Data.Repositories
                 await Task.Run(async () =>
                 {
                     klientDocument.ID = Guid.NewGuid();
-
-                    ////  To change the file name if storing on disk and avoid malicious file names being loaded
-                    ////  var fileName = Guid.NewGuid().ToString() + Path.GetExtension(document.FileName);
-
-                    //using var memoryStream = new MemoryStream();
-                    //await document.CopyToAsync(memoryStream).ConfigureAwait(true);
-                    //klientDocument.Document.AddRange(memoryStream.ToArray());
-                    
                     await _context.KlientDocuments.AddAsync((KlientDocument)klientDocument).ConfigureAwait(true);
 
                 }).ConfigureAwait(true);

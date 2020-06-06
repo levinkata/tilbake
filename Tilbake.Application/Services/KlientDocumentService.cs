@@ -29,14 +29,14 @@ namespace Tilbake.Application.Services
 
             KlientDocument klientDocument = new KlientDocument()
             {
-                KlientID = model.KlientID,
+                KlientID = model.FileParams.KlientID,
                 DocumentDate = DateTime.Now,
-                DocumentTypeID = model.DocumentTypeID,
-                Description = model.Description
+                DocumentTypeID = model.FileParams.DocumentTypeID,
+                Description = model.FileParams.Description
             };
 
             using var memoryStream = new MemoryStream();
-            await model.DocumentFile.CopyToAsync(memoryStream).ConfigureAwait(true);
+            await model.File.CopyToAsync(memoryStream).ConfigureAwait(true);
             klientDocument.Document.AddRange(memoryStream.ToArray());
 
             return await Task.Run(() => _klientDocumentRepository.AddAsync(klientDocument)).ConfigureAwait(true);

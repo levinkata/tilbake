@@ -20,7 +20,7 @@ namespace Tilbake.Infrastructure.Data.Context
         public DbSet<City> Cities { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<CoverType> CoverTypes { get; set; }
-        public DbSet<DocumentType> DocumentTypes { get; set; }        
+        public DbSet<DocumentCategory> DocumentCategories { get; set; }        
         public DbSet<DriverType> DriverTypes { get; set; }
         public DbSet<Glass> Glasses { get; set; }
         public DbSet<House> Houses { get; set; }
@@ -85,7 +85,7 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<City>().ToTable("City");
             builder.Entity<Content>().ToTable("Content");
             builder.Entity<CoverType>().ToTable("CoverType");
-            builder.Entity<DocumentType>().ToTable("DocumentType");            
+            builder.Entity<DocumentCategory>().ToTable("DocumentCategory");            
             builder.Entity<DriverType>().ToTable("DriverType");
             builder.Entity<Glass>().ToTable("Glass");
             builder.Entity<House>().ToTable("House");

@@ -30,7 +30,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientDocuments/Klient/5
         [HttpGet("Klient/{klientId}")]
-        public async Task<ActionResult> GetByKlient(Guid klientId)
+        public async Task<IActionResult> GetByKlient(Guid klientId)
         {
             KlientDocumentsViewModel model = await _klientDocumentService.GetByKlientAsync(klientId).ConfigureAwait(true);
             if (model == null)
@@ -43,7 +43,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientDocuments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
             KlientDocumentViewModel model = await _klientDocumentService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -79,9 +79,14 @@ namespace Tilbake.API.Controllers
 
         // POST: api/KlientDocuments
         [HttpPost]
-        public async Task<ActionResult> Post([ModelBinder(BinderType = typeof(JsonModelBinder))] UploadFileParamsViewModel fileParams,
+        public async Task<IActionResult> Post([ModelBinder(BinderType = typeof(JsonModelBinder))] DocParams docParams,
             IFormFile file)
         {
+            if (docParams == null)
+            {
+                throw new ArgumentNullException(nameof(docParams));
+            }
+
             if (file == null)
             {
                 return BadRequest($"File must be attached to complete this operation.");
@@ -89,7 +94,8 @@ namespace Tilbake.API.Controllers
 
             FileUpLoadViewModel model = new FileUpLoadViewModel()
             {
-                FileParams = fileParams,
+                KlientID = docParams.KlientID,
+                DocumentCategoryID = docParams.DocumentCategoryID,
                 File = file
             };
 

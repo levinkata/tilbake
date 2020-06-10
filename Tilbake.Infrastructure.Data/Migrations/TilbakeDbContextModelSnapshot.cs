@@ -208,7 +208,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.ToTable("CoverType");
                 });
 
-            modelBuilder.Entity("Tilbake.Domain.Models.DocumentType", b =>
+            modelBuilder.Entity("Tilbake.Domain.Models.DocumentCategory", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -221,7 +221,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("DocumentType");
+                    b.ToTable("DocumentCategory");
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.DriverType", b =>
@@ -501,23 +501,18 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
+                    b.Property<Guid>("DocumentCategoryID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DocumentDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DocumentTypeID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("KlientID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("DocumentTypeID");
+                    b.HasIndex("DocumentCategoryID");
 
                     b.HasIndex("KlientID");
 
@@ -1487,9 +1482,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Tilbake.Domain.Models.KlientDocument", b =>
                 {
-                    b.HasOne("Tilbake.Domain.Models.DocumentType", "DocumentType")
+                    b.HasOne("Tilbake.Domain.Models.DocumentCategory", "DocumentCategory")
                         .WithMany()
-                        .HasForeignKey("DocumentTypeID")
+                        .HasForeignKey("DocumentCategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

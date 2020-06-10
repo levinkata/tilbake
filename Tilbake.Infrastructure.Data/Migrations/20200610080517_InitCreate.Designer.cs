@@ -10,8 +10,8 @@ using Tilbake.Infrastructure.Data.Context;
 namespace Tilbake.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TilbakeDbContext))]
-    [Migration("20200522094639_MotorModel")]
-    partial class MotorModel
+    [Migration("20200610080517_InitCreate")]
+    partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -503,11 +503,6 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
                     b.Property<DateTime>("DocumentDate")
                         .HasColumnType("datetime2");
 
@@ -516,11 +511,6 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("KlientID")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
 
                     b.HasKey("ID");
 
@@ -707,9 +697,6 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<Guid>("MotorMakeID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("MotorModelID")
                         .HasColumnType("uniqueidentifier");
 
@@ -733,7 +720,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.HasIndex("DriverTypeID");
 
-                    b.HasIndex("MotorMakeID");
+                    b.HasIndex("MotorModelID");
 
                     b.HasIndex("MotorUseID");
 
@@ -1235,19 +1222,19 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AllRiskID")
+                    b.Property<Guid?>("AllRiskID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ContentID")
+                    b.Property<Guid?>("ContentID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("GlassID")
+                    b.Property<Guid?>("GlassID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("HouseID")
+                    b.Property<Guid?>("HouseID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MotorID")
+                    b.Property<Guid?>("MotorID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -1566,9 +1553,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tilbake.Domain.Models.MotorMake", "MotorMake")
+                    b.HasOne("Tilbake.Domain.Models.MotorModel", "MotorModel")
                         .WithMany()
-                        .HasForeignKey("MotorMakeID")
+                        .HasForeignKey("MotorModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1639,7 +1626,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Tilbake.Domain.Models.KlientRisk", "KlientRisk")
-                        .WithMany()
+                        .WithMany("PolitikkRisks")
                         .HasForeignKey("KlientRiskID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1720,7 +1707,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Tilbake.Domain.Models.KlientRisk", "KlientRisk")
-                        .WithMany()
+                        .WithMany("QuoteItems")
                         .HasForeignKey("KlientRiskID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1736,33 +1723,23 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 {
                     b.HasOne("Tilbake.Domain.Models.AllRisk", "AllRisk")
                         .WithMany("Risks")
-                        .HasForeignKey("AllRiskID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AllRiskID");
 
                     b.HasOne("Tilbake.Domain.Models.Content", "Content")
                         .WithMany("Risks")
-                        .HasForeignKey("ContentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContentID");
 
                     b.HasOne("Tilbake.Domain.Models.Glass", "Glass")
                         .WithMany("Risks")
-                        .HasForeignKey("GlassID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GlassID");
 
                     b.HasOne("Tilbake.Domain.Models.House", "House")
                         .WithMany("Risks")
-                        .HasForeignKey("HouseID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HouseID");
 
                     b.HasOne("Tilbake.Domain.Models.Motor", "Motor")
                         .WithMany("Risks")
-                        .HasForeignKey("MotorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MotorID");
                 });
 #pragma warning restore 612, 618
         }

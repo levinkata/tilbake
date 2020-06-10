@@ -58,13 +58,14 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<KlientDocument>> GetAllAsync()
         {
-            using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
-
-            return await Task.Run(() => _context.KlientDocuments
+            return await Task.Run(async () => {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+                await _context.KlientDocuments
                                                 .Include(b => b.Klient)
-                                                .Include(b => b.DocumentType)
-                                                .AsNoTracking().ToListAsync()).ConfigureAwait(true);
+                                                .Include(b => b.DocumentCategory)
+                                                .AsNoTracking().ToListAsync().ConfigureAwait(true);
+            }).ConfigureAwait(true);
         }
 
         public async Task<KlientDocument> GetAsync(Guid id)
@@ -74,7 +75,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.KlientDocuments
                                                 .Include(b => b.Klient)
-                                                .Include(b => b.DocumentType)
+                                                .Include(b => b.DocumentCategory)
                                                 .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
         }
 
@@ -85,7 +86,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             return await Task.Run(() => _context.KlientDocuments
                                                 .Include(b => b.Klient)
-                                                .Include(b => b.DocumentType)
+                                                .Include(b => b.DocumentCategory)
                                                 .Where(e => e.KlientID == klientId)).ConfigureAwait(true);
         }
 

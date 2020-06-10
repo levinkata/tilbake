@@ -29,10 +29,9 @@ namespace Tilbake.Application.Services
 
             KlientDocument klientDocument = new KlientDocument()
             {
-                KlientID = model.FileParams.KlientID,
+                KlientID = model.KlientID,
                 DocumentDate = DateTime.Now,
-                DocumentTypeID = model.FileParams.DocumentTypeID,
-                Description = model.FileParams.Description
+                DocumentCategoryID = model.DocumentCategoryID
             };
 
             using var memoryStream = new MemoryStream();

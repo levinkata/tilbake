@@ -16,7 +16,7 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IBankBranchService, BankBranchService>();
             services.AddScoped<IBodyTypeService, BodyTypeService>();
             services.AddScoped<ICoverTypeService, CoverTypeService>();
-            services.AddScoped<IDocumentTypeService, DocumentTypeService>();
+            services.AddScoped<IDocumentCategoryService, DocumentCategoryService>();
             services.AddScoped<IDriverTypeService, DriverTypeService>();
             services.AddScoped<IGlassService, GlassService>();
             services.AddScoped<IHouseService, HouseService>();
@@ -60,7 +60,7 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IBankBranchRepository, BankBranchRepository>();
             services.AddScoped<IBodyTypeRepository, BodyTypeRepository>();
             services.AddScoped<ICoverTypeRepository, CoverTypeRepository>();
-            services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
+            services.AddScoped<IDocumentCategoryRepository, DocumentCategoryRepository>();
             services.AddScoped<IDriverTypeRepository, DriverTypeRepository>();
             services.AddScoped<IHouseRepository, HouseRepository>();
             services.AddScoped<IGlassRepository, GlassRepository>();

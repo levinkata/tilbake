@@ -10,14 +10,14 @@ using Tilbake.Infrastructure.Data.Context;
 namespace Tilbake.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TilbakeDbContext))]
-    [Migration("20200513153141_MotorTable")]
-    partial class MotorTable
+    [Migration("20200610133209_DocumentCategory")]
+    partial class DocumentCategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.0-preview.3.20181.2")
+                .HasAnnotation("ProductVersion", "5.0.0-preview.4.20220.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -53,12 +53,12 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ComponentID")
+                    b.Property<Guid>("RiskItemID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ComponentID");
+                    b.HasIndex("RiskItemID");
 
                     b.ToTable("AllRisk");
                 });
@@ -168,22 +168,6 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.ToTable("City");
                 });
 
-            modelBuilder.Entity("Tilbake.Domain.Models.Component", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Component");
-                });
-
             modelBuilder.Entity("Tilbake.Domain.Models.Content", b =>
                 {
                     b.Property<Guid>("ID")
@@ -226,7 +210,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.ToTable("CoverType");
                 });
 
-            modelBuilder.Entity("Tilbake.Domain.Models.DocumentType", b =>
+            modelBuilder.Entity("Tilbake.Domain.Models.DocumentCategory", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -239,7 +223,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("DocumentType");
+                    b.ToTable("DocumentCategory");
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.DriverType", b =>
@@ -280,12 +264,12 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ComponentID")
+                    b.Property<Guid>("RiskItemID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ComponentID");
+                    b.HasIndex("RiskItemID");
 
                     b.ToTable("Glass");
                 });
@@ -519,28 +503,18 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
+                    b.Property<Guid>("DocumentCategoryID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DocumentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DocumentTypeID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("KlientID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
                     b.HasKey("ID");
 
-                    b.HasIndex("DocumentTypeID");
+                    b.HasIndex("DocumentCategoryID");
 
                     b.HasIndex("KlientID");
 
@@ -648,6 +622,17 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.ToTable("Krav");
                 });
 
+            modelBuilder.Entity("Tilbake.Domain.Models.KravNumberGenerator", b =>
+                {
+                    b.Property<int>("KravNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("KravNumber")
+                        .HasName("PK_KravNumber");
+
+                    b.ToTable("KravNumberGenerator");
+                });
+
             modelBuilder.Entity("Tilbake.Domain.Models.KravStatus", b =>
                 {
                     b.Property<Guid>("ID")
@@ -712,10 +697,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<Guid>("MotorMakeID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("MotorModeID")
+                    b.Property<Guid>("MotorModelID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("MotorUseID")
@@ -738,7 +720,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.HasIndex("DriverTypeID");
 
-                    b.HasIndex("MotorMakeID");
+                    b.HasIndex("MotorModelID");
 
                     b.HasIndex("MotorUseID");
 
@@ -816,10 +798,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MakeID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("MotorMakeID")
+                    b.Property<Guid>("MotorMakeID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -920,6 +899,17 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.ToTable("Politikk");
                 });
 
+            modelBuilder.Entity("Tilbake.Domain.Models.PolitikkNumberGenerator", b =>
+                {
+                    b.Property<int>("PolitikkNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("PolitikkNumber")
+                        .HasName("PK_PolitikkNumber");
+
+                    b.ToTable("PolitikkNumberGenerator");
+                });
+
             modelBuilder.Entity("Tilbake.Domain.Models.PolitikkRisk", b =>
                 {
                     b.Property<Guid>("ID")
@@ -986,7 +976,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("PolicyStatus");
+                    b.ToTable("PolitikkStatus");
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.PolitikkType", b =>
@@ -1002,7 +992,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("PolicyType");
+                    b.ToTable("PolitikkType");
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.Portfolio", b =>
@@ -1232,19 +1222,19 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AllRiskID")
+                    b.Property<Guid?>("AllRiskID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ContentID")
+                    b.Property<Guid?>("ContentID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("GlassID")
+                    b.Property<Guid?>("GlassID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("HouseID")
+                    b.Property<Guid?>("HouseID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MotorID")
+                    b.Property<Guid?>("MotorID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -1260,6 +1250,22 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.HasIndex("MotorID");
 
                     b.ToTable("Risk");
+                });
+
+            modelBuilder.Entity("Tilbake.Domain.Models.RiskItem", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("RiskItem");
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.RoofType", b =>
@@ -1337,9 +1343,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Tilbake.Domain.Models.AllRisk", b =>
                 {
-                    b.HasOne("Tilbake.Domain.Models.Component", "Component")
+                    b.HasOne("Tilbake.Domain.Models.RiskItem", "RiskItem")
                         .WithMany()
-                        .HasForeignKey("ComponentID")
+                        .HasForeignKey("RiskItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1388,9 +1394,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Tilbake.Domain.Models.Glass", b =>
                 {
-                    b.HasOne("Tilbake.Domain.Models.Component", "Component")
+                    b.HasOne("Tilbake.Domain.Models.RiskItem", "RiskItem")
                         .WithMany()
-                        .HasForeignKey("ComponentID")
+                        .HasForeignKey("RiskItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1478,9 +1484,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Tilbake.Domain.Models.KlientDocument", b =>
                 {
-                    b.HasOne("Tilbake.Domain.Models.DocumentType", "DocumentType")
+                    b.HasOne("Tilbake.Domain.Models.DocumentCategory", "DocumentCategory")
                         .WithMany()
-                        .HasForeignKey("DocumentTypeID")
+                        .HasForeignKey("DocumentCategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1500,7 +1506,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Tilbake.Domain.Models.Risk", "Risk")
-                        .WithMany()
+                        .WithMany("KlientRisks")
                         .HasForeignKey("RiskID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1547,9 +1553,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tilbake.Domain.Models.MotorMake", "MotorMake")
+                    b.HasOne("Tilbake.Domain.Models.MotorModel", "MotorModel")
                         .WithMany()
-                        .HasForeignKey("MotorMakeID")
+                        .HasForeignKey("MotorModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1573,7 +1579,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 {
                     b.HasOne("Tilbake.Domain.Models.MotorMake", "MotorMake")
                         .WithMany("MotorModels")
-                        .HasForeignKey("MotorMakeID");
+                        .HasForeignKey("MotorMakeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.Politikk", b =>
@@ -1618,13 +1626,13 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Tilbake.Domain.Models.KlientRisk", "KlientRisk")
-                        .WithMany()
+                        .WithMany("PolitikkRisks")
                         .HasForeignKey("KlientRiskID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tilbake.Domain.Models.Politikk", "Politikk")
-                        .WithMany()
+                        .WithMany("PolitikkRisks")
                         .HasForeignKey("PolitikkID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1699,7 +1707,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Tilbake.Domain.Models.KlientRisk", "KlientRisk")
-                        .WithMany()
+                        .WithMany("QuoteItems")
                         .HasForeignKey("KlientRiskID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1715,33 +1723,23 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 {
                     b.HasOne("Tilbake.Domain.Models.AllRisk", "AllRisk")
                         .WithMany("Risks")
-                        .HasForeignKey("AllRiskID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AllRiskID");
 
                     b.HasOne("Tilbake.Domain.Models.Content", "Content")
                         .WithMany("Risks")
-                        .HasForeignKey("ContentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContentID");
 
                     b.HasOne("Tilbake.Domain.Models.Glass", "Glass")
                         .WithMany("Risks")
-                        .HasForeignKey("GlassID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GlassID");
 
                     b.HasOne("Tilbake.Domain.Models.House", "House")
                         .WithMany("Risks")
-                        .HasForeignKey("HouseID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HouseID");
 
                     b.HasOne("Tilbake.Domain.Models.Motor", "Motor")
                         .WithMany("Risks")
-                        .HasForeignKey("MotorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MotorID");
                 });
 #pragma warning restore 612, 618
         }

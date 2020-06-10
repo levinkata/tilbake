@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Tilbake.Infrastructure.Data.Migrations
 {
-    public partial class MoreTables : Migration
+    public partial class InitCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,45 +13,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
             }
 
             migrationBuilder.CreateTable(
-                name: "BankAccount",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BankBranchID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankAccount", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_BankAccount_BankBranch_BankBranchID",
-                        column: x => x.BankBranchID,
-                        principalTable: "BankBranch",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "City",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LandID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_City", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_City_Land_LandID",
-                        column: x => x.LandID,
-                        principalTable: "Land",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Component",
+                name: "Bank",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -59,7 +21,31 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Component", x => x.ID);
+                    table.PrimaryKey("PK_Bank", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BodyType",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BodyType", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CoverType",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoverType", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,6 +97,29 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Insurer",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Insurer", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InvoiceNumberGenerator",
+                columns: table => new
+                {
+                    InvoiceNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvoiceNumber", x => x.InvoiceNumber);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "InvoiceStatus",
                 columns: table => new
                 {
@@ -123,6 +132,28 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KlientNumberGenerator",
+                columns: table => new
+                {
+                    KlientNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KlientNumber", x => x.KlientNumber);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KravNumberGenerator",
+                columns: table => new
+                {
+                    KravNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KravNumber", x => x.KravNumber);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KravStatus",
                 columns: table => new
                 {
@@ -132,6 +163,18 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KravStatus", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Land",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Land", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -159,7 +202,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PolicyStatus",
+                name: "Occupation",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -167,11 +210,22 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PolicyStatus", x => x.ID);
+                    table.PrimaryKey("PK_Occupation", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PolicyType",
+                name: "PolitikkNumberGenerator",
+                columns: table => new
+                {
+                    PolitikkNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PolitikkNumber", x => x.PolitikkNumber);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PolitikkStatus",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -179,7 +233,32 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PolicyType", x => x.ID);
+                    table.PrimaryKey("PK_PolitikkStatus", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PolitikkType",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PolitikkType", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Portfolio",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Portfolio", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +271,17 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PremiumType", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuoteNumberGenerator",
+                columns: table => new
+                {
+                    QuoteNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuoteNumber", x => x.QuoteNumber);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,6 +321,18 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RiskItem",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RiskItem", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RoofType",
                 columns: table => new
                 {
@@ -255,6 +357,18 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Title",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Title", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WallType",
                 columns: table => new
                 {
@@ -267,109 +381,22 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "KlientBankAccount",
-                columns: table => new
-                {
-                    KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BankAccountID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_KlientBankAccount", x => new { x.BankAccountID, x.KlientID });
-                    table.ForeignKey(
-                        name: "FK_KlientBankAccount_BankAccount_BankAccountID",
-                        column: x => x.BankAccountID,
-                        principalTable: "BankAccount",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_KlientBankAccount_Klient_KlientID",
-                        column: x => x.KlientID,
-                        principalTable: "Klient",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Adresse",
+                name: "BankBranch",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PhysicalAddress = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PostalAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CityID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Adresse", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Adresse_City_CityID",
-                        column: x => x.CityID,
-                        principalTable: "City",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AllRisk",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ComponentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AllRisk", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_AllRisk_Component_ComponentID",
-                        column: x => x.ComponentID,
-                        principalTable: "Component",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Glass",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ComponentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Glass", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Glass_Component_ComponentID",
-                        column: x => x.ComponentID,
-                        principalTable: "Component",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "KlientDocument",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BankID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    DocumentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DocumentTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    BIC = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    SwiftCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KlientDocument", x => x.ID);
+                    table.PrimaryKey("PK_BankBranch", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_KlientDocument_DocumentType_DocumentTypeID",
-                        column: x => x.DocumentTypeID,
-                        principalTable: "DocumentType",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_KlientDocument_Klient_KlientID",
-                        column: x => x.KlientID,
-                        principalTable: "Klient",
+                        name: "FK_BankBranch_Bank_BankID",
+                        column: x => x.BankID,
+                        principalTable: "Bank",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -395,13 +422,31 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "City",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LandID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_City", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_City_Land_LandID",
+                        column: x => x.LandID,
+                        principalTable: "Land",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MotorModel",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MakeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    MotorMakeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    MotorMakeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -410,53 +455,6 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         name: "FK_MotorModel_MotorMake_MotorMakeID",
                         column: x => x.MotorMakeID,
                         principalTable: "MotorMake",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Motor",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    BodyTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MotorMakeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MotorModeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegYear = table.Column<int>(type: "int", nullable: false),
-                    DriverTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EngineNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ChassisNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    EngineCapacity = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Colour = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    MotorUseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SecurityFitting = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Motor", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Motor_BodyType_BodyTypeID",
-                        column: x => x.BodyTypeID,
-                        principalTable: "BodyType",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Motor_DriverType_DriverTypeID",
-                        column: x => x.DriverTypeID,
-                        principalTable: "DriverType",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Motor_MotorMake_MotorMakeID",
-                        column: x => x.MotorMakeID,
-                        principalTable: "MotorMake",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Motor_MotorUse_MotorUseID",
-                        column: x => x.MotorUseID,
-                        principalTable: "MotorUse",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -484,52 +482,81 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Politikk",
+                name: "AllRisk",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PortfolioKlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PolitikkNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PolitikkTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    InsurerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CoverStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CoverEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InceptionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PolitikkStatusID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SalesTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    RiskItemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Politikk", x => x.ID);
+                    table.PrimaryKey("PK_AllRisk", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Politikk_Insurer_InsurerID",
-                        column: x => x.InsurerID,
-                        principalTable: "Insurer",
+                        name: "FK_AllRisk_RiskItem_RiskItemID",
+                        column: x => x.RiskItemID,
+                        principalTable: "RiskItem",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Glass",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RiskItemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Glass", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Glass_RiskItem_RiskItemID",
+                        column: x => x.RiskItemID,
+                        principalTable: "RiskItem",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Klient",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TitleID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KlientNumber = table.Column<int>(type: "int", nullable: false),
+                    KlientType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IDNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Mobile = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Fax = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Carrier = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OccupationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LandID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Klient", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Klient_Land_LandID",
+                        column: x => x.LandID,
+                        principalTable: "Land",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Politikk_PolicyStatus_PolitikkStatusID",
-                        column: x => x.PolitikkStatusID,
-                        principalTable: "PolicyStatus",
+                        name: "FK_Klient_Occupation_OccupationID",
+                        column: x => x.OccupationID,
+                        principalTable: "Occupation",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Politikk_PolicyType_PolitikkTypeID",
-                        column: x => x.PolitikkTypeID,
-                        principalTable: "PolicyType",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Politikk_PortfolioKlient_PortfolioKlientID",
-                        column: x => x.PortfolioKlientID,
-                        principalTable: "PortfolioKlient",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Politikk_SalesType_SalesTypeID",
-                        column: x => x.SalesTypeID,
-                        principalTable: "SalesType",
+                        name: "FK_Klient_Title_TitleID",
+                        column: x => x.TitleID,
+                        principalTable: "Title",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -594,6 +621,166 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BankAccount",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BankBranchID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BankAccount", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_BankAccount_BankBranch_BankBranchID",
+                        column: x => x.BankBranchID,
+                        principalTable: "BankBranch",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Adresse",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PhysicalAddress = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PostalAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CityID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Adresse", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Adresse_City_CityID",
+                        column: x => x.CityID,
+                        principalTable: "City",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Motor",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    BodyTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MotorModelID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegYear = table.Column<int>(type: "int", nullable: false),
+                    DriverTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EngineNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ChassisNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    EngineCapacity = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Colour = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MotorUseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SecurityFitting = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Motor", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Motor_BodyType_BodyTypeID",
+                        column: x => x.BodyTypeID,
+                        principalTable: "BodyType",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Motor_DriverType_DriverTypeID",
+                        column: x => x.DriverTypeID,
+                        principalTable: "DriverType",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Motor_MotorModel_MotorModelID",
+                        column: x => x.MotorModelID,
+                        principalTable: "MotorModel",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Motor_MotorUse_MotorUseID",
+                        column: x => x.MotorUseID,
+                        principalTable: "MotorUse",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KlientDocument",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DocumentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DocumentTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KlientDocument", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_KlientDocument_DocumentType_DocumentTypeID",
+                        column: x => x.DocumentTypeID,
+                        principalTable: "DocumentType",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_KlientDocument_Klient_KlientID",
+                        column: x => x.KlientID,
+                        principalTable: "Klient",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PortfolioKlient",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PortfolioID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PortfolioKlient", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_PortfolioKlient_Klient_KlientID",
+                        column: x => x.KlientID,
+                        principalTable: "Klient",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PortfolioKlient_Portfolio_PortfolioID",
+                        column: x => x.PortfolioID,
+                        principalTable: "Portfolio",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KlientBankAccount",
+                columns: table => new
+                {
+                    KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BankAccountID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KlientBankAccount", x => new { x.BankAccountID, x.KlientID });
+                    table.ForeignKey(
+                        name: "FK_KlientBankAccount_BankAccount_BankAccountID",
+                        column: x => x.BankAccountID,
+                        principalTable: "BankAccount",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_KlientBankAccount_Klient_KlientID",
+                        column: x => x.KlientID,
+                        principalTable: "Klient",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MotorImprovement",
                 columns: table => new
                 {
@@ -615,6 +802,128 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         name: "FK_MotorImprovement_Motor_MotorID",
                         column: x => x.MotorID,
                         principalTable: "Motor",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Risk",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AllRiskID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ContentID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    GlassID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    HouseID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MotorID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Risk", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Risk_AllRisk_AllRiskID",
+                        column: x => x.AllRiskID,
+                        principalTable: "AllRisk",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Risk_Content_ContentID",
+                        column: x => x.ContentID,
+                        principalTable: "Content",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Risk_Glass_GlassID",
+                        column: x => x.GlassID,
+                        principalTable: "Glass",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Risk_House_HouseID",
+                        column: x => x.HouseID,
+                        principalTable: "House",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Risk_Motor_MotorID",
+                        column: x => x.MotorID,
+                        principalTable: "Motor",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Politikk",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PortfolioKlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PolitikkNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PolitikkTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InsurerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CoverStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CoverEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InceptionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PolitikkStatusID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SalesTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Politikk", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Politikk_Insurer_InsurerID",
+                        column: x => x.InsurerID,
+                        principalTable: "Insurer",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Politikk_PolitikkStatus_PolitikkStatusID",
+                        column: x => x.PolitikkStatusID,
+                        principalTable: "PolitikkStatus",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Politikk_PolitikkType_PolitikkTypeID",
+                        column: x => x.PolitikkTypeID,
+                        principalTable: "PolitikkType",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Politikk_PortfolioKlient_PortfolioKlientID",
+                        column: x => x.PortfolioKlientID,
+                        principalTable: "PortfolioKlient",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Politikk_SalesType_SalesTypeID",
+                        column: x => x.SalesTypeID,
+                        principalTable: "SalesType",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KlientRisk",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RiskID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KlientRisk", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_KlientRisk_Klient_KlientID",
+                        column: x => x.KlientID,
+                        principalTable: "Klient",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_KlientRisk_Risk_RiskID",
+                        column: x => x.RiskID,
+                        principalTable: "Risk",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -644,77 +953,6 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         name: "FK_Premium_PremiumType_PremiumTypeID",
                         column: x => x.PremiumTypeID,
                         principalTable: "PremiumType",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Risk",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AllRiskID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ContentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GlassID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    HouseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MotorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Risk", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Risk_AllRisk_AllRiskID",
-                        column: x => x.AllRiskID,
-                        principalTable: "AllRisk",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Risk_Content_ContentID",
-                        column: x => x.ContentID,
-                        principalTable: "Content",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Risk_Glass_GlassID",
-                        column: x => x.GlassID,
-                        principalTable: "Glass",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Risk_House_HouseID",
-                        column: x => x.HouseID,
-                        principalTable: "House",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Risk_Motor_MotorID",
-                        column: x => x.MotorID,
-                        principalTable: "Motor",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "KlientRisk",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RiskID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_KlientRisk", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_KlientRisk_Klient_KlientID",
-                        column: x => x.KlientID,
-                        principalTable: "Klient",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_KlientRisk_Risk_RiskID",
-                        column: x => x.RiskID,
-                        principalTable: "Risk",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -755,7 +993,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuoteItems",
+                name: "QuoteItem",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -769,27 +1007,27 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuoteItems", x => x.ID);
+                    table.PrimaryKey("PK_QuoteItem", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_QuoteItems_CoverType_CoverTypeID",
+                        name: "FK_QuoteItem_CoverType_CoverTypeID",
                         column: x => x.CoverTypeID,
                         principalTable: "CoverType",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuoteItems_Insurer_InsurerID",
+                        name: "FK_QuoteItem_Insurer_InsurerID",
                         column: x => x.InsurerID,
                         principalTable: "Insurer",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuoteItems_KlientRisk_KlientRiskID",
+                        name: "FK_QuoteItem_KlientRisk_KlientRiskID",
                         column: x => x.KlientRiskID,
                         principalTable: "KlientRisk",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuoteItems_Quotes_QuoteID",
+                        name: "FK_QuoteItem_Quotes_QuoteID",
                         column: x => x.QuoteID,
                         principalTable: "Quotes",
                         principalColumn: "ID",
@@ -902,14 +1140,19 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 column: "CityID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AllRisk_ComponentID",
+                name: "IX_AllRisk_RiskItemID",
                 table: "AllRisk",
-                column: "ComponentID");
+                column: "RiskItemID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BankAccount_BankBranchID",
                 table: "BankAccount",
                 column: "BankBranchID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BankBranch_BankID",
+                table: "BankBranch",
+                column: "BankID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_City_LandID",
@@ -927,9 +1170,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 column: "WallTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Glass_ComponentID",
+                name: "IX_Glass_RiskItemID",
                 table: "Glass",
-                column: "ComponentID");
+                column: "RiskItemID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_House_ResidenceTypeID",
@@ -960,6 +1203,21 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "IX_InvoiceItem_PolitikkRiskID",
                 table: "InvoiceItem",
                 column: "PolitikkRiskID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Klient_LandID",
+                table: "Klient",
+                column: "LandID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Klient_OccupationID",
+                table: "Klient",
+                column: "OccupationID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Klient_TitleID",
+                table: "Klient",
+                column: "TitleID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KlientBankAccount_KlientID",
@@ -1017,9 +1275,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 column: "DriverTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Motor_MotorMakeID",
+                name: "IX_Motor_MotorModelID",
                 table: "Motor",
-                column: "MotorMakeID");
+                column: "MotorModelID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Motor_MotorUseID",
@@ -1082,6 +1340,16 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 column: "ExtensionID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PortfolioKlient_KlientID",
+                table: "PortfolioKlient",
+                column: "KlientID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortfolioKlient_PortfolioID",
+                table: "PortfolioKlient",
+                column: "PortfolioID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Premium_PolitikkID",
                 table: "Premium",
                 column: "PolitikkID");
@@ -1092,23 +1360,23 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 column: "PremiumTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuoteItems_CoverTypeID",
-                table: "QuoteItems",
+                name: "IX_QuoteItem_CoverTypeID",
+                table: "QuoteItem",
                 column: "CoverTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuoteItems_InsurerID",
-                table: "QuoteItems",
+                name: "IX_QuoteItem_InsurerID",
+                table: "QuoteItem",
                 column: "InsurerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuoteItems_KlientRiskID",
-                table: "QuoteItems",
+                name: "IX_QuoteItem_KlientRiskID",
+                table: "QuoteItem",
                 column: "KlientRiskID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuoteItems_QuoteID",
-                table: "QuoteItems",
+                name: "IX_QuoteItem_QuoteID",
+                table: "QuoteItem",
                 column: "QuoteID");
 
             migrationBuilder.CreateIndex(
@@ -1156,19 +1424,28 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "InvoiceItem");
 
             migrationBuilder.DropTable(
+                name: "InvoiceNumberGenerator");
+
+            migrationBuilder.DropTable(
                 name: "KlientBankAccount");
 
             migrationBuilder.DropTable(
                 name: "KlientDocument");
 
             migrationBuilder.DropTable(
+                name: "KlientNumberGenerator");
+
+            migrationBuilder.DropTable(
                 name: "Krav");
+
+            migrationBuilder.DropTable(
+                name: "KravNumberGenerator");
 
             migrationBuilder.DropTable(
                 name: "MotorImprovement");
 
             migrationBuilder.DropTable(
-                name: "MotorModel");
+                name: "PolitikkNumberGenerator");
 
             migrationBuilder.DropTable(
                 name: "PolitikkRiskExtension");
@@ -1177,7 +1454,10 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "Premium");
 
             migrationBuilder.DropTable(
-                name: "QuoteItems");
+                name: "QuoteItem");
+
+            migrationBuilder.DropTable(
+                name: "QuoteNumberGenerator");
 
             migrationBuilder.DropTable(
                 name: "City");
@@ -1216,6 +1496,12 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "InvoiceStatus");
 
             migrationBuilder.DropTable(
+                name: "BankBranch");
+
+            migrationBuilder.DropTable(
+                name: "CoverType");
+
+            migrationBuilder.DropTable(
                 name: "KlientRisk");
 
             migrationBuilder.DropTable(
@@ -1225,13 +1511,22 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "QuoteStatus");
 
             migrationBuilder.DropTable(
+                name: "Bank");
+
+            migrationBuilder.DropTable(
                 name: "Risk");
 
             migrationBuilder.DropTable(
-                name: "PolicyStatus");
+                name: "Insurer");
 
             migrationBuilder.DropTable(
-                name: "PolicyType");
+                name: "PolitikkStatus");
+
+            migrationBuilder.DropTable(
+                name: "PolitikkType");
+
+            migrationBuilder.DropTable(
+                name: "PortfolioKlient");
 
             migrationBuilder.DropTable(
                 name: "SalesType");
@@ -1252,7 +1547,13 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "Motor");
 
             migrationBuilder.DropTable(
-                name: "Component");
+                name: "Klient");
+
+            migrationBuilder.DropTable(
+                name: "Portfolio");
+
+            migrationBuilder.DropTable(
+                name: "RiskItem");
 
             migrationBuilder.DropTable(
                 name: "ResidenceType");
@@ -1264,13 +1565,28 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "WallType");
 
             migrationBuilder.DropTable(
+                name: "BodyType");
+
+            migrationBuilder.DropTable(
                 name: "DriverType");
 
             migrationBuilder.DropTable(
-                name: "MotorMake");
+                name: "MotorModel");
 
             migrationBuilder.DropTable(
                 name: "MotorUse");
+
+            migrationBuilder.DropTable(
+                name: "Land");
+
+            migrationBuilder.DropTable(
+                name: "Occupation");
+
+            migrationBuilder.DropTable(
+                name: "Title");
+
+            migrationBuilder.DropTable(
+                name: "MotorMake");
         }
     }
 }

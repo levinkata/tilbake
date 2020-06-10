@@ -3,8 +3,8 @@ using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.ViewModels
 {
-    public class DocumentTypesViewModel
+    public class DocumentCategoriesViewModel
     {
-        public IEnumerable<DocumentType> DocumentTypes { get; set; }
+        public IEnumerable<DocumentCategory> DocumentCategories { get; set; }
     }
 }

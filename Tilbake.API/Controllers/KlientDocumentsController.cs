@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.API.Binders;
 using Tilbake.Application.Interfaces;
@@ -79,7 +80,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/KlientDocuments
         [HttpPost]
-        public async Task<IActionResult> Post([ModelBinder(BinderType = typeof(JsonModelBinder))] DocParams docParams,
+        public async Task<IActionResult> Post([ModelBinder(BinderType = typeof(JsonModelBinder))][FromBody] IList<DocParams> docParams,
             IFormFile file)
         {
             if (docParams == null)
@@ -94,8 +95,8 @@ namespace Tilbake.API.Controllers
 
             FileUpLoadViewModel model = new FileUpLoadViewModel()
             {
-                KlientID = docParams.KlientID,
-                DocumentCategoryID = docParams.DocumentCategoryID,
+                KlientID = docParams[0].KlientID,
+                DocumentCategoryID = docParams[0].DocumentCategoryID,
                 File = file
             };
 

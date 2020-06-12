@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/SalesTypes
         [HttpGet]
-        public async Task<ActionResult> GetSalesTypes()
+        public async Task<IActionResult> GetSalesTypes()
         {
             SalesTypesViewModel model = await _salesTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.SalesTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/SalesTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetSalesType(Guid id)
+        public async Task<IActionResult> GetSalesType(Guid id)
         {
             SalesTypeViewModel model = await _salesTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/SalesTypes
         [HttpPost]
-        public async Task<ActionResult> PostSalesType(SalesType salesType)
+        public async Task<IActionResult> PostSalesType(SalesType salesType)
         {
             SalesTypeViewModel model = new SalesTypeViewModel()
             {

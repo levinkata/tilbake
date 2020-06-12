@@ -10,14 +10,14 @@ using Tilbake.Infrastructure.Data.Context;
 namespace Tilbake.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TilbakeDbContext))]
-    [Migration("20200610080517_InitCreate")]
+    [Migration("20200612091212_InitCreate")]
     partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.0-preview.4.20220.10")
+                .HasAnnotation("ProductVersion", "5.0.0-preview.5.20278.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -210,7 +210,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                     b.ToTable("CoverType");
                 });
 
-            modelBuilder.Entity("Tilbake.Domain.Models.DocumentType", b =>
+            modelBuilder.Entity("Tilbake.Domain.Models.DocumentCategory", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -223,7 +223,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("DocumentType");
+                    b.ToTable("DocumentCategory");
                 });
 
             modelBuilder.Entity("Tilbake.Domain.Models.DriverType", b =>
@@ -503,18 +503,25 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<Guid>("DocumentCategoryID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DocumentDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DocumentTypeID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("KlientID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("ID");
 
-                    b.HasIndex("DocumentTypeID");
+                    b.HasIndex("DocumentCategoryID");
 
                     b.HasIndex("KlientID");
 
@@ -1484,9 +1491,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Tilbake.Domain.Models.KlientDocument", b =>
                 {
-                    b.HasOne("Tilbake.Domain.Models.DocumentType", "DocumentType")
+                    b.HasOne("Tilbake.Domain.Models.DocumentCategory", "DocumentCategory")
                         .WithMany()
-                        .HasForeignKey("DocumentTypeID")
+                        .HasForeignKey("DocumentCategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

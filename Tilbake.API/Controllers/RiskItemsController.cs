@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/RiskItems
         [HttpGet]
-        public async Task<ActionResult> GetRiskItems()
+        public async Task<IActionResult> GetRiskItems()
         {
             RiskItemsViewModel model = await _riskItemService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.RiskItems)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/RiskItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetRiskItem(Guid id)
+        public async Task<IActionResult> GetRiskItem(Guid id)
         {
             RiskItemViewModel model = await _riskItemService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/RiskItems
         [HttpPost]
-        public async Task<ActionResult> PostRiskItem(RiskItem riskItem)
+        public async Task<IActionResult> PostRiskItem(RiskItem riskItem)
         {
             RiskItemViewModel model = new RiskItemViewModel()
             {

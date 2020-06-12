@@ -65,7 +65,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/QuoteStatuss
         [HttpPost]
-        public async Task<ActionResult> PostQuoteStatus(QuoteStatus quoteStatus)
+        public async Task<IActionResult> PostQuoteStatus(QuoteStatus quoteStatus)
         {
             QuoteStatusViewModel model = new QuoteStatusViewModel()
             {

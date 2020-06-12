@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientBankAccounts
         [HttpGet]
-        public async Task<ActionResult> GetKlientBankAccounts()
+        public async Task<IActionResult> GetKlientBankAccounts()
         {
             KlientBankAccountsViewModel model = await _klientBankAccountService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.KlientBankAccounts)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/KlientBankAccounts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetKlientBankAccount(Guid klientId, Guid bankAccountId)
+        public async Task<IActionResult> GetKlientBankAccount(Guid klientId, Guid bankAccountId)
         {
             KlientBankAccountViewModel model = await _klientBankAccountService.GetAsync(klientId, bankAccountId).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/KlientBankAccounts
         [HttpPost]
-        public async Task<ActionResult> PostKlientBankAccount(KlientBankAccount klientBankAccount)
+        public async Task<IActionResult> PostKlientBankAccount(KlientBankAccount klientBankAccount)
         {
             KlientBankAccountViewModel model = new KlientBankAccountViewModel()
             {

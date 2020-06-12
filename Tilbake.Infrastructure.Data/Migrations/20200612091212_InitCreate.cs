@@ -49,7 +49,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DocumentType",
+                name: "DocumentCategory",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -57,7 +57,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentType", x => x.ID);
+                    table.PrimaryKey("PK_DocumentCategory", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -711,16 +711,18 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     KlientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DocumentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DocumentTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DocumentCategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KlientDocument", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_KlientDocument_DocumentType_DocumentTypeID",
-                        column: x => x.DocumentTypeID,
-                        principalTable: "DocumentType",
+                        name: "FK_KlientDocument_DocumentCategory_DocumentCategoryID",
+                        column: x => x.DocumentCategoryID,
+                        principalTable: "DocumentCategory",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -1225,9 +1227,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 column: "KlientID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_KlientDocument_DocumentTypeID",
+                name: "IX_KlientDocument_DocumentCategoryID",
                 table: "KlientDocument",
-                column: "DocumentTypeID");
+                column: "DocumentCategoryID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KlientDocument_KlientID",
@@ -1469,7 +1471,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
                 name: "BankAccount");
 
             migrationBuilder.DropTable(
-                name: "DocumentType");
+                name: "DocumentCategory");
 
             migrationBuilder.DropTable(
                 name: "Incident");

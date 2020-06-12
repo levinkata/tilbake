@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/DriverTypes
         [HttpGet]
-        public async Task<ActionResult> GetDriverTypes()
+        public async Task<IActionResult> GetDriverTypes()
         {
             DriverTypesViewModel model = await _driverTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.DriverTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/DriverTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetDriverType(Guid id)
+        public async Task<IActionResult> GetDriverType(Guid id)
         {
             DriverTypeViewModel model = await _driverTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/DriverTypes
         [HttpPost]
-        public async Task<ActionResult> PostDriverType(DriverType driverType)
+        public async Task<IActionResult> PostDriverType(DriverType driverType)
         {
             DriverTypeViewModel model = new DriverTypeViewModel()
             {

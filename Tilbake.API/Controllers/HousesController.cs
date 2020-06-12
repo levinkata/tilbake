@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Houses
         [HttpGet]
-        public async Task<ActionResult> GetHouses()
+        public async Task<IActionResult> GetHouses()
         {
             HousesViewModel model = await _houseService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Houses)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Houses/Klient/5
         [HttpGet("Klient/{klientId}")]
-        public async Task<ActionResult> GetByKlient(Guid klientId)
+        public async Task<IActionResult> GetByKlient(Guid klientId)
         {
             HousesViewModel model = await _houseService.GetByKlientAsync(klientId).ConfigureAwait(true);
             if (model == null)
@@ -41,7 +41,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Houses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetHouse(Guid id)
+        public async Task<IActionResult> GetHouse(Guid id)
         {
             HouseViewModel model = await _houseService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -78,7 +78,7 @@ namespace Tilbake.API.Controllers
         // POST: api/Houses/6
         [HttpPost]
         [HttpPost("{klientId}")]
-        public async Task<ActionResult> PostHouse(Guid klientId, House house)
+        public async Task<IActionResult> PostHouse(Guid klientId, House house)
         {
             HouseViewModel model = new HouseViewModel()
             {

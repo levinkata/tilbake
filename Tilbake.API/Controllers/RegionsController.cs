@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Regions
         [HttpGet]
-        public async Task<ActionResult> GetRegions()
+        public async Task<IActionResult> GetRegions()
         {
             RegionsViewModel model = await _regionService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Regions)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Regions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetRegion(Guid id)
+        public async Task<IActionResult> GetRegion(Guid id)
         {
             RegionViewModel model = await _regionService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Regions
         [HttpPost]
-        public async Task<ActionResult> PostRegion(Region region)
+        public async Task<IActionResult> PostRegion(Region region)
         {
             RegionViewModel model = new RegionViewModel()
             {

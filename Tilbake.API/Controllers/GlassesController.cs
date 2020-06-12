@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Glasss
         [HttpGet]
-        public async Task<ActionResult> GetGlasss()
+        public async Task<IActionResult> GetGlasss()
         {
             GlassesViewModel model = await _glassService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Glasses)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Glasss/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetGlass(Guid id)
+        public async Task<IActionResult> GetGlass(Guid id)
         {
             GlassViewModel model = await _glassService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Glasss
         [HttpPost]
-        public async Task<ActionResult> PostGlass(Guid klientId, Glass glass)
+        public async Task<IActionResult> PostGlass(Guid klientId, Glass glass)
         {
             GlassViewModel model = new GlassViewModel()
             {

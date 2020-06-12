@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Incidents
         [HttpGet]
-        public async Task<ActionResult> GetIncidents()
+        public async Task<IActionResult> GetIncidents()
         {
             IncidentsViewModel model = await _incidentService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Incidents)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Incidents/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetIncident(Guid id)
+        public async Task<IActionResult> GetIncident(Guid id)
         {
             IncidentViewModel model = await _incidentService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Incidents
         [HttpPost]
-        public async Task<ActionResult> PostIncident(Incident incident)
+        public async Task<IActionResult> PostIncident(Incident incident)
         {
             IncidentViewModel model = new IncidentViewModel()
             {

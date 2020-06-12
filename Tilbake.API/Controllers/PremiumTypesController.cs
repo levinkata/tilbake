@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/PremiumTypes
         [HttpGet]
-        public async Task<ActionResult> GetPremiumTypes()
+        public async Task<IActionResult> GetPremiumTypes()
         {
             PremiumTypesViewModel model = await _premiumTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.PremiumTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/PremiumTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetPremiumType(Guid id)
+        public async Task<IActionResult> GetPremiumType(Guid id)
         {
             PremiumTypeViewModel model = await _premiumTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/PremiumTypes
         [HttpPost]
-        public async Task<ActionResult> PostPremiumType(PremiumType premiumType)
+        public async Task<IActionResult> PostPremiumType(PremiumType premiumType)
         {
             PremiumTypeViewModel model = new PremiumTypeViewModel()
             {

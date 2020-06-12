@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/AllRisks
         [HttpGet]
-        public async Task<ActionResult> GetAllRisks()
+        public async Task<IActionResult> GetAllRisks()
         {
             AllRisksViewModel model = await _allRiskService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.AllRisks)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/AllRisks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetAllRisk(Guid id)
+        public async Task<IActionResult> GetAllRisk(Guid id)
         {
             AllRiskViewModel model = await _allRiskService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/AllRisks
         [HttpPost]
-        public async Task<ActionResult> PostAllRisk(Guid klientId, AllRisk allRisk)
+        public async Task<IActionResult> PostAllRisk(Guid klientId, AllRisk allRisk)
         {
             AllRiskViewModel model = new AllRiskViewModel()
             {

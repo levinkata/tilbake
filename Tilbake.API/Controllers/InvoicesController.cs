@@ -21,7 +21,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Invoices
         [HttpGet]
-        public async Task<ActionResult> GetInvoices()
+        public async Task<IActionResult> GetInvoices()
         {
             InvoicesViewModel model = await _invoiceService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Invoices)).ConfigureAwait(true);
@@ -29,7 +29,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Invoices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetInvoice(Guid id)
+        public async Task<IActionResult> GetInvoice(Guid id)
         {
             InvoiceViewModel model = await _invoiceService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -42,7 +42,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Invoices/Klient/6
         [HttpGet("Klient/{klientId}")]
-        public async Task<ActionResult> GetKlientAsync(Guid klientId)
+        public async Task<IActionResult> GetKlientAsync(Guid klientId)
         {
             InvoicesViewModel model = await _invoiceService.GetKlientAsync(klientId).ConfigureAwait(true);
             if (model == null)
@@ -55,7 +55,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Invoices/Invoice/6
         [HttpGet("Invoice/{invoiceNumber}")]
-        public async Task<ActionResult> GetByInvoiceNumberAsync(int invoiceNumber)
+        public async Task<IActionResult> GetByInvoiceNumberAsync(int invoiceNumber)
         {
             InvoiceViewModel model = await _invoiceService.GetByInvoiceNumberAsync(invoiceNumber).ConfigureAwait(true);
             if (model == null)
@@ -91,7 +91,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Invoices
         [HttpPost]
-        public async Task<ActionResult> PostInvoice(Invoice invoice, [FromRoute] List<InvoiceItem> invoiceItems)
+        public async Task<IActionResult> PostInvoice(Invoice invoice, [FromRoute] List<InvoiceItem> invoiceItems)
         {
             InvoiceViewModel model = new InvoiceViewModel()
             {

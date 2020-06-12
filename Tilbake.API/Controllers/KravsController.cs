@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Kravs
         [HttpGet]
-        public async Task<ActionResult> GetKravs()
+        public async Task<IActionResult> GetKravs()
         {
             KravsViewModel model = await _kravService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Kravs)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Kravs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetKrav(int id)
+        public async Task<IActionResult> GetKrav(int id)
         {
             KravViewModel model = await _kravService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Kravs
         [HttpPost]
-        public async Task<ActionResult> PostKrav(Krav krav)
+        public async Task<IActionResult> PostKrav(Krav krav)
         {
             KravViewModel model = new KravViewModel()
             {

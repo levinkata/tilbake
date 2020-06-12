@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/CoverTypes
         [HttpGet]
-        public async Task<ActionResult> GetCoverTypes()
+        public async Task<IActionResult> GetCoverTypes()
         {
             CoverTypesViewModel model = await _coverTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.CoverTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/CoverTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetCoverType(Guid id)
+        public async Task<IActionResult> GetCoverType(Guid id)
         {
             CoverTypeViewModel model = await _coverTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/CoverTypes
         [HttpPost]
-        public async Task<ActionResult> PostCoverType(CoverType coverType)
+        public async Task<IActionResult> PostCoverType(CoverType coverType)
         {
             CoverTypeViewModel model = new CoverTypeViewModel()
             {

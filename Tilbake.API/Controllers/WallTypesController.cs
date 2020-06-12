@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/WallTypes
         [HttpGet]
-        public async Task<ActionResult> GetWallTypes()
+        public async Task<IActionResult> GetWallTypes()
         {
             WallTypesViewModel model = await _wallTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.WallTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/WallTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetWallType(Guid id)
+        public async Task<IActionResult> GetWallType(Guid id)
         {
             WallTypeViewModel model = await _wallTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/WallTypes
         [HttpPost]
-        public async Task<ActionResult> PostWallType(WallType wallType)
+        public async Task<IActionResult> PostWallType(WallType wallType)
         {
             WallTypeViewModel model = new WallTypeViewModel()
             {

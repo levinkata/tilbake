@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/DocumentCategories
         [HttpGet]
-        public async Task<ActionResult> GetDocumentCategories()
+        public async Task<IActionResult> GetDocumentCategories()
         {
             DocumentCategoriesViewModel model = await _documentCategoryService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.DocumentCategories)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/DocumentCategories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetDocumentCategory(Guid id)
+        public async Task<IActionResult> GetDocumentCategory(Guid id)
         {
             DocumentCategoryViewModel model = await _documentCategoryService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/DocumentCategories
         [HttpPost]
-        public async Task<ActionResult> PostDocumentCategory(DocumentCategory documentCategory)
+        public async Task<IActionResult> PostDocumentCategory(DocumentCategory documentCategory)
         {
             DocumentCategoryViewModel model = new DocumentCategoryViewModel()
             {

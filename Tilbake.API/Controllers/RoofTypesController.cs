@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/RoofTypes
         [HttpGet]
-        public async Task<ActionResult> GetRoofTypes()
+        public async Task<IActionResult> GetRoofTypes()
         {
             RoofTypesViewModel model = await _roofTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.RoofTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/RoofTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetRoofType(Guid id)
+        public async Task<IActionResult> GetRoofType(Guid id)
         {
             RoofTypeViewModel model = await _roofTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/RoofTypes
         [HttpPost]
-        public async Task<ActionResult> PostRoofType(RoofType roofType)
+        public async Task<IActionResult> PostRoofType(RoofType roofType)
         {
             RoofTypeViewModel model = new RoofTypeViewModel()
             {

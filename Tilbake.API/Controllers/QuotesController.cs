@@ -21,7 +21,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Quotes
         [HttpGet]
-        public async Task<ActionResult> GetQuotes()
+        public async Task<IActionResult> GetQuotes()
         {
             QuotesViewModel model = await _quoteService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Quotes)).ConfigureAwait(true);
@@ -29,7 +29,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Quotes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetQuote(Guid id)
+        public async Task<IActionResult> GetQuote(Guid id)
         {
             QuoteViewModel model = await _quoteService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -42,7 +42,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Quotes/Klient/6
         [HttpGet("Klient/{klientId}")]
-        public async Task<ActionResult> GetKlientAsync(Guid klientId)
+        public async Task<IActionResult> GetKlientAsync(Guid klientId)
         {
             QuotesViewModel model = await _quoteService.GetKlientAsync(klientId).ConfigureAwait(true);
             if (model == null)
@@ -55,7 +55,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Quotes/Quote/6
         [HttpGet("Quote/{quoteNumber}")]
-        public async Task<ActionResult> GetByQuoteNumberAsync(int quoteNumber)
+        public async Task<IActionResult> GetByQuoteNumberAsync(int quoteNumber)
         {
             QuoteViewModel model = await _quoteService.GetByQuoteNumberAsync(quoteNumber).ConfigureAwait(true);
             if (model == null)
@@ -91,7 +91,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Quotes
         [HttpPost]
-        public async Task<ActionResult> PostQuote(Quote quote, [FromRoute] List<QuoteItem> quoteItems)
+        public async Task<IActionResult> PostQuote(Quote quote, [FromRoute] List<QuoteItem> quoteItems)
         {
             QuoteViewModel model = new QuoteViewModel()
             {

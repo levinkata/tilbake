@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/BodyTypes
         [HttpGet]
-        public async Task<ActionResult> GetBodyTypes()
+        public async Task<IActionResult> GetBodyTypes()
         {
             BodyTypesViewModel model = await _bodyTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.BodyTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/BodyTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetBodyType(Guid id)
+        public async Task<IActionResult> GetBodyType(Guid id)
         {
             BodyTypeViewModel model = await _bodyTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/BodyTypes
         [HttpPost]
-        public async Task<ActionResult> PostBodyType(BodyType bodyType)
+        public async Task<IActionResult> PostBodyType(BodyType bodyType)
         {
             BodyTypeViewModel model = new BodyTypeViewModel()
             {

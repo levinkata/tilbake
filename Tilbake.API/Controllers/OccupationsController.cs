@@ -65,7 +65,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Occupations
         [HttpPost]
-        public async Task<ActionResult> PostOccupation(Occupation occupation)
+        public async Task<IActionResult> PostOccupation(Occupation occupation)
         {
             OccupationViewModel model = new OccupationViewModel()
             {

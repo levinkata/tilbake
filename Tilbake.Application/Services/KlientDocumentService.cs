@@ -30,13 +30,14 @@ namespace Tilbake.Application.Services
             KlientDocument klientDocument = new KlientDocument()
             {
                 KlientID = model.KlientID,
+                Description = Guid.NewGuid().ToString(),
                 DocumentDate = DateTime.Now,
                 DocumentCategoryID = model.DocumentCategoryID
             };
 
             using var memoryStream = new MemoryStream();
             await model.File.CopyToAsync(memoryStream).ConfigureAwait(true);
-            klientDocument.Document.AddRange(memoryStream.ToArray());
+            klientDocument.Photo = memoryStream.ToArray();
 
             return await Task.Run(() => _klientDocumentRepository.AddAsync(klientDocument)).ConfigureAwait(true);
         }
@@ -56,6 +57,12 @@ namespace Tilbake.Application.Services
 
         public async Task<KlientDocumentViewModel> GetAsync(Guid id)
         {
+            //var hh = await _klientDocumentRepository.GetAsync(id).ConfigureAwait(true);
+            //byte[] ll = hh.Document.ToArray();
+            //using var memoryStream = new MemoryStream();
+            //memoryStream.Write(ll, 0, (int)ll.Length);
+            //File.WriteAllBytes(@"D:\source\repos\testpdf.pdf", memoryStream.ToArray());
+
             return new KlientDocumentViewModel()
             {
                 KlientDocument = await Task.Run(() => _klientDocumentRepository.GetAsync(id)).ConfigureAwait(true)

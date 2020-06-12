@@ -15,7 +15,7 @@ namespace Tilbake.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.0-preview.4.20220.10")
+                .HasAnnotation("ProductVersion", "5.0.0-preview.5.20278.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -501,6 +501,10 @@ namespace Tilbake.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<Guid>("DocumentCategoryID")
                         .HasColumnType("uniqueidentifier");
 
@@ -509,6 +513,9 @@ namespace Tilbake.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("KlientID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("ID");
 

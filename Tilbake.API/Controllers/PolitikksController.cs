@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Politikks
         [HttpGet]
-        public async Task<ActionResult> GetPolitikks()
+        public async Task<IActionResult> GetPolitikks()
         {
             PolitikksViewModel model = await _politikkService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Politikks)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Politikks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetPolitikk(Guid id)
+        public async Task<IActionResult> GetPolitikk(Guid id)
         {
             PolitikkViewModel model = await _politikkService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Politikks
         [HttpPost]
-        public async Task<ActionResult> PostPolitikk(Politikk politikk)
+        public async Task<IActionResult> PostPolitikk(Politikk politikk)
         {
             PolitikkViewModel model = new PolitikkViewModel()
             {

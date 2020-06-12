@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200610080517_InitCreate.cs" />
+    <Compile Remove="Migrations\20200610080517_InitCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200612075030_AddPhotoProperty.cs" />
+    <Compile Remove="Migrations\20200612075030_AddPhotoProperty.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

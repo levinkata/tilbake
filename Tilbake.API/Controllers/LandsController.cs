@@ -65,7 +65,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Lands
         [HttpPost]
-        public async Task<ActionResult> PostLand(Land land)
+        public async Task<IActionResult> PostLand(Land land)
         {
             LandViewModel model = new LandViewModel()
             {

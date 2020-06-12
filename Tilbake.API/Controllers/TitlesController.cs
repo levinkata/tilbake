@@ -65,7 +65,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Titles
         [HttpPost]
-        public async Task<ActionResult> PostTitle(Title title)
+        public async Task<IActionResult> PostTitle(Title title)
         {
             TitleViewModel model = new TitleViewModel()
             {

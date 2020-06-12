@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/ResidenceTypes
         [HttpGet]
-        public async Task<ActionResult> GetResidenceTypes()
+        public async Task<IActionResult> GetResidenceTypes()
         {
             ResidenceTypesViewModel model = await _residenceTypeService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.ResidenceTypes)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/ResidenceTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetResidenceType(Guid id)
+        public async Task<IActionResult> GetResidenceType(Guid id)
         {
             ResidenceTypeViewModel model = await _residenceTypeService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/ResidenceTypes
         [HttpPost]
-        public async Task<ActionResult> PostResidenceType(ResidenceType residenceType)
+        public async Task<IActionResult> PostResidenceType(ResidenceType residenceType)
         {
             ResidenceTypeViewModel model = new ResidenceTypeViewModel()
             {

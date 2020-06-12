@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/InvoiceStatuses
         [HttpGet]
-        public async Task<ActionResult> GetInvoiceStatuses()
+        public async Task<IActionResult> GetInvoiceStatuses()
         {
             InvoiceStatusesViewModel model = await _invoiceStatusService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.InvoiceStatuses)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/InvoiceStatuses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetInvoiceStatus(Guid id)
+        public async Task<IActionResult> GetInvoiceStatus(Guid id)
         {
             InvoiceStatusViewModel model = await _invoiceStatusService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/InvoiceStatuses
         [HttpPost]
-        public async Task<ActionResult> PostInvoiceStatus(InvoiceStatus invoiceStatus)
+        public async Task<IActionResult> PostInvoiceStatus(InvoiceStatus invoiceStatus)
         {
             InvoiceStatusViewModel model = new InvoiceStatusViewModel()
             {

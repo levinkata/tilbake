@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Insurers
         [HttpGet]
-        public async Task<ActionResult> GetInsurers()
+        public async Task<IActionResult> GetInsurers()
         {
             InsurersViewModel model = await _insurerService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.Insurers)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Insurers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetInsurer(Guid id)
+        public async Task<IActionResult> GetInsurer(Guid id)
         {
             InsurerViewModel model = await _insurerService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/Insurers
         [HttpPost]
-        public async Task<ActionResult> PostInsurer(Insurer insurer)
+        public async Task<IActionResult> PostInsurer(Insurer insurer)
         {
             InsurerViewModel model = new InsurerViewModel()
             {

@@ -20,7 +20,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/MotorUses
         [HttpGet]
-        public async Task<ActionResult> GetMotorUses()
+        public async Task<IActionResult> GetMotorUses()
         {
             MotorUsesViewModel model = await _motorUseService.GetAllAsync().ConfigureAwait(true);
             return await Task.Run(() => Ok(model.MotorUses)).ConfigureAwait(true);
@@ -28,7 +28,7 @@ namespace Tilbake.API.Controllers
 
         // GET: api/MotorUses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetMotorUse(Guid id)
+        public async Task<IActionResult> GetMotorUse(Guid id)
         {
             MotorUseViewModel model = await _motorUseService.GetAsync(id).ConfigureAwait(true);
             if (model == null)
@@ -64,7 +64,7 @@ namespace Tilbake.API.Controllers
 
         // POST: api/MotorUses
         [HttpPost]
-        public async Task<ActionResult> PostMotorUse(MotorUse motorUse)
+        public async Task<IActionResult> PostMotorUse(MotorUse motorUse)
         {
             MotorUseViewModel model = new MotorUseViewModel()
             {

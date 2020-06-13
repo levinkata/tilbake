@@ -90,16 +90,20 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
-        public async Task<Klient> GetAsync(Guid id)
+        public async Task<Klient> GetAsync(Guid id, bool includeRelated)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-            return await Task.Run(() => context.Klients
-                                                .Include(b => b.Land)
-                                                .Include(b => b.Occupation)
-                                                .Include(b => b.Title)
-                                                .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+            if (includeRelated)
+                return await Task.Run(() => context.Klients
+                                                    .Include(b => b.Land)
+                                                    .Include(b => b.Occupation)
+                                                    .Include(b => b.Title)
+                                                    .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+
+                return await Task.Run(() => context.Klients
+                                                    .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);                                                    
         }
 
         public async Task<Klient> GetByIdNumberAsync(string idNumber)

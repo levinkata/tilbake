@@ -101,7 +101,12 @@ namespace Tilbake.Infrastructure.Data.Context
             });
 
             builder.Entity<InvoiceStatus>().ToTable("InvoiceStatus");
-            builder.Entity<Klient>().ToTable("Klient");
+
+            builder.Entity<Klient>(p =>
+            {
+                p.ToTable("Klient");
+                p.HasIndex(r => r.IDNumber).IsUnique().HasName("UQ_IDNumber");
+            });
             
             builder.Entity<KlientBankAccount>(p =>
             {
@@ -133,7 +138,14 @@ namespace Tilbake.Infrastructure.Data.Context
 
             builder.Entity<KravStatus>().ToTable("KravStatus");
             builder.Entity<Land>().ToTable("Land");
-            builder.Entity<Motor>().ToTable("Motor");
+            builder.Entity<Motor>(p =>
+            {
+                p.ToTable("Motor");
+                p.HasIndex(r => r.RegNumber).IsUnique().HasName("IX_RegNumber");
+                p.HasIndex(r => r.EngineNumber).IsUnique().HasName("IX_EngineNumber");
+                p.HasIndex(r => r.ChassisNumber).IsUnique().HasName("IX_ChassisNumber");                               
+            });
+
             builder.Entity<MotorImprovement>().ToTable("MotorImprovement");
             builder.Entity<MotorMake>().ToTable("MotorMake");
             builder.Entity<MotorModel>().ToTable("MotorModel");

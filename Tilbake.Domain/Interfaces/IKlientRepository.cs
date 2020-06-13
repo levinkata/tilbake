@@ -9,7 +9,7 @@ namespace Tilbake.Domain.Interfaces
     {
         Task<IEnumerable<Klient>> GetAllAsync();
         Task<IEnumerable<Klient>> GetByNameAsync(string klientName);
-        Task<Klient> GetAsync(Guid id);
+        Task<Klient> GetAsync(Guid id, bool includeRelated);
         Task<Klient> GetByIdNumberAsync(string idNumber);
         Task<Klient> GetByKlientNumberAsync(int klientNumber);
         Task<int> AddAsync(Guid portfolioId, Klient klient);

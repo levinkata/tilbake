@@ -36,11 +36,11 @@ namespace Tilbake.Application.Services
             };
         }
 
-        public async Task<KlientViewModel> GetAsync(Guid id)
+        public async Task<KlientViewModel> GetAsync(Guid id, bool includeRelated)
         {
             return new KlientViewModel()
             {
-                Klient = await Task.Run(() => _klientRepository.GetAsync(id)).ConfigureAwait(true)
+                Klient = await Task.Run(() => _klientRepository.GetAsync(id, includeRelated)).ConfigureAwait(true)
             };
         }
 

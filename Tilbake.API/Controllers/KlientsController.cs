@@ -31,7 +31,7 @@ namespace Tilbake.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetKlient(Guid id)
         {
-            KlientViewModel model = await _klientService.GetAsync(id).ConfigureAwait(true);
+            KlientViewModel model = await _klientService.GetAsync(id, true).ConfigureAwait(true);
             if (model == null)
             {
                 return NotFound();
@@ -80,7 +80,7 @@ namespace Tilbake.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteKlient(Guid id)
         {
-            KlientViewModel model = await _klientService.GetAsync(id).ConfigureAwait(true);
+            KlientViewModel model = await _klientService.GetAsync(id, false).ConfigureAwait(true);
             if (model == null)
             {
                 return NotFound();

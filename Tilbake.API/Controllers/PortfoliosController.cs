@@ -32,7 +32,7 @@ namespace Tilbake.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPortfolio(Guid id)
         {
-            PortfolioViewModel model = await _portfolioService.GetAsync(id, false).ConfigureAwait(true);
+            PortfolioViewModel model = await _portfolioService.GetAsync(id, true).ConfigureAwait(true);
             if (model == null)
             {
                 return NotFound();

@@ -8,7 +8,7 @@ namespace Tilbake.Application.Interfaces
     {
         Task<KlientsViewModel> GetAllAsync();
         Task<KlientsViewModel> GetByNameAsync(string klientName);
-        Task<KlientViewModel> GetAsync(Guid id);
+        Task<KlientViewModel> GetAsync(Guid id, bool includeRelated);
         Task<KlientViewModel> GetByIdNumberAsync(string idNumber);
         Task<KlientViewModel> GetByKlientNumberAsync(int klientNumber);
         Task<int> AddAsync(KlientViewModel model);

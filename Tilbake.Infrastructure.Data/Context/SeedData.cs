@@ -805,6 +805,23 @@ namespace Tilbake.Infrastructure.Data.Context
             regions.ForEach(async s => await context.Regions.AddAsync(s).ConfigureAwait(true));
             context.SaveChanges();            
 
+            var drivertypes = new List<DriverType>
+                {
+                   new DriverType { Name="Any Insured Driver"},
+                   new DriverType { Name="Insured and any Family Member"},
+                   new DriverType { Name="Insured Only"}
+                };
+            drivertypes.ForEach(async s => await context.DriverTypes.AddAsync(s).ConfigureAwait(true));
+            context.SaveChanges();
+
+            var motoruses = new List<MotorUse>
+                {
+                   new MotorUse { Name="Business"},
+                   new MotorUse { Name="Private"},
+                   new MotorUse { Name="Business and Private"}
+                };
+            motoruses.ForEach(async s => await context.MotorUses.AddAsync(s).ConfigureAwait(true));
+            context.SaveChanges();            
         }
     }
 

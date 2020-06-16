@@ -9,8 +9,8 @@ namespace Tilbake.Domain.Interfaces
     {
         Task<IEnumerable<Title>> GetAllAsync();
         Task<Title> GetAsync(Guid id);
-        Task<int> AddAsync(Title title);
-        Task<int> UpdateAsync(Title title);
-        Task<int> DeleteAsync(Guid id);
+        Task AddAsync(Title title);
+        void UpdateAsync(Title title);
+        void DeleteAsync(Title title);
     }
 }

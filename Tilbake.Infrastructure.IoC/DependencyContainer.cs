@@ -95,6 +95,7 @@ namespace Tilbake.Infrastructure.IoC
             services.AddScoped<IRoofTypeRepository, RoofTypeRepository>();            
             services.AddScoped<ITitleRepository, TitleRepository>();
             services.AddScoped<ISalesTypeRepository, SalesTypeRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IWallTypeRepository, WallTypeRepository>();
         }
     }

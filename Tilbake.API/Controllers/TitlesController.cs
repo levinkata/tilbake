@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tilbake.API.Resources;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.ViewModels;
 using Tilbake.Domain.Models;
@@ -8,22 +11,35 @@ using Tilbake.Domain.Models;
 namespace Tilbake.API.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class TitlesController : ControllerBase
     {
         private readonly ITitleService _titleService;
+        private readonly IMapper _mapper;
 
-        public TitlesController(ITitleService titleService)
+        public TitlesController(ITitleService titleService, IMapper mapper)
         {
             _titleService = titleService;
+            _mapper = mapper;
         }
 
+        /// <summary>
+        /// Lists all titles.
+        /// </summary>
+        /// <returns>List of titles.</returns>
+        /// 
         // GET: api/Titles
         [HttpGet]
-        public async Task<IActionResult> GetTitles()
+        [ProducesResponseType(typeof(IEnumerable<TitleResource>), 200)]
+        public async Task<IEnumerable<TitleResource>> GetTitles()
         {
-            TitlesViewModel model = await _titleService.GetAllAsync().ConfigureAwait(true);
-            return await Task.Run(() => Ok(model.Titles)).ConfigureAwait(true);
+            var titles = await _titleService.GetAllAsync().ConfigureAwait(true);
+
+            var resources = _mapper.Map<IEnumerable<Title>, IEnumerable<TitleResource>>(titles);
+            return resources;
+
+            // return await Task.Run(() => Ok(model.Titles)).ConfigureAwait(true);
         }
 
         // GET: api/Titles/5
@@ -39,55 +55,107 @@ namespace Tilbake.API.Controllers
             return await Task.Run(() => Ok(model.Title)).ConfigureAwait(true);
         }
 
+        /// <summary>
+        /// Updates an existing title according to an identifier.
+        /// </summary>
+        /// <param name="id">Title identifier.</param>
+        /// <param name="resource">Updated title data.</param>
+        /// <returns>Response for the request.</returns>
         // PUT: api/Titles/5
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTitle(Guid id, Title title)
+        [ProducesResponseType(typeof(TitleResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> PutAsync(Guid id, [FromBody] SaveTitleResource resource)
         {
-            if (title == null)
+            //if (title == null)
+            //{
+            //    throw new ArgumentNullException(nameof(title));
+            //}
+
+            //if (id != title.ID)
+            //{
+            //    return BadRequest();
+            //}
+
+            //TitleViewModel model = new TitleViewModel()
+            //{
+            //    Title = title
+            //};
+
+            //await _titleService.UpdateAsync(model).ConfigureAwait(true);
+            //return await Task.Run(() => NoContent()).ConfigureAwait(true);
+
+            var title = _mapper.Map<SaveTitleResource, Title>(resource);
+            var result = await _titleService.UpdateAsync(id, title).ConfigureAwait(true);
+
+            if (!result.Success)
             {
-                throw new ArgumentNullException(nameof(title));
+                return BadRequest(new ErrorResource(result.Message));
             }
 
-            if (id != title.ID)
-            {
-                return BadRequest();
-            }
-
-            TitleViewModel model = new TitleViewModel()
-            {
-                Title = title
-            };
-
-            await _titleService.UpdateAsync(model).ConfigureAwait(true);
-            return await Task.Run(() => NoContent()).ConfigureAwait(true);
+            var titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
+            return Ok(titleResource);
         }
 
+        /// <summary>
+        /// Saves a new title.
+        /// </summary>
+        /// <param name="resource">Title data.</param>
+        /// <returns>Response for the request.</returns>
         // POST: api/Titles
         [HttpPost]
-        public async Task<IActionResult> PostTitle(Title title)
+        public async Task<IActionResult> PostAsync([FromBody] SaveTitleResource resource)
         {
-            TitleViewModel model = new TitleViewModel()
-            {
-                Title = title
-            };
+            //TitleViewModel model = new TitleViewModel()
+            //{
+            //    Title = title
+            //};
 
-            await _titleService.AddAsync(model).ConfigureAwait(true);
-            return await Task.Run(() => NoContent()).ConfigureAwait(true);
-        }
+            //await _titleService.AddAsync(model).ConfigureAwait(true);
+            //return await Task.Run(() => NoContent()).ConfigureAwait(true);
 
-        // DELETE: api/Titles/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTitle(Guid id)
-        {
-            TitleViewModel model = await _titleService.GetAsync(id).ConfigureAwait(true);
-            if (model == null)
+            var title = _mapper.Map<SaveTitleResource, Title>(resource);
+            var result = await _titleService.SaveAsync(title).ConfigureAwait(true);
+
+            if (!result.Success)
             {
-                return NotFound();
+                return BadRequest(new ErrorResource(result.Message));
             }
 
-            await _titleService.DeleteAsync(id).ConfigureAwait(true);
-            return await Task.Run(() => NoContent()).ConfigureAwait(true);
+            var titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
+            return Ok(titleResource);
+        }
+
+        /// <summary>
+        /// Deletes a given title according to an identifier.
+        /// </summary>
+        /// <param name="id">Title identifier.</param>
+        /// <returns>Response for the request.</returns>
+        // DELETE: api/Titles/5
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(TitleResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            //TitleViewModel model = await _titleService.GetAsync(id).ConfigureAwait(true);
+            //if (model == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //await _titleService.DeleteAsync(id).ConfigureAwait(true);
+            //return await Task.Run(() => NoContent()).ConfigureAwait(true);
+
+            var result = await _titleService.DeleteAsync(id).ConfigureAwait(true);
+
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
+            return Ok(titleResource);
         }
     }
 }

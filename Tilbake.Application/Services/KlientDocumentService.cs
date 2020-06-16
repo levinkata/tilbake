@@ -57,11 +57,12 @@ namespace Tilbake.Application.Services
 
         public async Task<KlientDocumentViewModel> GetAsync(Guid id)
         {
-            //var hh = await _klientDocumentRepository.GetAsync(id).ConfigureAwait(true);
-            //byte[] ll = hh.Document.ToArray();
-            //using var memoryStream = new MemoryStream();
-            //memoryStream.Write(ll, 0, (int)ll.Length);
-            //File.WriteAllBytes(@"D:\source\repos\testpdf.pdf", memoryStream.ToArray());
+            var klientDocument = await _klientDocumentRepository.GetAsync(id).ConfigureAwait(true);
+            byte[] fileBuffer = klientDocument.Photo;
+            string fileName = Guid.NewGuid().ToString();
+            using var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(fileBuffer, 0, (int)fileBuffer.Length).ConfigureAwait(true);
+            File.WriteAllBytes(@"D:\source\repos\" + fileName + ".pdf", memoryStream.ToArray());
 
             return new KlientDocumentViewModel()
             {

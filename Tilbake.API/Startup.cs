@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -5,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using Tilbake.API.Binders;
+using Tilbake.API.Controllers.Config;
+using Tilbake.API.Extensions;
 using Tilbake.Infrastructure.Data.Context;
 using Tilbake.Infrastructure.IoC;
 
@@ -30,7 +33,10 @@ namespace Tilbake.API
             services.AddCors();
             services.AddControllers()
                 .AddNewtonsoftJson(options => {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; })
+                .ConfigureApiBehaviorOptions(options => {
+                // Adds a custom error response factory when ModelState is invalid
+                options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory.ProduceErrorResponse;
             });
 
             // 1. Add Authentication Services
@@ -43,6 +49,13 @@ namespace Tilbake.API
                 options.Audience = "https://api.tilbake.com";
             });
 
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tilbake API", Version = "v1" });
+            });
+
+            services.AddAutoMapper(typeof(Startup));
             RegisterServices(services);
         }
 
@@ -62,11 +75,20 @@ namespace Tilbake.API
 
             app.UseHttpsRedirection();
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tilbake API V1");
+            });
+
             app.UseRouting();
 
             // 2. Enable authentication middleware
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

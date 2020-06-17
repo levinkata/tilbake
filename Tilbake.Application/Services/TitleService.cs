@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Interfaces.Communication;
-using Tilbake.Application.ViewModels;
 using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Models;
 
@@ -22,7 +21,6 @@ namespace Tilbake.Application.Services
 
         public async Task<TitleResponse> SaveAsync(Title title)
         {
-            // return await Task.Run(() => _titleRepository.AddAsync(model.Title)).ConfigureAwait(true);
             try
             {
                 await _titleRepository.AddAsync(title).ConfigureAwait(true);
@@ -39,7 +37,6 @@ namespace Tilbake.Application.Services
 
         public async Task<TitleResponse> DeleteAsync(Guid id)
         {
-            // return await Task.Run(() => _titleRepository.DeleteAsync(id)).ConfigureAwait(true);
             var existingTitle = await _titleRepository.GetAsync(id).ConfigureAwait(true);
 
             if (existingTitle == null)
@@ -61,19 +58,16 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<Title>> GetAllAsync()
         {
-            //return new TitlesViewModel()
-            //{
-            //    Titles = await Task.Run(() => _titleRepository.GetAllAsync()).ConfigureAwait(true)
-            //};
             return await Task.Run(() => _titleRepository.GetAllAsync()).ConfigureAwait(true);
         }
 
-        public async Task<TitleViewModel> GetAsync(Guid id)
+        public async Task<TitleResponse> GetAsync(Guid id)
         {
-            return new TitleViewModel()
-            {
-                Title = await Task.Run(() => _titleRepository.GetAsync(id)).ConfigureAwait(true)
-            };
+            var title = await _titleRepository.GetAsync(id).ConfigureAwait(true);
+            if (title == null)
+                return new TitleResponse($"Title not found: {id}");
+            
+            return new TitleResponse(title);
         }
 
         public async Task<TitleResponse> UpdateAsync(Guid id, Title title)
@@ -83,7 +77,6 @@ namespace Tilbake.Application.Services
                 throw new ArgumentNullException(nameof(title));
             }
 
-            // return await Task.Run(() => _titleRepository.UpdateAsync(model.Title)).ConfigureAwait(true);
             var existingTitle = await _titleRepository.GetAsync(id).ConfigureAwait(true);
 
             if (existingTitle == null)

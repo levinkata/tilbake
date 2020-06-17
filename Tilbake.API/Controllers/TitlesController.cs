@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.API.Resources;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.ViewModels;
 using Tilbake.Domain.Models;
 
 namespace Tilbake.API.Controllers
@@ -38,21 +37,20 @@ namespace Tilbake.API.Controllers
 
             var resources = _mapper.Map<IEnumerable<Title>, IEnumerable<TitleResource>>(titles);
             return resources;
-
-            // return await Task.Run(() => Ok(model.Titles)).ConfigureAwait(true);
         }
 
         // GET: api/Titles/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTitle(Guid id)
         {
-            TitleViewModel model = await _titleService.GetAsync(id).ConfigureAwait(true);
-            if (model == null)
+            var result = await _titleService.GetAsync(id).ConfigureAwait(true);
+            if (!result.Success)
             {
-                return NotFound();
+                return BadRequest(new ErrorResource(result.Message));
             }
 
-            return await Task.Run(() => Ok(model.Title)).ConfigureAwait(true);
+            var titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
+            return Ok(titleResource);
         }
 
         /// <summary>
@@ -68,24 +66,6 @@ namespace Tilbake.API.Controllers
         [ProducesResponseType(typeof(ErrorResource), 400)]
         public async Task<IActionResult> PutAsync(Guid id, [FromBody] SaveTitleResource resource)
         {
-            //if (title == null)
-            //{
-            //    throw new ArgumentNullException(nameof(title));
-            //}
-
-            //if (id != title.ID)
-            //{
-            //    return BadRequest();
-            //}
-
-            //TitleViewModel model = new TitleViewModel()
-            //{
-            //    Title = title
-            //};
-
-            //await _titleService.UpdateAsync(model).ConfigureAwait(true);
-            //return await Task.Run(() => NoContent()).ConfigureAwait(true);
-
             var title = _mapper.Map<SaveTitleResource, Title>(resource);
             var result = await _titleService.UpdateAsync(id, title).ConfigureAwait(true);
 
@@ -107,14 +87,6 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveTitleResource resource)
         {
-            //TitleViewModel model = new TitleViewModel()
-            //{
-            //    Title = title
-            //};
-
-            //await _titleService.AddAsync(model).ConfigureAwait(true);
-            //return await Task.Run(() => NoContent()).ConfigureAwait(true);
-
             var title = _mapper.Map<SaveTitleResource, Title>(resource);
             var result = await _titleService.SaveAsync(title).ConfigureAwait(true);
 
@@ -138,15 +110,6 @@ namespace Tilbake.API.Controllers
         [ProducesResponseType(typeof(ErrorResource), 400)]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            //TitleViewModel model = await _titleService.GetAsync(id).ConfigureAwait(true);
-            //if (model == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //await _titleService.DeleteAsync(id).ConfigureAwait(true);
-            //return await Task.Run(() => NoContent()).ConfigureAwait(true);
-
             var result = await _titleService.DeleteAsync(id).ConfigureAwait(true);
 
             if (!result.Success)

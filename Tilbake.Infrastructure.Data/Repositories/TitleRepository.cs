@@ -39,7 +39,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
         }
 
         public async Task<Title> GetAsync(Guid id)
-        {                                   .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+        {
             return await _context.Titles.FindAsync(id).ConfigureAwait(true);
         }
 

@@ -120,19 +120,19 @@ namespace Tilbake.Infrastructure.Data.Context
 
             var klients = new List<Klient>
                 {
-                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Mr").ID,KlientNumber=int.Parse("1",CultureInfo.CurrentCulture),Phone="3966700",
+                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Mr").Id,KlientNumber=int.Parse("1",CultureInfo.CurrentCulture),Phone="3966700",
                              FirstName="Island",LastName="Molobe",BirthDate=DateTime.ParseExact("12/04/1968",dateformat,CultureInfo.CurrentCulture),Gender=Gender.Male.ToString(),IDNumber="718614601",Mobile="79999993",Fax="3959992",
                              OccupationID=occupations.SingleOrDefault(m => m.Name =="Civil Servant").ID,LandID=lands.SingleOrDefault(m => m.Name =="Botswana").ID,
                              Carrier=Carrier.Email.ToString(),Email="molobe@gmail.com"},
-                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Mr").ID,KlientNumber=int.Parse("2",CultureInfo.CurrentCulture),Phone="3966701",
+                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Mr").Id,KlientNumber=int.Parse("2",CultureInfo.CurrentCulture),Phone="3966701",
                              FirstName="Khumoetsile",LastName="Letsweletse",BirthDate=DateTime.ParseExact("25/12/1968",dateformat,CultureInfo.CurrentCulture),Gender=Gender.Male.ToString(),IDNumber="214412205",Mobile="79999992",Fax="3959991",
                              OccupationID=occupations.SingleOrDefault(m => m.Name =="Engineer").ID,LandID=lands.SingleOrDefault(m => m.Name =="Botswana").ID,
                              Carrier=Carrier.Email.ToString(),Email="letsweletse@gmail.com"},
-                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Ms").ID,KlientNumber=int.Parse("3",CultureInfo.CurrentCulture),Phone="3966702",
+                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Ms").Id,KlientNumber=int.Parse("3",CultureInfo.CurrentCulture),Phone="3966702",
                              FirstName="Rosemary",LastName="Rammei",BirthDate=DateTime.ParseExact("02/01/1972",dateformat,CultureInfo.CurrentCulture),Gender=Gender.Female.ToString(),IDNumber="108221609",Mobile="79999991",Fax="3959990",
                              OccupationID=occupations.SingleOrDefault(m => m.Name =="Teacher").ID,LandID=lands.SingleOrDefault(m => m.Name =="Botswana").ID,
                              Carrier=Carrier.Email.ToString(),Email="rammei@gmail.com"},
-                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Mr").ID,KlientNumber=int.Parse("4",CultureInfo.CurrentCulture),Phone="3966703",
+                    new Klient { KlientType=KlientType.Individual.ToString(),TitleID=titles.SingleOrDefault(m => m.Name =="Mr").Id,KlientNumber=int.Parse("4",CultureInfo.CurrentCulture),Phone="3966703",
                              FirstName="Reuben",LastName="Erastus",BirthDate=DateTime.ParseExact("30/06/1953",dateformat,CultureInfo.CurrentCulture),Gender=Gender.Male.ToString(),IDNumber="848515605",Mobile="79999990",Fax="3959999",
                              OccupationID=occupations.SingleOrDefault(m => m.Name =="Health Worker").ID,LandID=lands.SingleOrDefault(m => m.Name =="Botswana").ID,
                             Carrier=Carrier.Email.ToString(),Email="ersatus@gmail.com"}

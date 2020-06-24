@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Tilbake.API.Controllers.Config;
-using Tilbake.API.Extensions;
 using Tilbake.Infrastructure.Data.Context;
 using Tilbake.Infrastructure.IoC;
 

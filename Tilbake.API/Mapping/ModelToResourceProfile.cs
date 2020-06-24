@@ -8,6 +8,7 @@ namespace Tilbake.API.Mapping
     {
         public ModelToResourceProfile()
         {
+            CreateMap<Klient, KlientResource>();
             CreateMap<Title, TitleResource>();
         }
     }

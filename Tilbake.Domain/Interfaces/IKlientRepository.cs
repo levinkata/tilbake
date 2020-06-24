@@ -12,8 +12,8 @@ namespace Tilbake.Domain.Interfaces
         Task<Klient> GetAsync(Guid id, bool includeRelated);
         Task<Klient> GetByIdNumberAsync(string idNumber);
         Task<Klient> GetByKlientNumberAsync(int klientNumber);
-        Task<int> AddAsync(Guid portfolioId, Klient klient);
-        Task<int> UpdateAsync(Klient klient);
-        Task<int> DeleteAsync(Guid id);
+        Task AddAsync(Guid portfolioId, Klient klient);
+        void UpdateAsync(Klient klient);
+        void DeleteAsync(Klient klient);
     }
 }

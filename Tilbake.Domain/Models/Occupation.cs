@@ -5,7 +5,7 @@ namespace Tilbake.Domain.Models
 {
     public class Occupation
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Occupation"), Required, StringLength(50)]
         public string Name { get; set; }

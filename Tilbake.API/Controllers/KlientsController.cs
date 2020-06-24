@@ -1,93 +1,126 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tilbake.API.Resources;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.ViewModels;
 using Tilbake.Domain.Models;
 
 namespace Tilbake.API.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class KlientsController : ControllerBase
     {
         private readonly IKlientService _klientService;
+        private readonly IMapper _mapper;
 
-        public KlientsController(IKlientService klientService)
+        public KlientsController(IKlientService klientService, IMapper mapper)
         {
             _klientService = klientService;
+            _mapper = mapper;
         }
 
+        /// <summary>
+        /// Lists all existing klients.
+        /// </summary>
+        /// <returns>List of klients.</returns>
         // GET: api/Klients
         [HttpGet]
-        public async Task<IActionResult> GetKlients()
+        [ProducesResponseType(typeof(IEnumerable<KlientResource>), 200)]
+        public async Task<IEnumerable<KlientResource>> GetAsync()
         {
-            KlientsViewModel model = await _klientService.GetAllAsync().ConfigureAwait(true);
-            return await Task.Run(() => Ok(model.Klients)).ConfigureAwait(true);
+            var klients = await _klientService.GetAllAsync().ConfigureAwait(true);
+
+            var resources = _mapper.Map<IEnumerable<Klient>, IEnumerable<KlientResource>>(klients);
+            return resources;
         }
 
         // GET: api/Klients/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetKlient(Guid id)
+        [ProducesResponseType(typeof(KlientResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> GetAsync(Guid id)
         {
-            KlientViewModel model = await _klientService.GetAsync(id, true).ConfigureAwait(true);
-            if (model == null)
+            var result = await _klientService.GetAsync(id, false).ConfigureAwait(true);
+            if (!result.Success)
             {
-                return NotFound();
+                return BadRequest(new ErrorResource(result.Message));
             }
 
-            return await Task.Run(() => Ok(model.Klient)).ConfigureAwait(true);
+            var klientResource = _mapper.Map<Klient, KlientResource>(result.Resource);
+            return Ok(klientResource);
         }
 
+        /// <summary>
+        /// Updates an existing klient according to an identifier.
+        /// </summary>
+        /// <param name="id">Klient identifier.</param>
+        /// <param name="resource">Klient data.</param>
+        /// <returns>Response for the request.</returns>
         // PUT: api/Klients/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutKlient(Guid id, Klient klient)
+        [ProducesResponseType(typeof(KlientResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> PutAsync(Guid id, [FromBody] SaveKlientResource resource)
         {
-            if (klient == null)
+            var klient = _mapper.Map<SaveKlientResource, Klient>(resource);
+            var result = await _klientService.UpdateAsync(id, klient).ConfigureAwait(true);
+
+            if (!result.Success)
             {
-                throw new ArgumentNullException(nameof(klient));
+                return BadRequest(new ErrorResource(result.Message));
             }
 
-            if (id != klient.ID)
-            {
-                return BadRequest();
-            }
-
-            KlientViewModel model = new KlientViewModel()
-            {
-                Klient = klient
-            };
-
-            await _klientService.UpdateAsync(model).ConfigureAwait(true);
-            return await Task.Run(() => NoContent()).ConfigureAwait(true);
+            var klientResource = _mapper.Map<Klient, KlientResource>(result.Resource);
+            return Ok(klientResource);
         }
 
+        /// <summary>
+        /// Saves a new klient.
+        /// </summary>
+        /// <param name="resource">Klient data.</param>
+        /// <returns>Response for the request.</returns>
         // POST: api/Klients
         [HttpPost]
-        public async Task<IActionResult> PostKlient(Klient klient)
+        [ProducesResponseType(typeof(KlientResource), 201)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> PostAsync(Guid portfolioId, [FromBody] SaveKlientResource resource)
         {
-            KlientViewModel model = new KlientViewModel()
-            {
-                Klient = klient
-            };
+            var klient = _mapper.Map<SaveKlientResource, Klient>(resource);
+            var result = await _klientService.SaveAsync(portfolioId, klient).ConfigureAwait(true);
 
-            await _klientService.AddAsync(model).ConfigureAwait(true);
-            return await Task.Run(() => NoContent()).ConfigureAwait(true);
-        }
-
-        // DELETE: api/Klients/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteKlient(Guid id)
-        {
-            KlientViewModel model = await _klientService.GetAsync(id, false).ConfigureAwait(true);
-            if (model == null)
+            if (!result.Success)
             {
-                return NotFound();
+                return BadRequest(new ErrorResource(result.Message));
             }
 
-            await _klientService.DeleteAsync(id).ConfigureAwait(true);
-            return await Task.Run(() => NoContent()).ConfigureAwait(true);
+            var klientResource = _mapper.Map<Klient, KlientResource>(result.Resource);
+            return Ok(klientResource);
+        }
+
+        /// <summary>
+        /// Deletes a given klient according to an identifier.
+        /// </summary>
+        /// <param name="id">Klient identifier.</param>
+        /// <returns>Response for the request.</returns>
+        // DELETE: api/Klients/5
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(KlientResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            var result = await _klientService.DeleteAsync(id).ConfigureAwait(true);
+
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var klientResource = _mapper.Map<Klient, KlientResource>(result.Resource);
+            return Ok(klientResource);
         }
     }
 }

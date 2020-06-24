@@ -31,7 +31,7 @@ namespace Tilbake.API.Controllers
         // GET: api/Titles
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<TitleResource>), 200)]
-        public async Task<IEnumerable<TitleResource>> GetTitles()
+        public async Task<IEnumerable<TitleResource>> GetAsync()
         {
             var titles = await _titleService.GetAllAsync().ConfigureAwait(true);
 
@@ -41,7 +41,9 @@ namespace Tilbake.API.Controllers
 
         // GET: api/Titles/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTitle(Guid id)
+        [ProducesResponseType(typeof(TitleResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> GetAsync(Guid id)
         {
             var result = await _titleService.GetAsync(id).ConfigureAwait(true);
             if (!result.Success)
@@ -85,6 +87,8 @@ namespace Tilbake.API.Controllers
         /// <returns>Response for the request.</returns>
         // POST: api/Titles
         [HttpPost]
+        [ProducesResponseType(typeof(TitleResource), 201)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
         public async Task<IActionResult> PostAsync([FromBody] SaveTitleResource resource)
         {
             var title = _mapper.Map<SaveTitleResource, Title>(resource);

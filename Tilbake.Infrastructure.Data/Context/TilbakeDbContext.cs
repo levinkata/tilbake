@@ -105,7 +105,7 @@ namespace Tilbake.Infrastructure.Data.Context
             builder.Entity<Klient>(p =>
             {
                 p.ToTable("Klient");
-                p.HasIndex(r => r.IDNumber).IsUnique().HasName("UQ_IDNumber");
+                p.HasIndex(r => r.IdNumber).IsUnique().HasName("UQ_IdNumber");
             });
             
             builder.Entity<KlientBankAccount>(p =>

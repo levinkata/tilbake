@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Models;
@@ -120,7 +119,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(p => p.PolitikkType)
                                                 .Include(p => p.SalesType)
                                                 .Include(p => p.PolitikkRisks)
-                                                .Where(e => e.PortfolioKlient.KlientID == klientId)).ConfigureAwait(true);
+                                                .Where(e => e.PortfolioKlient.KlientId == klientId)).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<Politikk>> GetPortfolioPolitikkAsync(Guid portfolioId)
@@ -138,7 +137,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
                                                 .Include(p => p.PolitikkType)
                                                 .Include(p => p.SalesType)
                                                 .Include(p => p.PolitikkRisks)
-                                                .Where(e => e.PortfolioKlient.PortfolioID == portfolioId)).ConfigureAwait(true);
+                                                .Where(e => e.PortfolioKlient.PortfolioId == portfolioId)).ConfigureAwait(true);
         }
 
         public async Task<int> UpdateAsync(Politikk politikk)

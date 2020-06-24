@@ -7,10 +7,10 @@ namespace Tilbake.Domain.Models
 {
     public class Klient
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Title")]
-        public Guid TitleID { get; set; }
+        public Guid TitleId { get; set; }
 
         [Display(Name = "Client Number")]
         public int KlientNumber { get; set; }
@@ -40,7 +40,7 @@ namespace Tilbake.Domain.Models
 
         [Display(Name = "ID Number"), StringLength(50)]
         [Required(ErrorMessage = "ID Number is required")]
-        public string IDNumber { get; set; }
+        public string IdNumber { get; set; }
 
         [Display(Name = "Phone"), StringLength(50)]
         public string Phone { get; set; }
@@ -61,10 +61,10 @@ namespace Tilbake.Domain.Models
         public string Carrier { get; set; }
 
         [Display(Name = "Occupation")]
-        public Guid OccupationID { get; set; }
+        public Guid OccupationId { get; set; }
 
         [Display(Name = "Nationality")]
-        public Guid LandID { get; set; }
+        public Guid LandId { get; set; }
 
         public virtual Land Land { get; private set; }
         public virtual Title Title { get; private set; }

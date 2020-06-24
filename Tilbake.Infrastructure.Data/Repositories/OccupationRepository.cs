@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Models;
@@ -32,7 +31,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
-                occupation.ID = Guid.NewGuid();
+                occupation.Id = Guid.NewGuid();
                 await context.Occupations.AddAsync((Occupation)occupation).ConfigureAwait(true);
                 return await Task.Run(() => context.SaveChangesAsync()).ConfigureAwait(true);
             }
@@ -68,7 +67,7 @@ namespace Tilbake.Infrastructure.Data.Repositories
             var context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
             return await Task.Run(() => context.Occupations
-                                                .FirstOrDefaultAsync(e => e.ID == id)).ConfigureAwait(true);
+                                                .FirstOrDefaultAsync(e => e.Id == id)).ConfigureAwait(true);
         }
 
         public async Task<int> UpdateAsync(Occupation occupation)

@@ -49,7 +49,7 @@ namespace Tilbake.API.Controllers
                 throw new ArgumentNullException(nameof(occupation));
             }
 
-            if (id != occupation.ID)
+            if (id != occupation.Id)
             {
                 return BadRequest();
             }

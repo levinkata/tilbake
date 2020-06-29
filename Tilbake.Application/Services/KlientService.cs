@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tilbake.Application.Exceptions;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Interfaces.Communication;
 using Tilbake.Domain.Interfaces;
@@ -65,7 +66,8 @@ namespace Tilbake.Application.Services
         {
             var klient = await Task.Run(() => _klientRepository.GetAsync(id, includeRelated)).ConfigureAwait(true);
             if (klient == null)
-                return new KlientResponse($"Klient not found: {id}");
+                // return new KlientResponse($"Klient not found: {id}");
+                throw new NotFoundException($"Klient with ID {id} not found.");
 
             return new KlientResponse(klient);
         }

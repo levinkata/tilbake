@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Tilbake.API.Controllers.Config;
+using Tilbake.API.Middleware;
 using Tilbake.Infrastructure.Data.Context;
 using Tilbake.Infrastructure.IoC;
 
@@ -66,6 +67,7 @@ namespace Tilbake.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseCors(builder =>
                 builder.WithOrigins("http://localhost:4200")
                         .AllowAnyMethod()

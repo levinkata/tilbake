@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces.Communication;
-using Tilbake.Application.ViewModels;
 using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Interfaces

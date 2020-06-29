@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tilbake.Application.Exceptions;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Interfaces.Communication;
 using Tilbake.Domain.Interfaces;
@@ -65,8 +66,9 @@ namespace Tilbake.Application.Services
         {
             var title = await _titleRepository.GetAsync(id).ConfigureAwait(true);
             if (title == null)
-                return new TitleResponse($"Title not found: {id}");
-            
+                // return new TitleResponse($"Title not found: {id}");
+                throw new NotFoundException($"Title with ID {id} not found.");
+
             return new TitleResponse(title);
         }
 
@@ -80,7 +82,7 @@ namespace Tilbake.Application.Services
             var existingTitle = await _titleRepository.GetAsync(id).ConfigureAwait(true);
 
             if (existingTitle == null)
-                return new TitleResponse($"Title not found: {id}");
+                return new TitleResponse($"Title with ID {id} not found.");
 
             existingTitle.Name = title.Name;
 

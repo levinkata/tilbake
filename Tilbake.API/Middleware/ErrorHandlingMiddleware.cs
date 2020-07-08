@@ -46,50 +46,42 @@ namespace Tilbake.API.Middleware
             var stackTrace = String.Empty;
 
             var exceptionType = exception.GetType();
-            if (exception is DbUpdateException dbUpdateEx)
-            {
-                message = exception.Message;
-                if (dbUpdateEx.InnerException != null && dbUpdateEx.InnerException.InnerException != null)
-                {
-                    if (dbUpdateEx.InnerException.InnerException is SqlException sqlException)
-                    {
-                        var valError = UniqueErrorFormatter(sqlException, dbUpdateEx.Entries);
-                        if (valError != null)
-                        {
-                            message = valError.ErrorMessage;
-                        }
+            //if (exception is DbUpdateException dbUpdateEx)
+            //{
+            //    message = exception.Message;
+            //    if (dbUpdateEx.InnerException != null && dbUpdateEx.InnerException.InnerException != null)
+            //    {
+            //        if (dbUpdateEx.InnerException.InnerException is SqlException sqlException)
+            //        {
+            //            var valError = UniqueErrorFormatter(sqlException, dbUpdateEx.Entries);
+            //            var returnMsg = valError.ErrorMessage;
 
-                        //switch (sqlException.Number)
-                        //{
-                        //    case 2627:  // Unique constraint error
-                        //        break;
-                        //    case 547:   // Constraint check violation
-                        //        break;
-                        //    case 2601:  // Duplicated key row error
-                        //                // Constraint violation exception
-                        //        message = exception.Message;
-                        //        if (valError != null)
-                        //        {
-                        //            _ = valError.ErrorMessage;
-                        //            status = HttpStatusCode.BadRequest;
-                        //            //var status = new StatusGenericHandler();
-                        //            //status.AddValidationResult(valError);
-                        //            //return status;
+            //            switch (sqlException.Number)
+            //            {
+            //                case 2627:  // Unique constraint error
+            //                    break;
+            //                case 547:   // Constraint check violation
+            //                    break;
+            //                case 2601:  // Duplicated key row error
+            //                            // Constraint violation exception
+            //                    message = returnMsg;
+            //                    status = HttpStatusCode.InternalServerError;
+            //                    // A custom exception of yours for concurrency issues
+            //                    // throw new ConcurrencyException();
+            //                    break;
+            //                default:
+            //                    // A custom exception of yours for other DB issues
+            //                    //throw new DatabaseAccessException(
+            //                    //  dbUpdateEx.Message, dbUpdateEx.InnerException);
+            //                    break;
+            //            }
+            //        }
+            //    }
+            //    // throw new DatabaseAccessException(dbUpdateEx.Message, dbUpdateEx.InnerException);
+            //}
+            //else
 
-                        //        }
-                        //        // A custom exception of yours for concurrency issues
-                        //        // throw new ConcurrencyException();
-                        //        break;
-                        //    default:
-                        //        // A custom exception of yours for other DB issues
-                        //        throw new DatabaseAccessException(
-                        //          dbUpdateEx.Message, dbUpdateEx.InnerException);
-                        //}
-                    }
-                }
-                throw new DatabaseAccessException(dbUpdateEx.Message, dbUpdateEx.InnerException);
-            }
-            else if (exceptionType == typeof(BadRequestException))
+            if (exceptionType == typeof(BadRequestException))
             {
                 message = exception.Message;
                 status = HttpStatusCode.BadRequest;
@@ -123,7 +115,7 @@ namespace Tilbake.API.Middleware
 
             //currently the entitiesNotSaved is empty for unique constraints - see https://github.com/aspnet/EntityFrameworkCore/issues/7829
             var entityDisplayName = entitiesNotSaved.Count == 1
-                ? entitiesNotSaved.Single().Entity.GetType().GetNameForClass()
+                ? entitiesNotSaved.Single().Entity.GetType().Name
                 : matches[0].Groups[1].Value;
 
             var returnError = "Cannot have a duplicate " +

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.Domain.Models
@@ -20,5 +21,6 @@ namespace Tilbake.Domain.Models
         public string SwiftCode { get; set; }
 
         public virtual Bank Bank { get; private set; }
+        public virtual IReadOnlyCollection<BankAccount> BankAccounts { get; set; } = new HashSet<BankAccount>();
     }
 }

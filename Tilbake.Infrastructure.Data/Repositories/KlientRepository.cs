@@ -10,11 +10,11 @@ using Tilbake.Infrastructure.Data.Generators;
 
 namespace Tilbake.Infrastructure.Data.Repositories
 {
-    public class KlientRepository : BaseRepository, IKlientRepository
+    public class KlientRepository : Repository<Klient>, IKlientRepository
     {
         public KlientRepository(TilbakeDbContext context) : base(context) { }
 
-        public async Task AddAsync(Guid portfolioId, Klient klient)
+        public async Task AddToPortfolio(Guid portfolioId, Klient klient)
         {
             if (klient == null)
             {
@@ -23,11 +23,12 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
             await Task.Run(async () =>
             {
-                var klientNumber = KlientNumbers.Get(_context);
+                var klientNumber = KlientNumbers.Get(TilbakeDbContext);
 
                 klient.Id = Guid.NewGuid();
                 klient.KlientNumber = klientNumber;
-                await _context.Klients.AddAsync((Klient)klient).ConfigureAwait(true);
+
+                await TilbakeDbContext.Klients.AddAsync((Klient)klient).ConfigureAwait(true);
 
                 if (portfolioId != Guid.Empty)
                 {
@@ -37,78 +38,50 @@ namespace Tilbake.Infrastructure.Data.Repositories
                         PortfolioId = portfolioId,
                         KlientId = klient.Id
                     };
-                    await _context.PortfolioKlients.AddAsync((PortfolioKlient)portfolioKlient).ConfigureAwait(true);
+                    await TilbakeDbContext.PortfolioKlients.AddAsync((PortfolioKlient)portfolioKlient).ConfigureAwait(true);
                 }
 
                 KlientNumberGenerator klientNumberGenerator = new KlientNumberGenerator
                 {
                     KlientNumber = klientNumber
                 };
-                await _context.KlientNumberGenerators.AddAsync(klientNumberGenerator).ConfigureAwait(true);
+                await TilbakeDbContext.KlientNumberGenerators.AddAsync(klientNumberGenerator).ConfigureAwait(true);
 
             }).ConfigureAwait(true);
         }
 
-        public void DeleteAsync(Klient klient)
-        {
-            _context.Klients.Remove((Klient)klient);
-        }
-
-        public async Task<IEnumerable<Klient>> GetAllAsync()
-        {
-            return await Task.Run(() => _context.Klients
-                                                .Include(b => b.Land)
-                                                .Include(b => b.Occupation)
-                                                .Include(b => b.Title)
-                                                .OrderBy(n => n.LastName)
-                                                .AsNoTracking().ToListAsync()).ConfigureAwait(true);
-        }
-
-        public async Task<Klient> GetAsync(Guid id, bool includeRelated)
-        {
-            if (includeRelated)
-                return await Task.Run(() => _context.Klients
-                                                    .Include(b => b.Land)
-                                                    .Include(b => b.Occupation)
-                                                    .Include(b => b.Title)
-                                                    .FirstOrDefaultAsync(e => e.Id == id)).ConfigureAwait(true);
-
-                return await Task.Run(() => _context.Klients
-                                                    .FirstOrDefaultAsync(e => e.Id == id)).ConfigureAwait(true);                                                    
-        }
-
         public async Task<Klient> GetByIdNumberAsync(string idNumber)
         {
-            return await Task.Run(() => _context.Klients
-                                                .Include(b => b.Land)
-                                                .Include(b => b.Occupation)
-                                                .Include(b => b.Title)
-                                                .SingleOrDefaultAsync(e => e.IdNumber == idNumber)).ConfigureAwait(true);
+            return await Task.Run(() => TilbakeDbContext.Klients
+                                                        .Include(b => b.Land)
+                                                        .Include(b => b.Occupation)
+                                                        .Include(b => b.Title)
+                                                        .SingleOrDefaultAsync(e => e.IdNumber == idNumber)).ConfigureAwait(true);
         }
 
         public async Task<Klient> GetByKlientNumberAsync(int klientNumber)
         {
-            return await Task.Run(() => _context.Klients
-                                                .Include(b => b.Land)
-                                                .Include(b => b.Occupation)
-                                                .Include(b => b.Title)
-                                                .SingleOrDefaultAsync(e => e.KlientNumber == klientNumber)).ConfigureAwait(true);
+            return await Task.Run(() => TilbakeDbContext.Klients
+                                                        .Include(b => b.Land)
+                                                        .Include(b => b.Occupation)
+                                                        .Include(b => b.Title)
+                                                        .SingleOrDefaultAsync(e => e.KlientNumber == klientNumber)).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<Klient>> GetByNameAsync(string klientName)
         {
-            return await Task.Run(() => _context.Klients
-                                                .Include(b => b.Land)
-                                                .Include(b => b.Occupation)
-                                                .Include(b => b.Title)
-                                                .Where(a => a.FirstName.Contains(klientName, StringComparison.OrdinalIgnoreCase) ||
-                                                a.LastName.Contains(klientName, StringComparison.OrdinalIgnoreCase))
-                                                .OrderBy(n => n.LastName).ToListAsync()).ConfigureAwait(true);
+            return await Task.Run(() => TilbakeDbContext.Klients
+                                                        .Include(b => b.Land)
+                                                        .Include(b => b.Occupation)
+                                                        .Include(b => b.Title)
+                                                        .Where(a => a.FirstName.Contains(klientName, StringComparison.OrdinalIgnoreCase) ||
+                                                        a.LastName.Contains(klientName, StringComparison.OrdinalIgnoreCase))
+                                                        .OrderBy(n => n.LastName).ToListAsync()).ConfigureAwait(true);
         }
 
-        public void UpdateAsync(Klient klient)
+        public TilbakeDbContext TilbakeDbContext
         {
-            _context.Klients.Update((Klient)klient);
+            get { return _context as TilbakeDbContext; }
         }
     }
 }

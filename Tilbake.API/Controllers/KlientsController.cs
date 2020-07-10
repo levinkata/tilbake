@@ -44,7 +44,21 @@ namespace Tilbake.API.Controllers
         [ProducesResponseType(typeof(ErrorResource), 400)]
         public async Task<IActionResult> GetAsync(Guid id)
         {
-            var result = await _klientService.GetAsync(id, false).ConfigureAwait(true);
+            var result = await _klientService.GetAsync(id).ConfigureAwait(true);
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var klientResource = _mapper.Map<Klient, KlientResource>(result.Resource);
+            return Ok(klientResource);
+        }
+
+        // GET: api/Klients/IdNumber/5
+        [HttpGet("IdNumber/{IdNumber}")]
+        public async Task<IActionResult> GetByIdNumber(string IdNumber)
+        {
+            var result = await _klientService.GetByIdNumberAsync(IdNumber).ConfigureAwait(true);
             if (!result.Success)
             {
                 return BadRequest(new ErrorResource(result.Message));
@@ -90,7 +104,7 @@ namespace Tilbake.API.Controllers
         public async Task<IActionResult> PostAsync(Guid portfolioId, [FromBody] SaveKlientResource resource)
         {
             var klient = _mapper.Map<SaveKlientResource, Klient>(resource);
-            var result = await _klientService.SaveAsync(portfolioId, klient).ConfigureAwait(true);
+            var result = await _klientService.AddToPortfolio(portfolioId, klient).ConfigureAwait(true);
 
             if (!result.Success)
             {

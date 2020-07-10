@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Exceptions;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Interfaces.Communication;
 using Tilbake.Domain.Interfaces;
@@ -11,12 +10,12 @@ namespace Tilbake.Application.Services
 {
     public class TitleService : ITitleService
     {
-        private readonly ITitleRepository _titleRepository;
+        //private readonly ITitleRepository _titleRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public TitleService(ITitleRepository titleRepository, IUnitOfWork unitOfWork)
+        public TitleService(IUnitOfWork unitOfWork)
         {
-            _titleRepository = titleRepository;
+            //_titleRepository = titleRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -24,7 +23,8 @@ namespace Tilbake.Application.Services
         {
             try
             {
-                await _titleRepository.AddAsync(title).ConfigureAwait(true);
+                //await _titleRepository.AddAsync(title).ConfigureAwait(true);
+                await _unitOfWork.Title.AddAsync(title).ConfigureAwait(true);
                 await _unitOfWork.CompleteAsync().ConfigureAwait(true);
 
                 return new TitleResponse(title);
@@ -38,14 +38,15 @@ namespace Tilbake.Application.Services
 
         public async Task<TitleResponse> DeleteAsync(Guid id)
         {
-            var existingTitle = await _titleRepository.GetAsync(id).ConfigureAwait(true);
+            //var existingTitle = await _titleRepository.GetById(id).ConfigureAwait(true);
+            var existingTitle = await _unitOfWork.Title.GetById(id).ConfigureAwait(true);
 
             if (existingTitle == null)
                 return new TitleResponse($"Category not found: {id}");
 
             try
             {
-                _titleRepository.DeleteAsync(existingTitle);
+                _unitOfWork.Title.Delete(existingTitle);
                 await _unitOfWork.CompleteAsync().ConfigureAwait(true);
 
                 return new TitleResponse(existingTitle);
@@ -59,15 +60,14 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<Title>> GetAllAsync()
         {
-            return await Task.Run(() => _titleRepository.GetAllAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.Title.GetAll()).ConfigureAwait(true);
         }
 
         public async Task<TitleResponse> GetAsync(Guid id)
         {
-            var title = await _titleRepository.GetAsync(id).ConfigureAwait(true);
+            var title = await _unitOfWork.Title.GetById(id).ConfigureAwait(true);
             if (title == null)
-                // return new TitleResponse($"Title not found: {id}");
-                throw new NotFoundException($"Title with ID {id} not found.");
+                return new TitleResponse($"Title not found: {id}");
 
             return new TitleResponse(title);
         }
@@ -79,7 +79,7 @@ namespace Tilbake.Application.Services
                 throw new ArgumentNullException(nameof(title));
             }
 
-            var existingTitle = await _titleRepository.GetAsync(id).ConfigureAwait(true);
+            var existingTitle = await _unitOfWork.Title.GetById(id).ConfigureAwait(true);
 
             if (existingTitle == null)
                 return new TitleResponse($"Title with ID {id} not found.");

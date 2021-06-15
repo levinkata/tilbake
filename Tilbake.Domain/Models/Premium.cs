@@ -1,35 +1,26 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Premium
+    public partial class Premium
     {
-        public Guid ID { get; set; }
-
-        [Display(Name = "Policy")]
-        public Guid PolitikkID { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",
-            ApplyFormatInEditMode = true)]
-        [Display(Name = "Premium Date")]
+        public Guid Id { get; set; }
+        public Guid PolicyId { get; set; }
         public DateTime PremiumDate { get; set; }
-
-        [Display(Name = "Month"), Range(1, 12)]
         public int PremiumMonth { get; set; }
-
-        [Display(Name = "Year"), Range(1900, 2099)]
         public int PremiumYear { get; set; }
-
-        [Display(Name = "Premium"), Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
+        public Guid PremiumTypeId { get; set; }
+        public bool IsRefunded { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        [Display(Name = "Premium Type")]
-        public Guid PremiumTypeID { get; set; }
-
-        public virtual Politikk Politikk { get; private set; }
-        public virtual PremiumType PremiumType { get; private set; }
+        public virtual Policy Policy { get; set; }
+        public virtual PremiumType PremiumType { get; set; }
     }
 }

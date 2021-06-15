@@ -14,22 +14,56 @@ namespace Tilbake.Infrastructure.Data.Repositories
 
         public Repository(DbContext context) => _context = context;
 
-        public async Task AddAsync(TEntity entity) => await _context.Set<TEntity>().AddAsync(entity).ConfigureAwait(true);
+        public async Task<TEntity> AddAsync(TEntity entity)
+        {
+            await Task.Run(() => _context.Set<TEntity>().AddAsync(entity)).ConfigureAwait(true);
+            return entity;            
+        } 
 
-        public async Task Delete(Guid id)
+        public async Task<TEntity> Delete(Guid id)
         {
             var entity = await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
-            _context.Set<TEntity>().Remove(entity);
+            if (entity == null)
+            {
+                return entity;
+            }
+
+            await Task.Run(() => _context.Set<TEntity>().Remove(entity)).ConfigureAwait(true);
+            return entity;
         }
 
-        public void Delete(TEntity entity) => _context.Set<TEntity>().Remove(entity);
+        public async Task<TEntity> Delete(TEntity entity)
+        {
+            if (entity == null)
+            {
+                return entity;
+            }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) => _context.Set<TEntity>().Where(predicate);
+            await Task.Run(() => _context.Set<TEntity>().Remove(entity)).ConfigureAwait(true);
+            return entity;
+        }
 
-        public async Task<IEnumerable<TEntity>> GetAll() => await _context.Set<TEntity>().ToListAsync().ConfigureAwait(true);
+        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>().Where(predicate).AsNoTracking();
+            return await Task.Run(() => query.ToListAsync()).ConfigureAwait(true);
+        } 
 
-        public async Task<TEntity> GetById(Guid id) => await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
+        public async Task<IEnumerable<TEntity>> GetAll()
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>().AsNoTracking();
+            return await Task.Run(() => query.ToListAsync()).ConfigureAwait(true);
+        }
 
-        public void Update(TEntity entity) => _context.Set<TEntity>().Update(entity);
+        public async Task<TEntity> GetById(Guid id)
+        {
+            return await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
+        }
+
+        public async Task<TEntity> Update(TEntity entity)
+        {
+            await Task.Run(() => _context.Set<TEntity>().Update(entity)).ConfigureAwait(true);
+            return entity;
+        }
     }
 }

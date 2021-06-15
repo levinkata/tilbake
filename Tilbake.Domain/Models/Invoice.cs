@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Invoice
+    public partial class Invoice
     {
-        public Guid ID { get; set; }
+        public Invoice()
+        {
+            ReceivableInvoices = new HashSet<ReceivableInvoice>();
+        }
 
-        [Display(Name = "Invoice Number"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public int InvoiceNumber { get; set; }
-
-        [Display(Name = "Invoice Date"), DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}",
-            ApplyFormatInEditMode = true)]
         public DateTime InvoiceDate { get; set; }
+        public Guid InvoiceStatusId { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        [Display(Name = "Invoice Status")]
-        public Guid InvoiceStatusID { get; set; }
-
-        public virtual InvoiceStatus Invoicetatus { get; private set; }
-        public virtual IReadOnlyCollection<InvoiceItem> InvoiceItems { get; set; } = new HashSet<InvoiceItem>();
+        public virtual InvoiceStatus InvoiceStatus { get; set; }
+        public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
     }
 }

@@ -1,10 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class QuoteNumberGenerator
+    public partial class QuoteNumberGenerator
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int QuoteNumber { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
     }
 }

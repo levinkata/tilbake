@@ -1,17 +1,24 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class MotorMake
+    public partial class MotorMake
     {
-        public Guid ID { get; set; }
+        public MotorMake()
+        {
+            MotorModels = new HashSet<MotorModel>();
+        }
 
-        [Display(Name = "Motor Make"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual IReadOnlyCollection<MotorModel> MotorModels { get; set; } = new HashSet<MotorModel>();
+        public virtual ICollection<MotorModel> MotorModels { get; set; }
     }
-
 }

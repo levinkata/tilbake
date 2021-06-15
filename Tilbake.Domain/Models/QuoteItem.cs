@@ -1,37 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class QuoteItem
+    public partial class QuoteItem
     {
-        public Guid ID { get; set; }
-        public Guid QuoteID { get; set; }
-        public Guid KlientRiskID { get; set; }
-
-        [Display(Name = "Insurer")]
-        public Guid InsurerID { get; set; }
-
-        [Display(Name = "Cover Type")]
-        public Guid CoverTypeID { get; set; }
-
-        [Display(Name = "Sum Insured"), Column(TypeName = "decimal(18,2)")]
+        public Guid Id { get; set; }
+        public Guid QuoteId { get; set; }
+        public Guid ClientRiskId { get; set; }
+        public Guid InsurerId { get; set; }
+        public Guid CoverTypeId { get; set; }
         public decimal SumInsured { get; set; }
-
-        [Display(Name = "Premium"), Column(TypeName = "decimal(18,2)")]
         public decimal Premium { get; set; }
-
-        [Display(Name = "Excess"), Required, StringLength(50)]
         public string Excess { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual KlientRisk KlientRisk { get; private set; }
-        public virtual CoverType CoverType { get; private set; }
-        public virtual Insurer Insurer { get; private set; }
-        public virtual Quote Quote { get; private set; }
+        public virtual ClientRisk ClientRisk { get; set; }
+        public virtual CoverType CoverType { get; set; }
+        public virtual Insurer Insurer { get; set; }
+        public virtual Quote Quote { get; set; }
     }
 }

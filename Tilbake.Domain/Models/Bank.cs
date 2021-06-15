@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Bank
+    public partial class Bank
     {
-        public Guid ID { get; set; }
+        public Bank()
+        {
+            BankBranches = new HashSet<BankBranch>();
+        }
 
-        [Display(Name = "Bank"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual IReadOnlyCollection<BankBranch> BankBranches { get; set; } = new HashSet<BankBranch>();
+        public virtual ICollection<BankBranch> BankBranches { get; set; }
     }
 }

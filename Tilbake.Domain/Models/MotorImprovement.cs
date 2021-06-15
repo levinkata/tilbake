@@ -1,41 +1,25 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class MotorImprovement
+    public partial class MotorImprovement
     {
-        public Guid ID { get; set; }
-        public Guid MotorID { get; set; }
-
-        [Display(Name = "Name"), Required, StringLength(50)]
+        public Guid Id { get; set; }
+        public Guid MotorId { get; set; }
         public string Name { get; set; }
-
-        [Display(Name = "Description"), Required, StringLength(50)]
         public string Description { get; set; }
-
-        [Display(Name = "Factory Fitted"), Required, StringLength(50)]
         public bool FactoryFitted { get; set; }
-
-        [Display(Name = "Make/Model"), Required, StringLength(50)]
         public string MakeModel { get; set; }
-
-        [Display(Name = "Serial Number"), Required, StringLength(50)]
         public string SerialNumber { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",
-            ApplyFormatInEditMode = true)]
-        [Display(Name = "Purchase Date")]
         public DateTime PurchaseDate { get; set; }
-
-        [Display(Name = "Value"), Column(TypeName = "decimal(18,2)")]
         public decimal Value { get; set; }
-
-        [Display(Name = "Premium"), Column(TypeName = "decimal(18,2)")]
         public decimal Premium { get; set; }
-
-        public virtual Motor Motor { get; private set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
     }
 }

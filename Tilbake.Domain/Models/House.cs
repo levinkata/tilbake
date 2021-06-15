@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class House
+    public partial class House
     {
-        public Guid ID { get; set; }
+        public House()
+        {
+            Risks = new HashSet<Risk>();
+        }
 
-        [Display(Name = "Location"), Required, StringLength(150)]
-        public string Location { get; set; }
+        public Guid Id { get; set; }
+        public string PhysicalAddress { get; set; }
+        public Guid ResidenceTypeId { get; set; }
+        public Guid RoofTypeId { get; set; }
+        public Guid WallTypeId { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        [Display(Name = "Residence Type")]
-        public Guid ResidenceTypeID { get; set; }
-
-        [Display(Name = "Roof Type")]
-        public Guid RoofTypeID { get; set; }
-
-        [Display(Name = "Wall Type")]
-        public Guid WallTypeID { get; set; }
-
-        public virtual ResidenceType ResidenceType { get; private set; }
-        public virtual RoofType RoofType { get; private set; }
-        public virtual WallType WallType { get; private set; }
-        public virtual IReadOnlyCollection<Risk> Risks{ get; set; } = new HashSet<Risk>();
+        public virtual ResidenceType ResidenceType { get; set; }
+        public virtual RoofType RoofType { get; set; }
+        public virtual WallType WallType { get; set; }
+        public virtual ICollection<Risk> Risks { get; set; }
     }
 }

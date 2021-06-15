@@ -1,18 +1,20 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class City
+    public partial class City
     {
         public Guid Id { get; set; }
-
-        [Display(Name = "City"), Required, StringLength(50)]
+        public Guid CountryId { get; set; }
         public string Name { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        [Display(Name = "Country")]
-        public Guid LandId { get; set; }
-
-        public virtual Land Land { get; private set; }
+        public virtual Country Country { get; set; }
     }
 }

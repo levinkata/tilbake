@@ -1,51 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Motor
+    public partial class Motor
     {
-        public Guid ID { get; set; }
+        public Motor()
+        {
+            Risks = new HashSet<Risk>();
+        }
 
-        [Display(Name = "Registration Number"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public string RegNumber { get; set; }
-
-        [Display(Name = "Body Type")]
-        public Guid BodyTypeID { get; set; }
-
-        [Display(Name = "Model")]
-        public Guid MotorModelID { get; set; }
-
-        [Display(Name = "Year")]
+        public Guid BodyTypeId { get; set; }
+        public Guid MotorModelId { get; set; }
         public int RegYear { get; set; }
-
-        [Display(Name = "Driver Type")]
-        public Guid DriverTypeID { get; set; }
-
-        [Display(Name = "Engine Number"), Required, StringLength(50)]
+        public Guid DriverTypeId { get; set; }
         public string EngineNumber { get; set; }
-
-        [Display(Name = "Chassis Number"), Required, StringLength(50)]
         public string ChassisNumber { get; set; }
-
-        [Display(Name = "Engine Capacity"), Required, StringLength(50)]
         public string EngineCapacity { get; set; }
-
-        [Display(Name = "Colour"), Required, StringLength(50)]
         public string Colour { get; set; }
-
-        [Display(Name = "Motor Use")]
-        public Guid MotorUseID { get; set; }
-
-        [Display(Name = "Security Fitting")]
+        public Guid MotorUseId { get; set; }
+        public bool GreyImport { get; set; }
         public bool SecurityFitting { get; set; }
+        public bool TrackingDevice { get; set; }
+        public bool Immobiliser { get; set; }
+        public bool Alarm { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual BodyType BodyType { get; private set; }
-        public virtual MotorModel MotorModel { get; private set; }
-        public virtual DriverType DriverType { get; private set; }
-        public virtual MotorUse MotorUse { get; private set; }
-        public virtual IReadOnlyCollection<MotorImprovement> MotorImprovements { get; set; } = new HashSet<MotorImprovement>();
-        public virtual IReadOnlyCollection<Risk> Risks { get; set; } = new HashSet<Risk>();
+        public virtual ICollection<Risk> Risks { get; set; }
     }
 }

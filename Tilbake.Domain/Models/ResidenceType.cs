@@ -1,13 +1,26 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class ResidenceType
+    public partial class ResidenceType
     {
-        public Guid ID { get; set; }
+        public ResidenceType()
+        {
+            Contents = new HashSet<Content>();
+            Houses = new HashSet<House>();
+        }
 
-        [Display(Name = "Residence Type"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
+
+        public virtual ICollection<Content> Contents { get; set; }
+        public virtual ICollection<House> Houses { get; set; }
     }
 }

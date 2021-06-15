@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Insurer
+    public partial class Insurer
     {
-        public Guid ID { get; set; }
+        public Insurer()
+        {
+            Policies = new HashSet<Policy>();
+            QuoteItems = new HashSet<QuoteItem>();
+        }
 
-        [Display(Name = "Insurer"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        [Display(Name = "Image")]
-        private readonly List<byte> image = new List<byte>();
-        public List<byte> Image { get { return image; } }
+        public virtual ICollection<Policy> Policies { get; set; }
+        public virtual ICollection<QuoteItem> QuoteItems { get; set; }
     }
 }

@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Portfolio
+    public partial class Portfolio
     {
-        public Guid ID { get; set; }
+        public Portfolio()
+        {
+            FileTemplates = new HashSet<FileTemplate>();
+            PortfolioClients = new HashSet<PortfolioClient>();
+        }
 
-        [Display(Name = "Portfolio"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public string Name { get; set; }
-
-        [Display(Name = "Description")]
         public string Description { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual IReadOnlyCollection<PortfolioKlient> PortfolioKlients { get; set; } = new HashSet<PortfolioKlient>();
+        public virtual ICollection<FileTemplate> FileTemplates { get; set; }
+        public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
     }
 }

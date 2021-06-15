@@ -1,13 +1,24 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class InvoiceStatus
+    public partial class InvoiceStatus
     {
-        public Guid ID { get; set; }
+        public InvoiceStatus()
+        {
+            Invoices = new HashSet<Invoice>();
+        }
 
-        [Display(Name = "Invoice Status"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
+
+        public virtual ICollection<Invoice> Invoices { get; set; }
     }
 }

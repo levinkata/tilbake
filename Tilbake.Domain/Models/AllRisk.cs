@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class AllRisk
+    public partial class AllRisk
     {
-        public Guid ID { get; set; }
+        public AllRisk()
+        {
+            Risks = new HashSet<Risk>();
+        }
 
-        [Display(Name = "Description")]
-        public Guid RiskItemID { get; set; }
+        public Guid Id { get; set; }
+        public Guid RiskItemId { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual RiskItem RiskItem { get; private set; }
-        public virtual IReadOnlyCollection<Risk> Risks { get; set; } = new HashSet<Risk>();
+        public virtual RiskItem RiskItem { get; set; }
+        public virtual ICollection<Risk> Risks { get; set; }
     }
 }

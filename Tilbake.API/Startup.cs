@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Tilbake.API.Controllers.Config;
 using Tilbake.API.Middleware;
-using Tilbake.Infrastructure.Data.Context;
+using Tilbake.Domain;
 using Tilbake.Infrastructure.IoC;
 
 namespace Tilbake.API

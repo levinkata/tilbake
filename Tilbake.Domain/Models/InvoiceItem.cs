@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class InvoiceItem
+    public partial class InvoiceItem
     {
-        public Guid ID { get; set; }
-        public Guid InvoiceID { get; set; }
-        public Guid PolitikkRiskID { get; set; }
-
-        public virtual PolitikkRisk PolitikkRisk { get; private set; }
-        public virtual Invoice Invoice { get; private set; }
+        public Guid Id { get; set; }
+        public Guid InvoiceId { get; set; }
+        public Guid PolicyRiskId { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
     }
 }

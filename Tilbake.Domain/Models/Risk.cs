@@ -1,24 +1,37 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Risk
+    public partial class Risk
     {
-        public Guid ID { get; set; }
-        public Guid? AllRiskID { get; set; }        
-        public Guid? ContentID { get; set; }
-        public Guid? GlassID { get; set; }
-        public Guid? HouseID { get; set; }
-        public Guid? MotorID { get; set; }
+        public Risk()
+        {
+            ClientRisks = new HashSet<ClientRisk>();
+        }
 
-        public virtual AllRisk AllRisk { get; private set; }
-        public virtual Content Content { get; private set; }
-        public virtual Glass Glass { get; private set; }
-        public virtual House House { get; private set; }
-        public virtual Motor Motor { get; private set; }
+        public Guid Id { get; set; }
+        public Guid? AllRiskId { get; set; }
+        public Guid? ContentId { get; set; }
+        public Guid? ElectronicEquipmentId { get; set; }
+        public Guid? GlassId { get; set; }
+        public Guid? HouseId { get; set; }
+        public Guid? MotorId { get; set; }
+        public Guid? PublicLiabilityId { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual IReadOnlyCollection<KlientRisk> KlientRisks { get; set; } = new HashSet<KlientRisk>();
+        public virtual AllRisk AllRisk { get; set; }
+        public virtual Content Content { get; set; }
+        public virtual ElectronicEquipment ElectronicEquipment { get; set; }
+        public virtual Glass Glass { get; set; }
+        public virtual House House { get; set; }
+        public virtual Motor Motor { get; set; }
+        public virtual PublicLiability PublicLiability { get; set; }
+        public virtual ICollection<ClientRisk> ClientRisks { get; set; }
     }
-
 }

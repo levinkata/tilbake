@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace Tilbake.Domain.Models
 {
-    public class Quote
+    public partial class Quote
     {
-        public Guid ID { get; set; }
+        public Quote()
+        {
+            QuoteItems = new HashSet<QuoteItem>();
+        }
 
-        [Display(Name = "Quote Number"), Required, StringLength(50)]
+        public Guid Id { get; set; }
         public int QuoteNumber { get; set; }
-
-        [Display(Name = "Quote Date"), DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}",
-            ApplyFormatInEditMode = true)]
         public DateTime QuoteDate { get; set; }
-
-        [Display(Name = "Quote Status")]
-        public Guid QuoteStatusID { get; set; }
-
-        [Display(Name = "Client Info"), StringLength(150)]
-        public string KlientInfo { get; set; }
-
-        [Display(Name = "Internal Info"), StringLength(150)]
+        public Guid QuoteStatusId { get; set; }
+        public string ClientInfo { get; set; }
         public string InternalInfo { get; set; }
+        public Guid? AddedBy { get; set; }
+        public DateTime? DateAdded { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DateModified { get; set; }
 
-        public virtual QuoteStatus QuoteStatus { get; private set; }
-        public virtual IReadOnlyCollection<QuoteItem> QuoteItems { get; set; } = new HashSet<QuoteItem>();
+        public virtual QuoteStatus QuoteStatus { get; set; }
+        public virtual ICollection<QuoteItem> QuoteItems { get; set; }
     }
 }

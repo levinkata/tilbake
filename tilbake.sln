@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Domain", "Tilbake.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Application", "Tilbake.Application\Tilbake.Application.csproj", "{E250BF5E-392F-45E8-9CB0-091107693AF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Infrastructure.Data", "Tilbake.Infrastructure.Data\Tilbake.Infrastructure.Data.csproj", "{602D44D3-0DD2-40BF-B526-84E8A56DEA54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Infrastructure.Persistence", "Tilbake.Infrastructure.Persistence\Tilbake.Infrastructure.Persistence.csproj", "{602D44D3-0DD2-40BF-B526-84E8A56DEA54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Infrastructure.IoC", "Tilbake.Infrastructure.IoC\Tilbake.Infrastructure.IoC.csproj", "{DFCF6E8E-3737-4A0B-8889-45CDFD5FA4C0}"
 EndProject
@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{6AD42F7E-82E9-45C2-80DF-DD484EDD8708}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.Data", "Infrastructure.Data", "{937BDC8E-DB0E-43C0-B19D-46A5C93D667A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.Persistence", "Infrastructure.Persistence", "{937BDC8E-DB0E-43C0-B19D-46A5C93D667A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.IoC", "Infrastructure.IoC", "{82511716-98C5-460A-BB2C-8CE4FA2062E6}"
 EndProject

@@ -6,13 +6,14 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0-preview.4.21253.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Tilbake.Application\Tilbake.Application.csproj" />
     <ProjectReference Include="..\Tilbake.Domain\Tilbake.Domain.csproj" />
-    <ProjectReference Include="..\Tilbake.Infrastructure.Data\Tilbake.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Tilbake.Infrastructure.Persistence\Tilbake.Infrastructure.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

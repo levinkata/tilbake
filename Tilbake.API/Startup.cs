@@ -1,3 +1,4 @@
+using Autofac;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ using Tilbake.API.Controllers.Config;
 using Tilbake.API.Middleware;
 using Tilbake.Domain;
 using Tilbake.Infrastructure.IoC;
+using Tilbake.Infrastructure.Persistence.Context;
 
 namespace Tilbake.API
 {
@@ -56,7 +58,6 @@ namespace Tilbake.API
             });
 
             services.AddAutoMapper(typeof(Startup));
-            RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

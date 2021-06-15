@@ -5,7 +5,7 @@ using Tilbake.Domain.Models;
 
 #nullable disable
 
-namespace Tilbake.Domain
+namespace Tilbake.Infrastructure.Persistence.Context
 {
     public partial class TilbakeDbContext : DbContext
     {

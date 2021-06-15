@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tilbake.Domain.Interfaces;
 
-namespace Tilbake.Infrastructure.Data.Repositories
+namespace Tilbake.Infrastructure.Persistence.Repositories
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {

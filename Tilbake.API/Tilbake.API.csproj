@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tilbake.Application\Tilbake.Application.csproj" />
-    <ProjectReference Include="..\Tilbake.Infrastructure.Data\Tilbake.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Tilbake.Infrastructure.Persistence\Tilbake.Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\Tilbake.Infrastructure.IoC\Tilbake.Infrastructure.IoC.csproj" />
   </ItemGroup>
 

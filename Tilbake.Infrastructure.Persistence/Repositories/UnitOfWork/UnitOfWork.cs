@@ -1,4 +1,10 @@
-namespace Tilbake.Infrastructure.Data.Repositories.UnitOfWork
+using System;
+using System.Threading.Tasks;
+using Tilbake.Domain.Interfaces;
+using Tilbake.Domain.Interfaces.UnitOfWork;
+using Tilbake.Infrastructure.Persistence.Context;
+
+namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -7,7 +13,11 @@ namespace Tilbake.Infrastructure.Data.Repositories.UnitOfWork
         public UnitOfWork(TilbakeDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+
+            Bank = new BankRepository(_context);
         }
+
+        public IBankRepository Bank { get; private set; }
 
         public async Task CompleteAsync()
         {

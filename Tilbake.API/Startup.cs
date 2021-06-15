@@ -98,9 +98,19 @@ namespace Tilbake.API
             });
         }
 
-        private static void RegisterServices(IServiceCollection services)
+        // ConfigureContainer is where you can register things directly
+        // with Autofac. This runs after ConfigureServices so the things
+        // here will override registrations made in ConfigureServices.
+        // Don't build the container; that gets done for you by the factory.
+        public static void ConfigureContainer(ContainerBuilder builder)
         {
-            DependencyContainer.RegisterServices(services);
+            // Add any Autofac modules or registrations.
+            // This is called AFTER ConfigureServices so things you
+            // register here OVERRIDE things registered in ConfigureServices.
+            //
+            // You must have the call to AddAutofac in the Program.Main
+            // method or this won't be called.
+            builder.RegisterModule(new AutofacModule());
         }
     }
 }

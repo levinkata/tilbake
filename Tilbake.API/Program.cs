@@ -13,8 +13,11 @@ namespace Tilbake.API
             host.Run();
         }
 
+        // The UseServiceProviderFactory call attaches the
+        // Autofac provider to the generic hosting mechanism.
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())  //  Added for Autofac by Levi Nkata
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

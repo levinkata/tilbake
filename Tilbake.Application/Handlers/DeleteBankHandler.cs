@@ -4,32 +4,29 @@ using System.Threading.Tasks;
 using MediatR;
 using Tilbake.Application.Commands;
 using Tilbake.Application.Interfaces.Communication;
-using Tilbake.Domain.Interfaces;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Handlers
 {
     public class DeleteBankHandler : IRequestHandler<DeleteBankCommand, BankResponse>
     {
-        private readonly IBankRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteBankHandler(IBankRepository repository, IUnitOfWork unitOfWork)
+        public DeleteBankHandler(IUnitOfWork unitOfWork)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task<BankResponse> Handle(DeleteBankCommand request, CancellationToken cancellationToken)
         {
-            var Bank = await _repository.GetById(request.Id).ConfigureAwait(true);
-            if (Bank == null)
+            var bank = await _unitOfWork.Bank.GetById(request.Id).ConfigureAwait(true);
+            if (bank == null)
                 return new BankResponse("Bank not found");
 
-            await _repository.Delete(Bank);
+            await _unitOfWork.Bank.Delete(bank).ConfigureAwait(true);
             await _unitOfWork.CompleteAsync().ConfigureAwait(true);
             
-            return new BankResponse(Bank);
+            return new BankResponse(bank);
         }        
     }
 }

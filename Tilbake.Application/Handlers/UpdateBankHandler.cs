@@ -2,35 +2,32 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Commands;
 using Tilbake.Application.Interfaces.Communication;
-using Tilbake.Infrastructure.Persistence.Context;
+using Tilbake.Domain.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Handlers
 {
     public class UpdateBankHandler : IRequestHandler<UpdateBankCommand, BankResponse>
     {
-        private readonly TilbakeDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateBankHandler(TilbakeDbContext context)
+        public UpdateBankHandler(IUnitOfWork unitOfWork)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork)); 
         }
 
         public async Task<BankResponse> Handle(UpdateBankCommand request, CancellationToken cancellationToken)
         {
-            var bank = await _context.Banks
-                                        .FirstOrDefaultAsync(e => e.Id == request.Id,
-                                         cancellationToken: cancellationToken).ConfigureAwait(true);
+            var bank = await _unitOfWork.Bank.GetById(request.Id).ConfigureAwait(true);
 
             if (bank == null)
                 return new BankResponse("Bank not found");
 
             bank.Name = request.Name;
 
-            _context.Banks.Update(bank);
-            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
+            await _unitOfWork.Bank.Update(bank).ConfigureAwait(true);
+            await _unitOfWork.CompleteAsync().ConfigureAwait(true);
 
             return new BankResponse(bank);
         }        

@@ -4,27 +4,27 @@ using System.Threading.Tasks;
 using MediatR;
 using Tilbake.Application.Interfaces.Communication;
 using Tilbake.Application.Queries;
-using Tilbake.Domain.Interfaces;
+using Tilbake.Domain.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Handlers
 {
     public class GetBankByIdHandler : IRequestHandler<GetBankByIdQuery, BankResponse>
     {
-        private readonly IBankRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetBankByIdHandler(IBankRepository repository)
+        public GetBankByIdHandler(IUnitOfWork unitOfWork)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));            
         }
 
         public async Task<BankResponse> Handle(GetBankByIdQuery request, CancellationToken cancellationToken)
         {
-            var Bank = await _repository.GetById(request.Id).ConfigureAwait(true);
+            var bank = await _unitOfWork.Bank.GetById(request.Id).ConfigureAwait(true);
 
-            if (Bank == null)
+            if (bank == null)
                 return new BankResponse($"Bank not found");
 
-            return new BankResponse(Bank);
+            return new BankResponse(bank);
         }        
     }
 }

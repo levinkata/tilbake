@@ -2,30 +2,33 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Commands;
 using Tilbake.Application.Interfaces.Communication;
-using Tilbake.Infrastructure.Persistence.Context;
+using Tilbake.Domain.Interfaces;
+using Tilbake.Domain.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Handlers
 {
     public class DeleteBankHandler : IRequestHandler<DeleteBankCommand, BankResponse>
     {
-        private readonly TilbakeDbContext _context;
+        private readonly IBankRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteBankHandler(TilbakeDbContext context)
+        public DeleteBankHandler(IBankRepository repository, IUnitOfWork unitOfWork)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task<BankResponse> Handle(DeleteBankCommand request, CancellationToken cancellationToken)
         {
-            var Bank = await _context.Banks.FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken: cancellationToken).ConfigureAwait(true);
+            var Bank = await _repository.GetById(request.Id).ConfigureAwait(true);
             if (Bank == null)
                 return new BankResponse("Bank not found");
 
-            _context.Banks.Remove(Bank);
-            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
+            await _repository.Delete(Bank);
+            await _unitOfWork.CompleteAsync().ConfigureAwait(true);
+            
             return new BankResponse(Bank);
         }        
     }

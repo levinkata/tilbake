@@ -2,27 +2,25 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Interfaces.Communication;
 using Tilbake.Application.Queries;
-using Tilbake.Infrastructure.Persistence.Context;
+using Tilbake.Domain.Interfaces;
 
 namespace Tilbake.Application.Handlers
 {
     public class GetBankByIdHandler : IRequestHandler<GetBankByIdQuery, BankResponse>
     {
-        private readonly TilbakeDbContext _context;
+        private readonly IBankRepository _repository;
 
-        public GetBankByIdHandler(TilbakeDbContext context)
+        public GetBankByIdHandler(IBankRepository repository)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public async Task<BankResponse> Handle(GetBankByIdQuery request, CancellationToken cancellationToken)
         {
-            var Bank = await _context.Banks
-                                         .FirstOrDefaultAsync(e => e.Id == request.Id,
-                                         cancellationToken: cancellationToken).ConfigureAwait(true);
+            var Bank = await _repository.GetById(request.Id).ConfigureAwait(true);
+
             if (Bank == null)
                 return new BankResponse($"Bank not found");
 

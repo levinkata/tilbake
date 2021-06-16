@@ -4,18 +4,21 @@ using System.Threading.Tasks;
 using MediatR;
 using Tilbake.Application.Commands;
 using Tilbake.Application.Interfaces.Communication;
+using Tilbake.Domain.Interfaces;
+using Tilbake.Domain.Interfaces.UnitOfWork;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Context;
 
 namespace Tilbake.Application.Handlers
 {
     public class CreateBankHandler : IRequestHandler<CreateBankCommand, BankResponse>
     {
-        private readonly TilbakeDbContext _context;
+        private readonly IBankRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CreateBankHandler(TilbakeDbContext context)
+        public CreateBankHandler(IBankRepository repository, IUnitOfWork unitOfWork)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task<BankResponse> Handle(CreateBankCommand request, CancellationToken cancellationToken)
@@ -24,8 +27,9 @@ namespace Tilbake.Application.Handlers
             {
                 Name = request.Name
             };
-            await _context.Banks.AddAsync(bank, cancellationToken).ConfigureAwait(true);
-            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
+            await _repository.AddAsync(bank).ConfigureAwait(true);
+            await _unitOfWork.CompleteAsync().ConfigureAwait(true);
+
             return new BankResponse(bank);
         }        
     }

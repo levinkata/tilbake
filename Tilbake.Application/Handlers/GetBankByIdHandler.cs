@@ -27,7 +27,6 @@ namespace Tilbake.Application.Handlers
                 return new BankResponse($"Bank not found");
 
             return new BankResponse(Bank);
-
         }        
     }
 }

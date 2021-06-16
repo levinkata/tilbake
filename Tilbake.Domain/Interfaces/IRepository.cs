@@ -11,8 +11,10 @@ namespace Tilbake.Domain.Interfaces
         Task<TEntity> GetById(Guid id);
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> AddAsync(TEntity entity);
+        Task <IEnumerable<TEntity>> AddRangeAsync (IEnumerable<TEntity> entities);        
         Task<TEntity> Update(TEntity entity);
         Task<TEntity> Delete(Guid id);
         Task<TEntity> Delete(TEntity entity);
+        Task<IEnumerable<TEntity>> DeleteRangeAsync(IEnumerable<TEntity> entities);        
     }
 }

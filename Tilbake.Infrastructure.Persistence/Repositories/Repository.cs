@@ -20,6 +20,12 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return entity;            
         } 
 
+        public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            await Task.Run(() => _context.Set<TEntity>().AddRangeAsync(entities)).ConfigureAwait(true);
+            return entities;
+        }
+
         public async Task<TEntity> Delete(Guid id)
         {
             var entity = await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
@@ -41,6 +47,17 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
             await Task.Run(() => _context.Set<TEntity>().Remove(entity)).ConfigureAwait(true);
             return entity;
+        }
+
+        public async Task<IEnumerable<TEntity>> DeleteRangeAsync(IEnumerable<TEntity> entities)
+        {
+            if (entities == null)
+            {
+                return entities;
+            }
+
+            await Task.Run(() => _context.Set<TEntity>().RemoveRange(entities)).ConfigureAwait(true);
+            return entities;
         }
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)

@@ -15,9 +15,11 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             _context = context ?? throw new ArgumentNullException(nameof(context));
 
             Bank = new BankRepository(_context);
+            BankBranch = new BankBranchRepository(_context);            
         }
 
         public IBankRepository Bank { get; private set; }
+        public IBankBranchRepository BankBranch { get; private set; }
 
         public async Task CompleteAsync()
         {

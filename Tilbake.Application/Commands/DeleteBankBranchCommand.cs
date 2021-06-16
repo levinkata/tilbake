@@ -4,8 +4,8 @@ using Tilbake.Application.Communication;
 
 namespace Tilbake.Application.Commands
 {
-    public class CreateBankCommand : IRequest<BankResponse>
+    public class DeleteBankBranchCommand : IRequest<BankBranchResponse>
     {
-        public string Name { get; set; }
+        public Guid Id { get; set; }        
     }
 }

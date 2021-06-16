@@ -1,4 +1,4 @@
-﻿namespace Tilbake.Application.Interfaces.Communication
+﻿namespace Tilbake.Application.Communication
 {
     public abstract class BaseResponse<T>
     {

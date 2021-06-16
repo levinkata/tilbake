@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tilbake.API.Resources;
 using Tilbake.Application.Commands;
-using Tilbake.Application.Interfaces.Communication;
+using Tilbake.Application.Communication;
 using Tilbake.Application.Queries;
 using Tilbake.Domain.Models;
 

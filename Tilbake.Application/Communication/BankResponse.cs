@@ -1,6 +1,6 @@
 using Tilbake.Domain.Models;
 
-namespace Tilbake.Application.Interfaces.Communication
+namespace Tilbake.Application.Communication
 {
     public class BankResponse : BaseResponse<Bank>
     {

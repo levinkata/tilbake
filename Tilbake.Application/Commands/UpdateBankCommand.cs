@@ -1,6 +1,6 @@
 using System;
 using MediatR;
-using Tilbake.Application.Interfaces.Communication;
+using Tilbake.Application.Communication;
 
 namespace Tilbake.Application.Commands
 {

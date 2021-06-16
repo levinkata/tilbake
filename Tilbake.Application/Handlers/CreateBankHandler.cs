@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Tilbake.Application.Commands;
-using Tilbake.Application.Interfaces.Communication;
+using Tilbake.Application.Communication;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 using Tilbake.Domain.Models;
 

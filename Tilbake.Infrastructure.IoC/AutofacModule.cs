@@ -3,7 +3,6 @@ using Tilbake.Domain.Interfaces.UnitOfWork;
 using Tilbake.Infrastructure.Persistence.Repositories;
 using System.Linq;
 using Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork;
-using Tilbake.Application.Services;
 using Tilbake.Application.PipelineBehaviours;
 using MediatR;
 
@@ -13,11 +12,6 @@ namespace Tilbake.Infrastructure.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(BankService).Assembly)
-                    .Where(t => t.Name.EndsWith("Service"))
-                    .AsImplementedInterfaces()
-                    .InstancePerLifetimeScope();
-
             builder.RegisterAssemblyTypes(typeof(BankRepository).Assembly)
                     .Where(t => t.Name.EndsWith("Repository"))
                     .AsImplementedInterfaces()

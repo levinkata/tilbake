@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Tilbake.Application.Interfaces.Communication;
+using Tilbake.Application.Communication;
 using Tilbake.Application.Queries;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 

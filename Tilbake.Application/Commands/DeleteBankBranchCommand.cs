@@ -1,5 +1,5 @@
-using System;
 using MediatR;
+using System;
 using Tilbake.Application.Communication;
 
 namespace Tilbake.Application.Commands

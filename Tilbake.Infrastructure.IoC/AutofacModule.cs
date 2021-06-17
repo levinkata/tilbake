@@ -1,10 +1,9 @@
 using Autofac;
+using MediatR;
+using Tilbake.Application.PipelineBehaviours;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 using Tilbake.Infrastructure.Persistence.Repositories;
-using System.Linq;
 using Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork;
-using Tilbake.Application.PipelineBehaviours;
-using MediatR;
 
 namespace Tilbake.Infrastructure.IoC
 {

@@ -1,8 +1,8 @@
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using Tilbake.Application.Queries;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 using Tilbake.Domain.Models;

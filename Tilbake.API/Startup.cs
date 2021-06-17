@@ -1,6 +1,5 @@
 using System.Reflection;
 using Autofac;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,8 +63,6 @@ namespace Tilbake.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tilbake API", Version = "v1" });
             });
-
-            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

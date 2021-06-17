@@ -7,7 +7,7 @@ using Tilbake.Application.Queries;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 using Tilbake.Domain.Models;
 
-namespace Tilbake.Application.Handlers
+namespace Tilbake.Application.Handlers.QueryHandlers
 {
     public class GetBankBranchesHandler : IRequestHandler<GetBankBranchesQuery, IEnumerable<BankBranch>>
     {

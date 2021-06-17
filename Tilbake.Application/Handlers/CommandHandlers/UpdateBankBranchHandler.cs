@@ -6,7 +6,7 @@ using Tilbake.Application.Commands;
 using Tilbake.Application.Communication;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 
-namespace Tilbake.Application.Handlers
+namespace Tilbake.Application.Handlers.CommandHandlers
 {
     public class UpdateBankBranchHandler : IRequestHandler<UpdateBankBranchCommand, BankBranchResponse>
     {

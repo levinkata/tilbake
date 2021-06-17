@@ -6,7 +6,7 @@ using Tilbake.Application.Communication;
 using Tilbake.Application.Queries;
 using Tilbake.Domain.Interfaces.UnitOfWork;
 
-namespace Tilbake.Application.Handlers
+namespace Tilbake.Application.Handlers.QueryHandlers
 {
     public class GetBankByIdHandler : IRequestHandler<GetBankByIdQuery, BankResponse>
     {

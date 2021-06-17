@@ -7,7 +7,9 @@ namespace Tilbake.Application.Validators
     {
         public CreateBankCommandValidator()
         {
-            RuleFor(c => c.Name).NotEmpty();
+            RuleFor(c => c.Name)
+                .NotEmpty().WithMessage("{PropertyName} should be not empty. NEVER!")
+                .Length(2,50);
         }        
     }
 }

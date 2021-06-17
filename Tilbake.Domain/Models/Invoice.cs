@@ -13,6 +13,7 @@ namespace Tilbake.Domain.Models
         }
 
         public Guid Id { get; set; }
+        public Guid PolicyId { get; set; }
         public int InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
         public Guid InvoiceStatusId { get; set; }
@@ -22,6 +23,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual InvoiceStatus InvoiceStatus { get; set; }
+        public virtual Policy Policy { get; set; }
         public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
     }
 }

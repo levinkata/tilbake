@@ -7,6 +7,11 @@ namespace Tilbake.Domain.Models
 {
     public partial class AspNetUser
     {
+        public AspNetUser()
+        {
+            AspnetUserPortfolios = new HashSet<AspnetUserPortfolio>();
+        }
+
         public string Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -28,5 +33,7 @@ namespace Tilbake.Domain.Models
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+
+        public virtual ICollection<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
     }
 }

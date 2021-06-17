@@ -9,6 +9,7 @@ namespace Tilbake.Domain.Models
     {
         public Policy()
         {
+            Invoices = new HashSet<Invoice>();
             PolicyRenewals = new HashSet<PolicyRenewal>();
             PolicyRisks = new HashSet<PolicyRisk>();
             Premia = new HashSet<Premium>();
@@ -36,6 +37,7 @@ namespace Tilbake.Domain.Models
         public virtual PolicyType PolicyType { get; set; }
         public virtual PortfolioClient PortfolioClient { get; set; }
         public virtual SalesType SalesType { get; set; }
+        public virtual ICollection<Invoice> Invoices { get; set; }
         public virtual ICollection<PolicyRenewal> PolicyRenewals { get; set; }
         public virtual ICollection<PolicyRisk> PolicyRisks { get; set; }
         public virtual ICollection<Premium> Premia { get; set; }

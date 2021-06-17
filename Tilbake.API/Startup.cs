@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac;
 using FluentValidation;
 using MediatR;
@@ -11,11 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using System.Reflection;
 using Tilbake.API.Controllers.Config;
 using Tilbake.API.Middleware;
 using Tilbake.Application.Queries;
 using Tilbake.Application.Validators;
-using Tilbake.Domain;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 
@@ -57,6 +56,8 @@ namespace Tilbake.API
                 options.Authority = "https://dev-me55aatm.auth0.com/";
                 options.Audience = "https://api.tilbake.com";
             });
+
+            services.AddAutoMapper(typeof(Startup));
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tilbake.API.Resources;
@@ -17,10 +18,12 @@ namespace Tilbake.API.Controllers
     public class BanksController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public BanksController(IMediator mediator)
+        public BanksController(IMediator mediator, IMapper mapper)
         {
-            _mediator = mediator;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         /// <summary>
@@ -31,9 +34,11 @@ namespace Tilbake.API.Controllers
         // GET: api/Banks
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Bank>), 200)]
-        public async Task<IEnumerable<Bank>> GetAllAsync()
+        public async Task<IEnumerable<BankResource>> GetAllAsync()
         {
-            return await _mediator.Send(new GetBanksQuery()).ConfigureAwait(true);
+            var result = await _mediator.Send(new GetBanksQuery()).ConfigureAwait(true);
+            var resources = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankResource>>(result);
+            return resources;
         }
 
         /// <summary>
@@ -46,9 +51,16 @@ namespace Tilbake.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(BankResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<BankResponse>> GetAsync(Guid id)
+        public async Task<ActionResult<IActionResult>> GetAsync(Guid id)
         {
-            return await _mediator.Send(new GetBankByIdQuery { Id = id }).ConfigureAwait(true);
+            var result = await _mediator.Send(new GetBankByIdQuery { Id = id }).ConfigureAwait(true);
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
+            return Ok(bankResource);
         }
 
         /// <summary>
@@ -61,15 +73,22 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(BankResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<BankResponse>> PutAsync(Guid id, [FromBody] UpdateBankCommand command)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] UpdateBankCommand command)
         {
             if (command == null)
             {
                 throw new ArgumentNullException(nameof(command));
             }
-            command.Id = id;
-            return await _mediator.Send(command).ConfigureAwait(true);
 
+            command.Id = id;
+            var result = await _mediator.Send(command).ConfigureAwait(true);
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
+            return Ok(bankResource);
         }
 
         /// <summary>
@@ -81,9 +100,16 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(BankResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<BankResponse>> PostAsync([FromBody] CreateBankCommand command)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] CreateBankCommand command)
         {
-            return await _mediator.Send(command).ConfigureAwait(true);
+            var result = await _mediator.Send(command).ConfigureAwait(true);
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
+            return Ok(bankResource);
         }
 
         /// <summary>
@@ -95,9 +121,16 @@ namespace Tilbake.API.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(BankResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<BankResponse>> DeleteAsync(Guid id)
+        public async Task<ActionResult<IActionResult>> DeleteAsync(Guid id)
         {
-            return await _mediator.Send( new DeleteBankCommand { Id = id }).ConfigureAwait(true);
+            var result = await _mediator.Send( new DeleteBankCommand { Id = id }).ConfigureAwait(true);
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
+            return Ok(bankResource);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Tilbake.API.Controllers
         /// 
         // GET: api/Banks
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Bank>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<BankResource>), 200)]
         public async Task<IEnumerable<BankResource>> GetAllAsync()
         {
             var result = await _mediator.Send(new GetBanksQuery()).ConfigureAwait(true);

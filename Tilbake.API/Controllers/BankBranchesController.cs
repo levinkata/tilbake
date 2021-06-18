@@ -29,7 +29,7 @@ namespace Tilbake.API.Controllers
         /// <summary>
         /// Lists all banks branche.
         /// </summary>
-        /// <returns>List of bank branchess.</returns>
+        /// <returns>List of bank branches.</returns>
         /// 
         // GET: api/BankBranches
         [HttpGet]
@@ -42,7 +42,7 @@ namespace Tilbake.API.Controllers
         }
 
         /// <summary>
-        /// Lists existing bank branches according to an identifier..
+        /// Lists existing bank branches according to a identifier..
         /// </summary>
         /// <param name="bankId">BankBranch identifier.</param>        
         /// <returns>Response for the request.</returns>
@@ -95,6 +95,7 @@ namespace Tilbake.API.Controllers
             {
                 throw new ArgumentNullException(nameof(command));
             }
+            
             command.Id = id;
             var result = await _mediator.Send(command).ConfigureAwait(true);
             if (!result.Success)

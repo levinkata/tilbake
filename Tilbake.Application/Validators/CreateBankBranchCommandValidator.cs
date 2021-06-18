@@ -3,9 +3,9 @@ using Tilbake.Application.Commands;
 
 namespace Tilbake.Application.Validators
 {
-    public class CreateBankCommandValidator : AbstractValidator<CreateBankCommand>
+    public class CreateBankBranchCommandValidator : AbstractValidator<CreateBankBranchCommand>
     {
-        public CreateBankCommandValidator()
+        public CreateBankBranchCommandValidator()
         {
             RuleFor(c => c.Name)
                 .NotEmpty().WithMessage("{PropertyName} should be not empty.")

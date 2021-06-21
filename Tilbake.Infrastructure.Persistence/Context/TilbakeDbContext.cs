@@ -27,7 +27,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
-        public virtual DbSet<AspnetUserScheme> AspnetUserSchemes { get; set; }
+        public virtual DbSet<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
         public virtual DbSet<Attorney> Attorneys { get; set; }
         public virtual DbSet<Bank> Banks { get; set; }
         public virtual DbSet<BankAccount> BankAccounts { get; set; }
@@ -129,7 +129,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<RoadsideAssist> RoadsideAssists { get; set; }
         public virtual DbSet<RoofType> RoofTypes { get; set; }
         public virtual DbSet<SalesType> SalesTypes { get; set; }
-        public virtual DbSet<Scheme> Schemes { get; set; }
         public virtual DbSet<Tax> Taxes { get; set; }
         public virtual DbSet<ThirdParty> ThirdParties { get; set; }
         public virtual DbSet<Title> Titles { get; set; }
@@ -140,14 +139,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
 
-/*         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-            }
-        } */
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//         {
+//             if (!optionsBuilder.IsConfigured)
+//             {
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+//             }
+//         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -189,12 +188,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<AspNetRole>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
                 entity.Property(e => e.Name).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedName).HasMaxLength(256);
@@ -202,7 +195,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<AspNetRoleClaim>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.RoleId)
                     .IsRequired()
@@ -211,15 +204,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<AspNetUser>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Id).HasMaxLength(250);
 
                 entity.Property(e => e.Email).HasMaxLength(256);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
-
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasMaxLength(250);
 
                 entity.Property(e => e.IdNumber).HasMaxLength(50);
 
@@ -240,11 +229,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<AspNetUserClaim>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.UserId)
                     .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<AspNetUserLogin>(entity =>
@@ -270,11 +259,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.RoleId)
                     .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(250);
 
                 entity.Property(e => e.UserId)
                     .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<AspNetUserToken>(entity =>
@@ -294,19 +283,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(450);
             });
 
-            modelBuilder.Entity<AspnetUserScheme>(entity =>
+            modelBuilder.Entity<AspnetUserPortfolio>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.AspNetUserId, e.PortfolioId });
 
-                entity.ToTable("AspnetUserScheme");
+                entity.ToTable("AspnetUserPortfolio");
 
-                entity.Property(e => e.AspNetUserId)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.AspNetUserId).HasMaxLength(250);
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.AspNetUser)
+                    .WithMany(p => p.AspnetUserPortfolios)
+                    .HasForeignKey(d => d.AspNetUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspnetUserPortfolio_AspNetUsers");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.AspnetUserPortfolios)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspnetUserPortfolio_Portfolio");
             });
 
             modelBuilder.Entity<Attorney>(entity =>
@@ -484,6 +483,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<ChartOfAccount>(entity =>
             {
+                entity.HasIndex(e => e.Glcode, "IX_ChartOfAccounts")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
@@ -1369,6 +1371,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.InvoiceStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Invoice_InvoiceStatus");
+
+                entity.HasOne(d => d.Policy)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.PolicyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_Policy");
             });
 
             modelBuilder.Entity<InvoiceItem>(entity =>
@@ -2148,6 +2156,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.QuoteDate).HasColumnType("date");
 
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.Quotes)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Quote_Client");
+
                 entity.HasOne(d => d.QuoteStatus)
                     .WithMany(p => p.Quotes)
                     .HasForeignKey(d => d.QuoteStatusId)
@@ -2564,23 +2578,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Scheme>(entity =>
-            {
-                entity.ToTable("Scheme");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.DateAdded).HasColumnType("datetime");
-
-                entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.Property(e => e.Description).IsRequired();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
             modelBuilder.Entity<Tax>(entity =>
             {
                 entity.ToTable("Tax");
@@ -2798,8 +2795,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
             });
-            
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
             OnModelCreatingPartial(modelBuilder);
         }

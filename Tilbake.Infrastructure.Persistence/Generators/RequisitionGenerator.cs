@@ -22,7 +22,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
         /// <summary>
         /// Template method to perform value generation for RequisitionNumber.
         /// </summary>
-        /// <param name="entry">In this case FundEmployee</param>
+        /// <param name="entry">In this case Requisition</param>
         /// <returns>Current invoice number</returns>
         public override int Next(EntityEntry entry)
         {

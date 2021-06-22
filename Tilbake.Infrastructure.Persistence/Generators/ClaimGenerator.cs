@@ -22,8 +22,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
         /// <summary>
         /// Template method to perform value generation for ClaimNumber.
         /// </summary>
-        /// <param name="entry">In this case FundEmployee</param>
-        /// <returns>Current invoice number</returns>
+        /// <param name="entry">In this case Claim</param>
+        /// <returns>Current claim number</returns>
         public override int Next(EntityEntry entry)
         {
             if (entry == null)
@@ -37,19 +37,19 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.ClaimNumberGenerators
                                     .Max(p => p.ClaimNumber) + 1 : 1;
 
-            var invoiceTable = _context.ClaimNumberGenerators
+            var claimTable = _context.ClaimNumberGenerators
                                             .FirstOrDefault();
 
-            if (invoiceTable == null)
+            if (claimTable == null)
             {
-                ClaimNumberGenerator invoiceNumberGenerator = new ClaimNumberGenerator()
+                ClaimNumberGenerator claimNumberGenerator = new ClaimNumberGenerator()
                 {
                     ClaimNumber = currentValue
                 };
-                _context.ClaimNumberGenerators.Add(invoiceNumberGenerator);
+                _context.ClaimNumberGenerators.Add(claimNumberGenerator);
             }
             else
-                invoiceTable.ClaimNumber = currentValue;
+                claimTable.ClaimNumber = currentValue;
 
             _context.SaveChangesAsync();
 
@@ -69,21 +69,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.ClaimNumberGenerators
                                     .Max(p => p.ClaimNumber) + 1 : 1;
 
-            var invoiceTable = await _context.ClaimNumberGenerators
+            var claimTable = await _context.ClaimNumberGenerators
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 
-            if (invoiceTable == null)
+            if (claimTable == null)
             {
-                ClaimNumberGenerator invoiceNumberGenerator = new ClaimNumberGenerator()
+                ClaimNumberGenerator claimNumberGenerator = new ClaimNumberGenerator()
                 {
                     ClaimNumber = currentValue
                 };
-                await _context.ClaimNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken)
+                await _context.ClaimNumberGenerators.AddAsync(claimNumberGenerator, cancellationToken)
                                                      .ConfigureAwait(false);
             }
             else
-                invoiceTable.ClaimNumber = currentValue;
+                claimTable.ClaimNumber = currentValue;
 
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

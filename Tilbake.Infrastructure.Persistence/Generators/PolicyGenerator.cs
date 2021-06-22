@@ -22,8 +22,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
         /// <summary>
         /// Template method to perform value generation for PolicyNumber.
         /// </summary>
-        /// <param name="entry">In this case FundEmployee</param>
-        /// <returns>Current invoice number</returns>
+        /// <param name="entry">In this case Policy</param>
+        /// <returns>Current policy number</returns>
         public override int Next(EntityEntry entry)
         {
             if (entry == null)
@@ -37,19 +37,19 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.PolicyNumberGenerators
                                     .Max(p => p.PolicyNumber) + 1 : 1;
 
-            var invoiceTable = _context.PolicyNumberGenerators
+            var policyTable = _context.PolicyNumberGenerators
                                             .FirstOrDefault();
 
-            if (invoiceTable == null)
+            if (policyTable == null)
             {
-                PolicyNumberGenerator invoiceNumberGenerator = new PolicyNumberGenerator()
+                PolicyNumberGenerator policyNumberGenerator = new PolicyNumberGenerator()
                 {
                     PolicyNumber = currentValue
                 };
-                _context.PolicyNumberGenerators.Add(invoiceNumberGenerator);
+                _context.PolicyNumberGenerators.Add(policyNumberGenerator);
             }
             else
-                invoiceTable.PolicyNumber = currentValue;
+                policyTable.PolicyNumber = currentValue;
 
             _context.SaveChangesAsync();
 
@@ -69,21 +69,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.PolicyNumberGenerators
                                     .Max(p => p.PolicyNumber) + 1 : 1;
 
-            var invoiceTable = await _context.PolicyNumberGenerators
+            var policyTable = await _context.PolicyNumberGenerators
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 
-            if (invoiceTable == null)
+            if (policyTable == null)
             {
-                PolicyNumberGenerator invoiceNumberGenerator = new PolicyNumberGenerator()
+                PolicyNumberGenerator policyNumberGenerator = new PolicyNumberGenerator()
                 {
                     PolicyNumber = currentValue
                 };
-                await _context.PolicyNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken)
+                await _context.PolicyNumberGenerators.AddAsync(policyNumberGenerator, cancellationToken)
                                                      .ConfigureAwait(false);
             }
             else
-                invoiceTable.PolicyNumber = currentValue;
+                policyTable.PolicyNumber = currentValue;
 
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

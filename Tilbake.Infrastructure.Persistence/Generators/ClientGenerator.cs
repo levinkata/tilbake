@@ -22,8 +22,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
         /// <summary>
         /// Template method to perform value generation for ClientNumber.
         /// </summary>
-        /// <param name="entry">In this case FundEmployee</param>
-        /// <returns>Current invoice number</returns>
+        /// <param name="entry">In this case Client</param>
+        /// <returns>Current client number</returns>
         public override int Next(EntityEntry entry)
         {
             if (entry == null)
@@ -37,19 +37,19 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.ClientNumberGenerators
                                     .Max(p => p.ClientNumber) + 1 : 1;
 
-            var invoiceTable = _context.ClientNumberGenerators
+            var clientTable = _context.ClientNumberGenerators
                                             .FirstOrDefault();
 
-            if (invoiceTable == null)
+            if (clientTable == null)
             {
-                ClientNumberGenerator invoiceNumberGenerator = new ClientNumberGenerator()
+                ClientNumberGenerator clientNumberGenerator = new ClientNumberGenerator()
                 {
                     ClientNumber = currentValue
                 };
-                _context.ClientNumberGenerators.Add(invoiceNumberGenerator);
+                _context.ClientNumberGenerators.Add(clientNumberGenerator);
             }
             else
-                invoiceTable.ClientNumber = currentValue;
+                clientTable.ClientNumber = currentValue;
 
             _context.SaveChangesAsync();
 
@@ -69,21 +69,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.ClientNumberGenerators
                                     .Max(p => p.ClientNumber) + 1 : 1;
 
-            var invoiceTable = await _context.ClientNumberGenerators
+            var clientTable = await _context.ClientNumberGenerators
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 
-            if (invoiceTable == null)
+            if (clientTable == null)
             {
-                ClientNumberGenerator invoiceNumberGenerator = new ClientNumberGenerator()
+                ClientNumberGenerator clientNumberGenerator = new ClientNumberGenerator()
                 {
                     ClientNumber = currentValue
                 };
-                await _context.ClientNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken)
+                await _context.ClientNumberGenerators.AddAsync(clientNumberGenerator, cancellationToken)
                                                      .ConfigureAwait(false);
             }
             else
-                invoiceTable.ClientNumber = currentValue;
+                clientTable.ClientNumber = currentValue;
 
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

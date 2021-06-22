@@ -22,8 +22,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
         /// <summary>
         /// Template method to perform value generation for QuoteNumber.
         /// </summary>
-        /// <param name="entry">In this case FundEmployee</param>
-        /// <returns>Current invoice number</returns>
+        /// <param name="entry">In this case Quote</param>
+        /// <returns>Current quote number</returns>
         public override int Next(EntityEntry entry)
         {
             if (entry == null)
@@ -37,19 +37,19 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.QuoteNumberGenerators
                                     .Max(p => p.QuoteNumber) + 1 : 1;
 
-            var invoiceTable = _context.QuoteNumberGenerators
+            var quoteTable = _context.QuoteNumberGenerators
                                             .FirstOrDefault();
 
-            if (invoiceTable == null)
+            if (quoteTable == null)
             {
-                QuoteNumberGenerator invoiceNumberGenerator = new QuoteNumberGenerator()
+                QuoteNumberGenerator quoteNumberGenerator = new QuoteNumberGenerator()
                 {
                     QuoteNumber = currentValue
                 };
-                _context.QuoteNumberGenerators.Add(invoiceNumberGenerator);
+                _context.QuoteNumberGenerators.Add(quoteNumberGenerator);
             }
             else
-                invoiceTable.QuoteNumber = currentValue;
+                quoteTable.QuoteNumber = currentValue;
 
             _context.SaveChangesAsync();
 
@@ -69,21 +69,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     _context.QuoteNumberGenerators
                                     .Max(p => p.QuoteNumber) + 1 : 1;
 
-            var invoiceTable = await _context.QuoteNumberGenerators
+            var quoteTable = await _context.QuoteNumberGenerators
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 
-            if (invoiceTable == null)
+            if (quoteTable == null)
             {
-                QuoteNumberGenerator invoiceNumberGenerator = new QuoteNumberGenerator()
+                QuoteNumberGenerator quoteNumberGenerator = new QuoteNumberGenerator()
                 {
                     QuoteNumber = currentValue
                 };
-                await _context.QuoteNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken)
+                await _context.QuoteNumberGenerators.AddAsync(quoteNumberGenerator, cancellationToken)
                                                      .ConfigureAwait(false);
             }
             else
-                invoiceTable.QuoteNumber = currentValue;
+                quoteTable.QuoteNumber = currentValue;
 
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

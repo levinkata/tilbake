@@ -2797,6 +2797,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
             });
 
             OnModelCreatingPartial(modelBuilder);
+            
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

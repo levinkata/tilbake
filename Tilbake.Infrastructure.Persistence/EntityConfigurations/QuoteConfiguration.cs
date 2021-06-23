@@ -6,7 +6,7 @@ using Tilbake.Infrastructure.Persistence.Generators;
 
 namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
 {
-    public class QuoteConfiguration  : IEntityTypeConfiguration<Quote>
+    public class QuoteConfiguration : IEntityTypeConfiguration<Quote>
     {
         public void Configure(EntityTypeBuilder<Quote> builder)
         {

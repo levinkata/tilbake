@@ -6,7 +6,7 @@ using Tilbake.Infrastructure.Persistence.Generators;
 
 namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
 {
-    public class ClientConfiguration  : IEntityTypeConfiguration<Client>
+    public class ClientConfiguration : IEntityTypeConfiguration<Client>
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         {

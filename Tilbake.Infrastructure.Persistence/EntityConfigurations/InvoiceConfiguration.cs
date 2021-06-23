@@ -6,7 +6,7 @@ using Tilbake.Infrastructure.Persistence.Generators;
 
 namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
 {
-    public class InvoiceConfiguration  : IEntityTypeConfiguration<Invoice>
+    public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
     {
         public void Configure(EntityTypeBuilder<Invoice> builder)
         {

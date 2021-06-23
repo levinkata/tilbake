@@ -12,7 +12,6 @@ namespace Tilbake.Domain.Models.Common
 
         private Address()
         {
-            
         }
 
         public Address(string physicalAddress, string postalAddress, Guid cityId)

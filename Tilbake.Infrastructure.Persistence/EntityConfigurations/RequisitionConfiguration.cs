@@ -6,7 +6,7 @@ using Tilbake.Infrastructure.Persistence.Generators;
 
 namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
 {
-    public class RequisitionConfiguration  : IEntityTypeConfiguration<Requisition>
+    public class RequisitionConfiguration : IEntityTypeConfiguration<Requisition>
     {
         public void Configure(EntityTypeBuilder<Requisition> builder)
         {

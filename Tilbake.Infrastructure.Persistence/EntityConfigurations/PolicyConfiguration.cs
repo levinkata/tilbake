@@ -6,7 +6,7 @@ using Tilbake.Infrastructure.Persistence.Generators;
 
 namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
 {
-    public class PolicyConfiguration  : IEntityTypeConfiguration<Policy>
+    public class PolicyConfiguration : IEntityTypeConfiguration<Policy>
     {
         public void Configure(EntityTypeBuilder<Policy> builder)
         {

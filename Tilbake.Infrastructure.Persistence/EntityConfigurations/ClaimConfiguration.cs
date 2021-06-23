@@ -6,7 +6,7 @@ using Tilbake.Infrastructure.Persistence.Generators;
 
 namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
 {
-    public class ClaimConfiguration  : IEntityTypeConfiguration<Claim>
+    public class ClaimConfiguration : IEntityTypeConfiguration<Claim>
     {
         public void Configure(EntityTypeBuilder<Claim> builder)
         {

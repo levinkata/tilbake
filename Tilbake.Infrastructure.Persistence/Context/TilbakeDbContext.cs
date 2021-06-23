@@ -2179,9 +2179,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Excess)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Excess).HasMaxLength(50);
 
                 entity.Property(e => e.Premium).HasColumnType("decimal(18, 2)");
 
@@ -2797,8 +2795,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
             });
 
             OnModelCreatingPartial(modelBuilder);
-            
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);            
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

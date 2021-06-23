@@ -34,7 +34,7 @@ namespace Tilbake.API
         {
             services.AddDbContext<TilbakeDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
-
+        
             services.AddValidatorsFromAssembly(typeof(CreateBankCommandValidator).GetTypeInfo().Assembly);
             services.AddMediatR(typeof(GetBanksQuery).GetTypeInfo().Assembly);
 

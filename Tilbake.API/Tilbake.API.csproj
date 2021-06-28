@@ -23,6 +23,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <UserSecretsId>4913c51d-1159-45d9-aac1-510cfb637102</UserSecretsId>
   </PropertyGroup>
 
 

@@ -27,14 +27,15 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .AsNoTracking()).ConfigureAwait(true);
         }
 
-        public Task<IQueryable<BankBranch>> GetAllAsync()
+        public async Task<IQueryable<BankBranch>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            IQueryable<BankBranch> bankBranches = _context.BankBranches.OrderBy(n => n.Name).AsNoTracking();
+            return await Task.Run(() => bankBranches).ConfigureAwait(true);
         }
 
-        public Task<BankBranch> GetByIdAsync(Guid id)
+        public async Task<BankBranch> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.BankBranches.FindAsync(id).ConfigureAwait(true);
         }
 
         public async Task<BankBranch> AddAsync(BankBranch bankBranch)

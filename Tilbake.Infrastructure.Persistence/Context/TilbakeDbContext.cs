@@ -229,8 +229,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<AspNetUserClaim>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasMaxLength(250);
@@ -1360,11 +1358,17 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
                 entity.Property(e => e.InvoiceDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InvoiceDueDate).HasColumnType("datetime");
+
+                entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.InvoiceStatus)
                     .WithMany(p => p.Invoices)
@@ -1377,6 +1381,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.PolicyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Invoice_Policy");
+
+                entity.HasOne(d => d.Tax)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.TaxId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_Tax");
             });
 
             modelBuilder.Entity<InvoiceItem>(entity =>
@@ -1888,9 +1898,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Excess)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Excess).HasMaxLength(50);
 
                 entity.Property(e => e.Premium).HasColumnType("decimal(18, 2)");
 
@@ -2513,7 +2521,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<RoadsideAssist>(entity =>
@@ -2795,8 +2803,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
             });
 
             OnModelCreatingPartial(modelBuilder);
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);            
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

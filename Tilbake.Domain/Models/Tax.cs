@@ -9,6 +9,7 @@ namespace Tilbake.Domain.Models
     {
         public Tax()
         {
+            Invoices = new HashSet<Invoice>();
             Requisitions = new HashSet<Requisition>();
         }
 
@@ -21,6 +22,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ICollection<Invoice> Invoices { get; set; }
         public virtual ICollection<Requisition> Requisitions { get; set; }
     }
 }

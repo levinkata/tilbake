@@ -1,9 +1,6 @@
 using Autofac;
-using MediatR;
-using Tilbake.Application.PipelineBehaviours;
-using Tilbake.Domain.Interfaces.UnitOfWork;
+using Tilbake.Application.Services;
 using Tilbake.Infrastructure.Persistence.Repositories;
-using Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork;
 
 namespace Tilbake.Infrastructure.IoC
 {
@@ -15,12 +12,10 @@ namespace Tilbake.Infrastructure.IoC
                     .Where(t => t.Name.EndsWith("Repository"))
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
-            
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>()
-                    .InstancePerLifetimeScope();
 
-            builder.RegisterGeneric(typeof(ValidationBehaviour<,>))
-                    .As(typeof(IPipelineBehavior<,>))
+            builder.RegisterAssemblyTypes(typeof(BankService).Assembly)
+                    .Where(t => t.Name.EndsWith("Service"))
+                    .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
         }
     }

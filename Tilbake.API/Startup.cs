@@ -1,5 +1,4 @@
 using Autofac;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -13,8 +12,6 @@ using Newtonsoft.Json;
 using System.Reflection;
 using Tilbake.API.Controllers.Config;
 using Tilbake.API.Middleware;
-using Tilbake.Application.Queries;
-using Tilbake.Application.Validators;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 
@@ -34,9 +31,6 @@ namespace Tilbake.API
         {
             services.AddDbContext<TilbakeDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
-        
-            services.AddValidatorsFromAssembly(typeof(CreateBankCommandValidator).GetTypeInfo().Assembly);
-            services.AddMediatR(typeof(GetBanksQuery).GetTypeInfo().Assembly);
 
             services.AddCors();
             services.AddControllers()

@@ -9,7 +9,7 @@ namespace Tilbake.API.Mapping
         public ResourceToModeProfilel()
         {
             CreateMap<BankSaveResource, Bank>();
-            CreateMap<BankBranchResource, BankBranch>();
+            CreateMap<BankBranchSaveResource, BankBranch>();
         }
     }
 }

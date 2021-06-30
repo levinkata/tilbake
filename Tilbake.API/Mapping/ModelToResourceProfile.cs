@@ -9,7 +9,8 @@ namespace Tilbake.API.Mapping
         public ModelToResourceProfile()
         {
             CreateMap<Bank, BankResource>();
-            CreateMap<BankBranch, BankBranchResource>();
+            CreateMap<BankBranch, BankBranchResource>()
+                    .ForMember(dest => dest.BankName, opt => opt.MapFrom(src => src.Bank.Name));
         }
     }
 }

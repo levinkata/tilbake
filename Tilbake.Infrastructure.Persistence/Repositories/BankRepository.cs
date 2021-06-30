@@ -33,7 +33,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         public async Task<Bank> DeleteAsync(Guid id)
         {
-            Bank bank = await _context.Banks.FindAsync(id).ConfigureAwait(true);
+            Bank bank = await _context.Banks
+                                    .Where(e => e.Id == id)
+                                    .FirstOrDefaultAsync().ConfigureAwait(true);            
             if (bank == null)
             {
                 return bank;
@@ -76,7 +78,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         public async Task<Bank> GetByIdAsync(Guid id)
         {
-            return await _context.Banks.FindAsync(id).ConfigureAwait(true);
+            return await Task.Run(() => _context.Banks
+                                                .Where(e => e.Id == id)
+                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
         }
 
         public async Task<Bank> UpdateAsync(Bank bank)

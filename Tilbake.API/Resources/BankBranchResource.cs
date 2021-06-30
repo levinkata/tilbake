@@ -7,5 +7,6 @@ namespace Tilbake.API.Resources
         public string SortCode { get; set; }
         public string SwiftCode { get; set; }
         public Guid BankId { get; set; }
+        public string BankName { get; set; }
     }
 }

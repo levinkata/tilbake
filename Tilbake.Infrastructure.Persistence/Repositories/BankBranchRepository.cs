@@ -29,13 +29,18 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         public async Task<IQueryable<BankBranch>> GetAllAsync()
         {
-            IQueryable<BankBranch> bankBranches = _context.BankBranches.OrderBy(n => n.Name).AsNoTracking();
-            return await Task.Run(() => bankBranches).ConfigureAwait(true);
+            return await Task.Run(() => _context.BankBranches
+                                                .Include(b => b.Bank)
+                                                .OrderBy(n => n.Name)
+                                                .AsNoTracking()).ConfigureAwait(true);
         }
 
         public async Task<BankBranch> GetByIdAsync(Guid id)
         {
-            return await _context.BankBranches.FindAsync(id).ConfigureAwait(true);
+            return await Task.Run(() => _context.BankBranches
+                                                .Include(b => b.Bank)
+                                                .Where(e => e.Id == id)
+                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
         }
 
         public async Task<BankBranch> AddAsync(BankBranch bankBranch)
@@ -66,7 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         public async Task<BankBranch> DeleteAsync(Guid id)
         {
-            BankBranch bankBranch = await _context.BankBranches.FindAsync(id).ConfigureAwait(true);
+            BankBranch bankBranch = await _context.BankBranches
+                                                    .Where(e => e.Id == id)
+                                                    .FirstOrDefaultAsync().ConfigureAwait(true);
             if (bankBranch == null)
             {
                 return bankBranch;

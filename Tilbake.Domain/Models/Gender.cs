@@ -9,6 +9,7 @@ namespace Tilbake.Domain.Models
     {
         public Gender()
         {
+            Clients = new HashSet<Client>();
             Drivers = new HashSet<Driver>();
         }
 
@@ -19,6 +20,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ICollection<Client> Clients { get; set; }
         public virtual ICollection<Driver> Drivers { get; set; }
     }
 }

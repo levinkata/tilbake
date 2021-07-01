@@ -41,6 +41,7 @@ namespace Tilbake.Domain.Models
         public virtual Carrier Carrier { get; set; }
         public virtual ClientType ClientType { get; set; }
         public virtual Country Country { get; set; }
+        public virtual Gender Gender { get; set; }
         public virtual MaritalStatus MaritalStatus { get; set; }
         public virtual Occupation Occupation { get; set; }
         public virtual Title Title { get; set; }

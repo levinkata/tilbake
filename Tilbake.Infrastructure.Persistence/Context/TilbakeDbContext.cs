@@ -866,6 +866,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Client_Country");
 
+                entity.HasOne(d => d.Gender)
+                    .WithMany(p => p.Clients)
+                    .HasForeignKey(d => d.GenderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Client_Gender");
+
                 entity.HasOne(d => d.MaritalStatus)
                     .WithMany(p => p.Clients)
                     .HasForeignKey(d => d.MaritalStatusId)

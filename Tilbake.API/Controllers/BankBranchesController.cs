@@ -87,14 +87,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(BankBranchResource), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] BankBranchResource bankBranchResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] BankBranchSaveResource bankBranchSaveResource)
         {
-            if (bankBranchResource == null)
+            if (bankBranchSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(bankBranchResource));
+                throw new ArgumentNullException(nameof(bankBranchSaveResource));
             }
             
-            BankBranch bankBranch = _mapper.Map<BankBranchResource, BankBranch>(bankBranchResource);
+            BankBranch bankBranch = _mapper.Map<BankBranchSaveResource, BankBranch>(bankBranchSaveResource);
 
             var result = await _bankBranchService.UpdateAsync(id, bankBranch).ConfigureAwait(true);
             if (!result.Success)
@@ -102,7 +102,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            bankBranchResource = _mapper.Map<BankBranch, BankBranchResource>(result.Resource);
+            var bankBranchResource = _mapper.Map<BankBranch, BankBranchResource>(result.Resource);
             return Ok(bankBranchResource);
 
         }

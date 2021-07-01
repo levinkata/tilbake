@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(BankResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] BankResource bankResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] BankSaveResource bankSaveResource)
         {
-            if (bankResource == null)
+            if (bankSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(bankResource));
+                throw new ArgumentNullException(nameof(bankSaveResource));
             }
 
-            Bank bank = _mapper.Map<BankResource, Bank>(bankResource);
+            Bank bank = _mapper.Map<BankSaveResource, Bank>(bankSaveResource);
 
             var result = await _bankService.UpdateAsync(id, bank).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
+            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
             return Ok(bankResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(BankResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] BankResource bankResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] BankSaveResource bankSaveResource)
         {
-            if (bankResource == null)
+            if (bankSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(bankResource));
+                throw new ArgumentNullException(nameof(bankSaveResource));
             }
 
-            Bank bank = _mapper.Map<BankResource, Bank>(bankResource);
+            Bank bank = _mapper.Map<BankSaveResource, Bank>(bankSaveResource);
 
             var result = await _bankService.AddAsync(bank).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
+            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
             return Ok(bankResource);
         }
 

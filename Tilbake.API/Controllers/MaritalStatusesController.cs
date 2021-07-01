@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(MaritalStatusResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] MaritalStatusResource maritalStatusResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] MaritalStatusSaveResource maritalStatusSaveResource)
         {
-            if (maritalStatusResource == null)
+            if (maritalStatusSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(maritalStatusResource));
+                throw new ArgumentNullException(nameof(maritalStatusSaveResource));
             }
 
-            MaritalStatus maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(maritalStatusResource);
+            MaritalStatus maritalStatus = _mapper.Map<MaritalStatusSaveResource, MaritalStatus>(maritalStatusSaveResource);
 
             var result = await _maritalStatusService.UpdateAsync(id, maritalStatus).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            maritalStatusResource = _mapper.Map<MaritalStatus, MaritalStatusResource>(result.Resource);
+            var maritalStatusResource = _mapper.Map<MaritalStatus, MaritalStatusResource>(result.Resource);
             return Ok(maritalStatusResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(MaritalStatusResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] MaritalStatusResource maritalStatusResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] MaritalStatusSaveResource maritalStatusSaveResource)
         {
-            if (maritalStatusResource == null)
+            if (maritalStatusSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(maritalStatusResource));
+                throw new ArgumentNullException(nameof(maritalStatusSaveResource));
             }
 
-            MaritalStatus maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(maritalStatusResource);
+            MaritalStatus maritalStatus = _mapper.Map<MaritalStatusSaveResource, MaritalStatus>(maritalStatusSaveResource);
 
             var result = await _maritalStatusService.AddAsync(maritalStatus).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            maritalStatusResource = _mapper.Map<MaritalStatus, MaritalStatusResource>(result.Resource);
+            var maritalStatusResource = _mapper.Map<MaritalStatus, MaritalStatusResource>(result.Resource);
             return Ok(maritalStatusResource);
         }
 

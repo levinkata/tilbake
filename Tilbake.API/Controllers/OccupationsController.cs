@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(OccupationResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] OccupationResource occupationResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] OccupationSaveResource occupationSaveResource)
         {
-            if (occupationResource == null)
+            if (occupationSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(occupationResource));
+                throw new ArgumentNullException(nameof(occupationSaveResource));
             }
 
-            Occupation occupation = _mapper.Map<OccupationResource, Occupation>(occupationResource);
+            Occupation occupation = _mapper.Map<OccupationSaveResource, Occupation>(occupationSaveResource);
 
             var result = await _occupationService.UpdateAsync(id, occupation).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
+            var occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
             return Ok(occupationResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(OccupationResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] OccupationResource occupationResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] OccupationSaveResource occupationSaveResource)
         {
-            if (occupationResource == null)
+            if (occupationSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(occupationResource));
+                throw new ArgumentNullException(nameof(occupationSaveResource));
             }
 
-            Occupation occupation = _mapper.Map<OccupationResource, Occupation>(occupationResource);
+            Occupation occupation = _mapper.Map<OccupationSaveResource, Occupation>(occupationSaveResource);
 
             var result = await _occupationService.AddAsync(occupation).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
+            var occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
             return Ok(occupationResource);
         }
 

@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(CountryResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] CountryResource countryResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] CountrySaveResource countrySaveResource)
         {
-            if (countryResource == null)
+            if (countrySaveResource == null)
             {
-                throw new ArgumentNullException(nameof(countryResource));
+                throw new ArgumentNullException(nameof(countrySaveResource));
             }
 
-            Country country = _mapper.Map<CountryResource, Country>(countryResource);
+            Country country = _mapper.Map<CountrySaveResource, Country>(countrySaveResource);
 
             var result = await _countryService.UpdateAsync(id, country).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            countryResource = _mapper.Map<Country, CountryResource>(result.Resource);
+            var countryResource = _mapper.Map<Country, CountryResource>(result.Resource);
             return Ok(countryResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(CountryResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] CountryResource countryResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] CountrySaveResource countrySaveResource)
         {
-            if (countryResource == null)
+            if (countrySaveResource == null)
             {
-                throw new ArgumentNullException(nameof(countryResource));
+                throw new ArgumentNullException(nameof(countrySaveResource));
             }
 
-            Country country = _mapper.Map<CountryResource, Country>(countryResource);
+            Country country = _mapper.Map<CountrySaveResource, Country>(countrySaveResource);
 
             var result = await _countryService.AddAsync(country).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            countryResource = _mapper.Map<Country, CountryResource>(result.Resource);
+            var countryResource = _mapper.Map<Country, CountryResource>(result.Resource);
             return Ok(countryResource);
         }
 

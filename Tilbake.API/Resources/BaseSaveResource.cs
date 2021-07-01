@@ -4,7 +4,8 @@ namespace Tilbake.API.Resources
 {
     public class BaseSaveResource
     {
-        [Required, StringLength(50)]
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "Please enter Name"), MaxLength(50)]
         public string Name { get; set; }
     }
 }

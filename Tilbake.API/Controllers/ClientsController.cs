@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ClientResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] ClientResource clientResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] ClientSaveResource clientSaveResource)
         {
-            if (clientResource == null)
+            if (clientSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(clientResource));
+                throw new ArgumentNullException(nameof(clientSaveResource));
             }
 
-            Client client = _mapper.Map<ClientResource, Client>(clientResource);
+            Client client = _mapper.Map<ClientSaveResource, Client>(clientSaveResource);
 
             var result = await _clientService.UpdateAsync(id, client).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
+            var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
             return Ok(clientResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ClientResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] ClientResource clientResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] ClientSaveResource clientSaveResource)
         {
-            if (clientResource == null)
+            if (clientSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(clientResource));
+                throw new ArgumentNullException(nameof(clientSaveResource));
             }
 
-            Client client = _mapper.Map<ClientResource, Client>(clientResource);
+            Client client = _mapper.Map<ClientSaveResource, Client>(clientSaveResource);
 
             var result = await _clientService.AddAsync(client).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
+            var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
             return Ok(clientResource);
         }
 

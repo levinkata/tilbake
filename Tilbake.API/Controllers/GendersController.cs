@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(GenderResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] GenderResource genderResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] GenderSaveResource genderSaveResource)
         {
-            if (genderResource == null)
+            if (genderSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(genderResource));
+                throw new ArgumentNullException(nameof(genderSaveResource));
             }
 
-            Gender gender = _mapper.Map<GenderResource, Gender>(genderResource);
+            Gender gender = _mapper.Map<GenderSaveResource, Gender>(genderSaveResource);
 
             var result = await _genderService.UpdateAsync(id, gender).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            genderResource = _mapper.Map<Gender, GenderResource>(result.Resource);
+            var genderResource = _mapper.Map<Gender, GenderResource>(result.Resource);
             return Ok(genderResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(GenderResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] GenderResource genderResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] GenderSaveResource genderSaveResource)
         {
-            if (genderResource == null)
+            if (genderSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(genderResource));
+                throw new ArgumentNullException(nameof(genderSaveResource));
             }
 
-            Gender gender = _mapper.Map<GenderResource, Gender>(genderResource);
+            Gender gender = _mapper.Map<GenderSaveResource, Gender>(genderSaveResource);
 
             var result = await _genderService.AddAsync(gender).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            genderResource = _mapper.Map<Gender, GenderResource>(result.Resource);
+            var genderResource = _mapper.Map<Gender, GenderResource>(result.Resource);
             return Ok(genderResource);
         }
 

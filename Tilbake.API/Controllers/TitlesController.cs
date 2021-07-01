@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(TitleResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] TitleResource titleResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] TitleSaveResource titleSaveResource)
         {
-            if (titleResource == null)
+            if (titleSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(titleResource));
+                throw new ArgumentNullException(nameof(titleSaveResource));
             }
 
-            Title title = _mapper.Map<TitleResource, Title>(titleResource);
+            Title title = _mapper.Map<TitleSaveResource, Title>(titleSaveResource);
 
             var result = await _titleService.UpdateAsync(id, title).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
+            var titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
             return Ok(titleResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(TitleResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] TitleResource titleResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] TitleSaveResource titleSaveResource)
         {
-            if (titleResource == null)
+            if (titleSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(titleResource));
+                throw new ArgumentNullException(nameof(titleSaveResource));
             }
 
-            Title title = _mapper.Map<TitleResource, Title>(titleResource);
+            Title title = _mapper.Map<TitleSaveResource, Title>(titleSaveResource);
 
             var result = await _titleService.AddAsync(title).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
+            var titleResource = _mapper.Map<Title, TitleResource>(result.Resource);
             return Ok(titleResource);
         }
 

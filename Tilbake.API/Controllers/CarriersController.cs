@@ -71,14 +71,14 @@ namespace Tilbake.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(CarrierResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] CarrierResource carrierResource)
+        public async Task<ActionResult<IActionResult>> PutAsync(Guid id, [FromBody] CarrierSaveResource carrierSaveResource)
         {
-            if (carrierResource == null)
+            if (carrierSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(carrierResource));
+                throw new ArgumentNullException(nameof(carrierSaveResource));
             }
 
-            Carrier carrier = _mapper.Map<CarrierResource, Carrier>(carrierResource);
+            Carrier carrier = _mapper.Map<CarrierSaveResource, Carrier>(carrierSaveResource);
 
             var result = await _carrierService.UpdateAsync(id, carrier).ConfigureAwait(true);
             if (!result.Success)
@@ -86,7 +86,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            carrierResource = _mapper.Map<Carrier, CarrierResource>(result.Resource);
+            var carrierResource = _mapper.Map<Carrier, CarrierResource>(result.Resource);
             return Ok(carrierResource);
         }
 
@@ -99,14 +99,14 @@ namespace Tilbake.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(CarrierResponse), 200)]
         [ProducesResponseType(typeof(ErrorResource), 400)]
-        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] CarrierResource carrierResource)
+        public async Task<ActionResult<IActionResult>> PostAsync([FromBody] CarrierSaveResource carrierSaveResource)
         {
-            if (carrierResource == null)
+            if (carrierSaveResource == null)
             {
-                throw new ArgumentNullException(nameof(carrierResource));
+                throw new ArgumentNullException(nameof(carrierSaveResource));
             }
 
-            Carrier carrier = _mapper.Map<CarrierResource, Carrier>(carrierResource);
+            Carrier carrier = _mapper.Map<CarrierSaveResource, Carrier>(carrierSaveResource);
 
             var result = await _carrierService.AddAsync(carrier).ConfigureAwait(true);
             if (!result.Success)
@@ -114,7 +114,7 @@ namespace Tilbake.API.Controllers
                 return BadRequest(new ErrorResource(result.Message));
             }
 
-            carrierResource = _mapper.Map<Carrier, CarrierResource>(result.Resource);
+            var carrierResource = _mapper.Map<Carrier, CarrierResource>(result.Resource);
             return Ok(carrierResource);
         }
 

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
 	  <NeutralLanguage>en-GB</NeutralLanguage>
+    <UserSecretsId>c712e9e4-b72a-4506-b07f-61ab60e07c8f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

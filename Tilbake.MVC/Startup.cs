@@ -43,6 +43,9 @@ namespace Tilbake.MVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //Register Syncfusion license
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDY3MzY0QDMxMzkyZTMyMmUzMGpPNGZYUWRadXdCdFNBVHZGOEs2dzl3QWxHUXZUdmxEeEFpY1p6Qm1Delk9");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

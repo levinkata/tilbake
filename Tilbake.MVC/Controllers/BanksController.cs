@@ -25,8 +25,10 @@ namespace Tilbake.MVC.Controllers
         {
             var result = await _bankService.GetAllAsync().ConfigureAwait(true);
             var resources = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankResource>>(result);
-            
+
+            ViewBag.datasource = resources;
             return View(resources);
+
         }
 
         // GET: BanksController/Details/5

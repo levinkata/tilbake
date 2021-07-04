@@ -62,14 +62,12 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            IQueryable<TEntity> query = _context.Set<TEntity>().Where(predicate).AsNoTracking();
-            return await Task.Run(() => query.ToListAsync()).ConfigureAwait(true);
-        } 
+            return await Task.Run(() => _context.Set<TEntity>().Where(predicate).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        }
 
         public async Task<IEnumerable<TEntity>> GetAll()
         {
-            IQueryable<TEntity> query = _context.Set<TEntity>().AsNoTracking();
-            return await Task.Run(() => query.ToListAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _context.Set<TEntity>().AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
         public async Task<TEntity> GetById(Guid id)

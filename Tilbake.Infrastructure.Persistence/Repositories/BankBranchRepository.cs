@@ -18,7 +18,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IQueryable<BankBranch>> GetByBankId(Guid bankId)
+        public async Task<IEnumerable<BankBranch>> GetByBankId(Guid bankId)
         {
             return await Task.Run(() => _context.BankBranches
                                                 .Include(b => b.Bank)
@@ -27,7 +27,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .AsNoTracking()).ConfigureAwait(true);
         }
 
-        public async Task<IQueryable<BankBranch>> GetAllAsync()
+        public async Task<IEnumerable<BankBranch>> GetAllAsync()
         {
             return await Task.Run(() => _context.BankBranches
                                                 .Include(b => b.Bank)
@@ -50,7 +50,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return bankBranch;
         }
 
-        public async Task<IQueryable<BankBranch>> AddRangeAsync(IQueryable<BankBranch> bankBranches)
+        public async Task<IEnumerable<BankBranch>> AddRangeAsync(IEnumerable<BankBranch> bankBranches)
         {
             await _context.BankBranches.AddRangeAsync(bankBranches).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -96,7 +96,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return bankBranch;
         }
 
-        public async Task<IQueryable<BankBranch>> DeleteRangeAsync(IQueryable<BankBranch> bankBranches)
+        public async Task<IEnumerable<BankBranch>> DeleteRangeAsync(IEnumerable<BankBranch> bankBranches)
         {
             if (bankBranches == null)
             {

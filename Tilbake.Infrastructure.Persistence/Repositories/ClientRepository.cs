@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return client;
         }
 
-        public async Task<IQueryable<Client>> AddRangeAsync(IQueryable<Client> clients)
+        public async Task<IEnumerable<Client>> AddRangeAsync(IEnumerable<Client> clients)
         {
             await _context.Clients.AddRangeAsync(clients).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return client;
         }
 
-        public async Task<IQueryable<Client>> DeleteRangeAsync(IQueryable<Client> clients)
+        public async Task<IEnumerable<Client>> DeleteRangeAsync(IEnumerable<Client> clients)
         {
             if (clients == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return clients;
         }
 
-        public async Task<IQueryable<Client>> GetAllAsync()
+        public async Task<IEnumerable<Client>> GetAllAsync()
         {
-            IQueryable<Client> clients = _context.Clients
+            IEnumerable<Client> clients = _context.Clients
                                                 .Include(c => c.Carrier)
                                                 .Include(y => y.ClientType)
                                                 .Include(u => u.Country)

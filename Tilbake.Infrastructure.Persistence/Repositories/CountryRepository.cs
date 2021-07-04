@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return country;
         }
 
-        public async Task<IQueryable<Country>> AddRangeAsync(IQueryable<Country> countrys)
+        public async Task<IEnumerable<Country>> AddRangeAsync(IEnumerable<Country> countrys)
         {
             await _context.Countries.AddRangeAsync(countrys).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return country;
         }
 
-        public async Task<IQueryable<Country>> DeleteRangeAsync(IQueryable<Country> countrys)
+        public async Task<IEnumerable<Country>> DeleteRangeAsync(IEnumerable<Country> countrys)
         {
             if (countrys == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return countrys;
         }
 
-        public async Task<IQueryable<Country>> GetAllAsync()
+        public async Task<IEnumerable<Country>> GetAllAsync()
         {
-            IQueryable<Country> countrys = _context.Countries.OrderBy(n => n.Name).AsNoTracking();
+            IEnumerable<Country> countrys = _context.Countries.OrderBy(n => n.Name).AsNoTracking();
             return await Task.Run(() => countrys).ConfigureAwait(true);
         }
 

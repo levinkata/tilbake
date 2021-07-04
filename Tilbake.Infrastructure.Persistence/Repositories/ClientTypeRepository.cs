@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return clientType;
         }
 
-        public async Task<IQueryable<ClientType>> AddRangeAsync(IQueryable<ClientType> clientTypes)
+        public async Task<IEnumerable<ClientType>> AddRangeAsync(IEnumerable<ClientType> clientTypes)
         {
             await _context.ClientTypes.AddRangeAsync(clientTypes).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return clientType;
         }
 
-        public async Task<IQueryable<ClientType>> DeleteRangeAsync(IQueryable<ClientType> clientTypes)
+        public async Task<IEnumerable<ClientType>> DeleteRangeAsync(IEnumerable<ClientType> clientTypes)
         {
             if (clientTypes == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return clientTypes;
         }
 
-        public async Task<IQueryable<ClientType>> GetAllAsync()
+        public async Task<IEnumerable<ClientType>> GetAllAsync()
         {
-            IQueryable<ClientType> clientTypes = _context.ClientTypes.OrderBy(n => n.Name).AsNoTracking();
+            IEnumerable<ClientType> clientTypes = _context.ClientTypes.OrderBy(n => n.Name).AsNoTracking();
             return await Task.Run(() => clientTypes).ConfigureAwait(true);
         }
 

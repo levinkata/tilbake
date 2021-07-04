@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return bank;
         }
 
-        public async Task<IQueryable<Bank>> AddRangeAsync(IQueryable<Bank> banks)
+        public async Task<IEnumerable<Bank>> AddRangeAsync(IEnumerable<Bank> banks)
         {
             await _context.Banks.AddRangeAsync(banks).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return bank;
         }
 
-        public async Task<IQueryable<Bank>> DeleteRangeAsync(IQueryable<Bank> banks)
+        public async Task<IEnumerable<Bank>> DeleteRangeAsync(IEnumerable<Bank> banks)
         {
             if (banks == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return banks;
         }
 
-        public async Task<IQueryable<Bank>> GetAllAsync()
+        public async Task<IEnumerable<Bank>> GetAllAsync()
         {
-            IQueryable<Bank> banks = _context.Banks.OrderBy(n => n.Name).AsNoTracking();
+            IEnumerable<Bank> banks = _context.Banks.OrderBy(n => n.Name).AsNoTracking();
             return await Task.Run(() => banks).ConfigureAwait(true);
         }
 

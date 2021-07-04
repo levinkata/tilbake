@@ -1,9 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Models;
-
-#nullable disable
 
 namespace Tilbake.Infrastructure.Persistence.Context
 {
@@ -139,14 +135,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
 
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-//             }
-//         }
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -211,6 +207,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
                 entity.Property(e => e.IdNumber).HasMaxLength(50);
+
+                entity.Property(e => e.JobTitleId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.LastName).HasMaxLength(50);
 
@@ -840,7 +838,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.MiddleName).HasMaxLength(50);
 
@@ -2807,6 +2805,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
             });
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
             OnModelCreatingPartial(modelBuilder);
         }

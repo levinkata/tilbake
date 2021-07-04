@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return gender;
         }
 
-        public async Task<IQueryable<Gender>> AddRangeAsync(IQueryable<Gender> genders)
+        public async Task<IEnumerable<Gender>> AddRangeAsync(IEnumerable<Gender> genders)
         {
             await _context.Genders.AddRangeAsync(genders).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return gender;
         }
 
-        public async Task<IQueryable<Gender>> DeleteRangeAsync(IQueryable<Gender> genders)
+        public async Task<IEnumerable<Gender>> DeleteRangeAsync(IEnumerable<Gender> genders)
         {
             if (genders == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return genders;
         }
 
-        public async Task<IQueryable<Gender>> GetAllAsync()
+        public async Task<IEnumerable<Gender>> GetAllAsync()
         {
-            IQueryable<Gender> genders = _context.Genders.OrderBy(n => n.Name).AsNoTracking();
+            IEnumerable<Gender> genders = _context.Genders.OrderBy(n => n.Name).AsNoTracking();
             return await Task.Run(() => genders).ConfigureAwait(true);
         }
 

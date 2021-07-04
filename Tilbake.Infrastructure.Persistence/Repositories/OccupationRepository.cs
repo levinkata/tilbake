@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return occupation;
         }
 
-        public async Task<IQueryable<Occupation>> AddRangeAsync(IQueryable<Occupation> occupations)
+        public async Task<IEnumerable<Occupation>> AddRangeAsync(IEnumerable<Occupation> occupations)
         {
             await _context.Occupations.AddRangeAsync(occupations).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return occupation;
         }
 
-        public async Task<IQueryable<Occupation>> DeleteRangeAsync(IQueryable<Occupation> occupations)
+        public async Task<IEnumerable<Occupation>> DeleteRangeAsync(IEnumerable<Occupation> occupations)
         {
             if (occupations == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return occupations;
         }
 
-        public async Task<IQueryable<Occupation>> GetAllAsync()
+        public async Task<IEnumerable<Occupation>> GetAllAsync()
         {
-            IQueryable<Occupation> occupations = _context.Occupations.OrderBy(n => n.Name).AsNoTracking();
+            IEnumerable<Occupation> occupations = _context.Occupations.OrderBy(n => n.Name).AsNoTracking();
             return await Task.Run(() => occupations).ConfigureAwait(true);
         }
 

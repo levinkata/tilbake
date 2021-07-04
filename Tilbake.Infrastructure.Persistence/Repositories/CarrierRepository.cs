@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return carrier;
         }
 
-        public async Task<IQueryable<Carrier>> AddRangeAsync(IQueryable<Carrier> carriers)
+        public async Task<IEnumerable<Carrier>> AddRangeAsync(IEnumerable<Carrier> carriers)
         {
             await _context.Carriers.AddRangeAsync(carriers).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return carrier;
         }
 
-        public async Task<IQueryable<Carrier>> DeleteRangeAsync(IQueryable<Carrier> carriers)
+        public async Task<IEnumerable<Carrier>> DeleteRangeAsync(IEnumerable<Carrier> carriers)
         {
             if (carriers == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return carriers;
         }
 
-        public async Task<IQueryable<Carrier>> GetAllAsync()
+        public async Task<IEnumerable<Carrier>> GetAllAsync()
         {
-            IQueryable<Carrier> carriers = _context.Carriers.OrderBy(n => n.Name).AsNoTracking();
+            IEnumerable<Carrier> carriers = _context.Carriers.OrderBy(n => n.Name).AsNoTracking();
             return await Task.Run(() => carriers).ConfigureAwait(true);
         }
 

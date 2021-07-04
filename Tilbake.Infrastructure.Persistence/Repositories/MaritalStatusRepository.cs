@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return maritalStatus;
         }
 
-        public async Task<IQueryable<MaritalStatus>> AddRangeAsync(IQueryable<MaritalStatus> maritalStatuses)
+        public async Task<IEnumerable<MaritalStatus>> AddRangeAsync(IEnumerable<MaritalStatus> maritalStatuses)
         {
             await _context.MaritalStatuses.AddRangeAsync(maritalStatuses).ConfigureAwait(true);
             await _context.SaveChangesAsync().ConfigureAwait(true);
@@ -58,7 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return maritalStatus;
         }
 
-        public async Task<IQueryable<MaritalStatus>> DeleteRangeAsync(IQueryable<MaritalStatus> maritalStatuses)
+        public async Task<IEnumerable<MaritalStatus>> DeleteRangeAsync(IEnumerable<MaritalStatus> maritalStatuses)
         {
             if (maritalStatuses == null)
             {
@@ -70,9 +71,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return maritalStatuses;
         }
 
-        public async Task<IQueryable<MaritalStatus>> GetAllAsync()
+        public async Task<IEnumerable<MaritalStatus>> GetAllAsync()
         {
-            IQueryable<MaritalStatus> maritalStatuses = _context.MaritalStatuses.OrderBy(n => n.Name).AsNoTracking();
+            IEnumerable<MaritalStatus> maritalStatuses = _context.MaritalStatuses.OrderBy(n => n.Name).AsNoTracking();
             return await Task.Run(() => maritalStatuses).ConfigureAwait(true);
         }
 

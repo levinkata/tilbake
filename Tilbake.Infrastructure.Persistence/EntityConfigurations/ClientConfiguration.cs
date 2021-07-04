@@ -15,7 +15,7 @@ namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            builder.ToTable("Clients");
+            builder.ToTable("Client");
 
             builder.Property(m => m.ClientNumber)
                     .ValueGeneratedNever()

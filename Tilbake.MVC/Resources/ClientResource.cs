@@ -60,7 +60,7 @@ namespace Tilbake.MVC.Resources
         [Display(Name = "Carrier")]
         public string Carrier { get; set; }
 
-        [Display(Name = "ClientType")]        
+        [Display(Name = "Client Type")]        
         public string ClientType { get; set; }
 
         [Display(Name = "Nationality")]        

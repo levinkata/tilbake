@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tilbake.Application.Mapping;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.MVC.Data;
@@ -37,7 +38,8 @@ namespace Tilbake.MVC
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(ModelToResourceProfile));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.MVC.Resources;
 
 namespace Tilbake.MVC.Controllers
 {

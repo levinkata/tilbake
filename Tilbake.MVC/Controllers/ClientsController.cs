@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.MVC.Resources;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -114,6 +114,23 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            var carriers = await _carrierService.GetAllAsync();
+            var clientTypes = await _clientTypeService.GetAllAsync();
+            var countries = await _countryService.GetAllAsync();
+            var genders = await _genderService.GetAllAsync();
+            var maritalStatuses = await _maritalStatusService.GetAllAsync();
+            var occupations = await _occupationService.GetAllAsync();
+            var titles = await _titleService.GetAllAsync();
+
+            clientSaveResource.Carriers = new SelectList(carriers, "Id", "Name", clientSaveResource.CarrierId);
+            clientSaveResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientSaveResource.ClientTypeId);
+            clientSaveResource.Countries = new SelectList(countries, "Id", "Name", clientSaveResource.CountryId);
+            clientSaveResource.Genders = new SelectList(genders, "Id", "Name", clientSaveResource.GenderId);
+            clientSaveResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientSaveResource.MaritalStatusId);
+            clientSaveResource.Occupations = new SelectList(occupations, "Id", "Name", clientSaveResource.OccupationId);
+            clientSaveResource.Titles = new SelectList(titles, "Id", "Name", clientSaveResource.TitleId);
+
             return View(clientSaveResource);
         }
 
@@ -127,6 +144,23 @@ namespace Tilbake.MVC.Controllers
             }
 
             var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
+
+            var carriers = await _carrierService.GetAllAsync();
+            var clientTypes = await _clientTypeService.GetAllAsync();
+            var countries = await _countryService.GetAllAsync();
+            var genders = await _genderService.GetAllAsync();
+            var maritalStatuses = await _maritalStatusService.GetAllAsync();
+            var occupations = await _occupationService.GetAllAsync();
+            var titles = await _titleService.GetAllAsync();
+
+            clientResource.Carriers = new SelectList(carriers, "Id", "Name", clientResource.CarrierId);
+            clientResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientResource.ClientTypeId);
+            clientResource.Countries = new SelectList(countries, "Id", "Name", clientResource.CountryId);
+            clientResource.Genders = new SelectList(genders, "Id", "Name", clientResource.GenderId);
+            clientResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientResource.MaritalStatusId);
+            clientResource.Occupations = new SelectList(occupations, "Id", "Name", clientResource.OccupationId);
+            clientResource.Titles = new SelectList(titles, "Id", "Name", clientResource.TitleId);
+
             return View(clientResource);
         }
 
@@ -151,6 +185,23 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            var carriers = await _carrierService.GetAllAsync();
+            var clientTypes = await _clientTypeService.GetAllAsync();
+            var countries = await _countryService.GetAllAsync();
+            var genders = await _genderService.GetAllAsync();
+            var maritalStatuses = await _maritalStatusService.GetAllAsync();
+            var occupations = await _occupationService.GetAllAsync();
+            var titles = await _titleService.GetAllAsync();
+
+            clientResource.Carriers = new SelectList(carriers, "Id", "Name", clientResource.CarrierId);
+            clientResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientResource.ClientTypeId);
+            clientResource.Countries = new SelectList(countries, "Id", "Name", clientResource.CountryId);
+            clientResource.Genders = new SelectList(genders, "Id", "Name", clientResource.GenderId);
+            clientResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientResource.MaritalStatusId);
+            clientResource.Occupations = new SelectList(occupations, "Id", "Name", clientResource.OccupationId);
+            clientResource.Titles = new SelectList(titles, "Id", "Name", clientResource.TitleId);
+
             return View(clientResource);
         }
 

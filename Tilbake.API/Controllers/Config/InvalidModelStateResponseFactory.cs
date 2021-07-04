@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using Tilbake.API.Extensions;
-using Tilbake.API.Resources;
+using Tilbake.Application.Resources;
 
 namespace Tilbake.API.Controllers.Config
 {

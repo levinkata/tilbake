@@ -58,15 +58,23 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Display(Name = "Carrier")]
-        public Guid CarrierId { get; set; }
-
         [Display(Name = "Occupation")]
         public Guid OccupationId { get; set; }
 
+        [Display(Name = "Carrier Email")]
+        public Guid CarrierEmail { get; set; }
+
+        [Display(Name = "Carrier Postal Mail")]
+        public Guid CarrierPostalMail { get; set; }
+
+        [Display(Name = "Carrier SMS")]
+        public Guid CarrierSMS { get; set; }
+
+        [Display(Name = "Carrier WhatsApp")]
+        public Guid CarrierWhatsApp { get; set; }
+
         //  SelectLists
 
-        public SelectList Carriers { get; set; }
         public SelectList ClientTypes { get; set; }
         public SelectList Countries { get; set; }
         public SelectList Genders { get; set; }

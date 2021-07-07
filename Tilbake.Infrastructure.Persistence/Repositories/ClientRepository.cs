@@ -74,7 +74,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<Client>> GetAllAsync()
         {
             IEnumerable<Client> clients = _context.Clients
-                                                .Include(c => c.Carrier)
                                                 .Include(y => y.ClientType)
                                                 .Include(u => u.Country)
                                                 .Include(g => g.Gender)
@@ -90,7 +89,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         {
             return await Task.Run(() => _context.Clients
                                                 .Where(e => e.Id == id)
-                                                .Include(c => c.Carrier)
                                                 .Include(y => y.ClientType)
                                                 .Include(u => u.Country)
                                                 .Include(g => g.Gender)

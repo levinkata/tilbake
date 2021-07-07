@@ -104,8 +104,11 @@ namespace Tilbake.Application.Services
             existingClient.Phone = client.Phone;
             existingClient.Mobile = client.Mobile;
             existingClient.Email = client.Email;
-            existingClient.CarrierId = client.CarrierId;
-            existingClient.OccupationId = client.OccupationId;            
+            existingClient.OccupationId = client.OccupationId;
+            existingClient.CarrierEmail = client.CarrierEmail;
+            existingClient.CarrierPostalMail = client.CarrierPostalMail;
+            existingClient.CarrierSms = client.CarrierSms;
+            existingClient.CarrierWhatsApp = client.CarrierWhatsApp;
 
             try
             {

@@ -9,6 +9,7 @@ namespace Tilbake.Domain.Models
         {
             ClaimDocuments = new HashSet<ClaimDocument>();
             ClientDocuments = new HashSet<ClientDocument>();
+            ClientRiskDocuments = new HashSet<ClientRiskDocument>();
         }
 
         public Guid Id { get; set; }
@@ -20,5 +21,6 @@ namespace Tilbake.Domain.Models
 
         public virtual ICollection<ClaimDocument> ClaimDocuments { get; set; }
         public virtual ICollection<ClientDocument> ClientDocuments { get; set; }
+        public virtual ICollection<ClientRiskDocument> ClientRiskDocuments { get; set; }
     }
 }

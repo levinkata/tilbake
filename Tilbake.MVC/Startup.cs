@@ -2,11 +2,13 @@ using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tilbake.Application.Mapping;
+using Tilbake.Application.Services;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.MVC.Data;
@@ -36,6 +38,8 @@ namespace Tilbake.MVC
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

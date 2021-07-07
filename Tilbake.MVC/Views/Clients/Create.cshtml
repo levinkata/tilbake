@@ -14,11 +14,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TitleId" class="control-label"></label>
-                <select asp-for="TitleId" class ="form-control" asp-items="@Model.Titles"></select>
+                <select asp-for="TitleId" class="form-control" asp-items="@Model.Titles"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ClientTypeId" class="control-label"></label>
-                <select asp-for="ClientTypeId" class ="form-control" asp-items="@Model.ClientTypes"></select>
+                <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypes"></select>
             </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="GenderId" class="control-label"></label>
-                <select asp-for="GenderId" class ="form-control" asp-items="@Model.Genders"></select>
+                <select asp-for="GenderId" class="form-control" asp-items="@Model.Genders"></select>
             </div>
             <div class="form-group">
                 <label asp-for="IdNumber" class="control-label"></label>
@@ -51,11 +51,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="MaritalStatusId" class="control-label"></label>
-                <select asp-for="MaritalStatusId" class ="form-control" asp-items="@Model.MaritalStatuses"></select>
+                <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatuses"></select>
             </div>
             <div class="form-group">
                 <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class ="form-control" asp-items="@Model.Countries"></select>
+                <select asp-for="CountryId" class="form-control" asp-items="@Model.Countries"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Phone" class="control-label"></label>
@@ -73,12 +73,28 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CarrierId" class="control-label"></label>
-                <select asp-for="CarrierId" class ="form-control" asp-items="@Model.Carriers"></select>
+                <label asp-for="OccupationId" class="control-label"></label>
+                <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations"></select>
             </div>
             <div class="form-group">
-                <label asp-for="OccupationId" class="control-label"></label>
-                <select asp-for="OccupationId" class ="form-control" asp-items="@Model.Occupations"></select>
+                <label asp-for="CarrierEmail" class="control-label"></label>
+                <input asp-for="CarrierEmail" class="form-control" />
+                <span asp-validation-for="CarrierEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarrierPostalMail" class="control-label"></label>
+                <input asp-for="CarrierPostalMail" class="form-control" />
+                <span asp-validation-for="CarrierPostalMail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarrierSMS" class="control-label"></label>
+                <input asp-for="CarrierSMS" class="form-control" />
+                <span asp-validation-for="CarrierSMS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarrierWhatsApp" class="control-label"></label>
+                <input asp-for="CarrierWhatsApp" class="form-control" />
+                <span asp-validation-for="CarrierWhatsApp" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

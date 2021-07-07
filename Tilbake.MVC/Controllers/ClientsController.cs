@@ -12,7 +12,6 @@ namespace Tilbake.MVC.Controllers
 {
     public class ClientsController : Controller
     {
-        private readonly ICarrierService _carrierService;
         private readonly IClientService _clientService;
         private readonly IClientTypeService _clientTypeService;
         private readonly ICountryService _countryService;
@@ -23,8 +22,7 @@ namespace Tilbake.MVC.Controllers
 
         private readonly IMapper _mapper;
 
-        public ClientsController(ICarrierService carrierService,
-                                IClientService clientService,
+        public ClientsController(IClientService clientService,
                                 IClientTypeService clientTypeService,
                                 ICountryService countryService,
                                 IGenderService genderService,
@@ -33,7 +31,6 @@ namespace Tilbake.MVC.Controllers
                                 ITitleService titleService,
                                 IMapper mapper)
         {
-            _carrierService = carrierService ?? throw new ArgumentNullException(nameof(carrierService));
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
             _clientTypeService = clientTypeService ?? throw new ArgumentNullException(nameof(clientTypeService));
             _countryService = countryService ?? throw new ArgumentNullException(nameof(countryService));
@@ -70,7 +67,6 @@ namespace Tilbake.MVC.Controllers
         // GET: ClientsController/Create
         public async Task<ActionResult> Create()
         {
-            var carriers = await _carrierService.GetAllAsync();
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -80,7 +76,6 @@ namespace Tilbake.MVC.Controllers
 
             ClientSaveResource clientSaveResource = new ClientSaveResource()
             {
-                Carriers = new SelectList(carriers, "Id", "Name"),
                 ClientTypes = new SelectList(clientTypes, "Id", "Name"),
                 Countries = new SelectList(countries, "Id", "Name"),
                 Genders = new SelectList(genders, "Id", "Name"),
@@ -115,7 +110,6 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var carriers = await _carrierService.GetAllAsync();
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -123,7 +117,6 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            clientSaveResource.Carriers = new SelectList(carriers, "Id", "Name", clientSaveResource.CarrierId);
             clientSaveResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientSaveResource.ClientTypeId);
             clientSaveResource.Countries = new SelectList(countries, "Id", "Name", clientSaveResource.CountryId);
             clientSaveResource.Genders = new SelectList(genders, "Id", "Name", clientSaveResource.GenderId);
@@ -145,7 +138,6 @@ namespace Tilbake.MVC.Controllers
 
             var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
 
-            var carriers = await _carrierService.GetAllAsync();
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -153,7 +145,6 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            clientResource.Carriers = new SelectList(carriers, "Id", "Name", clientResource.CarrierId);
             clientResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientResource.ClientTypeId);
             clientResource.Countries = new SelectList(countries, "Id", "Name", clientResource.CountryId);
             clientResource.Genders = new SelectList(genders, "Id", "Name", clientResource.GenderId);
@@ -186,7 +177,6 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var carriers = await _carrierService.GetAllAsync();
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -194,7 +184,6 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            clientResource.Carriers = new SelectList(carriers, "Id", "Name", clientResource.CarrierId);
             clientResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientResource.ClientTypeId);
             clientResource.Countries = new SelectList(countries, "Id", "Name", clientResource.CountryId);
             clientResource.Genders = new SelectList(genders, "Id", "Name", clientResource.GenderId);

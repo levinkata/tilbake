@@ -29,14 +29,16 @@ namespace Tilbake.Domain.Models
         public string Phone { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
-        public Guid CarrierId { get; set; }
         public Guid OccupationId { get; set; }
+        public bool CarrierEmail { get; set; }
+        public bool CarrierPostalMail { get; set; }
+        public bool CarrierSms { get; set; }
+        public bool CarrierWhatsApp { get; set; }
         public Guid? AddedById { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Carrier Carrier { get; set; }
         public virtual ClientType ClientType { get; set; }
         public virtual Country Country { get; set; }
         public virtual Gender Gender { get; set; }

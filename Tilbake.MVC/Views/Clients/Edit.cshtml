@@ -84,14 +84,29 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CarrierId" class="control-label"></label>
-                <select asp-for="CarrierId" class="form-control" asp-items="@Model.Carriers"></select>
-                <span asp-validation-for="CarrierId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="OccupationId" class="control-label"></label>
                 <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations"></select>
                 <span asp-validation-for="OccupationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarrierEmail" class="control-label"></label>
+                <input asp-for="CarrierEmail" class="form-control" />
+                <span asp-validation-for="CarrierEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarrierPostalMail" class="control-label"></label>
+                <input asp-for="CarrierPostalMail" class="form-control" />
+                <span asp-validation-for="CarrierPostalMail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarrierSMS" class="control-label"></label>
+                <input asp-for="CarrierSMS" class="form-control" />
+                <span asp-validation-for="CarrierSMS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarrierWhatsApp" class="control-label"></label>
+                <input asp-for="CarrierWhatsApp" class="form-control" />
+                <span asp-validation-for="CarrierWhatsApp" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

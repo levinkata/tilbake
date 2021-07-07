@@ -31,7 +31,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<BankBranch> BankBranches { get; set; }
         public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
         public virtual DbSet<BodyType> BodyTypes { get; set; }
-        public virtual DbSet<Carrier> Carriers { get; set; }
         public virtual DbSet<ChartOfAccount> ChartOfAccounts { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Claim> Claims { get; set; }
@@ -51,6 +50,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<ClientDocument> ClientDocuments { get; set; }
         public virtual DbSet<ClientNumberGenerator> ClientNumberGenerators { get; set; }
         public virtual DbSet<ClientRisk> ClientRisks { get; set; }
+        public virtual DbSet<ClientRiskDocument> ClientRiskDocuments { get; set; }
         public virtual DbSet<ClientType> ClientTypes { get; set; }
         public virtual DbSet<Content> Contents { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
@@ -462,21 +462,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Carrier>(entity =>
-            {
-                entity.ToTable("Carrier");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.DateAdded).HasColumnType("datetime");
-
-                entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
             modelBuilder.Entity<ChartOfAccount>(entity =>
             {
                 entity.HasIndex(e => e.Glcode, "IX_ChartOfAccounts")
@@ -820,9 +805,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasIndex(e => e.IdNumber, "IX_Client")
                     .IsUnique();
 
+                entity.HasIndex(e => e.ClientNumber, "IX_Client_ClientNumber")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.BirthDate).HasColumnType("date");
+
+                entity.Property(e => e.CarrierSms).HasColumnName("CarrierSMS");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -845,12 +835,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
-
-                entity.HasOne(d => d.Carrier)
-                    .WithMany(p => p.Clients)
-                    .HasForeignKey(d => d.CarrierId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Client_Carrier");
 
                 entity.HasOne(d => d.ClientType)
                     .WithMany(p => p.Clients)
@@ -965,6 +949,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.RiskId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ClientRisk_Risk");
+            });
+
+            modelBuilder.Entity<ClientRiskDocument>(entity =>
+            {
+                entity.ToTable("ClientRiskDocument");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.DocumentPath).IsUnicode(false);
+
+                entity.HasOne(d => d.ClientRisk)
+                    .WithMany(p => p.ClientRiskDocuments)
+                    .HasForeignKey(d => d.ClientRiskId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ClientRiskDocument_ClientRisk");
+
+                entity.HasOne(d => d.DocumentType)
+                    .WithMany(p => p.ClientRiskDocuments)
+                    .HasForeignKey(d => d.DocumentTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ClientRiskDocument_DocumentType");
             });
 
             modelBuilder.Entity<ClientType>(entity =>
@@ -1359,6 +1366,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
             modelBuilder.Entity<Invoice>(entity =>
             {
                 entity.ToTable("Invoice");
+
+                entity.HasIndex(e => e.InvoiceNumber, "IX_Invoice")
+                    .IsUnique();
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
@@ -1825,9 +1835,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.InceptionDate).HasColumnType("date");
 
-                entity.Property(e => e.PolicyNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.InsurerPolicyNumber).HasMaxLength(50);
 
                 entity.HasOne(d => d.Insurer)
                     .WithMany(p => p.Policies)
@@ -2156,6 +2164,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
             {
                 entity.ToTable("Quote");
 
+                entity.HasIndex(e => e.QuoteNumber, "IX_Quote")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.ClientInfo).HasMaxLength(150);
@@ -2376,6 +2387,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
             modelBuilder.Entity<Requisition>(entity =>
             {
                 entity.ToTable("Requisition");
+
+                entity.HasIndex(e => e.RequisitionNumber, "IX_Requisition")
+                    .IsUnique();
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 

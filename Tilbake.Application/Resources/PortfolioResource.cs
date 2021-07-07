@@ -1,0 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace Tilbake.Application.Resources
+{
+    public class PortfolioResource : BaseResource
+    {
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        [Display(Name = "Is Scheme?")]
+        public bool IsScheme { get; set; }
+    }
+}

@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public ClientRisk()
         {
+            ClientRiskDocuments = new HashSet<ClientRiskDocument>();
             PolicyRisks = new HashSet<PolicyRisk>();
             QuoteItems = new HashSet<QuoteItem>();
         }
@@ -21,6 +22,7 @@ namespace Tilbake.Domain.Models
 
         public virtual Client Client { get; set; }
         public virtual Risk Risk { get; set; }
+        public virtual ICollection<ClientRiskDocument> ClientRiskDocuments { get; set; }
         public virtual ICollection<PolicyRisk> PolicyRisks { get; set; }
         public virtual ICollection<QuoteItem> QuoteItems { get; set; }
     }

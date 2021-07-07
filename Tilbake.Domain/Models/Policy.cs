@@ -16,7 +16,8 @@ namespace Tilbake.Domain.Models
 
         public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
-        public string PolicyNumber { get; set; }
+        public int PolicyNumber { get; set; }
+        public string InsurerPolicyNumber { get; set; }
         public Guid PolicyTypeId { get; set; }
         public Guid InsurerId { get; set; }
         public DateTime CoverStartDate { get; set; }

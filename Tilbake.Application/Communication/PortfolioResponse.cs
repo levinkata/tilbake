@@ -2,14 +2,14 @@ using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Communication
 {
-    public class CarrierResponse : BaseResponse<Carrier>
+    public class PortfolioResponse : BaseResponse<Portfolio>
     {
         /// <summary>
         /// Creates a success response.
         /// </summary>
-        /// <param name="Carrier">Saved Carrier.</param>
+        /// <param name="Portfolio">Saved Portfolio.</param>
         /// <returns>Response.</returns>
-        public CarrierResponse(Carrier Carrier) : base(Carrier)
+        public PortfolioResponse(Portfolio Portfolio) : base(Portfolio)
         { 
             
         }
@@ -19,7 +19,7 @@ namespace Tilbake.Application.Communication
         /// </summary>
         /// <param name="message">Error message.</param>
         /// <returns>Response.</returns>
-        public CarrierResponse(string message) : base(message)
+        public PortfolioResponse(string message) : base(message)
         { 
 
         }        

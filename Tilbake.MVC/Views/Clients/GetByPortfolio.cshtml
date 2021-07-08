@@ -6,5 +6,5 @@
 }
 
 @*Execute ClientsViewComponentf*@
-@await Component.InvokeAsync("Clients", Model.Id)
+@await Component.InvokeAsync("Clients", new { portfolioId = Model.Id })
 

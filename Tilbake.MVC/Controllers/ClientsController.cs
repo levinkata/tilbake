@@ -53,10 +53,12 @@ namespace Tilbake.MVC.Controllers
         // GET: ClientsController/GetByPortfolio/5
         public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
         {
-            var result = await _clientService.GetByPortfolioIdAsync(portfolioId).ConfigureAwait(true);
-            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
-            ViewBag.PortfolioId = portfolioId;
-            return View(resources);
+            PortfolioResource resource = new PortfolioResource()
+            {
+                Id = portfolioId
+            };
+            
+            return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
         // GET: ClientsController/Details/5
@@ -116,6 +118,70 @@ namespace Tilbake.MVC.Controllers
                     return BadRequest(new ErrorResource(result.Message));
                 }
                 return RedirectToAction(nameof(Index));
+            }
+
+            var clientTypes = await _clientTypeService.GetAllAsync();
+            var countries = await _countryService.GetAllAsync();
+            var genders = await _genderService.GetAllAsync();
+            var maritalStatuses = await _maritalStatusService.GetAllAsync();
+            var occupations = await _occupationService.GetAllAsync();
+            var titles = await _titleService.GetAllAsync();
+
+            clientSaveResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientSaveResource.ClientTypeId);
+            clientSaveResource.Countries = new SelectList(countries, "Id", "Name", clientSaveResource.CountryId);
+            clientSaveResource.Genders = new SelectList(genders, "Id", "Name", clientSaveResource.GenderId);
+            clientSaveResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientSaveResource.MaritalStatusId);
+            clientSaveResource.Occupations = new SelectList(occupations, "Id", "Name", clientSaveResource.OccupationId);
+            clientSaveResource.Titles = new SelectList(titles, "Id", "Name", clientSaveResource.TitleId);
+
+            return View(clientSaveResource);
+        }
+
+        // GET: ClientsController/AddToPortfolio/5
+        public async Task<ActionResult> AddToPortfolio(Guid portfolioId)
+        {
+            var clientTypes = await _clientTypeService.GetAllAsync();
+            var countries = await _countryService.GetAllAsync();
+            var genders = await _genderService.GetAllAsync();
+            var maritalStatuses = await _maritalStatusService.GetAllAsync();
+            var occupations = await _occupationService.GetAllAsync();
+            var titles = await _titleService.GetAllAsync();
+
+            ClientSaveResource clientSaveResource = new ClientSaveResource()
+            {
+                PortfolioId = portfolioId,
+                ClientTypes = new SelectList(clientTypes, "Id", "Name"),
+                Countries = new SelectList(countries, "Id", "Name"),
+                Genders = new SelectList(genders, "Id", "Name"),
+                MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name"),
+                Occupations = new SelectList(occupations, "Id", "Name"),
+                Titles = new SelectList(titles, "Id", "Name")
+            };
+
+            return View(clientSaveResource);
+        }
+
+        // POST: ClientsController/AddToPortfolio/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddToPortfolio(ClientSaveResource clientSaveResource)
+        {
+            if (clientSaveResource == null)
+            {
+                throw new ArgumentNullException(nameof(clientSaveResource));
+            }
+
+            if (ModelState.IsValid)
+            {
+                Client client = _mapper.Map<ClientSaveResource, Client>(clientSaveResource);
+                client.Id = Guid.NewGuid();
+
+                var result = await _clientService.AddToPortfolioAsync(clientSaveResource.PortfolioId, client).ConfigureAwait(true);
+                if (!result.Success)
+                {
+                    return BadRequest(new ErrorResource(result.Message));
+                }
+                return RedirectToAction(nameof(GetByPortfolio), new { portfolioId = clientSaveResource.PortfolioId });
             }
 
             var clientTypes = await _clientTypeService.GetAllAsync();

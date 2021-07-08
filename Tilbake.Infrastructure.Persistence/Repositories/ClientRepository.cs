@@ -32,6 +32,20 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return clients;
         }
 
+        public async Task<Client> AddToPortfolioAsync(Guid portfolioId, Client client)
+        {
+            await _context.Clients.AddAsync(client).ConfigureAwait(true);
+            PortfolioClient portfolioClient = new PortfolioClient()
+            {
+                Id = Guid.NewGuid(),
+                PortfolioId = portfolioId,
+                ClientId = client.Id
+            };
+            await _context.PortfolioClients.AddAsync(portfolioClient).ConfigureAwait(true);
+            await _context.SaveChangesAsync().ConfigureAwait(true);
+            return client;
+        }
+
         public async Task<Client> DeleteAsync(Guid id)
         {
             Client client = await _context.Clients

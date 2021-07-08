@@ -67,6 +67,7 @@ namespace Tilbake.Application.Resources
         public bool CarrierWhatsApp { get; set; }
 
         //  Descriptions
+        public string PortfolioName { get; set; }
 
         [Display(Name = "Client Type")]        
         public string ClientType { get; set; }

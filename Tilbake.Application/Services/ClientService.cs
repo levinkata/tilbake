@@ -31,6 +31,20 @@ namespace Tilbake.Application.Services
             }
         }
 
+        public async Task<ClientResponse> AddToPortfolioAsync(Guid portfolioId, Client client)
+        {
+            try
+            {
+                await _clientRepository.AddToPortfolioAsync(portfolioId, client).ConfigureAwait(true);
+                return new ClientResponse(client);
+            }
+            catch (Exception ex)
+            {
+                // Do some logging stuff
+                return new ClientResponse($"An error occurred when saving the client: {ex.Message}");
+            }
+        }
+
         public async Task<ClientResponse> DeleteAsync(Guid id)
         {
             var existingClient = await _clientRepository.GetByIdAsync(id).ConfigureAwait(true);

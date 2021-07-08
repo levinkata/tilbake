@@ -12,6 +12,7 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId);
         Task<ClientResponse> GetByIdAsync(Guid id);
         Task<ClientResponse> AddAsync(Client client);
+        Task<ClientResponse> AddToPortfolioAsync(Guid portfolioId, Client client);
         Task<ClientResponse> UpdateAsync(Guid id, Client client);
         Task<ClientResponse> DeleteAsync(Guid id);
         Task<ClientResponse> DeleteAsync(Client client);

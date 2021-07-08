@@ -26,6 +26,7 @@ namespace Tilbake.MVC.ViewComponents
             var result = await _clientService.GetByPortfolioIdAsync(portfolioId).ConfigureAwait(true);
             var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
 
+            ViewBag.PortfolioId = portfolioId;
             return View(resources);
         }
     }

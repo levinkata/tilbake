@@ -6,6 +6,8 @@ namespace Tilbake.Application.Resources
 {
     public class ClientSaveResource
     {
+        public Guid PortfolioId { get; set; }
+
         [Display(Name = "Title")]
         public Guid TitleId { get; set; }
 
@@ -72,6 +74,9 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Carrier WhatsApp")]
         public bool CarrierWhatsApp { get; set; }
+
+        //  Descriptions
+        public string PortfolioName { get; set; }
 
         //  SelectLists
 

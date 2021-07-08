@@ -7,6 +7,7 @@ namespace Tilbake.Application.Resources
     public class ClientResource
     {
         public Guid Id { get; set; }
+        public Guid PortfolioId { get; set; }
 
         [Display(Name = "Title")]
         public Guid TitleId { get; set; }
@@ -54,16 +55,16 @@ namespace Tilbake.Application.Resources
         public Guid OccupationId { get; set; }
 
         [Display(Name = "Carrier Email")]
-        public Guid CarrierEmail { get; set; }
+        public bool CarrierEmail { get; set; }
 
         [Display(Name = "Carrier Postal Mail")]
-        public Guid CarrierPostalMail { get; set; }
+        public bool CarrierPostalMail { get; set; }
 
         [Display(Name = "Carrier SMS")]
-        public Guid CarrierSMS { get; set; }
+        public bool CarrierSms { get; set; }
 
         [Display(Name = "Carrier WhatsApp")]
-        public Guid CarrierWhatsApp { get; set; }
+        public bool CarrierWhatsApp { get; set; }
 
         //  Descriptions
 

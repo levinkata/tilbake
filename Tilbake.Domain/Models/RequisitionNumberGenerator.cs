@@ -5,6 +5,7 @@ namespace Tilbake.Domain.Models
 {
     public partial class RequisitionNumberGenerator
     {
+        public Guid Id { get; set; }
         public int RequisitionNumber { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }

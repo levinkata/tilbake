@@ -11,22 +11,38 @@ namespace Tilbake.Application.Services
 {
     public class EmailSender : IEmailSender
     {
+        //  Our private configuration variables
+        private readonly string host;
+        private readonly int port;
+        private readonly bool enableSSL;
+        private readonly string username;
+        private readonly string password;
+
+        public EmailSender(string host,int port, bool enableSSL, string username, string password)
+        {
+            this.host = host;
+            this.port = port;
+            this.enableSSL = enableSSL;
+            this.username = username;
+            this.password = password;
+        }
+
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             using (var message = new MailMessage())
             {
                 message.To.Add(new MailAddress(email, email));
-                message.From = new MailAddress("levi.nkata@gmail.com", "Tilbake");
+                message.From = new MailAddress(username, "Tilbake");
                 message.Subject = subject;
                 message.Body = htmlMessage;
                 message.IsBodyHtml = true;
 
-                using (var client = new SmtpClient("Smtp.gmail.com", 587))
+                using (var client = new SmtpClient(host, port))
                 {
-                    client.Port = 587;
+                    client.Port = port;
                     client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential("levi.nkata@gmail.com", "8va7xAf60");
-                    client.EnableSsl = true;
+                    client.Credentials = new NetworkCredential(username, password);
+                    client.EnableSsl = enableSSL;
                     client.Send(message);
                 }
             }

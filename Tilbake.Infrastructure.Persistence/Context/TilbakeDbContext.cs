@@ -642,11 +642,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<ClaimNumberGenerator>(entity =>
             {
-                entity.HasKey(e => e.ClaimNumber);
-
                 entity.ToTable("ClaimNumberGenerator");
 
-                entity.Property(e => e.ClaimNumber).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -917,11 +915,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<ClientNumberGenerator>(entity =>
             {
-                entity.HasKey(e => e.ClientNumber);
-
                 entity.ToTable("ClientNumberGenerator");
 
-                entity.Property(e => e.ClientNumber).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -1416,11 +1412,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<InvoiceNumberGenerator>(entity =>
             {
-                entity.HasKey(e => e.InvoiceNumber);
-
                 entity.ToTable("InvoiceNumberGenerator");
 
-                entity.Property(e => e.InvoiceNumber).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -1870,11 +1864,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<PolicyNumberGenerator>(entity =>
             {
-                entity.HasKey(e => e.PolicyNumber);
-
                 entity.ToTable("PolicyNumberGenerator");
 
-                entity.Property(e => e.PolicyNumber).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -2235,11 +2227,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<QuoteNumberGenerator>(entity =>
             {
-                entity.HasKey(e => e.QuoteNumber);
-
                 entity.ToTable("QuoteNumberGenerator");
 
-                entity.Property(e => e.QuoteNumber).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -2440,11 +2430,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<RequisitionNumberGenerator>(entity =>
             {
-                entity.HasKey(e => e.RequisitionNumber);
-
                 entity.ToTable("RequisitionNumberGenerator");
 
-                entity.Property(e => e.RequisitionNumber).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 

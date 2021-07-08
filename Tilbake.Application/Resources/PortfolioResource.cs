@@ -9,5 +9,9 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Is Scheme?")]
         public bool IsScheme { get; set; }
+
+
+        [Display(Name = "Clients")]
+        public int TotalClients { get; set; }
     }
 }

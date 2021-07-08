@@ -88,25 +88,25 @@
                 <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations"></select>
                 <span asp-validation-for="OccupationId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CarrierEmail" class="control-label"></label>
-                <input asp-for="CarrierEmail" class="form-control" />
-                <span asp-validation-for="CarrierEmail" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CarrierEmail" /> @Html.DisplayNameFor(model => model.CarrierEmail)
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="CarrierPostalMail" class="control-label"></label>
-                <input asp-for="CarrierPostalMail" class="form-control" />
-                <span asp-validation-for="CarrierPostalMail" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CarrierPostalMail" /> @Html.DisplayNameFor(model => model.CarrierPostalMail)
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="CarrierSMS" class="control-label"></label>
-                <input asp-for="CarrierSMS" class="form-control" />
-                <span asp-validation-for="CarrierSMS" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CarrierSms" /> @Html.DisplayNameFor(model => model.CarrierSms)
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="CarrierWhatsApp" class="control-label"></label>
-                <input asp-for="CarrierWhatsApp" class="form-control" />
-                <span asp-validation-for="CarrierWhatsApp" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CarrierWhatsApp" /> @Html.DisplayNameFor(model => model.CarrierWhatsApp)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

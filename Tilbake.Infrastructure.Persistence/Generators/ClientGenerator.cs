@@ -38,7 +38,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.ClientNumber) + 1 : 1;
 
             var clientTable = _context.ClientNumberGenerators
-                                            .FirstOrDefault();
+                                        .OrderByDescending(n => n.ClientNumber)
+                                        .FirstOrDefault();
 
             if (clientTable == null)
             {
@@ -70,6 +71,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.ClientNumber) + 1 : 1;
 
             var clientTable = await _context.ClientNumberGenerators
+                                            .OrderByDescending(n => n.ClientNumber)
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 

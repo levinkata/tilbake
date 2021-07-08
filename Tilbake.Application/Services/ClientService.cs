@@ -81,6 +81,11 @@ namespace Tilbake.Application.Services
             return new ClientResponse(client);
         }
 
+        public async Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId)
+        {
+            return await Task.Run(() => _clientRepository.GetByPortfolioIdAsync(portfolioId)).ConfigureAwait(true);
+        }
+
         public async Task<ClientResponse> UpdateAsync(Guid id, Client client)
         {
             if (client == null)

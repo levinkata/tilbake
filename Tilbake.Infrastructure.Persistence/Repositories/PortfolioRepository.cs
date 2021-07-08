@@ -107,6 +107,18 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => _context.Portfolios.OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
+        public async Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+
+            return await Task.Run(() => _context.Portfolios
+                                                .Include(p => p.PortfolioClients)
+                                                .Include(u => u.AspnetUserPortfolios)
+                                                .Where(e => e.AspnetUserPortfolios.FirstOrDefault().AspNetUserId == aspNetUserId)
+                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        }
+
         public async Task<Portfolio> GetByIdAsync(Guid id)
         {
             using var scope = _serviceScopeFactory.CreateScope();

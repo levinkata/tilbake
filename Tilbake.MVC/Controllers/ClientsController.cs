@@ -48,7 +48,15 @@ namespace Tilbake.MVC.Controllers
             var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
 
             return View(resources);
+        }
 
+        // GET: ClientsController/GetByPortfolio/5
+        public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
+        {
+            var result = await _clientService.GetByPortfolioIdAsync(portfolioId).ConfigureAwait(true);
+            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
+            ViewBag.PortfolioId = portfolioId;
+            return View(resources);
         }
 
         // GET: ClientsController/Details/5

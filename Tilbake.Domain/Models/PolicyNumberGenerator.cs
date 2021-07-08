@@ -5,6 +5,7 @@ namespace Tilbake.Domain.Models
 {
     public partial class PolicyNumberGenerator
     {
+        public Guid Id { get; set; }
         public int PolicyNumber { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }

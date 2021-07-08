@@ -10,13 +10,13 @@ namespace Tilbake.Application.Mapping
         {
             CreateMap<BankSaveResource, Bank>();
             CreateMap<BankBranchSaveResource, BankBranch>();
-            CreateMap<PortfolioSaveResource, Portfolio>();
             CreateMap<ClientSaveResource, Client>();
             CreateMap<ClientTypeSaveResource, ClientType>();
             CreateMap<CountrySaveResource, Country>();
             CreateMap<GenderSaveResource, Gender>();
             CreateMap<MaritalStatusSaveResource, MaritalStatus>();
             CreateMap<OccupationSaveResource, Occupation>();
+            CreateMap<PortfolioSaveResource, Portfolio>();
             CreateMap<TitleSaveResource, Title>();
         }
     }

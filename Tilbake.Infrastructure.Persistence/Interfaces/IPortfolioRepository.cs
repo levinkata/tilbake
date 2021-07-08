@@ -8,6 +8,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
     public interface IPortfolioRepository
     {
         Task<IEnumerable<Portfolio>> GetAllAsync();
+        Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId);
         Task<Portfolio> GetByIdAsync(Guid id);
         Task<int> AddAsync(Portfolio portfolio);
         Task<int> AddRangeAsync (IEnumerable<Portfolio> portfolios);

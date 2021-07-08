@@ -15,7 +15,7 @@ namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            builder.ToTable("Policys");
+            builder.ToTable("Policy");
 
             builder.Property(m => m.PolicyNumber)
                     .ValueGeneratedNever()

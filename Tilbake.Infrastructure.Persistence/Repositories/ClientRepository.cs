@@ -98,6 +98,21 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .FirstOrDefaultAsync()).ConfigureAwait(true);
         }
 
+        public async Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId)
+        {
+            return await Task.Run(() => _context.Clients
+                                                .Include(y => y.ClientType)
+                                                .Include(u => u.Country)
+                                                .Include(g => g.Gender)
+                                                .Include(m => m.MaritalStatus)
+                                                .Include(o => o.Occupation)
+                                                .Include(t => t.Title)
+                                                .Include(c => c.PortfolioClients)
+                                                    .ThenInclude(u => u.Portfolio)
+                                                .Where(e => e.PortfolioClients.FirstOrDefault().Portfolio.Id == portfolioId)
+                                                .OrderBy(n => n.LastName).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        }
+
         public async Task<Client> UpdateAsync(Client client)
         {
             if (client == null)

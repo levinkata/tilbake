@@ -5,6 +5,7 @@ namespace Tilbake.Domain.Models
 {
     public partial class QuoteNumberGenerator
     {
+        public Guid Id { get; set; }
         public int QuoteNumber { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }

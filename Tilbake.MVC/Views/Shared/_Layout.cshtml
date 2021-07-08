@@ -21,11 +21,6 @@
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
 
     <script src="https://kit.fontawesome.com/2ab1015e74.js" crossorigin="anonymous"></script>
-    @*@using Microsoft.AspNetCore.Identity
-    @using Tilbake.MVC.Areas.Identity
-    @using Tilbake.MVC.Areas.Identity.Pages
-    @using Tilbake.MVC.Data
-    @inject UserManager<ApplicationUser> UserManager*@
 </head>
 <body>
     <header>
@@ -53,7 +48,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">Clients</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Claims">Claims</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>

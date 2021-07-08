@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tilbake.MVC.Data
+namespace Tilbake.MVC.Areas.Identity
 {
     public class IdentityDbContext : IdentityDbContext<ApplicationUser>
     {

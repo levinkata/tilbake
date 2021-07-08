@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
+using Tilbake.MVC.Areas.Identity;
 
 namespace Tilbake.MVC.Data.Migrations
 {

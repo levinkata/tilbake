@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Tilbake.MVC.Data
+namespace Tilbake.MVC.Areas.Identity
 {
     public class ApplicationUser : IdentityUser
     {

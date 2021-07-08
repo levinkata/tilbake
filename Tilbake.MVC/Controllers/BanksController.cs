@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using Tilbake.Domain.Models;
 
 namespace Tilbake.MVC.Controllers
 {
+    [Authorize(Policy = "EmailId")]
     public class BanksController : Controller
     {
         private readonly IBankService _bankService;

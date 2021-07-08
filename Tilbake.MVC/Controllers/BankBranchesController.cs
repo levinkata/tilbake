@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace Tilbake.MVC.Controllers
 {
     public class BankBranchesController : Controller
     {
+
         private readonly IBankBranchService _bankBranchService;
         private readonly IMapper _mapper;
 

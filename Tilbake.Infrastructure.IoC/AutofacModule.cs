@@ -17,6 +17,10 @@ namespace Tilbake.Infrastructure.IoC
                     .Where(t => t.Name.EndsWith("Service"))
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
+
+            //builder.RegisterGeneric(typeof(ApplicationUserClaimsPrincipalFactory<,>))
+            //        .As(typeof(IUserClaimsPrincipalFactory<ApplicationUser>))
+            //        .InstancePerLifetimeScope();
         }
     }
 }

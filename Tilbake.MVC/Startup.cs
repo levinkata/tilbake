@@ -13,6 +13,8 @@ using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Areas.Identity.Data;
 using Tilbake.MVC.Data;
 
 namespace Tilbake.MVC
@@ -29,23 +31,15 @@ namespace Tilbake.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("Tilbake")));
-
             services.AddDbContext<TilbakeDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<IdentityDbContext>();
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
-                .AddDefaultTokenProviders()
-                .AddDefaultUI();
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<IdentityDbContext>()
+            //    .AddDefaultTokenProviders()
+            //    .AddDefaultUI();
 
             services.AddTransient<IEmailSender, EmailSender>(i =>
                 new EmailSender(
@@ -57,8 +51,17 @@ namespace Tilbake.MVC
                 )
             );
 
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("EmailId", policy =>
+                policy.RequireClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "levi.nkata@outlook.com"
+                ));
+            });
 
             services.AddAutoMapper(typeof(ModelToResourceProfile));
 
@@ -81,6 +84,7 @@ namespace Tilbake.MVC
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

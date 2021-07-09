@@ -5,22 +5,30 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+
     <br />
-    <p>The following are portfolios assigned to the current user</p>
-    <br />
-    <ol class="list-group list-group-numbered">
-        @foreach (var item in Model)
-        {
-            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
-                <div class="ms-2 me-auto">
-                    <div class="fw-bold">
-                        <a asp-controller="Clients" asp-action="GetByPortfolio" asp-route-portfolioId="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+    @if (Model.Any())
+    {
+        <p>The following are portfolios assigned to the current user</p>
+        <br />
+        <ol class="list-group list-group-numbered">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">
+                            <a asp-controller="Clients" asp-action="GetByPortfolio" asp-route-portfolioId="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                        </div>
+                        @Html.DisplayFor(modelItem => item.Description)
                     </div>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </div>
-                <span class="badge bg-primary rounded-pill">@Html.DisplayFor(modelItem => item.TotalClients)</span>
-            </li>
-        }
-    </ol>
+                    <span class="badge bg-primary rounded-pill">@Html.DisplayFor(modelItem => item.TotalClients)</span>
+                </li>
+            }
+        </ol>
+    }
+    else
+    {
+        <p class="text-danger">Logged in user does not have any assigned portfolios.</p>
+    }
+
 </div>

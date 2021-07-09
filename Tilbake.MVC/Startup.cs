@@ -1,21 +1,18 @@
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Areas.Identity.Data;
-using Tilbake.MVC.Data;
 
 namespace Tilbake.MVC
 {
@@ -36,11 +33,6 @@ namespace Tilbake.MVC
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<IdentityDbContext>()
-            //    .AddDefaultTokenProviders()
-            //    .AddDefaultUI();
-
             services.AddTransient<IEmailSender, EmailSender>(i =>
                 new EmailSender(
                     Configuration["EmailSender:Host"],
@@ -51,20 +43,19 @@ namespace Tilbake.MVC
                 )
             );
 
-            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
-
             services.AddControllersWithViews();
             services.AddRazorPages();
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("EmailId", policy =>
-                policy.RequireClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "levi.nkata@outlook.com"
-                ));
+                    policy.RequireClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "levi.nkata@outlook.com"));
+
+                options.AddPolicy("CreateRole", policy =>
+                    policy.RequireRole("Admin"));
             });
 
             services.AddAutoMapper(typeof(ModelToResourceProfile));
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

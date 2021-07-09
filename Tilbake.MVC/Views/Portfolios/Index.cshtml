@@ -4,6 +4,9 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "userstatus", buttonOption = new { content = "Details", cssClass = "e-flat e-details" } }); // custom
 }
 
 <h1>Index</h1>
@@ -13,55 +16,56 @@
 </p>
 
 <div class="control-section">
-    <ejs-grid id="Grid" allowSorting="true" dataSource="ViewBag.datasource" toolbar="@(new List<string>() {"Search" })" allowPaging="true">
+    <ejs-grid id="Grid" allowSorting="true" dataSource="ViewBag.datasource" commandClick="commandClick" toolbar="@(new List<string>() {"Search" })" allowPaging="true">
         <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
         <e-grid-columns>
             <e-grid-column field="" type="checkbox" width="30" allowFiltering="false" allowSorting="false"></e-grid-column>
             <e-grid-column field="Id" headerText="Id" textAlign="Left" visible="false"></e-grid-column>
             <e-grid-column field="Name" headerText="Name" width="80"></e-grid-column>
-            <e-grid-column field="Description" headerText="Description" width="100"></e-grid-column>
+            <e-grid-column field="Description" headerText="Description" width="80"></e-grid-column>
             <e-grid-column field="IsScheme" headerText="Is Scheme?" template="#template" width="30"></e-grid-column>
+            <e-grid-column headerText="Manage Records" width="50" commands="commands"></e-grid-column>
         </e-grid-columns>
     </ejs-grid>
 </div>
 
 @*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsScheme)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsScheme)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsScheme)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>*@
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsScheme)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
 
 <script id="template" type="text/x-template">
     <div class="template_checkbox">
@@ -70,4 +74,10 @@
         <input type="checkbox" disabled>
         ${/if}
     </div>
+</script>
+
+<script>
+    function commandClick(args) {
+        alert(JSON.stringify(args.rowData));  // display row data
+    }
 </script>

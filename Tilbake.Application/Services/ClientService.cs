@@ -95,6 +95,15 @@ namespace Tilbake.Application.Services
             return new ClientResponse(client);
         }
 
+        public async Task<ClientResponse> GetByIdNumberAsync(string idNumber)
+        {
+            var client = await _clientRepository.GetByIdNumberAsync(idNumber).ConfigureAwait(true);
+            if (client == null)
+                return new ClientResponse($"Client Id Number not found: {idNumber}");
+
+            return new ClientResponse(client);
+        }
+
         public async Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId)
         {
             return await Task.Run(() => _clientRepository.GetByPortfolioIdAsync(portfolioId)).ConfigureAwait(true);

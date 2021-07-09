@@ -18,7 +18,7 @@ namespace Tilbake.MVC.Areas.Identity.Data
         protected override async Task<ClaimsIdentity> GenerateClaimsAsync(ApplicationUser user)
         {
             var identity = await base.GenerateClaimsAsync(user);
-            identity.AddClaim(new Claim("ManNumber", user.ManNumber));
+            identity.AddClaim(new Claim("LastName", user.LastName));
 
             return identity;
         }

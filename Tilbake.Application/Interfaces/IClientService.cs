@@ -11,6 +11,7 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<Client>> GetAllAsync();
         Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId);
         Task<ClientResponse> GetByIdAsync(Guid id);
+        Task<ClientResponse> GetByIdNumberAsync(string idNumber);
         Task<ClientResponse> AddAsync(Client client);
         Task<ClientResponse> AddToPortfolioAsync(Guid portfolioId, Client client);
         Task<ClientResponse> UpdateAsync(Guid id, Client client);

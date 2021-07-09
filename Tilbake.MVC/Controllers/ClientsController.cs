@@ -44,10 +44,11 @@ namespace Tilbake.MVC.Controllers
         // GET: ClientsController
         public async Task<IActionResult> Index()
         {
-            var result = await _clientService.GetAllAsync().ConfigureAwait(true);
-            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
+            //var result = await _clientService.GetAllAsync().ConfigureAwait(true);
+            //var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
 
-            return View(resources);
+            //return View(resources);
+            return await Task.Run(() => View()).ConfigureAwait(true);
         }
 
         // GET: ClientsController/GetByPortfolio/5

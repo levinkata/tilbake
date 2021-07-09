@@ -112,6 +112,14 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .FirstOrDefaultAsync()).ConfigureAwait(true);
         }
 
+        public async Task<Client> GetByIdNumberAsync(string idNumber)
+        {
+            return await Task.Run(() => _context.Clients
+                                                .Where(e => e.IdNumber == idNumber)
+                                                .Include(y => y.PortfolioClients)
+                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
+        }
+
         public async Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId)
         {
             return await Task.Run(() => _context.Clients

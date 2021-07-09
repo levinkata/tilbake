@@ -21,12 +21,20 @@ namespace Tilbake.MVC.ViewComponents
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid portfolioId)
+        public async Task<IViewComponentResult> InvokeAsync(Guid? portfolioId)
         {
-            var result = await _clientService.GetByPortfolioIdAsync(portfolioId).ConfigureAwait(true);
-            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
+            IEnumerable<Client> result;
 
-            ViewBag.PortfolioId = portfolioId;
+            if (portfolioId == Guid.Empty)
+            {
+                result = await _clientService.GetAllAsync().ConfigureAwait(true);
+            }
+            else
+            {
+                result = await _clientService.GetByPortfolioIdAsync((Guid)portfolioId).ConfigureAwait(true);
+                ViewBag.PortfolioId = portfolioId;
+            }
+            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
             return View(resources);
         }
     }

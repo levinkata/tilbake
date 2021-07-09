@@ -1,7 +1,6 @@
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,8 +10,6 @@ using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
-using Tilbake.MVC.Areas.Identity;
-using Tilbake.MVC.Areas.Identity.Data;
 
 namespace Tilbake.MVC
 {

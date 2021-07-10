@@ -133,10 +133,6 @@ namespace Tilbake.Application.Services
             existingClient.Mobile = client.Mobile;
             existingClient.Email = client.Email;
             existingClient.OccupationId = client.OccupationId;
-            existingClient.CarrierEmail = client.CarrierEmail;
-            existingClient.CarrierPostalMail = client.CarrierPostalMail;
-            existingClient.CarrierSms = client.CarrierSms;
-            existingClient.CarrierWhatsApp = client.CarrierWhatsApp;
 
             try
             {

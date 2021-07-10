@@ -4,9 +4,7 @@
     ViewBag.Title = "Assign Portfolios";
 }
 
-<h2>New Risk Incident</h2>
-
-<h4>Risk Incident</h4>
+<h2>User Portfolios</h2>
 
 <div class="form-group">
     <label asp-for="UserId" class="col-md-2 control-label">Risk</label>
@@ -14,8 +12,7 @@
         <select asp-for="UserId" class="form-control" asp-items="@Model.Users"></select>
     </div>
 </div>
-
-<div class="row">
+<div class="row offset-md-0">
     <div class="col-md-5">
         <div class="form-group">
             <label asp-for="UnAssignedPortfolios" class="control-label"></label>
@@ -47,33 +44,48 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $(document).ready(function () {
 
-            $(window).on('load', function () {
-                alert("Window Loaded");
+    $(document).ready(function () {
+        var selectedUserId = null;
+
+        UserIdChanged();
+
+        function LoadLists(aPortfolios, uPortfolios) {
+
+            $('#AssignedPortfolios').empty();   // clear before appending new list
+            $('#UnAssignedPortfolios').empty();   // clear before appending new list
+
+            console.log('Assigned Portfolios');
+            console.log(aPortfolios);
+
+            $.each(aPortfolios, function (index, value) {
+                $('#AssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
             });
 
-            function LoadLists(aPortfolios, uPortfolios) {
+            $.each(uPortfolios, function (index, value) {
+                $('#UnAssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
+            });
+        }
 
-                $('#AssignedPortfolios').empty();   // clear before appending new list
-                $('#UnAssignedPortfolios').empty();   // clear before appending new list
+        function UserIdChanged() {
+            selectedUserId = $("#UserId").val();
 
-                console.log('Assigned Portfolios');
-                console.log(aPortfolios);
+            $.ajax({
+                url: '@(Url.Action("FillMultiSelectLists"))',
+                type: 'GET',
+                dataType: 'JSON',
+                data: { userId: selectedUserId },
+                success: function (data) {
+                    LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                }
+            });
+        }
 
-                $.each(aPortfolios, function (index, value) {
-                    $('#AssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
-                });
-
-                $.each(uPortfolios, function (index, value) {
-                    $('#UnAssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
-                });
-            }
-
-            $('#UserId').on('change', function () {
-                var selectedUserId = $("#UserId").val();
+        $('#UserId').on('change', function () {
+            UserIdChanged();
+                @*var selectedUserId = $("#UserId").val();
 
                 $.ajax({
                     url: '@(Url.Action("FillMultiSelectLists"))',
@@ -83,12 +95,12 @@
                     success: function (data) {
                         LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
                     }
-                });
-            });
+                });*@
+        });
 
             $('#right').on('click', function () {
                 var itemsSelected = [];
-                var selectedUserId = $('#UserId').val();
+                selectedUserId = $('#UserId').val();
 
                 $('#UnAssignedPortfolios option:selected').each(function () {
                     itemsSelected.push($(this).val());
@@ -107,7 +119,7 @@
 
             $('#rightAll').on('click', function () {
                 var itemsAll = [];
-                var selectedUserId = $('#UserId').val();
+                selectedUserId = $('#UserId').val();
 
                 $('#UnAssignedPortfolios option').each(function () {
                     itemsAll.push($(this).val());
@@ -126,7 +138,7 @@
 
             $('#left').on('click', function () {
                 var itemsSelected = [];
-                var selectedUserId = $('#UserId').val();
+                selectedUserId = $('#UserId').val();
 
                 $('#AssignedPortfolios option:selected').each(function () {
                     itemsSelected.push($(this).val());
@@ -145,7 +157,7 @@
 
             $('#leftAll').on('click', function () {
                 var itemsAll = [];
-                var selectedUserId = $('#UserId').val();
+                selectedUserId = $('#UserId').val();
 
                 $('#AssignedPortfolios option').each(function () {
                     itemsAll.push($(this).val());
@@ -163,5 +175,5 @@
                 });
             });
         });
-    </script>
+</script>
 }

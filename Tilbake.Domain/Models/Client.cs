@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public Client()
         {
             ClientBankAccounts = new HashSet<ClientBankAccount>();
+            ClientCarriers = new HashSet<ClientCarrier>();
             ClientDocuments = new HashSet<ClientDocument>();
             ClientRisks = new HashSet<ClientRisk>();
             PortfolioClients = new HashSet<PortfolioClient>();
@@ -30,10 +31,6 @@ namespace Tilbake.Domain.Models
         public string Mobile { get; set; }
         public string Email { get; set; }
         public Guid OccupationId { get; set; }
-        public bool CarrierEmail { get; set; }
-        public bool CarrierPostalMail { get; set; }
-        public bool CarrierSms { get; set; }
-        public bool CarrierWhatsApp { get; set; }
         public Guid? AddedById { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedById { get; set; }
@@ -46,6 +43,7 @@ namespace Tilbake.Domain.Models
         public virtual Occupation Occupation { get; set; }
         public virtual Title Title { get; set; }
         public virtual ICollection<ClientBankAccount> ClientBankAccounts { get; set; }
+        public virtual ICollection<ClientCarrier> ClientCarriers { get; set; }
         public virtual ICollection<ClientDocument> ClientDocuments { get; set; }
         public virtual ICollection<ClientRisk> ClientRisks { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }

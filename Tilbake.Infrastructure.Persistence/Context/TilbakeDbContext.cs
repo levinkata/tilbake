@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Models;
 
 namespace Tilbake.Infrastructure.Persistence.Context
@@ -33,6 +31,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<BankBranch> BankBranches { get; set; }
         public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
         public virtual DbSet<BodyType> BodyTypes { get; set; }
+        public virtual DbSet<Carrier> Carriers { get; set; }
         public virtual DbSet<ChartOfAccount> ChartOfAccounts { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Claim> Claims { get; set; }
@@ -49,6 +48,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Claimant> Claimants { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<ClientBankAccount> ClientBankAccounts { get; set; }
+        public virtual DbSet<ClientCarrier> ClientCarriers { get; set; }
         public virtual DbSet<ClientDocument> ClientDocuments { get; set; }
         public virtual DbSet<ClientNumberGenerator> ClientNumberGenerators { get; set; }
         public virtual DbSet<ClientRisk> ClientRisks { get; set; }
@@ -465,6 +465,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Carrier>(entity =>
+            {
+                entity.ToTable("Carrier");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<ChartOfAccount>(entity =>
             {
                 entity.HasIndex(e => e.Glcode, "IX_ChartOfAccounts")
@@ -813,8 +828,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.BirthDate).HasColumnType("date");
 
-                entity.Property(e => e.CarrierSms).HasColumnName("CarrierSMS");
-
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
@@ -891,6 +904,25 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ClientBankAccount_Client");
+            });
+
+            modelBuilder.Entity<ClientCarrier>(entity =>
+            {
+                entity.HasKey(e => new { e.ClientId, e.CarrierId });
+
+                entity.ToTable("ClientCarrier");
+
+                entity.HasOne(d => d.Carrier)
+                    .WithMany(p => p.ClientCarriers)
+                    .HasForeignKey(d => d.CarrierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ClientCarrier_Carrier");
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.ClientCarriers)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ClientCarrier_Client");
             });
 
             modelBuilder.Entity<ClientDocument>(entity =>

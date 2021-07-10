@@ -113,9 +113,10 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
 
             return await Task.Run(() => _context.Portfolios
+                                                .Where(c => c.AspnetUserPortfolios
+                                                .Any(u => u.AspNetUserId == aspNetUserId))
                                                 .Include(p => p.PortfolioClients)
                                                 .Include(u => u.AspnetUserPortfolios)
-                                                .Where(e => e.AspnetUserPortfolios.FirstOrDefault().AspNetUserId == aspNetUserId)
                                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 

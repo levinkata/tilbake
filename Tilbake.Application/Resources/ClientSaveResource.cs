@@ -63,18 +63,6 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Occupation")]
         public Guid OccupationId { get; set; }
 
-        [Display(Name = "Carrier Email")]
-        public bool CarrierEmail { get; set; }
-
-        [Display(Name = "Carrier Postal Mail")]
-        public bool CarrierPostalMail { get; set; }
-
-        [Display(Name = "Carrier SMS")]
-        public bool CarrierSms { get; set; }
-
-        [Display(Name = "Carrier WhatsApp")]
-        public bool CarrierWhatsApp { get; set; }
-
         //  Descriptions
         public string PortfolioName { get; set; }
 

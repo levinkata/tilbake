@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Models;
@@ -28,7 +29,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<Occupation>> AddRangeAsync(IEnumerable<Occupation> occupations)
         {
             await _context.Occupations.AddRangeAsync(occupations).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
+            await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // await _context.SaveChangesAsync().ConfigureAwait(true);
             return occupations;
         }
 
@@ -55,7 +57,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             }
             
             await Task.Run(() => _context.Occupations.Remove(occupation)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
+            //  await _context.SaveChangesAsync().ConfigureAwait(true);
+            await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             return occupation;
         }
 
@@ -91,8 +95,16 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                 return occupation;
             }
             
-            await Task.Run(() => _context.Occupations.Update(occupation)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
+            // await Task.Run(() => _context.Occupations.Update(occupation)).ConfigureAwait(true);
+
+            ///  New lines inserted to generate a lot more efficient and cleaner SQL of:
+            /// Update Students Set Class = 12 where Id = 1;
+            /// instead of:
+            /// Update Students Set Age = 25, Class = 12, Name = 'Mukesh' where Id = 1;
+            var oldOccupation = await _context.Occupations.FindAsync(occupation.Id);
+            await Task.Run(() => _context.Entry(oldOccupation).CurrentValues.SetValues(occupation)).ConfigureAwait(true);
+            //  await _context.SaveChangesAsync().ConfigureAwait(true);
+            await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
             return occupation;
         }
     }

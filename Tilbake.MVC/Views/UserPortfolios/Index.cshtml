@@ -1,0 +1,167 @@
+﻿@model UserPortfolioResource
+
+@{
+    ViewBag.Title = "Assign Portfolios";
+}
+
+<h2>New Risk Incident</h2>
+
+<h4>Risk Incident</h4>
+
+<div class="form-group">
+    <label asp-for="UserId" class="col-md-2 control-label">Risk</label>
+    <div class="col-md-10">
+        <select asp-for="UserId" class="form-control" asp-items="@Model.Users"></select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="form-group">
+            <label asp-for="UnAssignedPortfolios" class="control-label"></label>
+            <select asp-for="UnAssignedPortfolios" class="form-control"
+                    asp-items="@Model.PortfolioList"></select>
+        </div>
+    </div>
+    <div class="col-md-2 pt-md-3 text-center">
+        <div class="btn-group-vertical" role="group" aria-label="Portfolio control buttons">
+            <button type="button" id="right" class="btn btn-danger">&gt;</button>
+            <button type="button" id="left" class="btn btn-warning">&lt;</button>
+            <button type="button" id="rightAll" class="btn btn-success">&Gt;</button>
+            <button type="button" id="leftAll" class="btn btn-primary">&Lt;</button>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="form-group">
+            <label asp-for="AssignedPortfolios" class="control-label"></label>
+            <select asp-for="AssignedPortfolios" class="form-control"
+                    asp-items="@Model.UserPortfolioList"></select>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-info">Return</a>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(window).on('load', function () {
+                alert("Window Loaded");
+            });
+
+            function LoadLists(aPortfolios, uPortfolios) {
+
+                $('#AssignedPortfolios').empty();   // clear before appending new list
+                $('#UnAssignedPortfolios').empty();   // clear before appending new list
+
+                console.log('Assigned Portfolios');
+                console.log(aPortfolios);
+
+                $.each(aPortfolios, function (index, value) {
+                    $('#AssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
+                });
+
+                $.each(uPortfolios, function (index, value) {
+                    $('#UnAssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
+                });
+            }
+
+            $('#UserId').on('change', function () {
+                var selectedUserId = $("#UserId").val();
+
+                $.ajax({
+                    url: '@(Url.Action("FillMultiSelectLists"))',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: { userId: selectedUserId },
+                    success: function (data) {
+                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                    }
+                });
+            });
+
+            $('#right').on('click', function () {
+                var itemsSelected = [];
+                var selectedUserId = $('#UserId').val();
+
+                $('#UnAssignedPortfolios option:selected').each(function () {
+                    itemsSelected.push($(this).val());
+                });
+
+                $.ajax({
+                    url: '@(Url.Action("AddUserPortfolios"))',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: { userId: selectedUserId, portfolios: itemsSelected },
+                    success: function (data) {
+                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                    }
+                });
+            })
+
+            $('#rightAll').on('click', function () {
+                var itemsAll = [];
+                var selectedUserId = $('#UserId').val();
+
+                $('#UnAssignedPortfolios option').each(function () {
+                    itemsAll.push($(this).val());
+                });
+
+                $.ajax({
+                    url: '@(Url.Action("AddUserPortfolios"))',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: { userId: selectedUserId, portfolios: itemsAll },
+                    success: function (data) {
+                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                    }
+                });
+            })
+
+            $('#left').on('click', function () {
+                var itemsSelected = [];
+                var selectedUserId = $('#UserId').val();
+
+                $('#AssignedPortfolios option:selected').each(function () {
+                    itemsSelected.push($(this).val());
+                });
+
+                $.ajax({
+                    url: '@(Url.Action("RemoveUserPortfolios"))',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: { userId: selectedUserId, portfolios: itemsSelected },
+                    success: function (data) {
+                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                    }
+                });
+            })
+
+            $('#leftAll').on('click', function () {
+                var itemsAll = [];
+                var selectedUserId = $('#UserId').val();
+
+                $('#AssignedPortfolios option').each(function () {
+                    itemsAll.push($(this).val());
+                });
+                console.log(itemsAll);
+
+                $.ajax({
+                    url: '@(Url.Action("RemoveUserPortfolios"))',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: { userId: selectedUserId, portfolios: itemsAll },
+                    success: function (data) {
+                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                    }
+                });
+            });
+        });
+    </script>
+}

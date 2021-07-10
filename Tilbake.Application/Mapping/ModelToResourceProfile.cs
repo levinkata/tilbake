@@ -8,6 +8,9 @@ namespace Tilbake.Application.Mapping
     {
         public ModelToResourceProfile()
         {
+            CreateMap<AspnetUserPortfolio, AspnetUserPortfolioResource>()
+                    .ForMember(dest => dest.PortfolioName, opt => opt.MapFrom(src => src.Portfolio.Name)).ReverseMap();
+
             CreateMap<Bank, BankResource>().ReverseMap();
             CreateMap<BankBranch, BankBranchResource>()
                     .ForMember(dest => dest.BankName, opt => opt.MapFrom(src => src.Bank.Name)).ReverseMap();

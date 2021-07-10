@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Models;
 
 namespace Tilbake.Infrastructure.Persistence.Context
@@ -111,6 +113,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<QuoteNumberGenerator> QuoteNumberGenerators { get; set; }
         public virtual DbSet<QuoteStatus> QuoteStatuses { get; set; }
         public virtual DbSet<Receivable> Receivables { get; set; }
+        public virtual DbSet<ReceivableDocument> ReceivableDocuments { get; set; }
         public virtual DbSet<ReceivableInvoice> ReceivableInvoices { get; set; }
         public virtual DbSet<RefundStatus> RefundStatuses { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
@@ -2274,6 +2277,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.PaymentTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Receivable_PaymentType");
+            });
+
+            modelBuilder.Entity<ReceivableDocument>(entity =>
+            {
+                entity.ToTable("ReceivableDocument");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.DocumentPath).IsUnicode(false);
+
+                entity.HasOne(d => d.DocumentType)
+                    .WithMany(p => p.ReceivableDocuments)
+                    .HasForeignKey(d => d.DocumentTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceivableDocument_DocumentType");
+
+                entity.HasOne(d => d.Receivable)
+                    .WithMany(p => p.ReceivableDocuments)
+                    .HasForeignKey(d => d.ReceivableId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceivableDocument_Receivable");
             });
 
             modelBuilder.Entity<ReceivableInvoice>(entity =>

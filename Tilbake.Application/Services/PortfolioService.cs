@@ -68,5 +68,13 @@ namespace Tilbake.Application.Services
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
             return await Task.Run(() => _portfolioRepository.UpdateAsync(portfolio)).ConfigureAwait(true);
         }
+
+        public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
+        {
+            var result = await Task.Run(() => _portfolioRepository.GetByNotUserIdAsync(aspNetUserId)).ConfigureAwait(true);
+            var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
+
+            return resources;
+        }
     }
 }

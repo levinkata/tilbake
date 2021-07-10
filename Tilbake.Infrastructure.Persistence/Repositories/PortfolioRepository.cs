@@ -147,5 +147,16 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                 return ex.HResult;
             }
         }
+
+        public async Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+
+            return await Task.Run(() => _context.Portfolios
+                                                .Where(c => !c.AspnetUserPortfolios
+                                                .Any(u => u.AspNetUserId == aspNetUserId))
+                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public Receivable()
         {
+            ReceivableDocuments = new HashSet<ReceivableDocument>();
             ReceivableInvoices = new HashSet<ReceivableInvoice>();
         }
 
@@ -22,6 +23,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual PaymentType PaymentType { get; set; }
+        public virtual ICollection<ReceivableDocument> ReceivableDocuments { get; set; }
         public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
     }
 }

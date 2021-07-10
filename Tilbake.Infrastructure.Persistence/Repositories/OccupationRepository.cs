@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 
@@ -13,9 +15,11 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
     public class OccupationRepository : IOccupationRepository
     {
         private readonly TilbakeDbContext _context;
-
-        public OccupationRepository(TilbakeDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        
+        public OccupationRepository(TilbakeDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
@@ -55,7 +59,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             {
                 return occupation;
             }
-            
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier) // will give the user's userId
+            ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
+
             await Task.Run(() => _context.Occupations.Remove(occupation)).ConfigureAwait(true);
             //  await _context.SaveChangesAsync().ConfigureAwait(true);
             await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);

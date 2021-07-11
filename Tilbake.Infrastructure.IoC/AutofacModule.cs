@@ -1,6 +1,8 @@
 using Autofac;
 using Tilbake.Application.Services;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 using Tilbake.Infrastructure.Persistence.Repositories;
+using Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork;
 
 namespace Tilbake.Infrastructure.IoC
 {
@@ -17,6 +19,8 @@ namespace Tilbake.Infrastructure.IoC
                     .Where(t => t.Name.EndsWith("Service"))
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
+
+            builder.RegisterType(typeof(UnitOfWork)).As(typeof(IUnitOfWork)).InstancePerLifetimeScope();
 
             //builder.RegisterGeneric(typeof(ApplicationUserClaimsPrincipalFactory<,>))
             //        .As(typeof(IUserClaimsPrincipalFactory<ApplicationUser>))

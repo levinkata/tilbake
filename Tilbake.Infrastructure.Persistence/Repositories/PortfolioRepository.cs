@@ -1,9 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
@@ -33,6 +33,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
                 portfolio.Id = Guid.NewGuid();
                 await _context.Portfolios.AddAsync(portfolio).ConfigureAwait(true);
+
                 return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
             }
             catch (DbUpdateException ex)

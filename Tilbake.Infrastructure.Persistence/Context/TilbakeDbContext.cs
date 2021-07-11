@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
+using Tilbake.Domain.Models.Common;
 
 namespace Tilbake.Infrastructure.Persistence.Context
 {
@@ -14,7 +18,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
         {
         }
 
-        public virtual DbSet<Address> Addresses { get; set; }
+        //public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<AllRisk> AllRisks { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
@@ -138,34 +143,118 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-//            }
-//        }
+        public virtual async Task<int> SaveChangesAsync(string userId = null)
+        {
+            OnBeforeSaveChanges(userId);
+            var result = await base.SaveChangesAsync();
+            return result;
+        }
+
+        private void OnBeforeSaveChanges(string userId)
+        {
+            ChangeTracker.DetectChanges();
+            var auditEntries = new List<AuditEntry>();
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                    continue;
+                var auditEntry = new AuditEntry(entry)
+                {
+                    TableName = entry.Entity.GetType().Name,
+                    UserId = userId
+                };
+                auditEntries.Add(auditEntry);
+
+                foreach (var property in entry.Properties)
+                {
+                    string propertyName = property.Metadata.Name;
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                        continue;
+                    }
+
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            auditEntry.AuditType = AuditType.Create;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            break;
+
+                        case EntityState.Deleted:
+                            auditEntry.AuditType = AuditType.Delete;
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            break;
+
+                        case EntityState.Modified:
+                            if (property.IsModified)
+                            {
+                                auditEntry.ChangedColumns.Add(propertyName);
+                                auditEntry.AuditType = AuditType.Update;
+                                auditEntry.OldValues[propertyName] = property.OriginalValue;
+                                auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            }
+                            break;
+                    }
+                }
+            }
+            foreach (var auditEntry in auditEntries)
+            {
+                Audits.Add(auditEntry.ToAudit());
+            }
+        }
+
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+        //            }
+        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Address>(entity =>
+            //modelBuilder.Entity<Address>(entity =>
+            //{
+            //    entity.ToTable("Address");
+
+            //    entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+            //    entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+            //    entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+            //    entity.Property(e => e.PhysicalAddress)
+            //        .IsRequired()
+            //        .HasMaxLength(100);
+
+            //    entity.Property(e => e.PostalAddress).HasMaxLength(50);
+            //});
+
+            modelBuilder.Entity<Audit>(entity =>
             {
-                entity.ToTable("Address");
+                entity.ToTable("Audit");
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+                entity.Property(e => e.DateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.DateModified).HasColumnType("datetime");
+                entity.Property(e => e.PrimaryKey).HasMaxLength(50);
 
-                entity.Property(e => e.PhysicalAddress)
+                entity.Property(e => e.TableName)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.PostalAddress).HasMaxLength(50);
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<AllRisk>(entity =>

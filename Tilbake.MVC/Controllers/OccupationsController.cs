@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -64,6 +65,8 @@ namespace Tilbake.MVC.Controllers
             {
                 Occupation occupation = _mapper.Map<OccupationSaveResource, Occupation>(occupationSaveResource);
                 occupation.Id = Guid.NewGuid();
+
+                var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
 
                 var result = await _occupationService.AddAsync(occupation).ConfigureAwait(true);
                 if (!result.Success)

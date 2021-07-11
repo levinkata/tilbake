@@ -24,7 +24,7 @@ namespace Tilbake.Application.Services
         {
             var portfolio = _mapper.Map<PortfolioSaveResource, Portfolio>(resource);
             portfolio.Id = Guid.NewGuid();
-
+            
             return await Task.Run(() => _portfolioRepository.AddAsync(portfolio)).ConfigureAwait(true);
         }
 

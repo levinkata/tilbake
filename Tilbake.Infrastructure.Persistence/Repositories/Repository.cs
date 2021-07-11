@@ -26,7 +26,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return entities;
         }
 
-        public async Task<TEntity> Delete(Guid id)
+        public async Task<TEntity> DeleteAsync(Guid id)
         {
             var entity = await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
             if (entity == null)
@@ -38,7 +38,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return entity;
         }
 
-        public async Task<TEntity> Delete(TEntity entity)
+        public async Task<TEntity> DeleteAsync(TEntity entity)
         {
             if (entity == null)
             {
@@ -65,17 +65,17 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => _context.Set<TEntity>().Where(predicate).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await Task.Run(() => _context.Set<TEntity>().AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
-        public async Task<TEntity> GetById(Guid id)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
             return await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
         }
 
-        public async Task<TEntity> Update(TEntity entity)
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
             await Task.Run(() => _context.Set<TEntity>().Update(entity)).ConfigureAwait(true);
             return entity;

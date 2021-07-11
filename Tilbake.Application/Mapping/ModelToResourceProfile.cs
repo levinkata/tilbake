@@ -15,6 +15,8 @@ namespace Tilbake.Application.Mapping
             CreateMap<BankBranch, BankBranchResource>()
                     .ForMember(dest => dest.BankName, opt => opt.MapFrom(src => src.Bank.Name)).ReverseMap();
 
+            CreateMap<Carrier, CarrierResource>().ReverseMap();
+
             CreateMap<Client, ClientResource>()
                     .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType.Name))
                     .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))

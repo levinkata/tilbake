@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Models;
-using Tilbake.MVC.Areas.Identity;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 
@@ -15,11 +14,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
     public class OccupationRepository : IOccupationRepository
     {
         private readonly TilbakeDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
         
-        public OccupationRepository(TilbakeDbContext context, UserManager<ApplicationUser> userManager)
+        public OccupationRepository(TilbakeDbContext context)
         {
-            _userManager = userManager;
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
@@ -33,8 +30,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<Occupation>> AddRangeAsync(IEnumerable<Occupation> occupations)
         {
             await _context.Occupations.AddRangeAsync(occupations).ConfigureAwait(true);
-            await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
-            // await _context.SaveChangesAsync().ConfigureAwait(true);
+            //  await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _context.SaveChangesAsync().ConfigureAwait(true);
             return occupations;
         }
 
@@ -59,12 +56,12 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             {
                 return occupation;
             }
-            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier) // will give the user's userId
-            ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
+            //  var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier) // will give the user's userId
+            //  ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
 
             await Task.Run(() => _context.Occupations.Remove(occupation)).ConfigureAwait(true);
-            //  await _context.SaveChangesAsync().ConfigureAwait(true);
-            await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _context.SaveChangesAsync().ConfigureAwait(true);
+            //  await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             return occupation;
         }
@@ -107,10 +104,10 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             /// Update Students Set Class = 12 where Id = 1;
             /// instead of:
             /// Update Students Set Age = 25, Class = 12, Name = 'Mukesh' where Id = 1;
-            var oldOccupation = await _context.Occupations.FindAsync(occupation.Id);
-            await Task.Run(() => _context.Entry(oldOccupation).CurrentValues.SetValues(occupation)).ConfigureAwait(true);
-            //  await _context.SaveChangesAsync().ConfigureAwait(true);
-            await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+            //  var oldOccupation = await _context.Occupations.FindAsync(occupation.Id);
+            //  await Task.Run(() => _context.Entry(oldOccupation).CurrentValues.SetValues(occupation)).ConfigureAwait(true);
+            await _context.SaveChangesAsync().ConfigureAwait(true);
+            //  await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
             return occupation;
         }
     }

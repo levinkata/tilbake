@@ -12,6 +12,7 @@ namespace Tilbake.Domain.Models.Common
         {
             Entry = entry;
         }
+
         public EntityEntry Entry { get; }
         public string UserId { get; set; }
         public string TableName { get; set; }
@@ -20,9 +21,11 @@ namespace Tilbake.Domain.Models.Common
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
         public AuditType AuditType { get; set; }
         public List<string> ChangedColumns { get; } = new List<string>();
+
         public Audit ToAudit()
         {
             var audit = new Audit();
+
             audit.UserId = UserId;
             audit.Type = AuditType.ToString();
             audit.TableName = TableName;
@@ -31,7 +34,8 @@ namespace Tilbake.Domain.Models.Common
             audit.OldValues = OldValues.Count == 0 ? null : JsonConvert.SerializeObject(OldValues);
             audit.NewValues = NewValues.Count == 0 ? null : JsonConvert.SerializeObject(NewValues);
             audit.AffectedColumns = ChangedColumns.Count == 0 ? null : JsonConvert.SerializeObject(ChangedColumns);
+            
             return audit;
-    }
+        }
     }
 }

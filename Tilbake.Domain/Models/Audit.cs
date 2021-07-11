@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tilbake.Domain.Models.Common
+namespace Tilbake.Domain.Models
 {
     public partial class Audit
     {

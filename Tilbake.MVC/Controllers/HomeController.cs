@@ -26,9 +26,10 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            var resources = await _portfolioService.GetByUserIdAsync(user.Id).ConfigureAwait(true);
-            return View(resources);
+            //var user = await _userManager.GetUserAsync(HttpContext.User);
+            //var resources = await _portfolioService.GetByUserIdAsync(user.Id).ConfigureAwait(true);
+            //return View(resources);
+            return await Task.Run(() => Ok("Testing Audit"));
         }
 
         public IActionResult Privacy()

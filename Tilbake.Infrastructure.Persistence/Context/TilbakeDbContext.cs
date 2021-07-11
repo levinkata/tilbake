@@ -1,24 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
+using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Context
 {
     public partial class TilbakeDbContext : DbContext
     {
-        public TilbakeDbContext()
-        {
-        }
+        private readonly string _userId;
 
-        public TilbakeDbContext(DbContextOptions<TilbakeDbContext> options)
+        public TilbakeDbContext(DbContextOptions<TilbakeDbContext> options, IGetClaimsProvider userData)
             : base(options)
         {
+            _userId = userData.UserId;
         }
 
-        //public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Domain.Models.Address> Addresses { get; set; }
         public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<AllRisk> AllRisks { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
@@ -143,14 +144,20 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
 
-        public virtual async Task<int> SaveChangesAsync(string userId = null)
+        //I only have to override these two version of SaveChanges, as the other two versions call these
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            OnBeforeSaveChanges(userId);
-            var result = await base.SaveChangesAsync();
-            return result;
+            OnBeforeSaveChanges(_userId);
+            return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        private void OnBeforeSaveChanges(string userId)
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            OnBeforeSaveChanges(_userId);
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void OnBeforeSaveChanges(string userId = null)
         {
             ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditEntry>();
@@ -204,35 +211,35 @@ namespace Tilbake.Infrastructure.Persistence.Context
             }
         }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-        //            }
-        //        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            //modelBuilder.Entity<Address>(entity =>
-            //{
-            //    entity.ToTable("Address");
+            modelBuilder.Entity<Domain.Models.Address>(entity =>
+            {
+                entity.ToTable("Address");
 
-            //    entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-            //    entity.Property(e => e.DateAdded).HasColumnType("datetime");
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
-            //    entity.Property(e => e.DateModified).HasColumnType("datetime");
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-            //    entity.Property(e => e.PhysicalAddress)
-            //        .IsRequired()
-            //        .HasMaxLength(100);
+                entity.Property(e => e.PhysicalAddress)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
-            //    entity.Property(e => e.PostalAddress).HasMaxLength(50);
-            //});
+                entity.Property(e => e.PostalAddress).HasMaxLength(50);
+            });
 
             modelBuilder.Entity<Audit>(entity =>
             {

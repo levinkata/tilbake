@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -34,13 +32,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var carrier = await _carrierService.GetByIdAsync((Guid)id);
-            if (carrier == null)
+            var resource = await _carrierService.GetByIdAsync((Guid)id);
+            if (resource == null)
             {
                 return NotFound();
             }
 
-            return View(carrier);
+            return View(resource);
         }
 
         // GET: Carriers/Create
@@ -72,12 +70,12 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var carrier = await _carrierService.GetByIdAsync((Guid)id);
-            if (carrier == null)
+            var resource = await _carrierService.GetByIdAsync((Guid)id);
+            if (resource == null)
             {
                 return NotFound();
             }
-            return View(carrier);
+            return View(resource);
         }
 
         // POST: Carriers/Edit/5
@@ -115,13 +113,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var carrier = await _carrierService.GetByIdAsync((Guid)id);
-            if (carrier == null)
+            var resource = await _carrierService.GetByIdAsync((Guid)id);
+            if (resource == null)
             {
                 return NotFound();
             }
 
-            return View(carrier);
+            return View(resource);
         }
 
         // POST: Carriers/Delete/5

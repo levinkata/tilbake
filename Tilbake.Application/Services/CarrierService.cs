@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -39,12 +40,15 @@ namespace Tilbake.Application.Services
         {
             var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
             await _unitOfWork.Carriers.DeleteAsync(carrier).ConfigureAwait(true);
+
             return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
         public async Task<IEnumerable<CarrierResource>> GetAllAsync()
         {
             var result = await Task.Run(() => _unitOfWork.Carriers.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
             var resources = _mapper.Map<IEnumerable<Carrier>, IEnumerable<CarrierResource>>(result);
 
             return resources;
@@ -60,8 +64,9 @@ namespace Tilbake.Application.Services
 
         public async Task<int> UpdateAsync(CarrierResource resource)
         {
-            var portfolio = _mapper.Map<CarrierResource, Carrier>(resource);
-            await _unitOfWork.Carriers.UpdateAsync(portfolio).ConfigureAwait(true);
+            var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
+            await _unitOfWork.Carriers.UpdateAsync(resource.Id, carrier).ConfigureAwait(true);
+
             return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }

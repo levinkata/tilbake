@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
@@ -19,16 +19,13 @@ namespace Tilbake.MVC.Controllers
         private readonly IOccupationService _occupationService;
         private readonly ITitleService _titleService;
 
-        private readonly IMapper _mapper;
-
         public ClientsController(IClientService clientService,
                                 IClientTypeService clientTypeService,
                                 ICountryService countryService,
                                 IGenderService genderService,
                                 IMaritalStatusService maritalStatusService,
                                 IOccupationService occupationService,
-                                ITitleService titleService,
-                                IMapper mapper)
+                                ITitleService titleService)
         {
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
             _clientTypeService = clientTypeService ?? throw new ArgumentNullException(nameof(clientTypeService));
@@ -36,21 +33,16 @@ namespace Tilbake.MVC.Controllers
             _genderService = genderService ?? throw new ArgumentNullException(nameof(genderService));
             _maritalStatusService = maritalStatusService ?? throw new ArgumentNullException(nameof(maritalStatusService));
             _occupationService = occupationService ?? throw new ArgumentNullException(nameof(occupationService));
-            _titleService = titleService ?? throw new ArgumentNullException(nameof(titleService));                                                                                    
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _titleService = titleService ?? throw new ArgumentNullException(nameof(titleService));
         }
 
-        // GET: ClientsController
+        // GET: Clients
         public async Task<IActionResult> Index()
         {
-            //var result = await _clientService.GetAllAsync().ConfigureAwait(true);
-            //var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
-
-            //return View(resources);
             return await Task.Run(() => View()).ConfigureAwait(true);
         }
 
-        // GET: ClientsController/GetByPortfolio/5
+        // GET: Clients/GetByPortfolio/5
         public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
         {
             PortfolioResource resource = new PortfolioResource()
@@ -61,20 +53,24 @@ namespace Tilbake.MVC.Controllers
             return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
-        // GET: ClientsController/Details/5
-        public async Task<ActionResult> Details(Guid id)
+        // GET: Clients/Details/5
+        public async Task<ActionResult> Details(Guid? id)
         {
-            var result = await _clientService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
-            return View(clientResource);
+            var resource = await _clientService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
-        // GET: ClientsController/Create
+        // GET: Clients/Create
         public async Task<ActionResult> Create()
         {
             var clientTypes = await _clientTypeService.GetAllAsync();
@@ -84,7 +80,7 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();                                                                        
 
-            ClientSaveResource clientSaveResource = new ClientSaveResource()
+            ClientSaveResource resource = new ClientSaveResource()
             {
                 ClientTypes = new SelectList(clientTypes, "Id", "Name"),
                 Countries = new SelectList(countries, "Id", "Name"),
@@ -94,29 +90,22 @@ namespace Tilbake.MVC.Controllers
                 Titles = new SelectList(titles, "Id", "Name")
             };
 
-            return View(clientSaveResource);
+            return View(resource);
         }
 
-        // POST: ClientsController/Create
+        // POST: Clients/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(ClientSaveResource clientSaveResource)
+        public async Task<ActionResult> Create(ClientSaveResource resource)
         {
-            if (clientSaveResource == null)
+            if (resource == null)
             {
-                throw new ArgumentNullException(nameof(clientSaveResource));
+                throw new ArgumentNullException(nameof(resource));
             }
 
             if (ModelState.IsValid)
             {
-                Client client = _mapper.Map<ClientSaveResource, Client>(clientSaveResource);
-                client.Id = Guid.NewGuid();
-
-                var result = await _clientService.AddAsync(client).ConfigureAwait(true);
-                if (!result.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
+                await _clientService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -127,90 +116,24 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            clientSaveResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientSaveResource.ClientTypeId);
-            clientSaveResource.Countries = new SelectList(countries, "Id", "Name", clientSaveResource.CountryId);
-            clientSaveResource.Genders = new SelectList(genders, "Id", "Name", clientSaveResource.GenderId);
-            clientSaveResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientSaveResource.MaritalStatusId);
-            clientSaveResource.Occupations = new SelectList(occupations, "Id", "Name", clientSaveResource.OccupationId);
-            clientSaveResource.Titles = new SelectList(titles, "Id", "Name", clientSaveResource.TitleId);
+            resource.ClientTypes = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.Countries = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.Genders = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.Occupations = new SelectList(occupations, "Id", "Name", resource.OccupationId);
+            resource.Titles = new SelectList(titles, "Id", "Name", resource.TitleId);
 
-            return View(clientSaveResource);
+            return View(resource);
         }
 
-        // GET: ClientsController/AddToPortfolio/5
-        public async Task<ActionResult> AddToPortfolio(Guid portfolioId)
-        {
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
-
-            ClientSaveResource clientSaveResource = new ClientSaveResource()
-            {
-                PortfolioId = portfolioId,
-                ClientTypes = new SelectList(clientTypes, "Id", "Name"),
-                Countries = new SelectList(countries, "Id", "Name"),
-                Genders = new SelectList(genders, "Id", "Name"),
-                MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name"),
-                Occupations = new SelectList(occupations, "Id", "Name"),
-                Titles = new SelectList(titles, "Id", "Name")
-            };
-
-            return View(clientSaveResource);
-        }
-
-        // POST: ClientsController/AddToPortfolio/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddToPortfolio(ClientSaveResource clientSaveResource)
-        {
-            if (clientSaveResource == null)
-            {
-                throw new ArgumentNullException(nameof(clientSaveResource));
-            }
-
-            if (ModelState.IsValid)
-            {
-                Client client = _mapper.Map<ClientSaveResource, Client>(clientSaveResource);
-                client.Id = Guid.NewGuid();
-
-                var result = await _clientService.AddToPortfolioAsync(clientSaveResource.PortfolioId, client).ConfigureAwait(true);
-                if (!result.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
-                return RedirectToAction(nameof(GetByPortfolio), new { portfolioId = clientSaveResource.PortfolioId });
-            }
-
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
-
-            clientSaveResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientSaveResource.ClientTypeId);
-            clientSaveResource.Countries = new SelectList(countries, "Id", "Name", clientSaveResource.CountryId);
-            clientSaveResource.Genders = new SelectList(genders, "Id", "Name", clientSaveResource.GenderId);
-            clientSaveResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientSaveResource.MaritalStatusId);
-            clientSaveResource.Occupations = new SelectList(occupations, "Id", "Name", clientSaveResource.OccupationId);
-            clientSaveResource.Titles = new SelectList(titles, "Id", "Name", clientSaveResource.TitleId);
-
-            return View(clientSaveResource);
-        }
-
-        // GET: ClientsController/Edit/5
+        // GET: Clients/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
-            var result = await _clientService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            var resource = await _clientService.GetByIdAsync((Guid)id);
+            if (resource == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
-
-            var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
 
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
@@ -219,34 +142,35 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            clientResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientResource.ClientTypeId);
-            clientResource.Countries = new SelectList(countries, "Id", "Name", clientResource.CountryId);
-            clientResource.Genders = new SelectList(genders, "Id", "Name", clientResource.GenderId);
-            clientResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientResource.MaritalStatusId);
-            clientResource.Occupations = new SelectList(occupations, "Id", "Name", clientResource.OccupationId);
-            clientResource.Titles = new SelectList(titles, "Id", "Name", clientResource.TitleId);
+            resource.ClientTypes = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.Countries = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.Genders = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.Occupations = new SelectList(occupations, "Id", "Name", resource.OccupationId);
+            resource.Titles = new SelectList(titles, "Id", "Name", resource.TitleId);
 
-            return View(clientResource);
+            return View(resource);
         }
 
-        // POST: ClientsController/Edit/5
+        // POST: Clients/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, ClientResource clientResource)
+        public async Task<ActionResult> Edit(Guid id, ClientResource resource)
         {
-            if (clientResource == null)
+            if (resource == null)
             {
-                throw new ArgumentNullException(nameof(clientResource));
+                throw new ArgumentNullException(nameof(resource));
             }
 
             if (ModelState.IsValid)
             {
-                Client client = _mapper.Map<ClientResource, Client>(clientResource);
-
-                var result = await _clientService.UpdateAsync(id, client).ConfigureAwait(true);
-                if (!result.Success)
+                try
                 {
-                    return BadRequest(new ErrorResource(result.Message));
+                    await _clientService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -258,55 +182,41 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            clientResource.ClientTypes = new SelectList(clientTypes, "Id", "Name", clientResource.ClientTypeId);
-            clientResource.Countries = new SelectList(countries, "Id", "Name", clientResource.CountryId);
-            clientResource.Genders = new SelectList(genders, "Id", "Name", clientResource.GenderId);
-            clientResource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", clientResource.MaritalStatusId);
-            clientResource.Occupations = new SelectList(occupations, "Id", "Name", clientResource.OccupationId);
-            clientResource.Titles = new SelectList(titles, "Id", "Name", clientResource.TitleId);
+            resource.ClientTypes = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.Countries = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.Genders = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.Occupations = new SelectList(occupations, "Id", "Name", resource.OccupationId);
+            resource.Titles = new SelectList(titles, "Id", "Name", resource.TitleId);
 
-            return View(clientResource);
+            return View(resource);
         }
 
-        // GET: ClientsController/Delete/5
-        public async Task<ActionResult> Delete(Guid id)
+        // GET: Clients/Delete/5
+        public async Task<ActionResult> Delete(Guid? id)
         {
-            var result = await _clientService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
-            return View(clientResource);
+            var resource = await _clientService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
-        // POST: ClientsController/Delete/5
+        // POST: Clients/Delete/5
         [HttpPost]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            var result = await _clientService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
-            {
-                return BadRequest(new ErrorResource(result.Message));
-            }
-
-            try
-            {
-                var deleteResult = await _clientService.DeleteAsync(id).ConfigureAwait(true);
-                if (!deleteResult.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                var clientResource = _mapper.Map<Client, ClientResource>(result.Resource);
-                return View(clientResource);
-            }
+            await _clientService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

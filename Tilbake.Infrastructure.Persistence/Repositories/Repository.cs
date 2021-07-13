@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Repositories
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext _context;
+        protected readonly TilbakeDbContext _context;
 
-        public Repository(DbContext context) => _context = context;
+        public Repository(TilbakeDbContext context) => _context = context;
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
@@ -75,8 +76,11 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity entity)
+        public async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
         {
+            //var oldEntity = await _context.Set<TEntity>().FindAsync(id);
+            //_context.Entry(oldEntity).CurrentValues.SetValues(entity);
+
             await Task.Run(() => _context.Set<TEntity>().Update(entity)).ConfigureAwait(true);
             return entity;
         }

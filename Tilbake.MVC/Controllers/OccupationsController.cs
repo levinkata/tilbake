@@ -1,46 +1,44 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.MVC.Controllers
 {
+    [Authorize]
     public class OccupationsController : Controller
     {
         private readonly IOccupationService _occupationService;
-        private readonly IMapper _mapper;
 
-        public OccupationsController(IOccupationService occupationService, IMapper mapper)
+        public OccupationsController(IOccupationService occupationService)
         {
-            _occupationService = occupationService ?? throw new ArgumentNullException(nameof(occupationService));
-
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _occupationService = occupationService;
         }
+
         // GET: Occupations
         public async Task<IActionResult> Index()
         {
-            var result = await _occupationService.GetAllAsync().ConfigureAwait(true);
-            var resources = _mapper.Map<IEnumerable<Occupation>, IEnumerable<OccupationResource>>(result);
-
-            return View(resources);
+            return View(await _occupationService.GetAllAsync());
         }
 
         // GET: Occupations/Details/5
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(Guid? id)
         {
-            var result = await _occupationService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
-            return View(occupationResource);
+            var resource = await _occupationService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
         // GET: Occupations/Create
@@ -54,41 +52,30 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(OccupationSaveResource occupationSaveResource)
+        public async Task<IActionResult> Create(OccupationSaveResource resource)
         {
-            if (occupationSaveResource == null)
-            {
-                throw new ArgumentNullException(nameof(occupationSaveResource));
-            }
-
             if (ModelState.IsValid)
             {
-                Occupation occupation = _mapper.Map<OccupationSaveResource, Occupation>(occupationSaveResource);
-                occupation.Id = Guid.NewGuid();
-
-                var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
-
-                var result = await _occupationService.AddAsync(occupation).ConfigureAwait(true);
-                if (!result.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
+                await _occupationService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
-            return View(occupationSaveResource);
+            return View(resource);
         }
 
         // GET: Occupations/Edit/5
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
-            var result = await _occupationService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
-            return View(occupationResource);
+            var resource = await _occupationService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+            return View(resource);
         }
 
         // POST: Occupations/Edit/5
@@ -96,38 +83,43 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, OccupationResource occupationResource)
+        public async Task<IActionResult> Edit(Guid? id, OccupationResource resource)
         {
-            if (id != occupationResource.Id)
+            if (id != resource.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                Occupation occupation = _mapper.Map<OccupationResource, Occupation>(occupationResource);
-
-                var result = await _occupationService.UpdateAsync(id, occupation).ConfigureAwait(true);
-                if (!result.Success)
+                try
                 {
-                    return BadRequest(new ErrorResource(result.Message));
+                    await _occupationService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(occupationResource);
+            return View(resource);
         }
 
         // GET: Occupations/Delete/5
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
-            var result = await _occupationService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
-            return View(occupationResource);
+            var resource = await _occupationService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
         // POST: Occupations/Delete/5
@@ -135,26 +127,8 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var result = await _occupationService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
-            {
-                return BadRequest(new ErrorResource(result.Message));
-            }
-
-            try
-            {
-                var deleteResult = await _occupationService.DeleteAsync(id).ConfigureAwait(true);
-                if (!deleteResult.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                var occupationResource = _mapper.Map<Occupation, OccupationResource>(result.Resource);
-                return View(occupationResource);
-            }
+            await _occupationService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

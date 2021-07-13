@@ -8,7 +8,7 @@ namespace Tilbake.Application.Resources
         public string UserId { get; set; }
 
         [Display(Name = "Portfolios")]
-        public string[] Portfolios { get; set; }
+        public string[] PortfolioIds { get; set; }
 
         [Display(Name = "Assigned Portfolios")]
         public string[] AssignedPortfolios { get; set; }

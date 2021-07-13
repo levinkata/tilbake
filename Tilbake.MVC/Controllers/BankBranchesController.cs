@@ -1,58 +1,50 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.MVC.Controllers
 {
+    [Authorize]
     public class BankBranchesController : Controller
     {
-
         private readonly IBankBranchService _bankBranchService;
-        private readonly IMapper _mapper;
 
-        public BankBranchesController(IBankBranchService bankBranchService, IMapper mapper)
+        public BankBranchesController(IBankBranchService bankBranchService)
         {
-            _bankBranchService = bankBranchService ?? throw new ArgumentNullException(nameof(bankBranchService));
-
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _bankBranchService = bankBranchService;
         }
 
         // GET: BankBranches
         public async Task<IActionResult> Index()
         {
-            var result = await _bankBranchService.GetAllAsync().ConfigureAwait(true);
-            var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
-
-            return View(resources);
+            return View(await _bankBranchService.GetAllAsync());
         }
 
         // GET: BankBranches/Details/5
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(Guid? id)
         {
-            var result = await _bankBranchService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var bankBranchResource = _mapper.Map<BankBranch, BankBranchResource>(result.Resource);
-            return View(bankBranchResource);
+            var resource = await _bankBranchService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
         // GET: BankBranches/Create
-        public IActionResult Create(Guid bankId)
+        public IActionResult Create()
         {
-            BankBranchSaveResource bankBranchSaveResource = new BankBranchSaveResource()
-            {
-                BankId = bankId
-            };
-            return View(bankBranchSaveResource);
+            return View();
         }
 
         // POST: BankBranches/Create
@@ -60,39 +52,30 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BankBranchSaveResource bankBranchSaveResource)
+        public async Task<IActionResult> Create(BankBranchSaveResource resource)
         {
-            if (bankBranchSaveResource == null)
-            {
-                throw new ArgumentNullException(nameof(bankBranchSaveResource));
-            }
-
             if (ModelState.IsValid)
             {
-                BankBranch bankBranch = _mapper.Map<BankBranchSaveResource, BankBranch>(bankBranchSaveResource);
-                bankBranch.Id = Guid.NewGuid();
-
-                var result = await _bankBranchService.AddAsync(bankBranch).ConfigureAwait(true);
-                if (!result.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
+                await _bankBranchService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
-            return View(bankBranchSaveResource);
+            return View(resource);
         }
 
         // GET: BankBranches/Edit/5
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
-            var result = await _bankBranchService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var bankBranchResource = _mapper.Map<BankBranch, BankBranchResource>(result.Resource);
-            return View(bankBranchResource);
+            var resource = await _bankBranchService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+            return View(resource);
         }
 
         // POST: BankBranches/Edit/5
@@ -100,38 +83,43 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, BankBranchResource bankBranchResource)
+        public async Task<IActionResult> Edit(Guid? id, BankBranchResource resource)
         {
-            if (id != bankBranchResource.Id)
+            if (id != resource.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                BankBranch bankBranch = _mapper.Map<BankBranchResource, BankBranch>(bankBranchResource);
-
-                var result = await _bankBranchService.UpdateAsync(id, bankBranch).ConfigureAwait(true);
-                if (!result.Success)
+                try
                 {
-                    return BadRequest(new ErrorResource(result.Message));
+                    await _bankBranchService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(bankBranchResource);
+            return View(resource);
         }
 
         // GET: BankBranches/Delete/5
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
-            var result = await _bankBranchService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var bankBranchResource = _mapper.Map<BankBranch, BankBranchResource>(result.Resource);
-            return View(bankBranchResource);
+            var resource = await _bankBranchService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
         // POST: BankBranches/Delete/5
@@ -139,26 +127,8 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var result = await _bankBranchService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
-            {
-                return BadRequest(new ErrorResource(result.Message));
-            }
-
-            try
-            {
-                var deleteResult = await _bankBranchService.DeleteAsync(id).ConfigureAwait(true);
-                if (!deleteResult.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                var bankBranchResource = _mapper.Map<BankBranch, BankBranchResource>(result.Resource);
-                return View(bankBranchResource);
-            }
+            await _bankBranchService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

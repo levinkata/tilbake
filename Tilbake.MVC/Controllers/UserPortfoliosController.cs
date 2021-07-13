@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
@@ -15,15 +13,12 @@ namespace Tilbake.MVC.Controllers
     public class UserPortfoliosController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IPortfolioService _portfolioService;
         private readonly IUserPortfolioService _userPortfolioService;
 
         public UserPortfoliosController(UserManager<ApplicationUser> userManager,
-                    IPortfolioService portfolioService,
                     IUserPortfolioService userPortfolioService)
         {
             _userManager = userManager;
-            _portfolioService = portfolioService;
             _userPortfolioService = userPortfolioService;
         }
 
@@ -42,13 +37,13 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> FillMultiSelectLists(string userId)
         {
-            var unAssignedPortfolios = await _portfolioService.GetByNotUserIdAsync(userId).ConfigureAwait(true);
+            var unAssignedPortfolios = await _userPortfolioService.GetByNotUserIdAsync(userId).ConfigureAwait(true);
 
             var userPortfolios = await _userPortfolioService.GetByUserIdAsync(userId).ConfigureAwait(true);
             var assignedPortfolios = userPortfolios.Select(r => new
                                                     {
-                                                        Id = r.PortfolioId,
-                                                        Name = r.PortfolioName
+                                                        Id = r.Id,
+                                                        Name = r.Name
                                                     });
 
             return Json(new { unAssignedPortfolios, assignedPortfolios });
@@ -60,7 +55,7 @@ namespace Tilbake.MVC.Controllers
             UserPortfolioResource resource = new UserPortfolioResource()
             {
                 UserId = userId,
-                Portfolios = portfolios
+                PortfolioIds = portfolios
             };
 
             await _userPortfolioService.AddRangeAsync(resource).ConfigureAwait(true);
@@ -74,7 +69,7 @@ namespace Tilbake.MVC.Controllers
             UserPortfolioResource resource = new UserPortfolioResource()
             {
                 UserId = userId,
-                Portfolios = portfolios
+                PortfolioIds = portfolios
             };
 
             await _userPortfolioService.DeleteRangeAsync(resource).ConfigureAwait(true);

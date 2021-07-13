@@ -24,17 +24,18 @@ namespace Tilbake.Domain.Models.Common
 
         public Audit ToAudit()
         {
-            var audit = new Audit();
+            var audit = new Audit
+            {
+                UserId = UserId,
+                Type = AuditType.ToString(),
+                TableName = TableName,
+                DateTime = DateTime.Now,
+                PrimaryKey = JsonConvert.SerializeObject(KeyValues),
+                OldValues = OldValues.Count == 0 ? null : JsonConvert.SerializeObject(OldValues),
+                NewValues = NewValues.Count == 0 ? null : JsonConvert.SerializeObject(NewValues),
+                AffectedColumns = ChangedColumns.Count == 0 ? null : JsonConvert.SerializeObject(ChangedColumns)
+            };
 
-            audit.UserId = UserId;
-            audit.Type = AuditType.ToString();
-            audit.TableName = TableName;
-            audit.DateTime = DateTime.Now;
-            audit.PrimaryKey = JsonConvert.SerializeObject(KeyValues);
-            audit.OldValues = OldValues.Count == 0 ? null : JsonConvert.SerializeObject(OldValues);
-            audit.NewValues = NewValues.Count == 0 ? null : JsonConvert.SerializeObject(NewValues);
-            audit.AffectedColumns = ChangedColumns.Count == 0 ? null : JsonConvert.SerializeObject(ChangedColumns);
-            
             return audit;
         }
     }

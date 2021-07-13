@@ -1,21 +1,19 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Repositories
 {
-    public class BankBranchRepository : IBankBranchRepository
+    public class BankBranchRepository : Repository<BankBranch>, IBankBranchRepository
     {
-        private readonly TilbakeDbContext _context;
-
-        public BankBranchRepository(TilbakeDbContext context)
+        public BankBranchRepository(TilbakeDbContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+
         }
 
         public async Task<IEnumerable<BankBranch>> GetByBankId(Guid bankId)
@@ -26,86 +24,5 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .OrderBy(n => n.Name)
                                                 .AsNoTracking()).ConfigureAwait(true);
         }
-
-        public async Task<IEnumerable<BankBranch>> GetAllAsync()
-        {
-            return await Task.Run(() => _context.BankBranches
-                                                .Include(b => b.Bank)
-                                                .OrderBy(n => n.Name)
-                                                .AsNoTracking()).ConfigureAwait(true);
-        }
-
-        public async Task<BankBranch> GetByIdAsync(Guid id)
-        {
-            return await Task.Run(() => _context.BankBranches
-                                                .Include(b => b.Bank)
-                                                .Where(e => e.Id == id)
-                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
-        }
-
-        public async Task<BankBranch> AddAsync(BankBranch bankBranch)
-        {
-            await _context.BankBranches.AddAsync(bankBranch).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return bankBranch;
-        }
-
-        public async Task<IEnumerable<BankBranch>> AddRangeAsync(IEnumerable<BankBranch> bankBranches)
-        {
-            await _context.BankBranches.AddRangeAsync(bankBranches).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return bankBranches;
-        }
-
-        public async Task<BankBranch> UpdateAsync(BankBranch bankBranch)
-        {
-            if (bankBranch == null)
-            {
-                return bankBranch;
-            }
-            
-            await Task.Run(() => _context.BankBranches.Update(bankBranch)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return bankBranch;
-        }
-
-        public async Task<BankBranch> DeleteAsync(Guid id)
-        {
-            BankBranch bankBranch = await _context.BankBranches
-                                                    .Where(e => e.Id == id)
-                                                    .FirstOrDefaultAsync().ConfigureAwait(true);
-            if (bankBranch == null)
-            {
-                return bankBranch;
-            }
-
-            await Task.Run(() => _context.BankBranches.Remove(bankBranch)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return bankBranch;
-        }
-
-        public async Task<BankBranch> DeleteAsync(BankBranch bankBranch)
-        {
-            if (bankBranch == null)
-            {
-                return bankBranch;
-            }
-            
-            await Task.Run(() => _context.BankBranches.Remove(bankBranch)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return bankBranch;
-        }
-
-        public async Task<IEnumerable<BankBranch>> DeleteRangeAsync(IEnumerable<BankBranch> bankBranches)
-        {
-            if (bankBranches == null)
-            {
-                return bankBranches;
-            }
-
-            await Task.Run(() => _context.BankBranches.RemoveRange(bankBranches)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return bankBranches;
-        }     
     }
 }

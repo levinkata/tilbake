@@ -1,108 +1,73 @@
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class OccupationService : IOccupationService
     {
-        private readonly IOccupationRepository _occupationRepository;
-        
-        public OccupationService(IOccupationRepository occupationRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public OccupationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _occupationRepository = occupationRepository ?? throw new ArgumentNullException(nameof(occupationRepository));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<OccupationResponse> AddAsync(Occupation occupation)
+        public async Task<int> AddAsync(OccupationSaveResource resource)
         {
-            try
-            {
-                await _occupationRepository.AddAsync(occupation).ConfigureAwait(true);
-                return new OccupationResponse(occupation);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new OccupationResponse($"An error occurred when saving the occupation: {ex.Message}");
-            }
+            var occupation = _mapper.Map<OccupationSaveResource, Occupation>(resource);
+            occupation.Id = Guid.NewGuid();
+
+            await _unitOfWork.Occupations.AddAsync(occupation).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<OccupationResponse> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            var existingOccupation = await _occupationRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingOccupation == null)
-                return new OccupationResponse($"Occupation Id not found: {id}");
-
-            try
-            {
-                await _occupationRepository.DeleteAsync(existingOccupation).ConfigureAwait(false);
-                return new OccupationResponse(existingOccupation);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new OccupationResponse($"An error occurred when deleting the occupation: {ex.Message}");
-            }
+            await _unitOfWork.Occupations.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<OccupationResponse> DeleteAsync(Occupation occupation)
+        public async Task<int> DeleteAsync(OccupationResource resource)
         {
-            if (occupation == null)
-                return new OccupationResponse($"Occupation not found: {occupation}");
+            var occupation = _mapper.Map<OccupationResource, Occupation>(resource);
+            await _unitOfWork.Occupations.DeleteAsync(occupation).ConfigureAwait(true);
 
-            try
-            {
-                await _occupationRepository.DeleteAsync(occupation).ConfigureAwait(false);
-                return new OccupationResponse(occupation);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new OccupationResponse($"An error occurred when deleting the occupation: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Occupation>> GetAllAsync()
+        public async Task<IEnumerable<OccupationResource>> GetAllAsync()
         {
-            return await Task.Run(() => _occupationRepository.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Occupations.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
+            var resources = _mapper.Map<IEnumerable<Occupation>, IEnumerable<OccupationResource>>(result);
+
+            return resources;
         }
 
-        public async Task<OccupationResponse> GetByIdAsync(Guid id)
+        public async Task<OccupationResource> GetByIdAsync(Guid id)
         {
-            var occupation = await _occupationRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (occupation == null)
-                return new OccupationResponse($"Occupation Id not found: {id}");
+            var result = await _unitOfWork.Occupations.GetByIdAsync(id).ConfigureAwait(true);
+            var resources = _mapper.Map<Occupation, OccupationResource>(result);
 
-            return new OccupationResponse(occupation);
+            return resources;
         }
 
-        public async Task<OccupationResponse> UpdateAsync(Guid id, Occupation occupation)
+        public async Task<int> UpdateAsync(OccupationResource resource)
         {
-            if (occupation == null)
-                return new OccupationResponse($"Occupation not found: {occupation}");
+            var occupation = _mapper.Map<OccupationResource, Occupation>(resource);
+            await _unitOfWork.Occupations.UpdateAsync(resource.Id, occupation).ConfigureAwait(true);
 
-            var existingOccupation = await _occupationRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingOccupation == null)
-                return new OccupationResponse($"Occupation Id not found: {id}");
-
-            existingOccupation.Name = occupation.Name;
-
-            try
-            {
-                await _occupationRepository.UpdateAsync(existingOccupation).ConfigureAwait(false);
-                return new OccupationResponse(existingOccupation);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new OccupationResponse($"An error occurred when updating the occupation: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

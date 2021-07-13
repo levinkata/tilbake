@@ -14,20 +14,20 @@ namespace Tilbake.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IPortfolioService _portfolioService;
+        private readonly IUserPortfolioService _userPortfolioService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(IPortfolioService portfolioService, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
+        public HomeController(IUserPortfolioService userPortfolioService, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
-            _portfolioService = portfolioService;
+            _userPortfolioService = userPortfolioService;
             _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var resources = await _portfolioService.GetByUserIdAsync(user.Id).ConfigureAwait(true);
+            var resources = await _userPortfolioService.GetByUserIdAsync(user.Id).ConfigureAwait(true);
             return View(resources);
         }
 

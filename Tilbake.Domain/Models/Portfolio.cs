@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tilbake.Domain.Models.Common;
 
 namespace Tilbake.Domain.Models
 {
-    public partial class Portfolio
+    public partial class Portfolio : IEntity
     {
         public Portfolio()
         {

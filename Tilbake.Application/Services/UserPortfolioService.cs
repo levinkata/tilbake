@@ -5,83 +5,78 @@ using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class UserPortfolioService : IUserPortfolioService
     {
-        private readonly IUserPortfolioRepository _userPortfolioRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UserPortfolioService(IUserPortfolioRepository userPortfolioRepository, IMapper mapper)
+        public UserPortfolioService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _userPortfolioRepository = userPortfolioRepository ?? throw new ArgumentNullException(nameof(userPortfolioRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        }
-
-        public async Task<int> AddAsync(AspnetUserPortfolioResource resource)
-        {
-            var aspnetUserPortfolio = _mapper.Map<AspnetUserPortfolioResource, AspnetUserPortfolio>(resource);
-            return await Task.Run(() => _userPortfolioRepository.AddAsync(aspnetUserPortfolio))
-                                                                .ConfigureAwait(true);
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<int> AddRangeAsync(UserPortfolioResource resources)
         {
             List<AspnetUserPortfolio> aspnetUserPortfolios = new List<AspnetUserPortfolio>();
 
-            int ro = resources.Portfolios.Length;
+            int ro = resources.PortfolioIds.Length;
             var aspNetUserId = resources.UserId;
-            var portfolios = resources.Portfolios;
+            var portfolioIds = resources.PortfolioIds;
 
             for (int i = 0; i < ro; i++)
             {
                 AspnetUserPortfolio aspnetUserPortfolio = new AspnetUserPortfolio()
                 {
                     AspNetUserId = aspNetUserId,
-                    PortfolioId = Guid.Parse(portfolios[i].ToString())
+                    PortfolioId = Guid.Parse(portfolioIds[i].ToString())
                 };
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
 
-            return await Task.Run(() => _userPortfolioRepository.AddRangeAsync(aspnetUserPortfolios)).ConfigureAwait(true);
-        }
-
-        public async Task<int> DeleteAsync(AspnetUserPortfolioResource resource)
-        {
-            var aspnetUserPortfolio = _mapper.Map<AspnetUserPortfolioResource, AspnetUserPortfolio>(resource);
-            return await Task.Run(() => _userPortfolioRepository.DeleteAsync(aspnetUserPortfolio))
-                                                                .ConfigureAwait(true);
+            await _unitOfWork.UserPortfolios.AddRangeAsync(aspnetUserPortfolios).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
         public async Task<int> DeleteRangeAsync(UserPortfolioResource resources)
         {
             List<AspnetUserPortfolio> aspnetUserPortfolios = new List<AspnetUserPortfolio>();
 
-            int ro = resources.Portfolios.Length;
+            int ro = resources.PortfolioIds.Length;
             var aspNetUserId = resources.UserId;
-            var portfolios = resources.Portfolios;
+            var portfolioIds = resources.PortfolioIds;
 
             for (int i = 0; i < ro; i++)
             {
                 AspnetUserPortfolio aspnetUserPortfolio = new AspnetUserPortfolio()
                 {
                     AspNetUserId = aspNetUserId,
-                    PortfolioId = Guid.Parse(portfolios[i].ToString())
+                    PortfolioId = Guid.Parse(portfolioIds[i].ToString())
                 };
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
 
-            return await Task.Run(() => _userPortfolioRepository.DeleteRangeAsync(aspnetUserPortfolios)).ConfigureAwait(true);
+            await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<AspnetUserPortfolioResource>> GetByUserIdAsync(string aspNetUserId)
+        public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
         {
-            var result = await Task.Run(() => _userPortfolioRepository.GetByUserIdAsync(aspNetUserId))
-                                                                        .ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByNotUserIdAsync(aspNetUserId)).ConfigureAwait(true);
+            var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
 
-            var resources = _mapper.Map<IEnumerable<AspnetUserPortfolio>, IEnumerable<AspnetUserPortfolioResource>>(result);
+            return resources;
+        }
+
+        public async Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId)
+        {
+            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByUserIdAsync(aspNetUserId)).ConfigureAwait(true);
+            var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
+
             return resources;
         }
     }

@@ -1,115 +1,80 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class BankBranchService : IBankBranchService
     {
-        private readonly IBankBranchRepository _bankBranchRepository;
-        
-        public BankBranchService(IBankBranchRepository bankBranchRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public BankBranchService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _bankBranchRepository = bankBranchRepository ?? throw new ArgumentNullException(nameof(bankBranchRepository));
-        }
-        
-        public async Task<BankBranchResponse> AddAsync(BankBranch bankBranch)
-        {
-            try
-            {
-                await _bankBranchRepository.AddAsync(bankBranch).ConfigureAwait(true);
-                return new BankBranchResponse(bankBranch);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankBranchResponse($"An error occurred when saving the bank branch: {ex.Message}");
-            }
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<BankBranchResponse> DeleteAsync(Guid id)
+        public async Task<int> AddAsync(BankBranchSaveResource resource)
         {
-            var existingBankBranch = await _bankBranchRepository.GetByIdAsync(id).ConfigureAwait(true);
+            var bankBranch = _mapper.Map<BankBranchSaveResource, BankBranch>(resource);
+            bankBranch.Id = Guid.NewGuid();
 
-            if (existingBankBranch == null)
-                return new BankBranchResponse($"Bank Branch Id not found: {id}");
-
-            try
-            {
-                await _bankBranchRepository.DeleteAsync(existingBankBranch).ConfigureAwait(false);
-                return new BankBranchResponse(existingBankBranch);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankBranchResponse($"An error occurred when deleting the bank branch: {ex.Message}");
-            }
+            await _unitOfWork.BankBranches.AddAsync(bankBranch).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<BankBranchResponse> DeleteAsync(BankBranch bankBranch)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            if (bankBranch == null)
-                return new BankBranchResponse($"Bank Branch not found: {bankBranch}");
-
-            try
-            {
-                await _bankBranchRepository.DeleteAsync(bankBranch).ConfigureAwait(false);
-                return new BankBranchResponse(bankBranch);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankBranchResponse($"An error occurred when deleting the bank branch: {ex.Message}");
-            }
+            await _unitOfWork.BankBranches.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<BankBranch>> GetAllAsync()
+        public async Task<int> DeleteAsync(BankBranchResource resource)
         {
-            return await Task.Run(() => _bankBranchRepository.GetAllAsync()).ConfigureAwait(true);
+            var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
+            await _unitOfWork.BankBranches.DeleteAsync(bankBranch).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<BankBranch>> GetByBankId(Guid bankId)
+        public async Task<IEnumerable<BankBranchResource>> GetAllAsync()
         {
-            return await Task.Run(() => _bankBranchRepository.GetByBankId(bankId)).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.BankBranches.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
+            var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
+
+            return resources;
         }
 
-        public async Task<BankBranchResponse> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<BankBranchResource>> GetByBankId(Guid bankId)
         {
-            var bankBranch = await _bankBranchRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (bankBranch == null)
-                return new BankBranchResponse($"Bank Branch Id not found: {id}");
+            var result = await Task.Run(() => _unitOfWork.BankBranches.GetByBankId(bankId)).ConfigureAwait(true);
+            var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
 
-            return new BankBranchResponse(bankBranch);
+            return resources;
         }
 
-        public async Task<BankBranchResponse> UpdateAsync(Guid id, BankBranch bankBranch)
+        public async Task<BankBranchResource> GetByIdAsync(Guid id)
         {
-            if (bankBranch == null)
-                return new BankBranchResponse($"Bank Branch not found: {bankBranch}");
+            var result = await _unitOfWork.BankBranches.GetByIdAsync(id).ConfigureAwait(true);
+            var resource = _mapper.Map<BankBranch, BankBranchResource>(result);
 
-            var existingBankBranch = await _bankBranchRepository.GetByIdAsync(id).ConfigureAwait(true);
+            return resource;
+        }
 
-            if (existingBankBranch == null)
-                return new BankBranchResponse($"Bank Branch Id not found: {id}");
+        public async Task<int> UpdateAsync(BankBranchResource resource)
+        {
+            var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
+            await _unitOfWork.BankBranches.UpdateAsync(resource.Id, bankBranch).ConfigureAwait(true);
 
-            existingBankBranch.Name = bankBranch.Name;
-            existingBankBranch.SortCode = bankBranch.SortCode;
-            existingBankBranch.SwiftCode = bankBranch.SwiftCode;
-
-            try
-            {
-                await _bankBranchRepository.UpdateAsync(existingBankBranch).ConfigureAwait(false);
-                return new BankBranchResponse(existingBankBranch);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankBranchResponse($"An error occurred when updating the bank branch: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

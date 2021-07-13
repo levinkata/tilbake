@@ -1,108 +1,72 @@
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class TitleService : ITitleService
     {
-        private readonly ITitleRepository _titleRepository;
-        
-        public TitleService(ITitleRepository titleRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public TitleService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _titleRepository = titleRepository ?? throw new ArgumentNullException(nameof(titleRepository));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<TitleResponse> AddAsync(Title title)
+        public async Task<int> AddAsync(TitleSaveResource resource)
         {
-            try
-            {
-                await _titleRepository.AddAsync(title).ConfigureAwait(true);
-                return new TitleResponse(title);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new TitleResponse($"An error occurred when saving the title: {ex.Message}");
-            }
+            var title = _mapper.Map<TitleSaveResource, Title>(resource);
+            title.Id = Guid.NewGuid();
+
+            await _unitOfWork.Titles.AddAsync(title).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<TitleResponse> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            var existingTitle = await _titleRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingTitle == null)
-                return new TitleResponse($"Title Id not found: {id}");
-
-            try
-            {
-                await _titleRepository.DeleteAsync(existingTitle).ConfigureAwait(false);
-                return new TitleResponse(existingTitle);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new TitleResponse($"An error occurred when deleting the title: {ex.Message}");
-            }
+            await _unitOfWork.Titles.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<TitleResponse> DeleteAsync(Title title)
+        public async Task<int> DeleteAsync(TitleResource resource)
         {
-            if (title == null)
-                return new TitleResponse($"Title not found: {title}");
-
-            try
-            {
-                await _titleRepository.DeleteAsync(title).ConfigureAwait(false);
-                return new TitleResponse(title);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new TitleResponse($"An error occurred when deleting the title: {ex.Message}");
-            }
+            var title = _mapper.Map<TitleResource, Title>(resource);
+            await _unitOfWork.Titles.DeleteAsync(title).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Title>> GetAllAsync()
+        public async Task<IEnumerable<TitleResource>> GetAllAsync()
         {
-            return await Task.Run(() => _titleRepository.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Titles.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
+            var resources = _mapper.Map<IEnumerable<Title>, IEnumerable<TitleResource>>(result);
+
+            return resources;
         }
 
-        public async Task<TitleResponse> GetByIdAsync(Guid id)
+        public async Task<TitleResource> GetByIdAsync(Guid id)
         {
-            var title = await _titleRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (title == null)
-                return new TitleResponse($"Title Id not found: {id}");
+            var result = await _unitOfWork.Titles.GetByIdAsync(id).ConfigureAwait(true);
+            var resources = _mapper.Map<Title, TitleResource>(result);
 
-            return new TitleResponse(title);
+            return resources;
         }
 
-        public async Task<TitleResponse> UpdateAsync(Guid id, Title title)
+        public async Task<int> UpdateAsync(TitleResource resource)
         {
-            if (title == null)
-                return new TitleResponse($"Title not found: {title}");
+            var title = _mapper.Map<TitleResource, Title>(resource);
+            await _unitOfWork.Titles.UpdateAsync(resource.Id, title).ConfigureAwait(true);
 
-            var existingTitle = await _titleRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingTitle == null)
-                return new TitleResponse($"Title Id not found: {id}");
-
-            existingTitle.Name = title.Name;
-
-            try
-            {
-                await _titleRepository.UpdateAsync(existingTitle).ConfigureAwait(false);
-                return new TitleResponse(existingTitle);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new TitleResponse($"An error occurred when updating the title: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

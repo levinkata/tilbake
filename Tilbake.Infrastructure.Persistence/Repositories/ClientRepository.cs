@@ -1,150 +1,30 @@
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Repositories
 {
-    public class ClientRepository : IClientRepository
+    public class ClientRepository : Repository<Client>, IClientRepository
     {
-        private readonly TilbakeDbContext _context;
-
-        public ClientRepository(TilbakeDbContext context)
+        public ClientRepository(TilbakeDbContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
 
-        public async Task<Client> AddAsync(Client client)
-        {
-            await _context.Clients.AddAsync(client).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return client;
-        }
-
-        public async Task<IEnumerable<Client>> AddRangeAsync(IEnumerable<Client> clients)
-        {
-            await _context.Clients.AddRangeAsync(clients).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return clients;
-        }
-
-        public async Task<Client> AddToPortfolioAsync(Guid portfolioId, Client client)
-        {
-            await _context.Clients.AddAsync(client).ConfigureAwait(true);
-            PortfolioClient portfolioClient = new PortfolioClient()
-            {
-                Id = Guid.NewGuid(),
-                PortfolioId = portfolioId,
-                ClientId = client.Id
-            };
-            await _context.PortfolioClients.AddAsync(portfolioClient).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return client;
-        }
-
-        public async Task<Client> DeleteAsync(Guid id)
-        {
-            Client client = await _context.Clients
-                                    .Where(e => e.Id == id)
-                                    .FirstOrDefaultAsync().ConfigureAwait(true);            
-            if (client == null)
-            {
-                return client;
-            }
-
-            await Task.Run(() => _context.Clients.Remove(client)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return client;
-        }
-
-        public async Task<Client> DeleteAsync(Client client)
-        {
-            if (client == null)
-            {
-                return client;
-            }
-            
-            await Task.Run(() => _context.Clients.Remove(client)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return client;
-        }
-
-        public async Task<IEnumerable<Client>> DeleteRangeAsync(IEnumerable<Client> clients)
-        {
-            if (clients == null)
-            {
-                return clients;
-            }
-
-            await Task.Run(() => _context.Clients.RemoveRange(clients)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return clients;
-        }
-
-        public async Task<IEnumerable<Client>> GetAllAsync()
-        {
-            IEnumerable<Client> clients = _context.Clients
-                                                .Include(y => y.ClientType)
-                                                .Include(u => u.Country)
-                                                .Include(g => g.Gender)
-                                                .Include(m => m.MaritalStatus)
-                                                .Include(o => o.Occupation)
-                                                .Include(t => t.Title)
-                                                .OrderBy(n => n.LastName)
-                                                .AsNoTracking();
-            return await Task.Run(() => clients).ConfigureAwait(true);
-        }
-
-        public async Task<Client> GetByIdAsync(Guid id)
-        {
-            return await Task.Run(() => _context.Clients
-                                                .Where(e => e.Id == id)
-                                                .Include(y => y.ClientType)
-                                                .Include(u => u.Country)
-                                                .Include(g => g.Gender)
-                                                .Include(m => m.MaritalStatus)
-                                                .Include(o => o.Occupation)
-                                                .Include(t => t.Title)
-                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
         }
 
         public async Task<Client> GetByIdNumberAsync(string idNumber)
         {
             return await Task.Run(() => _context.Clients
+                                                .Include(b => b.ClientType)
+                                                .Include(b => b.Country)
+                                                .Include(b => b.Gender)
+                                                .Include(b => b.MaritalStatus)
+                                                .Include(b => b.Occupation)
+                                                .Include(b => b.Title)
                                                 .Where(e => e.IdNumber == idNumber)
-                                                .Include(y => y.PortfolioClients)
                                                 .FirstOrDefaultAsync()).ConfigureAwait(true);
-        }
-
-        public async Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId)
-        {
-            return await Task.Run(() => _context.Clients
-                                                .Include(y => y.ClientType)
-                                                .Include(u => u.Country)
-                                                .Include(g => g.Gender)
-                                                .Include(m => m.MaritalStatus)
-                                                .Include(o => o.Occupation)
-                                                .Include(t => t.Title)
-                                                .Include(c => c.PortfolioClients)
-                                                    .ThenInclude(u => u.Portfolio)
-                                                .Where(e => e.PortfolioClients.FirstOrDefault().Portfolio.Id == portfolioId)
-                                                .OrderBy(n => n.LastName).AsNoTracking().ToListAsync()).ConfigureAwait(true);
-        }
-
-        public async Task<Client> UpdateAsync(Client client)
-        {
-            if (client == null)
-            {
-                return client;
-            }
-            
-            await Task.Run(() => _context.Clients.Update(client)).ConfigureAwait(true);
-            await _context.SaveChangesAsync().ConfigureAwait(true);
-            return client;
         }
     }
 }

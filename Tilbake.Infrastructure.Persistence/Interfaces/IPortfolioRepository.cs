@@ -1,21 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Domain.Models;
 
 namespace Tilbake.Infrastructure.Persistence.Interfaces
 {
-    public interface IPortfolioRepository
+    public interface IPortfolioRepository : IRepository<Portfolio>
     {
-        Task<IEnumerable<Portfolio>> GetAllAsync();
-        Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId);
-        Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId);
-        Task<Portfolio> GetByIdAsync(Guid id);
-        Task<int> AddAsync(Portfolio portfolio);
-        Task<int> AddRangeAsync (IEnumerable<Portfolio> portfolios);
-        Task<int> UpdateAsync(Portfolio portfolio);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(Portfolio portfolio);
-        Task<int> DeleteRangeAsync(IEnumerable<Portfolio> portfolios);  
+        //Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId);
+        //Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId);
     }    
 }

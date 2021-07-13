@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
-using Tilbake.Domain.Models;
+using Tilbake.Application.Resources;
 
 namespace Tilbake.Application.Interfaces
 {
     public interface IClientTypeService
     {
-        Task<IEnumerable<ClientType>> GetAllAsync();
-        Task<ClientTypeResponse> GetByIdAsync(Guid id);
-        Task<ClientTypeResponse> AddAsync(ClientType clientType);
-        Task<ClientTypeResponse> UpdateAsync(Guid id, ClientType clientType);
-        Task<ClientTypeResponse> DeleteAsync(Guid id);
-        Task<ClientTypeResponse> DeleteAsync(ClientType clientType);
+        Task<IEnumerable<ClientTypeResource>> GetAllAsync();
+        Task<ClientTypeResource> GetByIdAsync(Guid id);
+        Task<int> AddAsync(ClientTypeSaveResource resource);
+        Task<int> UpdateAsync(ClientTypeResource resource);
+        Task<int> DeleteAsync(Guid id);
+        Task<int> DeleteAsync(ClientTypeResource resource);
     }
 }

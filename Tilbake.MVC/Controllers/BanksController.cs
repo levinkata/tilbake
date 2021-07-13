@@ -1,158 +1,137 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    [Authorize(Policy = "EmailId")]
+    [Authorize]
     public class BanksController : Controller
     {
         private readonly IBankService _bankService;
-        private readonly IMapper _mapper;
 
-        public BanksController(IBankService bankService, IMapper mapper)
+        public BanksController(IBankService bankService)
         {
-            _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _bankService = bankService;
         }
 
-        // GET: BanksController
+        // GET: Banks
         public async Task<IActionResult> Index()
         {
-            var result = await _bankService.GetAllAsync().ConfigureAwait(true);
-            var resources = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankResource>>(result);
-
+            var resources = await _bankService.GetAllAsync().ConfigureAwait(true);
+            
             ViewBag.datasource = resources;
-            return View(resources);
-
+            return await Task.Run(() => View(resources)).ConfigureAwait(true);
         }
 
-        // GET: BanksController/Details/5
-        public async Task<ActionResult> Details(Guid id)
+        // GET: Banks/Details/5
+        public async Task<IActionResult> Details(Guid? id)
         {
-            var result = await _bankService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
-            return View(bankResource);
+            var resource = await _bankService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
-        // GET: BanksController/Create
-        public ActionResult Create()
+        // GET: Banks/Create
+        public IActionResult Create()
         {
             return View();
         }
 
-        // POST: BanksController/Create
+        // POST: Banks/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(BankSaveResource bankSaveResource)
+        public async Task<IActionResult> Create(BankSaveResource resource)
         {
-            if (bankSaveResource == null)
+            if (ModelState.IsValid)
             {
-                throw new ArgumentNullException(nameof(bankSaveResource));
+                await _bankService.AddAsync(resource);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(resource);
+        }
+
+        // GET: Banks/Edit/5
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var resource = await _bankService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+            return View(resource);
+        }
+
+        // POST: Banks/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid? id, BankResource resource)
+        {
+            if (id != resource.Id)
+            {
+                return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                Bank bank = _mapper.Map<BankSaveResource, Bank>(bankSaveResource);
-                bank.Id = Guid.NewGuid();
-
-                var result = await _bankService.AddAsync(bank).ConfigureAwait(true);
-                if (!result.Success)
+                try
                 {
-                    return BadRequest(new ErrorResource(result.Message));
+                    await _bankService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(bankSaveResource);
+            return View(resource);
         }
 
-        // GET: BanksController/Edit/5
-        public async Task<ActionResult> Edit(Guid id)
+        // GET: Banks/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
         {
-            var result = await _bankService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
+            if (id == null)
             {
-                return BadRequest(new ErrorResource(result.Message));
+                return NotFound();
             }
 
-            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
-            return View(bankResource);
+            var resource = await _bankService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
-        // POST: BanksController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, BankResource bankResource)
-        {
-            if (bankResource == null)
-            {
-                throw new ArgumentNullException(nameof(bankResource));
-            }
-
-            if (ModelState.IsValid)
-            {
-                Bank bank = _mapper.Map<BankResource, Bank>(bankResource);
-
-                var result = await _bankService.UpdateAsync(id, bank).ConfigureAwait(true);
-                if (!result.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bankResource);
-        }
-
-        // GET: BanksController/Delete/5
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            var result = await _bankService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
-            {
-                return BadRequest(new ErrorResource(result.Message));
-            }
-
-            var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
-            return View(bankResource);
-        }
-
-        // POST: BanksController/Delete/5
-        [HttpPost]
+        // POST: Banks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var result = await _bankService.GetByIdAsync(id).ConfigureAwait(true);
-            if (!result.Success)
-            {
-                return BadRequest(new ErrorResource(result.Message));
-            }
-
-            try
-            {
-                var deleteResult = await _bankService.DeleteAsync(id).ConfigureAwait(true);
-                if (!deleteResult.Success)
-                {
-                    return BadRequest(new ErrorResource(result.Message));
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                var bankResource = _mapper.Map<Bank, BankResource>(result.Resource);
-                return View(bankResource);
-            }
+            await _bankService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

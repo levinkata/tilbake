@@ -1,108 +1,73 @@
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class MaritalStatusService : IMaritalStatusService
     {
-        private readonly IMaritalStatusRepository _maritalStatusRepository;
-        
-        public MaritalStatusService(IMaritalStatusRepository maritalStatusRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public MaritalStatusService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _maritalStatusRepository = maritalStatusRepository ?? throw new ArgumentNullException(nameof(maritalStatusRepository));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<MaritalStatusResponse> AddAsync(MaritalStatus maritalStatus)
+        public async Task<int> AddAsync(MaritalStatusSaveResource resource)
         {
-            try
-            {
-                await _maritalStatusRepository.AddAsync(maritalStatus).ConfigureAwait(true);
-                return new MaritalStatusResponse(maritalStatus);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new MaritalStatusResponse($"An error occurred when saving the maritalStatus: {ex.Message}");
-            }
+            var maritalStatus = _mapper.Map<MaritalStatusSaveResource, MaritalStatus>(resource);
+            maritalStatus.Id = Guid.NewGuid();
+
+            await _unitOfWork.MaritalStatuses.AddAsync(maritalStatus).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<MaritalStatusResponse> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            var existingMaritalStatus = await _maritalStatusRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingMaritalStatus == null)
-                return new MaritalStatusResponse($"MaritalStatus Id not found: {id}");
-
-            try
-            {
-                await _maritalStatusRepository.DeleteAsync(existingMaritalStatus).ConfigureAwait(false);
-                return new MaritalStatusResponse(existingMaritalStatus);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new MaritalStatusResponse($"An error occurred when deleting the maritalStatus: {ex.Message}");
-            }
+            await _unitOfWork.MaritalStatuses.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<MaritalStatusResponse> DeleteAsync(MaritalStatus maritalStatus)
+        public async Task<int> DeleteAsync(MaritalStatusResource resource)
         {
-            if (maritalStatus == null)
-                return new MaritalStatusResponse($"MaritalStatus not found: {maritalStatus}");
+            var maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(resource);
+            await _unitOfWork.MaritalStatuses.DeleteAsync(maritalStatus).ConfigureAwait(true);
 
-            try
-            {
-                await _maritalStatusRepository.DeleteAsync(maritalStatus).ConfigureAwait(false);
-                return new MaritalStatusResponse(maritalStatus);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new MaritalStatusResponse($"An error occurred when deleting the maritalStatus: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<MaritalStatus>> GetAllAsync()
+        public async Task<IEnumerable<MaritalStatusResource>> GetAllAsync()
         {
-            return await Task.Run(() => _maritalStatusRepository.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.MaritalStatuses.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
+            var resources = _mapper.Map<IEnumerable<MaritalStatus>, IEnumerable<MaritalStatusResource>>(result);
+
+            return resources;
         }
 
-        public async Task<MaritalStatusResponse> GetByIdAsync(Guid id)
+        public async Task<MaritalStatusResource> GetByIdAsync(Guid id)
         {
-            var maritalStatus = await _maritalStatusRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (maritalStatus == null)
-                return new MaritalStatusResponse($"MaritalStatus Id not found: {id}");
+            var result = await _unitOfWork.MaritalStatuses.GetByIdAsync(id).ConfigureAwait(true);
+            var resources = _mapper.Map<MaritalStatus, MaritalStatusResource>(result);
 
-            return new MaritalStatusResponse(maritalStatus);
+            return resources;
         }
 
-        public async Task<MaritalStatusResponse> UpdateAsync(Guid id, MaritalStatus maritalStatus)
+        public async Task<int> UpdateAsync(MaritalStatusResource resource)
         {
-            if (maritalStatus == null)
-                return new MaritalStatusResponse($"MaritalStatus not found: {maritalStatus}");
+            var maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(resource);
+            await _unitOfWork.MaritalStatuses.UpdateAsync(resource.Id, maritalStatus).ConfigureAwait(true);
 
-            var existingMaritalStatus = await _maritalStatusRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingMaritalStatus == null)
-                return new MaritalStatusResponse($"MaritalStatus Id not found: {id}");
-
-            existingMaritalStatus.Name = maritalStatus.Name;
-
-            try
-            {
-                await _maritalStatusRepository.UpdateAsync(existingMaritalStatus).ConfigureAwait(false);
-                return new MaritalStatusResponse(existingMaritalStatus);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new MaritalStatusResponse($"An error occurred when updating the maritalStatus: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

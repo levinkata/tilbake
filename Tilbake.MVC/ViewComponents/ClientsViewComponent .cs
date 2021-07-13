@@ -12,30 +12,28 @@ namespace Tilbake.MVC.ViewComponents
     public class ClientsViewComponent : ViewComponent
     {
         private readonly IClientService _clientService;
-        private readonly IMapper _mapper;
+        private readonly IPortfolioClientService _portfolioClientService;
 
         public ClientsViewComponent(IClientService clientService,
-                                IMapper mapper)
+                                IPortfolioClientService portfolioClientService)
         {
-            _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _clientService = clientService;
+            _portfolioClientService = portfolioClientService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid? portfolioId)
         {
-            IEnumerable<Client> result;
+            ViewBag.PortfolioId = portfolioId;
 
             if (portfolioId == Guid.Empty)
             {
-                result = await _clientService.GetAllAsync().ConfigureAwait(true);
+                return View(await Task.Run(() => _clientService.GetAllAsync()).ConfigureAwait(true));
             }
             else
             {
-                result = await _clientService.GetByPortfolioIdAsync((Guid)portfolioId).ConfigureAwait(true);
-                ViewBag.PortfolioId = portfolioId;
+                return View(await Task.Run(() => _portfolioClientService.GetByPortfoloId((Guid)portfolioId)).ConfigureAwait(true));
+
             }
-            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
-            return View(resources);
         }
     }
 }

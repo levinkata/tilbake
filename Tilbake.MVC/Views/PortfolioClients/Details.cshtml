@@ -1,0 +1,137 @@
+﻿@model ClientResource
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <span class="d-block p-2 bg-primary text-white">Portfolio Client</span>
+    <hr />
+</div>
+
+<div class="container">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="politikks-tab" data-toggle="tab" href="#politikks" role="tab" aria-controls="politikks" aria-selected="false">Policies</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="objects-tab" data-toggle="tab" href="#objects" role="tab" aria-controls="objects" aria-selected="false">Objects</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="quotes-tab" data-toggle="tab" href="#quotes" role="tab" aria-controls="quotes" aria-selected="false">Quotes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="invoices-tab" data-toggle="tab" href="#invoices" role="tab" aria-controls="invoices" aria-selected="false">Invoices</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false">Documents</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="kravs-tab" data-toggle="tab" href="#kravs" role="tab" aria-controls="kravs" aria-selected="false">Claims</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="CRM-tab" data-toggle="tab" href="#CRM" role="tab" aria-controls="CRM" aria-selected="false">CRM</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="consents-tab" data-toggle="tab" href="#consents" role="tab" aria-controls="consents" aria-selected="false">Consents</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+            <br />
+            <div class="text-center">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary btn-sm">Edit Details</a>
+            </div>
+            <br />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.IdNumber)
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.IdNumber)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.BirthDate)
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.BirthDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Gender)
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.Gender)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Mobile)
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.Mobile)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Occupation)
+                </dt>
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.Occupation)
+                </dd>
+            </dl>
+            <hr size="30">
+            <div>
+                @*@await Component.InvokeAsync("AdresseItem", new { itemId = Model.Klient.ID })*@
+            </div>
+        </div>
+        <div class="tab-pane" id="politikks" role="tabpanel" aria-labelledby="politikks-tab">
+            <br />
+            @*@await Component.InvokeAsync("Politikk", new { klientId = @Model.Klient.ID })*@
+        </div>
+        <div class="tab-pane" id="objects" role="tabpanel" aria-labelledby="objects-tab">
+            <br />
+            <div class="text-center">
+                @*<a asp-controller="KlientObject" asp-action="Create" asp-route-klientId="@Model.Klient.ID" class="btn btn-secondary btn-sm">Add Object</a>*@
+            </div>
+            <br />
+            @*@await Component.InvokeAsync("KlientObject", new { klientId = @Model.Klient.ID })*@
+        </div>
+        <div class="tab-pane" id="quotes" role="tabpanel" aria-labelledby="quotes-tab">
+            <br />
+            <div class="text-center">
+                @*<a asp-controller="Quote" asp-action="Create" asp-route-klientId="@Model.Klient.ID" class="btn btn-secondary btn-sm">Add Quote</a>*@
+            </div>
+            <br />
+            @*@await Component.InvokeAsync("KlientQuote", new { klientId = @Model.Klient.ID })*@
+        </div>
+        <div class="tab-pane" id="invoices" role="tabpanel" aria-labelledby="invoices-tab">Invoices</div>
+        <div class="tab-pane" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+            <br />
+            <div class="text-center">
+                @*<a asp-controller="KlientDocument" asp-action="Create" asp-route-klientId="@Model.Klient.ID" class="btn btn-secondary btn-sm">Add Document</a>*@
+            </div>
+            <br />
+            @*@await Component.InvokeAsync("KlientDocument", new { klientId = @Model.Klient.ID })*@
+        </div>
+        <div class="tab-pane" id="kravs" role="tabpanel" aria-labelledby="kravs-tab">Claims</div>
+        <div class="tab-pane" id="CRM" role="tabpanel" aria-labelledby="CRM-tab">CRM</div>
+        <div class="tab-pane" id="consents" role="tabpanel" aria-labelledby="quotes-tab">Consents</div>
+    </div>
+</div>
+
+<div class="clearfix">...</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

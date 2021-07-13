@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
-using Tilbake.Domain.Models;
+using Tilbake.Application.Resources;
 
 namespace Tilbake.Application.Interfaces
 {
     public interface IBankBranchService
     {
-        Task<IEnumerable<BankBranch>> GetAllAsync();
-        Task<IEnumerable<BankBranch>> GetByBankId(Guid bankId);
-        Task<BankBranchResponse> GetByIdAsync(Guid id);
-        Task<BankBranchResponse> AddAsync(BankBranch bankBranch);
-        Task<BankBranchResponse> UpdateAsync(Guid id, BankBranch bankBranch);
-        Task<BankBranchResponse> DeleteAsync(Guid id);
-        Task<BankBranchResponse> DeleteAsync(BankBranch bankBranch);
+        Task<IEnumerable<BankBranchResource>> GetAllAsync();
+        Task<IEnumerable<BankBranchResource>> GetByBankId(Guid bankId);
+        Task<BankBranchResource> GetByIdAsync(Guid id);
+        Task<int> AddAsync(BankBranchSaveResource resource);
+        Task<int> UpdateAsync(BankBranchResource resource);
+        Task<int> DeleteAsync(Guid id);
+        Task<int> DeleteAsync(BankBranchResource resource);
     }
 }

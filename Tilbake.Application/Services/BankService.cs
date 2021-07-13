@@ -1,108 +1,72 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class BankService : IBankService
     {
-        private readonly IBankRepository _bankRepository;
-        
-        public BankService(IBankRepository bankRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public BankService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _bankRepository = bankRepository ?? throw new ArgumentNullException(nameof(bankRepository));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<BankResponse> AddAsync(Bank bank)
+        public async Task<int> AddAsync(BankSaveResource resource)
         {
-            try
-            {
-                await _bankRepository.AddAsync(bank).ConfigureAwait(true);
-                return new BankResponse(bank);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankResponse($"An error occurred when saving the bank: {ex.Message}");
-            }
+            var bank = _mapper.Map<BankSaveResource, Bank>(resource);
+            bank.Id = Guid.NewGuid();
+
+            await _unitOfWork.Banks.AddAsync(bank).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<BankResponse> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            var existingBank = await _bankRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingBank == null)
-                return new BankResponse($"Bank Id not found: {id}");
-
-            try
-            {
-                await _bankRepository.DeleteAsync(existingBank).ConfigureAwait(false);
-                return new BankResponse(existingBank);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankResponse($"An error occurred when deleting the bank: {ex.Message}");
-            }
+            await _unitOfWork.Banks.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<BankResponse> DeleteAsync(Bank bank)
+        public async Task<int> DeleteAsync(BankResource resource)
         {
-            if (bank == null)
-                return new BankResponse($"Bank not found: {bank}");
-
-            try
-            {
-                await _bankRepository.DeleteAsync(bank).ConfigureAwait(false);
-                return new BankResponse(bank);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankResponse($"An error occurred when deleting the bank: {ex.Message}");
-            }
+            var bank = _mapper.Map<BankResource, Bank>(resource);
+            await _unitOfWork.Banks.DeleteAsync(bank).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Bank>> GetAllAsync()
+        public async Task<IEnumerable<BankResource>> GetAllAsync()
         {
-            return await Task.Run(() => _bankRepository.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Banks.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
+            var resources = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankResource>>(result);
+
+            return resources;
         }
 
-        public async Task<BankResponse> GetByIdAsync(Guid id)
+        public async Task<BankResource> GetByIdAsync(Guid id)
         {
-            var bank = await _bankRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (bank == null)
-                return new BankResponse($"Bank Id not found: {id}");
+            var result = await _unitOfWork.Banks.GetByIdAsync(id).ConfigureAwait(true);
+            var resources = _mapper.Map<Bank, BankResource>(result);
 
-            return new BankResponse(bank);
+            return resources;
         }
 
-        public async Task<BankResponse> UpdateAsync(Guid id, Bank bank)
+        public async Task<int> UpdateAsync(BankResource resource)
         {
-            if (bank == null)
-                return new BankResponse($"Bank not found: {bank}");
+            var bank = _mapper.Map<BankResource, Bank>(resource);
+            await _unitOfWork.Banks.UpdateAsync(resource.Id, bank).ConfigureAwait(true);
 
-            var existingBank = await _bankRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingBank == null)
-                return new BankResponse($"Bank Id not found: {id}");
-
-            existingBank.Name = bank.Name;
-
-            try
-            {
-                await _bankRepository.UpdateAsync(existingBank).ConfigureAwait(false);
-                return new BankResponse(existingBank);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new BankResponse($"An error occurred when updating the bank: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

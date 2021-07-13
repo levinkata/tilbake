@@ -8,8 +8,8 @@ namespace Tilbake.Application.Interfaces
     public interface IPortfolioService
     {
         Task<IEnumerable<PortfolioResource>> GetAllAsync();
-        Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId);
-        Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId);
+        //Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId);
+        //Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId);
         Task<PortfolioResource> GetByIdAsync(Guid id);
         Task<int> AddAsync(PortfolioSaveResource resource);
         Task<int> UpdateAsync(PortfolioResource resource);

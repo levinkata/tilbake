@@ -6,10 +6,9 @@ namespace Tilbake.Application.Interfaces
 {
     public interface IUserPortfolioService
     {
-        Task<IEnumerable<AspnetUserPortfolioResource>> GetByUserIdAsync(string aspNetUserId);
-        Task<int> AddAsync(AspnetUserPortfolioResource resource);
+        Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId);
+        Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId);
         Task<int> AddRangeAsync(UserPortfolioResource resources);
-        Task<int> DeleteAsync(AspnetUserPortfolioResource resource);
         Task<int> DeleteRangeAsync(UserPortfolioResource resources);
     }
 }

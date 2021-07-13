@@ -1,21 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
-using Tilbake.Domain.Models;
+using Tilbake.Application.Resources;
 
 namespace Tilbake.Application.Interfaces
 {
     public interface IClientService
     {
-        Task<IEnumerable<Client>> GetAllAsync();
-        Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId);
-        Task<ClientResponse> GetByIdAsync(Guid id);
-        Task<ClientResponse> GetByIdNumberAsync(string idNumber);
-        Task<ClientResponse> AddAsync(Client client);
-        Task<ClientResponse> AddToPortfolioAsync(Guid portfolioId, Client client);
-        Task<ClientResponse> UpdateAsync(Guid id, Client client);
-        Task<ClientResponse> DeleteAsync(Guid id);
-        Task<ClientResponse> DeleteAsync(Client client);
+        Task<IEnumerable<ClientResource>> GetAllAsync();
+        Task<ClientResource> GetByIdAsync(Guid id);
+        Task<ClientResource> GetByIdNumberAsync(string idNumber);
+        Task<int> AddAsync(ClientSaveResource resource);
+        Task<int> UpdateAsync(ClientResource resource);
+        Task<int> DeleteAsync(Guid id);
+        Task<int> DeleteAsync(ClientResource resource);
     }
 }

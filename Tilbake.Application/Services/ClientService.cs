@@ -1,149 +1,81 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class ClientService : IClientService
     {
-        private readonly IClientRepository _clientRepository;
-        
-        public ClientService(IClientRepository clientRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public ClientService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _clientRepository = clientRepository ?? throw new ArgumentNullException(nameof(clientRepository));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<ClientResponse> AddAsync(Client client)
+        public async Task<int> AddAsync(ClientSaveResource resource)
         {
-            try
-            {
-                await _clientRepository.AddAsync(client).ConfigureAwait(true);
-                return new ClientResponse(client);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new ClientResponse($"An error occurred when saving the client: {ex.Message}");
-            }
+            var client = _mapper.Map<ClientSaveResource, Client>(resource);
+            client.Id = Guid.NewGuid();
+
+            await _unitOfWork.Clients.AddAsync(client).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<ClientResponse> AddToPortfolioAsync(Guid portfolioId, Client client)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            try
-            {
-                await _clientRepository.AddToPortfolioAsync(portfolioId, client).ConfigureAwait(true);
-                return new ClientResponse(client);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new ClientResponse($"An error occurred when saving the client: {ex.Message}");
-            }
+            await _unitOfWork.Clients.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<ClientResponse> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(ClientResource resource)
         {
-            var existingClient = await _clientRepository.GetByIdAsync(id).ConfigureAwait(true);
+            var client = _mapper.Map<ClientResource, Client>(resource);
+            await _unitOfWork.Clients.DeleteAsync(client).ConfigureAwait(true);
 
-            if (existingClient == null)
-                return new ClientResponse($"Client Id not found: {id}");
-
-            try
-            {
-                await _clientRepository.DeleteAsync(existingClient).ConfigureAwait(false);
-                return new ClientResponse(existingClient);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new ClientResponse($"An error occurred when deleting the client: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<ClientResponse> DeleteAsync(Client client)
+        public async Task<IEnumerable<ClientResource>> GetAllAsync()
         {
-            if (client == null)
-                return new ClientResponse($"Client not found: {client}");
+            var result = await Task.Run(() => _unitOfWork.Clients.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.LastName);
 
-            try
-            {
-                await _clientRepository.DeleteAsync(client).ConfigureAwait(false);
-                return new ClientResponse(client);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new ClientResponse($"An error occurred when deleting the client: {ex.Message}");
-            }
+            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
+
+            return resources;
         }
 
-        public async Task<IEnumerable<Client>> GetAllAsync()
+        public async Task<ClientResource> GetByIdAsync(Guid id)
         {
-            return await Task.Run(() => _clientRepository.GetAllAsync()).ConfigureAwait(true);
+            var result = await _unitOfWork.Clients.GetByIdAsync(id).ConfigureAwait(true);
+            var resources = _mapper.Map<Client, ClientResource>(result);
+
+            return resources;
         }
 
-        public async Task<ClientResponse> GetByIdAsync(Guid id)
+        public async Task<ClientResource> GetByIdNumberAsync(string idNumber)
         {
-            var client = await _clientRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (client == null)
-                return new ClientResponse($"Client Id not found: {id}");
+            var result = await _unitOfWork.Clients.GetByIdNumberAsync(idNumber).ConfigureAwait(true);
+            var resources = _mapper.Map<Client, ClientResource>(result);
 
-            return new ClientResponse(client);
+            return resources;
         }
 
-        public async Task<ClientResponse> GetByIdNumberAsync(string idNumber)
+        public async Task<int> UpdateAsync(ClientResource resource)
         {
-            var client = await _clientRepository.GetByIdNumberAsync(idNumber).ConfigureAwait(true);
-            if (client == null)
-                return new ClientResponse($"Client Id Number not found: {idNumber}");
+            var client = _mapper.Map<ClientResource, Client>(resource);
+            await _unitOfWork.Clients.UpdateAsync(resource.Id, client).ConfigureAwait(true);
 
-            return new ClientResponse(client);
-        }
-
-        public async Task<IEnumerable<Client>> GetByPortfolioIdAsync(Guid portfolioId)
-        {
-            return await Task.Run(() => _clientRepository.GetByPortfolioIdAsync(portfolioId)).ConfigureAwait(true);
-        }
-
-        public async Task<ClientResponse> UpdateAsync(Guid id, Client client)
-        {
-            if (client == null)
-                return new ClientResponse($"Client not found: {client}");
-
-            var existingClient = await _clientRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingClient == null)
-                return new ClientResponse($"Client Id not found: {id}");
-
-            existingClient.TitleId = client.TitleId;
-            existingClient.ClientTypeId = client.ClientTypeId;
-            existingClient.FirstName = client.FirstName;
-            existingClient.MiddleName = client.MiddleName;
-            existingClient.LastName = client.LastName;
-            existingClient.BirthDate = client.BirthDate;
-            existingClient.GenderId = client.GenderId;
-            existingClient.IdNumber = client.IdNumber;
-            existingClient.MaritalStatusId = client.MaritalStatusId;
-            existingClient.CountryId = client.CountryId;
-            existingClient.Phone = client.Phone;
-            existingClient.Mobile = client.Mobile;
-            existingClient.Email = client.Email;
-            existingClient.OccupationId = client.OccupationId;
-
-            try
-            {
-                await _clientRepository.UpdateAsync(existingClient).ConfigureAwait(false);
-                return new ClientResponse(existingClient);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new ClientResponse($"An error occurred when updating the client: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

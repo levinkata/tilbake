@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
@@ -9,66 +9,51 @@ using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Repositories
 {
-    public class PortfolioClientRepository : IPortfolioClientRepository
+    public class PortfolioClientRepository : Repository<PortfolioClient>, IPortfolioClientRepository
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-
-        public PortfolioClientRepository(IServiceScopeFactory serviceScopeFactory)
+        public PortfolioClientRepository(TilbakeDbContext context) : base(context)
         {
-            _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
+
         }
 
-        public async Task<int> AddAsync(PortfolioClient portfolioClient)
+        public async Task<PortfolioClient> AddClientAsync(Guid portfolioId, Client client)
         {
-            if (portfolioClient == null)
+            await _context.Clients.AddAsync(client).ConfigureAwait(true);
+            PortfolioClient portfolioClient = new PortfolioClient()
             {
-                throw new ArgumentNullException(nameof(portfolioClient));
-            }
-
-            try
-            {
-                using var scope = _serviceScopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
-
-                await _context.PortfolioClients.AddAsync(portfolioClient).ConfigureAwait(true);
-                return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
-            }
-            catch (DbUpdateException ex)
-            {
-                return ex.HResult;
-            }
+                Id = Guid.NewGuid(),
+                PortfolioId = portfolioId,
+                ClientId = client.Id
+            };
+            await _context.PortfolioClients.AddAsync(portfolioClient).ConfigureAwait(true);
+            await _context.SaveChangesAsync().ConfigureAwait(true);
+            return portfolioClient;
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
         {
-            using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
-
-            PortfolioClient portfolioClient = await _context.PortfolioClients.FindAsync(id).ConfigureAwait(true);
-            _context.PortfolioClients.Remove((PortfolioClient)portfolioClient);
-            return await Task.Run(() => _context.SaveChangesAsync()).ConfigureAwait(true);
-        }
-
-        public async Task<IEnumerable<PortfolioClient>> GetAllAsync()
-        {
-            using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
-
             return await Task.Run(() => _context.PortfolioClients
-                                                .Include(p => p.Portfolio)
-                                                .Include(c => c.Client)
-                                                .AsNoTracking().ToListAsync()).ConfigureAwait(true);
+                                                .Any(e => e.PortfolioId == portfolioId && e.ClientId == clientId))
+                                                .ConfigureAwait(true);
         }
 
-        public async Task<PortfolioClient> GetByIdAsync(Guid id)
+        public async Task<Client> GetByClientId(Guid portfolioId, Guid clientId)
         {
-            using var scope = _serviceScopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<TilbakeDbContext>();
+            return await Task.Run(() => _context.Clients
+                                                .Where(c => c.PortfolioClients
+                                                .Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId))
+                                                .Include(c => c.PortfolioClients)
+                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
+        }
 
-            return await Task.Run(() => _context.PortfolioClients
-                                                .Include(p => p.Portfolio)
-                                                .Include(c => c.Client)
-                                                .FirstOrDefaultAsync(e => e.Id == id)).ConfigureAwait(true);
+        public async Task<IEnumerable<Client>> GetByPortfolioId(Guid portfolioId)
+        {
+            return await Task.Run(() => _context.Clients
+                                                .Where(c => c.PortfolioClients
+                                                .Any(p => p.PortfolioId == portfolioId))
+                                                .Include(c => c.PortfolioClients)
+                                                .OrderBy(n => n.LastName)
+                                                .AsNoTracking()).ConfigureAwait(true);
         }
     }
 }

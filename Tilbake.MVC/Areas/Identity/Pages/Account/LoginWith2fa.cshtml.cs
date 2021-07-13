@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Tilbake.MVC.Data;
 
 namespace Tilbake.MVC.Areas.Identity.Pages.Account
 {

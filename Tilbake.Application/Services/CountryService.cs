@@ -1,108 +1,73 @@
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class CountryService : ICountryService
     {
-        private readonly ICountryRepository _countryRepository;
-        
-        public CountryService(ICountryRepository countryRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public CountryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _countryRepository = countryRepository ?? throw new ArgumentNullException(nameof(countryRepository));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<CountryResponse> AddAsync(Country country)
+        public async Task<int> AddAsync(CountrySaveResource resource)
         {
-            try
-            {
-                await _countryRepository.AddAsync(country).ConfigureAwait(true);
-                return new CountryResponse(country);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new CountryResponse($"An error occurred when saving the country: {ex.Message}");
-            }
+            var country = _mapper.Map<CountrySaveResource, Country>(resource);
+            country.Id = Guid.NewGuid();
+
+            await _unitOfWork.Countries.AddAsync(country).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<CountryResponse> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            var existingCountry = await _countryRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingCountry == null)
-                return new CountryResponse($"Country Id not found: {id}");
-
-            try
-            {
-                await _countryRepository.DeleteAsync(existingCountry).ConfigureAwait(false);
-                return new CountryResponse(existingCountry);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new CountryResponse($"An error occurred when deleting the country: {ex.Message}");
-            }
+            await _unitOfWork.Countries.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<CountryResponse> DeleteAsync(Country country)
+        public async Task<int> DeleteAsync(CountryResource resource)
         {
-            if (country == null)
-                return new CountryResponse($"Country not found: {country}");
+            var country = _mapper.Map<CountryResource, Country>(resource);
+            await _unitOfWork.Countries.DeleteAsync(country).ConfigureAwait(true);
 
-            try
-            {
-                await _countryRepository.DeleteAsync(country).ConfigureAwait(false);
-                return new CountryResponse(country);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new CountryResponse($"An error occurred when deleting the country: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Country>> GetAllAsync()
+        public async Task<IEnumerable<CountryResource>> GetAllAsync()
         {
-            return await Task.Run(() => _countryRepository.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Countries.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
+            var resources = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryResource>>(result);
+
+            return resources;
         }
 
-        public async Task<CountryResponse> GetByIdAsync(Guid id)
+        public async Task<CountryResource> GetByIdAsync(Guid id)
         {
-            var country = await _countryRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (country == null)
-                return new CountryResponse($"Country Id not found: {id}");
+            var result = await _unitOfWork.Countries.GetByIdAsync(id).ConfigureAwait(true);
+            var resources = _mapper.Map<Country, CountryResource>(result);
 
-            return new CountryResponse(country);
+            return resources;
         }
 
-        public async Task<CountryResponse> UpdateAsync(Guid id, Country country)
+        public async Task<int> UpdateAsync(CountryResource resource)
         {
-            if (country == null)
-                return new CountryResponse($"Country not found: {country}");
+            var country = _mapper.Map<CountryResource, Country>(resource);
+            await _unitOfWork.Countries.UpdateAsync(resource.Id, country).ConfigureAwait(true);
 
-            var existingCountry = await _countryRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingCountry == null)
-                return new CountryResponse($"Country Id not found: {id}");
-
-            existingCountry.Name = country.Name;
-
-            try
-            {
-                await _countryRepository.UpdateAsync(existingCountry).ConfigureAwait(false);
-                return new CountryResponse(existingCountry);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new CountryResponse($"An error occurred when updating the country: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

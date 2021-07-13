@@ -1,108 +1,73 @@
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Services
 {
     public class GenderService : IGenderService
     {
-        private readonly IGenderRepository _genderRepository;
-        
-        public GenderService(IGenderRepository genderRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public GenderService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _genderRepository = genderRepository ?? throw new ArgumentNullException(nameof(genderRepository));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<GenderResponse> AddAsync(Gender gender)
+        public async Task<int> AddAsync(GenderSaveResource resource)
         {
-            try
-            {
-                await _genderRepository.AddAsync(gender).ConfigureAwait(true);
-                return new GenderResponse(gender);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new GenderResponse($"An error occurred when saving the gender: {ex.Message}");
-            }
+            var gender = _mapper.Map<GenderSaveResource, Gender>(resource);
+            gender.Id = Guid.NewGuid();
+
+            await _unitOfWork.Genders.AddAsync(gender).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<GenderResponse> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            var existingGender = await _genderRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingGender == null)
-                return new GenderResponse($"Gender Id not found: {id}");
-
-            try
-            {
-                await _genderRepository.DeleteAsync(existingGender).ConfigureAwait(false);
-                return new GenderResponse(existingGender);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new GenderResponse($"An error occurred when deleting the gender: {ex.Message}");
-            }
+            await _unitOfWork.Genders.DeleteAsync(id);
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<GenderResponse> DeleteAsync(Gender gender)
+        public async Task<int> DeleteAsync(GenderResource resource)
         {
-            if (gender == null)
-                return new GenderResponse($"Gender not found: {gender}");
+            var gender = _mapper.Map<GenderResource, Gender>(resource);
+            await _unitOfWork.Genders.DeleteAsync(gender).ConfigureAwait(true);
 
-            try
-            {
-                await _genderRepository.DeleteAsync(gender).ConfigureAwait(false);
-                return new GenderResponse(gender);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new GenderResponse($"An error occurred when deleting the gender: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 
-        public async Task<IEnumerable<Gender>> GetAllAsync()
+        public async Task<IEnumerable<GenderResource>> GetAllAsync()
         {
-            return await Task.Run(() => _genderRepository.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Genders.GetAllAsync()).ConfigureAwait(true);
+            result = result.OrderBy(n => n.Name);
+
+            var resources = _mapper.Map<IEnumerable<Gender>, IEnumerable<GenderResource>>(result);
+
+            return resources;
         }
 
-        public async Task<GenderResponse> GetByIdAsync(Guid id)
+        public async Task<GenderResource> GetByIdAsync(Guid id)
         {
-            var gender = await _genderRepository.GetByIdAsync(id).ConfigureAwait(true);
-            if (gender == null)
-                return new GenderResponse($"Gender Id not found: {id}");
+            var result = await _unitOfWork.Genders.GetByIdAsync(id).ConfigureAwait(true);
+            var resources = _mapper.Map<Gender, GenderResource>(result);
 
-            return new GenderResponse(gender);
+            return resources;
         }
 
-        public async Task<GenderResponse> UpdateAsync(Guid id, Gender gender)
+        public async Task<int> UpdateAsync(GenderResource resource)
         {
-            if (gender == null)
-                return new GenderResponse($"Gender not found: {gender}");
+            var gender = _mapper.Map<GenderResource, Gender>(resource);
+            await _unitOfWork.Genders.UpdateAsync(resource.Id, gender).ConfigureAwait(true);
 
-            var existingGender = await _genderRepository.GetByIdAsync(id).ConfigureAwait(true);
-
-            if (existingGender == null)
-                return new GenderResponse($"Gender Id not found: {id}");
-
-            existingGender.Name = gender.Name;
-
-            try
-            {
-                await _genderRepository.UpdateAsync(existingGender).ConfigureAwait(false);
-                return new GenderResponse(existingGender);
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new GenderResponse($"An error occurred when updating the gender: {ex.Message}");
-            }
+            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
     }
 }

@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
-using Tilbake.Domain.Models;
+using Tilbake.Application.Resources;
 
 namespace Tilbake.Application.Interfaces
 {
     public interface ICountryService
     {
-        Task<IEnumerable<Country>> GetAllAsync();
-        Task<CountryResponse> GetByIdAsync(Guid id);
-        Task<CountryResponse> AddAsync(Country country);
-        Task<CountryResponse> UpdateAsync(Guid id, Country country);
-        Task<CountryResponse> DeleteAsync(Guid id);
-        Task<CountryResponse> DeleteAsync(Country country);
+        Task<IEnumerable<CountryResource>> GetAllAsync();
+        Task<CountryResource> GetByIdAsync(Guid id);
+        Task<int> AddAsync(CountrySaveResource resource);
+        Task<int> UpdateAsync(CountryResource resource);
+        Task<int> DeleteAsync(Guid id);
+        Task<int> DeleteAsync(CountryResource resource);
     }
 }

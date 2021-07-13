@@ -13,5 +13,7 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Clients")]
         public int TotalClients { get; set; }
+
+        public string UserId { get; set; }
     }
 }

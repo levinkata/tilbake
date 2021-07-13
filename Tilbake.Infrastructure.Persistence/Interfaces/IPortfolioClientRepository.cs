@@ -5,11 +5,11 @@ using Tilbake.Domain.Models;
 
 namespace Tilbake.Infrastructure.Persistence.Interfaces
 {
-    public interface IPortfolioClientRepository
+    public interface IPortfolioClientRepository : IRepository<PortfolioClient>
     {
-        Task<IEnumerable<PortfolioClient>> GetAllAsync();
-        Task<PortfolioClient> GetByIdAsync(Guid id);
-        Task<int> AddAsync(PortfolioClient portfolioClient);
-        Task<int> DeleteAsync(Guid id);
-    }    
+        Task<IEnumerable<Client>> GetByPortfolioId(Guid portfolioId);
+        Task<Client> GetByClientId(Guid portfolioId, Guid clientId);
+        Task<PortfolioClient> AddClientAsync(Guid portfolioId, Client client);
+        Task<bool> ExistsAsync(Guid portfolioId, Guid clientId);
+    }
 }

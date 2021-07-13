@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Communication;
-using Tilbake.Domain.Models;
+using Tilbake.Application.Resources;
 
 namespace Tilbake.Application.Interfaces
 {
     public interface IGenderService
     {
-        Task<IEnumerable<Gender>> GetAllAsync();
-        Task<GenderResponse> GetByIdAsync(Guid id);
-        Task<GenderResponse> AddAsync(Gender gender);
-        Task<GenderResponse> UpdateAsync(Guid id, Gender gender);
-        Task<GenderResponse> DeleteAsync(Guid id);
-        Task<GenderResponse> DeleteAsync(Gender gender);
+        Task<IEnumerable<GenderResource>> GetAllAsync();
+        Task<GenderResource> GetByIdAsync(Guid id);
+        Task<int> AddAsync(GenderSaveResource resource);
+        Task<int> UpdateAsync(GenderResource resource);
+        Task<int> DeleteAsync(Guid id);
+        Task<int> DeleteAsync(GenderResource resource);
     }
 }

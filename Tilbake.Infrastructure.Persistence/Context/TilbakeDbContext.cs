@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
@@ -21,7 +22,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         }
 
         public virtual DbSet<Domain.Models.Address> Addresses { get; set; }
-        public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<AllRisk> AllRisks { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
@@ -32,6 +32,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
         public virtual DbSet<Attorney> Attorneys { get; set; }
+        public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<Bank> Banks { get; set; }
         public virtual DbSet<BankAccount> BankAccounts { get; set; }
         public virtual DbSet<BankAuditLog> BankAuditLogs { get; set; }
@@ -61,6 +62,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<ClientRisk> ClientRisks { get; set; }
         public virtual DbSet<ClientRiskDocument> ClientRiskDocuments { get; set; }
         public virtual DbSet<ClientType> ClientTypes { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Content> Contents { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<CoverType> CoverTypes { get; set; }
@@ -145,7 +147,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
 
-        //I only have to override these two version of SaveChanges, as the other two versions call these
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+        //            }
+        //        }
+
+        //Only have to override these two version of SaveChanges, as the other two versions call these
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaveChanges(_userId);
@@ -234,15 +245,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
             }
         }
 
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-//             }
-//         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
@@ -262,29 +264,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(100);
 
                 entity.Property(e => e.PostalAddress).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<Audit>(entity =>
-            {
-                entity.ToTable("Audit");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.DateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.PrimaryKey).HasMaxLength(50);
-
-                entity.Property(e => e.TableName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<AllRisk>(entity =>
@@ -454,6 +433,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Audit>(entity =>
+            {
+                entity.ToTable("Audit");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.PrimaryKey).HasMaxLength(50);
+
+                entity.Property(e => e.TableName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Bank>(entity =>
@@ -1137,6 +1139,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Company>(entity =>
+            {
+                entity.ToTable("Company");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Phone).HasMaxLength(50);
+
+                entity.Property(e => e.Website).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Content>(entity =>
@@ -2325,11 +2342,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.QuoteDate).HasColumnType("date");
 
-                entity.HasOne(d => d.Client)
+                entity.HasOne(d => d.PortfolioClient)
                     .WithMany(p => p.Quotes)
-                    .HasForeignKey(d => d.ClientId)
+                    .HasForeignKey(d => d.PortfolioClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Quote_Client");
+                    .HasConstraintName("FK_Quote_PortfolioClient");
 
                 entity.HasOne(d => d.QuoteStatus)
                     .WithMany(p => p.Quotes)

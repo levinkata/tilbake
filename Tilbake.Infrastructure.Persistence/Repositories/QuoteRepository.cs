@@ -19,10 +19,10 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<Quote>> GetByPortfolioAsync(Guid portfolioId)
         {
             return await Task.Run(() => _context.Quotes
+                                                .Include(q => q.QuoteStatus)
                                                 .Include(e => e.QuoteItems)
-                                                    .ThenInclude(p => p.ClientRisk)
-                                                        .ThenInclude(r => r.Client)
-                                                .Where(k => k.QuoteItems.FirstOrDefault().ClientRisk.Client.PortfolioClients.FirstOrDefault().PortfolioId == portfolioId)
+                                                .Include(c => c.PortfolioClient)
+                                                .Where(r => r.PortfolioClient.PortfolioId == portfolioId)
                                                 .OrderBy(n => n.QuoteNumber).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
@@ -31,10 +31,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => _context.Quotes
                                                 .Include(q => q.QuoteStatus)
                                                 .Include(d => d.QuoteItems)
-                                                    .ThenInclude(p => p.ClientRisk)
-                                                        .ThenInclude(r => r.Client)
-                                                            .ThenInclude(k => k.PortfolioClients)
-                                                .Where(k => k.QuoteItems.FirstOrDefault().ClientRisk.Client.PortfolioClients.FirstOrDefault().Id == portfolioClientId)
+                                                .Where(e => e.PortfolioClientId == portfolioClientId)
                                                 .OrderBy(n => n.QuoteNumber).AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
@@ -42,7 +39,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         {
             return await Task.Run(() => _context.Quotes
                                                 .Include(b => b.QuoteStatus)
-                                                .Include(b => b.Client)
+                                                .Include(b => b.PortfolioClient)
                                                 .Where(e => e.QuoteNumber == quoteNumber)
                                                 .FirstOrDefaultAsync()).ConfigureAwait(true);
         }

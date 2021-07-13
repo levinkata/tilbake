@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
+using Tilbake.Domain.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -12,10 +15,19 @@ namespace Tilbake.MVC.Controllers
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;
+        private readonly IInsurerService _insurerService;
+        private readonly ICoverTypeService _coverTypeService;
+        private readonly IQuoteStatusService _quoteStatusService;
 
-        public QuotesController(IQuoteService quoteService)
+        public QuotesController(IQuoteService quoteService,
+                                IInsurerService insurerService,        
+                                ICoverTypeService coverTypeService,
+                                IQuoteStatusService quoteStatusService)
         {
             _quoteService = quoteService;
+            _insurerService = insurerService;
+            _coverTypeService = coverTypeService;
+            _quoteStatusService = quoteStatusService;
         }
 
         // GET: Quotes
@@ -23,6 +35,17 @@ namespace Tilbake.MVC.Controllers
         {
             var resources = await _quoteService.GetByPortfolioAsync(portfolioId).ConfigureAwait(true);
             return await Task.Run(() => View(resources)).ConfigureAwait(true);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> QuoteItemRow(Guid portfolioClientId, [FromBody] List<QuoteItem> paramObjects)
+        {
+            return await Task.Run(() => ViewComponent("QuoteItem", new { portfolioClientId, paramObjects })).ConfigureAwait(true);
+        }
+
+        public async Task<IActionResult> Quotation()
+        {
+            return await Task.Run(() => View()).ConfigureAwait(true);
         }
 
         // GET: Quotes/Details/5
@@ -42,10 +65,45 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // GET: Quotes/Create
-        public IActionResult Create()
+        [HttpPost]
+        public async Task<IActionResult> PostQuote(List<QuoteItem> quoteItems, Guid portfolioClientId, string clientInfo, string internalInfo, Guid quoteStatusId)
         {
-            return View();
+            if (quoteItems == null)
+            {
+                throw new ArgumentNullException(nameof(quoteItems));
+            };
+
+            QuoteSaveResource resource = new QuoteSaveResource
+            {
+                QuoteDate = DateTime.Today,
+                QuoteStatusId = quoteStatusId,
+                ClientInfo = clientInfo,
+                InternalInfo = internalInfo + portfolioClientId.ToString()
+            };
+
+            resource.QuoteItems.AddRange(quoteItems);
+
+            await _quoteService.AddAsync(resource).ConfigureAwait(true);
+
+            return await Task.Run(() => Json(quoteItems)).ConfigureAwait(true);
+        }
+
+        // GET: Quotes/Create
+        public async Task<IActionResult> Create(Guid portfolioClientId)
+        {
+            var insurers = await _insurerService.GetAllAsync();
+            var coverTypes = await _coverTypeService.GetAllAsync();
+            var quoteStatuses = await _quoteStatusService.GetAllAsync();
+
+            QuoteSaveResource resource = new QuoteSaveResource()
+            {
+                PortfolioClientId = portfolioClientId,
+                InsurerList = new SelectList(insurers, "Id", "Name"),
+                CoverageList = new SelectList(coverTypes, "Id", "Name"),
+                QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name")
+            };
+
+            return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
         // POST: Quotes/Create
@@ -58,9 +116,17 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _quoteService.AddAsync(resource);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
             }
-            return View(resource);
+            var insurers = await _insurerService.GetAllAsync();
+            var coverTypes = await _coverTypeService.GetAllAsync();
+            var quoteStatuses = await _quoteStatusService.GetAllAsync();
+
+            resource.InsurerList = new SelectList(insurers, "Id", "Name");
+            resource.CoverageList = new SelectList(coverTypes, "Id", "Name");
+            resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
+
+            return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
         // GET: Quotes/Edit/5
@@ -76,7 +142,8 @@ namespace Tilbake.MVC.Controllers
             {
                 return NotFound();
             }
-            return View(resource);
+
+            return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
         // POST: Quotes/Edit/5
@@ -101,7 +168,7 @@ namespace Tilbake.MVC.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
             }
             return View(resource);
         }
@@ -128,8 +195,10 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _quoteService.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            var resource = await _quoteService.GetByIdAsync((Guid)id);
+            await _quoteService.DeleteAsync(resource);
+
+            return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
         }
     }
 }

@@ -15,10 +15,8 @@ namespace Tilbake.Domain.Models
         public string Reference { get; set; }
         public DateTime ReferenceDate { get; set; }
         public Guid RequestedById { get; set; }
-        public int FromMonth { get; set; }
-        public int ToMonth { get; set; }
-        public int FromYear { get; set; }
-        public int ToYear { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
         public decimal? Amount { get; set; }
         public string Reason { get; set; }
         public bool IsWithdrawal { get; set; }

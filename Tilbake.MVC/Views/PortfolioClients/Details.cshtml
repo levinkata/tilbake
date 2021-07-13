@@ -110,7 +110,7 @@
         <div class="tab-pane" id="quotes" role="tabpanel" aria-labelledby="quotes-tab">
             <br />
             <div class="text-center">
-                @*<a asp-controller="Quote" asp-action="Create" asp-route-klientId="@Model.Klient.ID" class="btn btn-secondary btn-sm">Add Quote</a>*@
+                <a asp-controller="Quote" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
             </div>
             <br />
             @*@await Component.InvokeAsync("KlientQuote", new { klientId = @Model.Klient.ID })*@

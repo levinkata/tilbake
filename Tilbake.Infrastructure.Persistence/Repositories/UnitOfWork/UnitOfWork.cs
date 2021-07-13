@@ -38,8 +38,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             PolicyTypes = new PolicyTypeRepository(_context);
             Portfolios = new PortfolioRepository(_context);
             PortfolioClients = new PortfolioClientRepository(_context);
-            QuoteStatuses = new QuoteStatusRepository(_context);
             Quotes = new QuoteRepository(_context);
+            QuoteItems = new QuoteItemRepository(_context);
+            QuoteStatuses = new QuoteStatusRepository(_context);
             Risks = new RiskRepository(_context);
             SalesTypes = new SalesTypeRepository(_context);
             Titles = new TitleRepository(_context);
@@ -72,8 +73,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IPolicyTypeRepository PolicyTypes { get; private set; }
         public IPortfolioRepository Portfolios { get; private set; }
         public IPortfolioClientRepository PortfolioClients { get; private set; }
-        public IQuoteStatusRepository QuoteStatuses { get; private set; }
         public IQuoteRepository Quotes { get; private set; }
+        public IQuoteItemRepository QuoteItems { get; private set; }
+        public IQuoteStatusRepository QuoteStatuses { get; private set; }
         public IRiskRepository Risks { get; private set; }
         public ISalesTypeRepository SalesTypes { get; private set; }
         public ITitleRepository Titles { get; private set; }

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var SubPremium = 0M;
 }
 
 <h1>Details</h1>
@@ -11,38 +12,125 @@
     <h4>Quote</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.QuoteNumber)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.QuoteNumber)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.QuoteDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.QuoteDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ClientInfo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ClientInfo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.InternalInfo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.InternalInfo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.QuoteStatus)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.QuoteStatus)
         </dd>
     </dl>
 </div>
+
+@if (Model.QuoteItems.Any())
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.QuoteItems.FirstOrDefault().SumInsured)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.QuoteItems.FirstOrDefault().Premium)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.QuoteItems.FirstOrDefault().Excess)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.QuoteItems)
+            {
+                @*if (item.InsurerName != InsurerName)
+                    {
+                        InsurerName = item.InsurerName;
+                        if (SubPremium > 0)
+                        {
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>@SubPremium</strong></td>
+                                <td></td>
+                            </tr>
+                            SubPremium = 0;
+                        }
+                        <tr>
+                            <td>
+                                <strong>@Html.DisplayFor(modelItem => item.InsurerName)</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                    if (item.Product.Name != ProductName)
+                    {
+                        ProductName = item.Product.Name;
+                        <tr>
+                            <td><strong>@ProductName</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }*@
+
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SumInsured)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Premium)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Excess)
+                    </td>
+                </tr>
+                SubPremium += item.Premium;
+            }
+
+            @if (SubPremium > 0)
+            {
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>@SubPremium</strong></td>
+                    <td></td>
+                </tr>
+                SubPremium = 0;
+            }
+        </tbody>
+    </table>
+}
+</div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

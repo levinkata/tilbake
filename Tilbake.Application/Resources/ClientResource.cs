@@ -8,6 +8,7 @@ namespace Tilbake.Application.Resources
     {
         public Guid Id { get; set; }
         public Guid PortfolioId { get; set; }
+        public Guid PortfolioClientId { get; set; }
 
         [Display(Name = "Title")]
         public Guid TitleId { get; set; }

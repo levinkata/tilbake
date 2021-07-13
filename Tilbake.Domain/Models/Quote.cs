@@ -11,7 +11,7 @@ namespace Tilbake.Domain.Models
         }
 
         public Guid Id { get; set; }
-        public Guid ClientId { get; set; }
+        public Guid PortfolioClientId { get; set; }
         public int QuoteNumber { get; set; }
         public DateTime QuoteDate { get; set; }
         public Guid QuoteStatusId { get; set; }
@@ -22,7 +22,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Client Client { get; set; }
+        public virtual PortfolioClient PortfolioClient { get; set; }
         public virtual QuoteStatus QuoteStatus { get; set; }
         public virtual ICollection<QuoteItem> QuoteItems { get; set; }
     }

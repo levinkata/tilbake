@@ -23,10 +23,22 @@ namespace Tilbake.Application.Services
 
         public async Task<int> AddAsync(QuoteSaveResource resource)
         {
-            var quote = _mapper.Map<QuoteSaveResource, Quote>(resource);
-            quote.Id = Guid.NewGuid();
+            List<QuoteItem> quoteItemsList = new List<QuoteItem>();
 
+            int ro = resource.QuoteItems.Count;
+            var quoteItems = resource.QuoteItems;
+
+            var quote = _mapper.Map<QuoteSaveResource, Quote>(resource);
+
+            quote.Id = Guid.NewGuid();
             await _unitOfWork.Quotes.AddAsync(quote).ConfigureAwait(true);
+
+            for (int i = 0; i < ro; i++)
+            {
+                quoteItems[i].QuoteId = quote.Id;
+            }
+
+            await _unitOfWork.QuoteItems.AddRangeAsync(quoteItems).ConfigureAwait(true);
             return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
         }
 

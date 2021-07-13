@@ -1,0 +1,66 @@
+﻿@model QuoteResource
+@{
+    int RowIndex = 0;
+}
+
+@if (Model.QuoteItems.Any())
+{
+    <div class="row">
+        <form asp-controller="Quote" asp-action="Create" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="PortfolioClientId" type="hidden" />
+            <input asp-for="QuoteDate" value="@DateTime.Now" type="hidden" />
+            <div class="form-group">
+
+                <div>
+                    <label class="control-label"><strong>Levi Nkata</strong></label>
+                </div>
+                @foreach (var item in Model.QuoteItems)
+                {
+                    <input asp-for="QuoteItems[RowIndex].InsurerId" type="hidden" />
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <select asp-for="QuoteItems[RowIndex].CoverType" class="form-control" asp-items="@Model.CoverageList"></select>
+                        </div>
+                        <div class="col-md-2">
+                            <input asp-for="QuoteItems[RowIndex].SumInsured" class="form-control" placeholder="Sum Insured" />
+                        </div>
+                        <div class="col-md-2">
+                            <input asp-for="QuoteItems[RowIndex].Premium" class="form-control" placeholder="Premium" />
+                        </div>
+                        <div class="col-md-2">
+                            <input asp-for="QuoteItems[RowIndex].Excess" class="form-control" placeholder="Excess" />
+                        </div>
+                    </div>
+                    RowIndex++;
+                }
+
+            </div>
+            <div class="row form-group">
+                <div class="col-md-4 ">
+                    <label asp-for="ClientInfo" class="control-label"></label>
+                    <input asp-for="ClientInfo" class="form-control" />
+                    <span asp-validation-for="ClientInfo" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="InternalInfo" class="control-label"></label>
+                    <input asp-for="InternalInfo" class="form-control" />
+                    <span asp-validation-for="InternalInfo" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="QuoteStatusId" class="control-label"></label>
+                    <select asp-for="QuoteStatusId" asp-items="@Model.QuoteStatusList" class="form-control"></select>
+                    <span asp-validation-for="QuoteStatusId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" id="btnCreateQuote" class="btn btn-primary" value="Create Quote" /> |
+                <a asp-controller="Quote" asp-action="Create" asp-route-portfolioKlientId="@Model.PortfolioClientId">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+}

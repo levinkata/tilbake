@@ -12,7 +12,6 @@ namespace Tilbake.Domain.Models
             ClientDocuments = new HashSet<ClientDocument>();
             ClientRisks = new HashSet<ClientRisk>();
             PortfolioClients = new HashSet<PortfolioClient>();
-            Quotes = new HashSet<Quote>();
         }
 
         public Guid Id { get; set; }
@@ -47,6 +46,5 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<ClientDocument> ClientDocuments { get; set; }
         public virtual ICollection<ClientRisk> ClientRisks { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
-        public virtual ICollection<Quote> Quotes { get; set; }
     }
 }

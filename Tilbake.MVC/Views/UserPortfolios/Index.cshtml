@@ -20,13 +20,19 @@
                     asp-items="@Model.PortfolioList"></select>
         </div>
     </div>
-    <div class="col-md-2 pt-md-3 text-center">
+    @*<div class="col-md-2 pt-md-3 text-center">
         <div class="btn-group-vertical" role="group" aria-label="Portfolio control buttons">
             <button type="button" id="right" class="btn btn-danger">&gt;</button>
             <button type="button" id="left" class="btn btn-warning">&lt;</button>
             <button type="button" id="rightAll" class="btn btn-success">&Gt;</button>
             <button type="button" id="leftAll" class="btn btn-primary">&Lt;</button>
         </div>
+    </div>*@
+    <div class="d-grid gap-2 col-1 mx-auto">
+        <button class="btn  btn-danger" id="right" type="button">&gt;</button>
+        <button class="btn btn-warning" id="left" type="button">&lt;</button>
+        <button class="btn  btn-success" id="rightAll" type="button">&Gt;</button>
+        <button class="btn btn-primary" id="leftAll" type="button">&Lt;</button>
     </div>
     <div class="col-md-5">
         <div class="form-group">

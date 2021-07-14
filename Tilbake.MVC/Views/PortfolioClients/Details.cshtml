@@ -16,7 +16,7 @@
             <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="politikks-tab" data-toggle="tab" href="#politikks" role="tab" aria-controls="politikks" aria-selected="false">Policies</a>
+            <a class="nav-link" id="policies-tab" data-toggle="tab" href="#policies" role="tab" aria-controls="policies" aria-selected="false">Policies</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="objects-tab" data-toggle="tab" href="#objects" role="tab" aria-controls="objects" aria-selected="false">Objects</a>
@@ -95,7 +95,7 @@
                 @*@await Component.InvokeAsync("AdresseItem", new { itemId = Model.Klient.ID })*@
             </div>
         </div>
-        <div class="tab-pane" id="politikks" role="tabpanel" aria-labelledby="politikks-tab">
+        <div class="tab-pane" id="policies" role="tabpanel" aria-labelledby="policies-tab">
             <br />
             @*@await Component.InvokeAsync("Politikk", new { klientId = @Model.Klient.ID })*@
         </div>
@@ -110,7 +110,7 @@
         <div class="tab-pane" id="quotes" role="tabpanel" aria-labelledby="quotes-tab">
             <br />
             <div class="text-center">
-                <a asp-controller="Quote" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
+                <a asp-controller="Quotes" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
             </div>
             <br />
             @*@await Component.InvokeAsync("KlientQuote", new { klientId = @Model.Klient.ID })*@

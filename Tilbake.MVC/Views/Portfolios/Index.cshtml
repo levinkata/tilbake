@@ -2,18 +2,20 @@
 @using Syncfusion.EJ2
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Portfolios";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     List<object> commands = new List<object>();
     commands.Add(new { type = "userstatus", buttonOption = new { content = "Details", cssClass = "e-flat e-details" } }); // custom
 }
 
-<h1>Index</h1>
+<h1>Portfolios</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <div class="form-group">
+        <a asp-action="Create" class="btn btn-primary" type="button">Create New</a>
+    </div>
+</div>
 
 <div class="control-section">
     <ejs-grid id="Grid" allowSorting="true" dataSource="ViewBag.datasource" commandClick="commandClick" toolbar="@(new List<string>() {"Search" })" allowPaging="true">

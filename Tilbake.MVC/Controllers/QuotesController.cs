@@ -15,17 +15,14 @@ namespace Tilbake.MVC.Controllers
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;
-        private readonly IInsurerService _insurerService;
         private readonly ICoverTypeService _coverTypeService;
         private readonly IQuoteStatusService _quoteStatusService;
 
         public QuotesController(IQuoteService quoteService,
-                                IInsurerService insurerService,        
                                 ICoverTypeService coverTypeService,
                                 IQuoteStatusService quoteStatusService)
         {
             _quoteService = quoteService;
-            _insurerService = insurerService;
             _coverTypeService = coverTypeService;
             _quoteStatusService = quoteStatusService;
         }
@@ -82,7 +79,6 @@ namespace Tilbake.MVC.Controllers
             };
 
             resource.QuoteItems.AddRange(quoteItems);
-
             await _quoteService.AddAsync(resource).ConfigureAwait(true);
 
             return await Task.Run(() => Json(quoteItems)).ConfigureAwait(true);
@@ -91,14 +87,12 @@ namespace Tilbake.MVC.Controllers
         // GET: Quotes/Create
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
-            var insurers = await _insurerService.GetAllAsync();
             var coverTypes = await _coverTypeService.GetAllAsync();
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
             QuoteSaveResource resource = new QuoteSaveResource()
             {
                 PortfolioClientId = portfolioClientId,
-                InsurerList = new SelectList(insurers, "Id", "Name"),
                 CoverageList = new SelectList(coverTypes, "Id", "Name"),
                 QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name")
             };
@@ -118,11 +112,11 @@ namespace Tilbake.MVC.Controllers
                 await _quoteService.AddAsync(resource);
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
             }
-            var insurers = await _insurerService.GetAllAsync();
+            //  var insurers = await _insurerService.GetAllAsync();
             var coverTypes = await _coverTypeService.GetAllAsync();
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
-            resource.InsurerList = new SelectList(insurers, "Id", "Name");
+            //  resource.InsurerList = new SelectList(insurers, "Id", "Name");
             resource.CoverageList = new SelectList(coverTypes, "Id", "Name");
             resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
 

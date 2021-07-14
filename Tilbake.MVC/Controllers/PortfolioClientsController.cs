@@ -10,6 +10,7 @@ namespace Tilbake.MVC.Controllers
     public class PortfolioClientsController : Controller
     {
         private readonly IPortfolioClientService _portfolioClientService;
+        private readonly IClientService _clientService;
         private readonly IClientTypeService _clientTypeService;
         private readonly ICountryService _countryService;
         private readonly IGenderService _genderService;
@@ -18,6 +19,7 @@ namespace Tilbake.MVC.Controllers
         private readonly ITitleService _titleService;
 
         public PortfolioClientsController(IPortfolioClientService portfolioClientService,
+                                            IClientService clientService,
                                             IClientTypeService clientTypeService,
                                             ICountryService countryService,
                                             IGenderService genderService,
@@ -26,6 +28,7 @@ namespace Tilbake.MVC.Controllers
                                             ITitleService titleService)
         {
             _portfolioClientService = portfolioClientService;
+            _clientService = clientService;
             _clientTypeService = clientTypeService;
             _countryService = countryService;
             _genderService = genderService;
@@ -48,12 +51,14 @@ namespace Tilbake.MVC.Controllers
         // GET: PortfolioClients/Details/5
         public async Task<IActionResult> Details(Guid portfolioId, Guid clientId)
         {
-            var resource = await _portfolioClientService.GetByClientId((Guid)portfolioId, (Guid)clientId);
+            var portfolioClientId = await _portfolioClientService.GetPortfolioClientId(portfolioId, clientId);
+            var resource = await _clientService.GetByClientId((Guid)portfolioId, (Guid)clientId);
             if (resource == null)
             {
                 return NotFound();
             }
             resource.PortfolioId = portfolioId;
+            resource.PortfolioClientId = portfolioClientId;
 
             return View(resource);
         }
@@ -119,7 +124,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _portfolioClientService.GetByClientId((Guid)portfolioId, (Guid)clientId);
+            var resource = await _clientService.GetByClientId((Guid)portfolioId, (Guid)clientId);
             if (resource == null)
             {
                 return NotFound();

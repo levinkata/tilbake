@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -49,14 +48,6 @@ namespace Tilbake.Application.Services
             return await _unitOfWork.PortfolioClients.ExistsAsync(portfolioId, clientId).ConfigureAwait(true);
         }
 
-        public async Task<ClientResource> GetByClientId(Guid portfolioId, Guid clientId)
-        {
-            var result = await Task.Run(() => _unitOfWork.PortfolioClients.GetByClientId(portfolioId, clientId)).ConfigureAwait(true);
-            var resource = _mapper.Map<Client, ClientResource>(result);
-
-            return resource;
-        }
-
         public async Task<PortfolioClientResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.PortfolioClients.GetByIdAsync(id).ConfigureAwait(true);
@@ -65,12 +56,9 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<IEnumerable<ClientResource>> GetByPortfoloId(Guid portfolioId)
+        public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
         {
-            var result = await Task.Run(() => _unitOfWork.PortfolioClients.GetByPortfolioId(portfolioId)).ConfigureAwait(true);
-            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
-
-            return resources;
+            return await _unitOfWork.PortfolioClients.GetPortfolioClientId(portfolioId, clientId).ConfigureAwait(true);
         }
     }
 }

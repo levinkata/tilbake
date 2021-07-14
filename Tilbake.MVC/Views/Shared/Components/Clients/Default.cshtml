@@ -4,9 +4,11 @@
 
 @if (ViewBag.PortfolioId != null)
 {
-    <p>
-        <a asp-controller="PortfolioClients" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId">New Client</a>
-    </p>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <div class="form-group">
+            <a asp-controller="PortfolioClients" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId" class="btn btn-primary" type="button">Create New</a>
+        </div>
+    </div>
 }
 
 <table class="table">

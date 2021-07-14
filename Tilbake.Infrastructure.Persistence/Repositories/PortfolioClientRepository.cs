@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Domain.Models;
@@ -37,23 +35,10 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .ConfigureAwait(true);
         }
 
-        public async Task<Client> GetByClientId(Guid portfolioId, Guid clientId)
+        public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
         {
-            return await Task.Run(() => _context.Clients
-                                                .Where(c => c.PortfolioClients
-                                                .Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId))
-                                                .Include(c => c.PortfolioClients)
-                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
-        }
-
-        public async Task<IEnumerable<Client>> GetByPortfolioId(Guid portfolioId)
-        {
-            return await Task.Run(() => _context.Clients
-                                                .Where(c => c.PortfolioClients
-                                                .Any(p => p.PortfolioId == portfolioId))
-                                                .Include(c => c.PortfolioClients)
-                                                .OrderBy(n => n.LastName)
-                                                .AsNoTracking()).ConfigureAwait(true);
+            return await Task.Run(() => _context.PortfolioClients
+                                                .SingleOrDefault(e => e.PortfolioId == portfolioId && e.ClientId == clientId).Id);
         }
     }
 }

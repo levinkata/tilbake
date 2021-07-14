@@ -12,13 +12,10 @@ namespace Tilbake.MVC.ViewComponents
     public class ClientsViewComponent : ViewComponent
     {
         private readonly IClientService _clientService;
-        private readonly IPortfolioClientService _portfolioClientService;
 
-        public ClientsViewComponent(IClientService clientService,
-                                IPortfolioClientService portfolioClientService)
+        public ClientsViewComponent(IClientService clientService)
         {
             _clientService = clientService;
-            _portfolioClientService = portfolioClientService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid? portfolioId)
@@ -31,7 +28,7 @@ namespace Tilbake.MVC.ViewComponents
             }
             else
             {
-                return View(await Task.Run(() => _portfolioClientService.GetByPortfoloId((Guid)portfolioId)).ConfigureAwait(true));
+                return View(await Task.Run(() => _clientService.GetByPortfoloId((Guid)portfolioId)).ConfigureAwait(true));
 
             }
         }

@@ -70,6 +70,22 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
+        public async Task<IEnumerable<ClientResource>> GetByPortfoloId(Guid portfolioId)
+        {
+            var result = await Task.Run(() => _unitOfWork.Clients.GetByPortfolioId(portfolioId)).ConfigureAwait(true);
+            var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
+
+            return resources;
+        }
+
+        public async Task<ClientResource> GetByClientId(Guid portfolioId, Guid clientId)
+        {
+            var result = await Task.Run(() => _unitOfWork.Clients.GetByClientId(portfolioId, clientId)).ConfigureAwait(true);
+            var resource = _mapper.Map<Client, ClientResource>(result);
+
+            return resource;
+        }
+
         public async Task<int> UpdateAsync(ClientResource resource)
         {
             var client = _mapper.Map<ClientResource, Client>(resource);

@@ -1,0 +1,298 @@
+﻿@model QuoteSaveResource
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Quote</h4>
+<a asp-controller="Client" asp-action="Details" asp-route-id="@Model.PortfolioClientId"><span class="d-block p-2 bg-primary text-white">Full Name</span></a>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="form-group">
+            <label id="lblNoObject" class="invisible"><span>No objects available for this client</span></label>
+            <table id="tblObjects" class="table table-sm invisible">
+                <thead>
+                    <tr>
+                        <th>
+                            Description
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="form-group">
+            <table id="tblCart" class="table table-sm invisible">
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>Cart</strong>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="button" id="btnProceedToQuote" class="btn btn-primary invisible" value="Proceed to quote" />
+        </div>
+        <div class="form-group">
+            <div id="ErrorMsg" class="invisible">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="viewPlaceHolder" class="form-group"></div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var portfolioClientId = '@Model.PortfolioClientId';
+        $(document).ready(function () {
+
+            LoadObjects(portfolioClientId);
+            LoadCart(portfolioClientId);
+        });
+
+        $('#btnProceedToQuote').click(function () {
+            var numInsurers = $('#SelectedInsurers :selected').length;
+            var cartItems = $('#tblCart tbody tr');
+            var numCart = cartItems.length;
+            $("#ErrorMsg").empty();
+            if (numCart == 0) {
+                $("#ErrorMsg").removeClass("invisible").addClass("text-danger visible");
+                $("#ErrorMsg").append('<label>Cart is empty</label>');
+                return;
+            };
+
+            if (numInsurers == 0) {
+                $("#ErrorMsg").removeClass("invisible").addClass("text-danger visible");
+                $("#ErrorMsg").append('<label>Select Insurer to proceed</label>');
+                return;
+            };
+            $("#ErrorMsg").removeClass("text-danger visible").addClass("invisible");
+            ProceedToQuote();
+        });
+
+        function ResetBtnToProceed() {
+            var cartItems = $('#tblCart tbody tr').length;
+            if (cartItems == 0) {
+                $('#tblCart').removeClass("table visible").addClass("table invisible");
+                $('#btnProceedToQuote').removeClass("btn btn-primary visible").addClass("btn btn-primary invisible");
+            } else {
+                $('#btnProceedToQuote').removeClass("btn btn-primary invisible").addClass("btn btn-primary visible");
+                $('#tblCart').removeClass("table invisible").addClass("table visible");
+            }
+        }
+
+        function LoadCart(portfolioClientId) {
+
+            $.ajax({
+                url: '@(Url.Action("GetCarts", "Cart"))',
+                type: "GET",
+                dataType: "JSON",
+                data: { portfolioClientId: portfolioClientId },
+                error: function (xhr, status, error) {
+                    alert("An error occurred??: " + error);
+                },
+                success: function (result) {
+                    $('#tblCart tbody').empty();
+
+                    $.each(result, function (index, value) {
+
+                        $('#tblCart tbody')
+                        .append($('<tr>')
+                            .attr({ 'data-object-id': value.id })
+                            .append($('<td>').html(value.description))
+                            .attr({ 'data-product-id': value.productID, 'data-description' : value.description })
+                            .append($('<td>')
+                                .append($('<a>')
+                                    .attr('href', '#')
+                                    .append($('<span>&minus;</span>').addClass('btn btn-danger btn-sm float-right'))
+                                    .click(function () {
+                                        // Delete Cart from Database
+                                        DeleteCart(value.id);
+                                    })
+                                )
+                            )
+                        );
+                    });
+                    ResetBtnToProceed();
+                }
+            });
+        }
+
+        function LoadObjects(portfolioClientId) {
+
+            $.ajax({
+                url: '@(Url.Action("GetClientObjects", "ClientObject"))',
+                type: 'GET',
+                dataType: 'JSON',
+                data: { portfolioClientId: portfolioClientId, filter: false},
+                error: function (xhr, status, error) {
+                    alert("An error occurred.");
+                },
+                success: function (result) {
+                    $('#tblObjects tbody').empty();
+
+                    $.each(result, function (index, value) {
+                        $('#tblObjects tbody')
+                            .append($('<tr>')
+                                .append($('<td>').html(value.description))
+                                    .append($('<td>')
+                                    .append($('<a>')
+                                        .attr('href', '#')
+                                        .append($('<span>&plus;</span>').addClass('btn btn-success btn-sm float-right'))
+                                        .click(function () {
+                                            AddToCart(value.objectId,
+                                                value.description,
+                                                value.productId);
+                                        })
+                                )
+                            ));
+                    });
+
+                    var mtrItems = $('#tblObjects tbody tr').length;
+                    if (mtrItems == 0) {
+                        $('#tblObjects').removeClass("table visible").addClass("table invisible");
+                        $('#tblObjects').remove();
+                        $('#lblNoObject').removeClass("invisible").addClass("visible");
+                        $('#lstInsurer').removeClass("visible").addClass("invisible");
+                    } else {
+                        $('#tblObjects').removeClass("table invisible").addClass("table visible");
+                        $('#lblNoObject').removeClass("visible").addClass("invisible");
+                        $('#lstInsurer').removeClass("invisible").addClass("PortfolioClientIdfolioClientIdfolioClientIdtfolioClientIdisible");
+                    }
+                }
+            });
+        }
+
+        function ProceedToQuote() {
+            var paramObjects = [];
+            $('#SelectedInsurers :selected').each(function () {
+                $('#tblCart tbody tr').each(function () {
+                    paramObjects.push({
+                        ID: '@Guid.Empty',
+                        QuoteID: '@Guid.Empty',
+                        ObjectID: $(this).attr('data-object-id'),
+                        CoverageID: '@Guid.Empty',
+                        ProductID: $(this).attr('data-product-id'),
+                        Description: $(this).attr('data-description'),
+                        SumInsured: 0,
+                        Premium: 0,
+                        Excess: ''
+                    });
+                })
+            });
+
+            if (paramObjects)
+            {
+                var url = '/Quote/QuoteDetailRow?portfolioClientId=' + portfolioClientId;
+
+                $.ajax({
+                    url: url,
+                    contentType: "application/json; charset=utf-8",
+                    type: "POST",
+                    data: JSON.stringify(paramObjects),
+                    dataType: "html",
+                    error: function (xhr, status, error) {
+                        alert("An error has occured." + error);
+                    },
+                    success: function (data) {
+                        $("#viewPlaceHolder").html(data);
+                    }
+                });
+            }
+        }
+
+        function AddToCart(objectId, description, productId) {
+
+            $("#ErrorMsg").empty();
+            var cartItem = $('#tblCart').find('tr[data-object-id=' + objectId + ']');
+            if (cartItem.length > 0) {
+                $("#ErrorMsg").removeClass("invisible").addClass("text-danger visible");
+                $("#ErrorMsg").append('<label>Item already in Cart</label>');
+                $("#ErrorMsg").delay(3000).queue(function (n) {
+                    $(this).removeClass("text-danger visible").addClass("invisible");
+                    n();
+                });
+                return;
+            }
+
+            cartItem = $('#tblCart tbody')
+                .append($('<tr>')
+                    .attr({ 'data-object-id': objectId })
+                    .append($('<td>').html(description))
+                    .attr({ 'data-product-id': productId, 'data-description' : description })
+                    .append($('<td>')
+                        .append($('<a>')
+                            .attr('href', '#')
+                            .append($('<span>&minus;</span>').addClass('btn btn-danger btn-sm float-right'))
+                            .click(function () {
+                                // Delete Cart from Database: DELETE /api/Carts/{id}
+                                DeleteCart(objectId);
+                            })
+                        )
+                    )
+                );
+            ResetBtnToProceed();
+            // Add one Cart record in Database: POST /api/Carts
+            PostCart(objectId, description, productId);
+        }
+
+        function PostCart(objectId, description, productId) {
+            var cart = {
+                ID: objectId,
+                PortfolioClientId: portfolioClientId,
+                ProductID: productId,
+                Description: description,
+                SumInsured: 0
+            };
+            $.ajax({
+                url: '@(Url.Action("PostCart", "Cart"))',
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(cart),
+                success: function (result) {
+
+                    var cartItem = $('#tblCart').find('tr[data-object-id=' + objectId + ']');
+                    cartItem.attr('data-object-id', result.id);
+                    cartItem.attr({ 'data-product-id': result.productID, 'data-description' : result.description });
+                },
+                error: function (message) {
+                    console.log(message.statusText);
+                }
+            });
+        }
+
+        function DeleteCart(cartId) {
+            $.ajax({
+                url: '@(Url.Action("DeleteCart", "Cart"))',
+                type: "DELETE",
+                dataType: "JSON",
+                data: { id: cartId },
+                error: function (xhr, status, error) {
+                    alert("An error occurred: " + error);
+                },
+                success: function (result) {
+
+                    if (result.id) {
+                        var cartItem = $('#tblCart').find('tr[data-object-id=' + cartId + ']');
+                        cartItem.remove();
+                    }
+                    ResetBtnToProceed();
+                }
+            });
+        }
+    </script>
+}

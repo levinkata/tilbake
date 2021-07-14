@@ -38,7 +38,14 @@ namespace Tilbake.Application.Mapping
             CreateMap<Invoice, InvoiceResource>().ReverseMap();
             CreateMap<InvoiceStatus, InvoiceStatusResource>().ReverseMap();
             CreateMap<MaritalStatus, MaritalStatusResource>().ReverseMap();
-            CreateMap<Motor, MotorResource>().ReverseMap();
+
+            CreateMap<Motor, MotorResource>()
+                .ForMember(dest => dest.BodyType, opt => opt.MapFrom(src => src.BodyType.Name))
+                .ForMember(dest => dest.DriverType, opt => opt.MapFrom(src => src.DriverType.Name))
+                .ForMember(dest => dest.MotorMake, opt => opt.MapFrom(src => src.MotorModel.MotorMake.Name))
+                .ForMember(dest => dest.MotorModel, opt => opt.MapFrom(src => src.MotorModel.Name))
+                .ReverseMap();
+
             CreateMap<MotorMake, MotorMakeResource>().ReverseMap();
             CreateMap<MotorModel, MotorModelResource>().ReverseMap();
             CreateMap<MotorUse, MotorUseResource>().ReverseMap();

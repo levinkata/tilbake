@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public Invoice()
         {
+            InvoiceItems = new HashSet<InvoiceItem>();
             ReceivableInvoices = new HashSet<ReceivableInvoice>();
         }
 
@@ -27,6 +28,7 @@ namespace Tilbake.Domain.Models
         public virtual InvoiceStatus InvoiceStatus { get; set; }
         public virtual Policy Policy { get; set; }
         public virtual Tax Tax { get; set; }
+        public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
         public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
     }
 }

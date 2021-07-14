@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public Motor()
         {
+            MotorImprovements = new HashSet<MotorImprovement>();
             Risks = new HashSet<Risk>();
         }
 
@@ -31,6 +32,11 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual BodyType BodyType { get; set; }
+        public virtual DriverType DriverType { get; set; }
+        public virtual MotorModel MotorModel { get; set; }
+        public virtual MotorUse MotorUse { get; set; }
+        public virtual ICollection<MotorImprovement> MotorImprovements { get; set; }
         public virtual ICollection<Risk> Risks { get; set; }
     }
 }

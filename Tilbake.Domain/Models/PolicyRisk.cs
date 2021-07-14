@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public PolicyRisk()
         {
+            InvoiceItems = new HashSet<InvoiceItem>();
             PolicyRiskClaims = new HashSet<PolicyRiskClaim>();
             PolicyRiskExtensions = new HashSet<PolicyRiskExtension>();
             ValuationFeeRefunds = new HashSet<ValuationFeeRefund>();
@@ -28,6 +29,7 @@ namespace Tilbake.Domain.Models
         public virtual ClientRisk ClientRisk { get; set; }
         public virtual CoverType CoverType { get; set; }
         public virtual Policy Policy { get; set; }
+        public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
         public virtual ICollection<PolicyRiskClaim> PolicyRiskClaims { get; set; }
         public virtual ICollection<PolicyRiskExtension> PolicyRiskExtensions { get; set; }
         public virtual ICollection<ValuationFeeRefund> ValuationFeeRefunds { get; set; }

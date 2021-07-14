@@ -12,5 +12,8 @@ namespace Tilbake.Domain.Models
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
+
+        public virtual Invoice Invoice { get; set; }
+        public virtual PolicyRisk PolicyRisk { get; set; }
     }
 }

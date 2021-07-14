@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
@@ -455,7 +454,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.UserId)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<Bank>(entity =>
@@ -1579,6 +1578,18 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Invoice)
+                    .WithMany(p => p.InvoiceItems)
+                    .HasForeignKey(d => d.InvoiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InvoiceItem_Invoice");
+
+                entity.HasOne(d => d.PolicyRisk)
+                    .WithMany(p => p.InvoiceItems)
+                    .HasForeignKey(d => d.PolicyRiskId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InvoiceItem_PolicyRisk");
             });
 
             modelBuilder.Entity<InvoiceNumberGenerator>(entity =>
@@ -1745,6 +1756,30 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.RegNumber)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.HasOne(d => d.BodyType)
+                    .WithMany(p => p.Motors)
+                    .HasForeignKey(d => d.BodyTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Motor_BodyType");
+
+                entity.HasOne(d => d.DriverType)
+                    .WithMany(p => p.Motors)
+                    .HasForeignKey(d => d.DriverTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Motor_DriverType");
+
+                entity.HasOne(d => d.MotorModel)
+                    .WithMany(p => p.Motors)
+                    .HasForeignKey(d => d.MotorModelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Motor_MotorModel");
+
+                entity.HasOne(d => d.MotorUse)
+                    .WithMany(p => p.Motors)
+                    .HasForeignKey(d => d.MotorUseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Motor_MotorUse");
             });
 
             modelBuilder.Entity<MotorCycleType>(entity =>
@@ -1793,6 +1828,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Value).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Motor)
+                    .WithMany(p => p.MotorImprovements)
+                    .HasForeignKey(d => d.MotorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MotorImprovement_Motor");
             });
 
             modelBuilder.Entity<MotorMake>(entity =>
@@ -3001,8 +3042,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
             });
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
             OnModelCreatingPartial(modelBuilder);
         }

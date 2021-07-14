@@ -19,5 +19,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
+
+        public virtual Motor Motor { get; set; }
     }
 }

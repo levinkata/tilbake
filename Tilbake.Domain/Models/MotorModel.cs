@@ -5,6 +5,11 @@ namespace Tilbake.Domain.Models
 {
     public partial class MotorModel
     {
+        public MotorModel()
+        {
+            Motors = new HashSet<Motor>();
+        }
+
         public Guid Id { get; set; }
         public Guid MotorMakeId { get; set; }
         public string Name { get; set; }
@@ -14,5 +19,6 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual MotorMake MotorMake { get; set; }
+        public virtual ICollection<Motor> Motors { get; set; }
     }
 }

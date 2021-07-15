@@ -15,6 +15,10 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Cover Type")]
         public Guid CoverTypeId { get; set; }
 
+        [Display(Name = "Description")]
+        public decimal Description { get; set; }
+
+
         [Display(Name = "Sum Insured")]
         public decimal SumInsured { get; set; }
 

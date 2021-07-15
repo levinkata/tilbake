@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace Tilbake.Domain.Models.Common
 {
-    public class Address : ValueObject
+    public class AddressObject : ValueObject
     {
         public string PhysicalAddress { get; }
         public string PostalAddress { get; }
         public Guid CityId { get; }
         public virtual City City { get; }
 
-        private Address()
+        private AddressObject()
         {
         }
 
-        public Address(string physicalAddress, string postalAddress, Guid cityId)
+        public AddressObject(string physicalAddress, string postalAddress, Guid cityId)
         {
             PhysicalAddress = physicalAddress;
             PostalAddress = postalAddress;

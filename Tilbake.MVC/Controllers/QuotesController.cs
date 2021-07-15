@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -17,14 +18,29 @@ namespace Tilbake.MVC.Controllers
         private readonly IQuoteService _quoteService;
         private readonly ICoverTypeService _coverTypeService;
         private readonly IQuoteStatusService _quoteStatusService;
+        private readonly IBodyTypeService _bodyTypeService;
+        private readonly IDriverTypeService _driverTypeService;
+        private readonly IMotorMakeService _motorMakeService;
+        private readonly IMotorModelService _motorModelService;
+        private readonly IMotorUseService _motorUseService;
 
         public QuotesController(IQuoteService quoteService,
                                 ICoverTypeService coverTypeService,
-                                IQuoteStatusService quoteStatusService)
+                                IQuoteStatusService quoteStatusService,
+                                IBodyTypeService bodyTypeService,
+                                IDriverTypeService driverTypeService,
+                                IMotorMakeService motorMakeService,
+                                IMotorModelService motorModelService,
+                                IMotorUseService motorUseService)
         {
             _quoteService = quoteService;
             _coverTypeService = coverTypeService;
             _quoteStatusService = quoteStatusService;
+            _bodyTypeService = bodyTypeService;
+            _driverTypeService = driverTypeService;
+            _motorMakeService = motorMakeService;
+            _motorModelService = motorModelService;
+            _motorUseService = motorUseService;
         }
 
         // GET: Quotes
@@ -87,14 +103,26 @@ namespace Tilbake.MVC.Controllers
         // GET: Quotes/Create
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
+            var bodyTypes = await _bodyTypeService.GetAllAsync();
+            var driverTypes = await _driverTypeService.GetAllAsync();
+            var motorMakes = await _motorMakeService.GetAllAsync();
+            var motorMakeId = motorMakes.FirstOrDefault().Id;
+            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
+            var motorUses = await _motorUseService.GetAllAsync();
+            
             var coverTypes = await _coverTypeService.GetAllAsync();
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
             QuoteSaveResource resource = new QuoteSaveResource()
             {
                 PortfolioClientId = portfolioClientId,
-                CoverageList = new SelectList(coverTypes, "Id", "Name"),
-                QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name")
+                CoverTypelList = new SelectList(coverTypes, "Id", "Name"),
+                QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name"),
+                BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
+                DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
+                MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
+                MotorModelList = new SelectList(motorModels, "Id", "Name"),
+                MotorUseList = new SelectList(motorUses, "Id", "Name")
             };
 
             return await Task.Run(() => View(resource)).ConfigureAwait(true);
@@ -112,12 +140,11 @@ namespace Tilbake.MVC.Controllers
                 await _quoteService.AddAsync(resource);
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
             }
-            //  var insurers = await _insurerService.GetAllAsync();
+
             var coverTypes = await _coverTypeService.GetAllAsync();
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
-            //  resource.InsurerList = new SelectList(insurers, "Id", "Name");
-            resource.CoverageList = new SelectList(coverTypes, "Id", "Name");
+            resource.CoverTypelList = new SelectList(coverTypes, "Id", "Name");
             resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
 
             return await Task.Run(() => View(resource)).ConfigureAwait(true);

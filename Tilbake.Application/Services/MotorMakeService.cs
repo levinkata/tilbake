@@ -47,9 +47,9 @@ namespace Tilbake.Application.Services
         {
             var result = await Task.Run(() => _unitOfWork.MotorMakes.GetAllAsync()).ConfigureAwait(true);
             result = result.OrderBy(n => n.Name);
-
+            
             var resources = _mapper.Map<IEnumerable<MotorMake>, IEnumerable<MotorMakeResource>>(result);
-
+            
             return resources;
         }
 

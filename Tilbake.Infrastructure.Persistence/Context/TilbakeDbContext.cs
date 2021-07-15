@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
@@ -20,7 +21,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
             _userId = userData.UserId;
         }
 
-        public virtual DbSet<Domain.Models.Address> Addresses { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<AllRisk> AllRisks { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
@@ -155,13 +156,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
         //            }
         //        }
 
-        //Only have to override these two version of SaveChanges, as the other two versions call these
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaveChanges(_userId);
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
-
+        
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
             OnBeforeSaveChanges(_userId);
@@ -248,7 +248,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Domain.Models.Address>(entity =>
+            modelBuilder.Entity<Address>(entity =>
             {
                 entity.ToTable("Address");
 
@@ -568,6 +568,18 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.HasOne(d => d.PortfolioClient)
+                    .WithMany(p => p.Beneficiaries)
+                    .HasForeignKey(d => d.PortfolioClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Beneficiary_PortfolioClient");
+
+                entity.HasOne(d => d.RelationType)
+                    .WithMany(p => p.Beneficiaries)
+                    .HasForeignKey(d => d.RelationTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Beneficiary_Beneficiary");
             });
 
             modelBuilder.Entity<BodyType>(entity =>
@@ -1012,6 +1024,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasKey(e => new { e.ClientId, e.BankAccountId });
 
                 entity.ToTable("ClientBankAccount");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
 
                 entity.HasOne(d => d.BankAccount)
                     .WithMany(p => p.ClientBankAccounts)
@@ -2427,7 +2443,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasOne(d => d.Insurer)
                     .WithMany(p => p.QuoteItems)
                     .HasForeignKey(d => d.InsurerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_QuoteItem_Insurer");
 
                 entity.HasOne(d => d.Quote)
@@ -3042,6 +3057,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
             });
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
             OnModelCreatingPartial(modelBuilder);
         }

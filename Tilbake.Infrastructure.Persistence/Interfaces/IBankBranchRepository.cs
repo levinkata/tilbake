@@ -7,6 +7,6 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
 {
     public interface IBankBranchRepository : IRepository<BankBranch>
     {
-        Task<IEnumerable<BankBranch>> GetByBankId(Guid bankId);
+        Task<IEnumerable<BankBranch>> GetByBankIdAsync(Guid bankId);
     }    
 }

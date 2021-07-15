@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -17,18 +18,21 @@ namespace Tilbake.MVC.Controllers
         private readonly IDriverTypeService _driverTypeService;
         private readonly IMotorMakeService _motorMakeService;
         private readonly IMotorModelService _motorModelService;
+        private readonly IMotorUseService _motorUseService;
 
         public MotorsController(IMotorService motorService,
                                 IBodyTypeService bodyTypeService,
                                 IDriverTypeService driverTypeService,
                                 IMotorMakeService motorMakeService,
-                                IMotorModelService motorModelService)
+                                IMotorModelService motorModelService,
+                                IMotorUseService motorUseService)
         {
             _motorService = motorService;
             _bodyTypeService = bodyTypeService;
             _driverTypeService = driverTypeService;
             _motorMakeService = motorMakeService;
             _motorModelService = motorModelService;
+            _motorUseService = motorUseService;
         }
 
         // GET: Motors
@@ -61,15 +65,18 @@ namespace Tilbake.MVC.Controllers
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var driverTypes = await _driverTypeService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
-            var motorModels = await _motorModelService.GetAllAsync();
-
+            var motorMakeId = motorMakes.FirstOrDefault().Id;
+            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
+            var motorUses = await _motorUseService.GetAllAsync();
+            
             MotorSaveResource resource = new MotorSaveResource()
             {
                 PortfolioClientId = portfolioClientId,
                 BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
                 DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
                 MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
-                MotorModelList = new SelectList(motorModels, "Id", "Name")
+                MotorModelList = new SelectList(motorModels, "Id", "Name"),
+                MotorUseList = new SelectList(motorUses, "Id", "Name")
             };
             return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }

@@ -71,6 +71,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Model")]
         public string MotorModel { get; set; }
 
+        [Display(Name = "Motor Use")]
+        public string MotorUse { get; set; }
+
         //  SelectLists
 
         public SelectList BodyTypeList { get; set; }
@@ -78,5 +81,6 @@ namespace Tilbake.Application.Resources
         public SelectList DriverTypeList { get; set; }
         public SelectList MotorMakeList { get; set; }
         public SelectList MotorModelList { get; set; }
+        public SelectList MotorUseList { get; set; }
     }
 }

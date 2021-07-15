@@ -16,7 +16,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         }
 
-        public async Task<IEnumerable<MotorModel>> GetByMotorMakeId(Guid motorMakeId)
+        public async Task<IEnumerable<MotorModel>> GetByMotorMakeIdAsync(Guid motorMakeId)
         {
             return await Task.Run(() => _context.MotorModels
                                                 .Include(b => b.MotorMake)

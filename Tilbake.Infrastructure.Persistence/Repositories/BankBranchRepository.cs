@@ -16,7 +16,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         }
 
-        public async Task<IEnumerable<BankBranch>> GetByBankId(Guid bankId)
+        public async Task<IEnumerable<BankBranch>> GetByBankIdAsync(Guid bankId)
         {
             return await Task.Run(() => _context.BankBranches
                                                 .Include(b => b.Bank)

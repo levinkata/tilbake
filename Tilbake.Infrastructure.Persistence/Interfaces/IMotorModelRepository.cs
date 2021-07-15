@@ -7,6 +7,6 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
 {
     public interface IMotorModelRepository : IRepository<MotorModel>
     {
-        Task<IEnumerable<MotorModel>> GetByMotorMakeId(Guid motorMakeId);
+        Task<IEnumerable<MotorModel>> GetByMotorMakeIdAsync(Guid motorMakeId);
     }    
 }

@@ -3,7 +3,7 @@
 
 }
 
-<div class="d-flex bd-highlight">
+<div class="d-flex bd-highlight mb-2">
     <div class="ms-auto p-2 bg-light">
         <h1>Quote</h1>
         <dl class="row">
@@ -31,19 +31,19 @@
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="ClientInfo" class="control-label"></label>
-            <input asp-for="ClientInfo" id="clientInfo" class="form-control" />
+            <input asp-for="ClientInfo" id="ClientInfo" class="form-control" />
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="InternalInfo" class="control-label"></label>
-            <input asp-for="InternalInfo" id="internalInfo" class="form-control" />
+            <input asp-for="InternalInfo" id="InternalInfo" class="form-control" />
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="QuoteStatusId" class="control-label"></label>
-            <select asp-for="QuoteStatusId" id="quoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
+            <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
         </div>
     </div>
 </div>
@@ -104,7 +104,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnAddMotor" class="btn btn-primary">Understood</button>
+                    <button type="button" id="btnAddAllRisk" class="btn btn-primary">Understood</button>
                 </div>
             </div>
         </div>
@@ -173,9 +173,9 @@
                     </span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body offset-1">
                     <p>Motor Details</p>
-                    <div class="row offset-2">
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Motor.RegNumber" class="control-label"></label>
@@ -232,22 +232,22 @@
                             <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
                             <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-group form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="Motor.GreyImport" id="GreyImport" /> Grey Import
                             </label>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-group form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="Motor.SecurityFitting" id="SecurityFitting" /> Security Fitting
                             </label>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-group form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="Motor.TrackingDevice" id="TrackingDevice" /> Tracking Device
                             </label>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-group form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="Motor.Immobiliser" id="Immobiliser" /> Immobiliser
                             </label>
@@ -257,8 +257,7 @@
                                 <input class="form-check-input" asp-for="Motor.Alarm" type="checkbox" id="Alarm">
                                 <label class="form-check-label" asp-for="Motor.Alarm">Alarm</label>
                             </div>
-                        </div>
-
+                        </div>                          
                         <hr />
                         <div class="form-group">
                             <label asp-for="SumInsured" class="control-label"></label>
@@ -434,25 +433,29 @@
                 Id: quoteId,
                 PortfolioClientId: portfolioClientId,
                 QuoteNumber: 0,
-                QuoteDate: @DateTime.Now,
-                QuoteStatusId: $('#quoteStatusId option:selected').val(),
-                ClientInfo: $('#clientInfo').val(),
-                InternalInfo: $('#internalInfo').val()
+                QuoteDate: '@DateTime.Now',
+                QuoteStatusId: $('#QuoteStatusId option:selected').val(),
+                ClientInfo: $('#ClientInfo').val(),
+                InternalInfo: $('#InternalInfo').val()
             }
+
+            var objectResource = {
+                "quoteItems": quoteItems,
+                "motors": motors,
+                "quote": quote
+            };
+
+            console.log(JSON.stringify(objectResource));
 
             if (motors && quoteItems) {
                 var url = '/Quotes/PostQuote?portfolioClientId=' + portfolioClientId;
 
                 $.ajax({
                     url: url,
-                    contentType: "application/json",
+                    contentType: "application/json; charset=utf-8",
                     type: "POST",
                     traditional: true,
-                    data: {
-                        quoteItems: JSON.stringify(quoteItems),
-                        motors: JSON.stringify(motors),
-                        quote: JSON.stringify(quote)
-                    },
+                    data: JSON.stringify(objectResource),
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },

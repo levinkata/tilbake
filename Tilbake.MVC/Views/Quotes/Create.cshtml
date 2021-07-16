@@ -3,8 +3,7 @@
 
 }
 
-
-<div class="d-flex bd-highlight mb-3">
+<div class="d-flex bd-highlight">
     <div class="ms-auto p-2 bg-light">
         <h1>Quote</h1>
         <dl class="row">
@@ -12,7 +11,7 @@
                 Date:
             </dt>
             <dd class="col-sm-7">
-                14/07/2021
+                @DateTime.Now
             </dd>
             <dt class="col-sm-5">
                 Quote Number:
@@ -25,15 +24,35 @@
 </div>
 <div class="d-md-flex justify-content-md-end">
     <div class="form-group">
-        <a asp-controller="Quotes" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId"id="btnCreateQuote" class="btn btn-primary" type="button">Create Quote</a>
+        <input type="button" id="btnCreateQuote" class="btn btn-primary invisible" value="Create Quote" />
     </div>
 </div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="ClientInfo" class="control-label"></label>
+            <input asp-for="ClientInfo" id="clientInfo" class="form-control" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="InternalInfo" class="control-label"></label>
+            <input asp-for="InternalInfo" id="internalInfo" class="form-control" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="QuoteStatusId" class="control-label"></label>
+            <select asp-for="QuoteStatusId" id="quoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
+        </div>
+    </div>
+</div>
+
 <div class="p-2 bg-light mb-3">
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#allRiskModal">All Risks</button>
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#contentModal">Contents</button>
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#houseModal">House</button>
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#motorModal">Motor</button>
-
 </div>
 
 <div class="row">
@@ -57,9 +76,6 @@
         </table>
     </div>
     <div class="form-group">
-        <input type="button" id="btnProceedToQuote" class="btn btn-primary invisible" value="Proceed to quote" />
-    </div>
-    <div class="form-group">
         <div id="ErrorMsg" class="invisible">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -68,39 +84,8 @@
     </div>
 </div>
 
-@*<div class="form-group">
-    <div class="row">
-        <div class="col-md-6">
-            <h6><strong>Description</strong></h6>
-        </div>
-        <div class="col-md-4">
-            <h6><strong>Cover Type</strong></h6>
-        </div>
-        <div class="col-md-2">
-            <h6><strong>Sum Insured</strong></h6>
-        </div>
-    </div>
-</div>
-<hr />
-<div class="form-group">
-    @for (int i = 0; i < 4; i++)
-    {
-        <div class="row">
-            <div class="col-md-6">
-                <p>Description</p>
-            </div>
-            <div class="col-md-4">
-                <p>Cover Type</p>
-            </div>
-            <div class="col-md-2">
-                <p>Sum Insured</p>
-            </div>
-        </div>
-    }
-</div>*@
-
 <div>
-    <!-- Modal -->
+    <!-- AAll Risks Modal -->
     <div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -127,7 +112,7 @@
 </div>
 
 <div>
-    <!-- Modal -->
+    <!-- Contents Modal -->
     <div class="modal fade" id="contentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="contentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -165,9 +150,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-4">
-                            <p>House Details</p>
-                        </div>
+                        <p>House Details</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -179,9 +162,8 @@
     </div>
 </div>
 
-
-<div>
-    <!-- Modal -->
+<div class="offset-md-0">
+    <!-- Motor Modal -->
     <div class="modal fade" id="motorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="motorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -192,24 +174,29 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <p>Motor Details</p>
+                    <div class="row offset-2">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Motor.RegNumber" class="control-label"></label>
+                                <input asp-for="Motor.RegNumber" id="RegNumber" class="form-control" />
+                                <span asp-validation-for="Motor.RegNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Motor.BodyTypeId" class="control-label"></label>
+                                <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList"></select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
-
-                        <p>Motor Details</p>
                         <div class="form-group">
-                            <label asp-for="Motor.RegNumber" class="control-label"></label>
-                            <input asp-for="Motor.RegNumber" id="RegNumber" class="form-control" />
-                            <span asp-validation-for="Motor.RegNumber" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Motor.BodyTypeId" class="control-label"></label>
-                            <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList"></select>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="MotorMakeId" class="control-label"></label>
+                            <label asp-for="MotorMakeId" class="control-label">Make</label>
                             <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList"></select>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Motor.MotorModelId" class="control-label"></label>
+                            <label asp-for="Motor.MotorModelId" class="control-label">Model</label>
                             <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList"></select>
                         </div>
                         <div class="form-group">
@@ -218,62 +205,60 @@
                             <span asp-validation-for="Motor.RegYear" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Motor.DriverTypeId" class="control-label"></label>
+                            <label asp-for="Motor.DriverTypeId" class="control-label">Driver Type</label>
                             <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList"></select>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Motor.EngineNumber" class="control-label"></label>
+                            <label asp-for="Motor.EngineNumber" class="control-label">Engine Number</label>
                             <input asp-for="Motor.EngineNumber" id="EngineNumber" class="form-control" />
                             <span asp-validation-for="Motor.EngineNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Motor.ChassisNumber" class="control-label"></label>
+                            <label asp-for="Motor.ChassisNumber" class="control-label">Chassis Number</label>
                             <input asp-for="Motor.ChassisNumber" id="ChassisNumber" class="form-control" />
                             <span asp-validation-for="Motor.ChassisNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Motor.EngineCapacity" class="control-label"></label>
+                            <label asp-for="Motor.EngineCapacity" class="control-label">Engine Capacity</label>
                             <input asp-for="Motor.EngineCapacity" id="EngineCapacity" class="form-control" />
                             <span asp-validation-for="Motor.EngineCapacity" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Motor.Colour" class="control-label"></label>
+                            <label asp-for="Motor.Colour" class="control-label">Colour</label>
                             <input asp-for="Motor.Colour" id="Colour" class="form-control" />
                             <span asp-validation-for="Motor.Colour" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Motor.MotorUseId" class="control-label"></label>
+                            <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
                             <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
                         </div>
                         <div class="form-group form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.GreyImport" id="GreyImport" /> @Html.DisplayNameFor(model => model.Motor.GreyImport)
+                                <input class="form-check-input" asp-for="Motor.GreyImport" id="GreyImport" /> Grey Import
                             </label>
                         </div>
                         <div class="form-group form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.SecurityFitting" id="SecurityFitting" /> @Html.DisplayNameFor(model => model.Motor.SecurityFitting)
+                                <input class="form-check-input" asp-for="Motor.SecurityFitting" id="SecurityFitting" /> Security Fitting
                             </label>
                         </div>
                         <div class="form-group form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.TrackingDevice" id="TrackingDevice" /> @Html.DisplayNameFor(model => model.Motor.TrackingDevice)
+                                <input class="form-check-input" asp-for="Motor.TrackingDevice" id="TrackingDevice" /> Tracking Device
                             </label>
                         </div>
                         <div class="form-group form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.Immobiliser" id="Immobiliser" /> @Html.DisplayNameFor(model => model.Motor.Immobiliser)
+                                <input class="form-check-input" asp-for="Motor.Immobiliser" id="Immobiliser" /> Immobiliser
                             </label>
                         </div>
-                        <div class="form-group form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.Alarm" id="Alarm" /> @Html.DisplayNameFor(model => model.Motor.Alarm)
-                            </label>
+                        <div class="form-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" asp-for="Motor.Alarm" type="checkbox" id="Alarm">
+                                <label class="form-check-label" asp-for="Motor.Alarm">Alarm</label>
+                            </div>
                         </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" asp-for="Motor.Alarm" type="checkbox" id="Alarm">
-                            <label class="form-check-label" asp-for="Motor.Alarm">@Html.DisplayNameFor(model => model.Motor.Alarm)</label>
-                        </div>
+
                         <hr />
                         <div class="form-group">
                             <label asp-for="SumInsured" class="control-label"></label>
@@ -300,6 +285,7 @@
         var portfolioClientId = '@Model.PortfolioClientId';
         var motors = [];
         var quoteItems = [];
+        var quoteId = uuidv4();
 
         function uuidv4() {
             return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -334,9 +320,9 @@
 
         function LoadMotors() {
             var clientRiskId = uuidv4();
-            var description = '';
-            var coverType = '';
-            var sumInsured = 0;
+            var description = $('#RegYear').val() + ' ' + $('#MotorMakeId option:selected').text() + ' ' + $('#RegNumber').val();
+            var sumInsured = $('#SumInsured').val();
+            var coverType = $('#CoverTypeId option:selected').text();
 
             //  1. Build Motor Array to match model class Motor
             var motor = {
@@ -358,22 +344,18 @@
                 Alarm: $('#Alarm').val()
             };
 
-            description = $('#RegYear').val() + ' ' + $('#MotorMakeId option:selected').text() + ' ' + $('#RegNumber').val();
-            coverType = $('#CoverTypeId option:selected').text();
-            sumInsured = $('#SumInsured').val();
-
             //  2. Build QuoteItem Array to match model class QuoteItem
             var quoteItem = {
                 Id: uuidv4(),
-                QuoteId: uuidv4(),
+                QuoteId: quoteId,
                 ClientRiskId: clientRiskId,
                 InsurerId: null,
                 CoverTypeId: $('#CoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
                 Premium: 0,
-                Excess: null,
-                CoverType: coverType,
+                Excess: '',
+                CoverType: coverType
             }
 
             //  3. Append to the Arrays
@@ -382,6 +364,22 @@
 
             AddToCart(clientRiskId, description, coverType, sumInsured);
         }
+
+        $('#btnCreateQuote').click(function () {
+            var cartItems = $('#tblCart tbody tr');
+            var numCart = cartItems.length;
+
+            $("#ErrorMsg").empty();
+
+            if (numCart == 0) {
+                $("#ErrorMsg").removeClass("invisible").addClass("text-danger visible");
+                $("#ErrorMsg").append('<label>Cart is empty</label>');
+                return;
+            };
+            $("#ErrorMsg").removeClass("text-danger visible").addClass("invisible");
+
+            GenerateQuote();
+        });
 
         function ResetBtnCreateQuote() {
             var cartItems = $('#tblCart tbody tr').length;
@@ -394,8 +392,8 @@
             }
         }
 
-        function AddToCart(clientRiskId, description, CoverType, SumInsured) {
-            
+        function AddToCart(clientRiskId, description, coverType, sumInsured) {
+
             $("#ErrorMsg").empty();
             var cartItem = $('#tblCart').find('tr[data-client-risk-id=' + clientRiskId + ']');
             if (cartItem.length > 0) {
@@ -413,8 +411,8 @@
                     .attr({ 'data-client-risk-id': clientRiskId })
                     .append($('<td>').html(description))
                     .attr({ 'data-description': description })
-                    .append($('<td>').html(CoverType))
-                    .append($('<td>').html(SumInsured))
+                    .append($('<td>').html(coverType))
+                    .append($('<td>').html(sumInsured))
                     .append($('<td>')
                         .append($('<a>')
                             .attr('href', '#')
@@ -429,5 +427,40 @@
             ResetBtnCreateQuote();
         }
 
+        function GenerateQuote() {
+
+            //  Build Quote Arrat to match model class Quote
+            var quote = {
+                Id: quoteId,
+                PortfolioClientId: portfolioClientId,
+                QuoteNumber: 0,
+                QuoteDate: @DateTime.Now,
+                QuoteStatusId: $('#quoteStatusId option:selected').val(),
+                ClientInfo: $('#clientInfo').val(),
+                InternalInfo: $('#internalInfo').val()
+            }
+
+            if (motors && quoteItems) {
+                var url = '/Quotes/PostQuote?portfolioClientId=' + portfolioClientId;
+
+                $.ajax({
+                    url: url,
+                    contentType: "application/json",
+                    type: "POST",
+                    traditional: true,
+                    data: {
+                        quoteItems: JSON.stringify(quoteItems),
+                        motors: JSON.stringify(motors),
+                        quote: JSON.stringify(quote)
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error has occured." + error);
+                    },
+                    success: function (data) {
+                        alert('Returned from controller!')
+                    }
+                });
+            }
+        }
     </script>
 }

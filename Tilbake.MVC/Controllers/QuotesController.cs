@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostQuote(List<QuoteItem> quoteItems, Guid portfolioClientId, string clientInfo, string internalInfo, Guid quoteStatusId)
+        public async Task<IActionResult> PostQuote(Guid portfolioClientId, Quote quote, List<QuoteItem> quoteItems, List<Motor> motors)
         {
             if (quoteItems == null)
             {
@@ -89,15 +89,16 @@ namespace Tilbake.MVC.Controllers
             QuoteSaveResource resource = new QuoteSaveResource
             {
                 QuoteDate = DateTime.Today,
-                QuoteStatusId = quoteStatusId,
-                ClientInfo = clientInfo,
-                InternalInfo = internalInfo + portfolioClientId.ToString()
+                QuoteStatusId = quote.QuoteStatusId,
+                ClientInfo = quote.ClientInfo,
+                InternalInfo = quote.InternalInfo + portfolioClientId.ToString()
             };
 
-            resource.QuoteItems.AddRange(quoteItems);
+            // resource.QuoteItems.AddRange(quoteItems);
             await _quoteService.AddAsync(resource).ConfigureAwait(true);
 
-            return await Task.Run(() => Json(quoteItems)).ConfigureAwait(true);
+            //  return await Task.Run(() => Json(quoteItems)).ConfigureAwait(true);
+            return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
         }
 
         // GET: Quotes/Create

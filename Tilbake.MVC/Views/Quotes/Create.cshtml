@@ -282,8 +282,8 @@
 @section Scripts{
     <script>
         var portfolioClientId = '@Model.PortfolioClientId';
-        var motors = [];
-        var quoteItems = [];
+        var motors = new Array();
+        var quoteItems = new Array();
         var quoteId = uuidv4();
 
         function uuidv4() {

@@ -1,4 +1,6 @@
+using System.Reflection;
 using Autofac;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
+using Tilbake.Application.Validators;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 
@@ -40,7 +43,14 @@ namespace Tilbake.MVC
                 )
             );
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                    .AddFluentValidation(s =>
+                    {
+                        // s.RegisterValidatorsFromAssemblyContaining<BankResourceValidator>();
+                        s.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());                        
+                        s.DisableDataAnnotationsValidation = true;
+                    });
+            
             services.AddRazorPages();
 
             services.AddAuthorization(options =>

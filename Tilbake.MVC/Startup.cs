@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -8,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
 using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
-using Tilbake.Application.Validators;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 

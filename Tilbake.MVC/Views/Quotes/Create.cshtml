@@ -283,7 +283,7 @@
     <script>
         var portfolioClientId = '@Model.PortfolioClientId';
         var motors = new Array();
-        var quoteItems = new Array();
+        var quoteItems = [];
         var quoteId = uuidv4();
 
         function uuidv4() {
@@ -301,6 +301,7 @@
 
             $.ajax({
                 url: '@(Url.Action("GetMotorModels", "MotorModels"))',
+                traditional: true,
                 dataType: "JSON",
                 type: 'GET',
                 data: { motorMakeId: selectedmotorMakeId },
@@ -432,30 +433,27 @@
             var quote = {
                 Id: quoteId,
                 PortfolioClientId: portfolioClientId,
-                QuoteNumber: 0,
+                QuoteNumber: 1000,
                 QuoteDate: '@DateTime.Now',
                 QuoteStatusId: $('#QuoteStatusId option:selected').val(),
                 ClientInfo: $('#ClientInfo').val(),
                 InternalInfo: $('#InternalInfo').val()
-            }
-
-            var objectResource = {
-                "quoteItems": quoteItems,
-                "motors": motors,
-                "quote": quote
             };
-
-            console.log(JSON.stringify(objectResource));
 
             if (motors && quoteItems) {
                 var url = '/Quotes/PostQuote?portfolioClientId=' + portfolioClientId;
+                console.log(quoteItems);
+                console.log(JSON.stringify(motors));
 
                 $.ajax({
                     url: url,
-                    contentType: "application/json; charset=utf-8",
                     type: "POST",
+                    /*dataType: "json",*/
                     traditional: true,
-                    data: JSON.stringify(objectResource),
+                    data: {
+                        quote: JSON.stringify(quote),
+                        quoteItems: quoteItems,
+                        motors: JSON.stringify(motors) },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },

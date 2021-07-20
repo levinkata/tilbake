@@ -147,14 +147,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-        //            }
-        //        }
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//         {
+//             if (!optionsBuilder.IsConfigured)
+//             {
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+//             }
+//         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -243,7 +243,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
@@ -263,6 +263,56 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(100);
 
                 entity.Property(e => e.PostalAddress).HasMaxLength(50);
+
+                entity.HasOne(d => d.Attorney)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.AttorneyId)
+                    .HasConstraintName("FK_Address_Attorney");
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.CityId)
+                    .HasConstraintName("FK_Address_City");
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.ClientId)
+                    .HasConstraintName("FK_Address_Client");
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.CompanyId)
+                    .HasConstraintName("FK_Address_Company");
+
+                entity.HasOne(d => d.LossAdjuster)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.LossAdjusterId)
+                    .HasConstraintName("FK_Address_LossAdjuster");
+
+                entity.HasOne(d => d.Repairer)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.RepairerId)
+                    .HasConstraintName("FK_Address_Repairer");
+
+                entity.HasOne(d => d.RoadsideAssist)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.RoadsideAssistId)
+                    .HasConstraintName("FK_Address_RoadsideAssist");
+
+                entity.HasOne(d => d.ThirdParty)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.ThirdPartyId)
+                    .HasConstraintName("FK_Address_ThirdParty");
+
+                entity.HasOne(d => d.TowTruck)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.TowTruckId)
+                    .HasConstraintName("FK_Address_TowTruck");
+
+                entity.HasOne(d => d.TracingAgent)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.TracingAgentId)
+                    .HasConstraintName("FK_Address_TracingAgent");
             });
 
             modelBuilder.Entity<AllRisk>(entity =>
@@ -579,7 +629,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .WithMany(p => p.Beneficiaries)
                     .HasForeignKey(d => d.RelationTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Beneficiary_Beneficiary");
+                    .HasConstraintName("FK_Beneficiary_RelationType");
             });
 
             modelBuilder.Entity<BodyType>(entity =>
@@ -750,7 +800,13 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
+                entity.Property(e => e.Description).HasMaxLength(100);
+
                 entity.Property(e => e.DocumentDate).HasColumnType("date");
+
+                entity.Property(e => e.Extension).HasMaxLength(50);
+
+                entity.Property(e => e.FileType).HasMaxLength(50);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
@@ -1067,9 +1123,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Description).HasMaxLength(50);
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(100);
+
+                entity.Property(e => e.DocumentDate).HasColumnType("date");
 
                 entity.Property(e => e.DocumentPath).IsUnicode(false);
+
+                entity.Property(e => e.Extension).HasMaxLength(50);
+
+                entity.Property(e => e.FileType).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.ClientDocuments)
@@ -1124,9 +1192,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Description).HasMaxLength(50);
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(100);
+
+                entity.Property(e => e.DocumentDate).HasColumnType("date");
 
                 entity.Property(e => e.DocumentPath).IsUnicode(false);
+
+                entity.Property(e => e.Extension).HasMaxLength(50);
+
+                entity.Property(e => e.FileType).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.ClientRisk)
                     .WithMany(p => p.ClientRiskDocuments)
@@ -1161,6 +1241,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.ToTable("Company");
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
@@ -2509,9 +2593,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Description).HasMaxLength(50);
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(100);
+
+                entity.Property(e => e.DocumentDate).HasColumnType("date");
 
                 entity.Property(e => e.DocumentPath).IsUnicode(false);
+
+                entity.Property(e => e.Extension).HasMaxLength(50);
+
+                entity.Property(e => e.FileType).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.DocumentType)
                     .WithMany(p => p.ReceivableDocuments)

@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public Client()
         {
+            Addresses = new HashSet<Address>();
             ClientBankAccounts = new HashSet<ClientBankAccount>();
             ClientCarriers = new HashSet<ClientCarrier>();
             ClientDocuments = new HashSet<ClientDocument>();
@@ -41,6 +42,7 @@ namespace Tilbake.Domain.Models
         public virtual MaritalStatus MaritalStatus { get; set; }
         public virtual Occupation Occupation { get; set; }
         public virtual Title Title { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ClientBankAccount> ClientBankAccounts { get; set; }
         public virtual ICollection<ClientCarrier> ClientCarriers { get; set; }
         public virtual ICollection<ClientDocument> ClientDocuments { get; set; }

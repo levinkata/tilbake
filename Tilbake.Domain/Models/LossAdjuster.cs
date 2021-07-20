@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public LossAdjuster()
         {
+            Addresses = new HashSet<Address>();
             ClaimLossAdjusters = new HashSet<ClaimLossAdjuster>();
         }
 
@@ -22,6 +23,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ClaimLossAdjuster> ClaimLossAdjusters { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public Attorney()
         {
+            Addresses = new HashSet<Address>();
             ClaimAttorneys = new HashSet<ClaimAttorney>();
         }
 
@@ -22,6 +23,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ClaimAttorney> ClaimAttorneys { get; set; }
     }
 }

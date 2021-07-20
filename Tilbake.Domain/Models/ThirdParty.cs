@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public ThirdParty()
         {
+            Addresses = new HashSet<Address>();
             ClaimThirdParties = new HashSet<ClaimThirdParty>();
         }
 
@@ -22,6 +23,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ClaimThirdParty> ClaimThirdParties { get; set; }
     }
 }

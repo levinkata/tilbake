@@ -100,9 +100,7 @@ namespace Tilbake.MVC.Controllers
             // resource.QuoteItems.AddRange(quoteItems);
             // await _quoteService.AddAsync(resource).ConfigureAwait(true);
 
-            //  return await Task.Run(() => Json(quoteItems)).ConfigureAwait(true);
-            //return RedirectToAction(nameof(Details), "PortfolioClients", new { portfolioClientId });
-            return Json(new { message = "OK" + len.ToString()});
+            return RedirectToAction(nameof(Details), "PortfolioClients", new { portfolioClientId });
         }
 
         // GET: Quotes/Create

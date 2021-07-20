@@ -8,6 +8,9 @@ namespace Tilbake.Domain.Models
         public Guid Id { get; set; }
         public int ClaimNumber { get; set; }
         public string Name { get; set; }
+        public string FileType { get; set; }
+        public string Extension { get; set; }
+        public string Description { get; set; }
         public Guid DocumentTypeId { get; set; }
         public DateTime? DocumentDate { get; set; }
         public string DocumentPath { get; set; }

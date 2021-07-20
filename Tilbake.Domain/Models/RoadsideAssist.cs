@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public RoadsideAssist()
         {
+            Addresses = new HashSet<Address>();
             ClaimRoadsideAssists = new HashSet<ClaimRoadsideAssist>();
         }
 
@@ -22,6 +23,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ClaimRoadsideAssist> ClaimRoadsideAssists { get; set; }
     }
 }

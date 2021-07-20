@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostQuote(Guid portfolioClientId, object[] quote, string[] quoteItems, List<string> motors)
+        public IActionResult PostQuote(Guid portfolioClientId, object[] quote, string[] quoteItems, List<string> motors)
         {
             if (quoteItems == null)
             {

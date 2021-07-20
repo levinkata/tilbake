@@ -441,19 +441,14 @@
             };
 
             if (motors && quoteItems) {
-                var url = '/Quotes/PostQuote?portfolioClientId=' + portfolioClientId;
+                @* var url = '/Quotes/PostQuote?portfolioClientId=' + portfolioClientId; *@
                 console.log(quoteItems);
                 console.log(JSON.stringify(motors));
 
                 $.ajax({
-                    url: url,
+                    url: '@(Url.Action("PostQuote"))',
                     type: "POST",
-                    /*dataType: "json",*/
                     traditional: true,
-                    data: {
-                        quote: JSON.stringify(quote),
-                        quoteItems: quoteItems,
-                        motors: JSON.stringify(motors) },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },

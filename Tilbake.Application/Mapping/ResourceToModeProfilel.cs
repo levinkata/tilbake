@@ -16,6 +16,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<ClientSaveResource, Client>();
             CreateMap<ClientTypeSaveResource, ClientType>();
             CreateMap<CountrySaveResource, Country>();
+            CreateMap<ClientDocumentSaveResource, ClientDocument>();
             CreateMap<ClientRiskSaveResource, ClientRisk>();
             CreateMap<CoverTypeSaveResource, CoverType>();
             CreateMap<DocumentTypeSaveResource, DocumentType>();

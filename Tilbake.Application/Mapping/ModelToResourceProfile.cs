@@ -27,6 +27,9 @@ namespace Tilbake.Application.Mapping
                     .ForMember(dest => dest.Occupation, opt => opt.MapFrom(src => src.Occupation.Name))
                     .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Name)).ReverseMap();
 
+            CreateMap<ClientDocument, ClientDocumentResource>()
+                    .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType.Name)).ReverseMap();
+
             CreateMap<ClientRisk, ClientRiskResource>().ReverseMap();
             CreateMap<ClientType, ClientTypeResource>().ReverseMap();
             CreateMap<Country, CountryResource>().ReverseMap();

@@ -449,6 +449,11 @@
                     url: '@(Url.Action("PostQuote"))',
                     type: "POST",
                     traditional: true,
+                    data: {
+                        portfolioClientId: portfolioClientId,
+                        quote: quote, quoteItems: quoteItems,
+                        motors: JSON.stringify(motors)
+                    },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },

@@ -52,7 +52,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Details(Guid portfolioId, Guid clientId)
         {
             var portfolioClientId = await _portfolioClientService.GetPortfolioClientId(portfolioId, clientId);
-            var resource = await _clientService.GetByClientId((Guid)portfolioId, (Guid)clientId);
+            var resource = await _clientService.GetByClientId(portfolioId, clientId);
             if (resource == null)
             {
                 return NotFound();

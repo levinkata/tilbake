@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.Application.Resources
 {
-    public class ClientDocumentResource
+    public class ClientDocumentSaveResource
     {
-        public Guid Id { get; set; }
         public Guid ClientId { get; set; }
 
         [Display(Name = "Name")]

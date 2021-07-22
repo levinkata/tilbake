@@ -7,21 +7,22 @@
     <div class="ms-auto p-2 bg-light">
         <h1>Quote</h1>
         <dl class="row">
-            <dt class="col-sm-5">
+            <dt class="col-5">
                 Date:
             </dt>
-            <dd class="col-sm-7">
-                @DateTime.Now
+            <dd class="col-7">
+                @DateTime.Now.Date.ToString("MM/dd/yyyy")
             </dd>
-            <dt class="col-sm-5">
+            <dt class="col-5">
                 Quote Number:
             </dt>
-            <dd class="col-sm-7">
+            <dd class="col-7">
                 1
             </dd>
         </dl>
     </div>
 </div>
+
 <div class="d-md-flex justify-content-md-end">
     <div class="form-group">
         <input type="button" id="btnCreateQuote" class="btn btn-primary invisible" value="Create Quote" />
@@ -57,7 +58,7 @@
 
 <div class="row">
     <div class="form-group">
-        <table id="tblCart" class="table table-sm invisible">
+        <table id="tblCart" class="tilbake-table tilbake-table-rounded invisible">
             <thead>
                 <tr>
                     <th>
@@ -85,7 +86,7 @@
 </div>
 
 <div>
-    <!-- AAll Risks Modal -->
+    <!-- All Risks Modal -->
     <div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -253,7 +254,7 @@
                             </label>
                         </div>
                         <div class="form-group">
-                            <div class="form-check form-switch">
+                            <div class="form-check form-switch pl-2">
                                 <input class="form-check-input" asp-for="Motor.Alarm" type="checkbox" id="Alarm">
                                 <label class="form-check-label" asp-for="Motor.Alarm">Alarm</label>
                             </div>
@@ -282,7 +283,8 @@
 @section Scripts{
     <script>
         var portfolioClientId = '@Model.PortfolioClientId';
-        var motors = new Array();
+        var clientId = '@Model.ClientId';
+        var motors = [];
         var quoteItems = [];
         var quoteId = uuidv4();
 
@@ -433,7 +435,7 @@
             var quote = {
                 Id: quoteId,
                 PortfolioClientId: portfolioClientId,
-                QuoteNumber: 1000,
+                QuoteNumber: 1,
                 QuoteDate: '@DateTime.Now',
                 QuoteStatusId: $('#QuoteStatusId option:selected').val(),
                 ClientInfo: $('#ClientInfo').val(),
@@ -441,18 +443,17 @@
             };
 
             if (motors && quoteItems) {
-                @* var url = '/Quotes/PostQuote?portfolioClientId=' + portfolioClientId; *@
-                console.log(quoteItems);
-                console.log(JSON.stringify(motors));
 
                 $.ajax({
                     url: '@(Url.Action("PostQuote"))',
                     type: "POST",
-                    traditional: true,
+                    dataType: "json",
+/*                    traditional: true,*/
                     data: {
-                        portfolioClientId: portfolioClientId,
-                        quote: quote, quoteItems: quoteItems,
-                        motors: JSON.stringify(motors)
+                        clientId: clientId,
+                        quote: quote,
+                        quoteItems: quoteItems,
+                        motors: motors
                     },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);

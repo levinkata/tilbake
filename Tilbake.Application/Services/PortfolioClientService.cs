@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -46,6 +47,14 @@ namespace Tilbake.Application.Services
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
         {
             return await _unitOfWork.PortfolioClients.ExistsAsync(portfolioId, clientId).ConfigureAwait(true);
+        }
+
+        public async Task<PortfolioClientResource> FindAsync(Guid id)
+        {
+            var result = await _unitOfWork.PortfolioClients.FindAsync(p => p.Id == id).ConfigureAwait(true);
+            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result.FirstOrDefault());
+
+            return resource;
         }
 
         public async Task<PortfolioClientResource> GetByIdAsync(Guid id)

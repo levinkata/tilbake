@@ -13,7 +13,6 @@
     <div class="col-md-4">
         <form method="post" asp-action="Create" asp-route-clientId="@Model.ClientId" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PortfolioId" />
             <input type="hidden" asp-for="ClientId" />
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>

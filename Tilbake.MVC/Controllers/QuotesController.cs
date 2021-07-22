@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -23,6 +25,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IMotorMakeService _motorMakeService;
         private readonly IMotorModelService _motorModelService;
         private readonly IMotorUseService _motorUseService;
+        private readonly IPortfolioClientService _portfolioClientService;
 
         public QuotesController(IQuoteService quoteService,
                                 ICoverTypeService coverTypeService,
@@ -31,7 +34,8 @@ namespace Tilbake.MVC.Controllers
                                 IDriverTypeService driverTypeService,
                                 IMotorMakeService motorMakeService,
                                 IMotorModelService motorModelService,
-                                IMotorUseService motorUseService)
+                                IMotorUseService motorUseService,
+                                IPortfolioClientService portfolioClientService)
         {
             _quoteService = quoteService;
             _coverTypeService = coverTypeService;
@@ -41,6 +45,7 @@ namespace Tilbake.MVC.Controllers
             _motorMakeService = motorMakeService;
             _motorModelService = motorModelService;
             _motorUseService = motorUseService;
+            _portfolioClientService = portfolioClientService;
         }
 
         // GET: Quotes
@@ -79,33 +84,43 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostQuote(Guid portfolioClientId, object[] quote, string[] quoteItems, List<string> motors)
+        public async Task<IActionResult> PostQuote(Guid clientId, Quote quote, QuoteItem[] quoteItems, Motor[] motors)
         {
             if (quoteItems == null)
             {
                 throw new ArgumentNullException(nameof(quoteItems));
             };
 
+            var portfolioClientId = quote.PortfolioClientId;
 
-            var len = motors.Count;
+            QuoteSaveResource resource = new QuoteSaveResource
+            {
+                PortfolioClientId = portfolioClientId,
+                ClientId = clientId,
+                QuoteDate = DateTime.Today,
+                QuoteStatusId = quote.QuoteStatusId,
+                ClientInfo = quote.ClientInfo,
+                InternalInfo = quote.InternalInfo
+            };
 
-            //QuoteSaveResource resource = new QuoteSaveResource
-            //{
-            //    QuoteDate = DateTime.Today,
-            //    QuoteStatusId = quote.QuoteStatusId,
-            //    ClientInfo = quote.ClientInfo,
-            //    InternalInfo = quote.InternalInfo + portfolioClientId.ToString()
-            //};
+            resource.QuoteItems.AddRange(quoteItems);
 
-            // resource.QuoteItems.AddRange(quoteItems);
-            // await _quoteService.AddAsync(resource).ConfigureAwait(true);
+            if(motors.Length > 0)
+            {
+                resource.Motors.AddRange(motors);
+            }
 
-            return RedirectToAction(nameof(Details), "PortfolioClients", new { portfolioClientId });
+            await _quoteService.AddAsync(resource).ConfigureAwait(true);
+
+            return RedirectToAction(nameof(Create), new { portfolioClientId });
         }
 
         // GET: Quotes/Create
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
+            var portfolioClient = await _portfolioClientService.FindAsync(portfolioClientId);
+            var clientId = portfolioClient.ClientId;
+
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var driverTypes = await _driverTypeService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
@@ -119,6 +134,7 @@ namespace Tilbake.MVC.Controllers
             QuoteSaveResource resource = new QuoteSaveResource()
             {
                 PortfolioClientId = portfolioClientId,
+                ClientId = clientId,
                 CoverTypelList = new SelectList(coverTypes, "Id", "Name"),
                 QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name"),
                 BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),

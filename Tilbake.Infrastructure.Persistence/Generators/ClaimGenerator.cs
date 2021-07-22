@@ -51,8 +51,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             else
                 claimTable.ClaimNumber = currentValue;
 
-            _context.SaveChangesAsync();
-
             return currentValue;
         }
 
@@ -84,8 +82,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             }
             else
                 claimTable.ClaimNumber = currentValue;
-
-            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
             return currentValue;
         }        

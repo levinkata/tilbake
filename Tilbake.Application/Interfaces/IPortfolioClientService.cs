@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tilbake.Application.Resources;
 
@@ -7,6 +9,7 @@ namespace Tilbake.Application.Interfaces
     public interface IPortfolioClientService
     {
         Task<PortfolioClientResource> GetByIdAsync(Guid id);
+        Task<PortfolioClientResource> FindAsync(Guid id);
         Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId);
         Task<int> AddAsync(PortfolioClientSaveResource resource);
         Task<int> AddClientAsync(ClientSaveResource resource);

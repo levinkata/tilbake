@@ -52,8 +52,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             else
                 clientTable.ClientNumber = currentValue;
 
-            _context.SaveChangesAsync();
-
             return currentValue;
         }
 
@@ -86,8 +84,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             }
             else
                 clientTable.ClientNumber = currentValue;
-
-            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
             return currentValue;
         }        

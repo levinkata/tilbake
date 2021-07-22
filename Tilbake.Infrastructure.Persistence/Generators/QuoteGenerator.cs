@@ -51,8 +51,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             else
                 quoteTable.QuoteNumber = currentValue;
 
-            _context.SaveChangesAsync();
-
             return currentValue;
         }
 
@@ -85,9 +83,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             else
                 quoteTable.QuoteNumber = currentValue;
 
-            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-
             return currentValue;
-        }        
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Tilbake.Application.Resources
     public class QuoteSaveResource
     {
         public Guid PortfolioId { get; set; }
-
+        public Guid ClientId { get; set; }
         public Guid PortfolioClientId { get; set; }
 
         [Display(Name = "Quote Number")]

@@ -23,19 +23,49 @@ namespace Tilbake.Application.Services
 
         public async Task<int> AddAsync(QuoteSaveResource resource)
         {
-            List<QuoteItem> quoteItemsList = new List<QuoteItem>();
-
-            int ro = resource.QuoteItems.Count;
-            var quoteItems = resource.QuoteItems;
-
             var quote = _mapper.Map<QuoteSaveResource, Quote>(resource);
 
-            quote.Id = Guid.NewGuid();
-            await _unitOfWork.Quotes.AddAsync(quote).ConfigureAwait(true);
+            var clientId = resource.ClientId;
 
-            for (int i = 0; i < ro; i++)
+            quote.Id = Guid.NewGuid();
+            quote.QuoteDate = DateTime.Now;
+            await _unitOfWork.Quotes.AddAsync(quote).ConfigureAwait(true);
+            var quoteId = quote.Id;
+
+            int mo = resource.Motors.Count;
+            var motors = resource.Motors;
+            await _unitOfWork.Motors.AddRangeAsync(motors).ConfigureAwait(true);
+
+            var quoteItems = resource.QuoteItems;
+
+            for (int i = 0; i < mo; i++)
             {
-                quoteItems[i].QuoteId = quote.Id;
+                var motorId = motors[i].Id;
+
+                Risk risk = new Risk()
+                {
+                    Id = Guid.NewGuid(),
+                    MotorId = motorId
+                };
+                await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+
+                var riskId = risk.Id;
+
+                ClientRisk clientRisk = new ClientRisk()
+                {
+                    Id = Guid.NewGuid(),
+                    ClientId = clientId,
+                    RiskId = riskId
+                };
+                await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+
+                var clientRiskId = clientRisk.Id;
+
+                foreach (var item in quoteItems.Where(x => x.ClientRiskId == motorId))
+                {
+                    item.QuoteId = quoteId;
+                    item.ClientRiskId = clientRiskId;
+                }
             }
 
             await _unitOfWork.QuoteItems.AddRangeAsync(quoteItems).ConfigureAwait(true);

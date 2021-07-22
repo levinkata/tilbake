@@ -55,12 +55,6 @@ namespace Tilbake.MVC.Controllers
             return await Task.Run(() => View(resources)).ConfigureAwait(true);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> QuoteItemRow(Guid portfolioClientId, [FromBody] List<QuoteItem> paramObjects)
-        {
-            return await Task.Run(() => ViewComponent("QuoteItem", new { portfolioClientId, paramObjects })).ConfigureAwait(true);
-        }
-
         public async Task<IActionResult> Quotation()
         {
             return await Task.Run(() => View()).ConfigureAwait(true);
@@ -82,37 +76,25 @@ namespace Tilbake.MVC.Controllers
 
             return View(resource);
         }
-
+        
         [HttpPost]
-        public async Task<IActionResult> PostQuote(Guid clientId, Quote quote, QuoteItem[] quoteItems, Motor[] motors)
+        public async Task<IActionResult> PostQuote(QuoteObjectResource quoteObject)
         {
-            if (quoteItems == null)
+            if (quoteObject.QuoteItems == null)
             {
-                throw new ArgumentNullException(nameof(quoteItems));
+                throw new ArgumentNullException(nameof(quoteObject.QuoteItems));
             };
 
-            var portfolioClientId = quote.PortfolioClientId;
+            var portfolioClientId = quoteObject.Quote.PortfolioClientId;
 
-            QuoteSaveResource resource = new QuoteSaveResource
+            await _quoteService.AddAsync(quoteObject).ConfigureAwait(true);
+
+            return await Task.Run(() => Ok(new
             {
-                PortfolioClientId = portfolioClientId,
-                ClientId = clientId,
-                QuoteDate = DateTime.Today,
-                QuoteStatusId = quote.QuoteStatusId,
-                ClientInfo = quote.ClientInfo,
-                InternalInfo = quote.InternalInfo
-            };
-
-            resource.QuoteItems.AddRange(quoteItems);
-
-            if(motors.Length > 0)
-            {
-                resource.Motors.AddRange(motors);
-            }
-
-            await _quoteService.AddAsync(resource).ConfigureAwait(true);
-
-            return RedirectToAction(nameof(Create), new { portfolioClientId });
+                quoteObject.Quote.Id,
+                quoteObject.Quote.PortfolioClientId,
+                quoteObject.Quote.QuoteNumber
+            })).ConfigureAwait(true);
         }
 
         // GET: Quotes/Create
@@ -152,19 +134,19 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(QuoteSaveResource resource)
+        public async Task<IActionResult> Create(QuoteObjectResource resource)
         {
             if (ModelState.IsValid)
             {
                 await _quoteService.AddAsync(resource);
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.Quote.PortfolioClientId });
             }
 
-            var coverTypes = await _coverTypeService.GetAllAsync();
-            var quoteStatuses = await _quoteStatusService.GetAllAsync();
+            //var coverTypes = await _coverTypeService.GetAllAsync();
+            //var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
-            resource.CoverTypelList = new SelectList(coverTypes, "Id", "Name");
-            resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
+            //resource.CoverTypelList = new SelectList(coverTypes, "Id", "Name");
+            //resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
 
             return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }

@@ -81,6 +81,9 @@
             <div class="form-group text-center">
                 <a asp-controller="Quotes" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
             </div>
+            <div class="form-group">
+                @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
+            </div>
         </div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
             <br />

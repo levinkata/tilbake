@@ -174,17 +174,17 @@
                     </span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body offset-1">
+                <div class="modal-body ms-3">
                     <p>Motor Details</p>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <label asp-for="Motor.RegNumber" class="control-label"></label>
-                                <input asp-for="Motor.RegNumber" id="RegNumber" class="form-control" />
+                                <input asp-for="Motor.RegNumber" id="RegNumber" required class="form-control" />
                                 <span asp-validation-for="Motor.RegNumber" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="form-group">
                                 <label asp-for="Motor.BodyTypeId" class="control-label"></label>
                                 <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList"></select>
@@ -192,14 +192,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group">
-                            <label asp-for="MotorMakeId" class="control-label">Make</label>
-                            <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList"></select>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label asp-for="MotorMakeId" class="control-label">Make</label>
+                                <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList"></select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Motor.MotorModelId" class="control-label">Model</label>
-                            <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList"></select>
+                        <div class="col-7">
+                            <div class="form-group">
+                                <label asp-for="Motor.MotorModelId" class="control-label">Model</label>
+                                <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList"></select>
+                            </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group">
                             <label asp-for="Motor.RegYear" class="control-label"></label>
                             <input asp-for="Motor.RegYear" id="RegYear" class="form-control" />
@@ -209,52 +215,66 @@
                             <label asp-for="Motor.DriverTypeId" class="control-label">Driver Type</label>
                             <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList"></select>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Motor.EngineNumber" class="control-label">Engine Number</label>
-                            <input asp-for="Motor.EngineNumber" id="EngineNumber" class="form-control" />
-                            <span asp-validation-for="Motor.EngineNumber" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="Motor.EngineNumber" class="control-label">Engine Number</label>
+                                    <input asp-for="Motor.EngineNumber" id="EngineNumber" required class="form-control" />
+                                    <span asp-validation-for="Motor.EngineNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="Motor.ChassisNumber" class="control-label">Chassis Number</label>
+                                    <input asp-for="Motor.ChassisNumber" id="ChassisNumber" required class="form-control" />
+                                    <span asp-validation-for="Motor.ChassisNumber" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Motor.ChassisNumber" class="control-label">Chassis Number</label>
-                            <input asp-for="Motor.ChassisNumber" id="ChassisNumber" class="form-control" />
-                            <span asp-validation-for="Motor.ChassisNumber" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Motor.EngineCapacity" class="control-label">Engine Capacity</label>
-                            <input asp-for="Motor.EngineCapacity" id="EngineCapacity" class="form-control" />
-                            <span asp-validation-for="Motor.EngineCapacity" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Motor.Colour" class="control-label">Colour</label>
-                            <input asp-for="Motor.Colour" id="Colour" class="form-control" />
-                            <span asp-validation-for="Motor.Colour" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="Motor.EngineCapacity" class="control-label">Engine Capacity</label>
+                                    <input asp-for="Motor.EngineCapacity" id="EngineCapacity" class="form-control" />
+                                    <span asp-validation-for="Motor.EngineCapacity" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="Motor.Colour" class="control-label">Colour</label>
+                                    <input asp-for="Motor.Colour" id="Colour" class="form-control" />
+                                    <span asp-validation-for="Motor.Colour" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
                             <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
                         </div>
-                        <div class="form-group form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.GreyImport" id="GreyImport" /> Grey Import
-                            </label>
-                        </div>
-                        <div class="form-group form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.SecurityFitting" id="SecurityFitting" /> Security Fitting
-                            </label>
-                        </div>
-                        <div class="form-group form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.TrackingDevice" id="TrackingDevice" /> Tracking Device
-                            </label>
-                        </div>
-                        <div class="form-group form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Motor.Immobiliser" id="Immobiliser" /> Immobiliser
-                            </label>
+                        <div class="row">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Motor.GreyImport" id="GreyImport" /> Grey Import
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Motor.SecurityFitting" id="SecurityFitting" /> Security Fitting
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Motor.TrackingDevice" id="TrackingDevice" /> Tracking Device
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Motor.Immobiliser" id="Immobiliser" /> Immobiliser
+                                </label>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <div class="form-check form-switch pl-2">
+                            <div class="form-check form-switch ms-3">
                                 <input class="form-check-input" asp-for="Motor.Alarm" type="checkbox" id="Alarm">
                                 <label class="form-check-label" asp-for="Motor.Alarm">Alarm</label>
                             </div>
@@ -284,6 +304,9 @@
     <script>
         var portfolioClientId = '@Model.PortfolioClientId';
         var clientId = '@Model.ClientId';
+        var allRisks = [];
+        var contents = [];
+        var houses = [];
         var motors = [];
         var quoteItems = [];
         var quoteId = uuidv4();
@@ -435,7 +458,7 @@
             var quote = {
                 Id: quoteId,
                 PortfolioClientId: portfolioClientId,
-                QuoteNumber: 1,
+                QuoteNumber: 0,
                 QuoteDate: '@DateTime.Now',
                 QuoteStatusId: $('#QuoteStatusId option:selected').val(),
                 ClientInfo: $('#ClientInfo').val(),
@@ -444,22 +467,27 @@
 
             if (motors && quoteItems) {
 
+                QuoteObject = {
+                    ClientId: clientId,
+                    Quote: quote,
+                    QuoteItems: quoteItems,
+                    AllRisks: allRisks,
+                    Contents: contents,
+                    Houses: houses,
+                    Motors: motors
+                }
+
                 $.ajax({
                     url: '@(Url.Action("PostQuote"))',
                     type: "POST",
                     dataType: "json",
-/*                    traditional: true,*/
-                    data: {
-                        clientId: clientId,
-                        quote: quote,
-                        quoteItems: quoteItems,
-                        motors: motors
-                    },
+                    data: { quoteObject: QuoteObject },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },
                     success: function (data) {
-                        alert('Returned from controller!')
+                        // Do something here.
+                        window.location = '/Quotes/Create/?portfolioClientId=' + portfolioClientId;
                     }
                 });
             }

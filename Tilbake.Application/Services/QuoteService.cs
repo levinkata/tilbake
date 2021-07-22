@@ -21,18 +21,17 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(QuoteSaveResource resource)
+        public async Task<int> AddAsync(QuoteObjectResource resource)
         {
-            var quote = _mapper.Map<QuoteSaveResource, Quote>(resource);
-
             var clientId = resource.ClientId;
-
+            
+            var quote = resource.Quote;
             quote.Id = Guid.NewGuid();
             quote.QuoteDate = DateTime.Now;
             await _unitOfWork.Quotes.AddAsync(quote).ConfigureAwait(true);
             var quoteId = quote.Id;
 
-            int mo = resource.Motors.Count;
+            int mo = resource.Motors.Length;
             var motors = resource.Motors;
             await _unitOfWork.Motors.AddRangeAsync(motors).ConfigureAwait(true);
 

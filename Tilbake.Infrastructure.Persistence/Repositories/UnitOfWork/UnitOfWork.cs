@@ -12,6 +12,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         {
             _context = context;
 
+            AllRisks = new AllRiskRepository(_context);
             Banks = new BankRepository(_context);
             BankBranches = new BankBranchRepository(_context);
             BodyTypes = new BodyTypeRepository(_context);
@@ -21,11 +22,13 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             ClientTypes = new ClientTypeRepository(_context);
             Carriers = new CarrierRepository(_context);
             Cities = new CityRepository(_context);
+            Contents = new ContentRepository(_context);
             Countries = new CountryRepository(_context);
             CoverTypes = new CoverTypeRepository(_context);
             DocumentTypes = new DocumentTypeRepository(_context);
             DriverTypes = new DriverTypeRepository(_context);
             Genders = new GenderRepository(_context);
+            Houses = new HouseRepository(_context);
             Insurers = new InsurerRepository(_context);
             Invoices = new InvoiceRepository(_context);
             InvoiceStatuses = new InvoiceStatusRepository(_context);
@@ -48,6 +51,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             UserPortfolios = new UserPortfolioRepository(_context);
         }
 
+        public IAllRiskRepository AllRisks { get; private set; }
         public IBankRepository Banks { get; private set; }
         public IBankBranchRepository BankBranches { get; private set; }
         public IBodyTypeRepository BodyTypes { get; private set; }
@@ -57,11 +61,13 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IClientDocumentRepository ClientDocuments { get; private set; }
         public IClientRepository Clients { get; private set; }
         public IClientTypeRepository ClientTypes { get; private set; }
+        public IContentRepository Contents { get; private set; }
         public ICountryRepository Countries { get; private set; }
         public ICoverTypeRepository CoverTypes { get; private set; }
         public IDocumentTypeRepository DocumentTypes { get; private set; }
         public IDriverTypeRepository DriverTypes { get; private set; }
         public IGenderRepository Genders { get; private set; }
+        public IHouseRepository Houses { get; private set; }
         public IInsurerRepository Insurers { get; private set; }
         public IInvoiceRepository Invoices { get; private set; }
         public IInvoiceStatusRepository InvoiceStatuses { get; private set; }

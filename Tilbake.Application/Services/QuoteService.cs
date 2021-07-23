@@ -23,6 +23,12 @@ namespace Tilbake.Application.Services
 
         public async Task<int> AddAsync(QuoteObjectResource resource)
         {
+            var quoteItems = resource.QuoteItems;
+            if(quoteItems == null)
+            {
+                throw new ArgumentNullException(nameof(quoteItems));
+            }
+
             var clientId = resource.ClientId;
             
             var quote = resource.Quote;
@@ -31,11 +37,115 @@ namespace Tilbake.Application.Services
             await _unitOfWork.Quotes.AddAsync(quote).ConfigureAwait(true);
             var quoteId = quote.Id;
 
+            //  Update QuoteItems with AllRiskId
+            int ao = resource.AllRisks.Length;
+            var allRisks = resource.AllRisks;
+            await _unitOfWork.AllRisks.AddRangeAsync(allRisks).ConfigureAwait(true);
+
+            for (int i = 0; i < ao; i++)
+            {
+                var allRiskId = allRisks[i].Id;
+
+                Risk risk = new Risk()
+                {
+                    Id = Guid.NewGuid(),
+                    AllRiskId = allRiskId
+                };
+                await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+
+                var riskId = risk.Id;
+
+                ClientRisk clientRisk = new ClientRisk()
+                {
+                    Id = Guid.NewGuid(),
+                    ClientId = clientId,
+                    RiskId = riskId
+                };
+                await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+
+                var clientRiskId = clientRisk.Id;
+
+                foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskId))
+                {
+                    item.QuoteId = quoteId;
+                    item.ClientRiskId = clientRiskId;
+                }
+            }
+
+            //  Update QuoteItems with ContentId
+            int co = resource.Contents.Length;
+            var contents = resource.Contents;
+            await _unitOfWork.Contents.AddRangeAsync(contents).ConfigureAwait(true);
+
+            for (int i = 0; i < co; i++)
+            {
+                var contentId = contents[i].Id;
+
+                Risk risk = new Risk()
+                {
+                    Id = Guid.NewGuid(),
+                    ContentId = contentId
+                };
+                await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+
+                var riskId = risk.Id;
+
+                ClientRisk clientRisk = new ClientRisk()
+                {
+                    Id = Guid.NewGuid(),
+                    ClientId = clientId,
+                    RiskId = riskId
+                };
+                await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+
+                var clientRiskId = clientRisk.Id;
+
+                foreach (var item in quoteItems.Where(x => x.ClientRiskId == contentId))
+                {
+                    item.QuoteId = quoteId;
+                    item.ClientRiskId = clientRiskId;
+                }
+            }
+
+            //  Update QuoteItems with HouseId
+            int ho = resource.Houses.Length;
+            var houses = resource.Houses;
+            await _unitOfWork.Houses.AddRangeAsync(houses).ConfigureAwait(true);
+
+            for (int i = 0; i < ho; i++)
+            {
+                var houseId = houses[i].Id;
+
+                Risk risk = new Risk()
+                {
+                    Id = Guid.NewGuid(),
+                    HouseId = houseId
+                };
+                await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+
+                var riskId = risk.Id;
+
+                ClientRisk clientRisk = new ClientRisk()
+                {
+                    Id = Guid.NewGuid(),
+                    ClientId = clientId,
+                    RiskId = riskId
+                };
+                await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+
+                var clientRiskId = clientRisk.Id;
+
+                foreach (var item in quoteItems.Where(x => x.ClientRiskId == houseId))
+                {
+                    item.QuoteId = quoteId;
+                    item.ClientRiskId = clientRiskId;
+                }
+            }
+
+            //  Update QuoteItems with MotorId
             int mo = resource.Motors.Length;
             var motors = resource.Motors;
             await _unitOfWork.Motors.AddRangeAsync(motors).ConfigureAwait(true);
-
-            var quoteItems = resource.QuoteItems;
 
             for (int i = 0; i < mo; i++)
             {

@@ -5,6 +5,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
+        IAllRiskRepository AllRisks { get; }
         IBankRepository Banks { get; }
         IBankBranchRepository BankBranches { get; }
         IBodyTypeRepository BodyTypes { get; }
@@ -14,11 +15,13 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IClientRepository Clients { get; }
         IClientRiskRepository ClientRisks { get; }
         IClientTypeRepository ClientTypes{ get; }
+        IContentRepository Contents { get; }
         ICountryRepository Countries { get; }
         ICoverTypeRepository CoverTypes { get; }
         IDocumentTypeRepository DocumentTypes { get; }
         IDriverTypeRepository DriverTypes { get; }
         IGenderRepository Genders { get; }
+        IHouseRepository Houses { get; }
         IInsurerRepository Insurers { get; }
         IInvoiceRepository Invoices { get; }
         IInvoiceStatusRepository InvoiceStatuses { get; }

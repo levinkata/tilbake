@@ -22,9 +22,15 @@ namespace Tilbake.Application.Services
 
         public async Task<int> AddRangeAsync(UserPortfolioResource resources)
         {
+            if (resources.PortfolioIds == null)
+            {
+                throw new ArgumentNullException(nameof(resources.PortfolioIds));
+            }
+
             List<AspnetUserPortfolio> aspnetUserPortfolios = new List<AspnetUserPortfolio>();
 
             int ro = resources.PortfolioIds.Length;
+
             var aspNetUserId = resources.UserId;
             var portfolioIds = resources.PortfolioIds;
 
@@ -44,6 +50,11 @@ namespace Tilbake.Application.Services
 
         public async Task<int> DeleteRangeAsync(UserPortfolioResource resources)
         {
+            if (resources.PortfolioIds == null)
+            {
+                throw new ArgumentNullException(nameof(resources.PortfolioIds));
+            }
+
             List<AspnetUserPortfolio> aspnetUserPortfolios = new List<AspnetUserPortfolio>();
 
             int ro = resources.PortfolioIds.Length;

@@ -44,7 +44,6 @@
 
 <script type="text/javascript">
 
-
     $(document).ready(function () {
         var selectedUserId = null;
 
@@ -113,7 +112,7 @@
                     itemsAll.push($(this).val());
                 });
 
-                if(itemsAll) {
+                if (itemsAll) {
                     $.ajax({
                         url: '@(Url.Action("AddUserPortfolios"))',
                         type: 'POST',

@@ -21,10 +21,10 @@
         </div>
     </div>
     <div class="d-grid gap-2 col-1 mx-auto">
-        <button class="btn  btn-danger" id="right" type="button">&gt;</button>
-        <button class="btn btn-warning" id="left" type="button">&lt;</button>
-        <button class="btn  btn-success" id="rightAll" type="button">&Gt;</button>
-        <button class="btn btn-primary" id="leftAll" type="button">&Lt;</button>
+        <button class="btn  btn-danger" id="right" type="button"><i class="las la-angle-right"></i></button>
+        <button class="btn btn-warning" id="left" type="button"><i class="las la-angle-left"></i></button>
+        <button class="btn  btn-success" id="rightAll" type="button"><i class="las la-angle-double-right"></i></button>
+        <button class="btn btn-primary" id="leftAll" type="button"><i class="las la-angle-double-left"></i></button>
     </div>
     <div class="col-md-5">
         <div class="form-group">
@@ -54,9 +54,6 @@
 
             $('#AssignedPortfolios').empty();   // clear before appending new list
             $('#UnAssignedPortfolios').empty();   // clear before appending new list
-
-            console.log('Assigned Portfolios');
-            console.log(aPortfolios);
 
             $.each(aPortfolios, function (index, value) {
                 $('#AssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
@@ -93,15 +90,19 @@
                     itemsSelected.push($(this).val());
                 });
 
-                $.ajax({
-                    url: '@(Url.Action("AddUserPortfolios"))',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: { userId: selectedUserId, portfolios: itemsSelected },
-                    success: function (data) {
-                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
-                    }
-                });
+                if(itemsSelected) {
+                    $.ajax({
+                        url: '@(Url.Action("AddUserPortfolios"))',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: { userId: selectedUserId, portfolios: itemsSelected },
+                        success: function (data) {
+                            LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                        }
+                    });
+                } else {
+                    return false;
+                }
             })
 
             $('#rightAll').on('click', function () {
@@ -112,15 +113,19 @@
                     itemsAll.push($(this).val());
                 });
 
-                $.ajax({
-                    url: '@(Url.Action("AddUserPortfolios"))',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: { userId: selectedUserId, portfolios: itemsAll },
-                    success: function (data) {
-                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
-                    }
-                });
+                if(itemsAll) {
+                    $.ajax({
+                        url: '@(Url.Action("AddUserPortfolios"))',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: { userId: selectedUserId, portfolios: itemsAll },
+                        success: function (data) {
+                            LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                        }
+                    });
+                } else {
+                    return false;
+                }
             })
 
             $('#left').on('click', function () {
@@ -131,15 +136,19 @@
                     itemsSelected.push($(this).val());
                 });
 
-                $.ajax({
-                    url: '@(Url.Action("RemoveUserPortfolios"))',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: { userId: selectedUserId, portfolios: itemsSelected },
-                    success: function (data) {
-                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
-                    }
-                });
+                if(itemsSelected) {
+                    $.ajax({
+                        url: '@(Url.Action("RemoveUserPortfolios"))',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: { userId: selectedUserId, portfolios: itemsSelected },
+                        success: function (data) {
+                            LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                        }
+                    });
+                } else {
+                    return false;
+                }
             })
 
             $('#leftAll').on('click', function () {
@@ -149,17 +158,20 @@
                 $('#AssignedPortfolios option').each(function () {
                     itemsAll.push($(this).val());
                 });
-                console.log(itemsAll);
-
-                $.ajax({
-                    url: '@(Url.Action("RemoveUserPortfolios"))',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: { userId: selectedUserId, portfolios: itemsAll },
-                    success: function (data) {
-                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
-                    }
-                });
+                
+                if(itemsAll) {
+                    $.ajax({
+                        url: '@(Url.Action("RemoveUserPortfolios"))',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: { userId: selectedUserId, portfolios: itemsAll },
+                        success: function (data) {
+                            LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                        }
+                    });
+                } else {
+                    return false;
+                }
             });
         });
 </script>

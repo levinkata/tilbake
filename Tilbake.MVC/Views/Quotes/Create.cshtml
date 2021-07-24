@@ -132,7 +132,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnAddMotor" class="btn btn-primary">Understood</button>
+                    <button type="button" id="btnAddContent" class="btn btn-primary">Understood</button>
                 </div>
             </div>
         </div>
@@ -156,7 +156,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnAddMotor" class="btn btn-primary">Understood</button>
+                    <button type="button" id="btnAddHouse" class="btn btn-primary">Understood</button>
                 </div>
             </div>
         </div>
@@ -181,7 +181,9 @@
                             <div class="form-group">
                                 <label asp-for="Motor.RegNumber" class="control-label"></label>
                                 <input asp-for="Motor.RegNumber" id="RegNumber" required class="form-control" />
-                                <span asp-validation-for="Motor.RegNumber" class="text-danger"></span>
+                                <i class="las la-check-circle"></i>
+                                <i class="las la-exclamation-circle"></i>
+                                <small>Error message</small>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -301,6 +303,7 @@
 </div>
 
 @section Scripts{
+    <script src="~/js/motor.js"></script>
     <script>
         var portfolioClientId = '@Model.PortfolioClientId';
         var clientId = '@Model.ClientId';
@@ -322,6 +325,26 @@
         });
 
         $("#MotorMakeId").change(function () {
+            var selectedmotorMakeId = $("#MotorMakeId option:selected").val();
+
+            $.ajax({
+                url: '@(Url.Action("GetMotorModels", "MotorModels"))',
+                traditional: true,
+                dataType: "JSON",
+                type: 'GET',
+                data: { motorMakeId: selectedmotorMakeId },
+                error: function () {
+                    alert("An error occurred.");
+                },
+                success: function (models) {
+
+                    $("#MotorModelId").empty();   // clear before appending new list
+                    $.each(models, function (index, model) {
+                        $('#MotorModelId').append($('<option></option>').val(model.id).html(model.name));
+                    });
+                }
+            });
+        });        $("#MotorMakeId").change(function () {
             var selectedmotorMakeId = $("#MotorMakeId option:selected").val();
 
             $.ajax({

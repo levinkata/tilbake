@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
@@ -151,21 +150,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
 
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-//             }
-//         }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+        //            }
+        //        }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaveChanges(_userId);
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
-        
+
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
             OnBeforeSaveChanges(_userId);
@@ -247,7 +246,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
@@ -2621,6 +2620,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.QuoteDate).HasColumnType("date");
 
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.Quotes)
+                    .HasForeignKey(d => d.InsurerId)
+                    .HasConstraintName("FK_Quote_Insurer");
+
                 entity.HasOne(d => d.PortfolioClient)
                     .WithMany(p => p.Quotes)
                     .HasForeignKey(d => d.PortfolioClientId)
@@ -2661,11 +2665,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.CoverTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_QuoteItem_CoverType");
-
-                entity.HasOne(d => d.Insurer)
-                    .WithMany(p => p.QuoteItems)
-                    .HasForeignKey(d => d.InsurerId)
-                    .HasConstraintName("FK_QuoteItem_Insurer");
 
                 entity.HasOne(d => d.Quote)
                     .WithMany(p => p.QuoteItems)

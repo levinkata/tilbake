@@ -8,7 +8,6 @@ namespace Tilbake.Domain.Models
         public Guid Id { get; set; }
         public Guid QuoteId { get; set; }
         public Guid ClientRiskId { get; set; }
-        public Guid? InsurerId { get; set; }
         public Guid CoverTypeId { get; set; }
         public string Description { get; set; }
         public decimal SumInsured { get; set; }
@@ -21,7 +20,6 @@ namespace Tilbake.Domain.Models
 
         public virtual ClientRisk ClientRisk { get; set; }
         public virtual CoverType CoverType { get; set; }
-        public virtual Insurer Insurer { get; set; }
         public virtual Quote Quote { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<QuoteItemResource>
 @{
-    
+
 }
 
 @if (Model.Any())
@@ -36,7 +36,11 @@
                         <td>@item.SumInsured</td>
                         <td>@item.Premium</td>
                         <td>@item.Excess</td>
-                        <td></td>
+                        <td>
+                            <a asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-controller="QuoteItems" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
                     </tr>
                 }
             </tbody>

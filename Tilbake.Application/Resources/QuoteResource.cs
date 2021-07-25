@@ -9,7 +9,6 @@ namespace Tilbake.Application.Resources
     public class QuoteResource
     {
         public Guid PortfolioId { get; set; }
-
         public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
 
@@ -22,6 +21,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Quote Status")]
         public Guid QuoteStatusId { get; set; }
 
+        [Display(Name = "Insurer")]
+        public Guid InsurerId { get; set; }
+
         [Display(Name = "Client Info")]
         public string ClientInfo { get; set; }
 
@@ -31,13 +33,15 @@ namespace Tilbake.Application.Resources
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
         //  Descriptions
+        [Display(Name = "Insurer")]
+        public string Insurer { get; set; }
+
         [Display(Name = "Quote Status")]
         public string QuoteStatus { get; set; }
 
         //  SelectLists
-
+        public SelectList CoverTypeList { get; set; }
         public SelectList InsurerList { get; set; }
-        public SelectList CoverageList { get; set; }
         public SelectList QuoteStatusList { get; set; }
     }
 }

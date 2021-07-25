@@ -10,7 +10,7 @@ namespace Tilbake.Domain.Models
             Policies = new HashSet<Policy>();
             PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
             PortfolioPolicyFees = new HashSet<PortfolioPolicyFee>();
-            QuoteItems = new HashSet<QuoteItem>();
+            Quotes = new HashSet<Quote>();
         }
 
         public Guid Id { get; set; }
@@ -23,6 +23,6 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<Policy> Policies { get; set; }
         public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual ICollection<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
-        public virtual ICollection<QuoteItem> QuoteItems { get; set; }
+        public virtual ICollection<Quote> Quotes { get; set; }
     }
 }

@@ -34,7 +34,6 @@ namespace Tilbake.Application.Mapping
             CreateMap<PolicyStatusSaveResource, PolicyStatus>();
             CreateMap<PortfolioSaveResource, Portfolio>();
             CreateMap<QuoteSaveResource, Quote>();
-            CreateMap<QuoteItemSaveResource, QuoteItem>();
             CreateMap<QuoteStatusSaveResource, QuoteStatus>();
             CreateMap<PolicyTypeSaveResource, PolicyType>();
             CreateMap<RiskSaveResource, Risk>();

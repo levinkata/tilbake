@@ -11,7 +11,7 @@
                 Date:
             </dt>
             <dd class="col-7">
-                @DateTime.Now.Date.ToString("MM/dd/yyyy")
+                @DateTime.Now.Date.ToString("dd/MM/yyyy")
             </dd>
             <dt class="col-5">
                 Quote Number:
@@ -248,8 +248,8 @@
                                 </div>
                             </div>
                             <div class="col-6 border bg-light mb-3 py-2">
-                                <div class="row">
-                                    <div class="col-6 me-0">
+                                <div class="row gx-6">
+                                    <div class="col">
                                         <div class="form-group">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" asp-for="Motor.GreyImport" type="checkbox" id="GreyImport">
@@ -269,7 +269,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-6 me-auto">
+                                    <div class="col">
                                         <div class="form-group">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" asp-for="Motor.Immobiliser" type="checkbox" id="Immobiliser">
@@ -407,7 +407,6 @@
                 Id: uuidv4(),
                 QuoteId: quoteId,
                 ClientRiskId: clientRiskId,
-                InsurerId: null,
                 CoverTypeId: $('#CoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
@@ -494,6 +493,7 @@
                 QuoteNumber: 0,
                 QuoteDate: '@DateTime.Now',
                 QuoteStatusId: $('#QuoteStatusId option:selected').val(),
+                InsurerId: null,
                 ClientInfo: $('#ClientInfo').val(),
                 InternalInfo: $('#InternalInfo').val()
             };

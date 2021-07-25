@@ -18,28 +18,34 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.QuoteStatus)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Insurer)
+                </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QuoteNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QuoteDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QuoteStatus)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuoteNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuoteDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuoteStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Insurer)
+                </td>
+                <td>
+                    <a asp-controller="Quotes" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-controller="Quotes" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-controller="Quotes" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

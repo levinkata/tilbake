@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
@@ -9,6 +14,13 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         public QuoteItemRepository(TilbakeDbContext context) : base(context)
         {
 
+        }
+
+        public async Task<IEnumerable<QuoteItem>> GetByQuoteIdAsync(Guid quoteId)
+        {
+            return await Task.Run(() => _context.QuoteItems
+                                                .Include(q => q.CoverType)
+                                                .Where(e => e.QuoteId == quoteId));
         }
     }
 }

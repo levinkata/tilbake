@@ -29,10 +29,6 @@ namespace Tilbake.Infrastructure.IoC
             builder.RegisterType(typeof(GetClaimsFromUser))
                     .As(typeof(IGetClaimsProvider))
                     .InstancePerLifetimeScope();
-
-            //builder.RegisterGeneric(typeof(ApplicationUserClaimsPrincipalFactory<,>))
-            //        .As(typeof(IUserClaimsPrincipalFactory<ApplicationUser>))
-            //        .InstancePerLifetimeScope();
         }
     }
 }

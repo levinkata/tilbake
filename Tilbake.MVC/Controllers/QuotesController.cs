@@ -19,6 +19,7 @@ namespace Tilbake.MVC.Controllers
     {
         private readonly IQuoteService _quoteService;
         private readonly ICoverTypeService _coverTypeService;
+        private readonly IInsurerService _insurerService;
         private readonly IQuoteStatusService _quoteStatusService;
         private readonly IBodyTypeService _bodyTypeService;
         private readonly IDriverTypeService _driverTypeService;
@@ -29,6 +30,7 @@ namespace Tilbake.MVC.Controllers
 
         public QuotesController(IQuoteService quoteService,
                                 ICoverTypeService coverTypeService,
+                                IInsurerService insurerService,
                                 IQuoteStatusService quoteStatusService,
                                 IBodyTypeService bodyTypeService,
                                 IDriverTypeService driverTypeService,
@@ -39,6 +41,7 @@ namespace Tilbake.MVC.Controllers
         {
             _quoteService = quoteService;
             _coverTypeService = coverTypeService;
+            _insurerService = insurerService;
             _quoteStatusService = quoteStatusService;
             _bodyTypeService = bodyTypeService;
             _driverTypeService = driverTypeService;
@@ -130,8 +133,6 @@ namespace Tilbake.MVC.Controllers
         }
 
         // POST: Quotes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(QuoteObjectResource resource)
@@ -141,12 +142,6 @@ namespace Tilbake.MVC.Controllers
                 await _quoteService.AddAsync(resource);
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.Quote.PortfolioClientId });
             }
-
-            //var coverTypes = await _coverTypeService.GetAllAsync();
-            //var quoteStatuses = await _quoteStatusService.GetAllAsync();
-
-            //resource.CoverTypelList = new SelectList(coverTypes, "Id", "Name");
-            //resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
 
             return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
@@ -164,13 +159,17 @@ namespace Tilbake.MVC.Controllers
             {
                 return NotFound();
             }
+            
+            var quoteStatuses = await _quoteStatusService.GetAllAsync();
+            var insurers = await _insurerService.GetAllAsync();
+
+            resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
+            resource.InsurerList = new SelectList(insurers, "Id", "Name");
 
             return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
         // POST: Quotes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid? id, QuoteResource resource)

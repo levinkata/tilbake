@@ -38,7 +38,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.PolicyNumber) + 1 : 1;
 
             var policyTable = _context.PolicyNumberGenerators
-                                            .FirstOrDefault();
+                                        .OrderByDescending(e => e.PolicyNumber)
+                                        .FirstOrDefault();
 
             if (policyTable == null)
             {
@@ -68,6 +69,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.PolicyNumber) + 1 : 1;
 
             var policyTable = await _context.PolicyNumberGenerators
+                                            .OrderByDescending(e => e.PolicyNumber)
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 

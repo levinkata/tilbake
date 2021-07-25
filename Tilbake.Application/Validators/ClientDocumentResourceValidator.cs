@@ -11,6 +11,8 @@ namespace Tilbake.Application.Validators
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .Length(2, 50);
+
+            RuleFor(p => p.File).SetValidator(new FormFileValidator());
         }
     }
 }

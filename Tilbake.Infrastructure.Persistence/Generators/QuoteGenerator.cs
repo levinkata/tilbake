@@ -38,7 +38,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.QuoteNumber) + 1 : 1;
 
             var quoteTable = _context.QuoteNumberGenerators
-                                            .FirstOrDefault();
+                                        .OrderByDescending(e => e.QuoteNumber)
+                                        .FirstOrDefault();
 
             if (quoteTable == null)
             {
@@ -68,6 +69,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.QuoteNumber) + 1 : 1;
 
             var quoteTable = await _context.QuoteNumberGenerators
+                                            .OrderByDescending(e => e.QuoteNumber)
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 

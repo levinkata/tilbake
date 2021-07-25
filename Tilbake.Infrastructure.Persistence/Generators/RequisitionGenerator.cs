@@ -38,7 +38,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.RequisitionNumber) + 1 : 1;
 
             var invoiceTable = _context.RequisitionNumberGenerators
-                                            .FirstOrDefault();
+                                        .OrderByDescending(e => e.RequisitionNumber)
+                                        .FirstOrDefault();
 
             if (invoiceTable == null)
             {
@@ -68,8 +69,9 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.RequisitionNumber) + 1 : 1;
 
             var invoiceTable = await _context.RequisitionNumberGenerators
-                                            .FirstOrDefaultAsync(cancellationToken)
-                                            .ConfigureAwait(false);
+                                                .OrderByDescending(e => e.RequisitionNumber)
+                                                .FirstOrDefaultAsync(cancellationToken)
+                                                .ConfigureAwait(false);
 
             if (invoiceTable == null)
             {

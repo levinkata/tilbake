@@ -8,6 +8,8 @@ namespace Tilbake.Domain.Models
         public Insurer()
         {
             Policies = new HashSet<Policy>();
+            PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
+            PortfolioPolicyFees = new HashSet<PortfolioPolicyFee>();
             QuoteItems = new HashSet<QuoteItem>();
         }
 
@@ -19,6 +21,8 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual ICollection<Policy> Policies { get; set; }
+        public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
+        public virtual ICollection<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
         public virtual ICollection<QuoteItem> QuoteItems { get; set; }
     }
 }

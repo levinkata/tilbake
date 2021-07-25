@@ -9,7 +9,9 @@ namespace Tilbake.Domain.Models
         {
             AspnetUserPortfolios = new HashSet<AspnetUserPortfolio>();
             FileTemplates = new HashSet<FileTemplate>();
+            PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
             PortfolioClients = new HashSet<PortfolioClient>();
+            PortfolioPolicyFees = new HashSet<PortfolioPolicyFee>();
         }
 
         public Guid Id { get; set; }
@@ -23,6 +25,8 @@ namespace Tilbake.Domain.Models
 
         public virtual ICollection<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
         public virtual ICollection<FileTemplate> FileTemplates { get; set; }
+        public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
+        public virtual ICollection<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
     }
 }

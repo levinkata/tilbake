@@ -62,6 +62,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<ClientRisk> ClientRisks { get; set; }
         public virtual DbSet<ClientRiskDocument> ClientRiskDocuments { get; set; }
         public virtual DbSet<ClientType> ClientTypes { get; set; }
+        public virtual DbSet<CommissionRate> CommissionRates { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Content> Contents { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
@@ -76,6 +77,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<Glass> Glasses { get; set; }
         public virtual DbSet<House> Houses { get; set; }
+        public virtual DbSet<HouseCondition> HouseConditions { get; set; }
         public virtual DbSet<Incident> Incidents { get; set; }
         public virtual DbSet<IncidentAuditLog> IncidentAuditLogs { get; set; }
         public virtual DbSet<Insurer> Insurers { get; set; }
@@ -101,6 +103,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Payee> Payees { get; set; }
         public virtual DbSet<PayeeBankAccount> PayeeBankAccounts { get; set; }
         public virtual DbSet<PayeeType> PayeeTypes { get; set; }
+        public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<PaymentType> PaymentTypes { get; set; }
         public virtual DbSet<Policy> Policies { get; set; }
         public virtual DbSet<PolicyNumberGenerator> PolicyNumberGenerators { get; set; }
@@ -111,11 +114,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<PolicyStatus> PolicyStatuses { get; set; }
         public virtual DbSet<PolicyType> PolicyTypes { get; set; }
         public virtual DbSet<Portfolio> Portfolios { get; set; }
+        public virtual DbSet<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual DbSet<PortfolioClient> PortfolioClients { get; set; }
+        public virtual DbSet<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
         public virtual DbSet<Premium> Premia { get; set; }
         public virtual DbSet<PremiumRefund> PremiumRefunds { get; set; }
         public virtual DbSet<PremiumRefundClaim> PremiumRefundClaims { get; set; }
-        public virtual DbSet<PremiumType> PremiumTypes { get; set; }
         public virtual DbSet<PublicLiability> PublicLiabilities { get; set; }
         public virtual DbSet<Quote> Quotes { get; set; }
         public virtual DbSet<QuoteItem> QuoteItems { get; set; }
@@ -334,6 +338,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<AspNetRole>(entity =>
             {
+                entity.Property(e => e.Id).HasMaxLength(250);
+
                 entity.Property(e => e.Name).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedName).HasMaxLength(256);
@@ -345,7 +351,13 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.RoleId)
                     .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(250);
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetRoleClaims)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspNetRoleClaims_AspNetRoles");
             });
 
             modelBuilder.Entity<AspNetUser>(entity =>
@@ -380,6 +392,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserClaims)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspNetUserClaims_AspNetUsers");
             });
 
             modelBuilder.Entity<AspNetUserLogin>(entity =>
@@ -396,25 +414,37 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.UserId)
                     .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<AspNetUserRole>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.UserId, e.RoleId })
+                    .HasName("PK__AspNetUs__AF2760ADEB228D7E");
 
-                entity.Property(e => e.RoleId)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.UserId).HasMaxLength(250);
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.RoleId).HasMaxLength(250);
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspNetUserRoles_AspNetRoles");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspNetUserRoles_AspNetUsers");
             });
 
             modelBuilder.Entity<AspNetUserToken>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.UserId)
+                    .HasName("PK__AspNetUs__1788CC4CC42F81E2");
+
+                entity.Property(e => e.UserId).HasMaxLength(250);
 
                 entity.Property(e => e.LoginProvider)
                     .IsRequired()
@@ -423,10 +453,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(128);
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
             });
 
             modelBuilder.Entity<AspnetUserPortfolio>(entity =>
@@ -492,7 +518,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.PrimaryKey).HasMaxLength(50);
+                entity.Property(e => e.PrimaryKey).HasMaxLength(250);
 
                 entity.Property(e => e.TableName)
                     .IsRequired()
@@ -1077,9 +1103,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<ClientBankAccount>(entity =>
             {
-                entity.HasKey(e => new { e.ClientId, e.BankAccountId });
-
                 entity.ToTable("ClientBankAccount");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -1232,6 +1258,25 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<CommissionRate>(entity =>
+            {
+                entity.ToTable("CommissionRate");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.RiskName)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -1540,6 +1585,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .IsRequired()
                     .HasMaxLength(150);
 
+                entity.HasOne(d => d.HouseCondition)
+                    .WithMany(p => p.Houses)
+                    .HasForeignKey(d => d.HouseConditionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_House_HouseCondition");
+
                 entity.HasOne(d => d.ResidenceType)
                     .WithMany(p => p.Houses)
                     .HasForeignKey(d => d.ResidenceTypeId)
@@ -1557,6 +1608,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.WallTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_House_WallType");
+            });
+
+            modelBuilder.Entity<HouseCondition>(entity =>
+            {
+                entity.ToTable("HouseCondition");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Incident>(entity =>
@@ -2108,6 +2174,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<PaymentMethod>(entity =>
+            {
+                entity.ToTable("PaymentMethod");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<PaymentType>(entity =>
             {
                 entity.ToTable("PaymentType");
@@ -2143,11 +2224,23 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.InsurerPolicyNumber).HasMaxLength(50);
 
+                entity.HasOne(d => d.ClientBankAccount)
+                    .WithMany(p => p.Policies)
+                    .HasForeignKey(d => d.ClientBankAccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Policy_ClientBankAccount");
+
                 entity.HasOne(d => d.Insurer)
                     .WithMany(p => p.Policies)
                     .HasForeignKey(d => d.InsurerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policy_Insurer");
+
+                entity.HasOne(d => d.PaymentMethod)
+                    .WithMany(p => p.Policies)
+                    .HasForeignKey(d => d.PaymentMethodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Policy_PaymentMethod");
 
                 entity.HasOne(d => d.PolicyStatus)
                     .WithMany(p => p.Policies)
@@ -2217,6 +2310,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Excess).HasMaxLength(50);
 
                 entity.Property(e => e.Premium).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.RiskDate)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.SumInsured).HasColumnType("decimal(18, 2)");
 
@@ -2332,6 +2429,33 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<PortfolioAdministrationFee>(entity =>
+            {
+                entity.ToTable("PortfolioAdministrationFee");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Fee).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.PortfolioAdministrationFees)
+                    .HasForeignKey(d => d.InsurerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioAdministrationFee_Insurer");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioAdministrationFees)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioAdministrationFee_Portfolio");
+            });
+
             modelBuilder.Entity<PortfolioClient>(entity =>
             {
                 entity.ToTable("PortfolioClient");
@@ -2355,31 +2479,60 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasConstraintName("FK_PortfolioClient_Portfolio");
             });
 
+            modelBuilder.Entity<PortfolioPolicyFee>(entity =>
+            {
+                entity.ToTable("PortfolioPolicyFee");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Fee).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.PortfolioPolicyFees)
+                    .HasForeignKey(d => d.InsurerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioPolicyFee_Insurer");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioPolicyFees)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioPolicyFee_Portfolio");
+            });
+
             modelBuilder.Entity<Premium>(entity =>
             {
                 entity.ToTable("Premium");
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.AdministrationFee).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Commission).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
+                entity.Property(e => e.PolicyFee).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.PremiumDate).HasColumnType("date");
+
+                entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Policy)
                     .WithMany(p => p.Premia)
                     .HasForeignKey(d => d.PolicyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Premium_Policy");
-
-                entity.HasOne(d => d.PremiumType)
-                    .WithMany(p => p.Premia)
-                    .HasForeignKey(d => d.PremiumTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Premium_PremiumType");
             });
 
             modelBuilder.Entity<PremiumRefund>(entity =>
@@ -2430,21 +2583,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.PremiumRefundId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PremiumRefundClaim_PremiumRefund");
-            });
-
-            modelBuilder.Entity<PremiumType>(entity =>
-            {
-                entity.ToTable("PremiumType");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.DateAdded).HasColumnType("datetime");
-
-                entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<PublicLiability>(entity =>

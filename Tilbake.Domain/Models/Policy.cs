@@ -19,6 +19,9 @@ namespace Tilbake.Domain.Models
         public int PolicyNumber { get; set; }
         public string InsurerPolicyNumber { get; set; }
         public Guid PolicyTypeId { get; set; }
+        public int RunDay { get; set; }
+        public Guid PaymentMethodId { get; set; }
+        public Guid ClientBankAccountId { get; set; }
         public Guid InsurerId { get; set; }
         public DateTime CoverStartDate { get; set; }
         public DateTime CoverEndDate { get; set; }
@@ -31,7 +34,9 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ClientBankAccount ClientBankAccount { get; set; }
         public virtual Insurer Insurer { get; set; }
+        public virtual PaymentMethod PaymentMethod { get; set; }
         public virtual PolicyStatus PolicyStatus { get; set; }
         public virtual PolicyType PolicyType { get; set; }
         public virtual PortfolioClient PortfolioClient { get; set; }

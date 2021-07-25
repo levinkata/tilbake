@@ -38,7 +38,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.ClaimNumber) + 1 : 1;
 
             var claimTable = _context.ClaimNumberGenerators
-                                            .FirstOrDefault();
+                                        .OrderByDescending(e => e.ClaimNumber)
+                                        .FirstOrDefault();
 
             if (claimTable == null)
             {
@@ -68,6 +69,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                                     .Max(p => p.ClaimNumber) + 1 : 1;
 
             var claimTable = await _context.ClaimNumberGenerators
+                                            .OrderByDescending(e => e.ClaimNumber)
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 

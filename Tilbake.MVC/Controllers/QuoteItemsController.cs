@@ -69,13 +69,13 @@ namespace Tilbake.MVC.Controllers
                     throw;
                 }
 
-                return RedirectToAction(nameof(Edit), "Quotes", new { resource.QuoteId });
+                return RedirectToAction(nameof(Edit), "Quotes", new { Id = resource.QuoteId });
             }
             return View(resource);
         }
 
         // GET: QuoteItems/Detail/5
-        public async Task<IActionResult> Detail(Guid? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {

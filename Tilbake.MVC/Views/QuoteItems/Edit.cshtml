@@ -13,8 +13,8 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="QuoteId" value="" />
-            <input type="hidden" asp-for="ClientRiskId" value="" />
+            <input type="hidden" asp-for="QuoteId" />
+            <input type="hidden" asp-for="ClientRiskId" />
             <div class="form-group">
                 <label asp-for="CoverTypeId" class="control-label"></label>
                 <select asp-for="CoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>

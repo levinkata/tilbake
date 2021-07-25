@@ -5,58 +5,74 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="col-md-4 offset-md-8 bd-highlight mb-3">
+    <div class="mr-auto p-2 bg-light">
+        <h1>Quote</h1>
+        <dl class="row">
+            <dt class="col-6">
+                Date:
+            </dt>
+            <dd class="col-6">
+                @Model.QuoteDate.ToString("dd/MM/yyyy")
+            </dd>
+            <dt class="col-6">
+                Quote Number:
+            </dt>
+            <dd class="col-6">
+                @Model.QuoteNumber
+            </dd>
+        </dl>
+    </div>
+</div>
 
-<h4>Quote</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="hidden" asp-for="PortfolioClientId" />
-                <input type="hidden" asp-for="Id" />
-            </div>
-            <div class="form-group">
-                <label asp-for="QuoteNumber" class="control-label"></label>
-                <input asp-for="QuoteNumber" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="QuoteDate" class="control-label"></label>
-                <input asp-for="QuoteDate" class="form-control" />
-                <span asp-validation-for="QuoteDate" class="text-danger"></span>
-            </div>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="PortfolioClientId" />
+    <input type="hidden" asp-for="PortfolioId" />
+    <input type="hidden" asp-for="ClientId" />
+    <input type="hidden" asp-for="QuoteNumber" />
+    <input type="hidden" asp-for="QuoteDate" />
+    <div class="row">
+        <div class="col-6">
             <div class="form-group">
                 <label asp-for="InsurerId" class="control-label"></label>
                 <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList"></select>
                 <span asp-validation-for="InsurerId" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label asp-for="QuoteStatusId" class="control-label"></label>
                 <select asp-for="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
                 <span asp-validation-for="QuoteStatusId" class="text-danger"></span>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
             <div class="form-group">
                 <label asp-for="ClientInfo" class="control-label"></label>
                 <input asp-for="ClientInfo" class="form-control" />
                 <span asp-validation-for="ClientInfo" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label asp-for="InternalInfo" class="control-label"></label>
                 <input asp-for="InternalInfo" class="form-control" />
                 <span asp-validation-for="InternalInfo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-        <div>
-            @await Component.InvokeAsync("QuoteItems", new { quoteId = @Model.Id })
         </div>
     </div>
-</div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
 
+<div class="form-group">
+    @await Component.InvokeAsync("QuoteItems", new { quoteId = @Model.Id })
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

@@ -159,10 +159,15 @@ namespace Tilbake.MVC.Controllers
             {
                 return NotFound();
             }
+
+            var result = await _portfolioClientService.FindAsync(resource.PortfolioClientId);
             
+
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
 
+            resource.ClientId = result.ClientId;
+            resource.PortfolioId = result.PortfolioId;
             resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
             resource.InsurerList = new SelectList(insurers, "Id", "Name");
 
@@ -189,9 +194,27 @@ namespace Tilbake.MVC.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
+
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioId, resource.ClientId });
             }
             return View(resource);
+        }
+
+        // GET: Quotes/Detail/5
+        public async Task<IActionResult> Detail(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var resource = await _quoteService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
         // GET: Quotes/Delete/5

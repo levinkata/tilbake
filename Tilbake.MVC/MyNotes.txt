@@ -10,3 +10,20 @@ var cinemaCustomers = _context.Customers.
 Bootstrap Serverside Validation
 https://getbootstrap.com/docs/5.0/forms/validation/
                             
+
+You can simplify this, and there's really no need for using jquery here.
+
+var id = 88;
+
+for(var i = 0; i < data.length; i++) {
+    if(data[i].id == id) {
+        data.splice(i, 1);
+        break;
+    }
+}
+
+here is a solution if you are not using jquery:
+
+myArray = myArray.filter(function( obj ) {
+  return obj.id !== id;
+});

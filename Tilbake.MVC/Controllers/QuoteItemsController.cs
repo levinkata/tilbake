@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -35,7 +33,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetByIdAsync((Guid)id);
+            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -82,7 +80,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetByIdAsync((Guid)id);
+            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -99,7 +97,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetByIdAsync((Guid)id);
+            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();

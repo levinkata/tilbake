@@ -12,8 +12,13 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly TilbakeDbContext _context;
+        private DbSet<TEntity> dbSet;
 
-        public Repository(TilbakeDbContext context) => _context = context;
+        public Repository(TilbakeDbContext context)
+        {
+            _context = context;
+            dbSet = context.Set<TEntity>();
+        }
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
@@ -71,9 +76,48 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => _context.Set<TEntity>().AsNoTracking().ToListAsync()).ConfigureAwait(true);
         }
 
+        public async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+                query = query.Include(include);
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            return await Task.Run(() => query.ToList());
+        }
+
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
             return await _context.Set<TEntity>().FindAsync(id).ConfigureAwait(true);
+        }
+
+        public async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter = null, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+                query = query.Include(include);
+
+            return await query.FirstOrDefaultAsync(filter);
+        }
+
+        public async Task<IQueryable<TEntity>> QueryAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            return await Task.Run(() => query);
         }
 
         public async Task<TEntity> UpdateAsync(Guid id, TEntity entity)

@@ -27,3 +27,16 @@ here is a solution if you are not using jquery:
 myArray = myArray.filter(function( obj ) {
   return obj.id !== id;
 });
+
+
+
+Generic repository pattern and Unit of work with Entity framework
+http://janholinka.net/Blog/Article/9
+
+   var siteDetails = 
+           await this._siteDetailsRepository
+                     .GetAsync(x => 
+                               x.siteNo == siteNo,  //Conditions         
+                               null,                //Orders          
+                               x => x.Country)      //Includes
+           .ConfigureAwait(false);

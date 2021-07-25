@@ -41,6 +41,14 @@ namespace Tilbake.Application.Resources
             return resources;
         }
 
+        public async Task<QuoteItemResource> GetFirstOrDefaultAsync(Guid id)
+        {
+            var result = await _unitOfWork.QuoteItems.GetFirstOrDefaultAsync(p => p.Id == id, p => p.CoverType);
+            var resource = _mapper.Map<QuoteItem, QuoteItemResource>(result);
+
+            return resource;
+        }
+
         public async Task<int> UpdateAsync(QuoteItemResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource);

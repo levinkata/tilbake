@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var motor = _mapper.Map<MotorSaveResource, Motor>(resource);
             motor.Id = Guid.NewGuid();
 
-            await _unitOfWork.Motors.AddAsync(motor).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Motors.AddAsync(motor);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Motors.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(MotorResource resource)
         {
             var motor = _mapper.Map<MotorResource, Motor>(resource);
-            await _unitOfWork.Motors.DeleteAsync(motor).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Motors.DeleteAsync(motor);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<MotorResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Motors.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Motors.GetAllAsync());
             result = result.OrderBy(n => n.RegNumber);
 
             var resources = _mapper.Map<IEnumerable<Motor>, IEnumerable<MotorResource>>(result);
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         public async Task<MotorResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Motors.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Motors.GetByIdAsync(id);
             var resources = _mapper.Map<Motor, MotorResource>(result);
 
             return resources;
@@ -64,9 +64,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(MotorResource resource)
         {
             var motor = _mapper.Map<MotorResource, Motor>(resource);
-            await _unitOfWork.Motors.UpdateAsync(resource.Id, motor).ConfigureAwait(true);
+            await _unitOfWork.Motors.UpdateAsync(resource.Id, motor);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

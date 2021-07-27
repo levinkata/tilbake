@@ -8,6 +8,7 @@ namespace Tilbake.Application.Mapping
     {
         public ResourceToModeProfilel()
         {
+            CreateMap<AllRiskSaveResource, AllRisk>();
             CreateMap<BankSaveResource, Bank>();
             CreateMap<BankBranchSaveResource, BankBranch>();
             CreateMap<BodyTypeSaveResource, BodyType>();
@@ -18,10 +19,13 @@ namespace Tilbake.Application.Mapping
             CreateMap<CountrySaveResource, Country>();
             CreateMap<ClientDocumentSaveResource, ClientDocument>();
             CreateMap<ClientRiskSaveResource, ClientRisk>();
+            CreateMap<ContentSaveResource, Content>();
             CreateMap<CoverTypeSaveResource, CoverType>();
             CreateMap<DocumentTypeSaveResource, DocumentType>();
             CreateMap<DriverTypeSaveResource, DriverType>();
             CreateMap<GenderSaveResource, Gender>();
+            CreateMap<HouseSaveResource, House>();
+            CreateMap<HouseConditionSaveResource, HouseCondition>();
             CreateMap<InsurerSaveResource, Insurer>();
             CreateMap<InvoiceStatusSaveResource, InvoiceStatus>();
             CreateMap<InvoiceSaveResource, Invoice>();
@@ -37,8 +41,13 @@ namespace Tilbake.Application.Mapping
             CreateMap<QuoteStatusSaveResource, QuoteStatus>();
             CreateMap<PolicyTypeSaveResource, PolicyType>();
             CreateMap<RiskSaveResource, Risk>();
+            CreateMap<RiskItemSaveResource, RiskItem>();
+            CreateMap<ResidenceTypeSaveResource, ResidenceType>();
+            CreateMap<ResidenceUseSaveResource, ResidenceUse>();
+            CreateMap<RoofTypeSaveResource, RoofType>();
             CreateMap<SalesTypeSaveResource, SalesType>();
             CreateMap<TitleSaveResource, Title>();
+            CreateMap<WallTypeSaveResource, WallType>();
         }
     }
 }

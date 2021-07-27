@@ -183,7 +183,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
                     continue;
 
-                if (entry.Entity is IEntity entity)
+                if (entry.Entity is IAuditEntity entity)
                 {
                     if (entry.State == EntityState.Added)
                     {

@@ -29,6 +29,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             DriverTypes = new DriverTypeRepository(_context);
             Genders = new GenderRepository(_context);
             Houses = new HouseRepository(_context);
+            HouseConditions = new HouseConditionRepository(_context);
             Insurers = new InsurerRepository(_context);
             Invoices = new InvoiceRepository(_context);
             InvoiceStatuses = new InvoiceStatusRepository(_context);
@@ -42,13 +43,18 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             PolicyTypes = new PolicyTypeRepository(_context);
             Portfolios = new PortfolioRepository(_context);
             PortfolioClients = new PortfolioClientRepository(_context);
+            ResidenceTypes = new ResidenceTypeRepository(_context);
+            ResidenceUses = new ResidenceUseRepository(_context);
             Quotes = new QuoteRepository(_context);
             QuoteItems = new QuoteItemRepository(_context);
             QuoteStatuses = new QuoteStatusRepository(_context);
             Risks = new RiskRepository(_context);
+            RiskItems = new RiskItemRepository(_context);
+            RoofTypes = new RoofTypeRepository(_context);
             SalesTypes = new SalesTypeRepository(_context);
             Titles = new TitleRepository(_context);
             UserPortfolios = new UserPortfolioRepository(_context);
+            WallTypes = new WallTypeRepository(_context);
         }
 
         public IAllRiskRepository AllRisks { get; private set; }
@@ -68,6 +74,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IDriverTypeRepository DriverTypes { get; private set; }
         public IGenderRepository Genders { get; private set; }
         public IHouseRepository Houses { get; private set; }
+        public IHouseConditionRepository HouseConditions { get; private set; }
         public IInsurerRepository Insurers { get; private set; }
         public IInvoiceRepository Invoices { get; private set; }
         public IInvoiceStatusRepository InvoiceStatuses { get; private set; }
@@ -85,9 +92,14 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IQuoteItemRepository QuoteItems { get; private set; }
         public IQuoteStatusRepository QuoteStatuses { get; private set; }
         public IRiskRepository Risks { get; private set; }
+        public IRiskItemRepository RiskItems { get; private set; }
+        public IResidenceTypeRepository ResidenceTypes { get; private set; }
+        public IResidenceUseRepository ResidenceUses { get; private set; }
+        public IRoofTypeRepository RoofTypes { get; private set; }
         public ISalesTypeRepository SalesTypes { get; private set; }
         public ITitleRepository Titles { get; private set; }
         public IUserPortfolioRepository UserPortfolios { get; private set; }
+        public IWallTypeRepository WallTypes { get; private set; }
 
         public async Task<int> SaveAsync()
         {

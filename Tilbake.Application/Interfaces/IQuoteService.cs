@@ -12,6 +12,7 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<QuoteResource>> GetByPortfolioClientAsync(Guid portfolioClientId);
         Task<QuoteResource> GetByIdAsync(Guid id);
         Task<QuoteResource> GetByQuoteNumberAsync(int quoteNumber);
+        Task<QuoteResource> GetFirstOrDefaultAsync(Guid id);
         Task<int> AddAsync(QuoteObjectResource resource);
         Task<int> UpdateAsync(QuoteResource resource);
         Task<int> DeleteAsync(Guid id);

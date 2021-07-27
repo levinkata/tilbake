@@ -15,5 +15,6 @@ namespace Tilbake.Application.Resources
         public Content[] Contents { get; set; }
         public House[] Houses { get; set; }
         public Motor[] Motors { get; set; }
+        public RiskItem[] RiskItems { get; set; }
     }
 }

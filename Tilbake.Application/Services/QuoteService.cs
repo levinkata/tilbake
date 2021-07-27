@@ -39,40 +39,48 @@ namespace Tilbake.Application.Services
 
             if (resource.AllRisks != null)
             {
-                //  Update QuoteItems with AllRiskId
-                int ao = resource.AllRisks.Length;
-                var allRisks = resource.AllRisks;
-                await _unitOfWork.AllRisks.AddRangeAsync(allRisks).ConfigureAwait(true);
-
-                for (int i = 0; i < ao; i++)
+  
+                if (resource.RiskItems != null)
                 {
-                    var allRiskId = allRisks[i].Id;
+                    //  Create RiskItem Record
+                    var riskItems = resource.RiskItems;
+                    await _unitOfWork.RiskItems.AddRangeAsync(riskItems).ConfigureAwait(true);
 
-                    Risk risk = new Risk()
+                    //  Update QuoteItems with AllRiskId
+                    int ao = resource.AllRisks.Length;
+                    var allRisks = resource.AllRisks;
+                    await _unitOfWork.AllRisks.AddRangeAsync(allRisks).ConfigureAwait(true);
+
+                    for (int i = 0; i < ao; i++)
                     {
-                        Id = Guid.NewGuid(),
-                        AllRiskId = allRiskId
-                    };
-                    await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+                        var allRiskId = allRisks[i].Id;
 
-                    var riskId = risk.Id;
+                        Risk risk = new Risk()
+                        {
+                            Id = Guid.NewGuid(),
+                            AllRiskId = allRiskId
+                        };
+                        await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
 
-                    ClientRisk clientRisk = new ClientRisk()
-                    {
-                        Id = Guid.NewGuid(),
-                        ClientId = clientId,
-                        RiskId = riskId
-                    };
-                    await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+                        var riskId = risk.Id;
 
-                    var clientRiskId = clientRisk.Id;
+                        ClientRisk clientRisk = new ClientRisk()
+                        {
+                            Id = Guid.NewGuid(),
+                            ClientId = clientId,
+                            RiskId = riskId
+                        };
+                        await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
 
-                    foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskId))
-                    {
-                        item.QuoteId = quoteId;
-                        item.ClientRiskId = clientRiskId;
+                        var clientRiskId = clientRisk.Id;
+
+                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskId))
+                        {
+                            item.QuoteId = quoteId;
+                            item.ClientRiskId = clientRiskId;
+                        }
                     }
-                }                
+                }
             }
 
             if (resource.Contents != null)
@@ -248,9 +256,17 @@ namespace Tilbake.Application.Services
         public async Task<QuoteResource> GetByQuoteNumberAsync(int quoteNumber)
         {
             var result = await _unitOfWork.Quotes.GetByQuoteNumberAsync(quoteNumber).ConfigureAwait(true);
-            var resources = _mapper.Map<Quote, QuoteResource>(result);
+            var resource = _mapper.Map<Quote, QuoteResource>(result);
 
-            return resources;
+            return resource;
+        }
+
+        public async Task<QuoteResource> GetFirstOrDefaultAsync(Guid id)
+        {
+            var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(e => e.Id == id, e => e.QuoteStatus, e => e.Insurer);
+            var resource = _mapper.Map<Quote, QuoteResource>(result);
+
+            return resource;
         }
 
         public async Task<int> UpdateAsync(QuoteResource resource)

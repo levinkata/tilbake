@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
+using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
-namespace Tilbake.Application.Resources
+namespace Tilbake.Application.Services
 {
     public class QuoteItemService : IQuoteItemService
     {
@@ -47,6 +48,29 @@ namespace Tilbake.Application.Resources
             var resource = _mapper.Map<QuoteItem, QuoteItemResource>(result);
 
             return resource;
+        }
+
+        public async Task<QuoteItemObjectResource> GetRisksAsync(Guid id)
+        {
+            var resultAllRisk = await _unitOfWork.QuoteItems.GetAllRiskAsync(id);
+            var resultContent = await _unitOfWork.QuoteItems.GetContentAsync(id);
+            var resultHouse = await _unitOfWork.QuoteItems.GetHouseAsync(id);
+            var resultMotor = await _unitOfWork.QuoteItems.GetMotorAsync(id);
+
+            var resourceAllRisk = _mapper.Map<AllRisk, AllRiskResource>(resultAllRisk);
+            var resourceContent = _mapper.Map<Content, ContentResource>(resultContent);
+            var resourceHouse = _mapper.Map<House, HouseResource>(resultHouse);
+            var resourceMotor = _mapper.Map<Motor, MotorResource>(resultMotor);
+
+            QuoteItemObjectResource quoteItemObjectResource = new()
+            {
+                AllRisk = resourceAllRisk,
+                Content = resourceContent,
+                House = resourceHouse,
+                Motor = resourceMotor
+            };
+
+            return quoteItemObjectResource;
         }
 
         public async Task<int> UpdateAsync(QuoteItemResource resource)

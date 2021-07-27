@@ -3,26 +3,42 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var SubPremium = 0M;
 }
 
-<h1>Details</h1>
+<div class="col-md-4 offset-md-8 bd-highlight mb-3">
+    <div class="mr-auto p-2 bg-light">
+        <h1>Quote</h1>
+        <dl class="row">
+            <dt class="col-6">
+                Date:
+            </dt>
+            <dd class="col-6">
+                @Model.QuoteDate.ToString("dd/MM/yyyy")
+            </dd>
+            <dt class="col-6">
+                Quote Number:
+            </dt>
+            <dd class="col-6">
+                @Model.QuoteNumber
+            </dd>
+        </dl>
+    </div>
+</div>
 
 <div>
-    <h4>Quote</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.QuoteNumber)
+            @Html.DisplayNameFor(model => model.Insurer)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.QuoteNumber)
+            @Html.DisplayFor(model => model.Insurer)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.QuoteDate)
+            @Html.DisplayNameFor(model => model.QuoteStatus)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.QuoteDate)
+            @Html.DisplayFor(model => model.QuoteStatus)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ClientInfo)
@@ -36,99 +52,11 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.InternalInfo)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.QuoteStatus)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.QuoteStatus)
-        </dd>
     </dl>
 </div>
 
-@if (Model.QuoteItems.Any())
-{
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.QuoteItems.FirstOrDefault().SumInsured)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.QuoteItems.FirstOrDefault().Premium)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.QuoteItems.FirstOrDefault().Excess)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.QuoteItems)
-            {
-                @*if (item.InsurerName != InsurerName)
-                    {
-                        InsurerName = item.InsurerName;
-                        if (SubPremium > 0)
-                        {
-                            <tr>
-                                <td><strong>Total</strong></td>
-                                <td></td>
-                                <td></td>
-                                <td><strong>@SubPremium</strong></td>
-                                <td></td>
-                            </tr>
-                            SubPremium = 0;
-                        }
-                        <tr>
-                            <td>
-                                <strong>@Html.DisplayFor(modelItem => item.InsurerName)</strong>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    }
-                    if (item.Product.Name != ProductName)
-                    {
-                        ProductName = item.Product.Name;
-                        <tr>
-                            <td><strong>@ProductName</strong></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    }*@
-
-                <tr>
-                    <td></td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SumInsured)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Premium)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Excess)
-                    </td>
-                </tr>
-                SubPremium += item.Premium;
-            }
-
-            @if (SubPremium > 0)
-            {
-                <tr>
-                    <td><strong>Total</strong></td>
-                    <td></td>
-                    <td></td>
-                    <td><strong>@SubPremium</strong></td>
-                    <td></td>
-                </tr>
-                SubPremium = 0;
-            }
-        </tbody>
-    </table>
-}
+<div class="form-group">
+    @await Component.InvokeAsync("QuoteItems", new { quoteId = @Model.Id })
 </div>
 
 <div>

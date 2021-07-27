@@ -32,11 +32,36 @@ namespace Tilbake.Application.Resources
 
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
+        //  AllRisk
         [Display(Name = "Sum Insured")]
-        public decimal SumInsured { get; set; }
+        public decimal AllRiskSumInsured { get; set; }
 
         [Display(Name = "Cover Type")]
-        public Guid CoverTypeId { get; set; }
+        public Guid AllRiskCoverTypeId { get; set; }
+
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        //  Content
+        [Display(Name = "Sum Insured")]
+        public decimal ContentSumInsured { get; set; }
+
+        [Display(Name = "Cover Type")]
+        public Guid ContentCoverTypeId { get; set; }
+
+        //  House
+        [Display(Name = "Sum Insured")]
+        public decimal HouseSumInsured { get; set; }
+
+        [Display(Name = "Cover Type")]
+        public Guid HouseCoverTypeId { get; set; }
+
+        //  Motor
+        [Display(Name = "Sum Insured")]
+        public decimal MotorSumInsured { get; set; }
+
+        [Display(Name = "Cover Type")]
+        public Guid MotorCoverTypeId { get; set; }
 
         [Display(Name = "Motor Make")]
         public Guid MotorMakeId { get; set; }
@@ -52,8 +77,15 @@ namespace Tilbake.Application.Resources
         public SelectList QuoteStatusList { get; set; }
         public SelectList BodyTypeList { get; set; }
         public SelectList DriverTypeList { get; set; }
+        public SelectList HouseConditionList { get; set; }
         public SelectList MotorMakeList { get; set; }
         public SelectList MotorModelList { get; set; }
         public SelectList MotorUseList { get; set; }
+        public SelectList ResidenceTypeList { get; set; }
+        public SelectList ResidenceUseList { get; set; }
+        public SelectList RoofTypeList { get; set; }
+        public SelectList WallTypeList { get; set; }
+
+
     }
 }

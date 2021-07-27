@@ -2,7 +2,7 @@
 
 namespace Tilbake.Domain.Models.Common
 {
-    public interface IEntity
+    public interface IAuditEntity
     {
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }

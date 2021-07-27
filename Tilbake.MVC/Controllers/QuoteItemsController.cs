@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -13,16 +14,271 @@ namespace Tilbake.MVC.Controllers
         private readonly IQuoteItemService _quoteItemService;
         private readonly ICoverTypeService _coverTypeService;
 
+        private readonly IHouseService _houseService;
+        private readonly IHouseConditionService _houseConditionService;
+
+        private readonly IContentService _contentService;
+        private readonly IResidenceTypeService _residenceTypeService;
+        private readonly IResidenceUseService _residenceUseService;
+        private readonly IRoofTypeService _roofTypeService;
+        private readonly IWallTypeService _wallTypeService;
+
+        private readonly IAllRiskService _allRiskService;
+        private readonly IRiskItemService _riskItemService;
+        private readonly IMotorService _motorService;
+        private readonly IBodyTypeService _bodyTypeService;
+        private readonly IDriverTypeService _driverTypeService;
+        private readonly IMotorMakeService _motorMakeService;
+        private readonly IMotorModelService _motorModelService;
+        private readonly IMotorUseService _motorUseService;
+
         public QuoteItemsController(IQuoteItemService quoteItemService,
-                                    ICoverTypeService coverTypeService)
+                                    ICoverTypeService coverTypeService,
+                                    IHouseService houseService,
+                                    IHouseConditionService houseConditionService,
+                                    IContentService contentService,
+                                    IResidenceTypeService residenceTypeService,
+                                    IResidenceUseService residenceUseService,
+                                    IRoofTypeService roofTypeService,
+                                    IWallTypeService wallTypeService,
+                                    IAllRiskService allRiskService,
+                                    IRiskItemService riskItemService,
+                                    IMotorService motorService,
+                                    IBodyTypeService bodyTypeService,
+                                    IDriverTypeService driverTypeService,
+                                    IMotorMakeService motorMakeService,
+                                    IMotorModelService motorModelService,
+                                    IMotorUseService motorUseService)
         {
             _quoteItemService = quoteItemService;
             _coverTypeService = coverTypeService;
+
+            _houseService = houseService;
+            _houseConditionService = houseConditionService;
+
+            _contentService = contentService;
+            _residenceTypeService = residenceTypeService;
+            _residenceUseService = residenceUseService;
+            _roofTypeService = roofTypeService;
+            _wallTypeService = wallTypeService;
+
+            _allRiskService = allRiskService;
+            _riskItemService = riskItemService;
+
+            _motorService = motorService;
+            _bodyTypeService = bodyTypeService;
+            _driverTypeService = driverTypeService;
+            _motorMakeService = motorMakeService;
+            _motorModelService = motorModelService;
+            _motorUseService = motorUseService;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> QuoteItemRisk(Guid id)
+        {
+            var resource = await _quoteItemService.GetRisksAsync(id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            var returnView = "";
+            object model = null;
+
+            if (resource.AllRisk != null)
+            {
+                returnView = "QuoteAllRisk";
+                AllRiskResource allRiskResource = resource.AllRisk;
+                var riskItem = allRiskResource.RiskItemId;
+                var result = await _riskItemService.GetByIdAsync(riskItem);
+
+                allRiskResource.QuoteItemId = id;
+                allRiskResource.RiskItem = result.Description;
+                model = allRiskResource;
+            }
+
+            if (resource.Content != null)
+            {
+                var residenceTypes = await _residenceTypeService.GetAllAsync();
+                var residenceUses = await _residenceUseService.GetAllAsync();
+                var roofTypes = await _roofTypeService.GetAllAsync();
+                var wallTypes = await _wallTypeService.GetAllAsync();
+
+                returnView = "QuoteContent";
+                ContentResource contentResource = resource.Content;
+                contentResource.QuoteItemId = id;
+                contentResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", contentResource.ResidenceTypeId);
+                contentResource.ResidenceUseList = new SelectList(residenceUses, "Id", "Name", contentResource.ResidenceUseId);
+                contentResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", contentResource.RoofTypeId);
+                contentResource.WallTypeList = new SelectList(wallTypes, "Id", "Name", contentResource.WallTypeId);
+                model = contentResource;
+            }
+
+            if (resource.House != null)
+            {
+                var residenceTypes = await _residenceTypeService.GetAllAsync();
+                var houseConditions = await _houseConditionService.GetAllAsync();
+                var roofTypes = await _roofTypeService.GetAllAsync();
+                var wallTypes = await _wallTypeService.GetAllAsync();
+
+                returnView = "QuoteHouse";
+                HouseResource houseResource = resource.House;
+                houseResource.QuoteItemId = id;
+                houseResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", houseResource.ResidenceTypeId);
+                houseResource.HouseConditionList = new SelectList(houseConditions, "Id", "Name", houseResource.HouseConditionId);
+                houseResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", houseResource.RoofTypeId);
+                houseResource.WallTypeList = new SelectList(wallTypes, "Id", "Name", houseResource.WallTypeId);
+                model = houseResource;
+            }
+
+            if (resource.Motor != null)
+            {
+                var bodyTypes = await _bodyTypeService.GetAllAsync();
+                var driverTypes = await _driverTypeService.GetAllAsync();
+                var motorMakes = await _motorMakeService.GetAllAsync();
+                var motorMakeId = motorMakes.FirstOrDefault().Id;
+                var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
+                var motorUses = await _motorUseService.GetAllAsync();
+                var selectedMotorMakeId = motorModels.FirstOrDefault().MotorMakeId;
+
+                returnView = "QuoteMotor";
+                MotorResource motorResource = resource.Motor;
+                motorResource.QuoteItemId = id;
+                motorResource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", motorResource.BodyTypeId);
+                motorResource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", motorResource.DriverTypeId);
+                motorResource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", selectedMotorMakeId);
+                motorResource.MotorModelList = new SelectList(motorModels, "Id", "Name", motorResource.MotorModelId);
+                motorResource.MotorUseList = new SelectList(motorUses, "Id", "Name", motorResource.MotorUseId);
+                model = motorResource;
+            }
+
+            return View(returnView, model);
+        }
+
+
+        // POST: QuoteItems/EditAllRisk/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAllRisk(Guid? id, AllRiskResource resource)
+        {
+            if (id != resource.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    RiskItemResource riskResource = new()
+                    {
+                        Id = resource.RiskItemId,
+                        Description = resource.RiskItem
+                    };
+                    await _riskItemService.UpdateAsync(riskResource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+            }
+
+            return View(resource);
+        }
+
+        // POST: QuoteItems/EditContent/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditContent(Guid? id, ContentResource resource)
+        {
+            if (id != resource.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _contentService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+            }
+
+            return View(resource);
+        }
+
+        // POST: QuoteItems/EditHouse/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditHouse(Guid? id, HouseResource resource)
+        {
+            if (id != resource.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _houseService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+            }
+
+            return View(resource);
+        }
+
+        // POST: QuoteItems/EditMotor/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditMotor(Guid? id, MotorResource resource)
+        {
+            if (id != resource.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _motorService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+            }
+
+            var bodyTypes = await _bodyTypeService.GetAllAsync();
+            var driverTypes = await _driverTypeService.GetAllAsync();
+            var motorMakes = await _motorMakeService.GetAllAsync();
+            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(resource.MotorMakeId);
+            var motorUses = await _motorUseService.GetAllAsync();
+
+            resource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", resource.BodyTypeId);
+            resource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", resource.DriverTypeId);
+            resource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", resource.MotorMakeId);
+            resource.MotorModelList = new SelectList(motorModels, "Id", "Name", resource.MotorModelId);
+            resource.MotorUseList = new SelectList(motorUses, "Id", "Name", resource.MotorUseId);
+
+            return View(resource);
         }
 
         // GET: QuoteItems/Edit/5

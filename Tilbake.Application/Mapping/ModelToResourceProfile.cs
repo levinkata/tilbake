@@ -8,6 +8,9 @@ namespace Tilbake.Application.Mapping
     {
         public ModelToResourceProfile()
         {
+            CreateMap<AllRisk, AllRiskResource>()
+                    .ForMember(dest => dest.RiskItem, opt => opt.MapFrom(src => src.RiskItem.Description)).ReverseMap();
+
             CreateMap<AspnetUserPortfolio, AspnetUserPortfolioResource>()
                     .ForMember(dest => dest.PortfolioName, opt => opt.MapFrom(src => src.Portfolio.Name)).ReverseMap();
 
@@ -32,11 +35,26 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<ClientRisk, ClientRiskResource>().ReverseMap();
             CreateMap<ClientType, ClientTypeResource>().ReverseMap();
+
+            CreateMap<Content, ContentResource>()
+                    .ForMember(dest => dest.ResidenceUse, opt => opt.MapFrom(src => src.ResidenceUse.Name))
+                    .ForMember(dest => dest.ResidenceType, opt => opt.MapFrom(src => src.ResidenceType.Name))
+                    .ForMember(dest => dest.RoofType, opt => opt.MapFrom(src => src.RoofType.Name))
+                    .ForMember(dest => dest.WallType, opt => opt.MapFrom(src => src.WallType.Name)).ReverseMap();
+
             CreateMap<Country, CountryResource>().ReverseMap();
             CreateMap<CoverType, CoverTypeResource>().ReverseMap();
             CreateMap<DocumentType, DocumentTypeResource>().ReverseMap();
             CreateMap<DriverType, DriverTypeResource>().ReverseMap();
             CreateMap<Gender, GenderResource>().ReverseMap();
+
+            CreateMap<House, HouseResource>()
+                    .ForMember(dest => dest.HouseCondition, opt => opt.MapFrom(src => src.HouseCondition.Name))
+                    .ForMember(dest => dest.ResidenceType, opt => opt.MapFrom(src => src.ResidenceType.Name))
+                    .ForMember(dest => dest.RoofType, opt => opt.MapFrom(src => src.RoofType.Name))
+                    .ForMember(dest => dest.WallType, opt => opt.MapFrom(src => src.WallType.Name)).ReverseMap();
+
+            CreateMap<HouseCondition, HouseConditionResource>().ReverseMap();
             CreateMap<Insurer, InsurerResource>().ReverseMap();
             CreateMap<Invoice, InvoiceResource>().ReverseMap();
             CreateMap<InvoiceStatus, InvoiceStatusResource>().ReverseMap();
@@ -62,6 +80,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<PortfolioClient, PortfolioClientResource>().ReverseMap();
 
             CreateMap<Quote, QuoteResource>()
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer.Name))
                 .ForMember(dest => dest.QuoteStatus, opt => opt.MapFrom(src => src.QuoteStatus.Name))
                 .ForMember(dest => dest.QuoteItems, opt => opt.MapFrom(src => src.QuoteItems)).ReverseMap();
             
@@ -69,9 +88,14 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType.Name)).ReverseMap();
 
             CreateMap<QuoteStatus, QuoteStatusResource>().ReverseMap();
+            CreateMap<ResidenceType, ResidenceTypeResource>().ReverseMap();
+            CreateMap<ResidenceUse, ResidenceUseResource>().ReverseMap();
             CreateMap<Risk, RiskResource>().ReverseMap();
+            CreateMap<RiskItem, RiskItemResource>().ReverseMap();
+            CreateMap<RoofType, RoofTypeResource>().ReverseMap();
             CreateMap<SalesType, SalesTypeResource>().ReverseMap();
             CreateMap<Title, TitleResource>().ReverseMap();
+            CreateMap<WallType, WallTypeResource>().ReverseMap();
         }
     }
 }

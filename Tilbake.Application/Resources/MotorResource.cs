@@ -8,6 +8,7 @@ namespace Tilbake.Application.Resources
     {
         public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
+        public Guid QuoteItemId { get; set; }
 
         [Display(Name = "Registration Number")]
         public string RegNumber { get; set; }
@@ -54,6 +55,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Alarm?")]
         public bool Alarm { get; set; }
 
+        [Display(Name = "Make")]
+        public Guid MotorMakeId { get; set; }
+        
         //  Descriptions
 
         [Display(Name = "Body Type")]
@@ -74,5 +78,6 @@ namespace Tilbake.Application.Resources
         public SelectList DriverTypeList { get; set; }
         public SelectList MotorMakeList { get; set; }
         public SelectList MotorModelList { get; set; }
+        public SelectList MotorUseList { get; set; }
     }
 }

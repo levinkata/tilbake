@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table id="tlbOccupation" class="display">
     <thead>
         <tr>
             <th>
@@ -33,3 +33,14 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#tlbOccupation').DataTable({
+                "order": [[ 3, "desc" ]]
+            });
+        });
+    </script>
+
+}

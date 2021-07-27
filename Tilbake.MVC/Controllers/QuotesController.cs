@@ -3,14 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
-using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -23,9 +19,14 @@ namespace Tilbake.MVC.Controllers
         private readonly IQuoteStatusService _quoteStatusService;
         private readonly IBodyTypeService _bodyTypeService;
         private readonly IDriverTypeService _driverTypeService;
+        private readonly IHouseConditionService _houseConditionService;
         private readonly IMotorMakeService _motorMakeService;
         private readonly IMotorModelService _motorModelService;
         private readonly IMotorUseService _motorUseService;
+        private readonly IResidenceTypeService _residenceTypeService;
+        private readonly IResidenceUseService _residenceUseService;
+        private readonly IRoofTypeService _roofTypeService;
+        private readonly IWallTypeService _wallTypeService;
         private readonly IPortfolioClientService _portfolioClientService;
 
         public QuotesController(IQuoteService quoteService,
@@ -34,9 +35,14 @@ namespace Tilbake.MVC.Controllers
                                 IQuoteStatusService quoteStatusService,
                                 IBodyTypeService bodyTypeService,
                                 IDriverTypeService driverTypeService,
+                                IHouseConditionService houseConditionService,
                                 IMotorMakeService motorMakeService,
                                 IMotorModelService motorModelService,
                                 IMotorUseService motorUseService,
+                                IResidenceTypeService residenceTypeService,
+                                IResidenceUseService residenceUseService,
+                                IRoofTypeService roofTypeService,
+                                IWallTypeService wallTypeService,
                                 IPortfolioClientService portfolioClientService)
         {
             _quoteService = quoteService;
@@ -45,9 +51,14 @@ namespace Tilbake.MVC.Controllers
             _quoteStatusService = quoteStatusService;
             _bodyTypeService = bodyTypeService;
             _driverTypeService = driverTypeService;
+            _houseConditionService = houseConditionService;
             _motorMakeService = motorMakeService;
             _motorModelService = motorModelService;
             _motorUseService = motorUseService;
+            _residenceTypeService = residenceTypeService;
+            _residenceUseService = residenceUseService;
+            _roofTypeService = roofTypeService;
+            _wallTypeService = wallTypeService;
             _portfolioClientService = portfolioClientService;
         }
 
@@ -71,7 +82,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteService.GetByIdAsync((Guid)id);
+            var resource = await _quoteService.GetFirstOrDefaultAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -108,11 +119,16 @@ namespace Tilbake.MVC.Controllers
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var driverTypes = await _driverTypeService.GetAllAsync();
+            var houseConditions = await _houseConditionService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
             var motorMakeId = motorMakes.FirstOrDefault().Id;
             var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
             var motorUses = await _motorUseService.GetAllAsync();
-            
+            var residenceTypes = await _residenceTypeService.GetAllAsync();
+            var residenceUses = await _residenceUseService.GetAllAsync();
+            var roofTypes = await _roofTypeService.GetAllAsync();
+            var wallTypes = await _wallTypeService.GetAllAsync();
+
             var coverTypes = await _coverTypeService.GetAllAsync();
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
@@ -124,9 +140,14 @@ namespace Tilbake.MVC.Controllers
                 QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name"),
                 BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
                 DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
+                HouseConditionList = new SelectList(houseConditions, "Id", "Name"),
                 MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
                 MotorModelList = new SelectList(motorModels, "Id", "Name"),
-                MotorUseList = new SelectList(motorUses, "Id", "Name")
+                MotorUseList = new SelectList(motorUses, "Id", "Name"),
+                ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name"),
+                ResidenceUseList = new SelectList(residenceUses, "Id", "Name"),
+                RoofTypeList = new SelectList(roofTypes, "Id", "Name"),
+                WallTypeList = new SelectList(wallTypes, "Id", "Name")
             };
 
             return await Task.Run(() => View(resource)).ConfigureAwait(true);
@@ -198,23 +219,6 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioId, resource.ClientId });
             }
             return View(resource);
-        }
-
-        // GET: Quotes/Detail/5
-        public async Task<IActionResult> Detail(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _quoteService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
         }
 
         // GET: Quotes/Delete/5

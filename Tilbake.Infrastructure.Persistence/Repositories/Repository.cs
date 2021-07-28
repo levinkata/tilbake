@@ -151,16 +151,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         public async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
         {
-            //
             var oldEntity = await _context.Set<TEntity>().FindAsync(id);
             _context.Entry(oldEntity).CurrentValues.SetValues(entity);
-            
-            // -------
-            //_context.Set<TEntity>().Attach(entity);
-            //await Task.Run(() => _context.Entry(entity).State = EntityState.Modified);
-
-            //
-            //await Task.Run(() => _context.Set<TEntity>().Update(entity));
 
             return entity;
         }

@@ -15,7 +15,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="RegNumber" class="control-label"></label>
-                <input asp-for="RegNumber" class="form-control" />
+                <input asp-for="RegNumber" class="form-control text-uppercase" />
                 <span asp-validation-for="RegNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -37,12 +37,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="EngineNumber" class="control-label"></label>
-                <input asp-for="EngineNumber" class="form-control" />
+                <input asp-for="EngineNumber" class="form-control text-uppercase" />
                 <span asp-validation-for="EngineNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ChassisNumber" class="control-label"></label>
-                <input asp-for="ChassisNumber" class="form-control" />
+                <input asp-for="ChassisNumber" class="form-control text-uppercase" />
                 <span asp-validation-for="ChassisNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -59,50 +59,30 @@
                 <label asp-for="MotorUseId" class="control-label"></label>
                 <select asp-for="MotorUseId" class ="form-control" asp-items="ViewBag.MotorUseId"></select>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="GreyImport" /> @Html.DisplayNameFor(model => model.GreyImport)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="SecurityFitting" /> @Html.DisplayNameFor(model => model.SecurityFitting)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="TrackingDevice" /> @Html.DisplayNameFor(model => model.TrackingDevice)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Immobiliser" /> @Html.DisplayNameFor(model => model.Immobiliser)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Alarm" /> @Html.DisplayNameFor(model => model.Alarm)
                 </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="AddedBy" class="control-label"></label>
-                <input asp-for="AddedBy" class="form-control" />
-                <span asp-validation-for="AddedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateAdded" class="control-label"></label>
-                <input asp-for="DateAdded" class="form-control" />
-                <span asp-validation-for="DateAdded" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedBy" class="control-label"></label>
-                <input asp-for="ModifiedBy" class="form-control" />
-                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateModified" class="control-label"></label>
-                <input asp-for="DateModified" class="form-control" />
-                <span asp-validation-for="DateModified" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

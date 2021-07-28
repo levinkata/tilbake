@@ -65,27 +65,27 @@
                 <label asp-for="MotorUseId" class="control-label"></label>
                 <select asp-for="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="GreyImport" /> @Html.DisplayNameFor(model => model.GreyImport)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="SecurityFitting" /> @Html.DisplayNameFor(model => model.SecurityFitting)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="TrackingDevice" /> @Html.DisplayNameFor(model => model.TrackingDevice)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Immobiliser" /> @Html.DisplayNameFor(model => model.Immobiliser)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Alarm" /> @Html.DisplayNameFor(model => model.Alarm)
                 </label>
@@ -100,4 +100,39 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+@section Scripts{
+    <script>
 
+        $(document).ready(function () {
+
+            //  Do something here.
+            $('#RegNumber, #EngineNumber, #ChassisNumber').keyup(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            $("#MotorMakeId").change(function () {
+                var selectedMotorMakeId = $("#MotorMakeId option:selected").val();
+
+                $.ajax({
+                    url: '@(Url.Action("GetMotorModels", "MotorModels"))',
+                    traditional: true,
+                    dataType: "JSON",
+                    type: 'GET',
+                    data: { motorMakeId: selectedMotorMakeId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (models) {
+
+                        $("#MotorModelId").empty();   // clear before appending new list
+                        $.each(models, function (index, model) {
+                            $('#MotorModelId').append($('<option></option>').val(model.id).html(model.name));
+                        });
+                    }
+                });
+            });
+        });
+
+
+    </script>
+}

@@ -72,9 +72,24 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return entities;
         }
 
-        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> FindAsync(
+            Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includes)
         {
-            return await Task.Run(() => _context.Set<TEntity>().Where(predicate).AsNoTracking().ToListAsync());
+            IQueryable<TEntity> query = dbSet;
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+                query = query.Include(include);
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            // return await Task.Run(() => _context.Set<TEntity>().Where(predicate).AsNoTracking().ToListAsync());
+            return await Task.Run(() => query.AsNoTracking().ToListAsync());
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
@@ -82,7 +97,10 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => _context.Set<TEntity>().AsNoTracking().ToListAsync());
         }
 
-        public async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<List<TEntity>> GetAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -95,7 +113,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             if (orderBy != null)
                 query = orderBy(query);
 
-            return await Task.Run(() => query.ToList());
+            return await Task.Run(() => query.AsNoTracking().ToListAsync());
         }
 
         public async Task<TEntity> GetByIdAsync(Guid id)
@@ -103,7 +121,10 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await _context.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter = null, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<TEntity> GetFirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            params Expression<Func<TEntity,
+                object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -113,7 +134,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await query.FirstOrDefaultAsync(filter);
         }
 
-        public async Task<IQueryable<TEntity>> QueryAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        public async Task<IQueryable<TEntity>> QueryAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -128,7 +151,16 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         public async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
         {
-            await Task.Run(() => _context.Set<TEntity>().Update(entity)).ConfigureAwait(true);
+            //
+            var oldEntity = await _context.Set<TEntity>().FindAsync(id);
+            _context.Entry(oldEntity).CurrentValues.SetValues(entity);
+            
+            // -------
+            //_context.Set<TEntity>().Attach(entity);
+            //await Task.Run(() => _context.Entry(entity).State = EntityState.Modified);
+
+            //
+            //await Task.Run(() => _context.Set<TEntity>().Update(entity));
 
             return entity;
         }

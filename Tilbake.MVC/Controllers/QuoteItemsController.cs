@@ -78,9 +78,9 @@ namespace Tilbake.MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> QuoteItemRisk(Guid id)
+        public async Task<IActionResult> QuoteItemRisk(Guid quoteItemId)
         {
-            var resource = await _quoteItemService.GetRisksAsync(id);
+            var resource = await _quoteItemService.GetRisksAsync(quoteItemId);
             if (resource == null)
             {
                 return NotFound();
@@ -96,7 +96,7 @@ namespace Tilbake.MVC.Controllers
                 var riskItem = allRiskResource.RiskItemId;
                 var result = await _riskItemService.GetByIdAsync(riskItem);
 
-                allRiskResource.QuoteItemId = id;
+                allRiskResource.QuoteItemId = quoteItemId;
                 allRiskResource.RiskItem = result.Description;
                 model = allRiskResource;
             }
@@ -110,7 +110,7 @@ namespace Tilbake.MVC.Controllers
 
                 returnView = "QuoteContent";
                 ContentResource contentResource = resource.Content;
-                contentResource.QuoteItemId = id;
+                contentResource.QuoteItemId = quoteItemId;
                 contentResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", contentResource.ResidenceTypeId);
                 contentResource.ResidenceUseList = new SelectList(residenceUses, "Id", "Name", contentResource.ResidenceUseId);
                 contentResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", contentResource.RoofTypeId);
@@ -127,7 +127,7 @@ namespace Tilbake.MVC.Controllers
 
                 returnView = "QuoteHouse";
                 HouseResource houseResource = resource.House;
-                houseResource.QuoteItemId = id;
+                houseResource.QuoteItemId = quoteItemId;
                 houseResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", houseResource.ResidenceTypeId);
                 houseResource.HouseConditionList = new SelectList(houseConditions, "Id", "Name", houseResource.HouseConditionId);
                 houseResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", houseResource.RoofTypeId);
@@ -140,14 +140,16 @@ namespace Tilbake.MVC.Controllers
                 var bodyTypes = await _bodyTypeService.GetAllAsync();
                 var driverTypes = await _driverTypeService.GetAllAsync();
                 var motorMakes = await _motorMakeService.GetAllAsync();
-                var motorMakeId = motorMakes.FirstOrDefault().Id;
-                var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
                 var motorUses = await _motorUseService.GetAllAsync();
-                var selectedMotorMakeId = motorModels.FirstOrDefault().MotorMakeId;
 
                 returnView = "QuoteMotor";
                 MotorResource motorResource = resource.Motor;
-                motorResource.QuoteItemId = id;
+
+                var selectedMotorModel = await _motorModelService.GetByIdAsync(motorResource.MotorModelId);
+                var selectedMotorMakeId = selectedMotorModel.MotorMakeId;
+                var motorModels = await _motorModelService.GetByMotorMakeIdAsync(selectedMotorMakeId);
+
+                motorResource.QuoteItemId = quoteItemId;
                 motorResource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", motorResource.BodyTypeId);
                 motorResource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", motorResource.DriverTypeId);
                 motorResource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", selectedMotorMakeId);
@@ -174,18 +176,27 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
+                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
+                    quoteItemResource.Description = resource.RiskItem;
+
                     RiskItemResource riskResource = new()
                     {
                         Id = resource.RiskItemId,
                         Description = resource.RiskItem
                     };
-                    await _riskItemService.UpdateAsync(riskResource);
+
+                    QuoteItemRiskItemResource quoteItemRiskItemResource = new()
+                    {
+                        QuoteItem = quoteItemResource,
+                        RiskItem = riskResource
+                    };
+                    await _quoteItemService.UpdateQuoteItemRiskItemAsync(quoteItemRiskItemResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
             }
 
             return View(resource);
@@ -205,13 +216,21 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _contentService.UpdateAsync(resource);
+                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
+                    quoteItemResource.Description = resource.Name;
+
+                    QuoteItemContentResource quoteItemContentResource = new()
+                    {
+                        QuoteItem = quoteItemResource,
+                        Content = resource
+                    };
+                    await _quoteItemService.UpdateQuoteItemContentAsync(quoteItemContentResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
             }
 
             return View(resource);
@@ -231,13 +250,21 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _houseService.UpdateAsync(resource);
+                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
+                    quoteItemResource.Description = resource.PhysicalAddress;
+
+                    QuoteItemHouseResource quoteItemHouseResource = new()
+                    {
+                        QuoteItem = quoteItemResource,
+                        House = resource
+                    };
+                    await _quoteItemService.UpdateQuoteItemHouseAsync(quoteItemHouseResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
             }
 
             return View(resource);
@@ -246,24 +273,29 @@ namespace Tilbake.MVC.Controllers
         // POST: QuoteItems/EditMotor/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMotor(Guid? id, MotorResource resource)
+        public async Task<IActionResult> EditMotor(MotorResource resource)
         {
-            if (id != resource.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _motorService.UpdateAsync(resource);
+                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
+
+                    var motorMake = await _motorMakeService.GetByIdAsync(resource.MotorMakeId);
+                    quoteItemResource.Description = resource.RegYear + " " + motorMake.Name + " " + resource.RegNumber;
+
+                    QuoteItemMotorResource quoteItemMotorResource = new()
+                    {
+                        QuoteItem = quoteItemResource,
+                        Motor = resource
+                    };
+                    await _quoteItemService.UpdateQuoteItemMotorAsync(quoteItemMotorResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { id = resource.QuoteItemId });
+                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
             }
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();

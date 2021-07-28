@@ -40,3 +40,9 @@ http://janholinka.net/Blog/Article/9
                                null,                //Orders          
                                x => x.Country)      //Includes
            .ConfigureAwait(false);
+
+Generic Entity Base Class
+https://cpratt.co/generic-entity-base-class/
+
+A Truly Generic Repository, Part 1
+https://cpratt.co/truly-generic-repository/

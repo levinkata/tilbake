@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
@@ -38,7 +39,7 @@
     <script>
         $(document).ready(function() {
             $('#tlbOccupation').DataTable({
-                "order": [[ 3, "desc" ]]
+                "order": [[ 1, "desc" ]]
             });
         });
     </script>

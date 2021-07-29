@@ -10,5 +10,6 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
         Task<IEnumerable<Quote>> GetByPortfolioAsync(Guid portfolioId);
         Task<IEnumerable<Quote>> GetByPortfolioClientAsync(Guid portfolioClientId);
         Task<Quote> GetByQuoteNumberAsync(int quoteNumber);
+        Task<bool> IsConvertedToPolicy(Guid id);
     }
 }

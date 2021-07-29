@@ -12,6 +12,7 @@ namespace Tilbake.Application.Resources
         public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
         public Guid ClientId { get; set; }
+        public bool IsConverted { get; set; }
 
         [Display(Name = "Quote Number")]
         public int QuoteNumber { get; set; }

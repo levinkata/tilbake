@@ -4,18 +4,18 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    bool IsInvisible = false;
+    bool IsComplete = true;
 
-    if(Model.InsurerId == Guid.Empty)
+    if (Model.InsurerId == Guid.Empty)
     {
-        IsInvisible = true;
+        IsComplete = false;
     }
 
     foreach (var item in Model.QuoteItems)
     {
-        if(item.SumInsured == 0 || item.Premium == 0 || String.IsNullOrEmpty(item.Excess))
+        if (item.SumInsured == 0 || item.Premium == 0 || String.IsNullOrEmpty(item.Excess))
         {
-            IsInvisible = true;
+            IsComplete = false;
         }
     }
 }
@@ -40,15 +40,27 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-md-end">
-    <div class="form-group">
-        @if (!IsInvisible)
-        {
-            <a asp-controller="Policies" asp-action="QuoteToPolicy" asp-route-quoteId="@Model.Id" class="btn btn-primary">Convert Quote to Policy</a>
-        }
-    </div>
-</div>
+@if (Model.IsConverted)
+{
+    <p class="fw-bolder text-center text-danger">Quote was converted to policy</p>
+}
+else
+{
+    if (IsComplete)
+    {
+        <div class="d-flex justify-content-md-end">
+            <div class="form-group">
+                <a asp-controller="Policies" asp-action="QuoteToPolicy" asp-route-quoteId="@Model.Id" class="btn btn-primary">Convert Quote to Policy</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="fw-bolder text-center text-primary">Quote is incomplete.</p>
+        <p class="fst-italic text-center text-info">Ensure that Insurer, Sum Insured, Premium or Excess are completed.</p>
 
+    }
+}
 <div>
     <hr />
     <dl class="row">

@@ -183,23 +183,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
                     continue;
 
-                if (entry.Entity is IAuditEntity entity)
-                {
-                    if (entry.State == EntityState.Added)
-                    {
-                        entity.DateAdded = timestamp;
-                        entity.AddedBy = Guid.Parse(_userId.ToString());
-                    }
-                    else if (entry.State == EntityState.Modified)
-                    {
-                        entity.DateModified = timestamp;
-                        entity.ModifiedBy = Guid.Parse(_userId.ToString());
-
-                        Entry(entity).Property(x => x.AddedBy).IsModified = false;
-                        Entry(entity).Property(x => x.DateAdded).IsModified = false;
-                    }
-                }
-
                 var auditEntry = new AuditEntry(entry)
                 {
                     TableName = entry.Entity.GetType().Name,

@@ -75,18 +75,14 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: Quotes/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _quoteService.GetFirstOrDefaultAsync((Guid)id);
+            var resource = await _quoteService.GetFirstOrDefaultAsync(id);
             if (resource == null)
             {
                 return NotFound();
             }
+            resource.IsConverted = await _quoteService.IsConvertedToPolicy(id);
 
             return View(resource);
         }

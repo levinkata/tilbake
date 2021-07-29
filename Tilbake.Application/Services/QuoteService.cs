@@ -269,6 +269,11 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
+        public async Task<bool> IsConvertedToPolicy(Guid id)
+        {
+            return await _unitOfWork.Quotes.IsConvertedToPolicy(id);
+        }
+
         public async Task<int> UpdateAsync(QuoteResource resource)
         {
             var quote = _mapper.Map<QuoteResource, Quote>(resource);

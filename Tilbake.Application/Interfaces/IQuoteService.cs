@@ -17,8 +17,6 @@ namespace Tilbake.Application.Interfaces
         Task<int> UpdateAsync(QuoteResource resource);
         Task<int> DeleteAsync(Guid id);
         Task<int> DeleteAsync(QuoteResource resource);
-
-
-
+        Task<bool> IsConvertedToPolicy(Guid id);
     }
 }

@@ -43,5 +43,16 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Where(e => e.QuoteNumber == quoteNumber)
                                                 .FirstOrDefaultAsync());
         }
+
+        public async Task<bool> IsConvertedToPolicy(Guid id)
+        {
+            var result = await (from q in _context.Quotes
+                        join i in _context.QuoteItems on q.Id equals i.QuoteId
+                        join p in _context.PolicyRisks on i.ClientRiskId equals p.ClientRiskId
+                        where q.Id == id
+                        select q).ToListAsync();
+
+            return result.Any();
+        }
     }
 }

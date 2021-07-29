@@ -38,7 +38,7 @@ namespace Tilbake.MVC.Controllers
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-            return await Task.Run(() => View()).ConfigureAwait(true);
+            return await Task.Run(() => View());
         }
 
         // GET: Clients/GetByPortfolio/5
@@ -49,7 +49,7 @@ namespace Tilbake.MVC.Controllers
                 Id = portfolioId
             };
             
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // GET: Clients/Details/5

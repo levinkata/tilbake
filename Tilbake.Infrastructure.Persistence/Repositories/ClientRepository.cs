@@ -26,7 +26,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Include(b => b.Occupation)
                                                 .Include(b => b.Title)
                                                 .Where(e => e.IdNumber == idNumber)
-                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
+                                                .FirstOrDefaultAsync());
         }
 
         public async Task<Client> GetByClientId(Guid portfolioId, Guid clientId)
@@ -35,7 +35,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Where(c => c.PortfolioClients
                                                 .Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId))
                                                 .Include(c => c.PortfolioClients)
-                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
+                                                .FirstOrDefaultAsync());
         }
 
         public async Task<IEnumerable<Client>> GetByPortfolioId(Guid portfolioId)
@@ -45,7 +45,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Any(p => p.PortfolioId == portfolioId))
                                                 .Include(c => c.PortfolioClients)
                                                 .OrderBy(n => n.LastName)
-                                                .AsNoTracking()).ConfigureAwait(true);
+                                                .AsNoTracking());
         }
     }
 }

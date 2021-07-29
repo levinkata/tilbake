@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var carrier = _mapper.Map<CarrierSaveResource, Carrier>(resource);
             carrier.Id = Guid.NewGuid();
 
-            await _unitOfWork.Carriers.AddAsync(carrier).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Carriers.AddAsync(carrier);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Carriers.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(CarrierResource resource)
         {
             var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
-            await _unitOfWork.Carriers.DeleteAsync(carrier).ConfigureAwait(true);
+            await _unitOfWork.Carriers.DeleteAsync(carrier);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<CarrierResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Carriers.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Carriers.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Carrier>, IEnumerable<CarrierResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<CarrierResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Carriers.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Carriers.GetByIdAsync(id);
             var resources = _mapper.Map<Carrier, CarrierResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(CarrierResource resource)
         {
             var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
-            await _unitOfWork.Carriers.UpdateAsync(resource.Id, carrier).ConfigureAwait(true);
+            await _unitOfWork.Carriers.UpdateAsync(resource.Id, carrier);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

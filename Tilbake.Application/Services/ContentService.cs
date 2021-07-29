@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var content = _mapper.Map<ContentSaveResource, Content>(resource);
             content.Id = Guid.NewGuid();
 
-            await _unitOfWork.Contents.AddAsync(content).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Contents.AddAsync(content);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Contents.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(ContentResource resource)
         {
             var content = _mapper.Map<ContentResource, Content>(resource);
-            await _unitOfWork.Contents.DeleteAsync(content).ConfigureAwait(true);
+            await _unitOfWork.Contents.DeleteAsync(content);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<ContentResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Contents.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Contents.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Content>, IEnumerable<ContentResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<ContentResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Contents.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Contents.GetByIdAsync(id);
             var resources = _mapper.Map<Content, ContentResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(ContentResource resource)
         {
             var content = _mapper.Map<ContentResource, Content>(resource);
-            await _unitOfWork.Contents.UpdateAsync(resource.Id, content).ConfigureAwait(true);
+            await _unitOfWork.Contents.UpdateAsync(resource.Id, content);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

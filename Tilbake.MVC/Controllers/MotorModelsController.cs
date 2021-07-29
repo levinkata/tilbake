@@ -36,7 +36,7 @@ namespace Tilbake.MVC.Controllers
                                   m.Name
                               };
             
-            return await Task.Run(() => Json(motormodels)).ConfigureAwait(true);
+            return await Task.Run(() => Json(motormodels));
         }
 
         // GET: MotorModels/Details/5

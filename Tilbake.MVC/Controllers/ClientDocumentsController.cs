@@ -27,7 +27,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index(Guid clientId)
         {
             ViewBag.ClientId = clientId;
-            return await Task.Run(() => View()).ConfigureAwait(true);
+            return await Task.Run(() => View());
         }
 
         // GET: ClientDocuments/Details/5

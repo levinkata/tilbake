@@ -22,7 +22,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Include(b => b.Country)
                                                 .Where(e => e.CountryId == countryId)
                                                 .OrderBy(n => n.Name)
-                                                .AsNoTracking()).ConfigureAwait(true);
+                                                .AsNoTracking());
         }
     }
 }

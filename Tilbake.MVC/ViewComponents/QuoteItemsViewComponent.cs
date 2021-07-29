@@ -19,7 +19,7 @@ namespace Tilbake.MVC.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid quoteId)
         {
             var resources = await _quoteItemService.GetByQuoteIdAsync(quoteId);
-            return await Task.Run(() => View(resources)).ConfigureAwait(true);
+            return await Task.Run(() => View(resources));
         }
     }
 }

@@ -18,13 +18,13 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var roles = roleManager.Roles.ToList();
-            return await Task.Run(() => View(roles)).ConfigureAwait(true);
+            return await Task.Run(() => View(roles));
         }
 
         [Authorize(Policy = "CreateRole")]
         public async Task<IActionResult> Create()
         {
-            return await Task.Run(() => View(new IdentityRole())).ConfigureAwait(true);
+            return await Task.Run(() => View(new IdentityRole()));
         }
 
         [HttpPost]

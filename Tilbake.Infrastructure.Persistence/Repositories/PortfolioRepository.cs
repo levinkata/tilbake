@@ -22,7 +22,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         //                                        .Any(u => u.AspNetUserId == aspNetUserId))
         //                                        .Include(p => p.PortfolioClients)
         //                                        .Include(u => u.AspnetUserPortfolios)
-        //                                        .OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        //                                        .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
         //}
 
         //public async Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId)
@@ -30,7 +30,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         //    return await Task.Run(() => _context.Portfolios
         //                                        .Where(c => !c.AspnetUserPortfolios
         //                                        .Any(u => u.AspNetUserId == aspNetUserId))
-        //                                        .OrderBy(n => n.Name).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+        //                                        .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
         //}
     }
 }

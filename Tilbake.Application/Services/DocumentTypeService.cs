@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var documentType = _mapper.Map<DocumentTypeSaveResource, DocumentType>(resource);
             documentType.Id = Guid.NewGuid();
 
-            await _unitOfWork.DocumentTypes.AddAsync(documentType).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.DocumentTypes.AddAsync(documentType);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.DocumentTypes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(DocumentTypeResource resource)
         {
             var documentType = _mapper.Map<DocumentTypeResource, DocumentType>(resource);
-            await _unitOfWork.DocumentTypes.DeleteAsync(documentType).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.DocumentTypes.DeleteAsync(documentType);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<DocumentTypeResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.DocumentTypes.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.DocumentTypes.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<DocumentType>, IEnumerable<DocumentTypeResource>>(result);
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         public async Task<DocumentTypeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.DocumentTypes.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.DocumentTypes.GetByIdAsync(id);
             var resources = _mapper.Map<DocumentType, DocumentTypeResource>(result);
 
             return resources;
@@ -64,9 +64,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(DocumentTypeResource resource)
         {
             var documentType = _mapper.Map<DocumentTypeResource, DocumentType>(resource);
-            await _unitOfWork.DocumentTypes.UpdateAsync(resource.Id, documentType).ConfigureAwait(true);
+            await _unitOfWork.DocumentTypes.UpdateAsync(resource.Id, documentType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

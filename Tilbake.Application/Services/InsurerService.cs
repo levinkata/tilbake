@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var insurer = _mapper.Map<InsurerSaveResource, Insurer>(resource);
             insurer.Id = Guid.NewGuid();
 
-            await _unitOfWork.Insurers.AddAsync(insurer).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Insurers.AddAsync(insurer);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Insurers.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(InsurerResource resource)
         {
             var insurer = _mapper.Map<InsurerResource, Insurer>(resource);
-            await _unitOfWork.Insurers.DeleteAsync(insurer).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Insurers.DeleteAsync(insurer);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<InsurerResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Insurers.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Insurers.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Insurer>, IEnumerable<InsurerResource>>(result);
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         public async Task<InsurerResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Insurers.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Insurers.GetByIdAsync(id);
             var resources = _mapper.Map<Insurer, InsurerResource>(result);
 
             return resources;
@@ -64,9 +64,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(InsurerResource resource)
         {
             var insurer = _mapper.Map<InsurerResource, Insurer>(resource);
-            await _unitOfWork.Insurers.UpdateAsync(resource.Id, insurer).ConfigureAwait(true);
+            await _unitOfWork.Insurers.UpdateAsync(resource.Id, insurer);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

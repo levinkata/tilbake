@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var portfolio = _mapper.Map<PortfolioSaveResource, Portfolio>(resource);
             portfolio.Id = Guid.NewGuid();
 
-            await _unitOfWork.Portfolios.AddAsync(portfolio).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Portfolios.AddAsync(portfolio);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Portfolios.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(PortfolioResource resource)
         {
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
-            await _unitOfWork.Portfolios.DeleteAsync(portfolio).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Portfolios.DeleteAsync(portfolio);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Portfolios.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Portfolios.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         //public async Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId)
         //{
-        //    var result = await Task.Run(() => _unitOfWork.Portfolios.GetByUserIdAsync(aspNetUserId)).ConfigureAwait(true);
+        //    var result = await Task.Run(() => _unitOfWork.Portfolios.GetByUserIdAsync(aspNetUserId));
         //    result = result.OrderBy(n => n.Name);
 
         //    var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
@@ -65,7 +65,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Portfolios.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Portfolios.GetByIdAsync(id);
             var resources = _mapper.Map<Portfolio, PortfolioResource>(result);
             return resources;
         }
@@ -73,14 +73,14 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(PortfolioResource resource)
         {
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
-            await _unitOfWork.Portfolios.UpdateAsync(resource.Id, portfolio).ConfigureAwait(true);
+            await _unitOfWork.Portfolios.UpdateAsync(resource.Id, portfolio);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         //public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
         //{
-        //    var result = await Task.Run(() => _unitOfWork.Portfolios.GetByNotUserIdAsync(aspNetUserId)).ConfigureAwait(true);
+        //    var result = await Task.Run(() => _unitOfWork.Portfolios.GetByNotUserIdAsync(aspNetUserId));
         //    result = result.OrderBy(n => n.Name);
 
         //    var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);

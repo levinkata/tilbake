@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var gender = _mapper.Map<GenderSaveResource, Gender>(resource);
             gender.Id = Guid.NewGuid();
 
-            await _unitOfWork.Genders.AddAsync(gender).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Genders.AddAsync(gender);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Genders.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(GenderResource resource)
         {
             var gender = _mapper.Map<GenderResource, Gender>(resource);
-            await _unitOfWork.Genders.DeleteAsync(gender).ConfigureAwait(true);
+            await _unitOfWork.Genders.DeleteAsync(gender);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<GenderResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Genders.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Genders.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Gender>, IEnumerable<GenderResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<GenderResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Genders.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Genders.GetByIdAsync(id);
             var resources = _mapper.Map<Gender, GenderResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(GenderResource resource)
         {
             var gender = _mapper.Map<GenderResource, Gender>(resource);
-            await _unitOfWork.Genders.UpdateAsync(resource.Id, gender).ConfigureAwait(true);
+            await _unitOfWork.Genders.UpdateAsync(resource.Id, gender);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

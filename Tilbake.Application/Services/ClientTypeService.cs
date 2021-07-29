@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var clientType = _mapper.Map<ClientTypeSaveResource, ClientType>(resource);
             clientType.Id = Guid.NewGuid();
 
-            await _unitOfWork.ClientTypes.AddAsync(clientType).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.ClientTypes.AddAsync(clientType);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.ClientTypes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(ClientTypeResource resource)
         {
             var clientType = _mapper.Map<ClientTypeResource, ClientType>(resource);
-            await _unitOfWork.ClientTypes.DeleteAsync(clientType).ConfigureAwait(true);
+            await _unitOfWork.ClientTypes.DeleteAsync(clientType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<ClientTypeResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.ClientTypes.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.ClientTypes.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<ClientType>, IEnumerable<ClientTypeResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientTypeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.ClientTypes.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.ClientTypes.GetByIdAsync(id);
             var resources = _mapper.Map<ClientType, ClientTypeResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(ClientTypeResource resource)
         {
             var clientType = _mapper.Map<ClientTypeResource, ClientType>(resource);
-            await _unitOfWork.ClientTypes.UpdateAsync(resource.Id, clientType).ConfigureAwait(true);
+            await _unitOfWork.ClientTypes.UpdateAsync(resource.Id, clientType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var city = _mapper.Map<CitySaveResource, City>(resource);
             city.Id = Guid.NewGuid();
 
-            await _unitOfWork.Cities.AddAsync(city).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Cities.AddAsync(city);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Cities.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(CityResource resource)
         {
             var city = _mapper.Map<CityResource, City>(resource);
-            await _unitOfWork.Cities.DeleteAsync(city).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Cities.DeleteAsync(city);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<CityResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Cities.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Cities.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(result);
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         public async Task<CityResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Cities.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Cities.GetByIdAsync(id);
             var resources = _mapper.Map<City, CityResource>(result);
 
             return resources;
@@ -64,9 +64,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(CityResource resource)
         {
             var city = _mapper.Map<CityResource, City>(resource);
-            await _unitOfWork.Cities.UpdateAsync(resource.Id, city).ConfigureAwait(true);
+            await _unitOfWork.Cities.UpdateAsync(resource.Id, city);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

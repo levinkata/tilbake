@@ -331,7 +331,7 @@ namespace Tilbake.MVC.Controllers
 
             resource.CoverTypeList = new SelectList(coverTypes, "Id", "Name");
 
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // POST: QuoteItems/Edit/5
@@ -374,7 +374,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // GET: QuoteItems/Delete/5

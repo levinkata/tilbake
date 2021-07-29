@@ -3,6 +3,21 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool IsInvisible = false;
+
+    if(Model.InsurerId == Guid.Empty)
+    {
+        IsInvisible = true;
+    }
+
+    foreach (var item in Model.QuoteItems)
+    {
+        if(item.SumInsured == 0 || item.Premium == 0 || String.IsNullOrEmpty(item.Excess))
+        {
+            IsInvisible = true;
+        }
+    }
 }
 
 <div class="col-md-4 offset-md-8 bd-highlight mb-3">
@@ -22,6 +37,15 @@
                 @Model.QuoteNumber
             </dd>
         </dl>
+    </div>
+</div>
+
+<div class="d-flex justify-content-md-end">
+    <div class="form-group">
+        @if (!IsInvisible)
+        {
+            <a asp-controller="Policies" asp-action="QuoteToPolicy" asp-route-quoteId="@Model.Id" class="btn btn-primary">Convert Quote to Policy</a>
+        }
     </div>
 </div>
 

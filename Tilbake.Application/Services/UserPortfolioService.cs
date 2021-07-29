@@ -44,8 +44,8 @@ namespace Tilbake.Application.Services
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
 
-            await _unitOfWork.UserPortfolios.AddRangeAsync(aspnetUserPortfolios).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.UserPortfolios.AddRangeAsync(aspnetUserPortfolios);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteRangeAsync(UserPortfolioResource resources)
@@ -71,13 +71,13 @@ namespace Tilbake.Application.Services
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
 
-            await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
         {
-            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByNotUserIdAsync(aspNetUserId)).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByNotUserIdAsync(aspNetUserId));
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
 
             return resources;
@@ -85,7 +85,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId)
         {
-            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByUserIdAsync(aspNetUserId)).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByUserIdAsync(aspNetUserId));
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
 
             return resources;

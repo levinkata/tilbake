@@ -50,21 +50,21 @@ namespace Tilbake.Application.Services
                 clientDocument.DocumentDate = DateTime.Now;
                 clientDocument.DocumentPath = filePath;
 
-                await _unitOfWork.ClientDocuments.AddAsync(clientDocument).ConfigureAwait(true);
+                await _unitOfWork.ClientDocuments.AddAsync(clientDocument);
             }
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
-            var result = await _unitOfWork.ClientDocuments.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.ClientDocuments.GetByIdAsync(id);
 
             if (File.Exists(result.DocumentPath))
             {
                 File.Delete(result.DocumentPath);
             }
             await _unitOfWork.ClientDocuments.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(ClientDocumentResource resource)
@@ -75,14 +75,14 @@ namespace Tilbake.Application.Services
             }
 
             var clientDocument = _mapper.Map<ClientDocumentResource, ClientDocument>(resource);
-            await _unitOfWork.ClientDocuments.DeleteAsync(clientDocument).ConfigureAwait(true);
+            await _unitOfWork.ClientDocuments.DeleteAsync(clientDocument);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<ClientDocumentResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.ClientDocuments.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.ClientDocuments.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<ClientDocument>, IEnumerable<ClientDocumentResource>>(result);
@@ -92,7 +92,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientDocumentResource>> GetByClientIdAsync(Guid clientId)
         {
-            var result = await _unitOfWork.ClientDocuments.GetByClientIdAsync(clientId).ConfigureAwait(true);
+            var result = await _unitOfWork.ClientDocuments.GetByClientIdAsync(clientId);
             var resources = _mapper.Map<IEnumerable<ClientDocument>, IEnumerable< ClientDocumentResource>>(result);
 
             return resources;
@@ -100,7 +100,7 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientDocumentResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.ClientDocuments.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.ClientDocuments.GetByIdAsync(id);
             var resource = _mapper.Map<ClientDocument, ClientDocumentResource>(result);
 
             return resource;
@@ -109,9 +109,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(ClientDocumentResource resource)
         {
             var clientDocument = _mapper.Map<ClientDocumentResource, ClientDocument>(resource);
-            await _unitOfWork.ClientDocuments.UpdateAsync(resource.Id, clientDocument).ConfigureAwait(true);
+            await _unitOfWork.ClientDocuments.UpdateAsync(resource.Id, clientDocument);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

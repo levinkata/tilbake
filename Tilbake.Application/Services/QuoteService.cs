@@ -34,7 +34,7 @@ namespace Tilbake.Application.Services
             var quote = resource.Quote;
             quote.Id = Guid.NewGuid();
             quote.QuoteDate = DateTime.Now;
-            await _unitOfWork.Quotes.AddAsync(quote).ConfigureAwait(true);
+            await _unitOfWork.Quotes.AddAsync(quote);
             var quoteId = quote.Id;
 
             if (resource.AllRisks != null)
@@ -44,12 +44,12 @@ namespace Tilbake.Application.Services
                 {
                     //  Create RiskItem Record
                     var riskItems = resource.RiskItems;
-                    await _unitOfWork.RiskItems.AddRangeAsync(riskItems).ConfigureAwait(true);
+                    await _unitOfWork.RiskItems.AddRangeAsync(riskItems);
 
                     //  Update QuoteItems with AllRiskId
                     int ao = resource.AllRisks.Length;
                     var allRisks = resource.AllRisks;
-                    await _unitOfWork.AllRisks.AddRangeAsync(allRisks).ConfigureAwait(true);
+                    await _unitOfWork.AllRisks.AddRangeAsync(allRisks);
 
                     for (int i = 0; i < ao; i++)
                     {
@@ -60,7 +60,7 @@ namespace Tilbake.Application.Services
                             Id = Guid.NewGuid(),
                             AllRiskId = allRiskId
                         };
-                        await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+                        await _unitOfWork.Risks.AddAsync(risk);
 
                         var riskId = risk.Id;
 
@@ -70,7 +70,7 @@ namespace Tilbake.Application.Services
                             ClientId = clientId,
                             RiskId = riskId
                         };
-                        await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+                        await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
                         var clientRiskId = clientRisk.Id;
 
@@ -88,7 +88,7 @@ namespace Tilbake.Application.Services
                 //  Update QuoteItems with ContentId
                 int co = resource.Contents.Length;
                 var contents = resource.Contents;
-                await _unitOfWork.Contents.AddRangeAsync(contents).ConfigureAwait(true);
+                await _unitOfWork.Contents.AddRangeAsync(contents);
 
                 for (int i = 0; i < co; i++)
                 {
@@ -99,7 +99,7 @@ namespace Tilbake.Application.Services
                         Id = Guid.NewGuid(),
                         ContentId = contentId
                     };
-                    await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+                    await _unitOfWork.Risks.AddAsync(risk);
 
                     var riskId = risk.Id;
 
@@ -109,7 +109,7 @@ namespace Tilbake.Application.Services
                         ClientId = clientId,
                         RiskId = riskId
                     };
-                    await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
                     var clientRiskId = clientRisk.Id;
 
@@ -126,7 +126,7 @@ namespace Tilbake.Application.Services
                 //  Update QuoteItems with HouseId
                 int ho = resource.Houses.Length;
                 var houses = resource.Houses;
-                await _unitOfWork.Houses.AddRangeAsync(houses).ConfigureAwait(true);
+                await _unitOfWork.Houses.AddRangeAsync(houses);
 
                 for (int i = 0; i < ho; i++)
                 {
@@ -137,7 +137,7 @@ namespace Tilbake.Application.Services
                         Id = Guid.NewGuid(),
                         HouseId = houseId
                     };
-                    await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+                    await _unitOfWork.Risks.AddAsync(risk);
 
                     var riskId = risk.Id;
 
@@ -147,7 +147,7 @@ namespace Tilbake.Application.Services
                         ClientId = clientId,
                         RiskId = riskId
                     };
-                    await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
                     var clientRiskId = clientRisk.Id;
 
@@ -164,7 +164,7 @@ namespace Tilbake.Application.Services
                 //  Update QuoteItems with MotorId
                 int mo = resource.Motors.Length;
                 var motors = resource.Motors;
-                await _unitOfWork.Motors.AddRangeAsync(motors).ConfigureAwait(true);
+                await _unitOfWork.Motors.AddRangeAsync(motors);
 
                 for (int i = 0; i < mo; i++)
                 {
@@ -175,7 +175,7 @@ namespace Tilbake.Application.Services
                         Id = Guid.NewGuid(),
                         MotorId = motorId
                     };
-                    await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
+                    await _unitOfWork.Risks.AddAsync(risk);
 
                     var riskId = risk.Id;
 
@@ -185,7 +185,7 @@ namespace Tilbake.Application.Services
                         ClientId = clientId,
                         RiskId = riskId
                     };
-                    await _unitOfWork.ClientRisks.AddAsync(clientRisk).ConfigureAwait(true);
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
                     var clientRiskId = clientRisk.Id;
 
@@ -197,27 +197,27 @@ namespace Tilbake.Application.Services
                 }
             }
 
-            await _unitOfWork.QuoteItems.AddRangeAsync(quoteItems).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.QuoteItems.AddRangeAsync(quoteItems);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Quotes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(QuoteResource resource)
         {
             var quote = _mapper.Map<QuoteResource, Quote>(resource);
-            await _unitOfWork.Quotes.DeleteAsync(quote).ConfigureAwait(true);
+            await _unitOfWork.Quotes.DeleteAsync(quote);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<QuoteResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Quotes.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Quotes.GetAllAsync());
             result = result.OrderBy(n => n.QuoteNumber);
 
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
@@ -227,7 +227,7 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Quotes.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Quotes.GetByIdAsync(id);
             var resources = _mapper.Map<Quote, QuoteResource>(result);
 
             return resources;
@@ -235,7 +235,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioAsync(Guid portfolioId)
         {
-            var result = await Task.Run(() => _unitOfWork.Quotes.GetByPortfolioAsync(portfolioId)).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Quotes.GetByPortfolioAsync(portfolioId));
             result = result.OrderBy(n => n.QuoteNumber);
 
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
@@ -245,7 +245,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioClientAsync(Guid portfolioClientId)
         {
-            var result = await Task.Run(() => _unitOfWork.Quotes.GetByPortfolioClientAsync(portfolioClientId)).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Quotes.GetByPortfolioClientAsync(portfolioClientId));
             result = result.OrderBy(n => n.QuoteNumber);
 
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
@@ -255,7 +255,7 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetByQuoteNumberAsync(int quoteNumber)
         {
-            var result = await _unitOfWork.Quotes.GetByQuoteNumberAsync(quoteNumber).ConfigureAwait(true);
+            var result = await _unitOfWork.Quotes.GetByQuoteNumberAsync(quoteNumber);
             var resource = _mapper.Map<Quote, QuoteResource>(result);
 
             return resource;
@@ -263,7 +263,7 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetFirstOrDefaultAsync(Guid id)
         {
-            var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(e => e.Id == id, e => e.QuoteStatus, e => e.Insurer);
+            var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(e => e.Id == id, e => e.QuoteStatus, e => e.Insurer, e => e.QuoteItems);
             var resource = _mapper.Map<Quote, QuoteResource>(result);
 
             return resource;
@@ -272,9 +272,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(QuoteResource resource)
         {
             var quote = _mapper.Map<QuoteResource, Quote>(resource);
-            await _unitOfWork.Quotes.UpdateAsync(resource.Id, quote).ConfigureAwait(true);
+            await _unitOfWork.Quotes.UpdateAsync(resource.Id, quote);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

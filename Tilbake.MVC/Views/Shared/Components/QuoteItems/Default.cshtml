@@ -1,12 +1,9 @@
 ﻿@model IEnumerable<QuoteItemResource>
-@{
-
-}
 
 @if (Model.Any())
 {
     <div class="form-group">
-        <table class="table">
+        <table id="tblQuoteItems" class="table">
             <thead>
                 <tr>
                     <th>
@@ -31,13 +28,15 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Description</td>
+                        <td>
+                            <a asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">@item.Description</a>
+                        </td>
                         <td>@item.CoverType</td>
                         <td>@item.SumInsured</td>
                         <td>@item.Premium</td>
                         <td>@item.Excess</td>
                         <td>
-                            <a asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">Edit</a> |
+                            <a asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                             <a asp-controller="QuoteItems" asp-action="Details" asp-route-id="@item.Id">Details</a> |
                             <a asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         </td>

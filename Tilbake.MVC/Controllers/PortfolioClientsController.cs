@@ -45,7 +45,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioId = portfolioId
             };
 
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // GET: PortfolioClients/Details/5
@@ -84,7 +84,7 @@ namespace Tilbake.MVC.Controllers
                 Occupations = new SelectList(occupations, "Id", "Name"),
                 Titles = new SelectList(titles, "Id", "Name")
             };
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // POST: PortfolioClients/Create

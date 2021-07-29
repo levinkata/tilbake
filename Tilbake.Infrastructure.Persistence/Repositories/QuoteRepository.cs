@@ -23,7 +23,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Include(e => e.QuoteItems)
                                                 .Include(c => c.PortfolioClient)
                                                 .Where(r => r.PortfolioClient.PortfolioId == portfolioId)
-                                                .OrderBy(n => n.QuoteNumber).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+                                                .OrderBy(n => n.QuoteNumber).AsNoTracking().ToListAsync());
         }
 
         public async Task<IEnumerable<Quote>> GetByPortfolioClientAsync(Guid portfolioClientId)
@@ -32,7 +32,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Include(q => q.QuoteStatus)
                                                 .Include(d => d.QuoteItems)
                                                 .Where(e => e.PortfolioClientId == portfolioClientId)
-                                                .OrderBy(n => n.QuoteNumber).AsNoTracking().ToListAsync()).ConfigureAwait(true);
+                                                .OrderBy(n => n.QuoteNumber).AsNoTracking().ToListAsync());
         }
 
         public async Task<Quote> GetByQuoteNumberAsync(int quoteNumber)
@@ -41,7 +41,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Include(b => b.QuoteStatus)
                                                 .Include(b => b.PortfolioClient)
                                                 .Where(e => e.QuoteNumber == quoteNumber)
-                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
+                                                .FirstOrDefaultAsync());
         }
     }
 }

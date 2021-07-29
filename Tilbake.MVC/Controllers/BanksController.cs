@@ -21,10 +21,10 @@ namespace Tilbake.MVC.Controllers
         // GET: Banks
         public async Task<IActionResult> Index()
         {
-            var resources = await _bankService.GetAllAsync().ConfigureAwait(true);
+            var resources = await _bankService.GetAllAsync();
             
             ViewBag.datasource = resources;
-            return await Task.Run(() => View(resources)).ConfigureAwait(true);
+            return await Task.Run(() => View(resources));
         }
 
         // GET: Banks/Details/5
@@ -82,8 +82,6 @@ namespace Tilbake.MVC.Controllers
         }
 
         // POST: Banks/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid? id, BankResource resource)

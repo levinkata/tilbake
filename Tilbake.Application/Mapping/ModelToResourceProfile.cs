@@ -14,6 +14,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<AspnetUserPortfolio, AspnetUserPortfolioResource>()
                     .ForMember(dest => dest.PortfolioName, opt => opt.MapFrom(src => src.Portfolio.Name)).ReverseMap();
 
+            CreateMap<Audit, AuditResource>().ReverseMap();
             CreateMap<Bank, BankResource>().ReverseMap();
             CreateMap<BankBranch, BankBranchResource>()
                     .ForMember(dest => dest.BankName, opt => opt.MapFrom(src => src.Bank.Name)).ReverseMap();
@@ -23,7 +24,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<City, CityResource>().ReverseMap();
 
             CreateMap<Client, ClientResource>()
-                    .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType.Name))
+                    .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType.Name)) 
                     .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
                     .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name))
                     .ForMember(dest => dest.MaritalStatus, opt => opt.MapFrom(src => src.MaritalStatus.Name))
@@ -71,6 +72,19 @@ namespace Tilbake.Application.Mapping
             CreateMap<MotorModel, MotorModelResource>().ReverseMap();
             CreateMap<MotorUse, MotorUseResource>().ReverseMap();
             CreateMap<Occupation, OccupationResource>().ReverseMap();
+            CreateMap<PaymentMethod, PaymentMethodResource>().ReverseMap();
+
+            CreateMap<Policy, PolicyResource>()
+                .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.ClientBankAccount.BankAccount.AccountNumber))
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer.Name))
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod.Name))
+                .ForMember(dest => dest.PolicyStatus, opt => opt.MapFrom(src => src.PolicyStatus.Name))
+                .ForMember(dest => dest.PolicyType, opt => opt.MapFrom(src => src.PolicyType.Name))
+                .ForMember(dest => dest.SalesType, opt => opt.MapFrom(src => src.SalesType.Name)).ReverseMap();
+
+            CreateMap<PolicyRisk, PolicyRiskResource>()
+            .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType.Name)).ReverseMap();
+
             CreateMap<PolicyStatus, PolicyStatusResource>().ReverseMap();
             CreateMap<PolicyType, PolicyTypeResource>().ReverseMap();
 

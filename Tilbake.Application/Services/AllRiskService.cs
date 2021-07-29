@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var allRisk = _mapper.Map<AllRiskSaveResource, AllRisk>(resource);
             allRisk.Id = Guid.NewGuid();
 
-            await _unitOfWork.AllRisks.AddAsync(allRisk).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.AllRisks.AddAsync(allRisk);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.AllRisks.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(AllRiskResource resource)
         {
             var allRisk = _mapper.Map<AllRiskResource, AllRisk>(resource);
-            await _unitOfWork.AllRisks.DeleteAsync(allRisk).ConfigureAwait(true);
+            await _unitOfWork.AllRisks.DeleteAsync(allRisk);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<AllRiskResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.AllRisks.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.AllRisks.GetAllAsync());
             result = result.OrderBy(n => n.RiskItem.Description);
 
             var resources = _mapper.Map<IEnumerable<AllRisk>, IEnumerable<AllRiskResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<AllRiskResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.AllRisks.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.AllRisks.GetByIdAsync(id);
             var resources = _mapper.Map<AllRisk, AllRiskResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(AllRiskResource resource)
         {
             var allRisk = _mapper.Map<AllRiskResource, AllRisk>(resource);
-            await _unitOfWork.AllRisks.UpdateAsync(resource.Id, allRisk).ConfigureAwait(true);
+            await _unitOfWork.AllRisks.UpdateAsync(resource.Id, allRisk);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var residenceUse = _mapper.Map<ResidenceUseSaveResource, ResidenceUse>(resource);
             residenceUse.Id = Guid.NewGuid();
 
-            await _unitOfWork.ResidenceUses.AddAsync(residenceUse).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.ResidenceUses.AddAsync(residenceUse);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.ResidenceUses.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(ResidenceUseResource resource)
         {
             var residenceUse = _mapper.Map<ResidenceUseResource, ResidenceUse>(resource);
-            await _unitOfWork.ResidenceUses.DeleteAsync(residenceUse).ConfigureAwait(true);
+            await _unitOfWork.ResidenceUses.DeleteAsync(residenceUse);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<ResidenceUseResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.ResidenceUses.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.ResidenceUses.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<ResidenceUse>, IEnumerable<ResidenceUseResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<ResidenceUseResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.ResidenceUses.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.ResidenceUses.GetByIdAsync(id);
             var resources = _mapper.Map<ResidenceUse, ResidenceUseResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(ResidenceUseResource resource)
         {
             var residenceUse = _mapper.Map<ResidenceUseResource, ResidenceUse>(resource);
-            await _unitOfWork.ResidenceUses.UpdateAsync(resource.Id, residenceUse).ConfigureAwait(true);
+            await _unitOfWork.ResidenceUses.UpdateAsync(resource.Id, residenceUse);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

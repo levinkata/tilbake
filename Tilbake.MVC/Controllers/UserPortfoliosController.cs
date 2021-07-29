@@ -31,15 +31,15 @@ namespace Tilbake.MVC.Controllers
                 Users = new SelectList(users, "Id", "Email"),
             };
 
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         [HttpGet]
         public async Task<IActionResult> FillMultiSelectLists(string userId)
         {
-            var unAssignedPortfolios = await _userPortfolioService.GetByNotUserIdAsync(userId).ConfigureAwait(true);
+            var unAssignedPortfolios = await _userPortfolioService.GetByNotUserIdAsync(userId);
 
-            var userPortfolios = await _userPortfolioService.GetByUserIdAsync(userId).ConfigureAwait(true);
+            var userPortfolios = await _userPortfolioService.GetByUserIdAsync(userId);
             var assignedPortfolios = userPortfolios.Select(r => new
                                                     {
                                                         Id = r.Id,
@@ -58,7 +58,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioIds = portfolios
             };
 
-            await _userPortfolioService.AddRangeAsync(resource).ConfigureAwait(true);
+            await _userPortfolioService.AddRangeAsync(resource);
 
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }
@@ -72,7 +72,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioIds = portfolios
             };
 
-            await _userPortfolioService.DeleteRangeAsync(resource).ConfigureAwait(true);
+            await _userPortfolioService.DeleteRangeAsync(resource);
 
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }

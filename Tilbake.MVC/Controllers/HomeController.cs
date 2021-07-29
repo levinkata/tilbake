@@ -27,7 +27,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var resources = await _userPortfolioService.GetByUserIdAsync(user.Id).ConfigureAwait(true);
+            var resources = await _userPortfolioService.GetByUserIdAsync(user.Id);
             return View(resources);
         }
 

@@ -20,7 +20,7 @@ namespace Tilbake.MVC.Controllers
         // GET: Portfolios
         public async Task<IActionResult> Index()
         {
-            var resources = await _portfolioService.GetAllAsync().ConfigureAwait(true);
+            var resources = await _portfolioService.GetAllAsync();
             ViewBag.datasource = resources;
 
             return View(resources);
@@ -53,7 +53,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _portfolioService.AddAsync(portfolioSaveResource).ConfigureAwait(true);
+                await _portfolioService.AddAsync(portfolioSaveResource);
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolioSaveResource);
@@ -80,7 +80,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _portfolioService.UpdateAsync(portfolioResource).ConfigureAwait(true);
+                await _portfolioService.UpdateAsync(portfolioResource);
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolioResource);

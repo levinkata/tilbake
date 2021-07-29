@@ -8,11 +8,13 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly TilbakeDbContext _context;
+
         public UnitOfWork(TilbakeDbContext context)
         {
             _context = context;
 
             AllRisks = new AllRiskRepository(_context);
+            Audits = new AuditRepository(_context);
             Banks = new BankRepository(_context);
             BankBranches = new BankBranchRepository(_context);
             BodyTypes = new BodyTypeRepository(_context);
@@ -39,6 +41,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             MotorModels = new MotorModelRepository(_context);
             MotorUses = new MotorUseRepository(_context);
             Occupations = new OccupationRepository(_context);
+            PaymentMethods = new PaymentMethodRepository(_context);
+            Policies = new PolicyRepository(_context);
+            PolicyRisks = new PolicyRiskRepository(_context);
             PolicyStatuses = new PolicyStatusRepository(_context);
             PolicyTypes = new PolicyTypeRepository(_context);
             Portfolios = new PortfolioRepository(_context);
@@ -58,6 +63,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         }
 
         public IAllRiskRepository AllRisks { get; private set; }
+        public IAuditRepository Audits { get; private set; }
         public IBankRepository Banks { get; private set; }
         public IBankBranchRepository BankBranches { get; private set; }
         public IBodyTypeRepository BodyTypes { get; private set; }
@@ -84,6 +90,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IMotorModelRepository MotorModels { get; private set; }
         public IMotorUseRepository MotorUses { get; private set; }
         public IOccupationRepository Occupations { get; private set; }
+        public IPaymentMethodRepository PaymentMethods { get; private set; }
+        public IPolicyRepository Policies { get; private set; }
+        public IPolicyRiskRepository PolicyRisks { get; private set; }
         public IPolicyStatusRepository PolicyStatuses { get; private set; }
         public IPolicyTypeRepository PolicyTypes { get; private set; }
         public IPortfolioRepository Portfolios { get; private set; }

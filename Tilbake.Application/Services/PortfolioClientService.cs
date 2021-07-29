@@ -25,8 +25,8 @@ namespace Tilbake.Application.Services
             var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
             portfolioClient.Id = Guid.NewGuid();
 
-            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> AddClientAsync(ClientSaveResource resource)
@@ -34,24 +34,24 @@ namespace Tilbake.Application.Services
             var client = _mapper.Map<ClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
 
-            await _unitOfWork.PortfolioClients.AddClientAsync(resource.PortfolioId, client).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.PortfolioClients.AddClientAsync(resource.PortfolioId, client);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.PortfolioClients.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
         {
-            return await _unitOfWork.PortfolioClients.ExistsAsync(portfolioId, clientId).ConfigureAwait(true);
+            return await _unitOfWork.PortfolioClients.ExistsAsync(portfolioId, clientId);
         }
 
         public async Task<PortfolioClientResource> FindAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioClients.FindAsync(p => p.Id == id).ConfigureAwait(true);
+            var result = await _unitOfWork.PortfolioClients.FindAsync(p => p.Id == id);
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result.FirstOrDefault());
 
             return resource;
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioClientResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(id);
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
 
             return resource;
@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
 
         public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
         {
-            return await _unitOfWork.PortfolioClients.GetPortfolioClientId(portfolioId, clientId).ConfigureAwait(true);
+            return await _unitOfWork.PortfolioClients.GetPortfolioClientId(portfolioId, clientId);
         }
     }
 }

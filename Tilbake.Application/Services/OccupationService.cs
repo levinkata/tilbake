@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var occupation = _mapper.Map<OccupationSaveResource, Occupation>(resource);
             occupation.Id = Guid.NewGuid();
 
-            await _unitOfWork.Occupations.AddAsync(occupation).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Occupations.AddAsync(occupation);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Occupations.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(OccupationResource resource)
         {
             var occupation = _mapper.Map<OccupationResource, Occupation>(resource);
-            await _unitOfWork.Occupations.DeleteAsync(occupation).ConfigureAwait(true);
+            await _unitOfWork.Occupations.DeleteAsync(occupation);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<OccupationResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Occupations.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Occupations.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Occupation>, IEnumerable<OccupationResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<OccupationResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Occupations.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Occupations.GetByIdAsync(id);
             var resources = _mapper.Map<Occupation, OccupationResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(OccupationResource resource)
         {
             var occupation = _mapper.Map<OccupationResource, Occupation>(resource);
-            await _unitOfWork.Occupations.UpdateAsync(resource.Id, occupation).ConfigureAwait(true);
+            await _unitOfWork.Occupations.UpdateAsync(resource.Id, occupation);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

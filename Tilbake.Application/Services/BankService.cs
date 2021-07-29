@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var bank = _mapper.Map<BankSaveResource, Bank>(resource);
             bank.Id = Guid.NewGuid();
 
-            await _unitOfWork.Banks.AddAsync(bank).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Banks.AddAsync(bank);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Banks.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(BankResource resource)
         {
             var bank = _mapper.Map<BankResource, Bank>(resource);
-            await _unitOfWork.Banks.DeleteAsync(bank).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Banks.DeleteAsync(bank);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<BankResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Banks.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Banks.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankResource>>(result);
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         public async Task<BankResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Banks.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Banks.GetByIdAsync(id);
             var resources = _mapper.Map<Bank, BankResource>(result);
 
             return resources;
@@ -64,9 +64,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(BankResource resource)
         {
             var bank = _mapper.Map<BankResource, Bank>(resource);
-            await _unitOfWork.Banks.UpdateAsync(resource.Id, bank).ConfigureAwait(true);
+            await _unitOfWork.Banks.UpdateAsync(resource.Id, bank);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

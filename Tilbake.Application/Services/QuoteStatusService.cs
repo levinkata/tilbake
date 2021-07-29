@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var quoteStatus = _mapper.Map<QuoteStatusSaveResource, QuoteStatus>(resource);
             quoteStatus.Id = Guid.NewGuid();
 
-            await _unitOfWork.QuoteStatuses.AddAsync(quoteStatus).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.QuoteStatuses.AddAsync(quoteStatus);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.QuoteStatuses.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(QuoteStatusResource resource)
         {
             var quoteStatus = _mapper.Map<QuoteStatusResource, QuoteStatus>(resource);
-            await _unitOfWork.QuoteStatuses.DeleteAsync(quoteStatus).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.QuoteStatuses.DeleteAsync(quoteStatus);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<QuoteStatusResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.QuoteStatuses.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.QuoteStatuses.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<QuoteStatus>, IEnumerable<QuoteStatusResource>>(result);
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteStatusResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.QuoteStatuses.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.QuoteStatuses.GetByIdAsync(id);
             var resources = _mapper.Map<QuoteStatus, QuoteStatusResource>(result);
 
             return resources;
@@ -64,9 +64,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(QuoteStatusResource resource)
         {
             var quoteStatus = _mapper.Map<QuoteStatusResource, QuoteStatus>(resource);
-            await _unitOfWork.QuoteStatuses.UpdateAsync(resource.Id, quoteStatus).ConfigureAwait(true);
+            await _unitOfWork.QuoteStatuses.UpdateAsync(resource.Id, quoteStatus);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

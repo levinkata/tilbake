@@ -24,11 +24,11 @@ namespace Tilbake.MVC.ViewComponents
 
             if (portfolioId == Guid.Empty)
             {
-                return View(await Task.Run(() => _clientService.GetAllAsync()).ConfigureAwait(true));
+                return View(await Task.Run(() => _clientService.GetAllAsync()));
             }
             else
             {
-                return View(await Task.Run(() => _clientService.GetByPortfoloId((Guid)portfolioId)).ConfigureAwait(true));
+                return View(await Task.Run(() => _clientService.GetByPortfoloId((Guid)portfolioId)));
 
             }
         }

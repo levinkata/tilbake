@@ -26,27 +26,27 @@ namespace Tilbake.Application.Services
             var wallType = _mapper.Map<WallTypeSaveResource, WallType>(resource);
             wallType.Id = Guid.NewGuid();
 
-            await _unitOfWork.WallTypes.AddAsync(wallType).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.WallTypes.AddAsync(wallType);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.WallTypes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(WallTypeResource resource)
         {
             var wallType = _mapper.Map<WallTypeResource, WallType>(resource);
-            await _unitOfWork.WallTypes.DeleteAsync(wallType).ConfigureAwait(true);
+            await _unitOfWork.WallTypes.DeleteAsync(wallType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<WallTypeResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.WallTypes.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.WallTypes.GetAllAsync());
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<WallType>, IEnumerable<WallTypeResource>>(result);
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
 
         public async Task<WallTypeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.WallTypes.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.WallTypes.GetByIdAsync(id);
             var resources = _mapper.Map<WallType, WallTypeResource>(result);
 
             return resources;
@@ -65,9 +65,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(WallTypeResource resource)
         {
             var wallType = _mapper.Map<WallTypeResource, WallType>(resource);
-            await _unitOfWork.WallTypes.UpdateAsync(resource.Id, wallType).ConfigureAwait(true);
+            await _unitOfWork.WallTypes.UpdateAsync(resource.Id, wallType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

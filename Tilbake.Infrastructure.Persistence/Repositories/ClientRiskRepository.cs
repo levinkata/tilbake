@@ -22,7 +22,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Include(c => c.Client)
                                                 .Include(p => p.Risk)
                                                 .Where(e => e.ClientId == clientId)
-                                                .AsNoTracking()).ConfigureAwait(true);
+                                                .AsNoTracking());
         }
 
         public async Task<Risk> GetByRiskId(Guid clientId, Guid riskId)
@@ -31,7 +31,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Where(c => c.ClientRisks
                                                 .Any(p => p.ClientId == clientId && p.RiskId == riskId))
                                                 .Include(c => c.ClientRisks)
-                                                .FirstOrDefaultAsync()).ConfigureAwait(true);
+                                                .FirstOrDefaultAsync());
         }
     }
 }

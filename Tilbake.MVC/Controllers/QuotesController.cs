@@ -65,13 +65,13 @@ namespace Tilbake.MVC.Controllers
         // GET: Quotes
         public async Task<IActionResult> Index(Guid portfolioId)
         {
-            var resources = await _quoteService.GetByPortfolioAsync(portfolioId).ConfigureAwait(true);
-            return await Task.Run(() => View(resources)).ConfigureAwait(true);
+            var resources = await _quoteService.GetByPortfolioAsync(portfolioId);
+            return await Task.Run(() => View(resources));
         }
 
         public async Task<IActionResult> Quotation()
         {
-            return await Task.Run(() => View()).ConfigureAwait(true);
+            return await Task.Run(() => View());
         }
 
         // GET: Quotes/Details/5
@@ -101,14 +101,14 @@ namespace Tilbake.MVC.Controllers
 
             var portfolioClientId = quoteObject.Quote.PortfolioClientId;
 
-            await _quoteService.AddAsync(quoteObject).ConfigureAwait(true);
+            await _quoteService.AddAsync(quoteObject);
 
             return await Task.Run(() => Ok(new
             {
                 quoteObject.Quote.Id,
                 quoteObject.Quote.PortfolioClientId,
                 quoteObject.Quote.QuoteNumber
-            })).ConfigureAwait(true);
+            }));
         }
 
         // GET: Quotes/Create
@@ -150,7 +150,7 @@ namespace Tilbake.MVC.Controllers
                 WallTypeList = new SelectList(wallTypes, "Id", "Name")
             };
 
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // POST: Quotes/Create
@@ -164,7 +164,7 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.Quote.PortfolioClientId });
             }
 
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // GET: Quotes/Edit/5
@@ -192,7 +192,7 @@ namespace Tilbake.MVC.Controllers
             resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
             resource.InsurerList = new SelectList(insurers, "Id", "Name");
 
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // POST: Quotes/Edit/5

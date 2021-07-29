@@ -78,7 +78,7 @@ namespace Tilbake.MVC.Controllers
                 MotorModelList = new SelectList(motorModels, "Id", "Name"),
                 MotorUseList = new SelectList(motorUses, "Id", "Name")
             };
-            return await Task.Run(() => View(resource)).ConfigureAwait(true);
+            return await Task.Run(() => View(resource));
         }
 
         // POST: Motors/Create

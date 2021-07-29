@@ -26,26 +26,26 @@ namespace Tilbake.Application.Services
             var risk = _mapper.Map<RiskSaveResource, Risk>(resource);
             risk.Id = Guid.NewGuid();
 
-            await _unitOfWork.Risks.AddAsync(risk).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Risks.AddAsync(risk);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Risks.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<int> DeleteAsync(RiskResource resource)
         {
             var risk = _mapper.Map<RiskResource, Risk>(resource);
-            await _unitOfWork.Risks.DeleteAsync(risk).ConfigureAwait(true);
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            await _unitOfWork.Risks.DeleteAsync(risk);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
         public async Task<IEnumerable<RiskResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Risks.GetAllAsync()).ConfigureAwait(true);
+            var result = await Task.Run(() => _unitOfWork.Risks.GetAllAsync());
             var resources = _mapper.Map<IEnumerable<Risk>, IEnumerable<RiskResource>>(result);
 
             return resources;
@@ -53,7 +53,7 @@ namespace Tilbake.Application.Services
 
         public async Task<RiskResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Risks.GetByIdAsync(id).ConfigureAwait(true);
+            var result = await _unitOfWork.Risks.GetByIdAsync(id);
             var resources = _mapper.Map<Risk, RiskResource>(result);
 
             return resources;
@@ -62,9 +62,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(RiskResource resource)
         {
             var risk = _mapper.Map<RiskResource, Risk>(resource);
-            await _unitOfWork.Risks.UpdateAsync(resource.Id, risk).ConfigureAwait(true);
+            await _unitOfWork.Risks.UpdateAsync(resource.Id, risk);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync()).ConfigureAwait(true);
+            return await Task.Run(() => _unitOfWork.SaveAsync());
         }
     }
 }

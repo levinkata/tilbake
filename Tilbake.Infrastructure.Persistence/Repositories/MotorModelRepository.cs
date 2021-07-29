@@ -22,7 +22,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Include(b => b.MotorMake)
                                                 .Where(e => e.MotorMakeId == motorMakeId)
                                                 .OrderBy(n => n.Name)
-                                                .AsNoTracking()).ConfigureAwait(true);
+                                                .AsNoTracking());
         }
     }
 }

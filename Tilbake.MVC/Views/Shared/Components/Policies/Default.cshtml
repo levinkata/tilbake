@@ -1,0 +1,58 @@
+﻿@model IEnumerable<PolicyResource>
+
+@if (Model.Count() == 0)
+{
+    <caption>No Records Found</caption>
+}
+else
+{
+    <table id="tlbPolicy" class="table">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.PolicyNumber)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Insurer)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.CoverStartDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.CoverEndDate)</strong>
+                </th>
+                                <th>
+                    <strong>@Html.DisplayNameFor(model => model.PolicyStatus)</strong>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PolicyNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Insurer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoverStartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoverEndDate)
+                    </td>
+                                        <td>
+                        @Html.DisplayFor(modelItem => item.PolicyStatus)
+                    </td>
+                    <td>
+                        <a asp-controller="Quotes" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="Quotes" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-controller="Quotes" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -30,7 +30,7 @@
         <input type="button" id="btnCreatePolicy" class="btn btn-primary invisible" value="Create Policy" />
     </div>
 </div>
-
+<div id="Message"></div>
 <div class="row">
     <div class="row">
         <div class="col-12">
@@ -112,6 +112,15 @@
                 <select asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethodList">
                     <option value="">Select Payment Method</option>
                 </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label"></label>
+                <textarea  asp-for="Comment" class="form-control"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
         </div>
     </div>
@@ -854,7 +863,7 @@
                 PolicyObject = {
                     ClientId: clientId,
                     Policy: policy,
-                    policyRisks: policyRisks,
+                    PolicyRisks: policyRisks,
                     AllRisks: allRisks,
                     Contents: contents,
                     Houses: houses,
@@ -873,6 +882,7 @@
                     success: function (data) {
                         // Empty tblCart.
                         window.location.reload();
+                        $('#Message').append('<p class="fw-bolder text-center text-danger">Policy created!</p>');
                     }
                 });
             }

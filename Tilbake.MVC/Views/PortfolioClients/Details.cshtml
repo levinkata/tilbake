@@ -79,13 +79,13 @@
                 @*@await Component.InvokeAsync("AdresseItem", new { itemId = Model.Klient.ID })*@
             </div>
         </div>
-        <div class="tab-pane fade" id="policy" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="tab-pane fade" id="policy" role="tabpanel" aria-labelledby="policy-tab">
             <br />
             <div class="form-group text-center">
                 <a asp-controller="Policies" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Policy</a>
             </div>
             <div class="form-group">
-                @*@await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })*@
+                @await Component.InvokeAsync("Policies", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">

@@ -161,7 +161,7 @@ namespace Tilbake.MVC.Controllers
             var houseConditions = await _houseConditionService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
             var motorMakeId = motorMakes.FirstOrDefault().Id;
-            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
+            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(Guid.Empty);
             var motorUses = await _motorUseService.GetAllAsync();
             var residenceTypes = await _residenceTypeService.GetAllAsync();
             var residenceUses = await _residenceUseService.GetAllAsync();

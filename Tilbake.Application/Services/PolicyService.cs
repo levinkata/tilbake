@@ -235,7 +235,7 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.Policies.GetAsync(
                 e => e.PortfolioClientId == portfolioClientId,
                 e => e.OrderByDescending(r => r.CoverStartDate),
-                p => p.PaymentMethod, p => p.PolicyStatus, p => p.PolicyType, p => p.SalesType);
+                p => p.PaymentMethod, p => p.PolicyStatus, p => p.PolicyType, p => p.SalesType, p => p.Insurer);
 
             var resources = _mapper.Map<IEnumerable<Policy>, IEnumerable<PolicyResource>>(result);
 

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<PolicyResource>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Guid portfolioClientId = Model.FirstOrDefault().PortfolioClientId;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" asp-route-portfolioClientId="@portfolioClientId">Create New</a>
+</p>
+@if(Model.Any())
+{
+    <table id="tblPolicy" class="table">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.PolicyNumber)</strong>
+                </th>
+                <th>
+                    <strong></strong>
+                    @Html.DisplayNameFor(model => model.InsurerPolicyNumber)
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.CoverStartDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.CoverEndDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InceptionDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Insurer)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.PaymentMethod)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.PolicyStatus)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.PolicyType)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.SalesType)</strong>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PolicyNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InsurerPolicyNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoverStartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoverEndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InceptionDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Insurer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentMethod)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PolicyStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PolicyType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SalesType)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else
+{
+    <p>No recordss</p>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#tlbPolicy').DataTable();
+        });
+    </script>
+
+}

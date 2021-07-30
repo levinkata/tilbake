@@ -73,7 +73,7 @@ namespace Tilbake.Application.Resources
         public Motor Motor { get; set; }
 
         //  SelectLists
-        public SelectList CoverTypelList { get; set; }
+        public SelectList CoverTypeList { get; set; }
         public SelectList QuoteStatusList { get; set; }
         public SelectList BodyTypeList { get; set; }
         public SelectList DriverTypeList { get; set; }
@@ -85,7 +85,6 @@ namespace Tilbake.Application.Resources
         public SelectList ResidenceUseList { get; set; }
         public SelectList RoofTypeList { get; set; }
         public SelectList WallTypeList { get; set; }
-
-
+        public SelectList DateRangeList { get; set; }
     }
 }

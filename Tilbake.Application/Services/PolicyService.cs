@@ -21,12 +21,181 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PolicySaveResource resource)
+        public async Task<int> AddAsync(PolicyObjectResource resource)
         {
-            var policy = _mapper.Map<PolicySaveResource, Policy>(resource);
-            policy.Id = Guid.NewGuid();
+            var policyRisks = resource.PolicyRisks;
+            if (policyRisks == null)
+            {
+                throw new ArgumentNullException(nameof(policyRisks));
+            }
 
+            var clientId = resource.ClientId;
+
+            var policy = resource.Policy;
+            policy.Id = Guid.NewGuid();
             await _unitOfWork.Policies.AddAsync(policy);
+            var policyId = policy.Id;
+
+            if (resource.AllRisks != null)
+            {
+                if (resource.RiskItems != null)
+                {
+                    //  Create RiskItem Record
+                    var riskItems = resource.RiskItems;
+                    await _unitOfWork.RiskItems.AddRangeAsync(riskItems);
+
+                    //  Update QuoteItems with AllRiskId
+                    int ao = resource.AllRisks.Length;
+                    var allRisks = resource.AllRisks;
+                    await _unitOfWork.AllRisks.AddRangeAsync(allRisks);
+
+                    for (int i = 0; i < ao; i++)
+                    {
+                        var allRiskId = allRisks[i].Id;
+
+                        Risk risk = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            AllRiskId = allRiskId
+                        };
+                        await _unitOfWork.Risks.AddAsync(risk);
+
+                        var riskId = risk.Id;
+
+                        ClientRisk clientRisk = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            ClientId = clientId,
+                            RiskId = riskId
+                        };
+                        await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                        var clientRiskId = clientRisk.Id;
+
+                        foreach (var item in policyRisks.Where(x => x.ClientRiskId == allRiskId))
+                        {
+                            item.PolicyId = policyId;
+                            item.ClientRiskId = clientRiskId;
+                        }
+                    }
+                }
+            }
+
+            if (resource.Contents != null)
+            {
+                //  Update QuoteItems with ContentId
+                int co = resource.Contents.Length;
+                var contents = resource.Contents;
+                await _unitOfWork.Contents.AddRangeAsync(contents);
+
+                for (int i = 0; i < co; i++)
+                {
+                    var contentId = contents[i].Id;
+
+                    Risk risk = new Risk()
+                    {
+                        Id = Guid.NewGuid(),
+                        ContentId = contentId
+                    };
+                    await _unitOfWork.Risks.AddAsync(risk);
+
+                    var riskId = risk.Id;
+
+                    ClientRisk clientRisk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = clientId,
+                        RiskId = riskId
+                    };
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                    var clientRiskId = clientRisk.Id;
+
+                    foreach (var item in policyRisks.Where(x => x.ClientRiskId == contentId))
+                    {
+                        item.PolicyId = policyId;
+                        item.ClientRiskId = clientRiskId;
+                    }
+                }
+            }
+
+            if (resource.Houses != null)
+            {
+                //  Update QuoteItems with HouseId
+                int ho = resource.Houses.Length;
+                var houses = resource.Houses;
+                await _unitOfWork.Houses.AddRangeAsync(houses);
+
+                for (int i = 0; i < ho; i++)
+                {
+                    var houseId = houses[i].Id;
+
+                    Risk risk = new Risk()
+                    {
+                        Id = Guid.NewGuid(),
+                        HouseId = houseId
+                    };
+                    await _unitOfWork.Risks.AddAsync(risk);
+
+                    var riskId = risk.Id;
+
+                    ClientRisk clientRisk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = clientId,
+                        RiskId = riskId
+                    };
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                    var clientRiskId = clientRisk.Id;
+
+                    foreach (var item in policyRisks.Where(x => x.ClientRiskId == houseId))
+                    {
+                        item.PolicyId = policyId;
+                        item.ClientRiskId = clientRiskId;
+                    }
+                }
+            }
+
+            if (resource.Motors != null)
+            {
+                //  Update QuoteItems with MotorId
+                int mo = resource.Motors.Length;
+                var motors = resource.Motors;
+                await _unitOfWork.Motors.AddRangeAsync(motors);
+
+                for (int i = 0; i < mo; i++)
+                {
+                    var motorId = motors[i].Id;
+
+                    Risk risk = new Risk()
+                    {
+                        Id = Guid.NewGuid(),
+                        MotorId = motorId
+                    };
+                    await _unitOfWork.Risks.AddAsync(risk);
+
+                    var riskId = risk.Id;
+
+                    ClientRisk clientRisk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = clientId,
+                        RiskId = riskId
+                    };
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                    var clientRiskId = clientRisk.Id;
+
+                    foreach (var item in policyRisks.Where(x => x.ClientRiskId == motorId))
+                    {
+                        item.PolicyId = policyId;
+                        item.ClientRiskId = clientRiskId;
+                    }
+                }
+            }
+
+            await _unitOfWork.PolicyRisks.AddRangeAsync(policyRisks);
             return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
@@ -57,6 +226,18 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Policies.GetByIdAsync(id);
             var resources = _mapper.Map<Policy, PolicyResource>(result);
+
+            return resources;
+        }
+
+        public async Task<IEnumerable<PolicyResource>> GetByPorfolioClientIdAsync(Guid portfolioClientId)
+        {
+            var result = await _unitOfWork.Policies.GetAsync(
+                e => e.PortfolioClientId == portfolioClientId,
+                e => e.OrderByDescending(r => r.CoverStartDate),
+                p => p.PaymentMethod, p => p.PolicyStatus, p => p.PolicyType, p => p.SalesType);
+
+            var resources = _mapper.Map<IEnumerable<Policy>, IEnumerable<PolicyResource>>(result);
 
             return resources;
         }

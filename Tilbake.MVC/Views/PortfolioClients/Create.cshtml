@@ -15,11 +15,15 @@
             <input asp-for="PortfolioId" type="hidden" />
             <div class="form-group">
                 <label asp-for="TitleId" class="control-label"></label>
-                <select asp-for="TitleId" class="form-control" asp-items="@Model.Titles"></select>
+                <select asp-for="TitleId" class="form-control" asp-items="@Model.Titles">
+                    <option value="">Select Salutation</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="ClientTypeId" class="control-label"></label>
-                <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypes"></select>
+                <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypes">
+                    <option value="">Select Client Type</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -43,7 +47,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="GenderId" class="control-label"></label>
-                <select asp-for="GenderId" class="form-control" asp-items="@Model.Genders"></select>
+                <select asp-for="GenderId" class="form-control" asp-items="@Model.Genders">
+                    <option value="">Select Gender</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="IdNumber" class="control-label"></label>
@@ -52,11 +58,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="MaritalStatusId" class="control-label"></label>
-                <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatuses"></select>
+                <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatuses">
+                    <option value="">Select Marital Status</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class="form-control" asp-items="@Model.Countries"></select>
+                <select asp-for="CountryId" class="form-control" asp-items="@Model.Countries">
+                    <option value="">Select Nationality</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Phone" class="control-label"></label>
@@ -75,7 +85,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="OccupationId" class="control-label"></label>
-                <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations"></select>
+                <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations">
+                    <option value="">Select Occupation</option>
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

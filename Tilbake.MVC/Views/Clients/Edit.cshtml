@@ -15,8 +15,11 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="TitleId" class="control-label"></label>
-                <select asp-for="TitleId" class="form-control" asp-items="@Model.Titles"></select>
-                <span asp-validation-for="TitleId" class="text-danger"></span>
+                <select asp-for="TitleId" class="form-control" asp-items="@Model.Titles">
+                    <option value="">Select Salutation</option>
+                </select>
+                <span asp-validation-for="TitleId" class="text-danger">
+                </span>
             </div>
             <div class="form-group">
                 <label asp-for="ClientNumber" class="control-label"></label>
@@ -25,7 +28,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="ClientTypeId" class="control-label"></label>
-                <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypes"></select>
+                <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypes">
+                    <option value="">Select Client Type</option>
+                </select>
                 <span asp-validation-for="ClientTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -50,7 +55,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="GenderId" class="control-label"></label>
-                <select asp-for="GenderId" class="form-control" asp-items="@Model.Genders"></select>
+                <select asp-for="GenderId" class="form-control" asp-items="@Model.Genders">
+                    <option value="">Select Gender</option>
+                </select>
                 <span asp-validation-for="GenderId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -60,12 +67,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="MaritalStatusId" class="control-label"></label>
-                <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatuses"></select>
+                <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatuses">
+                    <option value="">Select Marital Status</option>
+                </select>
                 <span asp-validation-for="MaritalStatusId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class="form-control" asp-items="@Model.Countries"></select>
+                <select asp-for="CountryId" class="form-control" asp-items="@Model.Countries">
+                    <option value="">Select Nationality</option>
+                </select>
                 <span asp-validation-for="CountryId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -85,7 +96,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="OccupationId" class="control-label"></label>
-                <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations"></select>
+                <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations">
+                    <option value="">Select Occupation</option>
+                </select>
                 <span asp-validation-for="OccupationId" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -1,8 +1,13 @@
-﻿@model QuoteSaveResource
+﻿@model PolicySaveResource
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <div class="col-md-4 offset-md-8 bd-highlight mb-3">
     <div class="mr-auto p-2 bg-light">
-        <h1>Quote</h1>
+        <h1>Policy</h1>
         <dl class="row">
             <dt class="col-6">
                 Date:
@@ -11,7 +16,7 @@
                 @DateTime.Now.Date.ToString("dd/MM/yyyy")
             </dd>
             <dt class="col-6">
-                Quote Number:
+                Policy Number:
             </dt>
             <dd class="col-6">
                 0
@@ -22,31 +27,96 @@
 
 <div class="d-flex justify-content-md-end">
     <div class="form-group">
-        <input type="button" id="btnCreateQuote" class="btn btn-primary invisible" value="Create Quote" />
+        <input type="button" id="btnCreatePolicy" class="btn btn-primary invisible" value="Create Policy" />
     </div>
 </div>
+
 <div class="row">
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="ClientInfo" class="control-label"></label>
-            <input asp-for="ClientInfo" id="ClientInfo" class="form-control" />
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label asp-for="InsurerId" class="control-label"></label>
+                <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList">
+                    <option value="">Select Insurer</option>
+                </select>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="InternalInfo" class="control-label"></label>
-            <input asp-for="InternalInfo" id="InternalInfo" class="form-control" />
+    <div class="row">
+        <div class="col-5">
+            <div class="form-group">
+                <label asp-for="InsurerPolicyNumber" class="control-label"></label>
+                <input asp-for="InsurerPolicyNumber" class="form-control" />
+                <span asp-validation-for="InsurerPolicyNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label asp-for="PolicyTypeId" class="control-label"></label>
+                <select asp-for="PolicyTypeId" class="form-control" asp-items="Model.PolicyTypeList">
+                    <option value="">Select Policy Type</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label asp-for="RunDay" class="control-label"></label>
+                <input asp-for="RunDay" class="form-control" />
+                <span asp-validation-for="RunDay" class="text-danger"></span>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="QuoteStatusId" class="control-label"></label>
-            <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList">
-                <option value="">Select Quote Status</option>
-            </select>
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="CoverStartDate" class="control-label"></label>
+                <input asp-for="CoverStartDate" class="form-control" />
+                <span asp-validation-for="CoverStartDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="CoverEndDate" class="control-label"></label>
+                <input asp-for="CoverEndDate" class="form-control" />
+                <span asp-validation-for="CoverEndDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="InceptionDate" class="control-label"></label>
+                <input asp-for="InceptionDate" class="form-control" />
+                <span asp-validation-for="InceptionDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="PolicyStatusId" class="control-label"></label>
+                <select asp-for="PolicyStatusId" class="form-control" asp-items="Model.PolicyStatusList">
+                    <option value="">Select Policy Status</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="SalesTypeId" class="control-label"></label>
+                <select asp-for="SalesTypeId" class="form-control" asp-items="Model.SalesTypeList">
+                    <option value="">Select Sales Type</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="PaymentMethodId" class="control-label"></label>
+                <select asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethodList">
+                    <option value="">Select Payment Method</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>
+
 
 <div class="p-2 bg-light mb-3">
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#allRiskModal">All Risks</button>
@@ -161,7 +231,7 @@
                         </div>
                     </div>
                     <div class="row">
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.ResidenceTypeId" class="control-label">Residence Type</label>
                                 <select asp-for="Content.ResidenceTypeId" id="ContentResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
@@ -169,7 +239,7 @@
                                 </select>
                             </div>
                         </div>
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.ResidenceUseId" class="control-label">Residence Type</label>
                                 <select asp-for="Content.ResidenceUseId" id="ContentResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList">
@@ -179,7 +249,7 @@
                         </div>
                     </div>
                     <div class="row">
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.WallTypeId" class="control-label">Wall Type</label>
                                 <select asp-for="Content.WallTypeId" id="ContentWallTypeId" class="form-control" asp-items="Model.WallTypeList">
@@ -187,7 +257,7 @@
                                 </select>
                             </div>
                         </div>
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.RoofTypeId" class="control-label">Roof Type</label>
                                 <select asp-for="Content.RoofTypeId" id="ContentRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
@@ -195,7 +265,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                     <div class="container border bg-light p-3">
                         <div class="row">
                             <div class="col-6">
@@ -245,7 +315,7 @@
                         </div>
                     </div>
                     <div class="row">
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.ResidenceTypeId" class="control-label">Residence Type</label>
                                 <select asp-for="House.ResidenceTypeId" id="HouseResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
@@ -253,7 +323,7 @@
                                 </select>
                             </div>
                         </div>
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.HouseConditionId" class="control-label">House Condition</label>
                                 <select asp-for="House.HouseConditionId" id="HouseConditionId" class="form-control" asp-items="Model.HouseConditionList">
@@ -263,15 +333,15 @@
                         </div>
                     </div>
                     <div class="row">
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.WallTypeId" class="control-label">Wall Type</label>
                                 <select asp-for="House.WallTypeId" id="HouseWallTypeId" class="form-control" asp-items="Model.WallTypeList">
-                                    <option value="">Select Roof Type</option>
+                                    <option value="">Select Wall Type</option>
                                 </select>
                             </div>
                         </div>
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.RoofTypeId" class="control-label">Roof Type</label>
                                 <select asp-for="House.RoofTypeId" id="HouseRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
@@ -297,7 +367,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                     <div class="container border bg-light p-3">
                         <div class="row">
                             <div class="col-6">
@@ -348,7 +418,9 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label asp-for="Motor.BodyTypeId" class="control-label">Body Type</label>
-                                <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList"></select>
+                                <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList">
+                                    <option value="">Select Body Type</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-3">
@@ -356,7 +428,7 @@
                                 <label asp-for="Motor.Colour" class="control-label">Colour</label>
                                 <input asp-for="Motor.Colour" id="Colour" class="form-control" />
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-4">
@@ -381,7 +453,7 @@
                                 <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList">
                                     <option value="">Select Year</option>
                                 </select>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -427,7 +499,7 @@
                             <div class="row gx-6">
                                 <div class="col">
                                     <div class="form-group">
-                                        <div class="form-check form-check-inlineform-switch">
+                                        <div class="form-check form-check-inline form-switch">
                                             <input class="form-check-input" asp-for="Motor.GreyImport" type="checkbox" id="GreyImport">
                                             <label class="form-check-label" asp-for="Motor.GreyImport">Grey Import</label>
                                         </div>
@@ -498,9 +570,9 @@
         var contents = [];
         var houses = [];
         var motors = [];
-        var quoteItems = [];
+        var policyRisks = [];
         var riskItems = [];
-        var quoteId = uuidv4();
+        var policyId = uuidv4();
 
         function uuidv4() {
             return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -552,10 +624,10 @@
                 Id: clientRiskId,
                 RiskItemid: riskItemId
             }
-            //  3. Build QuoteItem Array to match model class QuoteItem
-            var quoteItem = {
+            //  3. Build PolicyItem Array to match model class PolicyItem
+            var policyRisk = {
                 Id: uuidv4(),
-                QuoteId: quoteId,
+                PolicyId: policyId,
                 ClientRiskId: clientRiskId,
                 CoverTypeId: $('#AllRiskCoverTypeId option:selected').val(),
                 Description: description,
@@ -567,9 +639,9 @@
 
             //  4. Append to the Arrays
             allRisks.push(allRisk);
-            quoteItems.push(quoteItem);
+            policyRisks.push(policyRisk);
             riskItems.push(riskItem);
-            
+
             AddToCart(clientRiskId, description, coverType, sumInsured);
         }
 
@@ -587,13 +659,13 @@
                 Name: description,
                 PhysicalAddress: $('#ContentPhysicalAddress').val(),
                 ResidenceTypeId: $('#ContentResidenceTypeId option:selected').val(),
-                ResidenceUseId: $('#ContentResidenceUseId option:selected').val()                
+                ResidenceUseId: $('#ContentResidenceUseId option:selected').val()
             }
 
-            //  2. Build QuoteItem Array to match model class QuoteItem
-            var quoteItem = {
+            //  2. Build PolicyItem Array to match model class PolicyItem
+            var policyRisk = {
                 Id: uuidv4(),
-                QuoteId: quoteId,
+                PolicyId: policyId,
                 ClientRiskId: clientRiskId,
                 CoverTypeId: $('#ContentCoverTypeId option:selected').val(),
                 Description: description,
@@ -605,7 +677,7 @@
 
             //  3. Append to the Arrays
             contents.push(content);
-            quoteItems.push(quoteItem);
+            policyRisks.push(policyRisk);
 
             AddToCart(clientRiskId, description, coverType, sumInsured);
         }
@@ -625,13 +697,13 @@
                 WallTypeId: $('#HouseWallTypeId option:selected').val(),
                 HouseConditionId: $('#HouseConditionId option:selected').val(),
                 BurglarAlarm: $('#BurglarAlarm').val(),
-                BurglarBars: $('#BurglarAlarm').val()               
+                BurglarBars: $('#BurglarAlarm').val()
             }
 
-            //  2. Build QuoteItem Array to match model class QuoteItem
-            var quoteItem = {
+            //  2. Build PolicyItem Array to match model class PolicyItem
+            var policyRisk = {
                 Id: uuidv4(),
-                QuoteId: quoteId,
+                PolicyId: policyId,
                 ClientRiskId: clientRiskId,
                 CoverTypeId: $('#HouseCoverTypeId option:selected').val(),
                 Description: description,
@@ -643,7 +715,7 @@
 
             //  3. Append to the Arrays
             houses.push(house);
-            quoteItems.push(quoteItem);
+            policyRisks.push(policyRisk);
 
             AddToCart(clientRiskId, description, coverType, sumInsured);
         }
@@ -674,10 +746,10 @@
                 Alarm: $('#Alarm').val()
             };
 
-            //  2. Build QuoteItem Array to match model class QuoteItem
-            var quoteItem = {
+            //  2. Build PolicyItem Array to match model class PolicyItem
+            var policyRisk = {
                 Id: uuidv4(),
-                QuoteId: quoteId,
+                PolicyId: policyId,
                 ClientRiskId: clientRiskId,
                 CoverTypeId: $('#MotorCoverTypeId option:selected').val(),
                 Description: description,
@@ -689,12 +761,12 @@
 
             //  3. Append to the Arrays
             motors.push(motor);
-            quoteItems.push(quoteItem);
+            policyRisks.push(policyRisk);
 
             AddToCart(clientRiskId, description, coverType, sumInsured);
         }
 
-        $('#btnCreateQuote').click(function () {
+        $('#btnCreatePolicy').click(function () {
             var cartItems = $('#tblCart tbody tr');
             var numCart = cartItems.length;
 
@@ -707,20 +779,20 @@
             };
             $("#ErrorMsg").removeClass("text-danger visible").addClass("invisible");
 
-            GenerateQuote();
+            GeneratePolicy();
         });
 
-        function ResetBtnCreateQuote() {
+        function ResetBtnCreatePolicy() {
             var cartItems = $('#tblCart tbody tr').length;
             if (cartItems == 0) {
                 $('#tblCart').removeClass("visible").addClass("invisible");
-                $('#btnCreateQuote').removeClass("visible").addClass("invisible");
+                $('#btnCreatePolicy').removeClass("visible").addClass("invisible");
             } else {
-                $('#btnCreateQuote').removeClass("invisible").addClass("visible");
+                $('#btnCreatePolicy').removeClass("invisible").addClass("visible");
                 $('#tblCart').removeClass("invisible").addClass("table visible");
             }
         }
-        
+
         function AddToCart(clientRiskId, description, coverType, sumInsured) {
 
             $("#ErrorMsg").empty();
@@ -753,29 +825,36 @@
                     )
                 )
             );
-            ResetBtnCreateQuote();
+            ResetBtnCreatePolicy();
         }
 
-        function GenerateQuote() {
+        function GeneratePolicy() {
 
-            //  Build Quote Arrat to match model class Quote
-            var quote = {
-                Id: quoteId,
+            //  Build Policy Arrat to match model class Policy
+            var policy = {
+                Id: policyId,
                 PortfolioClientId: portfolioClientId,
-                QuoteNumber: 0,
-                QuoteDate: '@DateTime.Now',
-                QuoteStatusId: $('#QuoteStatusId option:selected').val(),
-                InsurerId: null,
-                ClientInfo: $('#ClientInfo').val(),
-                InternalInfo: $('#InternalInfo').val()
-            };
+                PolicyNumber: 0,
+                InsurerPolicyNumber: '',
+                PolicyTypeId: $('#PolicyTypeId option:selected').val(),
+                RunDay: $('#RunDay').val(),
+                PaymentMethodId: $('#PaymentMethodId option:selected').val(),
+                ClientBankAccountId: '@Guid.Empty',
+                InsurerId: $('#InsurerId option:selected').val(),
+                CoverStartDate: $('#CoverStartDate').val(),
+                CoverEndDate: $('#CoverEndDate').val(),
+                InceptionDate: $('#CoverStartDate').val(),
+                PolicyStatusId: $('#PolicyStatusId option:selected').val(),
+                SalesTypeId: $('#SalesTypeId option:selected').val(),
+                Comment: $('#Comment').val()
+            }
 
-            if (quoteItems) {
+            if (policyRisks) {
 
-                QuoteObject = {
+                PolicyObject = {
                     ClientId: clientId,
-                    Quote: quote,
-                    QuoteItems: quoteItems,
+                    Policy: policy,
+                    policyRisks: policyRisks,
                     AllRisks: allRisks,
                     Contents: contents,
                     Houses: houses,
@@ -784,25 +863,23 @@
                 }
 
                 $.ajax({
-                    url: '@(Url.Action("PostQuote"))',
+                    url: '@(Url.Action("PostPolicy"))',
                     type: "POST",
                     dataType: "json",
-                    data: { quoteObject: QuoteObject },
+                    data: { policyObject: PolicyObject },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },
                     success: function (data) {
                         // Empty tblCart.
-                        //location.reload();
                         window.location.reload();
-                        //window.location = '/Quotes/Create/?portfolioClientId=' + portfolioClientId;
                     }
                 });
             }
         }
 
         function DeleteCart(clientRiskId) {
-            
+
             if (clientRiskId) {
                 var cartItem = $('#tblCart').find('tr[data-client-risk-id=' + clientRiskId + ']');
                 cartItem.remove();
@@ -831,7 +908,8 @@
                     });
                 }
             }
-            ResetBtnCreateQuote();
+            ResetBtnCreatePolicy();
         }
     </script>
 }
+

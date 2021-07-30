@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
@@ -132,7 +133,7 @@ namespace Tilbake.MVC.Controllers
             {
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
-                CoverTypelList = new SelectList(coverTypes, "Id", "Name"),
+                CoverTypeList = new SelectList(coverTypes, "Id", "Name"),
                 QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name"),
                 BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
                 DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
@@ -143,7 +144,8 @@ namespace Tilbake.MVC.Controllers
                 ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name"),
                 ResidenceUseList = new SelectList(residenceUses, "Id", "Name"),
                 RoofTypeList = new SelectList(roofTypes, "Id", "Name"),
-                WallTypeList = new SelectList(wallTypes, "Id", "Name")
+                WallTypeList = new SelectList(wallTypes, "Id", "Name"),
+                DateRangeList = new SelectList(DateRanges.Years(), "Value", "Text")
             };
 
             return await Task.Run(() => View(resource));

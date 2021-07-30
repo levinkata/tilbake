@@ -97,7 +97,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => _context.Set<TEntity>().AsNoTracking().ToListAsync());
         }
 
-        public async Task<List<TEntity>> GetAsync(
+        public async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes)

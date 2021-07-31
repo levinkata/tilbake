@@ -233,5 +233,16 @@ namespace Tilbake.MVC.Controllers
                 policyObject.Policy.PolicyNumber
             }));
         }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var resource = await _policyService.GetByIdAsync(id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
+        }
     }
 }

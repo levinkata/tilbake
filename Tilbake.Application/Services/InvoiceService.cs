@@ -23,6 +23,14 @@ namespace Tilbake.Application.Services
 
         public async Task<int> AddAsync(InvoiceSaveResource resource)
         {
+            var policyId = resource.PolicyId;
+            var policyRisks = await _unitOfWork.PolicyRisks.GetAsync(r => r.PolicyId == policyId);
+
+            if (policyRisks == null)
+            {
+                throw new ArgumentNullException(nameof(policyRisks));
+            }
+
             var invoice = _mapper.Map<InvoiceSaveResource, Invoice>(resource);
             var taxId = invoice.TaxId;
 
@@ -35,10 +43,7 @@ namespace Tilbake.Application.Services
 
             await _unitOfWork.Invoices.AddAsync(invoice);
 
-            var policyId = resource.PolicyId;
             var invoiceId = invoice.Id;
-
-            var policyRisks = await _unitOfWork.PolicyRisks.GetAsync(r => r.PolicyId == policyId);
 
             List<InvoiceItem> invoiceItems = new();
             foreach (var item in policyRisks)

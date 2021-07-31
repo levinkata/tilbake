@@ -1,7 +1,8 @@
 @model InvoiceSaveResource
 
 @{
-
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="col-md-4 offset-md-8 bd-highlight mb-3">
@@ -24,55 +25,92 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-md-end">
-    <div class="form-group">
-        <input type="button" id="btnCreateInvoice" class="btn btn-primary invisible" value="Generate Invoice" />
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="PolicyId" />
+    <div class="d-flex justify-content-md-end">
         <div class="form-group">
-            <label asp-for="InvoiceDate" class="control-label"></label>
-            <input asp-for="InvoiceDate" id="InvoiceDate" class="form-control" />
+            <input type="submit" class="btn btn-primary" value="Generate Invoice" />
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="InvoiceDueDate" class="control-label"></label>
-            <input asp-for="InvoiceDueDate" id="InvoiceDueDate" class="form-control" />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="InvoiceDate" class="control-label"></label>
+                <input asp-for="InvoiceDate" id="InvoiceDate" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="InvoiceDueDate" class="control-label"></label>
+                <input asp-for="InvoiceDueDate" id="InvoiceDueDate" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="InvoiceStatusId" class="control-label"></label>
+                <select asp-for="InvoiceStatusId" id="InvoiceStatusId" class="form-control" asp-items="Model.InvoiceStatusList"></select>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="InvoiceStatusId" class="control-label"></label>
-            <select asp-for="InvoiceStatusId" id="InvoiceStatusId" class="form-control" asp-items="Model.InvoiceStatusList"></select>
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" id="Amount" class="form-control" />
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="TaxId" class="control-label"></label>
+                <select asp-for="TaxId" id="TaxId" class="form-control" asp-items="Model.TaxList"></select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label asp-for="TaxAmount" class="control-label"></label>
+                <input asp-for="TaxAmount" id="TaxAmount" class="form-control" aria-label="readonly input" readonly />
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-4">
-         <div class="form-group">
-            <label asp-for="Amount" class="control-label"></label>
-            <input asp-for="Amount" id="Amount" class="form-control" />
-        </div>
-    </div>
-    <div class="col-4">
-         <div class="form-group">
-            <label asp-for="TaxId" class="control-label"></label>
-            <select asp-for="TaxId" id="TaxId" class="form-control" asp-items="Model.TaxList"></select>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="form-group">
-            <label asp-for="TaxAmount" class="control-label"></label>
-            <input asp-for="TaxAmount" id="TaxAmount" class="form-control" aria-label="readonly input" readonly/>
-        </div>
-    </div>    
-</div>
+</form>
+
 
 @section Scripts {
 
-<script>
+    <script>
+    $(document).ready(function () {
+        function uuidv4() {
+            return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
 
-</script>
+        $('#InvoiceDate').change(function () {
+            $('#InvoiceDueDate').val($(this).val());
+        })
+
+        $('#Amount, #TaxId').change(function () {
+            var taxId = $('#TaxId').val();
+            var amount = $('#Amount').val();
+
+            if (taxId && amount > 0) {
+                $.ajax({
+                    url: '@(Url.Action("GetTaxRate", "Taxes"))',
+                    traditional: true,
+                    dataType: "JSON",
+                    type: 'GET',
+                    data: { id: taxId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (taxRate) {
+                        var taxAmount = amount * taxRate.taxRate / 100;
+                        $('#TaxAmount').val(taxAmount);
+                    }
+                });
+            }
+        });
+    });
+    </script>
 }

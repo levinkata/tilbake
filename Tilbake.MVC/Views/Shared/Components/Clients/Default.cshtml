@@ -6,7 +6,7 @@
 {
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <div class="form-group">
-            <a asp-controller="PortfolioClients" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId" class="btn btn-primary" type="button">Create New</a>
+            <a asp-controller="PortfolioClients" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId" class="btn btn-primary">Create New</a>
         </div>
     </div>
 }
@@ -43,7 +43,9 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ClientNumber)
+                    <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@item.Id">
+                        @Html.DisplayFor(modelItem => item.ClientNumber)
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
@@ -62,7 +64,6 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>

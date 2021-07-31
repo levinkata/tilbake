@@ -25,7 +25,9 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.QuoteNumber)
+                        <a asp-controller="Quotes" asp-action="Details" asp-route-id="@item.Id">
+                            @Html.DisplayFor(modelItem => item.QuoteNumber)
+                        </a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.QuoteDate)
@@ -38,7 +40,6 @@
                     </td>
                     <td>
                         <a asp-controller="Quotes" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Quotes" asp-action="Details" asp-route-id="@item.Id">Details</a> |
                         <a asp-controller="Quotes" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
                 </tr>

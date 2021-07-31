@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Context;
 
 namespace Tilbake.MVC.Controllers
 {

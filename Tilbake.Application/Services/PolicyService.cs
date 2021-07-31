@@ -224,7 +224,9 @@ namespace Tilbake.Application.Services
 
         public async Task<PolicyResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Policies.GetByIdAsync(id);
+            var result = await _unitOfWork.Policies.GetFirstOrDefaultAsync(
+                e => e.Id == id,
+                e => e.Insurer, e => e.PaymentMethod, e => e.PolicyStatus, e => e.PolicyType, e => e.SalesType);
             var resources = _mapper.Map<Policy, PolicyResource>(result);
 
             return resources;

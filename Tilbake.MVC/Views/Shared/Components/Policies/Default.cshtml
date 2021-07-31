@@ -17,7 +17,7 @@
                 <th>
                     <strong>@Html.DisplayNameFor(model => model.CoverEndDate)</strong>
                 </th>
-                                <th>
+                <th>
                     <strong>@Html.DisplayNameFor(model => model.PolicyStatus)</strong>
                 </th>
                 <th></th>
@@ -28,7 +28,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PolicyNumber)
+                        <a asp-controller="Policies" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.PolicyNumber)</a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Insurer)
@@ -43,9 +43,8 @@
                         @Html.DisplayFor(modelItem => item.PolicyStatus)
                     </td>
                     <td>
-                        <a asp-controller="Quotes" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Quotes" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-controller="Quotes" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-controller="Policies" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |<i class="fas fa-edit"></i>
+                        <a asp-controller="Policies" asp-action="Delete" asp-route-id="@item.Id">Delete</a><i class="fas fa-trash"></i>
                     </td>
                 </tr>
             }

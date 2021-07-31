@@ -1,0 +1,119 @@
+﻿@model PolicyResource
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<<div class="col-md-4 offset-md-8 bd-highlight mb-3">
+    <div class="mr-auto p-2 bg-light">
+        <h1>Policy</h1>
+        <dl class="row">
+            <dt class="col-6">
+                Date:
+            </dt>
+            <dd class="col-6">
+                @DateTime.Now.Date.ToString("dd/MM/yyyy")
+            </dd>
+            <dt class="col-6">
+                Policy Number:
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.PolicyNumber)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex justify-content-md-end">
+    <div class="form-group">
+        <a asp-controller="Invoices" asp-action="Create" asp-route-policyId="@Model.Id" class="btn btn-primary">Generate Invoice</a>
+    </div>
+</div>
+
+<div>
+    <hr />
+    <div class="container overflow-hidden">
+        <div class="row gx-6">
+            <div class="col">
+                <dl class="row">
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Insurer)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Insurer)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.InsurerPolicyNumber)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.InsurerPolicyNumber)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.RunDay)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.RunDay)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.CoverStartDate)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.CoverStartDate)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.CoverEndDate)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.CoverEndDate)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.InceptionDate)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.InceptionDate)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col justify-content-end">
+                <dl class="row">
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Comment)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Comment)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.PaymentMethod)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.PaymentMethod)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.PolicyStatus)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.PolicyStatus)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.PolicyType)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.PolicyType)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.SalesType)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.SalesType)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

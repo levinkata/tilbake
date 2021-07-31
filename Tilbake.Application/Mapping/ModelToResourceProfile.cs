@@ -57,7 +57,15 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<HouseCondition, HouseConditionResource>().ReverseMap();
             CreateMap<Insurer, InsurerResource>().ReverseMap();
-            CreateMap<Invoice, InvoiceResource>().ReverseMap();
+
+            CreateMap<Invoice, InvoiceResource>()
+                .ForMember(dest => dest.InvoiceStatus, opt => opt.MapFrom(src => src.InvoiceStatus.Name))
+                .ForMember(dest => dest.Tax, opt => opt.MapFrom(src => src.Tax.Name))
+                .ForMember(dest => dest.InvoiceItems, opt => opt.MapFrom(src => src.InvoiceItems)).ReverseMap();
+
+            CreateMap<InvoiceItem, InvoiceItemResource>()
+                .ForMember(dest => dest.PolicyRisk, opt => opt.MapFrom(src => src.PolicyRisk)).ReverseMap();
+
             CreateMap<InvoiceStatus, InvoiceStatusResource>().ReverseMap();
             CreateMap<MaritalStatus, MaritalStatusResource>().ReverseMap();
 
@@ -108,6 +116,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<RiskItem, RiskItemResource>().ReverseMap();
             CreateMap<RoofType, RoofTypeResource>().ReverseMap();
             CreateMap<SalesType, SalesTypeResource>().ReverseMap();
+            CreateMap<Tax, TaxResource>().ReverseMap();
             CreateMap<Title, TitleResource>().ReverseMap();
             CreateMap<WallType, WallTypeResource>().ReverseMap();
         }

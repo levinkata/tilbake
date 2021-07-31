@@ -84,6 +84,23 @@
     </div>
 </div>
 
+<!-- Flexbox container for aligning the toasts -->
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+
+  <!-- Then put toasts within -->
+  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="..." class="rounded me-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <small>11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
+
 <div class="ms-2">
     <!-- All Risks Modal -->
     <div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
@@ -379,7 +396,6 @@
                             <div class="form-group">
                                 <label asp-for="Motor.RegYear" class="control-label">Year</label>
                                 <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList">
-                                    <option value="">Select Year</option>
                                 </select>
                             </div> 
                         </div>
@@ -793,9 +809,15 @@
                     },
                     success: function (data) {
                         // Empty tblCart.
-                        //location.reload();
+                        quote.splice(0, quote.length);
+                        quoteItems.splice(0, quoteItems.length);
+                        allRisks.splice(0, allRisks.length);
+                        contents.splice(0, contents.length);
+                        houses.splice(0, houses.length);
+                        motors.splice(0, motors.length);
+                        riskItems.splice(0, riskItems.length);
+                        PolicyObject.splice(0, PolicyObject.length);
                         window.location.reload();
-                        //window.location = '/Quotes/Create/?portfolioClientId=' + portfolioClientId;
                     }
                 });
             }

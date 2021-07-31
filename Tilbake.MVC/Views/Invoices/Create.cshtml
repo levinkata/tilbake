@@ -1,0 +1,78 @@
+@model InvoiceSaveResource
+
+@{
+
+}
+
+<div class="col-md-4 offset-md-8 bd-highlight mb-3">
+    <div class="mr-auto p-2 bg-light">
+        <h1>Invoice</h1>
+        <dl class="row">
+            <dt class="col-6">
+                Date:
+            </dt>
+            <dd class="col-6">
+                @DateTime.Now.Date.ToString("dd/MM/yyyy")
+            </dd>
+            <dt class="col-6">
+                Invoice Number:
+            </dt>
+            <dd class="col-6">
+                0
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex justify-content-md-end">
+    <div class="form-group">
+        <input type="button" id="btnCreateInvoice" class="btn btn-primary invisible" value="Generate Invoice" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="InvoiceDate" class="control-label"></label>
+            <input asp-for="InvoiceDate" id="InvoiceDate" class="form-control" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="InvoiceDueDate" class="control-label"></label>
+            <input asp-for="InvoiceDueDate" id="InvoiceDueDate" class="form-control" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="InvoiceStatusId" class="control-label"></label>
+            <select asp-for="InvoiceStatusId" id="InvoiceStatusId" class="form-control" asp-items="Model.InvoiceStatusList"></select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+         <div class="form-group">
+            <label asp-for="Amount" class="control-label"></label>
+            <input asp-for="Amount" id="Amount" class="form-control" />
+        </div>
+    </div>
+    <div class="col-4">
+         <div class="form-group">
+            <label asp-for="TaxId" class="control-label"></label>
+            <select asp-for="TaxId" id="TaxId" class="form-control" asp-items="Model.TaxList"></select>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label asp-for="TaxAmount" class="control-label"></label>
+            <input asp-for="TaxAmount" id="TaxAmount" class="form-control" aria-label="readonly input" readonly/>
+        </div>
+    </div>    
+</div>
+
+@section Scripts {
+
+<script>
+
+</script>
+}

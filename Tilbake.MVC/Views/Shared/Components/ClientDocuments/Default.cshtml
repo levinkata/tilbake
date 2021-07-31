@@ -1,19 +1,14 @@
 ﻿@model IEnumerable<ClientDocumentResource>
 
-@if (Model.Count() == 0)
+@if (Model.Any())
 {
-    <caption>No Records Found</caption>
-}
-else
-{
-    <caption>Client Documents</caption>
-    <table class="tilbake-table tilbake-table-rounded">
+    <table class="table ">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>File Type</th>
-                <th>Document Date</th>
+                <th><strong>Name</strong></th>
+                <th><strong>Description</strong></th>
+                <th><strong>File Type</strong></th>
+                <th><strong>Document Date</strong></th>
                 <th></th>
             </tr>
         </thead>
@@ -33,4 +28,8 @@ else
             }
         </tbody>
     </table>
+}
+else
+{
+    <caption>No Records Found</caption>
 }

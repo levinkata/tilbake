@@ -1,10 +1,6 @@
 ﻿@model IEnumerable<PolicyResource>
 
-@if (Model.Count() == 0)
-{
-    <caption>No Records Found</caption>
-}
-else
+@if (Model.Any())
 {
     <table id="tlbPolicy" class="table">
         <thead>
@@ -55,4 +51,8 @@ else
             }
         </tbody>
     </table>
+}
+else
+{
+    <caption>No Records Found</caption>
 }

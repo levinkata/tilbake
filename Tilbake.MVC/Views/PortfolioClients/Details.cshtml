@@ -19,8 +19,11 @@
             <button class="nav-link" id="policy-tab" data-bs-toggle="tab" data-bs-target="#policy" type="button" role="tab" aria-controls="policy" aria-selected="true">Policy</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Quotes</button>
+            <button class="nav-link" id="quote-tab" data-bs-toggle="tab" data-bs-target="#quote" type="button" role="tab" aria-controls="quote" aria-selected="false">Quotes</button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="invoice-tab" data-bs-toggle="tab" data-bs-target="#invoice" type="button" role="tab" aria-controls="invoice" aria-selected="false">Invoices</button>
+        </li>        
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Client Documents</button>
         </li>
@@ -88,7 +91,7 @@
                 @await Component.InvokeAsync("Policies", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="tab-pane fade" id="quote" role="tabpanel" aria-labelledby="quote-tab">
             <br />
             <div class="form-group text-center">
                 <a asp-controller="Quotes" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
@@ -97,6 +100,15 @@
                 @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
         </div>
+        <div class="tab-pane fade" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
+            <br />
+            <div class="form-group text-center">
+                <a asp-controller="Invoices" asp-action="Create" asp-route-policyId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Policy</a>
+            </div>
+            <div class="form-group">
+                @await Component.InvokeAsync("Invoices", new { portfolioClientId = @Model.PortfolioClientId })
+            </div>
+        </div>        
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
             <br />
             <div class="form-group text-center">

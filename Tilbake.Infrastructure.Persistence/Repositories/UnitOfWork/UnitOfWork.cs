@@ -34,6 +34,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             HouseConditions = new HouseConditionRepository(_context);
             Insurers = new InsurerRepository(_context);
             Invoices = new InvoiceRepository(_context);
+            InvoiceItems = new InvoiceItemRepository(_context);
             InvoiceStatuses = new InvoiceStatusRepository(_context);
             MaritalStatuses = new MaritalStatusRepository(_context);
             Motors = new MotorRepository(_context);
@@ -58,6 +59,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             RoofTypes = new RoofTypeRepository(_context);
             SalesTypes = new SalesTypeRepository(_context);
             Titles = new TitleRepository(_context);
+            Taxes = new TaxRepository(_context);
             UserPortfolios = new UserPortfolioRepository(_context);
             WallTypes = new WallTypeRepository(_context);
         }
@@ -83,6 +85,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IHouseConditionRepository HouseConditions { get; private set; }
         public IInsurerRepository Insurers { get; private set; }
         public IInvoiceRepository Invoices { get; private set; }
+        public IInvoiceItemRepository InvoiceItems { get; private set; }
         public IInvoiceStatusRepository InvoiceStatuses { get; private set; }
         public IMaritalStatusRepository MaritalStatuses { get; private set; }
         public IMotorRepository Motors { get; private set; }
@@ -106,6 +109,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IResidenceUseRepository ResidenceUses { get; private set; }
         public IRoofTypeRepository RoofTypes { get; private set; }
         public ISalesTypeRepository SalesTypes { get; private set; }
+        public ITaxRepository Taxes { get; private set; }
         public ITitleRepository Titles { get; private set; }
         public IUserPortfolioRepository UserPortfolios { get; private set; }
         public IWallTypeRepository WallTypes { get; private set; }

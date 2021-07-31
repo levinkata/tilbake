@@ -87,8 +87,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
             if (orderBy != null)
                 query = orderBy(query);
-
-            // return await Task.Run(() => _context.Set<TEntity>().Where(predicate).AsNoTracking().ToListAsync());
+                
             return await Task.Run(() => query.AsNoTracking().ToListAsync());
         }
 

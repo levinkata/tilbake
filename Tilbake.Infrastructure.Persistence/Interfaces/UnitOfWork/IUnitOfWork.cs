@@ -26,6 +26,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IHouseConditionRepository HouseConditions { get; }
         IInsurerRepository Insurers { get; }
         IInvoiceRepository Invoices { get; }
+        IInvoiceItemRepository InvoiceItems { get; }
         IInvoiceStatusRepository InvoiceStatuses { get; }
         IMaritalStatusRepository MaritalStatuses { get; }
         IMotorRepository Motors { get; }
@@ -51,6 +52,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         ISalesTypeRepository SalesTypes { get; }
         ITitleRepository Titles { get; }
         IUserPortfolioRepository UserPortfolios { get; }
+        ITaxRepository Taxes { get; }
         IWallTypeRepository WallTypes { get; }
 
         Task<int> SaveAsync();

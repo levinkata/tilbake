@@ -27,6 +27,8 @@ namespace Tilbake.Application.Mapping
             CreateMap<HouseSaveResource, House>();
             CreateMap<HouseConditionSaveResource, HouseCondition>();
             CreateMap<InsurerSaveResource, Insurer>();
+            CreateMap<InvoiceSaveResource, Invoice>();
+            CreateMap<InvoiceItemSaveResource, InvoiceItem>();
             CreateMap<InvoiceStatusSaveResource, InvoiceStatus>();
             CreateMap<InvoiceSaveResource, Invoice>();
             CreateMap<MaritalStatusSaveResource, MaritalStatus>();
@@ -51,6 +53,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<RoofTypeSaveResource, RoofType>();
             CreateMap<SalesTypeSaveResource, SalesType>();
             CreateMap<TitleSaveResource, Title>();
+            CreateMap<TaxSaveResource, Tax>();
             CreateMap<WallTypeSaveResource, WallType>();
         }
     }

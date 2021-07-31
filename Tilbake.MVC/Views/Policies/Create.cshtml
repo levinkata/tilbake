@@ -417,6 +417,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div id="MotorError"></div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -460,7 +461,6 @@
                             <div class="form-group">
                                 <label asp-for="Motor.RegYear" class="control-label">Year</label>
                                 <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList">
-                                    <option value="">Select Year</option>
                                 </select>
                             </div>
                         </div>
@@ -730,6 +730,17 @@
         }
 
         function LoadMotors() {
+            if(!$('#RegNumber').val()) {
+                $('#MotorError').append('<p class="fw-bolder text-center text-danger">Registration Number cannot be blank.</p>');
+                $('#MotorError').show();
+                $('#MotorError').delay(3000).queue(function (n) {
+                    $(this).fadeOut();
+                    $('#MotorError').empty();
+                    n();
+                });
+                return;
+            }
+
             var clientRiskId = uuidv4();
             var description = $('#RegYear').val() + ' ' + $('#MotorMakeId option:selected').text() + ' ' + $('#RegNumber').val();
             var sumInsured = $('#MotorSumInsured').val();
@@ -881,6 +892,14 @@
                     },
                     success: function (data) {
                         // Empty tblCart.
+                        policy.splice(0, policy.length);
+                        policyRisks.splice(0, policyRisks.length);
+                        allRisks.splice(0, allRisks.length);
+                        contents.splice(0, contents.length);
+                        houses.splice(0, houses.length);
+                        motors.splice(0, motors.length);
+                        riskItems.splice(0, riskItems.length);
+                        PolicyObject.splice(0, PolicyObject.length);
                         window.location.reload();
                         $('#Message').append('<p class="fw-bolder text-center text-danger">Policy created!</p>');
                     }

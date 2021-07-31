@@ -9,7 +9,7 @@
     <br />
     @if (Model.Any())
     {
-        <p>The following are portfolios assigned to the current user</p>
+        <p class="fw-bolder">The following are portfolios assigned to the current user</p>
         <br />
         <ol class="list-group list-group-numbered">
             @foreach (var item in Model)
@@ -30,5 +30,4 @@
     {
         <p class="text-danger">Logged in user does not have any assigned portfolios.</p>
     }
-
 </div>

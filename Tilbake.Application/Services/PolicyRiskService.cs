@@ -45,7 +45,6 @@ namespace Tilbake.Application.Services
         public async Task<IEnumerable<PolicyRiskResource>> GetAllAsync()
         {
             var result = await Task.Run(() => _unitOfWork.PolicyRisks.GetAllAsync());
-
             var resources = _mapper.Map<IEnumerable<PolicyRisk>, IEnumerable<PolicyRiskResource>>(result);
 
             return resources;
@@ -55,6 +54,14 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.PolicyRisks.GetByIdAsync(id);
             var resources = _mapper.Map<PolicyRisk, PolicyRiskResource>(result);
+
+            return resources;
+        }
+
+        public async Task<IEnumerable<PolicyRiskResource>> GetByPolicyIdAsync(Guid policyId)
+        {
+            var result = await Task.Run(() => _unitOfWork.PolicyRisks.GetAsync(x => x.PolicyId == policyId));
+            var resources = _mapper.Map<IEnumerable<PolicyRisk>, IEnumerable<PolicyRiskResource>>(result);
 
             return resources;
         }

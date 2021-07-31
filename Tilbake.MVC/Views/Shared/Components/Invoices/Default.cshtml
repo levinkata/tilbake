@@ -1,0 +1,58 @@
+﻿@model IEnumerable<InvoiceResource>
+
+@if (Model.Any())
+{
+    <table id="tlbInvoice" class="table">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InvoiceNumber)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InvoiceDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Amount)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.TaxAmount)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InvoiceStatus)</strong>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Invoices" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.InvoiceNumber)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoiceDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TaxAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoiceStatus)
+                    </td>
+                    <td>
+                        <a asp-controller="Invoices" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="Invoices" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <caption>No Records Found</caption>
+
+}

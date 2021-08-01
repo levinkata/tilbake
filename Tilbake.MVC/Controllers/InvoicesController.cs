@@ -1,10 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Application.Services;
 
 namespace Tilbake.MVC.Controllers
 {

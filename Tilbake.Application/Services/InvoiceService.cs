@@ -26,15 +26,15 @@ namespace Tilbake.Application.Services
             var policyId = resource.PolicyId;
             var policyRisks = await _unitOfWork.PolicyRisks.GetAsync(r => r.PolicyId == policyId);
 
-            if (policyRisks == null)
+            if (resource == null)
             {
-                throw new ArgumentNullException(nameof(policyRisks));
+                throw new ArgumentNullException(nameof(resource));
             }
 
             var invoice = _mapper.Map<InvoiceSaveResource, Invoice>(resource);
             var taxId = invoice.TaxId;
 
-            var tax = await _unitOfWork.Taxes.GetByIdAsync(taxId);
+            var tax = await _unitOfWork.Taxes.GetFirstOrDefaultAsync( r => r.Id == taxId);
             var taxRate = tax.TaxRate;
 
             invoice.Id = Guid.NewGuid();
@@ -93,24 +93,26 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<InvoiceResource> GetByPolicyIdAsync(Guid policyId)
+        public async Task<IEnumerable<InvoiceResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Invoices.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Invoices.GetAsync(
                 e => e.PolicyId == policyId,
+                e => e.OrderBy(p => p.InvoiceDate),
                 e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
-            var resource = _mapper.Map<Invoice, InvoiceResource>(result);
+            var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource> >(result);
 
-            return resource;
+            return resources;
         }
 
-        public async Task<InvoiceResource> GetByPortfolioClientIdAsync(Guid portfolioClientId)
+        public async Task<IEnumerable<InvoiceResource>> GetByPortfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Invoices.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Invoices.GetAsync(
                 e => e.Policy.PortfolioClientId == portfolioClientId,
+                e => e.OrderBy(p => p.InvoiceDate),
                 e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
-            var resource = _mapper.Map<Invoice, InvoiceResource>(result);
+            var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource>>(result);
 
-            return resource;
+            return resources;
         }
 
         public async Task<int> UpdateAsync(InvoiceResource resource)

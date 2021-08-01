@@ -106,7 +106,7 @@
                 <a asp-controller="Invoices" asp-action="Create" asp-route-policyId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Policy</a>
             </div>
             <div class="form-group">
-                @*@await Component.InvokeAsync("Invoices", new { portfolioClientId = @Model.PortfolioClientId })*@
+                @await Component.InvokeAsync("Invoices", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
         </div>        
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">

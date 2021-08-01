@@ -44,7 +44,7 @@ namespace Tilbake.MVC.Controllers
         // GET: Clients/GetByPortfolio/5
         public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
         {
-            PortfolioResource resource = new PortfolioResource()
+            PortfolioResource resource = new()
             {
                 Id = portfolioId
             };
@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();                                                                        
 
-            ClientSaveResource resource = new ClientSaveResource()
+            ClientSaveResource resource = new()
             {
                 ClientTypes = new SelectList(clientTypes, "Id", "Name"),
                 Countries = new SelectList(countries, "Id", "Name"),

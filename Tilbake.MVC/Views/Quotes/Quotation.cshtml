@@ -1,18 +1,21 @@
 ﻿@{ 
     ViewData["Title"] = "Quotation";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    @*Layout = "~/Views/Shared/_Layout.cshtml";*@
 }
 
-<div class="container">
+<div class="container mt-3 w-75">
     <div class="row justify-content-around">
         <div class="col">
-            <h1>Company Name</h1>
+            <div class="col-8 px-0">
+                <img src="~/images/SmallLogo.png" class="img-fluid rounded float-start" alt="Company Logo">
+            </div>
+            
         </div>
-        <div class="col">
-            <h1>Invoice</h1>
+        <div class="col text-end">
+            <p class="fs-1 font-weight-bolder pt-3">Quote</p>
         </div>
     </div>
-    <div class="row justify-content-around">
+    <div class="row justify-content-around mb-3">
         <div class="col">
             <p>[Street Address]</p>
             <p>[City, State, ZIP Code]</p>
@@ -20,23 +23,25 @@
             <p>[Email Address]</p>
             <p>[Company Website]</p>
         </div>
-        <div class="col">
+        <div class="col text-end">
             <p>Date: 31/07/2021</p>
             <p>Invoice #: [######]</p>
             <p>Due Date: 31/07/2021</p>
         </div>
     </div>
-    <div class="row justify-content-around">
+    <div class="row justify-content-around mb-3">
         <div class="col">
-            <h6>BILL TO</h6>
+            <p class="p-2 bg-primary text-white">BILL TO</p>
             <p>[Recipient Name]</p>
             <p>[Company Name]</p>
             <p>[Street Address]</p>
             <p>[City, State, ZIP Code]</p>
             <p>[Phone]</p>
         </div>
+        <div class="col"></div>
+        <div class="col"></div>
         <div class="col">
-            <h6>SHIP TO</h6>
+            <p class="p-2 bg-primary text-white">SHIP TO</p>
             <p>[Recipient Name]</p>
             <p>[Company Name]</p>
             <p>[Street Address]</p>
@@ -45,19 +50,19 @@
         </div>
     </div>
     <div class="row g-2">
-        <div class="col-sm-6 col-md-8">
-            <h6>COMMENTS</h6>
+        <div class="col-sm-6 col-md-8 mt-3">
+            <p class="p-2 bg-primary text-white">COMMENTS</p>
             <p>1. Payment due in 30 days</p>
             <p>2. Please note the invoice number in your payment method</p>
             <br />
             <p>Banking and wire transfer informatoin may also be included here</p>
         </div>
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-4 text-end">
             <p>Subtotal [$#,###.##]</p>
             <p>Tax [$#,###.##]</p>
             <p>Total [$#,###.##]</p>
             <br />
-            <strong>Thank you for your business!</strong>
+            <p class="fw-bold">Thank you for your business!</p>
         </div>
     </div>
 </div>

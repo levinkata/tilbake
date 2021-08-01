@@ -43,8 +43,8 @@
                         @Html.DisplayFor(modelItem => item.PolicyStatus)
                     </td>
                     <td>
-                        <a asp-controller="Policies" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |<i class="fas fa-edit"></i>
-                        <a asp-controller="Policies" asp-action="Delete" asp-route-id="@item.Id">Delete</a><i class="fas fa-trash"></i>
+                        <a asp-controller="Policies" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
+                        <a asp-controller="Policies" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
                     </td>
                 </tr>
             }

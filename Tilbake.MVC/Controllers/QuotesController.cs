@@ -91,9 +91,9 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> PostQuote(QuoteObjectResource quoteObject)
         {
-            if (quoteObject.QuoteItems == null)
+            if (quoteObject == null)
             {
-                throw new ArgumentNullException(nameof(quoteObject.QuoteItems));
+                throw new ArgumentNullException(nameof(quoteObject));
             };
 
             var portfolioClientId = quoteObject.Quote.PortfolioClientId;
@@ -129,7 +129,7 @@ namespace Tilbake.MVC.Controllers
             var coverTypes = await _coverTypeService.GetAllAsync();
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
-            QuoteSaveResource resource = new QuoteSaveResource()
+            QuoteSaveResource resource = new()
             {
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,

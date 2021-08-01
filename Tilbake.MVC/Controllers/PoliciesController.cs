@@ -160,8 +160,8 @@ namespace Tilbake.MVC.Controllers
             var driverTypes = await _driverTypeService.GetAllAsync();
             var houseConditions = await _houseConditionService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
-            var motorMakeId = motorMakes.FirstOrDefault().Id;
-            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(Guid.Empty);
+            
+            
             var motorUses = await _motorUseService.GetAllAsync();
             var residenceTypes = await _residenceTypeService.GetAllAsync();
             var residenceUses = await _residenceUseService.GetAllAsync();
@@ -191,7 +191,7 @@ namespace Tilbake.MVC.Controllers
                 DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
                 HouseConditionList = new SelectList(houseConditions, "Id", "Name"),
                 MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
-                MotorModelList = new SelectList(motorModels, "Id", "Name"),
+                
                 MotorUseList = new SelectList(motorUses, "Id", "Name"),
                 ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name"),
                 ResidenceUseList = new SelectList(residenceUses, "Id", "Name"),
@@ -217,9 +217,9 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> PostPolicy(PolicyObjectResource policyObject)
         {
-            if (policyObject.PolicyRisks == null)
+            if (policyObject == null)
             {
-                throw new ArgumentNullException(nameof(policyObject.PolicyRisks));
+                throw new ArgumentNullException(nameof(policyObject));
             };
 
             var portfolioClientId = policyObject.Policy.PortfolioClientId;

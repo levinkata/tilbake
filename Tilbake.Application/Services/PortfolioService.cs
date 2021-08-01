@@ -53,16 +53,6 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        //public async Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId)
-        //{
-        //    var result = await Task.Run(() => _unitOfWork.Portfolios.GetByUserIdAsync(aspNetUserId));
-        //    result = result.OrderBy(n => n.Name);
-
-        //    var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
-
-        //    return resources;
-        //}
-
         public async Task<PortfolioResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.Portfolios.GetByIdAsync(id);

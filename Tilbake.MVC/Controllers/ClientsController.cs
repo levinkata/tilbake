@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
@@ -17,6 +18,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IMaritalStatusService _maritalStatusService;
         private readonly IOccupationService _occupationService;
         private readonly ITitleService _titleService;
+        private readonly ICarrierService _carrierService;
 
         public ClientsController(IClientService clientService,
                                 IClientTypeService clientTypeService,
@@ -24,7 +26,8 @@ namespace Tilbake.MVC.Controllers
                                 IGenderService genderService,
                                 IMaritalStatusService maritalStatusService,
                                 IOccupationService occupationService,
-                                ITitleService titleService)
+                                ITitleService titleService,
+                                ICarrierService carrierService)
         {
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
             _clientTypeService = clientTypeService ?? throw new ArgumentNullException(nameof(clientTypeService));
@@ -33,6 +36,7 @@ namespace Tilbake.MVC.Controllers
             _maritalStatusService = maritalStatusService ?? throw new ArgumentNullException(nameof(maritalStatusService));
             _occupationService = occupationService ?? throw new ArgumentNullException(nameof(occupationService));
             _titleService = titleService ?? throw new ArgumentNullException(nameof(titleService));
+            _carrierService = carrierService ?? throw new ArgumentNullException(nameof(carrierService));
         }
 
         // GET: Clients
@@ -77,16 +81,18 @@ namespace Tilbake.MVC.Controllers
             var genders = await _genderService.GetAllAsync();
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();                                                                        
+            var titles = await _titleService.GetAllAsync();
+            var carriers = await _carrierService.GetAllAsync();
 
             ClientSaveResource resource = new()
             {
-                ClientTypes = new SelectList(clientTypes, "Id", "Name"),
-                Countries = new SelectList(countries, "Id", "Name"),
-                Genders = new SelectList(genders, "Id", "Name"),
-                MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name"),
-                Occupations = new SelectList(occupations, "Id", "Name"),
-                Titles = new SelectList(titles, "Id", "Name")
+                ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
+                CountryList = new SelectList(countries, "Id", "Name"),
+                GenderList = new SelectList(genders, "Id", "Name"),
+                MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
+                OccupationList = new SelectList(occupations, "Id", "Name"),
+                TitleList = new SelectList(titles, "Id", "Name"),
+                CarrierList = SelectLists.Carriers(carriers, Guid.Empty)
             };
 
             return View(resource);
@@ -115,12 +121,12 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            resource.ClientTypes = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.Countries = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.Genders = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.Occupations = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-            resource.Titles = new SelectList(titles, "Id", "Name", resource.TitleId);
+            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
+            resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
 
             return View(resource);
         }
@@ -141,12 +147,12 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            resource.ClientTypes = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.Countries = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.Genders = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.Occupations = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-            resource.Titles = new SelectList(titles, "Id", "Name", resource.TitleId);
+            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
+            resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
 
             return View(resource);
         }
@@ -181,12 +187,12 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            resource.ClientTypes = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.Countries = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.Genders = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.Occupations = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-            resource.Titles = new SelectList(titles, "Id", "Name", resource.TitleId);
+            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
+            resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
 
             return View(resource);
         }

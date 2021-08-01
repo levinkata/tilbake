@@ -14,6 +14,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         ICityRepository Cities { get; }
         IClientDocumentRepository ClientDocuments { get; }
         IClientRepository Clients { get; }
+        IClientCarrierRepository ClientCarriers { get; }
         IClientRiskRepository ClientRisks { get; }
         IClientTypeRepository ClientTypes{ get; }
         IContentRepository Contents { get; }

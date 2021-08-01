@@ -10,24 +10,42 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div>
-    <ejs-button id="successbtn" cssClass="e-success" content="Create New"></ejs-button>
-</div>
+            {
+<table id="tlbBank" class="display">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+            } else
+            {
+<caption>No records Found</caption>
+            }
 
-<div class="control-section">
-    <ejs-grid id="Grid" dataSource="ViewBag.datasource" toolbar="@(new List<string>() {"Search" })" allowPaging="true">
-        <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
-        <e-grid-columns>
-            <e-grid-column field="Id" headerText="Id" textAlign="Left"  visible="false"></e-grid-column>
-            <e-grid-column field="Name" headerText="Name" width="50"></e-grid-column>
-        </e-grid-columns>
 
-    </ejs-grid>
-</div>
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#tlbBank').DataTable();
+        });
+    </script>
 
-<style>
-
-    button {
-        margin: 25px 5px 20px 20px;
-    }
-</style>
+}

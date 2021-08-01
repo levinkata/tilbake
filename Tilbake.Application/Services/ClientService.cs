@@ -25,8 +25,24 @@ namespace Tilbake.Application.Services
         {
             var client = _mapper.Map<ClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
-
             await _unitOfWork.Clients.AddAsync(client);
+
+            int ro = resource.CarrierIds.Length;
+            var carriers = resource.CarrierIds;
+            var clientId = client.Id;
+            List<ClientCarrier> clientCarriers = new();
+
+            for (int i = 0; i < ro; i++)
+            {
+                ClientCarrier clientCarrier = new()
+                {
+                    ClientId = clientId,
+                    CarrierId = Guid.Parse(carriers[i].ToString())
+                };
+                clientCarriers.Add(clientCarrier);
+            }
+
+            await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
             return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
@@ -106,6 +122,25 @@ namespace Tilbake.Application.Services
         {
             var client = _mapper.Map<ClientResource, Client>(resource);
             await _unitOfWork.Clients.UpdateAsync(resource.Id, client);
+
+            int ro = resource.CarrierIds.Length;
+            var carriers = resource.CarrierIds;
+            var clientId = client.Id;
+            await _unitOfWork.ClientCarriers.DeleteAsync(clientId);
+
+            List<ClientCarrier> clientCarriers = new();
+
+            for (int i = 0; i < ro; i++)
+            {
+                ClientCarrier clientCarrier = new()
+                {
+                    ClientId = clientId,
+                    CarrierId = Guid.Parse(carriers[i].ToString())
+                };
+                clientCarriers.Add(clientCarrier);
+            }
+
+            await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
 
             return await Task.Run(() => _unitOfWork.SaveAsync());
         }

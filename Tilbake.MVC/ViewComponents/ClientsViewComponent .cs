@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.MVC.ViewComponents
 {
@@ -20,14 +16,14 @@ namespace Tilbake.MVC.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(Guid? portfolioId)
         {
-            ViewBag.PortfolioId = portfolioId;
-
+ 
             if (portfolioId == Guid.Empty)
             {
                 return View(await Task.Run(() => _clientService.GetAllAsync()));
             }
             else
             {
+                ViewBag.PortfolioId = portfolioId;
                 return View(await Task.Run(() => _clientService.GetByPortfoloId((Guid)portfolioId)));
 
             }

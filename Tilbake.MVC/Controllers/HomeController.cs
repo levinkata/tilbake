@@ -31,6 +31,11 @@ namespace Tilbake.MVC.Controllers
             return View(resources);
         }
 
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

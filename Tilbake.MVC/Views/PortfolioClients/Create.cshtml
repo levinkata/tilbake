@@ -9,91 +9,133 @@
 <h4>Client Portfolio Client</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="PortfolioId" type="hidden" />
-            <div class="form-group">
-                <label asp-for="TitleId" class="control-label"></label>
-                <select asp-for="TitleId" class="form-control" asp-items="@Model.Titles">
-                    <option value="">Select Salutation</option>
-                </select>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="PortfolioId" type="hidden" />
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="TitleId" class="control-label"></label>
+                    <select asp-for="TitleId" class="form-control" asp-items="@Model.TitleList">
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ClientTypeId" class="control-label"></label>
-                <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypes">
-                    <option value="">Select Client Type</option>
-                </select>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="ClientTypeId" class="control-label"></label>
+                    <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypeList">
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MiddleName" class="control-label"></label>
-                <input asp-for="MiddleName" class="form-control" />
-                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="MiddleName" class="control-label"></label>
+                    <input asp-for="MiddleName" class="form-control" />
+                    <span asp-validation-for="MiddleName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="BirthDate" class="control-label"></label>
+                    <input asp-for="BirthDate" class="form-control" />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="GenderId" class="control-label"></label>
-                <select asp-for="GenderId" class="form-control" asp-items="@Model.Genders">
-                    <option value="">Select Gender</option>
-                </select>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="GenderId" class="control-label"></label>
+                    <select asp-for="GenderId" class="form-control" asp-items="@Model.GenderList">
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="IdNumber" class="control-label"></label>
-                <input asp-for="IdNumber" class="form-control" />
-                <span asp-validation-for="IdNumber" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="IdNumber" class="control-label"></label>
+                    <input asp-for="IdNumber" class="form-control" />
+                    <span asp-validation-for="IdNumber" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MaritalStatusId" class="control-label"></label>
-                <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatuses">
-                    <option value="">Select Marital Status</option>
-                </select>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="MaritalStatusId" class="control-label"></label>
+                    <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatusList">
+                        <option value="">Select Marital Status</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class="form-control" asp-items="@Model.Countries">
-                    <option value="">Select Nationality</option>
-                </select>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="CountryId" class="control-label"></label>
+                    <select asp-for="CountryId" class="form-control" asp-items="@Model.CountryList">
+                        <option value="">Select Nationality</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="OccupationId" class="control-label"></label>
+                    <select asp-for="OccupationId" class="form-control" asp-items="@Model.OccupationList">
+                        <option value="">Select Occupation</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Mobile" class="control-label"></label>
-                <input asp-for="Mobile" class="form-control" />
-                <span asp-validation-for="Mobile" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Mobile" class="control-label"></label>
+                    <input asp-for="Mobile" class="form-control" />
+                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="OccupationId" class="control-label"></label>
-                <select asp-for="OccupationId" class="form-control" asp-items="@Model.Occupations">
-                    <option value="">Select Occupation</option>
-                </select>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="CarrierIds" class="control-label"></label>
+                    <select asp-for="CarrierIds" class="form-control" asp-items="@Model.CarrierList">
+                    </select>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
 <div>

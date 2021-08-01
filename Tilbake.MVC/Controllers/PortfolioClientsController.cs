@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Threading.Tasks;
+using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
@@ -17,6 +18,8 @@ namespace Tilbake.MVC.Controllers
         private readonly IMaritalStatusService _maritalStatusService;
         private readonly IOccupationService _occupationService;
         private readonly ITitleService _titleService;
+        private readonly ICarrierService _carrierService;
+        private readonly IPortfolioService _portfolioService;
 
         public PortfolioClientsController(IPortfolioClientService portfolioClientService,
                                             IClientService clientService,
@@ -25,7 +28,9 @@ namespace Tilbake.MVC.Controllers
                                             IGenderService genderService,
                                             IMaritalStatusService maritalStatusService,
                                             IOccupationService occupationService,
-                                            ITitleService titleService)
+                                            ITitleService titleService,
+                                            ICarrierService carrierService,
+                                            IPortfolioService portfolioService)
         {
             _portfolioClientService = portfolioClientService;
             _clientService = clientService;
@@ -35,14 +40,19 @@ namespace Tilbake.MVC.Controllers
             _maritalStatusService = maritalStatusService;
             _occupationService = occupationService;
             _titleService = titleService;
+            _carrierService = carrierService;
+            _portfolioService = portfolioService;
         }
 
         // GET: PortfolioClients
         public async Task<IActionResult> Index(Guid portfolioId)
         {
-            ClientResource resource = new ClientResource()
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+
+            ClientResource resource = new()
             {
-                PortfolioId = portfolioId
+                PortfolioId = portfolioId,
+                PortfolioName = portfolio.Name
             };
 
             return await Task.Run(() => View(resource));
@@ -53,12 +63,15 @@ namespace Tilbake.MVC.Controllers
         {
             var portfolioClientId = await _portfolioClientService.GetPortfolioClientId(portfolioId, clientId);
             var resource = await _clientService.GetByClientId(portfolioId, clientId);
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+
             if (resource == null)
             {
                 return NotFound();
             }
             resource.PortfolioId = portfolioId;
             resource.PortfolioClientId = portfolioClientId;
+            resource.PortfolioName = portfolio.Name;
 
             return View(resource);
         }
@@ -72,24 +85,23 @@ namespace Tilbake.MVC.Controllers
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
+            var carriers = await _carrierService.GetAllAsync();
 
-
-            ClientSaveResource resource = new ClientSaveResource()
+            ClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
-                ClientTypes = new SelectList(clientTypes, "Id", "Name"),
-                Countries = new SelectList(countries, "Id", "Name"),
-                Genders = new SelectList(genders, "Id", "Name"),
-                MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name"),
-                Occupations = new SelectList(occupations, "Id", "Name"),
-                Titles = new SelectList(titles, "Id", "Name")
+                ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
+                CountryList = new SelectList(countries, "Id", "Name"),
+                GenderList = new SelectList(genders, "Id", "Name"),
+                MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
+                OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
+                TitleList = SelectLists.Titles(titles, Guid.Empty),
+                CarrierList = SelectLists.Carriers(carriers, Guid.Empty)
             };
             return await Task.Run(() => View(resource));
         }
 
         // POST: PortfolioClients/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ClientSaveResource resource)
@@ -105,13 +117,15 @@ namespace Tilbake.MVC.Controllers
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
+            var carriers = await _carrierService.GetAllAsync();
 
-            resource.ClientTypes = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.Countries = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.Genders = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatuses = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.Occupations = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-            resource.Titles = new SelectList(titles, "Id", "Name", resource.TitleId);
+            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
+            resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
+            resource.TitleList = SelectLists.Carriers(carriers, resource.TitleId);
 
             return View(resource);
         }

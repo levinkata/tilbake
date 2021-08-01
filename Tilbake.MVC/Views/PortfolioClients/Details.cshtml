@@ -3,10 +3,12 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var FullName = Model.FirstName + " " + Model.LastName;
 }
 
+<h1>@Model.PortfolioName</h1>
 <div>
-    <span class="d-block p-2 bg-primary text-white">Portfolio Client</span>
+    <span class="d-block p-2 bg-primary text-white">@FullName</span>
     <hr />
 </div>
 

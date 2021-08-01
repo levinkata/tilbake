@@ -1,9 +1,8 @@
 ﻿@model ClientResource
 
 @{
-    ViewData["Title"] = "Portfolio Clients";
+    ViewData["Title"] = Model.PortfolioName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*Execute ClientsViewComponent - Client by Portfolio*@
 @await Component.InvokeAsync("Clients", new { portfolioId = Model.PortfolioId })

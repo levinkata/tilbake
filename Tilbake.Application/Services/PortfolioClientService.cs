@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
@@ -24,8 +25,8 @@ namespace Tilbake.Application.Services
         {
             var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
             portfolioClient.Id = Guid.NewGuid();
-
             await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+
             return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
@@ -34,6 +35,22 @@ namespace Tilbake.Application.Services
             var client = _mapper.Map<ClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
 
+            int ro = resource.CarrierIds.Length;
+            var carriers = resource.CarrierIds;
+            var clientId = client.Id;
+            List<ClientCarrier> clientCarriers = new();
+
+            for (int i = 0; i < ro; i++)
+            {
+                ClientCarrier clientCarrier = new()
+                {
+                    ClientId = clientId,
+                    CarrierId = Guid.Parse(carriers[i].ToString())
+                };
+                clientCarriers.Add(clientCarrier);
+            }
+
+            await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
             await _unitOfWork.Clients.AddAsync(client);
 
             PortfolioClient portfolioClient = new()

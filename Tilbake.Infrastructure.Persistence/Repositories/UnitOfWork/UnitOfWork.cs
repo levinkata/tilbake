@@ -20,6 +20,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             BankBranches = new BankBranchRepository(_context);
             BodyTypes = new BodyTypeRepository(_context);
             Clients = new ClientRepository(_context);
+            ClientCarriers = new ClientCarrierRepository(_context);
             ClientDocuments = new ClientDocumentRepository(_context);
             ClientRisks = new ClientRiskRepository(_context);
             ClientTypes = new ClientTypeRepository(_context);
@@ -76,6 +77,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IClientRiskRepository ClientRisks { get; private set; }
         public IClientDocumentRepository ClientDocuments { get; private set; }
         public IClientRepository Clients { get; private set; }
+        public IClientCarrierRepository ClientCarriers { get; private set; }
         public IClientTypeRepository ClientTypes { get; private set; }
         public IContentRepository Contents { get; private set; }
         public ICountryRepository Countries { get; private set; }

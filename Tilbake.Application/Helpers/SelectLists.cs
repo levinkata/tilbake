@@ -8,12 +8,27 @@ namespace Tilbake.Application.Helpers
 {
     public class SelectLists
     {
-        public static SelectList Countries(IEnumerable<Country> countries, Guid? countryId)
+        public static SelectList Carriers(IEnumerable<CarrierResource> carriers, Guid? carrierId)
+        {
+            List<SelectListItem> items = new();
+            //items.Add(new SelectListItem() { Text = "Select Carrier", Value = "" });
+
+            foreach (var item in carriers)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (carrierId == Guid.Empty || String.IsNullOrEmpty(carrierId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", carrierId);
+        }
+
+        public static SelectList Countries(IEnumerable<CountryResource> countries, Guid? countryId)
         {
             List<SelectListItem> items = new();
             items.Add(new SelectListItem() { Text = "Select Country", Value = "" });
 
-            foreach (Country item in countries)
+            foreach (var item in countries)
             {
                 items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }
@@ -23,12 +38,12 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", countryId);
         }
 
-        public static SelectList Genders(IEnumerable<Gender> genders, Guid? genderId)
+        public static SelectList Genders(IEnumerable<GenderResource> genders, Guid? genderId)
         {
             List<SelectListItem> items = new();
             items.Add(new SelectListItem() { Text = "Select Gender", Value = "" });
 
-            foreach (Gender item in genders)
+            foreach (var item in genders)
             {
                 items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }
@@ -53,12 +68,12 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", invoiceStatusId);
         }
 
-        public static SelectList Occupations(IEnumerable<Occupation> occupations, Guid? occupationId)
+        public static SelectList Occupations(IEnumerable<OccupationResource> occupations, Guid? occupationId)
         {
             List<SelectListItem> items = new();
             items.Add(new SelectListItem() { Text = "Select Occupation", Value = "" });
 
-            foreach (Occupation item in occupations)
+            foreach (var item in occupations)
             {
                 items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }
@@ -83,12 +98,12 @@ namespace Tilbake.Application.Helpers
                                 new SelectList(items, "Value", "Text", taxId);
         }
 
-        public static SelectList Titles(IEnumerable<Title> titles, Guid? titleId)
+        public static SelectList Titles(IEnumerable<TitleResource> titles, Guid? titleId)
         {
             List<SelectListItem> items = new();
             items.Add(new SelectListItem() { Text = "Select Title", Value = "" });
 
-            foreach (Title item in titles)
+            foreach (var item in titles)
             {
                 items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }

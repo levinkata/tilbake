@@ -10,6 +10,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 {
     public class UserPortfolioRepository : Repository<AspnetUserPortfolio>, IUserPortfolioRepository
     {
+
         public UserPortfolioRepository(TilbakeDbContext context) : base(context)
         {
 
@@ -21,8 +22,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Where(c => !c.AspnetUserPortfolios
                                                 .Any(u => u.AspNetUserId == aspNetUserId))
                                                 .Include(c => c.PortfolioClients)
-                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync())
-                                                ;
+                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
         }
 
         public async Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId)
@@ -31,8 +31,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Where(c => c.AspnetUserPortfolios
                                                 .Any(p => p.AspNetUserId == aspNetUserId))
                                                 .Include(c => c.PortfolioClients)
-                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync())
-                                                ;
+                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
         }
     }
 }

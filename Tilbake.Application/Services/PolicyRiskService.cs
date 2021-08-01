@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -60,7 +61,11 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyRiskResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await Task.Run(() => _unitOfWork.PolicyRisks.GetAsync(x => x.PolicyId == policyId));
+            var result = await _unitOfWork.PolicyRisks.GetAsync(
+                e => e.PolicyId == policyId,
+                e => e.OrderByDescending(r => r.RiskDate),
+                p => p.CoverType);
+
             var resources = _mapper.Map<IEnumerable<PolicyRisk>, IEnumerable<PolicyRiskResource>>(result);
 
             return resources;

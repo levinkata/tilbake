@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PolicyRiskResource>
+
+@if (Model.Any())
+{
+    <div class="form-group">
+        <table id="tblPolicyRisk" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <strong>Description</strong>
+                    </th>
+                    <th>
+                        <strong>Cover Type</strong>
+                    </th>
+                    <th>
+                        <strong>Sum Insured</strong>
+                    </th>
+                    <th>
+                        <strong>Premium</strong>
+                    </th>
+                    <th>
+                        <strong>Excess</strong>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="PolicyRisks" asp-action="Details" asp-route-id="@item.Id">@item.Description</a>
+                        </td>
+                        <td>@item.CoverType</td>
+                        <td>@item.SumInsured</td>
+                        <td>@item.Premium</td>
+                        <td>@item.Excess</td>
+                        <td>
+                            <a asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <caption>No Records Found</caption>
+}

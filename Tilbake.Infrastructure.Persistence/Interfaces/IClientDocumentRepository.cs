@@ -7,6 +7,6 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
 {
     public interface IClientDocumentRepository : IRepository<ClientDocument>
     {
-        Task<IEnumerable<ClientDocument>> GetByClientIdAsync(Guid clientId);
+
     }
 }

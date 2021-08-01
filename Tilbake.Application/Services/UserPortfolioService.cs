@@ -77,7 +77,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
         {
-            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByNotUserIdAsync(aspNetUserId));
+            var result = await  _unitOfWork.UserPortfolios.GetByNotUserIdAsync(aspNetUserId);
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
 
             return resources;
@@ -85,7 +85,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId)
         {
-            var result = await Task.Run(() => _unitOfWork.UserPortfolios.GetByUserIdAsync(aspNetUserId));
+            var result = await _unitOfWork.UserPortfolios.GetByUserIdAsync(aspNetUserId);
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
 
             return resources;

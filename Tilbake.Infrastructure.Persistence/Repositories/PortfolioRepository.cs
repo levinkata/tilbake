@@ -1,7 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
@@ -15,22 +11,5 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         }
 
-        //public async Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId)
-        //{
-        //    return await Task.Run(() => _context.Portfolios
-        //                                        .Where(c => c.AspnetUserPortfolios
-        //                                        .Any(u => u.AspNetUserId == aspNetUserId))
-        //                                        .Include(p => p.PortfolioClients)
-        //                                        .Include(u => u.AspnetUserPortfolios)
-        //                                        .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
-        //}
-
-        //public async Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId)
-        //{
-        //    return await Task.Run(() => _context.Portfolios
-        //                                        .Where(c => !c.AspnetUserPortfolios
-        //                                        .Any(u => u.AspNetUserId == aspNetUserId))
-        //                                        .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
-        //}
     }
 }

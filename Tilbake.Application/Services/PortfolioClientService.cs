@@ -34,7 +34,17 @@ namespace Tilbake.Application.Services
             var client = _mapper.Map<ClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
 
-            await _unitOfWork.PortfolioClients.AddClientAsync(resource.PortfolioId, client);
+            await _unitOfWork.Clients.AddAsync(client);
+
+            PortfolioClient portfolioClient = new()
+            {
+                Id = Guid.NewGuid(),
+                PortfolioId = resource.PortfolioId,
+                ClientId = client.Id
+            };
+
+            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+
             return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 
@@ -46,12 +56,16 @@ namespace Tilbake.Application.Services
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
         {
-            return await _unitOfWork.PortfolioClients.ExistsAsync(portfolioId, clientId);
+            var result = await _unitOfWork.PortfolioClients.GetAsync(
+                                                            e => e.PortfolioId == portfolioId &&
+                                                            e.ClientId == clientId);
+            
+            return result.Any();
         }
 
         public async Task<PortfolioClientResource> FindAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioClients.FindAsync(p => p.Id == id);
+            var result = await _unitOfWork.PortfolioClients.GetAsync(p => p.Id == id);
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result.FirstOrDefault());
 
             return resource;
@@ -67,7 +81,10 @@ namespace Tilbake.Application.Services
 
         public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
         {
-            return await _unitOfWork.PortfolioClients.GetPortfolioClientId(portfolioId, clientId);
+            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
+                                e => e.PortfolioId == portfolioId && e.ClientId == clientId);
+
+            return result.Id;
         }
     }
 }

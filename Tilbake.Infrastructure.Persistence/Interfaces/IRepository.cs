@@ -39,11 +39,6 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
             Expression<Func<TEntity, bool>> filter = null,
             params Expression<Func<TEntity, object>>[] includes);
 
-        Task<IEnumerable<TEntity>> FindAsync(
-            Expression<Func<TEntity, bool>> predicate = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            params Expression<Func<TEntity, object>>[] includes);
-
         /// <summary>
         /// Get query for entity
         /// </summary>

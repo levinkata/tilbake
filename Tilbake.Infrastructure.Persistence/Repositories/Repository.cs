@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Tilbake.Domain.Models.Common;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 
@@ -13,90 +12,85 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly TilbakeDbContext _context;
-        private DbSet<TEntity> dbSet;
+        protected readonly DbSet<TEntity> dbSet;
 
         public Repository(TilbakeDbContext context)
         {
             _context = context;
-            dbSet = context.Set<TEntity>();
+            dbSet = _context.Set<TEntity>();
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            if (typeof(IAuditEntity).IsAssignableFrom(typeof(TEntity)))
+            if (entity == null)
             {
-                ((IAuditEntity)entity).DateAdded = DateTime.UtcNow;
+                throw new ArgumentNullException(nameof(entity));
             }
 
-            await Task.Run(() => _context.Set<TEntity>().AddAsync(entity));
-            return entity;            
+            try
+            {
+                await Task.Run(() => dbSet.AddAsync(entity));
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(entity)} could not be saved: {ex.Message}");
+            }           
         } 
 
-        public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
+        public virtual async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            await Task.Run(() => _context.Set<TEntity>().AddRangeAsync(entities));
+            await Task.Run(() => dbSet.AddRangeAsync(entities));
             return entities;
         }
 
-        public async Task<TEntity> DeleteAsync(Guid id)
+        public virtual async Task<TEntity> DeleteAsync(Guid id)
         {
-            var entity = await _context.Set<TEntity>().FindAsync(id);
+            var entity = await dbSet.FindAsync(id);
             if (entity == null)
             {
-                return entity;
+                throw new Exception($"{nameof(id)} could not be found.");
             }
 
-            await Task.Run(() => _context.Set<TEntity>().Remove(entity));
+            await Task.Run(() => dbSet.Remove(entity));
             return entity;
         }
 
-        public async Task<TEntity> DeleteAsync(TEntity entity)
+        public virtual async Task<TEntity> DeleteAsync(TEntity entity)
         {
             if (entity == null)
             {
-                return entity;
+                throw new Exception($"{nameof(entity)} could not be found.");
             }
 
-            await Task.Run(() => _context.Set<TEntity>().Remove(entity));
+            await Task.Run(() => dbSet.Remove(entity));
             return entity;
         }
 
-        public async Task<IEnumerable<TEntity>> DeleteRangeAsync(IEnumerable<TEntity> entities)
+        public virtual async Task<IEnumerable<TEntity>> DeleteRangeAsync(IEnumerable<TEntity> entities)
         {
             if (entities == null)
             {
-                return entities;
+                throw new Exception($"{nameof(entities)} could not be found.");
             }
 
-            await Task.Run(() => _context.Set<TEntity>().RemoveRange(entities));
+            await Task.Run(() => dbSet.RemoveRange(entities));
             return entities;
         }
-
-        public async Task<IEnumerable<TEntity>> FindAsync(
-            Expression<Func<TEntity, bool>> predicate = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            params Expression<Func<TEntity, object>>[] includes)
+        
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            IQueryable<TEntity> query = dbSet;
-
-            foreach (Expression<Func<TEntity, object>> include in includes)
-                query = query.Include(include);
-
-            if (predicate != null)
-                query = query.Where(predicate);
-
-            if (orderBy != null)
-                query = orderBy(query);
-                
-            return await Task.Run(() => query.AsNoTracking().ToListAsync());
+            try
+            {
+                return await dbSet.AsNoTracking().ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Couldn't retrieve entities: {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            return await Task.Run(() => _context.Set<TEntity>().AsNoTracking().ToListAsync());
-        }
-
-        public async Task<IEnumerable<TEntity>> GetAsync(
+        public virtual async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes)
@@ -115,12 +109,26 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => query.AsNoTracking().ToListAsync());
         }
 
-        public async Task<TEntity> GetByIdAsync(Guid id)
+        public virtual async Task<TEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Set<TEntity>().FindAsync(id);
+            try
+            {
+                var entity = await dbSet.FindAsync(id);
+                if (entity == null)
+                {
+                    throw new Exception($"Couldn't find entity with id={id}");
+                }
+
+                _context.Entry(entity).State = EntityState.Detached;
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Couldn't retrieve entity with id={id}: {ex.Message}");
+            }
         }
 
-        public async Task<TEntity> GetFirstOrDefaultAsync(
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(
             Expression<Func<TEntity, bool>> filter = null,
             params Expression<Func<TEntity,
                 object>>[] includes)
@@ -133,7 +141,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await query.FirstOrDefaultAsync(filter);
         }
 
-        public async Task<IQueryable<TEntity>> QueryAsync(
+        public virtual async Task<IQueryable<TEntity>> QueryAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
@@ -148,12 +156,24 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.Run(() => query.AsNoTracking());
         }
 
-        public async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
+        public virtual async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
         {
-            var oldEntity = await _context.Set<TEntity>().FindAsync(id);
-            _context.Entry(oldEntity).CurrentValues.SetValues(entity);
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
 
-            return entity;
+            try
+            {
+                var oldEntity = await dbSet.FindAsync(id);
+                _context.Entry(oldEntity).CurrentValues.SetValues(entity);
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(entity)} could not be updated: {ex.Message}");
+            }
         }
     }
 }

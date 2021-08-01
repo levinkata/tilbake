@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
@@ -62,6 +63,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             Taxes = new TaxRepository(_context);
             UserPortfolios = new UserPortfolioRepository(_context);
             WallTypes = new WallTypeRepository(_context);
+
         }
 
         public IAllRiskRepository AllRisks { get; private set; }

@@ -64,7 +64,15 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByIdNumberAsync(string idNumber)
         {
-            var result = await _unitOfWork.Clients.GetByIdNumberAsync(idNumber);
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
+                                            c => c.IdNumber == idNumber,
+                                            c => c.ClientType,
+                                            c => c.Country,
+                                            c => c.Gender,
+                                            c => c.MaritalStatus,
+                                            c => c.Occupation,
+                                            c => c.Title);
+
             var resources = _mapper.Map<Client, ClientResource>(result);
 
             return resources;
@@ -72,7 +80,12 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientResource>> GetByPortfoloId(Guid portfolioId)
         {
-            var result = await Task.Run(() => _unitOfWork.Clients.GetByPortfolioId(portfolioId));
+            var result = await Task.Run(() => _unitOfWork.Clients.GetAsync(
+                                                        e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId),
+                                                        e => e.OrderBy(r => r.LastName),
+                                                        e => e.PortfolioClients
+                                                        ));
+
             var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
 
             return resources;
@@ -80,7 +93,10 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByClientId(Guid portfolioId, Guid clientId)
         {
-            var result = await Task.Run(() => _unitOfWork.Clients.GetByClientId(portfolioId, clientId));
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
+                                                    c => c.PortfolioClients.Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId),
+                                                    c => c.PortfolioClients);
+
             var resource = _mapper.Map<Client, ClientResource>(result);
 
             return resource;

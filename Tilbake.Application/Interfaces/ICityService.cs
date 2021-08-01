@@ -8,6 +8,7 @@ namespace Tilbake.Application.Interfaces
     public interface ICityService
     {
         Task<IEnumerable<CityResource>> GetAllAsync();
+        Task<IEnumerable<CityResource>> GetByCountryId(Guid countryId);
         Task<CityResource> GetByIdAsync(Guid id);
         Task<int> AddAsync(CitySaveResource resource);
         Task<int> UpdateAsync(CityResource resource);

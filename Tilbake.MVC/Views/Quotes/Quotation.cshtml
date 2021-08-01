@@ -1,0 +1,63 @@
+﻿@{ 
+    ViewData["Title"] = "Quotation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-around">
+        <div class="col">
+            <h1>Company Name</h1>
+        </div>
+        <div class="col">
+            <h1>Invoice</h1>
+        </div>
+    </div>
+    <div class="row justify-content-around">
+        <div class="col">
+            <p>[Street Address]</p>
+            <p>[City, State, ZIP Code]</p>
+            <p>[Phone]</p>
+            <p>[Email Address]</p>
+            <p>[Company Website]</p>
+        </div>
+        <div class="col">
+            <p>Date: 31/07/2021</p>
+            <p>Invoice #: [######]</p>
+            <p>Due Date: 31/07/2021</p>
+        </div>
+    </div>
+    <div class="row justify-content-around">
+        <div class="col">
+            <h6>BILL TO</h6>
+            <p>[Recipient Name]</p>
+            <p>[Company Name]</p>
+            <p>[Street Address]</p>
+            <p>[City, State, ZIP Code]</p>
+            <p>[Phone]</p>
+        </div>
+        <div class="col">
+            <h6>SHIP TO</h6>
+            <p>[Recipient Name]</p>
+            <p>[Company Name]</p>
+            <p>[Street Address]</p>
+            <p>[City, State, ZIP Code]</p>
+            <p>[Phone]</p>
+        </div>
+    </div>
+    <div class="row g-2">
+        <div class="col-sm-6 col-md-8">
+            <h6>COMMENTS</h6>
+            <p>1. Payment due in 30 days</p>
+            <p>2. Please note the invoice number in your payment method</p>
+            <br />
+            <p>Banking and wire transfer informatoin may also be included here</p>
+        </div>
+        <div class="col-6 col-md-4">
+            <p>Subtotal [$#,###.##]</p>
+            <p>Tax [$#,###.##]</p>
+            <p>Total [$#,###.##]</p>
+            <br />
+            <strong>Thank you for your business!</strong>
+        </div>
+    </div>
+</div>

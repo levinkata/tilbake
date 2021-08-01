@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Tilbake.Domain.Models;
+﻿using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
 
@@ -12,33 +9,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
         public PortfolioClientRepository(TilbakeDbContext context) : base(context)
         {
 
-        }
-
-        public async Task<PortfolioClient> AddClientAsync(Guid portfolioId, Client client)
-        {
-            await _context.Clients.AddAsync(client);
-            PortfolioClient portfolioClient = new PortfolioClient()
-            {
-                Id = Guid.NewGuid(),
-                PortfolioId = portfolioId,
-                ClientId = client.Id
-            };
-            await _context.PortfolioClients.AddAsync(portfolioClient);
-            await _context.SaveChangesAsync();
-            return portfolioClient;
-        }
-
-        public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
-        {
-            return await Task.Run(() => _context.PortfolioClients
-                                                .Any(e => e.PortfolioId == portfolioId && e.ClientId == clientId))
-                                                ;
-        }
-
-        public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
-        {
-            return await Task.Run(() => _context.PortfolioClients
-                                                .SingleOrDefault(e => e.PortfolioId == portfolioId && e.ClientId == clientId).Id);
         }
     }
 }

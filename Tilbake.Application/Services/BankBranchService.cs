@@ -55,7 +55,11 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BankBranchResource>> GetByBankIdAsync(Guid bankId)
         {
-            var result = await Task.Run(() => _unitOfWork.BankBranches.GetByBankIdAsync(bankId));
+            var result = await Task.Run(() => _unitOfWork.BankBranches.GetAsync(
+                e => e.BankId == bankId,
+                e => e.OrderBy(r => r.Name),
+                e => e.Bank));
+
             var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
 
             return resources;

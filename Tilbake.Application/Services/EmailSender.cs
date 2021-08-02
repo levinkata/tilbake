@@ -37,14 +37,12 @@ namespace Tilbake.Application.Services
                 message.Body = htmlMessage;
                 message.IsBodyHtml = true;
 
-                using (var client = new SmtpClient(host, port))
-                {
-                    client.Port = port;
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential(username, password);
-                    client.EnableSsl = enableSSL;
-                    client.Send(message);
-                }
+                using var client = new SmtpClient(host, port);
+                client.Port = port;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(username, password);
+                client.EnableSsl = enableSSL;
+                client.Send(message);
             }
             return Task.CompletedTask;
         }

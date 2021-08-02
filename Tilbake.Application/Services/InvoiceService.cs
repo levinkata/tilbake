@@ -24,7 +24,7 @@ namespace Tilbake.Application.Services
         public async Task<int> AddAsync(InvoiceSaveResource resource)
         {
             var policyId = resource.PolicyId;
-            var policyRisks = await _unitOfWork.PolicyRisks.GetAsync(r => r.PolicyId == policyId);
+            var policyRisks = await _unitOfWork.PolicyRisks.GetAllAsync(r => r.PolicyId == policyId);
 
             if (resource == null)
             {
@@ -38,6 +38,7 @@ namespace Tilbake.Application.Services
             var taxRate = tax.TaxRate;
 
             invoice.Id = Guid.NewGuid();
+            invoice.Amount = policyRisks.Sum(r => r.Premium);
             invoice.TaxAmount = invoice.Amount * taxRate / 100;
             // invoice.ReducingBalance = invoice.Amount;
 
@@ -95,10 +96,11 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Invoices.GetAsync(
-                e => e.PolicyId == policyId,
-                e => e.OrderBy(p => p.InvoiceDate),
-                e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
+            var result = await _unitOfWork.Invoices.GetAllAsync(
+                                            e => e.PolicyId == policyId,
+                                            e => e.OrderBy(p => p.InvoiceDate),
+                                            e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
+
             var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource> >(result);
 
             return resources;
@@ -106,10 +108,11 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceResource>> GetByPortfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Invoices.GetAsync(
-                e => e.Policy.PortfolioClientId == portfolioClientId,
-                e => e.OrderBy(p => p.InvoiceDate),
-                e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
+            var result = await _unitOfWork.Invoices.GetAllAsync(
+                                            e => e.Policy.PortfolioClientId == portfolioClientId,
+                                            e => e.OrderBy(p => p.InvoiceDate),
+                                            e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
+
             var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource>>(result);
 
             return resources;

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
@@ -9,28 +10,34 @@ namespace Tilbake.MVC.Controllers
 {
     public class InvoicesController : Controller
     {
+        private readonly IPolicyRiskService _policyRiskService;
         private readonly IInvoiceService _invoiceService;
         private readonly IInvoiceStatusService _invoiceStatusService;
         private readonly ITaxService _taxService;
 
-        public InvoicesController(IInvoiceService invoiceService,
-                                 IInvoiceStatusService invoiceStatusService,
-                                 ITaxService taxService)
+        public InvoicesController(IPolicyRiskService policyRiskService,
+                                    IInvoiceService invoiceService,
+                                    IInvoiceStatusService invoiceStatusService,
+                                    ITaxService taxService)
         {
             _invoiceStatusService = invoiceStatusService;
             _taxService = taxService;
+            _policyRiskService = policyRiskService;
             _invoiceService = invoiceService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Create(Guid policyId)
         {
+            var policyRisks = await _policyRiskService.GetByPolicyIdAsync(policyId);
+
             var invoiceStatuses = await _invoiceStatusService.GetAllAsync();
             var taxes = await _taxService.GetAllAsync();
 
             InvoiceSaveResource resource = new()
             {
                 PolicyId = policyId,
+                Amount = policyRisks.Sum(r => r.Premium),
                 InvoiceStatusList = SelectLists.InvoiceStatuses(invoiceStatuses, Guid.Empty),
                 TaxList = SelectLists.Taxes(taxes, Guid.Empty)
             };

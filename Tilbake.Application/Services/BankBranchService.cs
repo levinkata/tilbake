@@ -33,20 +33,22 @@ namespace Tilbake.Application.Services
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.BankBranches.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(BankBranchResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
             await _unitOfWork.BankBranches.DeleteAsync(bankBranch);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await  _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BankBranchResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.BankBranches.GetAllAsync());
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.BankBranches.GetAllAsync(
+                                            null,
+                                            e => e.OrderBy(r => r.Name),
+                                            e => e.Bank);
 
             var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
 
@@ -55,10 +57,10 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BankBranchResource>> GetByBankIdAsync(Guid bankId)
         {
-            var result = await Task.Run(() => _unitOfWork.BankBranches.GetAsync(
-                e => e.BankId == bankId,
-                e => e.OrderBy(r => r.Name),
-                e => e.Bank));
+            var result = await _unitOfWork.BankBranches.GetAllAsync(
+                                            e => e.BankId == bankId,
+                                            e => e.OrderBy(r => r.Name),
+                                            e => e.Bank);
 
             var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
 

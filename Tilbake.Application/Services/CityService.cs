@@ -45,8 +45,10 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CityResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Cities.GetAllAsync());
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.Cities.GetAllAsync(
+                                                null,
+                                                r => r.OrderBy(n => n.Name),
+                                                r => r.Country);
 
             var resources = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(result);
 
@@ -55,10 +57,10 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CityResource>> GetByCountryId(Guid countryId)
         {
-            var result = await Task.Run(() => _unitOfWork.Cities.GetAsync(
+            var result = await _unitOfWork.Cities.GetAllAsync(
                         e => e.CountryId == countryId,
                         e => e.OrderBy(r => r.Name),
-                        e => e.Country));
+                        e => e.Country);
 
             var resources = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(result);
 

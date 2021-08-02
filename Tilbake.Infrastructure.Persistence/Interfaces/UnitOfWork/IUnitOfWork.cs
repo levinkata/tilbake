@@ -22,6 +22,8 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         ICoverTypeRepository CoverTypes { get; }
         IDocumentTypeRepository DocumentTypes { get; }
         IDriverTypeRepository DriverTypes { get; }
+        IFileTemplateRepository FileTemplates { get; }
+        IFileTemplateRecordRepository FileTemplateRecords { get; }
         IGenderRepository Genders { get; }
         IHouseRepository Houses { get; }
         IHouseConditionRepository HouseConditions { get; }

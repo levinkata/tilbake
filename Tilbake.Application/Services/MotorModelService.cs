@@ -45,8 +45,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<MotorModelResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.MotorModels.GetAllAsync());
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.MotorModels.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<MotorModel>, IEnumerable<MotorModelResource>>(result);
 
@@ -63,7 +64,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<MotorModelResource>> GetByMotorMakeIdAsync(Guid motorMakeId)
         {
-            var result = await  _unitOfWork.MotorModels.GetAsync(
+            var result = await  _unitOfWork.MotorModels.GetAllAsync(
                                             r => r.MotorMakeId == motorMakeId,
                                             r => r.OrderBy(p => p.Name),
                                             r => r.MotorMake);

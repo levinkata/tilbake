@@ -11,7 +11,6 @@ namespace Tilbake.Application.Helpers
         public static SelectList Carriers(IEnumerable<CarrierResource> carriers, Guid? carrierId)
         {
             List<SelectListItem> items = new();
-            //items.Add(new SelectListItem() { Text = "Select Carrier", Value = "" });
 
             foreach (var item in carriers)
             {
@@ -51,6 +50,20 @@ namespace Tilbake.Application.Helpers
             return (genderId == Guid.Empty || String.IsNullOrEmpty(genderId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", genderId);
+        }
+
+        public static SelectList FileFormats(IEnumerable<FileFormatResource> fileFormats, Guid? fileFormatId)
+        {
+            List<SelectListItem> items = new();
+
+            foreach (var item in fileFormats)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (fileFormatId == Guid.Empty || String.IsNullOrEmpty(fileFormatId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", fileFormatId);
         }
 
         public static SelectList InvoiceStatuses(IEnumerable<InvoiceStatusResource> invoiceStatuses, Guid? invoiceStatusId)

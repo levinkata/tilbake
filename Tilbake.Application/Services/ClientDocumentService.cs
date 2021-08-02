@@ -92,7 +92,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientDocumentResource>> GetByClientIdAsync(Guid clientId)
         {
-            var result = await _unitOfWork.ClientDocuments.GetAsync(
+            var result = await _unitOfWork.ClientDocuments.GetAllAsync(
                                                             e => e.ClientId == clientId,
                                                             e => e.OrderBy(p => p.Name),
                                                             e => e.DocumentType,
@@ -116,7 +116,7 @@ namespace Tilbake.Application.Services
             var clientDocument = _mapper.Map<ClientDocumentResource, ClientDocument>(resource);
             await _unitOfWork.ClientDocuments.UpdateAsync(resource.Id, clientDocument);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

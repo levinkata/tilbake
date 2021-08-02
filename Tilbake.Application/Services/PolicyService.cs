@@ -26,7 +26,7 @@ namespace Tilbake.Application.Services
             var policyRisks = resource.PolicyRisks;
             if (policyRisks == null)
             {
-                throw new ArgumentNullException(nameof(policyRisks));
+                throw new NullReferenceException(nameof(policyRisks));
             }
 
             var clientId = resource.ClientId;
@@ -92,7 +92,7 @@ namespace Tilbake.Application.Services
                 {
                     var contentId = contents[i].Id;
 
-                    Risk risk = new Risk()
+                    Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
                         ContentId = contentId
@@ -130,7 +130,7 @@ namespace Tilbake.Application.Services
                 {
                     var houseId = houses[i].Id;
 
-                    Risk risk = new Risk()
+                    Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
                         HouseId = houseId
@@ -168,7 +168,7 @@ namespace Tilbake.Application.Services
                 {
                     var motorId = motors[i].Id;
 
-                    Risk risk = new Risk()
+                    Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
                         MotorId = motorId
@@ -234,10 +234,13 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyResource>> GetByPorfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Policies.GetAsync(
-                e => e.PortfolioClientId == portfolioClientId,
-                e => e.OrderByDescending(r => r.CoverStartDate),
-                p => p.PaymentMethod, p => p.PolicyStatus, p => p.PolicyType, p => p.SalesType, p => p.Insurer);
+            var result = await _unitOfWork.Policies.GetAllAsync(
+                                            e => e.PortfolioClientId == portfolioClientId,
+                                            e => e.OrderByDescending(r => r.CoverStartDate),
+                                            p => p.PaymentMethod, p => p.PolicyStatus,
+                                            p => p.PolicyType,
+                                            p => p.SalesType,
+                                            p => p.Insurer);
 
             var resources = _mapper.Map<IEnumerable<Policy>, IEnumerable<PolicyResource>>(result);
 

@@ -17,20 +17,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0-preview.1" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.0-preview.4.21253.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0-preview.5.21301.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0-preview.5.21301.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.0-preview.6.21355.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0-preview.6.21355.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0-preview.6.21355.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-preview.6.21352.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-preview.6.21352.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0-preview.6.21362.1" />
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.2.0.44" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.2.0.49" />
   </ItemGroup>
 
   <ItemGroup>

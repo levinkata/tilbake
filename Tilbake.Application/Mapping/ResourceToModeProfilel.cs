@@ -23,6 +23,8 @@ namespace Tilbake.Application.Mapping
             CreateMap<CoverTypeSaveResource, CoverType>();
             CreateMap<DocumentTypeSaveResource, DocumentType>();
             CreateMap<DriverTypeSaveResource, DriverType>();
+            CreateMap<FileTemplateSaveResource, FileTemplate>();
+            CreateMap<FileTemplateRecordSaveResource, FileTemplateRecord>();
             CreateMap<GenderSaveResource, Gender>();
             CreateMap<HouseSaveResource, House>();
             CreateMap<HouseConditionSaveResource, HouseCondition>();

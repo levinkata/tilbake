@@ -96,7 +96,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientResource>> GetByPortfoloId(Guid portfolioId)
         {
-            var result = await Task.Run(() => _unitOfWork.Clients.GetAsync(
+            var result = await Task.Run(() => _unitOfWork.Clients.GetAllAsync(
                                                         e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId),
                                                         e => e.OrderBy(r => r.LastName),
                                                         e => e.PortfolioClients

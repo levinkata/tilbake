@@ -50,6 +50,11 @@ namespace Tilbake.Application.Mapping
             CreateMap<DriverType, DriverTypeResource>().ReverseMap();
             CreateMap<Gender, GenderResource>().ReverseMap();
 
+            CreateMap<FileTemplate, FileTemplateResource>()
+                .ForMember(dest => dest.FileTemplateRecords, opt => opt.MapFrom(src => src.FileTemplateRecords)).ReverseMap();
+
+            CreateMap<FileTemplateRecord, FileTemplateRecordResource>().ReverseMap();
+
             CreateMap<House, HouseResource>()
                     .ForMember(dest => dest.HouseCondition, opt => opt.MapFrom(src => src.HouseCondition.Name))
                     .ForMember(dest => dest.ResidenceType, opt => opt.MapFrom(src => src.ResidenceType.Name))

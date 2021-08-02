@@ -8,8 +8,6 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> GetAllAsync();
-
         /// <summary>
         /// Get all entities from db
         /// </summary>
@@ -17,7 +15,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
         /// <param name="orderBy"></param>
         /// <param name="includes"></param>
         /// <returns></returns>
-        Task<IEnumerable<TEntity>> GetAsync(
+        Task<IEnumerable<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes);

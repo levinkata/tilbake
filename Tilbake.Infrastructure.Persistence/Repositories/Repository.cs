@@ -77,20 +77,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             await Task.Run(() => dbSet.RemoveRange(entities));
             return entities;
         }
-        
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            try
-            {
-                return await dbSet.AsNoTracking().ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Couldn't retrieve entities: {ex.Message}");
-            }
-        }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAsync(
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes)
@@ -106,7 +94,14 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             if (orderBy != null)
                 query = orderBy(query);
 
-            return await Task.Run(() => query.AsNoTracking().ToListAsync());
+            try
+            {
+                return await Task.Run(() => query.AsNoTracking().ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Couldn't retrieve entities: {ex.Message}");
+            }
         }
 
         public virtual async Task<TEntity> GetByIdAsync(Guid id)

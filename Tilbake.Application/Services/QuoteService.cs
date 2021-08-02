@@ -26,7 +26,7 @@ namespace Tilbake.Application.Services
             var quoteItems = resource.QuoteItems;
             if(quoteItems == null)
             {
-                throw new ArgumentNullException(nameof(quoteItems));
+                return -1;
             }
 
             var clientId = resource.ClientId;
@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
                     {
                         var allRiskId = allRisks[i].Id;
 
-                        Risk risk = new Risk()
+                        Risk risk = new()
                         {
                             Id = Guid.NewGuid(),
                             AllRiskId = allRiskId
@@ -64,7 +64,7 @@ namespace Tilbake.Application.Services
 
                         var riskId = risk.Id;
 
-                        ClientRisk clientRisk = new ClientRisk()
+                        ClientRisk clientRisk = new()
                         {
                             Id = Guid.NewGuid(),
                             ClientId = clientId,
@@ -94,7 +94,7 @@ namespace Tilbake.Application.Services
                 {
                     var contentId = contents[i].Id;
 
-                    Risk risk = new Risk()
+                    Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
                         ContentId = contentId
@@ -103,7 +103,7 @@ namespace Tilbake.Application.Services
 
                     var riskId = risk.Id;
 
-                    ClientRisk clientRisk = new ClientRisk()
+                    ClientRisk clientRisk = new()
                     {
                         Id = Guid.NewGuid(),
                         ClientId = clientId,
@@ -132,7 +132,7 @@ namespace Tilbake.Application.Services
                 {
                     var houseId = houses[i].Id;
 
-                    Risk risk = new Risk()
+                    Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
                         HouseId = houseId
@@ -141,7 +141,7 @@ namespace Tilbake.Application.Services
 
                     var riskId = risk.Id;
 
-                    ClientRisk clientRisk = new ClientRisk()
+                    ClientRisk clientRisk = new()
                     {
                         Id = Guid.NewGuid(),
                         ClientId = clientId,
@@ -170,7 +170,7 @@ namespace Tilbake.Application.Services
                 {
                     var motorId = motors[i].Id;
 
-                    Risk risk = new Risk()
+                    Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
                         MotorId = motorId
@@ -179,7 +179,7 @@ namespace Tilbake.Application.Services
 
                     var riskId = risk.Id;
 
-                    ClientRisk clientRisk = new ClientRisk()
+                    ClientRisk clientRisk = new()
                     {
                         Id = Guid.NewGuid(),
                         ClientId = clientId,
@@ -217,8 +217,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Quotes.GetAllAsync());
-            result = result.OrderBy(n => n.QuoteNumber);
+            var result = await _unitOfWork.Quotes.GetAllAsync(
+                                                null,
+                                                r => r.OrderBy(n => n.QuoteNumber));
 
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
 
@@ -227,7 +228,10 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Quotes.GetByIdAsync(id);
+            var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(
+                                                r => r.Id == id,
+                                                r => r.QuoteItems);
+
             var resources = _mapper.Map<Quote, QuoteResource>(result);
 
             return resources;
@@ -235,7 +239,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.Quotes.GetAsync(
+            var result = await _unitOfWork.Quotes.GetAllAsync(
                                                   r => r.PortfolioClient.PortfolioId == portfolioId,
                                                   r => r.OrderBy(p => p.QuoteNumber),
                                                   r => r.QuoteItems,
@@ -249,7 +253,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioClientAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Quotes.GetAsync(
+            var result = await _unitOfWork.Quotes.GetAllAsync(
                                                   r => r.PortfolioClientId == portfolioClientId,
                                                   r => r.OrderBy(p => p.QuoteNumber),
                                                   r => r.QuoteItems,
@@ -285,8 +289,6 @@ namespace Tilbake.Application.Services
 
         public async Task<bool> IsConvertedToPolicy(Guid id)
         {
-            var result = await _unitOfWork.Quotes.IsConvertedToPolicy(id);
-
             return await _unitOfWork.Quotes.IsConvertedToPolicy(id);
         }
 

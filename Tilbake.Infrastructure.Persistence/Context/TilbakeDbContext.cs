@@ -173,8 +173,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
         private void OnBeforeSaveChanges(string userId = null)
         {
-            var timestamp = DateTime.Now;
-
             ChangeTracker.DetectChanges();
 
             var auditEntries = new List<AuditEntry>();

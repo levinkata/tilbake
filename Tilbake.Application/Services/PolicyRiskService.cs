@@ -61,10 +61,10 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyRiskResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.PolicyRisks.GetAsync(
-                e => e.PolicyId == policyId,
-                e => e.OrderByDescending(r => r.RiskDate),
-                p => p.CoverType);
+            var result = await _unitOfWork.PolicyRisks.GetAllAsync(
+                                            e => e.PolicyId == policyId,
+                                            e => e.OrderByDescending(r => r.RiskDate),
+                                            p => p.CoverType);
 
             var resources = _mapper.Map<IEnumerable<PolicyRisk>, IEnumerable<PolicyRiskResource>>(result);
 

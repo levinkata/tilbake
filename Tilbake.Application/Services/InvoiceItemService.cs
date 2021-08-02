@@ -36,9 +36,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceItemResource>> GetByInvoiceIdAsync(Guid invoiceId)
         {
-            var result = await _unitOfWork.InvoiceItems.GetAsync(
-                p => p.InvoiceId == invoiceId, null,
-                p => p.PolicyRisk);
+            var result = await _unitOfWork.InvoiceItems.GetAllAsync(
+                                            p => p.InvoiceId == invoiceId, null,
+                                            p => p.PolicyRisk);
             var resources = _mapper.Map<IEnumerable<InvoiceItem>, IEnumerable<InvoiceItemResource>>(result);
             
             return resources;

@@ -6,7 +6,7 @@ using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
-    public class FileTemplateResource : BaseResource
+    public class FileTemplateSaveResource : BaseResource
     {
         public Guid PortfolioId { get; set; }
 
@@ -16,7 +16,7 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Delimiter")]
         public string Delimiter { get; set; }
 
-        public List<FileTemplateRecord> FileTemplateRecords { get; } = new List<FileTemplateRecord>();
+        //public List<FileTemplateRecord> FileTemplateRecords { get; } = new List<FileTemplateRecord>();
 
         //  SelectLists
         public SelectList FileFormatList { get; set; }

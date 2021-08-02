@@ -31,6 +31,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             CoverTypes = new CoverTypeRepository(_context);
             DocumentTypes = new DocumentTypeRepository(_context);
             DriverTypes = new DriverTypeRepository(_context);
+            FileTemplates = new FileTemplateRepository(_context);
+            FileTemplateRecords = new FileTemplateRecordRepository(_context);
             Genders = new GenderRepository(_context);
             Houses = new HouseRepository(_context);
             HouseConditions = new HouseConditionRepository(_context);
@@ -84,6 +86,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public ICoverTypeRepository CoverTypes { get; private set; }
         public IDocumentTypeRepository DocumentTypes { get; private set; }
         public IDriverTypeRepository DriverTypes { get; private set; }
+        public IFileTemplateRepository FileTemplates { get; private set; }
+        public IFileTemplateRecordRepository FileTemplateRecords { get; private set; }
         public IGenderRepository Genders { get; private set; }
         public IHouseRepository Houses { get; private set; }
         public IHouseConditionRepository HouseConditions { get; private set; }

@@ -73,7 +73,7 @@ namespace Tilbake.Application.Services
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetAsync(
+            var result = await _unitOfWork.PortfolioClients.GetAllAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.ClientId == clientId);
             
@@ -82,7 +82,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioClientResource> FindAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioClients.GetAsync(p => p.Id == id);
+            var result = await _unitOfWork.PortfolioClients.GetAllAsync(p => p.Id == id);
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result.FirstOrDefault());
 
             return resource;

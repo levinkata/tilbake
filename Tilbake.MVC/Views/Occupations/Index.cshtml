@@ -1,15 +1,18 @@
 ﻿@model IEnumerable<OccupationResource>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Occupations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <div class="form-group">
+        <a asp-action="Create" class="btn btn-primary"><i class="far fa-plus-square"></i></a>
+    </div>
+</div>
+
 @if(Model.Any())
             {
 <table id="tlbOccupation" class="display">

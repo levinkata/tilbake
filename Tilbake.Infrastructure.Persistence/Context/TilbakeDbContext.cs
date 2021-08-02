@@ -174,6 +174,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         private void OnBeforeSaveChanges(string userId = null)
         {
             ChangeTracker.DetectChanges();
+
             var dateTimeStamp = DateTime.UtcNow;
 
             var auditEntries = new List<AuditEntry>();

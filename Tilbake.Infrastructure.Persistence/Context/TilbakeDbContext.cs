@@ -174,12 +174,25 @@ namespace Tilbake.Infrastructure.Persistence.Context
         private void OnBeforeSaveChanges(string userId = null)
         {
             ChangeTracker.DetectChanges();
+            var dateTimeStamp = DateTime.UtcNow;
 
             var auditEntries = new List<AuditEntry>();
             foreach (var entry in ChangeTracker.Entries())
             {
                 if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
                     continue;
+
+                //if (entry.State == EntityState.Added)
+                //{
+                //    ((IAuditEntity)entry.Entity).AddedBy = Guid.Parse(_userId.ToString());
+                //    ((IAuditEntity)entry.Entity).DateAdded = dateTimeStamp;
+                //}
+
+                //if (entry.State == EntityState.Modified)
+                //{
+                //    ((IAuditEntity)entry.Entity).ModifiedBy = Guid.Parse(_userId.ToString());
+                //    ((IAuditEntity)entry.Entity).DateModified = dateTimeStamp;
+                //}
 
                 var auditEntry = new AuditEntry(entry)
                 {
@@ -222,10 +235,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     }
                 }
             }
-            foreach (var auditEntry in auditEntries)
-            {
-                Audits.Add(auditEntry.ToAudit());
-            }
+            auditEntries.ForEach(s => Audits.Add(s.ToAudit()));
+
+            //foreach (var auditEntry in auditEntries)
+            //{
+            //    Audits.Add(auditEntry.ToAudit());
+            //}
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

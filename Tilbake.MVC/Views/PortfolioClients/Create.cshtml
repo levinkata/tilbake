@@ -1,12 +1,11 @@
 ﻿@model ClientSaveResource
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Model.PortfolioName;
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Client Portfolio Client</h4>
 <hr />
 <div class="row">
     <form asp-action="Create">

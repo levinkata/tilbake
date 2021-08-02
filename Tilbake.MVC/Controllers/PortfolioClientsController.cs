@@ -87,9 +87,12 @@ namespace Tilbake.MVC.Controllers
             var titles = await _titleService.GetAllAsync();
             var carriers = await _carrierService.GetAllAsync();
 
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+
             ClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
+                PortfolioName = portfolio.Name,
                 ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
                 CountryList = new SelectList(countries, "Id", "Name"),
                 GenderList = new SelectList(genders, "Id", "Name"),

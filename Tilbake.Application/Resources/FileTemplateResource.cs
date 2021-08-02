@@ -9,6 +9,7 @@ namespace Tilbake.Application.Resources
     public class FileTemplateResource : BaseResource
     {
         public Guid PortfolioId { get; set; }
+        public string PortfolioName { get; set; }
 
         [Display(Name = "File Type")]
         public string FileType { get; set; }

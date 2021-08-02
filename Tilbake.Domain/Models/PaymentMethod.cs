@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public PaymentMethod()
         {
             Policies = new HashSet<Policy>();
+            Reconcilliations = new HashSet<Reconcilliation>();
         }
 
         public Guid Id { get; set; }
@@ -18,5 +19,6 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual ICollection<Policy> Policies { get; set; }
+        public virtual ICollection<Reconcilliation> Reconcilliations { get; set; }
     }
 }

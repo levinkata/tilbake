@@ -1,0 +1,46 @@
+﻿@model IEnumerable<FileTemplateResource>
+
+@if (Model.Any())
+{
+    <table id="tlbFileTemplate" class="table">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Name)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.FileType)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Delimiter)</strong>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="FileTemplates" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Delimiter)
+                    </td>
+                    <td>
+                        <a asp-controller="FileTemplates" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a> |
+                        <a asp-controller="FileTemplates" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <caption>No Records Found</caption>
+
+}

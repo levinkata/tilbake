@@ -8,7 +8,8 @@ namespace Tilbake.Application.Resources
     public class ClientDocumentSaveResource
     {
         public Guid ClientId { get; set; }
-
+        public Guid PortfolioId { get; set; }
+        
         [Display(Name = "Name")]
         public string Name { get; set; }
 

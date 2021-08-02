@@ -51,8 +51,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             {
                 throw new Exception($"{nameof(id)} could not be found.");
             }
-
-            await Task.Run(() => dbSet.Remove(entity));
+            await DeleteAsync(entity);
             return entity;
         }
 
@@ -61,6 +60,11 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             if (entity == null)
             {
                 throw new Exception($"{nameof(entity)} could not be found.");
+            }
+            
+            if (_context.Entry(entity).State == EntityState.Detached)
+            {
+                dbSet.Attach(entity);
             }
 
             await Task.Run(() => dbSet.Remove(entity));

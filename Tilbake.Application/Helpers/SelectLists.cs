@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Tilbake.Application.Extensions;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
+using Tilbake.Domain.Enums;
 
 namespace Tilbake.Application.Helpers
 {
@@ -52,18 +54,25 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", genderId);
         }
 
-        public static SelectList FileFormats(IEnumerable<FileFormatResource> fileFormats, Guid? fileFormatId)
+        public static SelectList FileFormats(Guid? fileFormatId)
         {
+            var formatTypes = Enum.GetValues(typeof(FileFormat))
+                                    .Cast<FileFormat>().Select(c => new
+                                    {
+                                        Id = c.ToString(),
+                                        Name = c.GetDisplayName()
+                                    }).ToList();
+
             List<SelectListItem> items = new();
 
-            foreach (var item in fileFormats)
+            foreach (var item in formatTypes)
             {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
             }
 
             return (fileFormatId == Guid.Empty || String.IsNullOrEmpty(fileFormatId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", fileFormatId);
+                                        new SelectList(items, "Value", "Text") :
+                                        new SelectList(items, "Value", "Text", fileFormatId);
         }
 
         public static SelectList InvoiceStatuses(IEnumerable<InvoiceStatusResource> invoiceStatuses, Guid? invoiceStatusId)

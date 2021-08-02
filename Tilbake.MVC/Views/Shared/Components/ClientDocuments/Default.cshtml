@@ -21,8 +21,8 @@
                 <td>@file.FileType</td>
                 <td>@file.DocumentDate</td>
                 <td>
-                    <a class="btn btn-primary" type="button" asp-controller="ClientDocuments" asp-action="DownloadFile" asp-route-id="@file.Id">Download</a>
-                    <a class="btn btn-danger" type="button" asp-controller="ClientDocuments" asp-action="Delete" asp-route-id="@file.Id">Delete</a>
+                    <a asp-controller="ClientDocuments" asp-action="DownloadFile" asp-route-id="@file.Id"><i class="fas fa-file-download"></i></a>
+                    <a asp-controller="ClientDocuments" asp-action="Delete" asp-route-id="@file.Id"><i class="far fa-trash-alt"></i></a>
                 </td>
             </tr>
             }

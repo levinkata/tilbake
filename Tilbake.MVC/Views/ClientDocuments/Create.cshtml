@@ -1,11 +1,11 @@
 ﻿@model ClientDocumentSaveResource
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Client Documents";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Client Documents</h1>
+<h1>@ViewData["Title"]</h1>
 
 <h4>Upload File Here</h4>
 <hr />
@@ -14,6 +14,7 @@
         <form method="post" asp-action="Create" asp-route-clientId="@Model.ClientId" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ClientId" />
+            <input type="hidden" asp-for="PortfolioId" />
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" placeholder="Enter File Description" class="form-control" />

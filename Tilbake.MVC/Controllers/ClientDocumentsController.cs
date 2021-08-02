@@ -48,13 +48,14 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: ClientDocuments/Create
-        public async Task<IActionResult> Create(Guid clientId)
+        public async Task<IActionResult> Create(Guid portfolioId, Guid clientId)
         {
             var documentTypes = await _documentTypeService.GetAllAsync();
 
-            ClientDocumentSaveResource resource = new ClientDocumentSaveResource()
+            ClientDocumentSaveResource resource = new()
             {
                 ClientId = clientId,
+                PortfolioId = portfolioId,
                 DocumentTypeList = new SelectList(documentTypes, "Id", "Name"),
             };
 
@@ -69,7 +70,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _clientDocumentService.AddAsync(resource);
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.ClientId });
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioId, resource.ClientId });
             }
             var documentTypes = await _documentTypeService.GetAllAsync();
 

@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public Portfolio()
         {
             AspnetUserPortfolios = new HashSet<AspnetUserPortfolio>();
+            Eftfiles = new HashSet<Eftfile>();
             FileTemplates = new HashSet<FileTemplate>();
             PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
             PortfolioClients = new HashSet<PortfolioClient>();
@@ -24,6 +25,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual ICollection<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
+        public virtual ICollection<Eftfile> Eftfiles { get; set; }
         public virtual ICollection<FileTemplate> FileTemplates { get; set; }
         public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }

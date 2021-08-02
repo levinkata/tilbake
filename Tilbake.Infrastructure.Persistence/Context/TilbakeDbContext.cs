@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
@@ -69,6 +70,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<DocumentType> DocumentTypes { get; set; }
         public virtual DbSet<Driver> Drivers { get; set; }
         public virtual DbSet<DriverType> DriverTypes { get; set; }
+        public virtual DbSet<Eftfile> Eftfiles { get; set; }
         public virtual DbSet<ElectronicEquipment> ElectronicEquipments { get; set; }
         public virtual DbSet<Extension> Extensions { get; set; }
         public virtual DbSet<FileTemplate> FileTemplates { get; set; }
@@ -127,6 +129,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Receivable> Receivables { get; set; }
         public virtual DbSet<ReceivableDocument> ReceivableDocuments { get; set; }
         public virtual DbSet<ReceivableInvoice> ReceivableInvoices { get; set; }
+        public virtual DbSet<Reconcilliation> Reconcilliations { get; set; }
         public virtual DbSet<RefundStatus> RefundStatuses { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<RelationType> RelationTypes { get; set; }
@@ -175,25 +178,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
         {
             ChangeTracker.DetectChanges();
 
-            var dateTimeStamp = DateTime.UtcNow;
-
             var auditEntries = new List<AuditEntry>();
             foreach (var entry in ChangeTracker.Entries())
             {
                 if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
                     continue;
-
-                //if (entry.State == EntityState.Added)
-                //{
-                //    ((IAuditEntity)entry.Entity).AddedBy = Guid.Parse(_userId.ToString());
-                //    ((IAuditEntity)entry.Entity).DateAdded = dateTimeStamp;
-                //}
-
-                //if (entry.State == EntityState.Modified)
-                //{
-                //    ((IAuditEntity)entry.Entity).ModifiedBy = Guid.Parse(_userId.ToString());
-                //    ((IAuditEntity)entry.Entity).DateModified = dateTimeStamp;
-                //}
 
                 var auditEntry = new AuditEntry(entry)
                 {
@@ -236,6 +225,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     }
                 }
             }
+            
             auditEntries.ForEach(s => Audits.Add(s.ToAudit()));
 
             //foreach (var auditEntry in auditEntries)
@@ -1442,6 +1432,35 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Eftfile>(entity =>
+            {
+                entity.ToTable("EFTFile");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.DocumentPath)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.RunDate).HasColumnType("date");
+
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.Eftfiles)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EFTFile_Portfolio");
+            });
+
             modelBuilder.Entity<ElectronicEquipment>(entity =>
             {
                 entity.ToTable("ElectronicEquipment");
@@ -1706,9 +1725,13 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
+                entity.Property(e => e.InstallmentAmount).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.InvoiceDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InvoiceDueDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ReducingBalance).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
 
@@ -2223,7 +2246,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasOne(d => d.ClientBankAccount)
                     .WithMany(p => p.Policies)
                     .HasForeignKey(d => d.ClientBankAccountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policy_ClientBankAccount");
 
                 entity.HasOne(d => d.Insurer)
@@ -2779,6 +2801,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasConstraintName("FK_ReceivableInvoice_Receivable");
             });
 
+            modelBuilder.Entity<Reconcilliation>(entity =>
+            {
+                entity.ToTable("Reconcilliation");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Invoice)
+                    .WithMany(p => p.Reconcilliations)
+                    .HasForeignKey(d => d.InvoiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reconcilliation_Invoice");
+
+                entity.HasOne(d => d.PaymentMethod)
+                    .WithMany(p => p.Reconcilliations)
+                    .HasForeignKey(d => d.PaymentMethodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reconcilliation_PaymentMethod");
+            });
+
             modelBuilder.Entity<RefundStatus>(entity =>
             {
                 entity.ToTable("RefundStatus");
@@ -3287,8 +3332,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
             });
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
             OnModelCreatingPartial(modelBuilder);
         }

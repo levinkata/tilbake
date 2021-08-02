@@ -9,6 +9,7 @@ namespace Tilbake.Domain.Models
         {
             InvoiceItems = new HashSet<InvoiceItem>();
             ReceivableInvoices = new HashSet<ReceivableInvoice>();
+            Reconcilliations = new HashSet<Reconcilliation>();
         }
 
         public Guid Id { get; set; }
@@ -20,6 +21,8 @@ namespace Tilbake.Domain.Models
         public Guid TaxId { get; set; }
         public decimal TaxAmount { get; set; }
         public Guid InvoiceStatusId { get; set; }
+        public decimal ReducingBalance { get; set; }
+        public decimal InstallmentAmount { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
@@ -30,5 +33,6 @@ namespace Tilbake.Domain.Models
         public virtual Tax Tax { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
         public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
+        public virtual ICollection<Reconcilliation> Reconcilliations { get; set; }
     }
 }

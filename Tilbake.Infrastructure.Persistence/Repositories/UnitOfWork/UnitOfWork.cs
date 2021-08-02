@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
@@ -129,7 +130,23 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
 
         public void Dispose()
         {
-            _context.Dispose();
+            // _context.Dispose();
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
         }
     }
 }

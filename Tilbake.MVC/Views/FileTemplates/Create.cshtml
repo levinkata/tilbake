@@ -1,0 +1,71 @@
+﻿@model FileTemplateSaveResource
+
+@{
+    ViewData["Title"] = Model.PortfolioName;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h6>File Template</h6>
+<hr />
+<div class="row">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="PortfolioId" />
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="FileType" class="control-label"></label>
+                    <select asp-for="FileType" class="form-control" asp-items="@Model.FileFormatList"></select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label asp-for="Delimiter" class="control-label"></label>
+                    <input asp-for="Delimiter" class="form-control" />
+                    <span asp-validation-for="Delimiter" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var selectedFileTypeId = $("#FileType").val();
+
+        $(document).ready(function () {
+
+            SetDelimeter(selectedUpLoadId);
+        });
+
+        $("#FileType").change(function () {
+            selectedUpLoadId = $("#FileType").val();
+            SetDelimeter(selectedFileTypeId);
+        });
+
+        function SetDelimeter(dValue) {
+            if (dValue == 2) {
+                $('#Delimiter').removeClass('invisible');
+            } else {
+                $('#Delimiter').addClass('invisible');
+            }
+        }
+    </script>
+}

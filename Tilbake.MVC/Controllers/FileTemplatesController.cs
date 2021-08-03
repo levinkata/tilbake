@@ -22,6 +22,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index(Guid portfolioId)
         {
             var resources = await _fileTemplateService.GetByPortfolioIdAsync(portfolioId);
+            ViewBag.PortfolioId = portfolioId;
             return View(resources);
         }
 
@@ -54,18 +55,18 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid portfolioId)
+        public async Task<IActionResult> Edit(Guid id)
         {
+            var resource = await _fileTemplateService.GetByIdAsync(id);
+
+            var portfolioId = resource.PortfolioId;
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
-            FileTemplateResource resource = new()
-            {
-                PortfolioId = portfolioId,
-                PortfolioName = portfolio.Name,
-                FileFormatList = SelectLists.FileFormats(Guid.Empty)
-            };
+            resource.PortfolioId = portfolioId;
+            resource.PortfolioName = portfolio.Name;
+            resource.FileFormatList = SelectLists.FileFormats(Guid.Empty);
 
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         [HttpPost]
@@ -75,7 +76,6 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _fileTemplateService.UpdateAsync(resource);
-
                 return RedirectToAction(nameof(Index), new { portfolioId = resource.PortfolioId });
             }
             return View(resource);

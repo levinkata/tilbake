@@ -2,13 +2,14 @@
 
 @{
     ViewData["Title"] = "File Template";
+    var portfolioId = ViewBag.PortfolioId;
 }
 
 <h1>File Template</h1>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <div class="form-group">
-        <a asp-action="Create"><i class="far fa-plus-square"></i></a>
+        <a asp-action="Create" asp-route-portfolioId="@portfolioId"><i class="far fa-plus-square"></i></a>
     </div>
 </div>
 

@@ -38,6 +38,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IMotorUseRepository MotorUses { get; }
         IOccupationRepository Occupations { get; }
         IPaymentMethodRepository PaymentMethods { get; }
+        IPaymentTypeRepository PaymentTypes { get; }
         IPolicyRepository Policies { get; }
         IPolicyRiskRepository PolicyRisks { get; }
         IPolicyStatusRepository PolicyStatuses { get; }
@@ -47,6 +48,9 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IQuoteRepository Quotes { get; }
         IQuoteItemRepository QuoteItems { get; }
         IQuoteStatusRepository QuoteStatuses { get; }
+        IReceivableRepository Receivables { get; }
+        IReceivableDocumentRepository ReceivableDocuments { get; }
+        IReceivableInvoiceRepository ReceivableInvoices { get; }
         IResidenceTypeRepository ResidenceTypes { get; }
         IResidenceUseRepository ResidenceUses { get; }
         IRiskRepository Risks { get; }

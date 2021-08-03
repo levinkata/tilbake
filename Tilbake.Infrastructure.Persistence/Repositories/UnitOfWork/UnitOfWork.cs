@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
@@ -48,12 +47,16 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             MotorUses = new MotorUseRepository(_context);
             Occupations = new OccupationRepository(_context);
             PaymentMethods = new PaymentMethodRepository(_context);
+            PaymentTypes = new PaymentTypeRepository(_context);
             Policies = new PolicyRepository(_context);
             PolicyRisks = new PolicyRiskRepository(_context);
             PolicyStatuses = new PolicyStatusRepository(_context);
             PolicyTypes = new PolicyTypeRepository(_context);
             Portfolios = new PortfolioRepository(_context);
             PortfolioClients = new PortfolioClientRepository(_context);
+            Receivables = new ReceivableRepository(_context);
+            ReceivableDocuments = new ReceivableDocumentRepository(_context);
+            ReceivableInvoices = new ReceivableInvoiceRepository(_context);
             ResidenceTypes = new ResidenceTypeRepository(_context);
             ResidenceUses = new ResidenceUseRepository(_context);
             Quotes = new QuoteRepository(_context);
@@ -103,6 +106,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IMotorUseRepository MotorUses { get; private set; }
         public IOccupationRepository Occupations { get; private set; }
         public IPaymentMethodRepository PaymentMethods { get; private set; }
+        public IPaymentTypeRepository PaymentTypes { get; private set; }
         public IPolicyRepository Policies { get; private set; }
         public IPolicyRiskRepository PolicyRisks { get; private set; }
         public IPolicyStatusRepository PolicyStatuses { get; private set; }
@@ -114,6 +118,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IQuoteStatusRepository QuoteStatuses { get; private set; }
         public IRiskRepository Risks { get; private set; }
         public IRiskItemRepository RiskItems { get; private set; }
+        public IReceivableRepository Receivables { get; private set; }
+        public IReceivableDocumentRepository ReceivableDocuments { get; private set; }
+        public IReceivableInvoiceRepository ReceivableInvoices { get; private set; }
         public IResidenceTypeRepository ResidenceTypes { get; private set; }
         public IResidenceUseRepository ResidenceUses { get; private set; }
         public IRoofTypeRepository RoofTypes { get; private set; }

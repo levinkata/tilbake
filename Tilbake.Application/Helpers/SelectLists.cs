@@ -105,6 +105,21 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", occupationId);
         }
 
+        public static SelectList PaymentTypes(IEnumerable<PaymentTypeResource> paymentTypes, Guid? paymentTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Payment Type", Value = "" });
+
+            foreach (var item in paymentTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (paymentTypeId == Guid.Empty || String.IsNullOrEmpty(paymentTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", paymentTypeId);
+        }
+
         public static SelectList Taxes(IEnumerable<TaxResource> taxes, Guid? taxId)
         {
             List<SelectListItem> items = new();

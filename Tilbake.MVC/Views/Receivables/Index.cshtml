@@ -1,0 +1,67 @@
+﻿@model IEnumerable<ReceivableResource>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@if(Model.Any())
+{
+    <table id="tblReceivable" class="display">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Reference)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.ReceivableDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Amount)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.BatchNumber)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.PaymentType)</strong>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Reference)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReceivableDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentType)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else
+{
+    <cpation>No Records Found</cpation>
+}
+

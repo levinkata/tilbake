@@ -40,6 +40,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<MotorUseSaveResource, MotorUse>();
             CreateMap<OccupationSaveResource, Occupation>();
             CreateMap<PaymentMethodSaveResource, PaymentMethod>();
+            CreateMap<PaymentTypeSaveResource, PaymentType>();
             CreateMap<PolicyStatusSaveResource, PolicyStatus>();
             CreateMap<PortfolioSaveResource, Portfolio>();
             CreateMap<QuoteSaveResource, Quote>();
@@ -50,6 +51,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<PolicyTypeSaveResource, PolicyType>();
             CreateMap<RiskSaveResource, Risk>();
             CreateMap<RiskItemSaveResource, RiskItem>();
+            CreateMap<ReceivableDocumentSaveResource, ReceivableDocument>();
             CreateMap<ResidenceTypeSaveResource, ResidenceType>();
             CreateMap<ResidenceUseSaveResource, ResidenceUse>();
             CreateMap<RoofTypeSaveResource, RoofType>();

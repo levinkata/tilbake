@@ -87,6 +87,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<MotorUse, MotorUseResource>().ReverseMap();
             CreateMap<Occupation, OccupationResource>().ReverseMap();
             CreateMap<PaymentMethod, PaymentMethodResource>().ReverseMap();
+            CreateMap<PaymentType, PaymentTypeResource>().ReverseMap();
 
             CreateMap<Policy, PolicyResource>()
                 .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.ClientBankAccount.BankAccount.AccountNumber))
@@ -116,6 +117,15 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType.Name)).ReverseMap();
 
             CreateMap<QuoteStatus, QuoteStatusResource>().ReverseMap();
+
+            CreateMap<Receivable, ReceivableResource>()
+                .ForMember(dest => dest.PaymentType, opt => opt.MapFrom(src => src.PaymentType.Name))
+                .ForMember(dest => dest.ReceivableInvoices, opt => opt.MapFrom(src => src.ReceivableInvoices))
+                .ForMember(dest => dest.ReceivableDocuments, opt => opt.MapFrom(src => src.ReceivableDocuments)).ReverseMap();
+
+            CreateMap<ReceivableDocument, ReceivableDocumentResource>()
+                .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType.Name)).ReverseMap();
+
             CreateMap<ResidenceType, ResidenceTypeResource>().ReverseMap();
             CreateMap<ResidenceUse, ResidenceUseResource>().ReverseMap();
             CreateMap<Risk, RiskResource>().ReverseMap();

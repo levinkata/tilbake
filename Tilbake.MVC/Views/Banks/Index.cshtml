@@ -14,7 +14,7 @@
 
 @if (Model.Any())
 {
-    <table id="tlbBank" class="display">
+    <table id="tblBank" class="display">
         <thead>
             <tr>
                 <th>
@@ -44,12 +44,10 @@ else
     <caption>No records Found</caption>
 }
 
-
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('#tlbBank').DataTable();
+            $('#tblBank').DataTable();
         });
     </script>
-
 }

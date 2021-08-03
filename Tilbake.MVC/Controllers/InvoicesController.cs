@@ -54,5 +54,17 @@ namespace Tilbake.MVC.Controllers
             }
             return View(resource);
         }
+
+        // GET: Invoices/Details/5
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var resource = await _invoiceService.GetByIdAsync(id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
+        }
     }
 }

@@ -51,6 +51,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<PolicyTypeSaveResource, PolicyType>();
             CreateMap<RiskSaveResource, Risk>();
             CreateMap<RiskItemSaveResource, RiskItem>();
+            CreateMap<ReceivableSaveResource, Receivable>();
             CreateMap<ReceivableDocumentSaveResource, ReceivableDocument>();
             CreateMap<ResidenceTypeSaveResource, ResidenceType>();
             CreateMap<ResidenceUseSaveResource, ResidenceUse>();

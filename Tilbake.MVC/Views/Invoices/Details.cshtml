@@ -4,30 +4,41 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="col-md-4 offset-md-8 bd-highlight mb-3">
+    <div class="mr-auto p-2 bg-light">
+        <h1>Invoice</h1>
+        <dl class="row">
+            <dt class="col-6">
+                Date:
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.InvoiceDate)
+            </dd>
+            <dt class="col-6">
+                Due Date:
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.InvoiceDueDate)
+            </dd>
+            <dt class="col-6">
+                Invoice Number:
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.InvoiceNumber)
+            </dd>
+        </dl>
+    </div>
+</div>
 
 <div>
     <h4>Invoice</h4>
+    <div class="d-flex justify-content-md-end">
+        <div class="form-group">
+            <a asp-controller="Receivables" asp-action="Create" asp-route-invoiceId="@Model.Id" class="btn btn-primary">Receivables</a>
+        </div>
+    </div>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceDueDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceDueDate)
-        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Amount)
         </dt>

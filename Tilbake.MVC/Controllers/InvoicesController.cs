@@ -66,5 +66,10 @@ namespace Tilbake.MVC.Controllers
 
             return View(resource);
         }
+
+        public IActionResult Invoice()
+        {
+            return View();
+        }
     }
 }

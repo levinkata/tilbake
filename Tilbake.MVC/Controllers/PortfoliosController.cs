@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -45,8 +43,6 @@ namespace Tilbake.MVC.Controllers
         }
 
         // POST: Portfolios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PortfolioSaveResource portfolioSaveResource)

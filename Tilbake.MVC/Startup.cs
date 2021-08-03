@@ -2,11 +2,13 @@ using Autofac;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Reflection;
 using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
@@ -17,16 +19,43 @@ namespace Tilbake.MVC
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region snippet_AddDistributedMemoryCache
+            services.AddDistributedMemoryCache();
+            #endregion
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.Cookie.Name = ".Tilbake.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(1000);
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential
+                options.Cookie.IsEssential = true;
+            });
+
+            // CheckConsentNeeded is true by default is for GDPR compliance.
+            // If you clicked accept on the consent popup at the top of the page(in the case of the default template),
+            // your session cookies would start working as you expected.The GDPR regulates how cookie operate,
+            // and will not be used until the user consents to them being used.
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => false; // Default is true, make it false - Levi Nkata 03/08/2021
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            
+
             services.AddDbContext<TilbakeDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
 
@@ -41,6 +70,19 @@ namespace Tilbake.MVC
                     Configuration["EmailSender:Password"]
                 )
             );
+
+            //  Configure Cookies
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+                options.LoginPath = new PathString("/Account/LogIn");
+                options.AccessDeniedPath = new PathString("/Account/AccessDenied");
+                options.LogoutPath = new PathString("/Account/LogOff");
+                options.SlidingExpiration = true;
+            });
 
             services.AddControllersWithViews()
                     .AddFluentValidation(s =>
@@ -89,7 +131,7 @@ namespace Tilbake.MVC
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

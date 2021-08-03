@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Threading.Tasks;
@@ -10,6 +11,9 @@ namespace Tilbake.MVC.Controllers
 {
     public class PortfolioClientsController : Controller
     {
+        public const string SessionPortfolioName = "_PortfolioName";
+        public const string SessionPortfolioId = "_PortfolioId";
+
         private readonly IPortfolioClientService _portfolioClientService;
         private readonly IClientService _clientService;
         private readonly IClientTypeService _clientTypeService;
@@ -79,6 +83,8 @@ namespace Tilbake.MVC.Controllers
         // GET: PortfolioClients/Create
         public async Task<IActionResult> Create(Guid portfolioId)
         {
+
+
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -88,6 +94,13 @@ namespace Tilbake.MVC.Controllers
             var carriers = await _carrierService.GetAllAsync();
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+
+            // Requires: using Microsoft.AspNetCore.Http;
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionPortfolioName)))
+            {
+                HttpContext.Session.SetString(SessionPortfolioName, portfolio.Name);
+                HttpContext.Session.SetString(SessionPortfolioId, portfolioId.ToString());
+            }
 
             ClientSaveResource resource = new()
             {

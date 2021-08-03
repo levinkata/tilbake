@@ -32,7 +32,14 @@ namespace Tilbake.Application.Services
 
         public async Task<int> DeleteAsync(Guid id)
         {
-            await _unitOfWork.Portfolios.DeleteAsync(id);
+            var portfolio = await _unitOfWork.Portfolios.GetFirstOrDefaultAsync(
+                                                        e => e.Id == id,
+                                                        e => e.AspnetUserPortfolios);
+            var aspnetUserPortfolios = portfolio.AspnetUserPortfolios;
+
+            await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios);
+            await _unitOfWork.Portfolios.DeleteAsync(portfolio);
+
             return await Task.Run(() => _unitOfWork.SaveAsync());
         }
 

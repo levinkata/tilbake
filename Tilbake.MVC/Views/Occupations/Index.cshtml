@@ -15,7 +15,7 @@
 
 @if(Model.Any())
             {
-<table id="tlbOccupation" class="display">
+<table id="tblOccupation" class="display">
     <thead>
         <tr>
             <th>
@@ -39,16 +39,16 @@
         }
     </tbody>
 </table>
-            } else
-            {
-                <caption>No records Found</caption>
-            }
+} else
+{
+    <caption>No Records Found</caption>
+}
 
 
 @section Scripts {
     <script>
         $(document).ready(function() {
-            $('#tlbOccupation').DataTable();
+            $('#tblOccupation').DataTable();
         });
     </script>
 

@@ -1,12 +1,10 @@
-﻿@model IEnumerable<PortfolioResource>
+﻿@model IEnumerable<FileTemplateResource>
 
 @{
-    ViewData["Title"] = "Portfolios";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
+    ViewData["Title"] = "File Template";
 }
 
-<h1>Portfolios</h1>
+<h1>File Template</h1>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <div class="form-group">
@@ -16,13 +14,17 @@
 
 @if (Model.Any())
 {
-    <table id="tblPortfolio" class="display">
+    <table id="tblFileTemplate" class="display">
         <thead>
             <tr>
-                <th><strong>@Html.DisplayNameFor(model => model.Name)</strong>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Name)</strong>
                 </th>
                 <th>
-                    <strong>@Html.DisplayNameFor(model => model.IsScheme)</strong>
+                    <strong> @Html.DisplayNameFor(model => model.FileType)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Delimiter)</strong>
                 </th>
                 <th></th>
             </tr>
@@ -35,7 +37,10 @@
                         <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IsScheme)
+                        @Html.DisplayFor(modelItem => item.FileType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Delimiter)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a> |
@@ -54,7 +59,8 @@ else
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('#tblPortfolio').DataTable();
+            $('#tblFileTemplate').DataTable();
         });
     </script>
+
 }

@@ -40,7 +40,7 @@ namespace Tilbake.Application.Services
             invoice.Id = Guid.NewGuid();
             invoice.Amount = policyRisks.Sum(r => r.Premium);
             invoice.TaxAmount = invoice.Amount * taxRate / 100;
-            // invoice.ReducingBalance = invoice.Amount;
+            invoice.ReducingBalance = invoice.Amount;
 
             await _unitOfWork.Invoices.AddAsync(invoice);
 
@@ -58,20 +58,20 @@ namespace Tilbake.Application.Services
                 invoiceItems.Add(invoiceItem);
             }
             await _unitOfWork.InvoiceItems.AddRangeAsync(invoiceItems);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Invoices.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(InvoiceResource resource)
         {
             var invoice = _mapper.Map<InvoiceResource, Invoice>(resource);
             await _unitOfWork.Invoices.DeleteAsync(invoice);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceResource>> GetAllAsync()
@@ -123,7 +123,7 @@ namespace Tilbake.Application.Services
             var invoice = _mapper.Map<InvoiceResource, Invoice>(resource);
             await _unitOfWork.Invoices.UpdateAsync(resource.Id, invoice);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

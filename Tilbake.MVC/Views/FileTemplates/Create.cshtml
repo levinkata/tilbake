@@ -26,7 +26,7 @@
                     <select asp-for="FileType" class="form-control" asp-items="@Model.FileFormatList"></select>
                 </div>
             </div>
-            <div class="col-2">
+            <div id="DelimiterDiv" class="col-2">
                 <div class="form-group">
                     <label asp-for="Delimiter" class="control-label"></label>
                     <input asp-for="Delimiter" class="form-control" />
@@ -48,23 +48,24 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        var selectedFileTypeId = $("#FileType").val();
+        var selectedFileTypeId = $('#FileType').val();
 
         $(document).ready(function () {
 
-            SetDelimeter(selectedUpLoadId);
+            SetDelimeter(selectedFileTypeId);
         });
 
-        $("#FileType").change(function () {
-            selectedUpLoadId = $("#FileType").val();
+        $('#FileType').change(function () {
+            selectedFileTypeId = $("#FileType").val();
             SetDelimeter(selectedFileTypeId);
         });
 
         function SetDelimeter(dValue) {
-            if (dValue == 2) {
-                $('#Delimiter').removeClass('invisible');
+            
+            if (dValue == 'CSV') {
+                $('#DelimiterDiv').removeClass('invisible');
             } else {
-                $('#Delimiter').addClass('invisible');
+                $('#DelimiterDiv').addClass('invisible');
             }
         }
     </script>

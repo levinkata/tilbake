@@ -19,9 +19,10 @@ namespace Tilbake.MVC.Controllers
             _portfolioService = portfolioService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(Guid portfolioId)
         {
-            return View();
+            var resources = await _fileTemplateService.GetByPortfolioIdAsync(portfolioId);
+            return View(resources);
         }
 
         [HttpGet]
@@ -47,7 +48,35 @@ namespace Tilbake.MVC.Controllers
             {
                 await _fileTemplateService.AddAsync(resource);
 
-                RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId });
+                return RedirectToAction(nameof(Index), new { portfolioId = resource.PortfolioId });
+            }
+            return View(resource);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid portfolioId)
+        {
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+
+            FileTemplateResource resource = new()
+            {
+                PortfolioId = portfolioId,
+                PortfolioName = portfolio.Name,
+                FileFormatList = SelectLists.FileFormats(Guid.Empty)
+            };
+
+            return await Task.Run(() => View(resource));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(FileTemplateResource resource)
+        {
+            if (ModelState.IsValid)
+            {
+                await _fileTemplateService.UpdateAsync(resource);
+
+                return RedirectToAction(nameof(Index), new { portfolioId = resource.PortfolioId });
             }
             return View(resource);
         }

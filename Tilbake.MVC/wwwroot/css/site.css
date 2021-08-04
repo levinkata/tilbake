@@ -30,6 +30,7 @@ a {
 html {
   font-size: 14px;
 }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -39,6 +40,7 @@ html {
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
@@ -64,54 +66,11 @@ body {
   margin-bottom: 60px;
   font-family: 'Roboto', sans-serif;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
-}
-
-/* Tilbake styles
--------------------------------------------------- */
-.form-control input:focus {
-  outline: 0;
-  border-color: #777;
-}
-
-.form-control.success input {
-  border-color: #2ecc71;
-}
-
-.form-control.error input {
-  border-color: #e74c3c;
-}
-
-.form-control i {
-  visibility: hidden;
-  position: absolute;
-  top: 40px;
-  right: 10px;
-}
-
-.form-control.success i.fa-check-circle {
-  color: #2ecc71;
-  visibility: visible;
-}
-
-.form-control.error i.fa-exclamation-circle {
-  color: #e74c3c;
-  visibility: visible;
-}
-
-.form-control small {
-  color: #e74c3c;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  visibility: hidden;
-}
-
-.form-control.error small {
-  visibility: visible;
 }

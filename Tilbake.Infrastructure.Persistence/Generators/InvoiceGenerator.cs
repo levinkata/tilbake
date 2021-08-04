@@ -43,7 +43,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             if (invoiceTable == null)
             {
-                InvoiceNumberGenerator invoiceNumberGenerator = new InvoiceNumberGenerator()
+                InvoiceNumberGenerator invoiceNumberGenerator = new()
                 {
                     InvoiceNumber = currentValue
                 };
@@ -70,17 +70,15 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var invoiceTable = await _context.InvoiceNumberGenerators
                                             .OrderByDescending(e => e.InvoiceNumber)
-                                            .FirstOrDefaultAsync(cancellationToken)
-                                            .ConfigureAwait(false);
+                                            .FirstOrDefaultAsync(cancellationToken);
 
             if (invoiceTable == null)
             {
-                InvoiceNumberGenerator invoiceNumberGenerator = new InvoiceNumberGenerator()
+                InvoiceNumberGenerator invoiceNumberGenerator = new()
                 {
                     InvoiceNumber = currentValue
                 };
-                await _context.InvoiceNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken)
-                                                     .ConfigureAwait(false);
+                await _context.InvoiceNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken);
             }
             else
                 invoiceTable.InvoiceNumber = currentValue;

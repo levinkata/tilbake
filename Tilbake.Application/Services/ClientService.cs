@@ -94,7 +94,7 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<IEnumerable<ClientResource>> GetByPortfoloId(Guid portfolioId)
+        public async Task<IEnumerable<ClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
             var result = await Task.Run(() => _unitOfWork.Clients.GetAllAsync(
                                                         e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId),
@@ -114,7 +114,6 @@ namespace Tilbake.Application.Services
                                                     c => c.PortfolioClients);
 
             var resource = _mapper.Map<Client, ClientResource>(result);
-
             return resource;
         }
 
@@ -142,7 +141,17 @@ namespace Tilbake.Application.Services
 
             await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<ClientResource> GetByPolicyIdAsync(Guid policyId)
+        {
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
+                                        c => c.PortfolioClients.Any(p => p.Policies.Any(r => r.Id == policyId)));
+
+            var resource = _mapper.Map<Client, ClientResource>(result);
+
+            return resource;
         }
     }
 }

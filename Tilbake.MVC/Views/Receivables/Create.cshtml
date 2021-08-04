@@ -50,4 +50,10 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $('#Reference, #BatchNumber').keyup(function () {
+        $(this).val($(this).val().toUpperCase());
+    });
+</script>
 }

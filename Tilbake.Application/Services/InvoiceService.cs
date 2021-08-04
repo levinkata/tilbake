@@ -79,7 +79,8 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.Invoices.GetAllAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.InvoiceDate),
-                                            r => r.InvoiceStatus);
+                                            r => r.InvoiceStatus,
+                                            r => r.Policy.PortfolioClient.Client);
 
             var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource>>(result);
             return resources;

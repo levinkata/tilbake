@@ -97,3 +97,10 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+<script>
+    $('#RegNumber, #EngineNumber, #ChassisNumber').keyup(function () {
+        $(this).val($(this).val().toUpperCase());
+    });
+</script>
+} 

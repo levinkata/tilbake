@@ -10,14 +10,19 @@ namespace Tilbake.Application.Resources
     {
         public Guid Id { get; set; }
         public Guid PolicyId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
-        [Display(Name = "Invoice Number")]
+        [Display(Name = "Client Name")]
+        public string FullName => String.IsNullOrEmpty(FirstName) ? LastName : FirstName + " " + LastName;
+
+        [Display(Name = "Number")]
         public int InvoiceNumber { get; set; }
 
-        [Display(Name = "Invoice Date")]
+        [Display(Name = "Date")]
         public DateTime InvoiceDate { get; set; }
 
-        [Display(Name = "Invoice Due Date")]
+        [Display(Name = "Due Date")]
         public DateTime InvoiceDueDate { get; set; }
 
         [Display(Name = "Amount")]
@@ -31,13 +36,13 @@ namespace Tilbake.Application.Resources
         public decimal ReducingBalance { get; set; }
         public decimal InstallmentAmount { get; set; }
 
-        [Display(Name = "Invoice Status")]
+        [Display(Name = "Status")]
         public Guid InvoiceStatusId { get; set; }
 
         public List<InvoiceItem> InvoiceItems { get; } = new List<InvoiceItem>();
 
         //  Descriptions
-        [Display(Name = "Invoice Status")]        
+        [Display(Name = "Status")]        
         public string InvoiceStatus {get; set; }
 
         [Display(Name = "Tax")]

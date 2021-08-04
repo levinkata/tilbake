@@ -19,9 +19,10 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: BankBranches
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid bankId)
         {
-            return View(await _bankBranchService.GetAllAsync());
+            ViewBag.BankId = bankId;
+            return View(await _bankBranchService.GetByBankIdAsync(bankId));
         }
 
         // GET: BankBranches/Details/5
@@ -48,8 +49,6 @@ namespace Tilbake.MVC.Controllers
         }
 
         // POST: BankBranches/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BankBranchSaveResource resource)

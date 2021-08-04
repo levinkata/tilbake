@@ -22,7 +22,6 @@
     left: 0;
     top: 0;
     height: 100%;
-/*    background: var(--main-color);*/
     background: #DD2F6E;
     z-index: 100;
     transition: margin-left 300ms;

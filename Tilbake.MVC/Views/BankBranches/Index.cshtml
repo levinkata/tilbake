@@ -1,77 +1,78 @@
-﻿@model IEnumerable<Tilbake.Domain.Models.BankBranch>
+﻿@model IEnumerable<BankBranchResource>
 
 @{
     ViewData["Title"] = "Index";
+    var bankId = Model.GroupBy(r => r.BankId).FirstOrDefault().Key;
+    var bankName = Model.GroupBy(r => r.BankName).FirstOrDefault().Key;
 }
 
-<h1>Index</h1>
+<h1>@bankName</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SortCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SwiftCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AddedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateAdded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateModified)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bank)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SortCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SwiftCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateAdded)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bank.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<h4>Branches</h4>
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <div class="form-group">
+        <a asp-action="Create"><i class="far fa-plus-square"></i></a>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <table id="tblBankBranch" class="display">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Name)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.SortCode)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.SwiftCode)</strong>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SortCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SwiftCode)
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-dark rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">View</a></li>
+                                <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Print</a></li>
+                                <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <caption>No Bank Branches.</caption>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tblBankBranch').DataTable();
+        });
+    </script>
+}

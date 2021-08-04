@@ -1,22 +1,67 @@
 ﻿@model IEnumerable<InvoiceResource>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Invoices";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="container border rounded-0 p-3 mb-3">
+    <div class="row justify-content-start">
+        <div class="col-2 flex-column">
+            <p class="fs-6"><span>Overdue</span></p>
+            <span>P645,268.80</span>
+            <span>BWP</span>
+        </div>
+        <div class="col-3">
+
+        </div>
+        <div class="col-2">
+            <p class="fs-6"><span>Due within next 30 days</span></p>
+            <span>P0.00</span>
+            <span>BWP</span>
+        </div>
+        <div class="col-3">
+
+        </div>
+        <div class="col-2">
+            <p class="fs-6"><span>Average time to get paid</span></p>
+            <span>9</span>
+            <span>days</span>
+        </div>
+    </div>
+</div>
 
 @if (Model.Any())
 {
+
+<div>
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Unpaid<span class="badge bg-info">16</span></button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Draft<span class="badge bg-info">0</span></button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">All invoices</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">...</div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+    </div>
+</div>
+
     <table id="tblInvoice" class="display">
         <thead>
             <tr>
                 <th>
                     <strong>@Html.DisplayNameFor(model => model.InvoiceNumber)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.FullName)</strong>
                 </th>
                 <th>
                     <strong>@Html.DisplayNameFor(model => model.InvoiceDate)</strong>
@@ -30,29 +75,50 @@
                 <th>
                     <strong>@Html.DisplayNameFor(model => model.InvoiceStatus)</strong>
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.InvoiceNumber)</a>
-                        
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoiceDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoiceDueDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoiceStatus)
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceDueDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceStatus)
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-dark rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">View</a></li>
+                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                            <li><a class="dropdown-item" href="#">Duplicate</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Record payment</a></li>
+                            <li><a class="dropdown-item" href="#">Resend</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Export as PDF</a></li>
+                            <li><a class="dropdown-item" href="#">Print</a></li>
+                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

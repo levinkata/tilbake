@@ -30,6 +30,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var resources = await _invoiceService.GetAllAsync();
+
             return View(resources);
         }
 
@@ -37,7 +38,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Create(Guid policyId)
         {
             var policyRisks = await _policyRiskService.GetByPolicyIdAsync(policyId);
-
+            
             var invoiceStatuses = await _invoiceStatusService.GetAllAsync();
             var taxes = await _taxService.GetAllAsync();
 
@@ -57,7 +58,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _invoiceService.AddAsync(resource);
-                RedirectToAction("Details", "Policies", new { id = resource.PolicyId });
+                return RedirectToAction("Details", "Policies", new { id = resource.PolicyId });
             }
             return View(resource);
         }

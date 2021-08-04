@@ -525,7 +525,9 @@
         }
 
         $(document).ready(function () {
-            //  LoadBankAccount(selectedklientId);
+            $('#RegNumber, #EngineNumber, #ChassisNumber').keyup(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
         });
 
         $("#MotorMakeId").change(function () {

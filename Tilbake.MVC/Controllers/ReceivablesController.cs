@@ -48,7 +48,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _receivableService.AddAsync(resource);
-                return RedirectToAction(nameof(Index), new { resource.InvoiceId });
+                return RedirectToAction("Details", "Invoices", new { id = resource.InvoiceId });
             }
 
             var paymentTypes = await _paymentTypeService.GetAllAsync();

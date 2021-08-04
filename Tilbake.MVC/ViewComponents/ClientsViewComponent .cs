@@ -24,7 +24,7 @@ namespace Tilbake.MVC.ViewComponents
             else
             {
                 ViewBag.PortfolioId = portfolioId;
-                return View(await Task.Run(() => _clientService.GetByPortfoloId((Guid)portfolioId)));
+                return View(await Task.Run(() => _clientService.GetByPortfolioIdAsync((Guid)portfolioId)));
 
             }
         }

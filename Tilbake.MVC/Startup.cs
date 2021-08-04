@@ -78,9 +78,9 @@ namespace Tilbake.MVC
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 
-                options.LoginPath = new PathString("/Account/LogIn");
-                options.AccessDeniedPath = new PathString("/Account/AccessDenied");
-                options.LogoutPath = new PathString("/Account/LogOff");
+                options.LoginPath = new PathString("/Identity/Account/Login");
+                options.AccessDeniedPath = new PathString("/Identity/Account/AccessDenied");
+                options.LogoutPath = new PathString("/Identity//Account/Logout");
                 options.SlidingExpiration = true;
             });
 

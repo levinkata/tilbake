@@ -22,8 +22,14 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Amount")]
         public decimal Amount { get; set; }
+
+        [Display(Name = "Tax")]
         public Guid TaxId { get; set; }
+
         public decimal TaxAmount { get; set; }
+
+        public decimal ReducingBalance { get; set; }
+        public decimal InstallmentAmount { get; set; }
 
         [Display(Name = "Invoice Status")]
         public Guid InvoiceStatusId { get; set; }

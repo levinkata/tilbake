@@ -27,6 +27,13 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var resources = await _invoiceService.GetAllAsync();
+            return View(resources);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create(Guid policyId)
         {
             var policyRisks = await _policyRiskService.GetByPolicyIdAsync(policyId);

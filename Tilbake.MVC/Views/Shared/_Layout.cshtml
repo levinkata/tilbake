@@ -28,8 +28,6 @@
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
 
     <script src="https://kit.fontawesome.com/2ab1015e74.js" crossorigin="anonymous"></script>
-
-
 </head>
 <body>
     <header>
@@ -55,6 +53,17 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">Clients</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarAccounting" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Accounting
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarAccounting">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">Invoices</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Record Payment</a></li>
+                                </ul>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

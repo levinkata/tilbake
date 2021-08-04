@@ -76,21 +76,22 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Invoices.GetAllAsync());
-            result = result.OrderBy(n => n.InvoiceNumber);
+            var result = await _unitOfWork.Invoices.GetAllAsync(
+                                            null,
+                                            r => r.OrderByDescending(n => n.InvoiceDate),
+                                            r => r.InvoiceStatus);
 
             var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource>>(result);
-
             return resources;
         }
 
         public async Task<InvoiceResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.Invoices.GetFirstOrDefaultAsync(
-                e => e.Id == id,
-                e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
-            var resource = _mapper.Map<Invoice, InvoiceResource>(result);
+                                            e => e.Id == id,
+                                            e => e.InvoiceStatus, e => e.InvoiceItems, e => e.Tax);
 
+            var resource = _mapper.Map<Invoice, InvoiceResource>(result);
             return resource;
         }
 

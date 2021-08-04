@@ -1,0 +1,71 @@
+﻿@model IEnumerable<InvoiceResource>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@if (Model.Any())
+{
+    <table id="tblInvoice" class="display">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InvoiceNumber)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InvoiceDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InvoiceDueDate)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Amount)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.InvoiceStatus)</strong>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.InvoiceNumber)</a>
+                        
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoiceDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoiceDueDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoiceStatus)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <caption>No Records Found</caption>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tblInvoice').DataTable();
+        });
+    </script>
+}

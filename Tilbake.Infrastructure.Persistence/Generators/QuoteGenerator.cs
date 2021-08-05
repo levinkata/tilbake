@@ -87,7 +87,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             }
             else
                 quoteTable.QuoteNumber = currentValue;
-
+            
             return currentValue;
         }
     }

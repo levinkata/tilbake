@@ -13,7 +13,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
     public class PolicyGenerator : ValueGenerator<int>
     {
         public override bool GeneratesTemporaryValues => false;
-        private TilbakeDbContext _context;
+        // private TilbakeDbContext _context;
 
         public PolicyGenerator()
         {
@@ -31,12 +31,12 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                 throw new ArgumentNullException(nameof(entry));
             }
 
-            _context = (TilbakeDbContext)entry.Context;
+            var _context = (TilbakeDbContext)entry.Context;
 
-            int currentValue = _context.PolicyNumberGenerators.Any() ?
-                                    _context.PolicyNumberGenerators
-                                    .AsNoTracking()
-                                    .Max(p => p.PolicyNumber) + 1 : 1;
+            var currentValue = _context.PolicyNumberGenerators.Any() ?
+                                        _context.PolicyNumberGenerators
+                                        .AsNoTracking()
+                                        .Max(p => p.PolicyNumber) + 1 : 1;
 
             var policyTable = _context.PolicyNumberGenerators
                                         .AsNoTracking()
@@ -65,18 +65,17 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                 throw new ArgumentNullException(nameof(entry));
             }
 
-            _context = (TilbakeDbContext)entry.Context;
+            var _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.PolicyNumberGenerators.Any() ?
-                                    _context.PolicyNumberGenerators
-                                    .AsNoTracking()
-                                    .Max(p => p.PolicyNumber) + 1 : 1;
+                                        _context.PolicyNumberGenerators
+                                        .AsNoTracking()
+                                        .Max(p => p.PolicyNumber) + 1 : 1;
 
             var policyTable = await _context.PolicyNumberGenerators
                                             .AsNoTracking()
                                             .OrderByDescending(e => e.PolicyNumber)
-                                            .FirstOrDefaultAsync(cancellationToken)
-                                            .ConfigureAwait(false);
+                                            .FirstOrDefaultAsync(cancellationToken);
 
             if (policyTable == null)
             {

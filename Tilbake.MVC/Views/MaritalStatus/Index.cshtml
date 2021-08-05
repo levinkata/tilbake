@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MaritalStatusResource>
+
+@{
+    ViewData["Title"] = "Marital Status";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@if(Model.Any())
+            {
+<table id="tblMaritalStatus" class="display">
+    <thead>
+        <tr>
+            <th>
+                <strong>@Html.DisplayNameFor(model => model.Name)</strong>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td class="justify-content-end">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-dark rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">View</a></li>
+                            <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Print</a></li>
+                            <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+} else
+{
+    <caption>No Records Found</caption>
+}
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $('#tblMaritalStatus').DataTable();
+    })
+</script>
+} 

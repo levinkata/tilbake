@@ -1,38 +1,36 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
+using Tilbake.Domain.Models;
+using Tilbake.Infrastructure.Persistence.Context;
 
 namespace Tilbake.MVC.Controllers
 {
-    [Authorize]
-    public class CarriersController : Controller
+    public class MaritalStatusController : Controller
     {
-        private readonly ICarrierService _carrierService;
+        private readonly IMaritalStatusService _maritalStatusService;
 
-        public CarriersController(ICarrierService carrierService)
+        public MaritalStatusController(IMaritalStatusService maritalStatusService)
         {
-            _carrierService = carrierService;
+            _maritalStatusService = maritalStatusService;
         }
 
-        // GET: Carriers
+        // GET: MaritalStatus
         public async Task<IActionResult> Index()
         {
-            return View(await _carrierService.GetAllAsync());
+            return View(await _maritalStatusService.GetAllAsync());
         }
 
-        // GET: Carriers/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        // GET: MaritalStatus/Details/5
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _carrierService.GetByIdAsync((Guid)id);
+            var resource = await _maritalStatusService.GetByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
@@ -41,34 +39,29 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // GET: Carriers/Create
+        // GET: MaritalStatus/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Carriers/Create
+        // POST: MaritalStatus/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CarrierSaveResource resource)
+        public async Task<IActionResult> Create(MaritalStatusSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _carrierService.AddAsync(resource);
+                await _maritalStatusService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
         }
 
-        // GET: Carriers/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        // GET: MaritalStatus/Edit/5
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _carrierService.GetByIdAsync((Guid)id);
+            var resource = await _maritalStatusService.GetByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
@@ -76,10 +69,10 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // POST: Carriers/Edit/5
+        // POST: MaritalStatus/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, CarrierResource resource)
+        public async Task<IActionResult> Edit(Guid id, MaritalStatusResource resource)
         {
             if (id != resource.Id)
             {
@@ -90,7 +83,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _carrierService.UpdateAsync(resource);
+                    await _maritalStatusService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -101,15 +94,10 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // GET: Carriers/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        // GET: MaritalStatus/Delete/5
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _carrierService.GetByIdAsync((Guid)id);
+            var resource = await _maritalStatusService.GetByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
@@ -118,12 +106,12 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // POST: Carriers/Delete/5
+        // POST: MaritalStatus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _carrierService.DeleteAsync(id);
+            await _maritalStatusService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

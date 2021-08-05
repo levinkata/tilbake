@@ -19,7 +19,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             _context = context;
             dbSet = _context.Set<TEntity>();
         }
-
+        
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
             if (entity == null)

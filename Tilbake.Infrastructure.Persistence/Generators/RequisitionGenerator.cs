@@ -33,17 +33,19 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             _context = (TilbakeDbContext)entry.Context;
 
-            var currentValue = _context.RequisitionNumberGenerators.Any() ?
-                                    _context.RequisitionNumberGenerators
-                                    .Max(p => p.RequisitionNumber) + 1 : 1;
+                var currentValue = _context.RequisitionNumberGenerators.Any() ?
+                                        _context.RequisitionNumberGenerators
+                                        .AsNoTracking()
+                                        .Max(p => p.RequisitionNumber) + 1 : 1;
 
             var invoiceTable = _context.RequisitionNumberGenerators
+                                        .AsNoTracking()
                                         .OrderByDescending(e => e.RequisitionNumber)
                                         .FirstOrDefault();
 
             if (invoiceTable == null)
             {
-                RequisitionNumberGenerator invoiceNumberGenerator = new RequisitionNumberGenerator()
+                RequisitionNumberGenerator invoiceNumberGenerator = new()
                 {
                     RequisitionNumber = currentValue
                 };
@@ -66,21 +68,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.RequisitionNumberGenerators.Any() ?
                                     _context.RequisitionNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.RequisitionNumber) + 1 : 1;
 
             var invoiceTable = await _context.RequisitionNumberGenerators
+                                                .AsNoTracking()
                                                 .OrderByDescending(e => e.RequisitionNumber)
-                                                .FirstOrDefaultAsync(cancellationToken)
-                                                .ConfigureAwait(false);
+                                                .FirstOrDefaultAsync(cancellationToken);
 
             if (invoiceTable == null)
             {
-                RequisitionNumberGenerator invoiceNumberGenerator = new RequisitionNumberGenerator()
+                RequisitionNumberGenerator invoiceNumberGenerator = new()
                 {
                     RequisitionNumber = currentValue
                 };
-                await _context.RequisitionNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken)
-                                                     .ConfigureAwait(false);
+                await _context.RequisitionNumberGenerators.AddAsync(invoiceNumberGenerator, cancellationToken);
             }
             else
                 invoiceTable.RequisitionNumber = currentValue;

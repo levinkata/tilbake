@@ -35,15 +35,17 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.ClaimNumberGenerators.Any() ?
                                     _context.ClaimNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.ClaimNumber) + 1 : 1;
 
             var claimTable = _context.ClaimNumberGenerators
+                                        .AsNoTracking()
                                         .OrderByDescending(e => e.ClaimNumber)
                                         .FirstOrDefault();
 
             if (claimTable == null)
             {
-                ClaimNumberGenerator claimNumberGenerator = new ClaimNumberGenerator()
+                ClaimNumberGenerator claimNumberGenerator = new()
                 {
                     ClaimNumber = currentValue
                 };
@@ -66,21 +68,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.ClaimNumberGenerators.Any() ?
                                     _context.ClaimNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.ClaimNumber) + 1 : 1;
 
             var claimTable = await _context.ClaimNumberGenerators
+                                            .AsNoTracking()
                                             .OrderByDescending(e => e.ClaimNumber)
-                                            .FirstOrDefaultAsync(cancellationToken)
-                                            .ConfigureAwait(false);
+                                            .FirstOrDefaultAsync(cancellationToken);
 
             if (claimTable == null)
             {
-                ClaimNumberGenerator claimNumberGenerator = new ClaimNumberGenerator()
+                ClaimNumberGenerator claimNumberGenerator = new()
                 {
                     ClaimNumber = currentValue
                 };
-                await _context.ClaimNumberGenerators.AddAsync(claimNumberGenerator, cancellationToken)
-                                                     .ConfigureAwait(false);
+                await _context.ClaimNumberGenerators.AddAsync(claimNumberGenerator, cancellationToken);
             }
             else
                 claimTable.ClaimNumber = currentValue;

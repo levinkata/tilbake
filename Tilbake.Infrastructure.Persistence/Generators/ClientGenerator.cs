@@ -35,15 +35,17 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.ClientNumberGenerators.Any() ?
                                     _context.ClientNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.ClientNumber) + 1 : 1;
 
             var clientTable = _context.ClientNumberGenerators
+                                        .AsNoTracking()
                                         .OrderByDescending(n => n.ClientNumber)
                                         .FirstOrDefault();
 
             if (clientTable == null)
             {
-                ClientNumberGenerator clientNumberGenerator = new ClientNumberGenerator()
+                ClientNumberGenerator clientNumberGenerator = new()
                 {
                     ClientNumber = currentValue
                 };
@@ -66,21 +68,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.ClientNumberGenerators.Any() ?
                                     _context.ClientNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.ClientNumber) + 1 : 1;
 
             var clientTable = await _context.ClientNumberGenerators
+                                            .AsNoTracking()
                                             .OrderByDescending(n => n.ClientNumber)
-                                            .FirstOrDefaultAsync(cancellationToken)
-                                            .ConfigureAwait(false);
+                                            .FirstOrDefaultAsync(cancellationToken);
 
             if (clientTable == null)
             {
-                ClientNumberGenerator clientNumberGenerator = new ClientNumberGenerator()
+                ClientNumberGenerator clientNumberGenerator = new()
                 {
                     ClientNumber = currentValue
                 };
-                await _context.ClientNumberGenerators.AddAsync(clientNumberGenerator, cancellationToken)
-                                                     .ConfigureAwait(false);
+                await _context.ClientNumberGenerators.AddAsync(clientNumberGenerator, cancellationToken);
             }
             else
                 clientTable.ClientNumber = currentValue;

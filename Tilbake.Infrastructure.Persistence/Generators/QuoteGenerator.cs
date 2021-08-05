@@ -17,6 +17,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
         public QuoteGenerator()
         {
+
         }
 
         /// <summary>
@@ -35,15 +36,17 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.QuoteNumberGenerators.Any() ?
                                     _context.QuoteNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.QuoteNumber) + 1 : 1;
 
             var quoteTable = _context.QuoteNumberGenerators
+                                        .AsNoTracking()
                                         .OrderByDescending(e => e.QuoteNumber)
                                         .FirstOrDefault();
 
             if (quoteTable == null)
             {
-                QuoteNumberGenerator quoteNumberGenerator = new QuoteNumberGenerator()
+                QuoteNumberGenerator quoteNumberGenerator = new()
                 {
                     QuoteNumber = currentValue
                 };
@@ -66,21 +69,21 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.QuoteNumberGenerators.Any() ?
                                     _context.QuoteNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.QuoteNumber) + 1 : 1;
 
             var quoteTable = await _context.QuoteNumberGenerators
+                                            .AsNoTracking()
                                             .OrderByDescending(e => e.QuoteNumber)
-                                            .FirstOrDefaultAsync(cancellationToken)
-                                            .ConfigureAwait(false);
+                                            .FirstOrDefaultAsync(cancellationToken);
 
             if (quoteTable == null)
             {
-                QuoteNumberGenerator quoteNumberGenerator = new QuoteNumberGenerator()
+                QuoteNumberGenerator quoteNumberGenerator = new()
                 {
                     QuoteNumber = currentValue
                 };
-                await _context.QuoteNumberGenerators.AddAsync(quoteNumberGenerator, cancellationToken)
-                                                     .ConfigureAwait(false);
+                await _context.QuoteNumberGenerators.AddAsync(quoteNumberGenerator, cancellationToken);
             }
             else
                 quoteTable.QuoteNumber = currentValue;

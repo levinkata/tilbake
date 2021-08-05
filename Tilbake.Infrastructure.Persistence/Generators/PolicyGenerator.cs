@@ -33,20 +33,23 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             _context = (TilbakeDbContext)entry.Context;
 
-            var currentValue = _context.PolicyNumberGenerators.Any() ?
+            int currentValue = _context.PolicyNumberGenerators.Any() ?
                                     _context.PolicyNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.PolicyNumber) + 1 : 1;
 
             var policyTable = _context.PolicyNumberGenerators
+                                        .AsNoTracking()
                                         .OrderByDescending(e => e.PolicyNumber)
                                         .FirstOrDefault();
 
             if (policyTable == null)
             {
-                PolicyNumberGenerator policyNumberGenerator = new PolicyNumberGenerator()
+                PolicyNumberGenerator policyNumberGenerator = new()
                 {
                     PolicyNumber = currentValue
                 };
+
                 _context.PolicyNumberGenerators.Add(policyNumberGenerator);
             }
             else
@@ -66,21 +69,22 @@ namespace Tilbake.Infrastructure.Persistence.Generators
 
             var currentValue = _context.PolicyNumberGenerators.Any() ?
                                     _context.PolicyNumberGenerators
+                                    .AsNoTracking()
                                     .Max(p => p.PolicyNumber) + 1 : 1;
 
             var policyTable = await _context.PolicyNumberGenerators
+                                            .AsNoTracking()
                                             .OrderByDescending(e => e.PolicyNumber)
                                             .FirstOrDefaultAsync(cancellationToken)
                                             .ConfigureAwait(false);
 
             if (policyTable == null)
             {
-                PolicyNumberGenerator policyNumberGenerator = new PolicyNumberGenerator()
+                PolicyNumberGenerator policyNumberGenerator = new()
                 {
                     PolicyNumber = currentValue
                 };
-                await _context.PolicyNumberGenerators.AddAsync(policyNumberGenerator, cancellationToken)
-                                                     .ConfigureAwait(false);
+                await _context.PolicyNumberGenerators.AddAsync(policyNumberGenerator, cancellationToken);
             }
             else
                 policyTable.PolicyNumber = currentValue;

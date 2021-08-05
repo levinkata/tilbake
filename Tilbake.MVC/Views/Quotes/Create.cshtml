@@ -1,5 +1,9 @@
 ﻿@model QuoteSaveResource
 
+@{ 
+    ViewData["Title"] = "Quote";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 <div class="col-md-4 offset-md-8 bd-highlight mb-3">
     <div class="mr-auto p-2 bg-light">
         <h1>Quote</h1>
@@ -811,6 +815,7 @@
                     },
                     success: function (data) {
                         // Empty tblCart.
+
                         quote.splice(0, quote.length);
                         quoteItems.splice(0, quoteItems.length);
                         allRisks.splice(0, allRisks.length);

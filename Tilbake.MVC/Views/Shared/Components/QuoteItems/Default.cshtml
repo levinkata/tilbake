@@ -35,9 +35,18 @@
                         <td>@item.SumInsured</td>
                         <td>@item.Premium</td>
                         <td>@item.Excess</td>
-                        <td>
-                            <a asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a> |
-                            <a asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                        <td class="justify-content-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-dark rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">View</a></li>
+                                    <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Print</a></li>
+                                    <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 }

@@ -34,10 +34,12 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.InvoiceNumberGenerators.Any() ?
-                                    _context.InvoiceNumberGenerators
-                                    .Max(p => p.InvoiceNumber) + 1 : 1;
+                                        _context.InvoiceNumberGenerators
+                                        .AsNoTracking()
+                                        .Max(p => p.InvoiceNumber) + 1 : 1;
 
             var invoiceTable = _context.InvoiceNumberGenerators
+                                        .AsNoTracking()
                                         .OrderByDescending(e => e.InvoiceNumber)
                                         .FirstOrDefault();
 
@@ -65,10 +67,12 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.InvoiceNumberGenerators.Any() ?
-                                    _context.InvoiceNumberGenerators
-                                    .Max(p => p.InvoiceNumber) + 1 : 1;
+                                        _context.InvoiceNumberGenerators
+                                        .AsNoTracking()
+                                        .Max(p => p.InvoiceNumber) + 1 : 1;
 
             var invoiceTable = await _context.InvoiceNumberGenerators
+                                            .AsNoTracking()
                                             .OrderByDescending(e => e.InvoiceNumber)
                                             .FirstOrDefaultAsync(cancellationToken);
 

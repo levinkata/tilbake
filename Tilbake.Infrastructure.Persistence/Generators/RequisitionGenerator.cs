@@ -13,7 +13,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
     public class RequisitionGenerator : ValueGenerator<int>
     {
         public override bool GeneratesTemporaryValues => false;
-        private TilbakeDbContext _context;
 
         public RequisitionGenerator()
         {
@@ -31,7 +30,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                 throw new ArgumentNullException(nameof(entry));
             }
 
-            _context = (TilbakeDbContext)entry.Context;
+            var _context = (TilbakeDbContext)entry.Context;
 
                 var currentValue = _context.RequisitionNumberGenerators.Any() ?
                                         _context.RequisitionNumberGenerators
@@ -64,7 +63,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                 throw new ArgumentNullException(nameof(entry));
             }
 
-            _context = (TilbakeDbContext)entry.Context;
+            var _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.RequisitionNumberGenerators.Any() ?
                                     _context.RequisitionNumberGenerators

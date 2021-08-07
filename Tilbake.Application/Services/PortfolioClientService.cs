@@ -21,23 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PortfolioClientSaveResource resource)
-        {
-            var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
-            portfolioClient.Id = Guid.NewGuid();
-            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
-
-            return await Task.Run(() => _unitOfWork.SaveAsync());
-        }
-
         public async Task<int> AddClientAsync(ClientSaveResource resource)
         {
             var client = _mapper.Map<ClientSaveResource, Client>(resource);
+            // var clientNumber = await _unitOfWork.ClientNumberGenerators.NextValue();
+
             client.Id = Guid.NewGuid();
+            client.DateAdded = DateTime.Now;
+            //client.ClientNumber = clientNumber;
+            await _unitOfWork.Clients.AddAsync(client);
+            var clientId = client.Id;
 
             int ro = resource.CarrierIds.Length;
             var carriers = resource.CarrierIds;
-            var clientId = client.Id;
+
             List<ClientCarrier> clientCarriers = new();
 
             for (int i = 0; i < ro; i++)
@@ -49,9 +46,7 @@ namespace Tilbake.Application.Services
                 };
                 clientCarriers.Add(clientCarrier);
             }
-
             await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
-            await _unitOfWork.Clients.AddAsync(client);
 
             PortfolioClient portfolioClient = new()
             {
@@ -59,16 +54,15 @@ namespace Tilbake.Application.Services
                 PortfolioId = resource.PortfolioId,
                 ClientId = client.Id
             };
-
             await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.PortfolioClients.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)

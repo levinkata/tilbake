@@ -38,16 +38,11 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
             params Expression<Func<TEntity, object>>[] includes);
 
         /// <summary>
-        /// Get query for entity
+        /// Insert entity in db
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="orderBy"></param>
-        /// <returns></returns>
-        Task<IQueryable<TEntity>> QueryAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
-
+        /// <param name="entity"></param>
         Task<TEntity> AddAsync(TEntity entity);
+
         Task <IEnumerable<TEntity>> AddRangeAsync (IEnumerable<TEntity> entities);
 
         /// <summary>
@@ -62,7 +57,12 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
         /// <param name="id"></param>
         Task<TEntity> DeleteAsync(Guid id);
 
+        /// <summary>
+        /// Delete entity from db
+        /// </summary>
+        /// <param name="entity"></param>
         Task<TEntity> DeleteAsync(TEntity entity);
+
         Task<IEnumerable<TEntity>> DeleteRangeAsync(IEnumerable<TEntity> entities);        
     }
 }

@@ -13,7 +13,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                 .User.Claims.SingleOrDefault(x =>
                     x.Type == ClaimTypes.NameIdentifier)?.Value;
         }
-
+        
         public string UserId { get; private set; }
     }
 }

@@ -54,7 +54,13 @@ namespace Tilbake.MVC
                 options.CheckConsentNeeded = context => false; // Default is true, make it false - Levi Nkata 03/08/2021
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            
+
+            //services.AddDbContextFactory<TilbakeDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
+
+            //services.AddScoped<TilbakeDbContext>(options =>
+            //    options.GetRequiredService<IDbContextFactory<TilbakeDbContext>>()
+            //    .CreateDbContext());
 
             services.AddDbContext<TilbakeDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));

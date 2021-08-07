@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
@@ -70,7 +71,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             Taxes = new TaxRepository(_context);
             UserPortfolios = new UserPortfolioRepository(_context);
             WallTypes = new WallTypeRepository(_context);
-
         }
 
         public IAllRiskRepository AllRisks { get; private set; }
@@ -80,10 +80,10 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IBodyTypeRepository BodyTypes { get; private set; }
         public ICarrierRepository Carriers { get; private set; }
         public ICityRepository Cities { get; private set; }
-        public IClientRiskRepository ClientRisks { get; private set; }
-        public IClientDocumentRepository ClientDocuments { get; private set; }
         public IClientRepository Clients { get; private set; }
         public IClientCarrierRepository ClientCarriers { get; private set; }
+        public IClientDocumentRepository ClientDocuments { get; private set; }
+        public IClientRiskRepository ClientRisks { get; private set; }
         public IClientTypeRepository ClientTypes { get; private set; }
         public IContentRepository Contents { get; private set; }
         public ICountryRepository Countries { get; private set; }

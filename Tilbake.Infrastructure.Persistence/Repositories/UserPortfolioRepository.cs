@@ -10,7 +10,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 {
     public class UserPortfolioRepository : Repository<AspnetUserPortfolio>, IUserPortfolioRepository
     {
-
         public UserPortfolioRepository(TilbakeDbContext context) : base(context)
         {
 

@@ -13,10 +13,10 @@ namespace Tilbake.Infrastructure.Persistence.Generators
     public class ClientGenerator : ValueGenerator<int>
     {
         public override bool GeneratesTemporaryValues => false;
-        private TilbakeDbContext _context;
 
         public ClientGenerator()
         {
+
         }
 
         /// <summary>
@@ -30,8 +30,8 @@ namespace Tilbake.Infrastructure.Persistence.Generators
             {
                 throw new ArgumentNullException(nameof(entry));
             }
-
-            _context = (TilbakeDbContext)entry.Context;
+            
+            var _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.ClientNumberGenerators.Any() ?
                                     _context.ClientNumberGenerators
@@ -64,7 +64,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                 throw new ArgumentNullException(nameof(entry));
             }
 
-            _context = (TilbakeDbContext)entry.Context;
+            var _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.ClientNumberGenerators.Any() ?
                                     _context.ClientNumberGenerators

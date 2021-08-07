@@ -13,7 +13,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
     public class PolicyGenerator : ValueGenerator<int>
     {
         public override bool GeneratesTemporaryValues => false;
-        // private TilbakeDbContext _context;
 
         public PolicyGenerator()
         {

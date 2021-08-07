@@ -2,6 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tilbake.Domain.Models;
+using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Generators;
 
 namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
@@ -17,10 +18,10 @@ namespace Tilbake.Infrastructure.Persistence.EntityConfigurations
 
             builder.ToTable("Client");
 
-            builder.Property(m => m.ClientNumber)
-                    .ValueGeneratedNever()
-                    .HasValueGenerator((e, p) =>
-                    new ClientGenerator());    
+            //builder.Property(m => m.ClientNumber)
+            //        .ValueGeneratedNever()
+            //        .HasValueGenerator((e, p) =>
+            //        new ClientGenerator());    
         }        
     }
 }

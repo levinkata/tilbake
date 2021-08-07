@@ -2,14 +2,16 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<h4>Clients</h4>
 @if (ViewBag.PortfolioId != null)
 {
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <div class="form-group">
-            <a asp-controller="PortfolioClients" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId"><i class="far fa-plus-square"></i></a>
+            <a class="btn btn-primary" asp-controller="PortfolioClients" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId">New Client</a>
         </div>
     </div>
 }
+
 @if (Model.Any())
 {
     
@@ -62,7 +64,7 @@
                 </td>
                 <td class="justify-content-center">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-outline-dark rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-outline-info rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@item.Id">View</a></li>

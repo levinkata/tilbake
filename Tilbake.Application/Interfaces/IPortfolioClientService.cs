@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tilbake.Application.Resources;
 
@@ -11,7 +9,6 @@ namespace Tilbake.Application.Interfaces
         Task<PortfolioClientResource> GetByIdAsync(Guid id);
         Task<PortfolioClientResource> FindAsync(Guid id);
         Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId);
-        Task<int> AddAsync(PortfolioClientSaveResource resource);
         Task<int> AddClientAsync(ClientSaveResource resource);
         Task<int> DeleteAsync(Guid id);
         Task<bool> ExistsAsync(Guid portfolioId, Guid clientId);

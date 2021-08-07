@@ -42,7 +42,9 @@
 
 @if (Model.IsConverted)
 {
-    <p class="fw-bolder text-center text-danger">Quote was converted to policy</p>
+    <div class="alert alert-danger" role="alert">
+        Quote was converted to policy!
+    </div>
 }
 else
 {
@@ -56,8 +58,12 @@ else
     }
     else
     {
-        <p class="fw-bolder text-center text-primary">Quote is incomplete.</p>
-        <p class="fst-italic text-center text-info">Ensure that Insurer, Sum Insured, Premium or Excess are completed.</p>
+        <div class="alert alert-info" role="alert">
+            Quote is incomplete.
+        </div>
+        <div class="alert alert-dark" role="alert">
+            Ensure that Insurer, Sum Insured, Premium or Excess are completed!
+        </div>
     }
 }
 <div>

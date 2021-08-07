@@ -13,7 +13,6 @@ namespace Tilbake.Infrastructure.Persistence.Generators
     public class QuoteGenerator : ValueGenerator<int>
     {
         public override bool GeneratesTemporaryValues => false;
-        private TilbakeDbContext _context;
 
         public QuoteGenerator()
         {
@@ -32,7 +31,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                 throw new ArgumentNullException(nameof(entry));
             }
 
-            _context = (TilbakeDbContext)entry.Context;
+            var _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.QuoteNumberGenerators.Any() ?
                                     _context.QuoteNumberGenerators
@@ -65,7 +64,7 @@ namespace Tilbake.Infrastructure.Persistence.Generators
                 throw new ArgumentNullException(nameof(entry));
             }
 
-            _context = (TilbakeDbContext)entry.Context;
+            var _context = (TilbakeDbContext)entry.Context;
 
             var currentValue = _context.QuoteNumberGenerators.Any() ?
                                     _context.QuoteNumberGenerators

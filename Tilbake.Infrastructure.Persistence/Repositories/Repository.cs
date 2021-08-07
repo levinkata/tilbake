@@ -61,12 +61,12 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             {
                 throw new Exception($"{nameof(entity)} could not be found.");
             }
-            
+
             if (_context.Entry(entity).State == EntityState.Detached)
             {
                 dbSet.Attach(entity);
             }
-
+            
             await Task.Run(() => dbSet.Remove(entity));
             return entity;
         }
@@ -138,21 +138,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                 query = query.Include(include).AsNoTracking();
 
             return await query.FirstOrDefaultAsync(filter);
-        }
-
-        public virtual async Task<IQueryable<TEntity>> QueryAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
-        {
-            IQueryable<TEntity> query = dbSet;
-
-            if (filter != null)
-                query = query.Where(filter);
-
-            if (orderBy != null)
-                query = orderBy(query);
-
-            return await Task.Run(() => query.AsNoTracking());
         }
 
         public virtual async Task<TEntity> UpdateAsync(Guid id, TEntity entity)

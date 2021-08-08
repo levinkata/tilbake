@@ -84,6 +84,7 @@ namespace Tilbake.MVC.Controllers
             var titles = await _titleService.GetAllAsync();
             var carriers = await _carrierService.GetAllAsync();
 
+            Guid[] carrierIds = new Guid[1];
             ClientSaveResource resource = new()
             {
                 ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
@@ -92,7 +93,7 @@ namespace Tilbake.MVC.Controllers
                 MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
                 OccupationList = new SelectList(occupations, "Id", "Name"),
                 TitleList = new SelectList(titles, "Id", "Name"),
-                CarrierList = SelectLists.Carriers(carriers, Guid.Empty)
+                CarrierList = SelectLists.Carriers(carriers, carrierIds)
             };
 
             return View(resource);

@@ -10,7 +10,7 @@ namespace Tilbake.Application.Helpers
 {
     public class SelectLists
     {
-        public static SelectList Carriers(IEnumerable<CarrierResource> carriers, Guid? carrierId)
+        public static MultiSelectList Carriers(IEnumerable<CarrierResource> carriers, Guid[] carrierIds)
         {
             List<SelectListItem> items = new();
 
@@ -19,9 +19,9 @@ namespace Tilbake.Application.Helpers
                 items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }
 
-            return (carrierId == Guid.Empty || String.IsNullOrEmpty(carrierId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", carrierId);
+            return (carrierIds == null) ?
+                                new MultiSelectList(items, "Value", "Text") :
+                                new MultiSelectList(items, "Value", "Text", carrierIds);
         }
 
         public static SelectList Countries(IEnumerable<CountryResource> countries, Guid? countryId)

@@ -72,7 +72,15 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Clients.GetByIdAsync(id);
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
+                                                    r => r.Id == id,
+                                                    r => r.ClientType,
+                                                    r => r.Country,
+                                                    r => r.Gender,
+                                                    r => r.MaritalStatus,
+                                                    r => r.Occupation,
+                                                    r => r.Title);
+
             var resources = _mapper.Map<Client, ClientResource>(result);
 
             return resources;
@@ -121,25 +129,34 @@ namespace Tilbake.Application.Services
         {
             var client = _mapper.Map<ClientResource, Client>(resource);
             await _unitOfWork.Clients.UpdateAsync(resource.Id, client);
-
-            int ro = resource.CarrierIds.Length;
-            var carriers = resource.CarrierIds;
+            
             var clientId = client.Id;
-            await _unitOfWork.ClientCarriers.DeleteAsync(clientId);
+            var clientCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
+                                                    r => r.ClientId == clientId);
 
-            List<ClientCarrier> clientCarriers = new();
-
-            for (int i = 0; i < ro; i++)
+            if (clientCarriers != null)
             {
-                ClientCarrier clientCarrier = new()
-                {
-                    ClientId = clientId,
-                    CarrierId = Guid.Parse(carriers[i].ToString())
-                };
-                clientCarriers.Add(clientCarrier);
+                await _unitOfWork.ClientCarriers.DeleteRangeAsync(clientCarriers);
             }
 
-            await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
+            if(resource.CarrierIds != null)
+            {
+                int ro = resource.CarrierIds.Length;
+                var carriers = resource.CarrierIds;
+
+                List<ClientCarrier> newClientCarriers = new();
+                for (int i = 0; i < ro; i++)
+                {
+                    ClientCarrier clientCarrier = new()
+                    {
+                        ClientId = clientId,
+                        CarrierId = Guid.Parse(carriers[i].ToString())
+                    };
+                    newClientCarriers.Add(clientCarrier);
+                }
+
+                await _unitOfWork.ClientCarriers.AddRangeAsync(newClientCarriers);
+            }
 
             return await _unitOfWork.SaveAsync();
         }

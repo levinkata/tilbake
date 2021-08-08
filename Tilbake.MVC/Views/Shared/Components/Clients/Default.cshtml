@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<ClientResource>
-
+@{ 
+    var portfolioId = ViewBag.PortfolioId;
+}
 <h1>@ViewData["Title"]</h1>
 
 <h4>Clients</h4>
@@ -68,7 +70,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@item.Id">View</a></li>
-                            <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                            <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Edit" asp-route-portfolioId="@portfolioId" asp-route-clientId="@item.Id">Edit</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Print</a></li>
                             <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>

@@ -66,7 +66,7 @@ namespace Tilbake.Application.Resources
 
         public List<ClientCarrier> ClientCarriers { get; } = new();
 
-        public string[] CarrierIds { get; set; }
+        public Guid[] CarrierIds { get; set; }
 
         //  Descriptions
         public string PortfolioName { get; set; }
@@ -80,6 +80,6 @@ namespace Tilbake.Application.Resources
         public SelectList MaritalStatusList { get; set; }
         public SelectList OccupationList { get; set; }
         public SelectList TitleList { get; set; }
-        public SelectList CarrierList { get; set; }
+        public MultiSelectList CarrierList { get; set; }
     }
 }

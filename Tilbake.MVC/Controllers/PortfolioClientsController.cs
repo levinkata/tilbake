@@ -24,6 +24,7 @@ namespace Tilbake.MVC.Controllers
         private readonly ITitleService _titleService;
         private readonly ICarrierService _carrierService;
         private readonly IPortfolioService _portfolioService;
+        private readonly IClientCarrierService _clientCarrierService;
 
         public PortfolioClientsController(IPortfolioClientService portfolioClientService,
                                             IClientService clientService,
@@ -34,7 +35,8 @@ namespace Tilbake.MVC.Controllers
                                             IOccupationService occupationService,
                                             ITitleService titleService,
                                             ICarrierService carrierService,
-                                            IPortfolioService portfolioService)
+                                            IPortfolioService portfolioService,
+                                            IClientCarrierService clientCarrierService)
         {
             _portfolioClientService = portfolioClientService;
             _clientService = clientService;
@@ -46,6 +48,7 @@ namespace Tilbake.MVC.Controllers
             _titleService = titleService;
             _carrierService = carrierService;
             _portfolioService = portfolioService;
+            _clientCarrierService = clientCarrierService;
         }
 
         // GET: PortfolioClients
@@ -83,8 +86,6 @@ namespace Tilbake.MVC.Controllers
         // GET: PortfolioClients/Create
         public async Task<IActionResult> Create(Guid portfolioId)
         {
-
-
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -102,6 +103,8 @@ namespace Tilbake.MVC.Controllers
                 HttpContext.Session.SetString(SessionPortfolioId, portfolioId.ToString());
             }
 
+            Guid[] carrierIds = new Guid[1];
+
             ClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
@@ -112,7 +115,7 @@ namespace Tilbake.MVC.Controllers
                 MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
                 OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
                 TitleList = SelectLists.Titles(titles, Guid.Empty),
-                CarrierList = SelectLists.Carriers(carriers, Guid.Empty)
+                CarrierList = SelectLists.Carriers(carriers, carrierIds)
             };
             return await Task.Run(() => View(resource));
         }
@@ -127,6 +130,7 @@ namespace Tilbake.MVC.Controllers
                 await _portfolioClientService.AddClientAsync(resource);
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });
             }
+
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -141,9 +145,58 @@ namespace Tilbake.MVC.Controllers
             resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
             resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
             resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
-            resource.TitleList = SelectLists.Carriers(carriers, resource.TitleId);
+            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
 
             return View(resource);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid portfolioId, Guid clientId)
+        {
+            var clientTypes = await _clientTypeService.GetAllAsync();
+            var countries = await _countryService.GetAllAsync();
+            var genders = await _genderService.GetAllAsync();
+            var maritalStatuses = await _maritalStatusService.GetAllAsync();
+            var occupations = await _occupationService.GetAllAsync();
+            var titles = await _titleService.GetAllAsync();
+            var carriers = await _carrierService.GetAllAsync();
+
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
+
+            var resource = await _clientService.GetByIdAsync(clientId);
+            
+            int counter = 0;
+            foreach (var item in resource.ClientCarriers)
+            {
+                resource.CarrierIds[counter] = item.CarrierId;
+                counter++;
+            }
+
+            resource.PortfolioId = portfolioId;
+            resource.PortfolioName = portfolio.Name;
+            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+            resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
+            resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
+            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
+            resource.ClientCarrierResources.AddRange(clientCarriers);
+
+            return await Task.Run(() => View("EditClient", resource));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ClientResource resource)
+        {
+            if(ModelState.IsValid)
+            {
+                await _clientService.UpdateAsync(resource);
+                return RedirectToAction(nameof(Edit), new { portfolioId = resource.PortfolioId, clientId = resource.Id });
+            }
+            return View("EditClient", resource);
         }
 
         // GET: PortfolioClients/Delete/5

@@ -3333,7 +3333,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
             });
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
+            // modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
             OnModelCreatingPartial(modelBuilder);
         }

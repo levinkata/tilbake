@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
@@ -64,10 +62,6 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Occupation")]
         public Guid OccupationId { get; set; }
 
-        public List<ClientCarrier> ClientCarriers { get; } = new();
-
-        public Guid[] CarrierIds { get; set; }
-
         //  Descriptions
         public string PortfolioName { get; set; }
 
@@ -80,6 +74,5 @@ namespace Tilbake.Application.Resources
         public SelectList MaritalStatusList { get; set; }
         public SelectList OccupationList { get; set; }
         public SelectList TitleList { get; set; }
-        public MultiSelectList CarrierList { get; set; }
     }
 }

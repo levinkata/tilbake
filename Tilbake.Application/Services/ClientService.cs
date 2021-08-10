@@ -27,23 +27,7 @@ namespace Tilbake.Application.Services
             client.Id = Guid.NewGuid();
             await _unitOfWork.Clients.AddAsync(client);
 
-            int ro = resource.CarrierIds.Length;
-            var carriers = resource.CarrierIds;
-            var clientId = client.Id;
-            List<ClientCarrier> clientCarriers = new();
-
-            for (int i = 0; i < ro; i++)
-            {
-                ClientCarrier clientCarrier = new()
-                {
-                    ClientId = clientId,
-                    CarrierId = Guid.Parse(carriers[i].ToString())
-                };
-                clientCarriers.Add(clientCarrier);
-            }
-
-            await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)

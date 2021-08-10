@@ -15,6 +15,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         {
             _context = context;
 
+            Addresses = new AddressRepository(_context);
             AllRisks = new AllRiskRepository(_context);
             Audits = new AuditRepository(_context);
             Banks = new BankRepository(_context);
@@ -73,6 +74,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             WallTypes = new WallTypeRepository(_context);
         }
 
+        public IAddressRepository Addresses { get; private set; }
         public IAllRiskRepository AllRisks { get; private set; }
         public IAuditRepository Audits { get; private set; }
         public IBankRepository Banks { get; private set; }

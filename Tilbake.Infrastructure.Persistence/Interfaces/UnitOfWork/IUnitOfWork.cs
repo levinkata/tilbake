@@ -5,6 +5,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
+        IAddressRepository Addresses { get; }
         IAllRiskRepository AllRisks { get; }
         IAuditRepository Audits { get; }
         IBankRepository Banks { get; }

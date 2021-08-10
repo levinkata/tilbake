@@ -128,12 +128,23 @@
                 <p class="bg-primary font-weight-bolder text-white p-2 mb-1">Carriers</p>
             </div>
             <div class="p-2 bg-light">
-                <ul class="bg-light">
-                    @foreach (var item in Model.ClientCarrierResources)
-                    {
-                        <li><small>@item.Carrier.Name</small></li>
-                    }
-                </ul>
+
+                @if (Model.ClientCarrierResources.Any())
+                {
+                    <ul class="bg-light">
+                        @foreach (var item in Model.ClientCarrierResources)
+                        {
+                            <li><small>@item.Carrier.Name</small></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>No Carriers</p>
+                }
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#carrierModal">Add Carrier</button>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -143,16 +154,67 @@
             <div class="p-2 bg-light">
                 <address>
                     <small>
-                        <strong>Physical Address</strong><br />
-                        Postal Address<br />
-                        City<br />
+                        <strong><input type="text" id="ClientPhysicalAddress" value="" readonly /></strong><br />
+                        <input type="text" id="ClientPostalAddress" value="" readonly /><br />
+                        <input type="text" id="ClientCity" value="" readonly /><br />
                     </small>
                 </address>
-
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#addressModal">Add Address</button>
+                </div>
             </div>
-
         </div>
 
+    </div>
+</div>
+
+<div class="ms-2">
+    <!-- Address Modal -->
+    <div class="modal fade" id="addressModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title" id="addressModalLabel">
+                        Address
+                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="PhysicalAddress" class="control-label">Physical Address</label>
+                                <input for="PhysicalAddress" id="PhysicalAddress" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="PostalAddress" class="control-label">Postal Address</label>
+                                <input for="PostalAddress" id="PostalAddress" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="AddressCountryId" class="control-label"></label>
+                                <select for="AddressCountryId" id="AddressCountryId" class="form-control" items=""></select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="CityId" class="control-label"></label>
+                                <select for="CityId" id="CityId" class="form-control" items=""></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnAddAddress" class="btn btn-primary" onclick="PostAddress()">Save this record</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -180,7 +242,117 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
+    <script>
+        var selectedClientId = '@Model.Id';
 
-</script>
+        $(document).ready(function () {
+            LoadAddress();
+        });
+
+        $("#AddressCountryId").change(function () {
+            var selectedCountryId = $("#AddressCountryId option:selected").val();
+
+            $.ajax({
+                url: '@(Url.Action("GetCities", "Cities"))',
+                traditional: true,
+                dataType: "JSON",
+                type: 'GET',
+                data: { countryId: selectedCountryId },
+                error: function () {
+                    alert("An error occurred.");
+                },
+                success: function (cities) {
+
+                    $("#CityId").empty();   // clear before appending new list
+                    $.each(cities, function (index, city) {
+                        $('#CityId').append($('<option></option>').val(city.id).html(city.name));
+                    });
+                }
+            });
+        });
+
+        $('#addressModal').on('show.bs.modal', function (e) {
+
+            LoadCountries();
+            $('#PhysicalAddress').val('');
+            $('#PostalAddress').val('');
+        });
+
+        function LoadAddress() {
+
+            $.ajax({
+                url: '@(Url.Action("GetByClientId", "Addresses"))',
+                traditional: true,
+                dataType: "JSON",
+                type: 'GET',
+                data: { clientId: selectedClientId },
+                error: function () {
+                    alert("An error occurred.");
+                },
+                success: function (address) {
+
+                    $('#ClientPhysicalAddress').val(resource.physicalAddress);
+                    $('#ClientPostalAddress').val(resource.postalAddress);
+                    $('#ClientCity').val(resource.cityName);
+                }
+            });
+        }
+
+        function LoadCountries() {
+
+            $.ajax({
+                url: '@(Url.Action("GetCountries", "Countries"))',
+                traditional: true,
+                dataType: "JSON",
+                type: 'GET',
+                error: function () {
+                    alert("An error occurred.");
+                },
+                success: function (countries) {
+
+                    $("#AddressCountryId").empty();   // clear before appending new list
+                    $.each(countries, function (index, country) {
+                        $('#AddressCountryId').append($('<option></option>').val(country.id).html(country.name));
+                    });
+                }
+            });
+        }
+
+        function PostAddress() {
+            var selectedCityId = $("#CityId option:selected").val();
+            //  1. Build address object to match model class Address.cs
+            var address = {
+                PhysicalAddress: $('#PhysicalAddress').val(),
+                PhysicalAddress: $('#PostalAddress').val(),
+                CityId: selectedCityId,
+                ClientId: '@Model.Id',
+                CompanyId: null,
+                LossAdjusterId: null,
+                RepairerId: null,
+                TracingAgentId: null,
+                AttorneyId: null,
+                ThirdPartyId: null,
+                TowTruckId: null,
+                RoadsideAssistId: null
+            };
+
+            //  2. Call POST
+            $.ajax({
+                url: '@(Url.Action("PostAddress", "Addresses"))',
+                type: "POST",
+                dataType: "JSON",
+                traditional: true,
+                data: address,
+                success: function (address) {
+
+                    LoadAddress();
+                    // Unload modal
+                    $('#addressModal').modal('hide');
+                },
+                error: function (message) {
+                    console.log(message.statusText);
+                }
+            });
+        };
+    </script>
 }

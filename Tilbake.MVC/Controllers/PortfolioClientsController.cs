@@ -92,7 +92,7 @@ namespace Tilbake.MVC.Controllers
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
-            var carriers = await _carrierService.GetAllAsync();
+            // var carriers = await _carrierService.GetAllAsync();
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
@@ -102,9 +102,7 @@ namespace Tilbake.MVC.Controllers
                 HttpContext.Session.SetString(SessionPortfolioName, portfolio.Name);
                 HttpContext.Session.SetString(SessionPortfolioId, portfolioId.ToString());
             }
-
-            Guid[] carrierIds = new Guid[1];
-
+            
             ClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
@@ -114,10 +112,10 @@ namespace Tilbake.MVC.Controllers
                 GenderList = new SelectList(genders, "Id", "Name"),
                 MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
                 OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
-                TitleList = SelectLists.Titles(titles, Guid.Empty),
-                CarrierList = SelectLists.Carriers(carriers, carrierIds)
+                TitleList = SelectLists.Titles(titles, Guid.Empty)
+                // CarrierList = SelectLists.Carriers(carriers, carrierIds)
             };
-            return await Task.Run(() => View(resource));
+            return View("CreateClient", resource);
         }
 
         // POST: PortfolioClients/Create
@@ -145,7 +143,6 @@ namespace Tilbake.MVC.Controllers
             resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
             resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
             resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
-            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
 
             return View(resource);
         }

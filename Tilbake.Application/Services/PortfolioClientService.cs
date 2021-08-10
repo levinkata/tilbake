@@ -32,27 +32,27 @@ namespace Tilbake.Application.Services
             await _unitOfWork.Clients.AddAsync(client);
             var clientId = client.Id;
 
-            int ro = resource.CarrierIds.Length;
-            var carriers = resource.CarrierIds;
+            //int ro = resource.CarrierIds.Length;
+            //var carriers = resource.CarrierIds;
 
-            List<ClientCarrier> clientCarriers = new();
+            //List<ClientCarrier> clientCarriers = new();
 
-            for (int i = 0; i < ro; i++)
-            {
-                ClientCarrier clientCarrier = new()
-                {
-                    ClientId = clientId,
-                    CarrierId = Guid.Parse(carriers[i].ToString())
-                };
-                clientCarriers.Add(clientCarrier);
-            }
-            await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
+            //for (int i = 0; i < ro; i++)
+            //{
+            //    ClientCarrier clientCarrier = new()
+            //    {
+            //        ClientId = clientId,
+            //        CarrierId = Guid.Parse(carriers[i].ToString())
+            //    };
+            //    clientCarriers.Add(clientCarrier);
+            //}
+            //await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
 
             PortfolioClient portfolioClient = new()
             {
                 Id = Guid.NewGuid(),
                 PortfolioId = resource.PortfolioId,
-                ClientId = client.Id
+                ClientId = clientId
             };
             await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
 

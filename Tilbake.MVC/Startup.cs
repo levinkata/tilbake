@@ -82,7 +82,7 @@ namespace Tilbake.MVC
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
 
                 options.LoginPath = new PathString("/Identity/Account/Login");
                 options.AccessDeniedPath = new PathString("/Identity/Account/AccessDenied");

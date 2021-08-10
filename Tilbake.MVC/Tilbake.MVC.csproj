@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Countries\" />
     <Folder Include="wwwroot\documents\client\" />
   </ItemGroup>
 

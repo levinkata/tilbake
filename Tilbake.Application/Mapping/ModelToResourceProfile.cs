@@ -8,6 +8,9 @@ namespace Tilbake.Application.Mapping
     {
         public ModelToResourceProfile()
         {
+            CreateMap<Address, AddressResource>()
+                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name)).ReverseMap();
+
             CreateMap<AllRisk, AllRiskResource>()
                     .ForMember(dest => dest.RiskItem, opt => opt.MapFrom(src => src.RiskItem.Description)).ReverseMap();
 

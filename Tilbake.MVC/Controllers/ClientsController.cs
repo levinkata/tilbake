@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
@@ -82,9 +81,7 @@ namespace Tilbake.MVC.Controllers
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
-            var carriers = await _carrierService.GetAllAsync();
 
-            Guid[] carrierIds = new Guid[1];
             ClientSaveResource resource = new()
             {
                 ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
@@ -92,8 +89,7 @@ namespace Tilbake.MVC.Controllers
                 GenderList = new SelectList(genders, "Id", "Name"),
                 MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
                 OccupationList = new SelectList(occupations, "Id", "Name"),
-                TitleList = new SelectList(titles, "Id", "Name"),
-                CarrierList = SelectLists.Carriers(carriers, carrierIds)
+                TitleList = new SelectList(titles, "Id", "Name")
             };
 
             return View(resource);

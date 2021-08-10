@@ -9,6 +9,7 @@ namespace Tilbake.Application.Resources
         public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
         public Guid QuoteItemId { get; set; }
+        public Guid PolicyRiskId { get; set; }
 
         [Display(Name = "Registration Number")]
         public string RegNumber { get; set; }

@@ -8,6 +8,7 @@ namespace Tilbake.Application.Resources
     {
         public Guid Id { get; set; }
         public Guid QuoteItemId { get; set; }
+        public Guid PolicyRiskId { get; set; }
 
         [Display(Name = "Description")]
         public Guid RiskItemId { get; set; }

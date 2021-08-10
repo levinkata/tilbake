@@ -2,17 +2,19 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class QuoteItemsController : Controller
+    public class PolicyRisksController : Controller
     {
-        private readonly IQuoteItemService _quoteItemService;
-        private readonly ICoverTypeService _coverTypeService;
+        private readonly IPolicyRiskService _policyRiskService;
 
+        private readonly ICoverTypeService _coverTypeService;
         private readonly IHouseService _houseService;
         private readonly IHouseConditionService _houseConditionService;
 
@@ -31,7 +33,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IMotorModelService _motorModelService;
         private readonly IMotorUseService _motorUseService;
 
-        public QuoteItemsController(IQuoteItemService quoteItemService,
+        public PolicyRisksController(IPolicyRiskService policyRiskService,
                                     ICoverTypeService coverTypeService,
                                     IHouseService houseService,
                                     IHouseConditionService houseConditionService,
@@ -49,7 +51,8 @@ namespace Tilbake.MVC.Controllers
                                     IMotorModelService motorModelService,
                                     IMotorUseService motorUseService)
         {
-            _quoteItemService = quoteItemService;
+            _policyRiskService = policyRiskService;
+
             _coverTypeService = coverTypeService;
 
             _houseService = houseService;
@@ -77,9 +80,9 @@ namespace Tilbake.MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> QuoteItemRisk(Guid quoteItemId)
+        public async Task<IActionResult> PolicyRisk(Guid policyRiskId)
         {
-            var resource = await _quoteItemService.GetRisksAsync(quoteItemId);
+            var resource = await _policyRiskService.GetRisksAsync(policyRiskId);
             if (resource == null)
             {
                 return NotFound();
@@ -90,12 +93,12 @@ namespace Tilbake.MVC.Controllers
 
             if (resource.AllRisk != null)
             {
-                returnView = "QuoteAllRisk";
+                returnView = "PolicyRiskAllRisk";
                 AllRiskResource allRiskResource = resource.AllRisk;
                 var riskItem = allRiskResource.RiskItemId;
                 var result = await _riskItemService.GetByIdAsync(riskItem);
 
-                allRiskResource.QuoteItemId = quoteItemId;
+                allRiskResource.PolicyRiskId = policyRiskId;
                 allRiskResource.RiskItem = result.Description;
                 model = allRiskResource;
             }
@@ -107,9 +110,9 @@ namespace Tilbake.MVC.Controllers
                 var roofTypes = await _roofTypeService.GetAllAsync();
                 var wallTypes = await _wallTypeService.GetAllAsync();
 
-                returnView = "QuoteContent";
+                returnView = "PolicyRiskContent";
                 ContentResource contentResource = resource.Content;
-                contentResource.QuoteItemId = quoteItemId;
+                contentResource.PolicyRiskId = policyRiskId;
                 contentResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", contentResource.ResidenceTypeId);
                 contentResource.ResidenceUseList = new SelectList(residenceUses, "Id", "Name", contentResource.ResidenceUseId);
                 contentResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", contentResource.RoofTypeId);
@@ -124,9 +127,9 @@ namespace Tilbake.MVC.Controllers
                 var roofTypes = await _roofTypeService.GetAllAsync();
                 var wallTypes = await _wallTypeService.GetAllAsync();
 
-                returnView = "QuoteHouse";
+                returnView = "PolicyRiskHouse";
                 HouseResource houseResource = resource.House;
-                houseResource.QuoteItemId = quoteItemId;
+                houseResource.PolicyRiskId = policyRiskId;
                 houseResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", houseResource.ResidenceTypeId);
                 houseResource.HouseConditionList = new SelectList(houseConditions, "Id", "Name", houseResource.HouseConditionId);
                 houseResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", houseResource.RoofTypeId);
@@ -141,14 +144,14 @@ namespace Tilbake.MVC.Controllers
                 var motorMakes = await _motorMakeService.GetAllAsync();
                 var motorUses = await _motorUseService.GetAllAsync();
 
-                returnView = "QuoteMotor";
+                returnView = "PolicyRiskMotor";
                 MotorResource motorResource = resource.Motor;
 
                 var selectedMotorModel = await _motorModelService.GetByIdAsync(motorResource.MotorModelId);
                 var selectedMotorMakeId = selectedMotorModel.MotorMakeId;
                 var motorModels = await _motorModelService.GetByMotorMakeIdAsync(selectedMotorMakeId);
 
-                motorResource.QuoteItemId = quoteItemId;
+                motorResource.PolicyRiskId = policyRiskId;
                 motorResource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", motorResource.BodyTypeId);
                 motorResource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", motorResource.DriverTypeId);
                 motorResource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", selectedMotorMakeId);
@@ -161,7 +164,7 @@ namespace Tilbake.MVC.Controllers
         }
 
 
-        // POST: QuoteItems/EditAllRisk/5
+        // POST: PolicyRisks/EditAllRisk/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAllRisk(Guid? id, AllRiskResource resource)
@@ -175,8 +178,8 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.RiskItem;
+                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.Id);
+                    policyRiskResource.Description = resource.RiskItem;
 
                     RiskItemResource riskResource = new()
                     {
@@ -184,24 +187,24 @@ namespace Tilbake.MVC.Controllers
                         Description = resource.RiskItem
                     };
 
-                    QuoteItemRiskItemResource quoteItemRiskItemResource = new()
+                    PolicyRiskRiskItemResource policyRiskRiskItemResource = new()
                     {
-                        QuoteItem = quoteItemResource,
+                        PolicyRisk = policyRiskResource,
                         RiskItem = riskResource
                     };
-                    await _quoteItemService.UpdateQuoteItemRiskItemAsync(quoteItemRiskItemResource);
+                    await _policyRiskService.UpdatePolicyRiskRiskItemAsync(policyRiskRiskItemResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
             }
 
             return View(resource);
         }
 
-        // POST: QuoteItems/EditContent/5
+        // POST: PolicyRisks/EditContent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditContent(Guid? id, ContentResource resource)
@@ -215,27 +218,27 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.Name;
+                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.PolicyRiskId);
+                    policyRiskResource.Description = resource.Name;
 
-                    QuoteItemContentResource quoteItemContentResource = new()
+                    PolicyRiskContentResource policyRiskContentResource = new()
                     {
-                        QuoteItem = quoteItemResource,
+                        PolicyRisk = policyRiskResource,
                         Content = resource
                     };
-                    await _quoteItemService.UpdateQuoteItemContentAsync(quoteItemContentResource);
+                    await _policyRiskService.UpdatePolicyRiskContentAsync(policyRiskContentResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
             }
 
             return View(resource);
         }
 
-        // POST: QuoteItems/EditHouse/5
+        // POST: PolicyRisks/EditHouse/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditHouse(Guid? id, HouseResource resource)
@@ -249,27 +252,27 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.PhysicalAddress;
+                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.PolicyRiskId);
+                    policyRiskResource.Description = resource.PhysicalAddress;
 
-                    QuoteItemHouseResource quoteItemHouseResource = new()
+                    PolicyRiskHouseResource policyRiskHouseResource = new()
                     {
-                        QuoteItem = quoteItemResource,
+                        PolicyRisk = policyRiskResource,
                         House = resource
                     };
-                    await _quoteItemService.UpdateQuoteItemHouseAsync(quoteItemHouseResource);
+                    await _policyRiskService.UpdatePolicyRiskHouseAsync(policyRiskHouseResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
             }
 
             return View(resource);
         }
 
-        // POST: QuoteItems/EditMotor/5
+        // POST: PolicyRisks/EditMotor/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditMotor(MotorResource resource)
@@ -278,23 +281,23 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
+                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.PolicyRiskId);
 
                     var motorMake = await _motorMakeService.GetByIdAsync(resource.MotorMakeId);
-                    quoteItemResource.Description = resource.RegYear + " " + motorMake.Name + " " + resource.RegNumber;
+                    policyRiskResource.Description = resource.RegYear + " " + motorMake.Name + " " + resource.RegNumber;
 
-                    QuoteItemMotorResource quoteItemMotorResource = new()
+                    PolicyRiskMotorResource policyRiskMotorResource = new()
                     {
-                        QuoteItem = quoteItemResource,
+                        PolicyRisk = policyRiskResource,
                         Motor = resource
                     };
-                    await _quoteItemService.UpdateQuoteItemMotorAsync(quoteItemMotorResource);
+                    await _policyRiskService.UpdatePolicyRiskMotorAsync(policyRiskMotorResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
             }
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
@@ -312,7 +315,7 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // GET: QuoteItems/Edit/5
+        // GET: PolicyRisks/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -320,23 +323,22 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
+            var resource = await _policyRiskService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
             }
 
             var coverTypes = await _coverTypeService.GetAllAsync();
-
             resource.CoverTypeList = new SelectList(coverTypes, "Id", "Name");
 
             return await Task.Run(() => View(resource));
         }
 
-        // POST: QuoteItems/Edit/5
+        // POST: PolicyRisks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, QuoteItemResource resource)
+        public async Task<IActionResult> Edit(Guid? id, PolicyRiskResource resource)
         {
             if (id != resource.Id)
             {
@@ -347,19 +349,19 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _quoteItemService.UpdateAsync(resource);
+                    await _policyRiskService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
 
-                return RedirectToAction(nameof(Edit), "Quotes", new { Id = resource.QuoteId });
+                return RedirectToAction(nameof(Edit), "Policy", new { Id = resource.PolicyId });
             }
             return View(resource);
         }
 
-        // GET: QuoteItems/Detail/5
+        // GET: PolicyRisks/Detail/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -367,24 +369,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return await Task.Run(() => View(resource));
-        }
-
-        // GET: QuoteItems/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
+            var resource = await _policyRiskService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -393,13 +378,30 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // POST: QuoteItems/Delete/5
+        // GET: PolicyRisks/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var resource = await _policyRiskService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
+        }
+
+        // POST: PolicyRisks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(QuoteItemResource resource)
+        public async Task<IActionResult> DeleteConfirmed(PolicyRiskResource resource)
         {
-            await _quoteItemService.DeleteAsync(resource.Id);
-            return RedirectToAction(nameof(Edit), "Quotes", new { resource.QuoteId });
+            await _policyRiskService.DeleteAsync(resource.Id);
+            return RedirectToAction(nameof(Edit), "Policy", new { resource.PolicyId });
         }
     }
 }

@@ -129,10 +129,10 @@
             </div>
             <div class="p-2 bg-light">
 
-                @if (Model.ClientCarrierResources.Any())
+                @if (Model.ClientCarriers.Any())
                 {
                     <ul class="bg-light">
-                        @foreach (var item in Model.ClientCarrierResources)
+                        @foreach (var item in Model.ClientCarriers)
                         {
                             <li><small>@item.Carrier.Name</small></li>
                         }
@@ -151,14 +151,21 @@
             <div class="justify-content-center">
                 <p class="bg-primary font-weight-bolder text-white p-2 mb-1">Address</p>
             </div>
-            <div class="p-2 bg-light">
-                <address>
-                    <small>
-                        <strong><input type="text" id="ClientPhysicalAddress" value="" readonly /></strong><br />
-                        <input type="text" id="ClientPostalAddress" value="" readonly /><br />
-                        <input type="text" id="ClientCity" value="" readonly /><br />
-                    </small>
-                </address>
+            <div class="p-3 bg-light">
+                @if (Model.Address != null)
+                {
+                    <dl>
+                        <dd id="sidePhysicalAddress" class="mb-0">
+                            <small>@Model.Address.PhysicalAddress</small>
+                        </dd>
+                        <dd id="sidePhysicalAddress" class="mb-0">
+                            <small>@Model.Address.PostalAddress</small>
+                        </dd>
+                        <dd id="sideCity">
+                            <small>@Model.Address.CityName</small>
+                        </dd>
+                    </dl>
+                }
                 <div class="form-group">
                     <button class="btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#addressModal">Add Address</button>
                 </div>
@@ -168,69 +175,50 @@
     </div>
 </div>
 
-<div class="ms-2">
-    <!-- Address Modal -->
-    <div class="modal fade" id="addressModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="modal-title" id="addressModalLabel">
-                        Address
-                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="PhysicalAddress" class="control-label">Physical Address</label>
-                                <input for="PhysicalAddress" id="PhysicalAddress" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="PostalAddress" class="control-label">Postal Address</label>
-                                <input for="PostalAddress" id="PostalAddress" class="form-control" />
-                            </div>
+<!-- Address Modal -->
+<div class="modal fade" id="addressModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="addressModalLabel">
+                    Address
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="PhysicalAddress" class="control-label">Physical Address</label>
+                            <input for="PhysicalAddress" id="PhysicalAddress" class="form-control" />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="AddressCountryId" class="control-label"></label>
-                                <select for="AddressCountryId" id="AddressCountryId" class="form-control" items=""></select>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="CityId" class="control-label"></label>
-                                <select for="CityId" id="CityId" class="form-control" items=""></select>
-                            </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="PostalAddress" class="control-label">Postal Address</label>
+                            <input for="PostalAddress" id="PostalAddress" class="form-control" />
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnAddAddress" class="btn btn-primary" onclick="PostAddress()">Save this record</button>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="AddressCountryId" class="control-label"></label>
+                            <select for="AddressCountryId" id="AddressCountryId" class="form-control" items=""></select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="CityId" class="control-label"></label>
+                            <select for="CityId" id="CityId" class="form-control" items=""></select>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- Flexbox container for aligning the toasts -->
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
-
-    <!-- Then put toasts within -->
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="..." class="rounded me-2" alt="...">
-            <strong class="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Hello, world! This is a toast message.
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnAddAddress" class="btn btn-primary" onclick="PostAddress()">Save this record</button>
+            </div>
         </div>
     </div>
 </div>
@@ -246,7 +234,7 @@
         var selectedClientId = '@Model.Id';
 
         $(document).ready(function () {
-            LoadAddress();
+            // Do something here.
         });
 
         $("#AddressCountryId").change(function () {
@@ -290,10 +278,9 @@
                     alert("An error occurred.");
                 },
                 success: function (address) {
-
-                    $('#ClientPhysicalAddress').val(resource.physicalAddress);
-                    $('#ClientPostalAddress').val(resource.postalAddress);
-                    $('#ClientCity').val(resource.cityName);
+                    $('#sidePhysicalAddress').val(address.physicalAddress);
+                    $('#sidePostalAddress').val(address.postalAddress);
+                    $('#sideCity').val(address.cityName);
                 }
             });
         }
@@ -323,7 +310,7 @@
             //  1. Build address object to match model class Address.cs
             var address = {
                 PhysicalAddress: $('#PhysicalAddress').val(),
-                PhysicalAddress: $('#PostalAddress').val(),
+                PostalAddress: $('#PostalAddress').val(),
                 CityId: selectedCityId,
                 ClientId: '@Model.Id',
                 CompanyId: null,

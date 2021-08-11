@@ -75,14 +75,11 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Occupation")]
         public string Occupation { get; set; }
 
+        public List<ClientCarrierResource> ClientCarriers = new();
+        public AddressResource Address { get; set; }
 
         [Display(Name = "Title")]
         public string Title { get; set; }
-
-        public List<ClientCarrier> ClientCarriers { get; } = new();
-        public List<ClientCarrierResource> ClientCarrierResources { get; } = new();
-        
-        public Guid[] CarrierIds { get; set; }
 
         //  SelectLists
 
@@ -92,6 +89,5 @@ namespace Tilbake.Application.Resources
         public SelectList MaritalStatusList { get; set; }
         public SelectList OccupationList { get; set; }
         public SelectList TitleList { get; set; }
-        public MultiSelectList CarrierList { get; set; }
     }
 }

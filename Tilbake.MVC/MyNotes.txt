@@ -51,3 +51,116 @@ $ dotnet ef dbcontext scaffold 'Server=den1.mssql7.gear.host;Database=tilbake;Us
 
 modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
+    <script>
+        var selectedClientId = '@Model.Id';
+
+        $(document).ready(function () {
+            LoadAddress();
+        });
+
+        $("#AddressCountryId").change(function () {
+            var selectedCountryId = $("#AddressCountryId option:selected").val();
+
+            $.ajax({
+                url: '@(Url.Action("GetCities", "Cities"))',
+                traditional: true,
+                dataType: "JSON",
+                type: 'GET',
+                data: { countryId: selectedCountryId },
+                error: function () {
+                    alert("An error occurred.");
+                },
+                success: function (cities) {
+
+                    $("#CityId").empty();   // clear before appending new list
+                    $.each(cities, function (index, city) {
+                        $('#CityId').append($('<option></option>').val(city.id).html(city.name));
+                    });
+                }
+            });
+        });
+
+        $('#addressModal').on('show.bs.modal', function (e) {
+
+            LoadCountries();
+            $('#PhysicalAddress').val('');
+            $('#PostalAddress').val('');
+        });
+
+        function LoadAddress() {
+
+            $.ajax({
+                url: '@(Url.Action("GetByClientId", "Addresses"))',
+                traditional: true,
+                dataType: "JSON",
+                type: 'GET',
+                data: { clientId: selectedClientId },
+                error: function () {
+                    alert("An error occurred.");
+                },
+                success: function (address) {
+                    $('#sidePhysicalAddress').val(address.physicalAddress);
+                    $('#sidePostalAddress').val(address.postalAddress);
+                    $('#sideCity').val(address.cityName);
+                }
+            });
+        }
+
+        function LoadCountries() {
+
+            $.ajax({
+                url: '@(Url.Action("GetCountries", "Countries"))',
+                traditional: true,
+                dataType: "JSON",
+                type: 'GET',
+                error: function () {
+                    alert("An error occurred.");
+                },
+                success: function (countries) {
+
+                    $("#AddressCountryId").empty();   // clear before appending new list
+                    $.each(countries, function (index, country) {
+                        $('#AddressCountryId').append($('<option></option>').val(country.id).html(country.name));
+                    });
+                }
+            });
+        }
+
+        function PostAddress() {
+            var selectedCityId = $("#CityId option:selected").val();
+            //  1. Build address object to match model class Address.cs
+            var address = {
+                PhysicalAddress: $('#PhysicalAddress').val(),
+                PhysicalAddress: $('#PostalAddress').val(),
+                CityId: selectedCityId,
+                ClientId: '@Model.Id',
+                CompanyId: null,
+                LossAdjusterId: null,
+                RepairerId: null,
+                TracingAgentId: null,
+                AttorneyId: null,
+                ThirdPartyId: null,
+                TowTruckId: null,
+                RoadsideAssistId: null
+            };
+
+            //  2. Call POST
+            $.ajax({
+                url: '@(Url.Action("PostAddress", "Addresses"))',
+                type: "POST",
+                dataType: "JSON",
+                traditional: true,
+                data: address,
+                success: function (address) {
+
+                    LoadAddress();
+                    // Unload modal
+                    $('#addressModal').modal('hide');
+                },
+                error: function (message) {
+                    console.log(message.statusText);
+                }
+            });
+        };
+    </script>
+

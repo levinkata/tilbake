@@ -41,9 +41,17 @@ else
                     <td>@file.Description</td>
                     <td>@file.FileType</td>
                     <td>@file.DocumentDate</td>
-                    <td>
-                        <a type="button" class="btn btn-primary" asp-action="DownloadFile" asp-route-id="@file.Id">Download</a>
-                        <a type="button" class="btn btn-danger" asp-action="DeleteFile" asp-route-id="@file.Id">Delete</a>
+                    <td class="justify-content-end">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="DownloadFile" asp-route-id="@file.Id">Download</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Print</a></li>
+                                <li><a class="dropdown-item" asp-action="DeleteFile" asp-route-id="@file.Id">Delete</a></li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             }

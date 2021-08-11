@@ -25,6 +25,7 @@ namespace Tilbake.MVC.Controllers
         private readonly ICarrierService _carrierService;
         private readonly IPortfolioService _portfolioService;
         private readonly IClientCarrierService _clientCarrierService;
+        private readonly IAddressService _addressService;
 
         public PortfolioClientsController(IPortfolioClientService portfolioClientService,
                                             IClientService clientService,
@@ -36,7 +37,8 @@ namespace Tilbake.MVC.Controllers
                                             ITitleService titleService,
                                             ICarrierService carrierService,
                                             IPortfolioService portfolioService,
-                                            IClientCarrierService clientCarrierService)
+                                            IClientCarrierService clientCarrierService,
+                                            IAddressService addressService)
         {
             _portfolioClientService = portfolioClientService;
             _clientService = clientService;
@@ -49,6 +51,7 @@ namespace Tilbake.MVC.Controllers
             _carrierService = carrierService;
             _portfolioService = portfolioService;
             _clientCarrierService = clientCarrierService;
+            _addressService = addressService;
         }
 
         // GET: PortfolioClients
@@ -92,7 +95,6 @@ namespace Tilbake.MVC.Controllers
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
-            // var carriers = await _carrierService.GetAllAsync();
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
@@ -113,7 +115,6 @@ namespace Tilbake.MVC.Controllers
                 MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
                 OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
                 TitleList = SelectLists.Titles(titles, Guid.Empty)
-                // CarrierList = SelectLists.Carriers(carriers, carrierIds)
             };
             return View("CreateClient", resource);
         }
@@ -160,15 +161,8 @@ namespace Tilbake.MVC.Controllers
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
             var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
-
+            var address = await _addressService.GetByClientIdAsync(clientId);
             var resource = await _clientService.GetByIdAsync(clientId);
-            
-            int counter = 0;
-            foreach (var item in resource.ClientCarriers)
-            {
-                resource.CarrierIds[counter] = item.CarrierId;
-                counter++;
-            }
 
             resource.PortfolioId = portfolioId;
             resource.PortfolioName = portfolio.Name;
@@ -178,10 +172,10 @@ namespace Tilbake.MVC.Controllers
             resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
             resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
             resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
-            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
-            resource.ClientCarrierResources.AddRange(clientCarriers);
+            resource.Address = address;
+            resource.ClientCarriers.AddRange(clientCarriers);
 
-            return await Task.Run(() => View("EditClient", resource));
+            return View("EditClient", resource);
         }
 
         [HttpPost]

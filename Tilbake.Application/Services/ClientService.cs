@@ -123,25 +123,6 @@ namespace Tilbake.Application.Services
                 await _unitOfWork.ClientCarriers.DeleteRangeAsync(clientCarriers);
             }
 
-            if(resource.CarrierIds != null)
-            {
-                int ro = resource.CarrierIds.Length;
-                var carriers = resource.CarrierIds;
-
-                List<ClientCarrier> newClientCarriers = new();
-                for (int i = 0; i < ro; i++)
-                {
-                    ClientCarrier clientCarrier = new()
-                    {
-                        ClientId = clientId,
-                        CarrierId = Guid.Parse(carriers[i].ToString())
-                    };
-                    newClientCarriers.Add(clientCarrier);
-                }
-
-                await _unitOfWork.ClientCarriers.AddRangeAsync(newClientCarriers);
-            }
-
             return await _unitOfWork.SaveAsync();
         }
 
@@ -151,7 +132,6 @@ namespace Tilbake.Application.Services
                                         c => c.PortfolioClients.Any(p => p.Policies.Any(r => r.Id == policyId)));
 
             var resource = _mapper.Map<Client, ClientResource>(result);
-
             return resource;
         }
     }

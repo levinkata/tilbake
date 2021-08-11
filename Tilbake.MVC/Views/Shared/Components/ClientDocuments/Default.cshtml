@@ -20,9 +20,17 @@
                 <td>@file.Description</td>
                 <td>@file.FileType</td>
                 <td>@file.DocumentDate</td>
-                <td>
-                    <a asp-controller="ClientDocuments" asp-action="DownloadFile" asp-route-id="@file.Id"><i class="fas fa-file-download"></i></a>
-                    <a asp-controller="ClientDocuments" asp-action="Delete" asp-route-id="@file.Id"><i class="far fa-trash-alt"></i></a>
+                <td class="justify-content-end">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="DownloadFile" asp-route-id="@file.Id"><i class="fas fa-file-download"></i> Download</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Print</a></li>
+                            <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="Delete" asp-route-id="@file.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
             }

@@ -66,14 +66,14 @@
                 </td>
                 <td class="justify-content-center">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-outline-info rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@item.Id">View</a></li>
                             <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Edit" asp-route-portfolioId="@portfolioId" asp-route-clientId="@item.Id">Edit</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Print</a></li>
-                            <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                            <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
                         </ul>
                     </div>
                 </td>

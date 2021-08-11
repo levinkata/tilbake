@@ -145,7 +145,7 @@ namespace Tilbake.MVC.Controllers
             resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
             resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
 
-            return View(resource);
+            return View("CreateClient", resource);
         }
 
         [HttpGet]

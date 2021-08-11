@@ -34,7 +34,7 @@ namespace Tilbake.Application.Validators
                 .Length(50);
         }
 
-        public bool IsIdNumberUnique(ClientResource editedClient, string newIdNumber)
+        private bool IsIdNumberUnique(ClientResource editedClient, string newIdNumber)
         {
             var result =_unitOfWork.Clients.GetAllAsync();
             return result.Result.All(e => e.Equals(editedClient) || e.IdNumber != newIdNumber);

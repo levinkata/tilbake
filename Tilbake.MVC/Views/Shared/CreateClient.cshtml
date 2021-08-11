@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = Model.PortfolioName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -10,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-9">
-        <form asp-controller="PortfolioClients" asp-action="Create">
+        <form class="row g-3" asp-controller="PortfolioClients" asp-action="Create" asp-route-portfolioId="@Model.PortfolioId">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="PortfolioId" type="hidden" />
             <div class="row">
@@ -68,7 +69,7 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="IdNumber" class="control-label"></label>
-                        <input asp-for="IdNumber" class="form-control" />
+                        <input asp-for="IdNumber" class="form-control"/>
                         <span asp-validation-for="IdNumber" class="text-danger"></span>
                     </div>
                 </div>
@@ -94,21 +95,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <div class="form-group">
                         <label asp-for="Phone" class="control-label"></label>
                         <input asp-for="Phone" class="form-control" />
                         <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <div class="form-group">
                         <label asp-for="Mobile" class="control-label"></label>
                         <input asp-for="Mobile" class="form-control" />
                         <span asp-validation-for="Mobile" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                     <div class="form-group">
                         <label asp-for="Email" class="control-label"></label>
                         <input asp-for="Email" class="form-control" />
@@ -126,48 +127,22 @@
             <div class="justify-content-center">
                 <p class="bg-primary font-weight-bolder text-white p-2 mb-1">Carriers</p>
             </div>
-            <div class="p-2 bg-light">
+            <div class="p-3 bg-light">
             </div>
         </div>
         <div class="form-group">
             <div class="justify-content-center">
                 <p class="bg-primary font-weight-bolder text-white p-2 mb-1">Address</p>
             </div>
-            <div class="p-2 bg-light">
-                <address>
-                    <small>
-                        <strong>Physical Address</strong><br />
-                        Postal Address<br />
-                        City<br />
-                    </small>
-                </address>
+            <div class="p-3 bg-light">
 
             </div>
-
-        </div>
-
-    </div>
-</div>
-
-<!-- Flexbox container for aligning the toasts -->
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
-
-    <!-- Then put toasts within -->
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="..." class="rounded me-2" alt="...">
-            <strong class="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Hello, world! This is a toast message.
         </div>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="PortfolioClients" asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Back to Portfolio Clients</a>
 </div>
 
 @section Scripts {

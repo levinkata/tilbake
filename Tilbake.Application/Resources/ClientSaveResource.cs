@@ -22,8 +22,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Middle Name")]
         public string MiddleName { get; set; }
 
-        [DataType(DataType.Text)]
-        [Required(ErrorMessage = "Please enter Name"), MaxLength(50)]
+        //[DataType(DataType.Text)]
+        //[Required(ErrorMessage = "Please enter Name"), MaxLength(50)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
@@ -33,8 +33,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Gender")]
         public Guid GenderId { get; set; }
 
-        [DataType(DataType.Text)]
-        [Required(ErrorMessage = "Please enter ID Number"), MaxLength(50)]
+        //[DataType(DataType.Text)]
+        //[Required(ErrorMessage = "Please enter ID Number"), MaxLength(50)]
         [Display(Name = "ID Number")]
         public string IdNumber { get; set; }
 
@@ -48,14 +48,14 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Phone")]
         public string Phone { get; set; }
 
-        [Required(ErrorMessage = "Please enter Mobile Number"), MaxLength(50)]
-        [DataType(DataType.PhoneNumber)]
+        //[Required(ErrorMessage = "Please enter Mobile Number"), MaxLength(50)]
+        //[DataType(DataType.PhoneNumber)]
         [Display(Name = "Mobile")]
         public string Mobile { get; set; }
 
-        [DataType(DataType.EmailAddress)]
-        [Required(ErrorMessage = "Please enter Email ID")]
-        [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Email is not valid.")]
+        //[DataType(DataType.EmailAddress)]
+        //[Required(ErrorMessage = "Please enter Email ID")]
+        //[RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Email is not valid.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 

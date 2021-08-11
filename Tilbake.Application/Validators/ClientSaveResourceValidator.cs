@@ -1,13 +1,19 @@
 using System;
+using System.Linq;
 using FluentValidation;
 using Tilbake.Application.Resources;
+using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Validators
 {
     public class ClientSaveResourceValidator : AbstractValidator<ClientSaveResource>
     {
-        public ClientSaveResourceValidator()
+        private readonly IUnitOfWork _unitOfWork;
+
+        public ClientSaveResourceValidator(IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
+            
             RuleFor(p => p.LastName)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
@@ -15,16 +21,29 @@ namespace Tilbake.Application.Validators
 
             RuleFor(p => p.IdNumber)
                 .Cascade(CascadeMode.Stop)
-                .NotEmpty()
-                .MaximumLength(50);
-                
+                .NotEmpty().WithMessage("Please enter ID Number")
+                .MaximumLength(50)
+                .Must(IsIdNumberUnique).WithMessage("Id Number must be unique");
+
             RuleFor(p => p.BirthDate)
                 .LessThan(DateTime.Now);
-                
+
             RuleFor(p => p.Email)
                 .Cascade(CascadeMode.Stop)
-                .EmailAddress()
-                .Length(50);
+                .NotEmpty()
+                .EmailAddress().WithMessage("Please enter Email ID")
+                .MaximumLength(50);
+
+            RuleFor(p => p.Mobile)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("Please enter Mobile Number")
+                .MaximumLength(50);
+        }
+
+        private bool IsIdNumberUnique(ClientSaveResource editedClient, string newIdNumber)
+        {
+            var result = _unitOfWork.Clients.GetAllAsync();
+            return result.Result.All(e => e.Equals(editedClient) || e.IdNumber != newIdNumber);
         }
     }
 }

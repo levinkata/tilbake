@@ -12,6 +12,7 @@ using System;
 using System.Reflection;
 using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
+using Tilbake.Application.Validators;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
 
@@ -93,8 +94,8 @@ namespace Tilbake.MVC
             services.AddControllersWithViews()
                     .AddFluentValidation(s =>
                     {
-                        // s.RegisterValidatorsFromAssemblyContaining<BankResourceValidator>();
-                        s.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());                        
+                        s.RegisterValidatorsFromAssemblyContaining<BankResourceValidator>();
+                        // s.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());                        
                         s.DisableDataAnnotationsValidation = true;
                     });
             

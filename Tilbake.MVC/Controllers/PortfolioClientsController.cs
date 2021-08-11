@@ -157,7 +157,6 @@ namespace Tilbake.MVC.Controllers
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
-            var carriers = await _carrierService.GetAllAsync();
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
             var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);

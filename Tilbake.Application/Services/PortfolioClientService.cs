@@ -24,29 +24,11 @@ namespace Tilbake.Application.Services
         public async Task<int> AddClientAsync(ClientSaveResource resource)
         {
             var client = _mapper.Map<ClientSaveResource, Client>(resource);
-            // var clientNumber = await _unitOfWork.ClientNumberGenerators.NextValue();
 
             client.Id = Guid.NewGuid();
             client.DateAdded = DateTime.Now;
-            //client.ClientNumber = clientNumber;
             await _unitOfWork.Clients.AddAsync(client);
             var clientId = client.Id;
-
-            //int ro = resource.CarrierIds.Length;
-            //var carriers = resource.CarrierIds;
-
-            //List<ClientCarrier> clientCarriers = new();
-
-            //for (int i = 0; i < ro; i++)
-            //{
-            //    ClientCarrier clientCarrier = new()
-            //    {
-            //        ClientId = clientId,
-            //        CarrierId = Guid.Parse(carriers[i].ToString())
-            //    };
-            //    clientCarriers.Add(clientCarrier);
-            //}
-            //await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
 
             PortfolioClient portfolioClient = new()
             {
@@ -93,7 +75,7 @@ namespace Tilbake.Application.Services
         public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
         {
             var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
-                                e => e.PortfolioId == portfolioId && e.ClientId == clientId);
+                                            e => e.PortfolioId == portfolioId && e.ClientId == clientId);
 
             return result.Id;
         }

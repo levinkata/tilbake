@@ -31,7 +31,7 @@ namespace Tilbake.Application.Validators
             RuleFor(p => p.Email)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .EmailAddress().WithMessage("Please enter Email ID")
+                .EmailAddress().WithMessage("Please enter Email Address")
                 .MaximumLength(50);
 
             RuleFor(p => p.Mobile)

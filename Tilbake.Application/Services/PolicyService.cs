@@ -247,6 +247,19 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
+        public async Task<PolicyResource> GetCurrentPolicyAsync(Guid portfolioClientId)
+        {
+            var result = await _unitOfWork.Policies.GetFirstOrDefaultAsync(
+                                             e => e.PortfolioClientId == portfolioClientId,
+                                             p => p.PaymentMethod, p => p.PolicyStatus,
+                                             p => p.PolicyType,
+                                             p => p.SalesType,
+                                             p => p.Insurer);
+
+            var resource = _mapper.Map<Policy, PolicyResource>(result);
+            return resource;
+        }
+
         public async Task<int> QuoteToPolicy(QuotePolicyObjectResource resource)
         {
             var insurerId = resource.Quote.InsurerId;

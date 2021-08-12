@@ -1,0 +1,18 @@
+﻿@model PolicyResource
+@{
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-title mb-3">Policy Details</h6>
+        @if (Model != null)
+        {
+            <p class="card-text"><strong>Policy Number: </strong>@Model.PolicyNumber</p>
+            <p class="card-text"><strong>Insurer Policy Number: </strong>@Model.InsurerPolicyNumber</p>
+            <p class="card-text"><strong>Insurer: </strong>@Model.Insurer</p>
+            <p class="card-text"><strong>Cover Start Date: </strong>@Model.CoverStartDate.ToString("dd/MM/yyyy")</p>
+            <p class="card-text"><strong>Cover End Date: </strong>@Model.CoverEndDate.ToString("dd/MM/yyyy")</p>
+            <p class="card-text"><strong>Inception Date: </strong>@Model.InceptionDate.ToString("dd/MM/yyyy")</p>
+        }
+    </div>
+</div>

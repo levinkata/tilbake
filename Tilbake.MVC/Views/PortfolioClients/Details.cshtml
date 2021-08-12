@@ -7,194 +7,159 @@
 }
 
 <h1>@Model.PortfolioName</h1>
-<div>
-    <span class="d-block p-2 bg-primary text-white">@FullName</span>
-    <hr />
-</div>
-<div class="row g-0">
-    <div class="col-md-3">
-        <div class="sticker">
-            <div class="d-block pb-0">
-                <h6>Total Premiums</h6>
-            </div>
-            <div class="d-flex flex-column justify-content-end">
-                <div class="row">
+
+<div class="row g-2">
+    <div class="col-3">
+        <div class="card text-center mb-4">
+            <div class="card-body text-center">
+                <div class="card-img mx-auto d-flex justify-content-center" style="max-height: 8rem;">
+                    <div class="position-relative overflow-hidden rounded-circle">
+                        <div style="overflow: hidden; box-sizing: border-box; display: inline-block; position: relative; width: 122px; height: 122px;">
+                            <img src="~/images/Profile.jpg" alt="Profile Picture" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;" />
+                        </div>
+                    </div>
+                </div>
+                <h6 class="card-title mb-3">@FullName</h6>
+                <p class="card-text"><strong>@Model.IdNumber</strong></p>
+                <div class="row mb-0">
                     <div class="col">
-                        <p class="font-weight-bolder mb-1 h4">$47K</p><span class="badge badge-info rounded-pill fs--2">+3.5%</span>
+                        <p class="card-text text-muted"><small>@Model.Gender</small></p>
                     </div>
-                    <div class="col-auto">
-                        Sat : 120
+                    <div class="col">
+                        <p class="card-text text-muted"><small>@Model.BirthDate.ToString("dd/MM/yyyy")</small></p>
                     </div>
+                </div>
+                <p class="card-text mb-0"><small>@Model.Mobile</small></p>
+                <p class="card-text mb-0"><small>@Model.Email</small></p>
+                <p class="card-text text-muted"><small>@Model.Occupation</small></p>
+                <div class="form-group">
+                    <a asp-action="EditClient" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</a>
+                </div>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title mb-3">Address</h6>
+                @if (Model.Address != null)
+                {
+                    <p class="card-text text-muted mb-0"><small>@Model.Address.PhysicalAddress</small></p>
+                    <p class="card-text text-muted mb-0"><small>@Model.Address.PostalAddress</small></p>
+                    <p class="card-text text-muted"><small>@Model.Address.CityName</small></p>
+                }
+                <div class="form-group">
+                    <button type="button" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card box-shadow">
-            <div class="card-header pb-0">
-                <h6>Sum Insured</h6>
-            </div>
-            <div class="card-body d-flex flex-column justify-content-end">
-                <div class="row">
-                    <div class="col">
-                        <p class="font-weight-bolder mb-1 h4">$900K</p><span class="badge badge-primary rounded-pill fs--2">+3.5%</span>
+    <div class="col-9">
+        <div class="row g-2 mb-3">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Premiums</h6>
+                        <div class="row">
+                            <div class="col">
+                                <p class="card-text font-weight-bolder mb-1 h4">$47K</p><span class="badge badge-danger rounded-pill fs--2">+3.5%</span>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted">Sat : 120</small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        Sat : 120
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">Sum Insured</h6>
+                        <div class="row">
+                            <div class="col">
+                                <p class="card-text font-weight-bolder mb-1 h4">$900K</p><span class="badge badge-primary rounded-pill fs--2">+3.5%</span>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted">Sat : 120</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">Risks</h6>
+                        <div class="row">
+                            <div class="col">
+                                <p class="card-text font-weight-bolder mb-1 h4">5</p><span class="badge badge-success rounded-pill fs--2">+3.5%</span>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted">Sat : 120</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Claims</h6>
+                        <div class="row">
+                            <div class="col">
+                                <p class="card-text font-weight-bolder mb-1 h4">$0</p><span class="badge badge-warning rounded-pill fs--2">+3.5%</span>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted">Sat : 120</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card box-shadow">
-            <div class="card-header pb-0">
-                <h6>Risks</h6>
+        <div class="row">
+            <div class="col">
+                @await Component.InvokeAsync("Policy", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
-            <div class="card-body d-flex flex-column justify-content-end">
-                <div class="row">
-                    <div class="col">
-                        <p class="font-weight-bolder mb-1 h4">5</p><span class="badge badge-success rounded-pill fs--2">+3.5%</span>
-                    </div>
-                    <div class="col-auto">
-                        Sat : 120
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card box-shadow">
-            <div class="card-header pb-0">
-                <h6>Total Claims</h6>
-            </div>
-            <div class="card-body d-flex flex-column justify-content-end">
-                <div class="row">
-                    <div class="col">
-                        <p class="font-weight-bolder mb-1 h4">$0</p><span class="badge badge-warning rounded-pill fs--2">+3.5%</span>
-                    </div>
-                    <div class="col-auto">
-                        Sat : 120
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<br />
-<div>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="policy-tab" data-bs-toggle="tab" data-bs-target="#policy" type="button" role="tab" aria-controls="policy" aria-selected="true">Policy</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="quote-tab" data-bs-toggle="tab" data-bs-target="#quote" type="button" role="tab" aria-controls="quote" aria-selected="false">Quotes</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="invoice-tab" data-bs-toggle="tab" data-bs-target="#invoice" type="button" role="tab" aria-controls="invoice" aria-selected="false">Invoices</button>
-        </li>        
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Client Documents</button>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <br />
-            <div class="form-group text-center">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary btn-sm">Edit Details</a>
-            </div>
-            <br />
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.IdNumber)
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.IdNumber)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.BirthDate)
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.BirthDate)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Gender)
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.Gender)
-                </dd>
-            </dl>
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Mobile)
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.Mobile)
-                </dd>
-            </dl>
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Occupation)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Occupation)
-                </dd>
-            </dl>
-            <hr size="30">
-            <div>
-                @*@await Component.InvokeAsync("AdresseItem", new { itemId = Model.Klient.ID })*@
-            </div>
-        </div>
-        <div class="tab-pane fade" id="policy" role="tabpanel" aria-labelledby="policy-tab">
-            <br />
-            <div class="form-group text-center">
-                <a asp-controller="Policies" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Policy</a>
-            </div>
-            <div class="form-group">
-                @await Component.InvokeAsync("Policies", new { portfolioClientId = @Model.PortfolioClientId })
-            </div>
-        </div>
-        <div class="tab-pane fade" id="quote" role="tabpanel" aria-labelledby="quote-tab">
-            <br />
-            <div class="form-group text-center">
-                <a asp-controller="Quotes" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
-            </div>
-            <div class="form-group">
-                @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
-            </div>
-        </div>
-        <div class="tab-pane fade" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
-            <br />
-            <div class="form-group text-center">
-                <a asp-controller="Invoices" asp-action="Create" asp-route-policyId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Policy</a>
-            </div>
-            <div class="form-group">
+            <div class="col justify-content-end">
                 @await Component.InvokeAsync("Invoices", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
-        </div>        
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <br />
-            <div class="form-group text-center">
-                <a asp-controller="ClientDocuments" asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@Model.Id" class="btn btn-secondary btn-sm">Add Document</a>
-            </div>
-            <div class="form-group">
-                @await Component.InvokeAsync("ClientDocuments", new { clientId = @Model.Id })
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="quote-tab" data-bs-toggle="tab" data-bs-target="#quote" type="button" role="tab" aria-controls="quote" aria-selected="false">Quotes</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Client Documents</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade  show active" id="quote" role="tabpanel" aria-labelledby="quote-tab">
+                        <br />
+                        <div class="form-group text-center">
+                            <a asp-controller="Quotes" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
+                        </div>
+                        <div class="form-group">
+                            @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <br />
+                        <div class="form-group text-center">
+                            <a asp-controller="ClientDocuments" asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@Model.Id" class="btn btn-secondary btn-sm">Add Document</a>
+                        </div>
+                        <div class="form-group">
+                            @await Component.InvokeAsync("ClientDocuments", new { clientId = @Model.Id })
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="form-group">
+            <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Back to List</a>
+        </div>
     </div>
-</div>
-
-<div class="form-group">
-    <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Back to List</a>
 </div>
 
 @section Scripts {

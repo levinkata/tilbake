@@ -1,58 +1,51 @@
 ﻿@model IEnumerable<PolicyRiskResource>
 
-@if (Model.Any())
-{
-    <div class="form-group">
-        <table id="tblPolicyRisk" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        <strong>Description</strong>
-                    </th>
-                    <th>
-                        <strong>Cover Type</strong>
-                    </th>
-                    <th>
-                        <strong>Sum Insured</strong>
-                    </th>
-                    <th>
-                        <strong>Premium</strong>
-                    </th>
-                    <th>
-                        <strong>Excess</strong>
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-title mb-3">Risks</h6>
+        @if (Model.Any())
+        {
+            <table id="tblPolicyRisk" class="table">
+                <thead>
                     <tr>
-                        <td>@item.Description</td>
-                        <td>@item.CoverType</td>
-                        <td>@item.SumInsured</td>
-                        <td>@item.Premium</td>
-                        <td>@item.Excess</td>
-                        <td class="justify-content-end">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="PolicyRisks" asp-action="PolicyRisk" asp-route-policyRiskId="@item.Id"><i class="fas fa-info"></i> Policy Risk</a></li>
-                                    <li><a class="dropdown-item" asp-controller="PolicyRisks" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                    <li><a class="dropdown-item" asp-controller="PolicyRisks" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
-                                </ul>
-                            </div>
-                        </td>
+                        <th>
+                            <strong>Description</strong>
+                        </th>
+                        <th>
+                            <strong>Sum Insured</strong>
+                        </th>
+                        <th>
+                            <strong>Premium</strong>
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@item.SumInsured</td>
+                            <td>@item.Premium</td>
+                            <td class="justify-content-end">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="PolicyRisks" asp-action="PolicyRisk" asp-route-policyRiskId="@item.Id"><i class="fas fa-info"></i> Policy Risk</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PolicyRisks" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Print</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PolicyRisks" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
-}
-else
-{
-    <caption>No Records Found</caption>
-}
+</div>
+
+

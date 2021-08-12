@@ -41,7 +41,7 @@ namespace Tilbake.Application.Services
             var client = _mapper.Map<ClientResource, Client>(resource);
             await _unitOfWork.Clients.DeleteAsync(client);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientResource>> GetAllAsync()
@@ -88,11 +88,16 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await Task.Run(() => _unitOfWork.Clients.GetAllAsync(
+            var result = await _unitOfWork.Clients.GetAllAsync(
                                                         e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId),
                                                         e => e.OrderBy(r => r.LastName),
-                                                        e => e.PortfolioClients
-                                                        ));
+                                                        e => e.PortfolioClients,
+                                                        c => c.ClientType,
+                                                        c => c.Country,
+                                                        c => c.Gender,
+                                                        c => c.MaritalStatus,
+                                                        c => c.Occupation,
+                                                        c => c.Title);
 
             var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
 
@@ -103,7 +108,13 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
                                                     c => c.PortfolioClients.Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId),
-                                                    c => c.PortfolioClients);
+                                                    c => c.PortfolioClients,
+                                                    c => c.ClientType,
+                                                    c => c.Country,
+                                                    c => c.Gender,
+                                                    c => c.MaritalStatus,
+                                                    c => c.Occupation,
+                                                    c => c.Title);
 
             var resource = _mapper.Map<Client, ClientResource>(result);
             return resource;

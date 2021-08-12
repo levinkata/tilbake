@@ -74,6 +74,10 @@ namespace Tilbake.MVC.Controllers
             var portfolioClientId = await _portfolioClientService.GetPortfolioClientId(portfolioId, clientId);
             var resource = await _clientService.GetByClientId(portfolioId, clientId);
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
+            var address = await _addressService.GetByClientIdAsync(clientId);
+            resource.Address = address;
+            resource.ClientCarriers.AddRange(clientCarriers);
 
             if (resource == null)
             {

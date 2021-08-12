@@ -1,67 +1,62 @@
 ﻿@model IEnumerable<InvoiceResource>
 
-@if (Model.Any())
-{
-    <table id="tlbInvoice" class="table">
-        <thead>
-            <tr>
-                <th>
-                    <strong>@Html.DisplayNameFor(model => model.InvoiceNumber)</strong>
-                </th>
-                <th>
-                    <strong>@Html.DisplayNameFor(model => model.InvoiceDate)</strong>
-                </th>
-                <th>
-                    <strong>@Html.DisplayNameFor(model => model.Amount)</strong>
-                </th>
-                <th>
-                    <strong>@Html.DisplayNameFor(model => model.TaxAmount)</strong>
-                </th>
-                <th>
-                    <strong>@Html.DisplayNameFor(model => model.InvoiceStatus)</strong>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoiceNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoiceDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TaxAmount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoiceStatus)
-                    </td>
-                    <td class="justify-content-end">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Details" asp-route-id="@item.Id">View</a></li>
-                                <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Print</a></li>
-                                <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <caption>No Records Found</caption>
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-title mb-3">Invoices</h6>
+        @if (Model.Any())
+        {
+            <table id="tlbInvoice" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.InvoiceNumber)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.InvoiceDate)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.Amount)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.InvoiceStatus)</strong>
+                        </th>
+                        @*<th></th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InvoiceNumber)
+                        </td>
+                        <td>
+                            @item.InvoiceDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InvoiceStatus)
+                        </td>
+                        @*<td class="justify-content-end">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Details" asp-route-id="@item.Id">View</a></li>
+                    <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Print</a></li>
+                    <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
+                </ul>
+            </div>
+        </td>*@
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
 
-}

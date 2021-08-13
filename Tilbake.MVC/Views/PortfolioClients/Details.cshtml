@@ -120,40 +120,16 @@
                 @await Component.InvokeAsync("Policy", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
             <div class="col justify-content-end">
-                @await Component.InvokeAsync("Invoices", new { portfolioClientId = @Model.PortfolioClientId })
+                <div class="card mb-3">Premiums</div>
+                <div class="card">Claims</div>
             </div>
         </div>
-
-        <div class="card mb-4">
-            <div class="card-body">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="quote-tab" data-bs-toggle="tab" data-bs-target="#quote" type="button" role="tab" aria-controls="quote" aria-selected="false">Quotes</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Client Documents</button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade  show active" id="quote" role="tabpanel" aria-labelledby="quote-tab">
-                        <br />
-                        <div class="form-group text-center">
-                            <a asp-controller="Quotes" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-secondary btn-sm">Add Quote</a>
-                        </div>
-                        <div class="form-group">
-                            @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                        <br />
-                        <div class="form-group text-center">
-                            <a asp-controller="ClientDocuments" asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@Model.Id" class="btn btn-secondary btn-sm">Add Document</a>
-                        </div>
-                        <div class="form-group">
-                            @await Component.InvokeAsync("ClientDocuments", new { clientId = @Model.Id })
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col">
+                @await Component.InvokeAsync("ClientDocuments", new { clientId = @Model.Id })
+            </div>
+            <div class="col">
+                @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
         </div>
         <div class="form-group">

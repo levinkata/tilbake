@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<ClientResource>
-@{ 
+@{
     var portfolioId = ViewBag.PortfolioId;
 }
 <h1>@ViewData["Title"]</h1>
@@ -13,71 +13,74 @@
         </div>
     </div>
 }
-
-@if (Model.Any())
-{
-    
-}
-<table id="tblClient" class="table">
-    <thead>
-        <tr>
-            <th>
-                <strong>@Html.DisplayNameFor(model => model.ClientNumber)</strong>
-            </th>
-            <th>
-                <strong>@Html.DisplayNameFor(model => model.FirstName)</strong>
-            </th>
-            <th>
-                <strong>@Html.DisplayNameFor(model => model.LastName)</strong>
-            </th>
-            <th>
-                <strong>@Html.DisplayNameFor(model => model.IdNumber)</strong>
-            </th>
-            <th>
-                <strong>@Html.DisplayNameFor(model => model.Mobile)</strong>
-            </th>
-            <th>
-                <strong>@Html.DisplayNameFor(model => model.Email)</strong>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<div class="card mb-3">
+    <div class="card-body">
+        @*<h6 class="card-title mb-3">Clients</h6>*@
+        @if (Model.Any())
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Mobile)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td class="justify-content-center">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@item.Id">View</a></li>
-                            <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Edit" asp-route-portfolioId="@portfolioId" asp-route-clientId="@item.Id">Edit</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Print</a></li>
-                            <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
+            <table id="tblClient" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.ClientNumber)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.FirstName)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.LastName)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.IdNumber)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.Mobile)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.Email)</strong>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClientNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Mobile)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td class="justify-content-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@item.Id">View</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Edit" asp-route-portfolioId="@portfolioId" asp-route-clientId="@item.Id">Edit</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Print</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PortfolioClients" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
-    </tbody>
-</table>
+    </div>
+</div>

@@ -219,7 +219,9 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Quotes.GetAllAsync(
                                                 null,
-                                                r => r.OrderBy(n => n.QuoteNumber));
+                                                r => r.OrderBy(n => n.QuoteNumber),
+                                                r => r.Insurer,
+                                                r => r.QuoteStatus);
 
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
 
@@ -230,7 +232,9 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(
                                                 r => r.Id == id,
-                                                r => r.QuoteItems);
+                                                r => r.QuoteItems,
+                                                r => r.Insurer,
+                                                r => r.QuoteStatus);
 
             var resources = _mapper.Map<Quote, QuoteResource>(result);
 
@@ -244,6 +248,7 @@ namespace Tilbake.Application.Services
                                                   r => r.OrderBy(p => p.QuoteNumber),
                                                   r => r.QuoteItems,
                                                   r => r.QuoteStatus,
+                                                  r => r.Insurer,
                                                   r => r.PortfolioClient);
             
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
@@ -258,6 +263,7 @@ namespace Tilbake.Application.Services
                                                   r => r.OrderBy(p => p.QuoteNumber),
                                                   r => r.QuoteItems,
                                                   r => r.QuoteStatus,
+                                                  r => r.Insurer,
                                                   r => r.PortfolioClient);
 
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
@@ -268,9 +274,10 @@ namespace Tilbake.Application.Services
         public async Task<QuoteResource> GetByQuoteNumberAsync(int quoteNumber)
         {
             var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(
-                                                   r => r.QuoteNumber == quoteNumber,
-                                                   r => r.QuoteStatus,
-                                                   r => r.PortfolioClient);
+                                                    r => r.QuoteNumber == quoteNumber,
+                                                    r => r.QuoteStatus,
+                                                    r => r.Insurer,
+                                                    r => r.PortfolioClient);
 
             var resource = _mapper.Map<Quote, QuoteResource>(result);
 
@@ -281,7 +288,9 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(
                                                     e => e.Id == id,
-                                                    e => e.QuoteStatus, e => e.Insurer, e => e.QuoteItems);
+                                                    e => e.QuoteStatus,
+                                                    e => e.Insurer,
+                                                    e => e.QuoteItems);
             var resource = _mapper.Map<Quote, QuoteResource>(result);
 
             return resource;

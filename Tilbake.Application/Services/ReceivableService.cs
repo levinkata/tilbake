@@ -24,8 +24,13 @@ namespace Tilbake.Application.Services
         public async Task<int> AddAsync(ReceivableSaveResource resource)
         {
             var receivable = _mapper.Map<ReceivableSaveResource, Receivable>(resource);
-            receivable.Id = Guid.NewGuid();
+            var invoiceId = resource.InvoiceId;
 
+            var invoice = await _unitOfWork.Invoices.GetByIdAsync(invoiceId);
+            var policyId = invoice.PolicyId;
+
+            receivable.Id = Guid.NewGuid();
+            receivable.DateAdded = DateTime.Now;
             await _unitOfWork.Receivables.AddAsync(receivable);
 
             ReceivableInvoice receivableInvoice = new()
@@ -34,6 +39,22 @@ namespace Tilbake.Application.Services
                 ReceivableId = receivable.Id
             };
             await _unitOfWork.ReceivableInvoices.AddAsync(receivableInvoice);
+
+            Premium newPremium = new()
+            {
+                Id = Guid.NewGuid(),
+                PolicyId = policyId,
+                PremiumDate = DateTime.Now,
+                PremiumMonth=0,
+                PremiumYear=0,
+                Amount=0,
+                IsRefunded=false,
+                Commission=0,
+                TaxAmount =0,
+                PolicyFee=0,
+                AdministrationFee =0
+            };
+            await _unitOfWork.Premiums.AddAsync(newPremium);
             return await _unitOfWork.SaveAsync();
         }
 

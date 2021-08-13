@@ -56,6 +56,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             PolicyTypes = new PolicyTypeRepository(_context);
             Portfolios = new PortfolioRepository(_context);
             PortfolioClients = new PortfolioClientRepository(_context);
+            Premiums = new PremiumRepository(_context);
             Receivables = new ReceivableRepository(_context);
             ReceivableDocuments = new ReceivableDocumentRepository(_context);
             ReceivableInvoices = new ReceivableInvoiceRepository(_context);
@@ -115,6 +116,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IPolicyTypeRepository PolicyTypes { get; private set; }
         public IPortfolioRepository Portfolios { get; private set; }
         public IPortfolioClientRepository PortfolioClients { get; private set; }
+        public IPremiumRepository Premiums { get; private set; }
         public IQuoteRepository Quotes { get; private set; }
         public IQuoteItemRepository QuoteItems { get; private set; }
         public IQuoteStatusRepository QuoteStatuses { get; private set; }

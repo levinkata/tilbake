@@ -50,6 +50,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<PolicySaveResource, Policy>();
             CreateMap<PolicyRiskSaveResource, PolicyRisk>();
             CreateMap<PolicyTypeSaveResource, PolicyType>();
+            CreateMap<PremiumSaveResource, Premium>();
             CreateMap<RiskSaveResource, Risk>();
             CreateMap<RiskItemSaveResource, RiskItem>();
             CreateMap<ReceivableSaveResource, Receivable>();

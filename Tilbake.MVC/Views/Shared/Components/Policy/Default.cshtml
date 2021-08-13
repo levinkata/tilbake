@@ -4,15 +4,52 @@
 
 <div class="card mb-3">
     <div class="card-body">
-        <h6 class="card-title mb-3">Policy Details</h6>
+        <h6 class="card-title mb-3">Policy</h6>
         @if (Model != null)
         {
-            <p class="card-text"><strong>Policy Number: </strong>@Model.PolicyNumber</p>
-            <p class="card-text"><strong>Insurer Policy Number: </strong>@Model.InsurerPolicyNumber</p>
-            <p class="card-text"><strong>Insurer: </strong>@Model.Insurer</p>
-            <p class="card-text"><strong>Cover Start Date: </strong>@Model.CoverStartDate.ToString("dd/MM/yyyy")</p>
-            <p class="card-text"><strong>Cover End Date: </strong>@Model.CoverEndDate.ToString("dd/MM/yyyy")</p>
-            <p class="card-text"><strong>Inception Date: </strong>@Model.InceptionDate.ToString("dd/MM/yyyy")</p>
+            <table class="table table-sm py-2">
+                <tbody>
+                    <tr>
+                        <th><strong>Policy Number</strong></th>
+                        <td>@Model.PolicyNumber</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Insurer Number</strong></th>
+                        <td>@Model.InsurerPolicyNumber</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Insurer</strong></th>
+                        <td>@Model.Insurer</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Cover Start Date</strong></th>
+                        <td>@Model.CoverStartDate.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Cover End Date</strong></th>
+                        <td>@Model.CoverEndDate.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Inception Date</strong></th>
+                        <td>@Model.InceptionDate.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Status</strong></th>
+                        <td>@Model.PolicyStatus</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Type</strong></th>
+                        <td>@Model.PolicyType</td>
+                    </tr>
+                    <tr>
+                        <th><strong>Payment Method</strong></th>
+                        <td>@Model.PaymentMethod</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <a asp-controller="Policies" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</a>
+            </div>
         }
     </div>
 </div>

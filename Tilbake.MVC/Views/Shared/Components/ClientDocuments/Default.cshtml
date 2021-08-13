@@ -1,43 +1,44 @@
 ﻿@model IEnumerable<ClientDocumentResource>
 
-@if (Model.Any())
-{
-    <table class="table ">
-        <thead>
-            <tr>
-                <th><strong>Name</strong></th>
-                <th><strong>Description</strong></th>
-                <th><strong>File Type</strong></th>
-                <th><strong>Document Date</strong></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var file in Model)
-            {
-            <tr>
-                <td>@file.Name</td>
-                <td>@file.Description</td>
-                <td>@file.FileType</td>
-                <td>@file.DocumentDate</td>
-                <td class="justify-content-end">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="DownloadFile" asp-route-id="@file.Id"><i class="fas fa-file-download"></i> Download</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Print</a></li>
-                            <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="Delete" asp-route-id="@file.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <caption>No Records Found</caption>
-}
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-title mb-3">Client Documents</h6>
+        @if (Model.Any())
+        {
+            <table class="table table-sm py-2">
+                <thead>
+                    <tr>
+                        <th><strong>Name</strong></th>
+                        <th><strong>Description</strong></th>
+                        @*<th><strong>Type</strong></th>
+                        <th><strong>Date</strong></th>
+                        <th></th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var file in Model)
+                    {
+                        <tr>
+                            <td>@file.Name</td>
+                            <td>@file.Description</td>
+                            @*<td>@file.FileType</td>
+                            <td>@file.DocumentDate</td>
+                            <td class="justify-content-end">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="DownloadFile" asp-route-id="@file.Id"><i class="fas fa-file-download"></i> Download</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Print</a></li>
+                                        <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="Delete" asp-route-id="@file.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

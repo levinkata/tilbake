@@ -46,6 +46,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IPolicyTypeRepository PolicyTypes { get; }
         IPortfolioRepository Portfolios { get; }
         IPortfolioClientRepository PortfolioClients { get; }
+        IPremiumRepository Premiums { get; }
         IQuoteRepository Quotes { get; }
         IQuoteItemRepository QuoteItems { get; }
         IQuoteStatusRepository QuoteStatuses { get; }

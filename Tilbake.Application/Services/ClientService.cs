@@ -25,6 +25,7 @@ namespace Tilbake.Application.Services
         {
             var client = _mapper.Map<ClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
+            client.DateAdded = DateTime.Now;
             await _unitOfWork.Clients.AddAsync(client);
 
             return await _unitOfWork.SaveAsync();
@@ -65,9 +66,9 @@ namespace Tilbake.Application.Services
                                                     r => r.Occupation,
                                                     r => r.Title);
 
-            var resources = _mapper.Map<Client, ClientResource>(result);
+            var resource = _mapper.Map<Client, ClientResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<ClientResource> GetByIdNumberAsync(string idNumber)
@@ -81,9 +82,9 @@ namespace Tilbake.Application.Services
                                             c => c.Occupation,
                                             c => c.Title);
 
-            var resources = _mapper.Map<Client, ClientResource>(result);
+            var resource = _mapper.Map<Client, ClientResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<IEnumerable<ClientResource>> GetByPortfolioIdAsync(Guid portfolioId)

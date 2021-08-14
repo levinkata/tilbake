@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;
@@ -28,6 +27,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             ClientTypes = new ClientTypeRepository(_context);
             Carriers = new CarrierRepository(_context);
             Cities = new CityRepository(_context);
+            CommissionRates = new CommissionRateRepository(_context);
             Contents = new ContentRepository(_context);
             Countries = new CountryRepository(_context);
             CoverTypes = new CoverTypeRepository(_context);
@@ -55,7 +55,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             PolicyStatuses = new PolicyStatusRepository(_context);
             PolicyTypes = new PolicyTypeRepository(_context);
             Portfolios = new PortfolioRepository(_context);
+            PortfolioAdministrationFees = new PortfolioAdministrationFeeRepository(_context);
             PortfolioClients = new PortfolioClientRepository(_context);
+            PortfolioPolicyFees = new PortfolioPolicyFeeRepository(_context);
             Premiums = new PremiumRepository(_context);
             Receivables = new ReceivableRepository(_context);
             ReceivableDocuments = new ReceivableDocumentRepository(_context);
@@ -88,6 +90,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IClientDocumentRepository ClientDocuments { get; private set; }
         public IClientRiskRepository ClientRisks { get; private set; }
         public IClientTypeRepository ClientTypes { get; private set; }
+        public ICommissionRateRepository CommissionRates { get; private set; }
         public IContentRepository Contents { get; private set; }
         public ICountryRepository Countries { get; private set; }
         public ICoverTypeRepository CoverTypes { get; private set; }
@@ -115,7 +118,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IPolicyStatusRepository PolicyStatuses { get; private set; }
         public IPolicyTypeRepository PolicyTypes { get; private set; }
         public IPortfolioRepository Portfolios { get; private set; }
+        public IPortfolioAdministrationFeeRepository PortfolioAdministrationFees { get; private set; }
         public IPortfolioClientRepository PortfolioClients { get; private set; }
+        public IPortfolioPolicyFeeRepository PortfolioPolicyFees { get; private set; }
         public IPremiumRepository Premiums { get; private set; }
         public IQuoteRepository Quotes { get; private set; }
         public IQuoteItemRepository QuoteItems { get; private set; }

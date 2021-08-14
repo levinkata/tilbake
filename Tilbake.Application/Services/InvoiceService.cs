@@ -41,7 +41,7 @@ namespace Tilbake.Application.Services
             invoice.Amount = policyRisks.Sum(r => r.Premium);
             invoice.TaxAmount = invoice.Amount * taxRate / 100;
             invoice.ReducingBalance = invoice.Amount;
-
+            invoice.DateAdded = DateTime.Now;
             await _unitOfWork.Invoices.AddAsync(invoice);
 
             var invoiceId = invoice.Id;

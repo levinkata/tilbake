@@ -34,7 +34,8 @@ namespace Tilbake.Application.Services
             {
                 Id = Guid.NewGuid(),
                 PortfolioId = resource.PortfolioId,
-                ClientId = clientId
+                ClientId = clientId,
+                DateAdded = DateTime.Now
             };
             await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
 

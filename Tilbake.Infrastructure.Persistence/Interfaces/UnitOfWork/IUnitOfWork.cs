@@ -18,6 +18,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IClientCarrierRepository ClientCarriers { get; }
         IClientRiskRepository ClientRisks { get; }
         IClientTypeRepository ClientTypes{ get; }
+        ICommissionRateRepository CommissionRates { get; }
         IContentRepository Contents { get; }
         ICountryRepository Countries { get; }
         ICoverTypeRepository CoverTypes { get; }
@@ -45,7 +46,9 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IPolicyStatusRepository PolicyStatuses { get; }
         IPolicyTypeRepository PolicyTypes { get; }
         IPortfolioRepository Portfolios { get; }
+        IPortfolioAdministrationFeeRepository PortfolioAdministrationFees { get; }
         IPortfolioClientRepository PortfolioClients { get; }
+        IPortfolioPolicyFeeRepository PortfolioPolicyFees { get; }
         IPremiumRepository Premiums { get; }
         IQuoteRepository Quotes { get; }
         IQuoteItemRepository QuoteItems { get; }

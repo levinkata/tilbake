@@ -4,9 +4,9 @@ using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Repositories
 {
-    public class CarrierRepository : Repository<Carrier>, ICarrierRepository
+    public class PortfolioPolicyFeeRepository : Repository<PortfolioPolicyFee>, IPortfolioPolicyFeeRepository
     {
-        public CarrierRepository(TilbakeDbContext context) : base(context)
+        public PortfolioPolicyFeeRepository(TilbakeDbContext context) : base(context)
         {
 
         }

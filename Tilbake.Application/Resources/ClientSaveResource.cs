@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.Application.Resources

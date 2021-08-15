@@ -25,9 +25,10 @@ namespace Tilbake.Application.Services
         {
             var bankBranch = _mapper.Map<BankBranchSaveResource, BankBranch>(resource);
             bankBranch.Id = Guid.NewGuid();
+            bankBranch.DateAdded = DateTime.Now;
 
             await _unitOfWork.BankBranches.AddAsync(bankBranch);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -51,7 +52,6 @@ namespace Tilbake.Application.Services
                                             e => e.Bank);
 
             var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
-
             return resources;
         }
 
@@ -63,7 +63,6 @@ namespace Tilbake.Application.Services
                                             e => e.Bank);
 
             var resources = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchResource>>(result);
-
             return resources;
         }
 
@@ -78,9 +77,10 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(BankBranchResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
+            bankBranch.DateModified = DateTime.Now;
             await _unitOfWork.BankBranches.UpdateAsync(resource.Id, bankBranch);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

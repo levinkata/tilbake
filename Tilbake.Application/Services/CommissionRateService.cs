@@ -51,14 +51,13 @@ namespace Tilbake.Application.Services
                                                 r => r.OrderBy(n => n.RiskName));
 
             var resources = _mapper.Map<IEnumerable<CommissionRate>, IEnumerable<CommissionRateResource>>(result);
-
             return resources;
         }
 
         public async Task<CommissionRateResource> GetByRisk(string riskName)
         {
             var result = await _unitOfWork.CommissionRates.GetFirstOrDefaultAsync(
-                        e => e.RiskName == riskName);
+                                            e => e.RiskName == riskName);
 
             var resource = _mapper.Map<CommissionRate, CommissionRateResource>(result);
             return resource;
@@ -75,8 +74,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(CommissionRateResource resource)
         {
             var commissionRate = _mapper.Map<CommissionRateResource, CommissionRate>(resource);
-            await _unitOfWork.CommissionRates.UpdateAsync(resource.Id, commissionRate);
+            commissionRate.DateModified = DateTime.Now;
 
+            await _unitOfWork.CommissionRates.UpdateAsync(resource.Id, commissionRate);
             return await _unitOfWork.SaveAsync();
         }
     }

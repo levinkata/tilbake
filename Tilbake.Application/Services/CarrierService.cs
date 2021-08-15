@@ -67,8 +67,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(CarrierResource resource)
         {
             var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
-            await _unitOfWork.Carriers.UpdateAsync(resource.Id, carrier);
+            carrier.DateModified = DateTime.Now;
 
+            await _unitOfWork.Carriers.UpdateAsync(resource.Id, carrier);
             return await _unitOfWork.SaveAsync();
         }
     }

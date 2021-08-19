@@ -29,39 +29,6 @@ namespace Tilbake.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region snippet_AddDistributedMemoryCache
-            services.AddDistributedMemoryCache();
-            #endregion
-
-            services.AddSession(options =>
-            {
-                // Set a short timeout for easy testing.
-                options.Cookie.Name = ".Tilbake.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(1000);
-                options.Cookie.HttpOnly = true;
-                // Make the session cookie essential
-                options.Cookie.IsEssential = true;
-            });
-
-            // CheckConsentNeeded is true by default is for GDPR compliance.
-            // If you clicked accept on the consent popup at the top of the page(in the case of the default template),
-            // your session cookies would start working as you expected.The GDPR regulates how cookie operate,
-            // and will not be used until the user consents to them being used.
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => false; // Default is true, make it false - Levi Nkata 03/08/2021
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            //services.AddDbContextFactory<TilbakeDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
-
-            //services.AddScoped<TilbakeDbContext>(options =>
-            //    options.GetRequiredService<IDbContextFactory<TilbakeDbContext>>()
-            //    .CreateDbContext());
-
             services.AddDbContext<TilbakeDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Tilbake")));
 
@@ -76,19 +43,6 @@ namespace Tilbake.MVC
                     Configuration["EmailSender:Password"]
                 )
             );
-
-            //  Configure Cookies
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
-
-                options.LoginPath = new PathString("/Identity/Account/Login");
-                options.AccessDeniedPath = new PathString("/Identity/Account/AccessDenied");
-                options.LogoutPath = new PathString("/Identity//Account/Logout");
-                options.SlidingExpiration = true;
-            });
 
             services.AddControllersWithViews()
                     .AddFluentValidation(s =>
@@ -137,7 +91,7 @@ namespace Tilbake.MVC
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSession();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

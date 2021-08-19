@@ -31,7 +31,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td class="justify-content-end">
+                <td class="text-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         </button>
@@ -53,12 +53,10 @@
     <caption>No Records Found</caption>
 }
 
-
 @section Scripts {
     <script>
         $(document).ready(function() {
             $('#tblOccupation').DataTable();
         });
     </script>
-
 }

@@ -93,10 +93,10 @@
                                     @Html.DisplayFor(modelItem => item.FullName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.InvoiceDate)
+                                    @item.InvoiceDate.ToString("dd/MM/yyyy")
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.InvoiceDueDate)
+                                    @item.InvoiceDueDate.ToString("dd/MM/yyyy")
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Amount)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
@@ -15,9 +16,9 @@ namespace Tilbake.MVC.Controllers
             _countryService = countryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _countryService.GetAllAsync());
         }
 
         [HttpGet]
@@ -50,6 +51,90 @@ namespace Tilbake.MVC.Controllers
                               };
 
             return Json(countries);
+        }
+
+        // GET: Countries/Details/5
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var resource = await _countryService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
+        }
+
+        // GET: Countries/Edit/5
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var resource = await _countryService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+            return View(resource);
+        }
+
+        // POST: Countries/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid? id, CountryResource resource)
+        {
+            if (id != resource.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _countryService.UpdateAsync(resource);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(resource);
+        }
+
+        // GET: Countries/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var resource = await _countryService.GetByIdAsync((Guid)id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
+        }
+
+        // POST: Countries/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            await _countryService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -99,17 +99,11 @@ namespace Tilbake.MVC.Controllers
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
-            // Requires: using Microsoft.AspNetCore.Http;
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionPortfolioName)))
-            {
-                HttpContext.Session.SetString(SessionPortfolioName, portfolio.Name);
-                HttpContext.Session.SetString(SessionPortfolioId, portfolioId.ToString());
-            }
-            
             ClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
                 PortfolioName = portfolio.Name,
+                BirthDate = DateTime.Now.Date,
                 ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
                 CountryList = new SelectList(countries, "Id", "Name"),
                 GenderList = new SelectList(genders, "Id", "Name"),

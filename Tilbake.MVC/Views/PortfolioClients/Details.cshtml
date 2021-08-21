@@ -75,7 +75,7 @@
                         <h6 class="card-title">Sum Insured</h6>
                         <div class="row">
                             <div class="col">
-                                <p class="card-text font-weight-bolder mb-1 h4">$900K</p><span class="badge badge-primary rounded-pill fs--2">+3.5%</span>
+                                <p class="card-text font-weight-bolder mb-1 h4">$90K</p><span class="badge badge-primary rounded-pill fs--2">+3.5%</span>
                             </div>
                             <div class="col-auto">
                                 <small class="text-muted">Sat : 120</small>
@@ -118,6 +118,9 @@
         <div class="row">
             <div class="col">
                 @await Component.InvokeAsync("Policy", new { portfolioClientId = @Model.PortfolioClientId })
+                <div class="form-group">
+                    <a asp-controller="Policies" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Policy</a>
+                </div>
             </div>
             <div class="col justify-content-end">
                 <div class="card mb-3">Premiums</div>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
@@ -152,15 +147,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<ValuationFeeRefundClaim> ValuationFeeRefundClaims { get; set; }
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
-
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-        //            }
-        //        }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -3332,8 +3318,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
             });
-
-            // modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
             OnModelCreatingPartial(modelBuilder);
         }

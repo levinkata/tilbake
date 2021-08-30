@@ -10,6 +10,7 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Table Name")]
         public string TableName { get; set; }
+
         [Display(Name = "Table Label")]
         public string TableLabel { get; set; }
 
@@ -22,10 +23,13 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Position")]
         public string Position { get; set; }
 
-        [Display(Name = "Position")]
+        [Display(Name = "Length")]
         public int ColumnLength { get; set; }
 
         [Display(Name = "Is Key")]
         public bool IsKey { get; set; }
+
+        //  Description
+        public string FileTemplate { get; set; }
     }
 }

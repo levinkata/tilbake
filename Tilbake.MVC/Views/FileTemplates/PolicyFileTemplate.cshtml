@@ -1,0 +1,117 @@
+﻿@model PolicyGiroResource
+@using Tilbake.Domain.Enums
+@{
+    ViewData["Title"] = "Policy File Template";
+}
+
+<h1>Policy FileTemplate</h1>
+
+<span class="d-block p-2 bg-primary text-white">@Model.PortfolioName - @Model.FileTemplateName - @Model.TableName</span>
+<br />
+
+<div class="row">
+    <form asp-action="PolicyFormatType">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="PortfolioId" />
+        <input type="hidden" asp-for="FileTemplateId" />
+        <input type="hidden" asp-for="TableName" />
+        <input type="hidden" asp-for="FirstNameId" />
+        <input type="hidden" asp-for="LastNameId" />
+        <input type="hidden" asp-for="IdNumberId" />
+        <input type="hidden" asp-for="PolicyNumberId" />
+        <div class="row offset-sm-0">
+            <div class="col-sm-4">
+                <label for="Field" class="control-label">Field Name</label>
+            </div>
+            <div class="col-sm-3">
+                <label for="Position" class="control-label">Position</label>
+            </div>
+            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            {
+                <div class="col-sm-2">
+                    <label for="Length" class="control-label">Length</label>
+                </div>
+            }
+            <div class="col-sm-2">
+                <label for="Key" class="control-label">Key?</label>
+            </div>
+        </div>
+        <div class="row offset-sm-0">
+            <div class="col-sm-4">
+                <label asp-for="FirstNameFieldLabel" class="control-label"></label>
+            </div>
+            <div class="col-sm-3">
+                <input asp-for="FirstNamePosition" class="form-control upperCase" />
+            </div>
+            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            {
+                <div class="col-sm-2">
+                    <input asp-for="FirstNameColumnLength" class="form-control" />
+                </div>
+            }
+            <div class="col-sm-2">
+                <input asp-for="FirstNameIsKey" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="row offset-sm-0">
+            <div class="col-sm-4">
+                <label asp-for="LastNameFieldLabel" class="control-label"></label>
+            </div>
+            <div class="col-sm-3">
+                <input asp-for="LastNamePosition" class="form-control upperCase" />
+            </div>
+            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            {
+                <div class="col-sm-2">
+                    <input asp-for="LastNameColumnLength" class="form-control" />
+                </div>
+            }
+            <div class="col-sm-2">
+                <input asp-for="LastNameIsKey" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="row offset-sm-0">
+            <div class="col-sm-4">
+                <label asp-for="IdNumberFieldLabel" class="control-label"></label>
+            </div>
+            <div class="col-sm-3">
+                <input asp-for="IdNumberPosition" class="form-control upperCase" />
+            </div>
+            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            {
+                <div class="col-sm-2">
+                    <input asp-for="IdNumberColumnLength" class="form-control" />
+                </div>
+            }
+            <div class="col-sm-2">
+                <input asp-for="IdNumberIsKey" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="row offset-sm-0">
+            <div class="col-sm-4">
+                <label asp-for="PolicyNumberFieldLabel" class="control-label"></label>
+            </div>
+            <div class="col-sm-3">
+                <input asp-for="PolicyNumberPosition" class="form-control upperCase" />
+            </div>
+            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            {
+                <div class="col-sm-2">
+                    <input asp-for="PolicyNumberColumnLength" class="form-control" />
+                </div>
+            }
+            <div class="col-sm-2">
+                <input asp-for="PolicyNumberIsKey" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group"></div>
+        <div class="form-group">
+            <input type="submit" value="Update Template Definition" class="btn btn-primary" /> |
+            <a asp-controller="FileTemplates" asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Return</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

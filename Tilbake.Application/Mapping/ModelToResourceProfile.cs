@@ -58,9 +58,11 @@ namespace Tilbake.Application.Mapping
             CreateMap<Gender, GenderResource>().ReverseMap();
 
             CreateMap<FileTemplate, FileTemplateResource>()
-                .ForMember(dest => dest.FileTemplateRecords, opt => opt.MapFrom(src => src.FileTemplateRecords)).ReverseMap();
+                    .ForMember(dest => dest.PortfolioName, opt => opt.MapFrom(src => src.Portfolio.Name))
+                    .ForMember(dest => dest.FileTemplateRecords, opt => opt.MapFrom(src => src.FileTemplateRecords)).ReverseMap();
 
-            CreateMap<FileTemplateRecord, FileTemplateRecordResource>().ReverseMap();
+            CreateMap<FileTemplateRecord, FileTemplateRecordResource>()
+                    .ForMember(dest => dest.FileTemplate, opt => opt.MapFrom(src => src.FileTemplate.Name)).ReverseMap();
 
             CreateMap<House, HouseResource>()
                     .ForMember(dest => dest.HouseCondition, opt => opt.MapFrom(src => src.HouseCondition.Name))

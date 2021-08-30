@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 using Tilbake.Domain.Models;
@@ -27,13 +23,13 @@ namespace Tilbake.Application.Services
             fileTemplateRecord.Id = Guid.NewGuid();
 
             await _unitOfWork.FileTemplateRecords.AddAsync(fileTemplateRecord);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await  _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.FileTemplateRecords.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(FileTemplateRecordResource resource)
@@ -41,12 +37,12 @@ namespace Tilbake.Application.Services
             var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
             await _unitOfWork.FileTemplateRecords.DeleteAsync(fileTemplateRecord);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.FileTemplateRecords.GetAllAsync());
+            var result = await _unitOfWork.FileTemplateRecords.GetAllAsync();
 
             var resources = _mapper.Map<IEnumerable<FileTemplateRecord>, IEnumerable<FileTemplateRecordResource>>(result);
 
@@ -57,7 +53,8 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.FileTemplateRecords.GetAllAsync(
                                                             e => e.FileTemplateId == fileTemplateId,
-                                                            e => e.OrderBy(n => n.TableName));
+                                                            e => e.OrderBy(n => n.TableName),
+                                                            e => e.FileTemplate);
 
             var resources = _mapper.Map<IEnumerable<FileTemplateRecord>, IEnumerable<FileTemplateRecordResource>>(result);
 
@@ -66,9 +63,23 @@ namespace Tilbake.Application.Services
 
         public async Task<FileTemplateRecordResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.FileTemplateRecords.GetByIdAsync(id);
-            var resources = _mapper.Map<FileTemplateRecord, FileTemplateRecordResource>(result);
+            var result = await _unitOfWork.FileTemplateRecords.GetFirstOrDefaultAsync(
+                                                            e => e.Id == id,
+                                                            e => e.FileTemplate);
+            var resource = _mapper.Map<FileTemplateRecord, FileTemplateRecordResource>(result);
 
+            return resource;
+        }
+
+        public async Task<IEnumerable<FileTemplateRecordResource>> GetTableFileTemplate(Guid fileTemplateId, string tableName)
+        {
+            var results = await _unitOfWork.FileTemplateRecords.GetAllAsync(
+                                                            r => r.FileTemplateId == fileTemplateId &&
+                                                            r.TableName == tableName,
+                                                            r => r.OrderBy(n => n.FieldName),
+                                                            r => r.FileTemplate);
+
+            var resources = _mapper.Map<IEnumerable<FileTemplateRecord>, IEnumerable<FileTemplateRecordResource>>(results);
             return resources;
         }
 
@@ -77,7 +88,7 @@ namespace Tilbake.Application.Services
             var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
             await _unitOfWork.FileTemplateRecords.UpdateAsync(resource.Id, fileTemplateRecord);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

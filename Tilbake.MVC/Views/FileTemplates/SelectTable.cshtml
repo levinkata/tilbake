@@ -1,0 +1,38 @@
+﻿@model SelectedTableResource
+
+@{
+    ViewBag.Title = "Add Table";
+}
+
+<h2>Add table</h2>
+
+<form asp-action="SelectTable" asp-antiforgery="true" method="post">
+    <div class="col-md-4">
+        <div class="form-horizontal">
+            <h4>Table</h4>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PortfolioId" />
+            <input type="hidden" asp-for="FileTemplateId" />
+            <input type="hidden" asp-for="FileFormat" />
+            <div class="form-group">
+                <label asp-for="TableName" class="control-label">Table</label>
+                <select asp-for="TableName" class="form-control" asp-items="@Model.TableList"></select>
+            </div>
+            @if (@Model.TableList.Count() > 0)
+            {
+                <div class="form-group">
+                    <input type="submit" value="Proceed" class="btn btn-info" /> |
+                    <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId" >Return</a>
+                </div>
+            }
+            else
+            {
+                <p>
+                    This Format does not have any tables assigned to it. <br />
+                    <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId" class="btn btn-info">Return</a>
+                </p>
+            }
+        </div>
+    </div>
+</form>

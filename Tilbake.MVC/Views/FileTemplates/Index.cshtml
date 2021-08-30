@@ -22,7 +22,7 @@
                     <strong>@Html.DisplayNameFor(model => model.Name)</strong>
                 </th>
                 <th>
-                    <strong> @Html.DisplayNameFor(model => model.FileType)</strong>
+                    <strong> @Html.DisplayNameFor(model => model.FileFormat)</strong>
                 </th>
                 <th>
                     <strong>@Html.DisplayNameFor(model => model.Delimiter)</strong>
@@ -35,10 +35,13 @@
             {
                 <tr>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                        <a asp-action="SelectTable"
+                           asp-route-portfolioId="@portfolioId"
+                           asp-route-fileTemplateId="@item.Id"
+                           asp-route-fileFormat="@item.FileFormat">@Html.DisplayFor(modelItem => item.Name)</a>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FileType)
+                        @Html.DisplayFor(modelItem => item.FileFormat)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Delimiter)

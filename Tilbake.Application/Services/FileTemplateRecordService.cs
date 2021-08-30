@@ -42,7 +42,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.FileTemplateRecords.GetAllAsync();
+            var result = await _unitOfWork.FileTemplateRecords.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.FieldName));
 
             var resources = _mapper.Map<IEnumerable<FileTemplateRecord>, IEnumerable<FileTemplateRecordResource>>(result);
 

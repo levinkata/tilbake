@@ -27,38 +27,38 @@ namespace Tilbake.Application.Services
             coverType.Id = Guid.NewGuid();
 
             await _unitOfWork.CoverTypes.AddAsync(coverType);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.CoverTypes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(CoverTypeResource resource)
         {
             var coverType = _mapper.Map<CoverTypeResource, CoverType>(resource);
             await _unitOfWork.CoverTypes.DeleteAsync(coverType);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CoverTypeResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.CoverTypes.GetAllAsync());
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.CoverTypes.GetAllAsync(
+                                        null,
+                                        r => r.OrderBy(p => p.Name));
 
             var resources = _mapper.Map<IEnumerable<CoverType>, IEnumerable<CoverTypeResource>>(result);
-
             return resources;
         }
 
         public async Task<CoverTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.CoverTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<CoverType, CoverTypeResource>(result);
+            var resource = _mapper.Map<CoverType, CoverTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(CoverTypeResource resource)
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             var coverType = _mapper.Map<CoverTypeResource, CoverType>(resource);
             await _unitOfWork.CoverTypes.UpdateAsync(resource.Id, coverType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

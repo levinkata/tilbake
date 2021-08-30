@@ -18,6 +18,8 @@ namespace Tilbake.Domain.Models
         public Guid? HouseId { get; set; }
         public Guid? MotorId { get; set; }
         public Guid? PublicLiabilityId { get; set; }
+        public Guid? StatedBenefitId { get; set; }
+        public Guid? WorkmanCompensationId { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
@@ -30,6 +32,8 @@ namespace Tilbake.Domain.Models
         public virtual House House { get; set; }
         public virtual Motor Motor { get; set; }
         public virtual PublicLiability PublicLiability { get; set; }
+        public virtual StatedBenefit StatedBenefit { get; set; }
+        public virtual WorkmanCompensation WorkmanCompensation { get; set; }
         public virtual ICollection<ClientRisk> ClientRisks { get; set; }
     }
 }

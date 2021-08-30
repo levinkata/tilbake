@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
 using Tilbake.Domain.Models.Common;
@@ -138,6 +140,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<RoadsideAssist> RoadsideAssists { get; set; }
         public virtual DbSet<RoofType> RoofTypes { get; set; }
         public virtual DbSet<SalesType> SalesTypes { get; set; }
+        public virtual DbSet<StatedBenefit> StatedBenefits { get; set; }
         public virtual DbSet<Tax> Taxes { get; set; }
         public virtual DbSet<ThirdParty> ThirdParties { get; set; }
         public virtual DbSet<Title> Titles { get; set; }
@@ -147,6 +150,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<ValuationFeeRefundClaim> ValuationFeeRefundClaims { get; set; }
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
+        public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
+
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+        //            }
+        //        }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -211,13 +224,13 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     }
                 }
             }
-            
+
             auditEntries.ForEach(s => Audits.Add(s.ToAudit()));
 
-            //foreach (var auditEntry in auditEntries)
-            //{
-            //    Audits.Add(auditEntry.ToAudit());
-            //}
+            foreach (var auditEntry in auditEntries)
+            {
+                Audits.Add(auditEntry.ToAudit());
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -1521,9 +1534,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Position)
-                    .IsRequired()
-                    .HasMaxLength(5);
+                entity.Property(e => e.Position).HasMaxLength(5);
 
                 entity.Property(e => e.TableLabel)
                     .IsRequired()
@@ -2212,6 +2223,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
             modelBuilder.Entity<Policy>(entity =>
             {
                 entity.ToTable("Policy");
+
+                entity.HasIndex(e => e.PolicyNumber, "IX_Policy")
+                    .IsUnique();
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
@@ -3024,6 +3038,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .WithMany(p => p.Risks)
                     .HasForeignKey(d => d.PublicLiabilityId)
                     .HasConstraintName("FK_Risk_PublicLiability");
+
+                entity.HasOne(d => d.StatedBenefit)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.StatedBenefitId)
+                    .HasConstraintName("FK_Risk_StatedBenefit");
+
+                entity.HasOne(d => d.WorkmanCompensation)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.WorkmanCompensationId)
+                    .HasConstraintName("FK_Risk_WorkmanCompensation");
             });
 
             modelBuilder.Entity<RiskItem>(entity =>
@@ -3099,6 +3123,23 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<StatedBenefit>(entity =>
+            {
+                entity.ToTable("StatedBenefit");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.RiskItem)
+                    .WithMany(p => p.StatedBenefits)
+                    .HasForeignKey(d => d.RiskItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StatedBenefit_RiskItem");
             });
 
             modelBuilder.Entity<Tax>(entity =>
@@ -3317,6 +3358,23 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.PortfolioClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Withdrawal_PortfolioClient");
+            });
+
+            modelBuilder.Entity<WorkmanCompensation>(entity =>
+            {
+                entity.ToTable("WorkmanCompensation");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.RiskItem)
+                    .WithMany(p => p.WorkmanCompensations)
+                    .HasForeignKey(d => d.RiskItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WorkmanCompensation_RiskItem");
             });
 
             OnModelCreatingPartial(modelBuilder);

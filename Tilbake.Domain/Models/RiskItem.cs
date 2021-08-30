@@ -11,6 +11,8 @@ namespace Tilbake.Domain.Models
             ElectronicEquipments = new HashSet<ElectronicEquipment>();
             Glasses = new HashSet<Glass>();
             PublicLiabilities = new HashSet<PublicLiability>();
+            StatedBenefits = new HashSet<StatedBenefit>();
+            WorkmanCompensations = new HashSet<WorkmanCompensation>();
         }
 
         public Guid Id { get; set; }
@@ -24,5 +26,7 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<ElectronicEquipment> ElectronicEquipments { get; set; }
         public virtual ICollection<Glass> Glasses { get; set; }
         public virtual ICollection<PublicLiability> PublicLiabilities { get; set; }
+        public virtual ICollection<StatedBenefit> StatedBenefits { get; set; }
+        public virtual ICollection<WorkmanCompensation> WorkmanCompensations { get; set; }
     }
 }

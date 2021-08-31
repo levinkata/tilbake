@@ -7,10 +7,8 @@ namespace Tilbake.Application.Resources
     {
         public Guid PortfolioId { get; set; }
         public Guid FileTemplateId { get; set; }
-        public string PortfolioName { get; set; }
         public string TableName { get; set; }
-        public FileFormat FileFormat { get; set; }
-        public string FileTemplateName { get; set; }
+        public FileType FileType { get; set; }
 
         public Guid FirstNameId { get; set; }
 
@@ -40,5 +38,9 @@ namespace Tilbake.Application.Resources
         public string PolicyNumberPosition { get; set; }
         public int PolicyNumberColumnLength { get; set; }
         public bool PolicyNumberIsKey { get; set; }
+
+        //  Descriptions
+        public string Portfolio { get; set; }
+        public string FileTemplate { get; set; }
     }
 }

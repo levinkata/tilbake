@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.Domain.Enums
 {
-    public enum FileFormat
+    public enum FileType
     {
         [Display(Name = "Excel")]            
         Excel = 1,

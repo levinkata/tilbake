@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PortfolioId" />
             <input type="hidden" asp-for="FileTemplateId" />
-            <input type="hidden" asp-for="FileFormat" />
+            <input type="hidden" asp-for="FileType" />
             <div class="form-group">
                 <label asp-for="TableName" class="control-label">Table</label>
                 <select asp-for="TableName" class="form-control" asp-items="@Model.TableList"></select>

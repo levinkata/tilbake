@@ -3,9 +3,10 @@
 @{
     ViewData["Title"] = "File Template";
     var portfolioId = ViewBag.PortfolioId;
+    var portfolioName = ViewBag.Portfolio;
 }
 
-<h1>File Template</h1>
+<h1>@portfolioName File Template</h1>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <div class="form-group">
@@ -38,7 +39,7 @@
                         <a asp-action="SelectTable"
                            asp-route-portfolioId="@portfolioId"
                            asp-route-fileTemplateId="@item.Id"
-                           asp-route-fileFormat="@item.FileType">@Html.DisplayFor(modelItem => item.Name)</a>
+                           asp-route-fileType="@item.FileType">@Html.DisplayFor(modelItem => item.Name)</a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FileType)
@@ -46,9 +47,22 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Delimiter)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                    <td class="text-right">
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="SelectTable"
+                                                            asp-route-portfolioId="@portfolioId"
+                                                            asp-route-fileTemplateId="@item.Id"
+                                                            asp-route-fileType="@item.FileType">Select Table</a></li>
+                                <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Print</a></li>
+                                <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             }

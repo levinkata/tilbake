@@ -56,8 +56,8 @@ namespace Tilbake.Application.Helpers
 
         public static SelectList FileFormats(Guid? fileFormatId)
         {
-            var formatTypes = Enum.GetValues(typeof(FileFormat))
-                                    .Cast<FileFormat>().Select(c => new
+            var formatTypes = Enum.GetValues(typeof(FileType))
+                                    .Cast<FileType>().Select(c => new
                                     {
                                         Id = c.ToString(),
                                         Name = c.GetDisplayName()

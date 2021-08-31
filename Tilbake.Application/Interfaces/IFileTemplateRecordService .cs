@@ -8,7 +8,6 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<FileTemplateRecordResource>> GetByFileTemplateIdAsync(Guid fileTemplateId);
         Task<IEnumerable<FileTemplateRecordResource>> GetTableFileTemplate(Guid fileTemplateId, string tableName);
         Task<FileTemplateRecordResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(FileTemplateRecordSaveResource resource);
         Task<int> UpdateAsync(FileTemplateRecordResource resource);
         Task<int> DeleteAsync(Guid id);
         Task<int> DeleteAsync(FileTemplateRecordResource resource);

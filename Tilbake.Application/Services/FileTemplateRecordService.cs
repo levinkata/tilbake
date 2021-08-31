@@ -17,15 +17,6 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(FileTemplateRecordSaveResource resource)
-        {
-            var fileTemplateRecord = _mapper.Map<FileTemplateRecordSaveResource, FileTemplateRecord>(resource);
-            fileTemplateRecord.Id = Guid.NewGuid();
-
-            await _unitOfWork.FileTemplateRecords.AddAsync(fileTemplateRecord);
-            return await  _unitOfWork.SaveAsync();
-        }
-
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.FileTemplateRecords.DeleteAsync(id);
@@ -47,7 +38,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.FieldName));
 
             var resources = _mapper.Map<IEnumerable<FileTemplateRecord>, IEnumerable<FileTemplateRecordResource>>(result);
-
             return resources;
         }
 
@@ -59,7 +49,6 @@ namespace Tilbake.Application.Services
                                                             e => e.FileTemplate);
 
             var resources = _mapper.Map<IEnumerable<FileTemplateRecord>, IEnumerable<FileTemplateRecordResource>>(result);
-
             return resources;
         }
 
@@ -69,7 +58,6 @@ namespace Tilbake.Application.Services
                                                             e => e.Id == id,
                                                             e => e.FileTemplate);
             var resource = _mapper.Map<FileTemplateRecord, FileTemplateRecordResource>(result);
-
             return resource;
         }
 

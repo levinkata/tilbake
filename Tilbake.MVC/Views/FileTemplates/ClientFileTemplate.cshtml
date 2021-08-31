@@ -5,7 +5,7 @@
     ViewBag.Title = "File Template";
 }
 <h1>Client FileTemplate</h1>
-<span class="d-block p-2 bg-primary text-white">@Model.PortfolioName - @Model.FileTemplateName - @Model.TableName</span>
+<span class="d-block p-2 bg-primary text-white">@Model.Portfolio - @Model.FileTemplate - @Model.TableName</span>
 <br />
 
 <div class="row">
@@ -34,15 +34,12 @@
             <div class="col-sm-3">
                 <label for="Position" class="control-label">Position</label>
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <label for="Length" class="control-label">Length</label>
                 </div>
             }
-            <div class="col-sm-2">
-                <label for="Key" class="control-label">Key?</label>
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -51,15 +48,12 @@
             <div class="col-sm-3">
                 <input asp-for="TitlePosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="TitleColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="TitleIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -68,15 +62,12 @@
             <div class="col-sm-3">
                 <input asp-for="ClientTypePosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="ClientTypeColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="ClientTypeIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -85,15 +76,12 @@
             <div class="col-sm-3">
                 <input asp-for="FirstNamePosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="FirstNameColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="FirstNameIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -102,15 +90,12 @@
             <div class="col-sm-3">
                 <input asp-for="LastNamePosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="LastNameColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="LastNameIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -119,15 +104,12 @@
             <div class="col-sm-3">
                 <input asp-for="BirthDatePosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="BirthDateColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="BirthDateIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -136,15 +118,12 @@
             <div class="col-sm-3">
                 <input asp-for="GenderPosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="GenderColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="GenderIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -153,15 +132,12 @@
             <div class="col-sm-3">
                 <input asp-for="IdNumberPosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="IdNumberColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="IdNumberIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -170,15 +146,12 @@
             <div class="col-sm-3">
                 <input asp-for="PhonePosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="PhoneColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="PhoneIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -187,15 +160,12 @@
             <div class="col-sm-3">
                 <input asp-for="MobilePosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="MobileColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="MobileIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -204,15 +174,12 @@
             <div class="col-sm-3">
                 <input asp-for="MaritalStatusPosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="MaritalStatusColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="MaritalStatusIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -221,15 +188,12 @@
             <div class="col-sm-3">
                 <input asp-for="CountryPosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="CountryColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="CountryIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -238,15 +202,12 @@
             <div class="col-sm-3">
                 <input asp-for="EmailPosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="EmailColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="EmailIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="row offset-sm-0">
             <div class="col-sm-4">
@@ -255,15 +216,12 @@
             <div class="col-sm-3">
                 <input asp-for="OccupationPosition" class="form-control upperCase" />
             </div>
-            @if (Model.FileFormat == FileFormat.FixedLengthDelimited)
+            @if (Model.FileType == FileType.FixedLengthDelimited)
             {
                 <div class="col-sm-2">
                     <input asp-for="OccupationColumnLength" class="form-control" />
                 </div>
             }
-            <div class="col-sm-2">
-                <input asp-for="OccupationIsKey" disabled class="form-control" />
-            </div>
         </div>
         <div class="form-group"></div>
         <div class="form-group">
@@ -275,4 +233,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {  
+            $("input[type=text]").keyup(function () {  
+                $(this).val($(this).val().toUpperCase());  
+            });  
+        }); 
+    </script>
+
 }

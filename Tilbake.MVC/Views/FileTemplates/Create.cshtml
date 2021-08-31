@@ -1,7 +1,7 @@
 ﻿@model FileTemplateSaveResource
 
 @{
-    ViewData["Title"] = Model.PortfolioName;
+    ViewData["Title"] = Model.Portfolio;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -23,7 +23,7 @@
             <div class="col-4">
                 <div class="form-group">
                     <label asp-for="FileType" class="control-label"></label>
-                    <select asp-for="FileType" class="form-control" asp-items="@Model.FileFormatList"></select>
+                    <select asp-for="FileType" class="form-control" asp-items="@Model.FileTypeList"></select>
                 </div>
             </div>
             <div id="DelimiterDiv" class="col-2">

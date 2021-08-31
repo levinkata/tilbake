@@ -15,8 +15,6 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Delimiter")]
         public string Delimiter { get; set; }
 
-        //public List<FileTemplateRecord> FileTemplateRecords { get; } = new List<FileTemplateRecord>();
-
         //  SelectLists
         public SelectList FileFormatList { get; set; }
     }

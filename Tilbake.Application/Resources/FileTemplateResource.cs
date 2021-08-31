@@ -9,8 +9,8 @@ namespace Tilbake.Application.Resources
         public Guid PortfolioId { get; set; }
         public string PortfolioName { get; set; }
 
-        [Display(Name = "File Format")]
-        public string FileFormat { get; set; }
+        [Display(Name = "File Type")]
+        public string FileType { get; set; }
 
         [Display(Name = "Delimiter")]
         public string Delimiter { get; set; }

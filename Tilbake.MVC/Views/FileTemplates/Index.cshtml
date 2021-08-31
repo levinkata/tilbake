@@ -36,10 +36,7 @@
             {
                 <tr>
                     <td>
-                        <a asp-action="SelectTable"
-                           asp-route-portfolioId="@portfolioId"
-                           asp-route-fileTemplateId="@item.Id"
-                           asp-route-fileType="@item.FileType">@Html.DisplayFor(modelItem => item.Name)</a>
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FileType)

@@ -133,7 +133,7 @@ namespace Tilbake.MVC.Controllers
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
-                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplate
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
                 };
 
                 foreach (var item in fileTemplateRecords)
@@ -212,7 +212,7 @@ namespace Tilbake.MVC.Controllers
                             resource.MobileColumnLength = item.ColumnLength;
                             break;
 
-                        case "Nationality":
+                        case "Country":
                             resource.CountryId = item.Id;
                             resource.CountryFieldLabel = item.FieldLabel;
                             resource.CountryPosition = item.Position;
@@ -248,7 +248,7 @@ namespace Tilbake.MVC.Controllers
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
-                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplate
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
                 };
 
                 foreach (var item in fileTemplateRecords)
@@ -306,7 +306,7 @@ namespace Tilbake.MVC.Controllers
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
-                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplate
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
                 };
 
                 foreach (var item in fileTemplateRecords)
@@ -348,6 +348,86 @@ namespace Tilbake.MVC.Controllers
                     }
                 }
                 return View("PolicyFileTemplate", resource);
+            }
+            else if (tableName == "Claim")
+            {
+                ClaimGiroResource resource = new()
+                {
+                    PortfolioId = portfolioId,
+                    Portfolio = portfolio,
+                    FileTemplateId = fileTemplateId,
+                    FileType = fileType,
+                    TableName = tableName,
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
+                };
+
+                foreach (var item in fileTemplateRecords)
+                {
+                    var fieldname = item.FieldName;
+
+                    switch (fieldname)
+                    {
+                        case "ClaimNumber":
+                            resource.ClaimNumberId = item.Id;
+                            resource.ClaimNumberFieldLabel = item.FieldLabel;
+                            resource.ClaimNumberPosition = item.Position;
+                            resource.ClaimNumberColumnLength = item.ColumnLength;
+                            break;
+
+                        case "ReportDate":
+                            resource.ReportDateId = item.Id;
+                            resource.ReportDateFieldLabel = item.FieldLabel;
+                            resource.ReportDatePosition = item.Position;
+                            resource.ReportDateColumnLength = item.ColumnLength;
+                            break;
+
+                        case "IncidentDate":
+                            resource.IncidentDateId = item.Id;
+                            resource.IncidentDateFieldLabel = item.FieldLabel;
+                            resource.IncidentDatePosition = item.Position;
+                            resource.IncidentDateColumnLength = item.ColumnLength;
+                            break;
+
+                        case "RegisterDate":
+                            resource.RegisterDateId = item.Id;
+                            resource.RegisterDateFieldLabel = item.FieldLabel;
+                            resource.RegisterDatePosition = item.Position;
+                            resource.RegisterDateColumnLength = item.ColumnLength;
+                            break;
+
+                        case "ReserveInsured":
+                            resource.ReserveInsuredId = item.Id;
+                            resource.ReserveInsuredFieldLabel = item.FieldLabel;
+                            resource.ReserveInsuredPosition = item.Position;
+                            resource.ReserveInsuredColumnLength = item.ColumnLength;
+                            break;
+
+                        case "ReserveThirdParty":
+                            resource.ReserveThirdPartyId = item.Id;
+                            resource.ReserveThirdPartyFieldLabel = item.FieldLabel;
+                            resource.ReserveThirdPartyPosition = item.Position;
+                            resource.ReserveThirdPartyColumnLength = item.ColumnLength;
+                            break;
+
+                        case "Excess":
+                            resource.ExcessId = item.Id;
+                            resource.ExcessFieldLabel = item.FieldLabel;
+                            resource.ExcessPosition = item.Position;
+                            resource.ExcessColumnLength = item.ColumnLength;
+                            break;
+
+                        case "RecoverFromThirdParty":
+                            resource.RecoverFromThirdPartyId = item.Id;
+                            resource.RecoverFromThirdPartyFieldLabel = item.FieldLabel;
+                            resource.RecoverFromThirdPartyPosition = item.Position;
+                            resource.RecoverFromThirdPartyColumnLength = item.ColumnLength;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                return View("ClaimFileTemplate", resource);
             }
             return View();
         }
@@ -511,6 +591,65 @@ namespace Tilbake.MVC.Controllers
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.PremiumId);
                     fileTemplateRecord.Position = resource.PremiumPosition;
                     fileTemplateRecord.ColumnLength = resource.PremiumColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                }
+                return RedirectToAction(nameof(Index), new { resource.PortfolioId });
+
+            }
+            return View(resource);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ClaimFileTemplate(ClaimGiroResource resource)
+        {
+            if (resource == null)
+            {
+                throw new ArgumentNullException(nameof(resource));
+            };
+
+            if (ModelState.IsValid)
+            {
+                var tablename = resource.TableName;
+                if (tablename == "Claim")
+                {
+                    var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ClaimNumberId);
+                    fileTemplateRecord.Position = resource.ClaimNumberPosition;
+                    fileTemplateRecord.ColumnLength = resource.ClaimNumberColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+
+                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ReportDateId);
+                    fileTemplateRecord.Position = resource.ReportDatePosition;
+                    fileTemplateRecord.ColumnLength = resource.ReportDateColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+
+                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.IncidentDateId);
+                    fileTemplateRecord.Position = resource.IncidentDatePosition;
+                    fileTemplateRecord.ColumnLength = resource.IncidentDateColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord).ConfigureAwait(true);
+
+                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.RegisterDateId);
+                    fileTemplateRecord.Position = resource.RegisterDatePosition;
+                    fileTemplateRecord.ColumnLength = resource.RegisterDateColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+
+                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ReserveInsuredId);
+                    fileTemplateRecord.Position = resource.ReserveInsuredPosition;
+                    fileTemplateRecord.ColumnLength = resource.ReserveInsuredColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+
+                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ReserveThirdPartyId);
+                    fileTemplateRecord.Position = resource.ReserveThirdPartyPosition;
+                    fileTemplateRecord.ColumnLength = resource.ReserveThirdPartyColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+
+                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ExcessId);
+                    fileTemplateRecord.Position = resource.ExcessPosition;
+                    fileTemplateRecord.ColumnLength = resource.ExcessColumnLength;
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+
+                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.RecoverFromThirdPartyId);
+                    fileTemplateRecord.Position = resource.RecoverFromThirdPartyPosition;
+                    fileTemplateRecord.ColumnLength = resource.RecoverFromThirdPartyColumnLength;
                     await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
                 }
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });

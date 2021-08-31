@@ -22,10 +22,10 @@
         <input type="hidden" asp-for="PremiumId" />
         <div class="row offset-sm-0">
             <div class="col-sm-4">
-                <label for="Field" class="control-label">Field Name</label>
+                <label for="Field" class="control-label"><strong>Field Name</strong></label>
             </div>
             <div class="col-sm-3">
-                <label for="Position" class="control-label">Position</label>
+                <label for="Position" class="control-label"><strong>Position</strong></label>
             </div>
             @if (Model.FileType == FileType.FixedLengthDelimited)
             {
@@ -114,4 +114,11 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {  
+            $('input[type=text]').keyup(function () {  
+                $(this).val($(this).val().toUpperCase());  
+            });  
+        }); 
+    </script>
 }

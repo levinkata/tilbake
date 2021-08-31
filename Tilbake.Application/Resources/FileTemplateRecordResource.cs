@@ -29,6 +29,6 @@ namespace Tilbake.Application.Resources
         public bool IsKey { get; set; }
 
         //  Description
-        public string FileTemplate { get; set; }
+        public string FileTemplateName { get; set; }
     }
 }

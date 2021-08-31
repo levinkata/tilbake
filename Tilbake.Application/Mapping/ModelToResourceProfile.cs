@@ -62,7 +62,7 @@ namespace Tilbake.Application.Mapping
                     .ForMember(dest => dest.FileTemplateRecords, opt => opt.MapFrom(src => src.FileTemplateRecords)).ReverseMap();
 
             CreateMap<FileTemplateRecord, FileTemplateRecordResource>()
-                    .ForMember(dest => dest.FileTemplate, opt => opt.MapFrom(src => src.FileTemplate.Name)).ReverseMap();
+                    .ForMember(dest => dest.FileTemplateName, opt => opt.MapFrom(src => src.FileTemplate.Name)).ReverseMap();
 
             CreateMap<House, HouseResource>()
                     .ForMember(dest => dest.HouseCondition, opt => opt.MapFrom(src => src.HouseCondition.Name))

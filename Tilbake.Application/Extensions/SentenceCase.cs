@@ -5,7 +5,7 @@ namespace Tilbake.Application.Extensions
 {
     public class SentenceCase
     {
-        public string ToProperCase(string text)
+        public static string ToProperCase(string text)
         {
             CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
             TextInfo textInfo = cultureInfo.TextInfo;

@@ -14,14 +14,14 @@ namespace Tilbake.Application.Interfaces
         Task<ClientResource> GetByIdNumberAsync(string idNumber);
         Task<ClientResource> GetByPolicyIdAsync(Guid policyId);
         Task<IEnumerable<ClientResource>> GetByPortfolioIdAsync(Guid portfolioId);
+        Task<IEnumerable<ClientBulkResource>> GetBulkByPortfolioIdAsync(Guid portfolioId);
         Task<ClientResource> GetByClientIdAsync(Guid portfolioId, Guid clientId);
-        Task<int> ImportBulkAsync(Guid portfolioId, Guid fileTemplateId, FileType fileType,
-                            string delimiter, IFormFile uploadFile, int startRow);
+        Task<int> ImportBulkAsync(UpLoadFileResource resource);
         Task<int> AddAsync(ClientSaveResource resource);
-        Task<int> AddRangeAsync(List<ClientSaveResource> resources);
+        Task<int> AddBulkAsync(List<ClientBulkSaveResource> resources);
         Task<int> UpdateAsync(ClientResource resource);
         Task<int> DeleteAsync(Guid id);
         Task<int> DeleteAsync(ClientResource resource);
-        Task<int> DeleteRangeAsync(List<ClientResource> resources);
+        Task<int> DeleteBulkAsync(List<ClientBulkResource> resources);
     }
 }

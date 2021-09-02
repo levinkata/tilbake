@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
+using Tilbake.Domain.Enums;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -65,11 +66,85 @@ namespace Tilbake.MVC.Controllers
             return await Task.Run(() => View(resource));
         }
 
+        public async Task<IActionResult> ImportBulk(Guid portfolioId, Guid fileTemplateId, FileType fileType, string delimiter)
+        {
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+
+            UpLoadFileResource resource = new()
+            {
+                PortfolioId = portfolioId,
+                PortfolioName = portfolio.Name,
+                FileTemplateId = fileTemplateId,
+                FileType = fileType,
+                Delimiter = delimiter,
+                TableName = "Client"
+            };
+            return View(resource);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ImportBulk(UpLoadFileResource resource)
+        {
+            if (resource == null)
+            {
+                throw new ArgumentNullException(nameof(resource));
+            };
+
+            if (ModelState.IsValid)
+            {
+                await _clientService.ImportBulkAsync(resource);
+                return RedirectToAction(nameof(LoadBulks), new { resource.PortfolioId });
+            }
+
+            return View(resource);
+        }
+
+        public async Task<IActionResult> LoadBulks(Guid portfolioId)
+        {
+            var resources = await _clientService.GetBulkByPortfolioIdAsync(portfolioId);
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+
+            ViewBag.PortfolioId = portfolioId;
+            ViewBag.PortfolioName = portfolio.Name;
+
+            return View(resources);
+        }
+
+        [HttpPost, ActionName("LoadBulks")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoadConfirmed(List<ClientBulkResource> resources)
+        {
+            if (resources == null)
+            {
+                throw new ArgumentNullException(nameof(resources));
+            };
+
+            var portfolioId = resources.GroupBy(r => r.PortfolioId).FirstOrDefault().Key;
+            var portfolio = await _portfolioService.GetByIdAsync((Guid)portfolioId);
+
+            if (ModelState.IsValid)
+            {
+                var clientBulks = await _clientService.GetBulkByPortfolioIdAsync((Guid)portfolioId);
+
+                await _clientService.AddBulkAsync(clientBulks);
+
+                return RedirectToAction(nameof(Index), new { portfolioId });
+            }
+            else
+            {
+                ModelState.AddModelError("", "Encountered possible error - Model is invalid");
+                ViewBag.PortfolioId = portfolioId;
+                ViewBag.PortfolioName = portfolio.Name;
+                return View(resources);
+            }
+        }
+
         // GET: PortfolioClients/Details/5
         public async Task<IActionResult> Details(Guid portfolioId, Guid clientId)
         {
             var portfolioClientId = await _portfolioClientService.GetPortfolioClientId(portfolioId, clientId);
-            var resource = await _clientService.GetByClientId(portfolioId, clientId);
+            var resource = await _clientService.GetByClientIdAsync(portfolioId, clientId);
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
             var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
             var address = await _addressService.GetByClientIdAsync(clientId);
@@ -192,7 +267,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _clientService.GetByClientId((Guid)portfolioId, (Guid)clientId);
+            var resource = await _clientService.GetByClientIdAsync((Guid)portfolioId, (Guid)clientId);
             if (resource == null)
             {
                 return NotFound();

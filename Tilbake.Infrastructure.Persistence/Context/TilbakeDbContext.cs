@@ -53,6 +53,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Claimant> Claimants { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<ClientBankAccount> ClientBankAccounts { get; set; }
+        public virtual DbSet<ClientBulk> ClientBulks { get; set; }
         public virtual DbSet<ClientCarrier> ClientCarriers { get; set; }
         public virtual DbSet<ClientDocument> ClientDocuments { get; set; }
         public virtual DbSet<ClientNumberGenerator> ClientNumberGenerators { get; set; }
@@ -104,6 +105,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<PaymentType> PaymentTypes { get; set; }
         public virtual DbSet<Policy> Policies { get; set; }
+        public virtual DbSet<PolicyBulk> PolicyBulks { get; set; }
         public virtual DbSet<PolicyNumberGenerator> PolicyNumberGenerators { get; set; }
         public virtual DbSet<PolicyRenewal> PolicyRenewals { get; set; }
         public virtual DbSet<PolicyRisk> PolicyRisks { get; set; }
@@ -116,6 +118,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<PortfolioClient> PortfolioClients { get; set; }
         public virtual DbSet<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
         public virtual DbSet<Premium> Premia { get; set; }
+        public virtual DbSet<PremiumBulk> PremiumBulks { get; set; }
         public virtual DbSet<PremiumRefund> PremiumRefunds { get; set; }
         public virtual DbSet<PremiumRefundClaim> PremiumRefundClaims { get; set; }
         public virtual DbSet<PublicLiability> PublicLiabilities { get; set; }
@@ -175,6 +178,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
         private void OnBeforeSaveChanges(string userId = null)
         {
+            var timestamp = DateTime.Now;
+
             ChangeTracker.DetectChanges();
 
             var auditEntries = new List<AuditEntry>();
@@ -224,9 +229,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     }
                 }
             }
-
-            auditEntries.ForEach(s => Audits.Add(s.ToAudit()));
-
             foreach (var auditEntry in auditEntries)
             {
                 Audits.Add(auditEntry.ToAudit());
@@ -1107,6 +1109,37 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ClientBankAccount_Client");
+            });
+
+            modelBuilder.Entity<ClientBulk>(entity =>
+            {
+                entity.ToTable("ClientBulk");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.BirthDate).HasColumnType("date");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.IdNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.IsExists).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MiddleName).HasMaxLength(50);
+
+                entity.Property(e => e.Mobile).HasMaxLength(50);
+
+                entity.Property(e => e.Phone).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ClientCarrier>(entity =>
@@ -2285,6 +2318,25 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasConstraintName("FK_Policy_SalesType");
             });
 
+            modelBuilder.Entity<PolicyBulk>(entity =>
+            {
+                entity.ToTable("PolicyBulk");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.IdNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
             modelBuilder.Entity<PolicyNumberGenerator>(entity =>
             {
                 entity.ToTable("PolicyNumberGenerator");
@@ -2551,6 +2603,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.PolicyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Premium_Policy");
+            });
+
+            modelBuilder.Entity<PremiumBulk>(entity =>
+            {
+                entity.ToTable("PremiumBulk");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Amount)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.IdNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<PremiumRefund>(entity =>

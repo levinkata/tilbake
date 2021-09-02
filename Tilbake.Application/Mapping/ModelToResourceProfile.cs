@@ -34,7 +34,9 @@ namespace Tilbake.Application.Mapping
                     .ForMember(dest => dest.Occupation, opt => opt.MapFrom(src => src.Occupation.Name))
                     .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Name))
                     .ForMember(dest => dest.ClientCarriers, opt => opt.MapFrom(src => src.ClientCarriers)).ReverseMap();
-            
+
+            CreateMap<ClientBulk, ClientBulkResource>().ReverseMap();
+
             CreateMap<ClientCarrier, ClientCarrierResource>()
                     .ForMember(dest => dest.Carrier, opt => opt.MapFrom(src => src.Carrier)).ReverseMap();
 

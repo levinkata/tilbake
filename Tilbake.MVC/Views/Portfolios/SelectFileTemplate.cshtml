@@ -1,0 +1,91 @@
+﻿@model IEnumerable<FileTemplateResource>
+
+@{
+    ViewData["Title"] = "Select File Template";
+    var portfolioId = ViewBag.PortfolioId;
+}
+
+<h4>Select File Template</h4>
+
+<table id="tblFileTemplate" class="display">
+    <thead>
+        <tr>
+            <th>
+                File Template
+            </th>
+            <th>
+                File Type
+            </th>
+            <th>
+                Delimiter
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Delimiter)
+                </td>
+                <td>
+                    <a asp-controller="PortfolioClient"
+                       asp-action="ImportBulk"
+                       asp-route-portfolioId="@item.PortfolioId"
+                       asp-route-fileTemplateId="@item.Id"
+                       asp-route-fileType="@item.FileType"
+                       asp-route-delimiter="@item.Delimiter">
+                        Clients
+                    </a> |
+                    <a asp-controller="PortfolioPolicy"
+                       asp-action="ImportPolitikkBulk"
+                       asp-route-portfolioId="@item.PortfolioId"
+                       asp-route-fileTemplateId="@item.Id"
+                       asp-route-fileType="@item.FileType"
+                       asp-route-delimiter="@item.Delimiter">
+                        Policies
+                    </a> |
+                    <a asp-controller="PortfolioPremium"
+                       asp-action="ImportPremium"
+                       asp-route-portfolioId="@item.PortfolioId"
+                       asp-route-fileTemplateId="@item.Id"
+                       asp-route-fileType="@item.FileType"
+                       asp-route-delimiter="@item.Delimiter">
+                        Premiums
+                    </a> |
+                    <a asp-controller="PortfolioLoan"
+                       asp-action="ImportLoan"
+                       asp-route-fileTemplateId="@item.Id"
+                       asp-route-fileType="@item.FileType"
+                       asp-route-delimiter="@item.Delimiter">
+                        Loans
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="PortfolioClient"
+       asp-action="Index"
+       asp-route-portfolioId="@portfolioId"
+       class="btn btn-info">
+        Return
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('tblFileTemplate').DataTable();
+        });
+    </script>
+}

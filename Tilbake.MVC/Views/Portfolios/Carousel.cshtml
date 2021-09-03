@@ -1,0 +1,162 @@
+﻿@model PortfolioResource
+
+@{
+    ViewData["Title"] = @Model.Name;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+<div class="card mb-4 p-3">
+    <div class="row">
+        <div class="col-md-3 mb-3 p-3">
+            <h6 class="fw-bolder mb-3">Client Management</h6>
+            <ul>
+                <li>
+                    <a asp-controller="PortfolioClients"
+                        asp-action="Index"
+                        asp-route-portfolioId="@Model.Id">
+                        Clients
+                    </a>
+                </li>
+                <li>
+                    Edit Contact Information
+                </li>
+                <li>
+                    Address Clean up
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-3 mb-3 p-3">
+            <h6 class="fw-bolder mb-3">New Business</h6>
+            <ul>
+                <li>
+                    <a asp-controller="Quotes"
+                       asp-action="Index"
+                       asp-route-portfolioId="@Model.Id">
+                        Quotes
+                    </a>
+                </li>
+                <li>
+                    Bind
+                </li>
+                <li>
+                    Issue
+                </li>
+                <li>
+                    Automated Underwriting
+                </li>
+                <li>
+                    Straight Through Processing
+                </li>
+                <li>
+                    Forms Inclusions
+                </li>
+                <li>
+                    Policy Dec Generation
+                </li>
+                <li>
+                    Task Management
+                </li>
+            </ul>
+
+        </div>
+        <div class="col-md-3 mb-3 p-3">
+            <h6 class="fw-bolder mb-3">Integration with Other Systems</h6>
+            <ul>
+                <li>
+                    Billing
+                </li>
+                <li>
+                    <a asp-controller="Claims"
+                       asp-action="Index"
+                       asp-route-portfolioId="@Model.Id">
+                        Claims
+                    </a>
+                </li>
+                <li>
+                    Paperless Business Process
+                </li>
+                <li>
+                    <a asp-controller="FileTemplates"
+                       asp-action="Index"
+                       asp-route-portfolioId="@Model.Id">
+                        Bulk Import and Export
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-3 mb-3 p-3">
+            <h6 class="fw-bolder mb-3">Third Party Integration</h6>
+            <ul>
+                <li>
+                    Rating Engines
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-3 p-3">
+            <h6 class="fw-bolder mb-3">In-Force Policy Administration</h6>
+            <ul>
+                <li>
+                    Endorsements
+                </li>
+                <li>
+                    Automated Renewals
+                </li>
+                <li>
+                    Cancellations
+                </li>
+                <li>
+                    Reinstatements
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-3 mb-3 p-3">
+            <h6 class="fw-bolder mb-3">Security/User Management</h6>
+            <ul>
+                <li>
+                    <a asp-controller="UserAdmin"
+                       asp-action="Index">
+                        User Registration
+                    </a>
+                </li>
+                <li>
+                    Authentication
+                </li>
+                <li>
+                    Role-based User Permissions
+                </li>
+                <li>
+                    User Administration
+                </li>
+                <li>
+                    Reset Password
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-3 mb-3 p-3">
+            <h6 class="fw-bolder mb-3">Agency Functions</h6>
+            <ul>
+                <li>
+                    Commission Reports
+                </li>
+                <li>
+                    Agency User Administration
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Index"
+       class="btn btn-info">
+        Return
+    </a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

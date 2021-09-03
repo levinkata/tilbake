@@ -50,7 +50,8 @@ namespace Tilbake.MVC
                         s.RegisterValidatorsFromAssemblyContaining<BankResourceValidator>();
                         // s.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());                        
                         s.DisableDataAnnotationsValidation = true;
-                    });
+                    })
+                    .AddRazorRuntimeCompilation();
             
             services.AddRazorPages();
 

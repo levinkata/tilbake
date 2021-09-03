@@ -9,10 +9,12 @@ namespace Tilbake.MVC.Controllers
     public class PortfoliosController : Controller
     {
         private readonly IPortfolioService _portfolioService;
+        private readonly IFileTemplateService _fileTemplateService;
 
-        public PortfoliosController(IPortfolioService portfolioService)
+        public PortfoliosController(IPortfolioService portfolioService, IFileTemplateService fileTemplateService)
         {
             _portfolioService = portfolioService;
+            _fileTemplateService = fileTemplateService;
         }
 
         // GET: Portfolios
@@ -21,6 +23,24 @@ namespace Tilbake.MVC.Controllers
             var resources = await _portfolioService.GetAllAsync();
             ViewBag.datasource = resources;
 
+            return View(resources);
+        }
+
+        public async Task<IActionResult> Carousel(Guid portfolioId)
+        {
+            var resource = await _portfolioService.GetByIdAsync(portfolioId);
+
+            return View(resource);
+        }
+
+        public async Task<ActionResult> SelectFileTemplate(Guid portfolioId)
+        {
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var resources = await _fileTemplateService.GetByPortfolioIdAsync(portfolioId);
+
+            ViewBag.PortfolioId = portfolioId;
+            ViewBag.PortfolioName = portfolio.Name;
+  
             return View(resources);
         }
 
@@ -68,8 +88,6 @@ namespace Tilbake.MVC.Controllers
         }
 
         // POST: Portfolios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(PortfolioResource portfolioResource)

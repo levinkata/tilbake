@@ -1,0 +1,48 @@
+﻿@model UpLoadFileResource
+
+@{
+    ViewData["Title"] = "ImportClientBulk";
+}
+
+<span class="d-block p-2 bg-primary text-white">@Model.PortfolioName</span>
+<br />
+
+<h4>Import Data</h4>
+
+<form asp-action="ImportBulk" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-horizontal">
+        <input type="hidden" asp-for="PortfolioId" />
+        <input type="hidden" asp-for="FileTemplateId" />
+        <input type="hidden" asp-for="FileType" />
+        <input type="hidden" asp-for="Delimiter" />
+        <input type="hidden" asp-for="TableName" />
+        <div class="form-group">
+            <label class="col-md-2 control-label">Enter Data Row #:</label>
+            <div class="col-md-2">
+                <input asp-for="StartRow" class="form-control" />
+                <span asp-validation-for="StartRow" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Select file to load:</label>
+            <div class="col-md-6">
+                <input type="file" asp-for="UpLoadFile" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="m-1 col-md-10">
+                <input type="submit" value="Upload" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="col-md-offset-2">
+    <a asp-controller="Portfolios"
+       asp-action="SelectFileTemplate"
+       asp-route-portfolioId="@Model.PortfolioId"
+       class="btn btn-info">
+        Return
+    </a>
+</div>

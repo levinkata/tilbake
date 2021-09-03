@@ -9,9 +9,6 @@ namespace Tilbake.MVC.Controllers
 {
     public class PortfolioClientsController : Controller
     {
-        public const string SessionPortfolioName = "_PortfolioName";
-        public const string SessionPortfolioId = "_PortfolioId";
-
         private readonly IPortfolioClientService _portfolioClientService;
         private readonly IClientService _clientService;
         private readonly IClientTypeService _clientTypeService;
@@ -125,10 +122,7 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var clientBulks = await _clientService.GetBulkByPortfolioIdAsync((Guid)portfolioId);
-
-                await _clientService.AddBulkAsync(clientBulks);
-
+                await _clientService.AddBulkAsync((Guid)portfolioId);
                 return RedirectToAction(nameof(Index), new { portfolioId });
             }
             else

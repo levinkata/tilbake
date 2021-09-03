@@ -121,7 +121,7 @@ namespace Tilbake.MVC.Controllers
         {
             var fileTemplate = await _fileTemplateService.GetByIdAsync(fileTemplateId);
             var portfolioId = fileTemplate.PortfolioId;
-            var portfolio = fileTemplate.Portfolio;
+            var portfolio = fileTemplate.PortfolioName;
             var fileTemplateRecords = await _fileTemplateRecordService.GetTableFileTemplate(fileTemplateId, tableName);
 
             if (tableName == "Client")
@@ -667,7 +667,7 @@ namespace Tilbake.MVC.Controllers
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
             resource.PortfolioId = portfolioId;
-            resource.Portfolio = portfolio.Name;
+            resource.PortfolioName = portfolio.Name;
             resource.FileTypeList = SelectLists.FileFormats(Guid.Empty);
 
             return View(resource);

@@ -7,6 +7,9 @@
         public const string ClientRiskFolder = "\\wwwroot\\documents\\clientrisk\\";
         public const string PaymentFolder = "\\wwwroot\\documents\\payment\\";
 
+        //  Mobile
+        public const string Mobile = "99999999";
+
         //  Email
         public const string Email = "name@noplace.com";
 

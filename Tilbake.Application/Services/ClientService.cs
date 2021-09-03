@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Globalization;
@@ -16,12 +17,14 @@ namespace Tilbake.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _environment;
         private readonly CultureInfo culture = new("en-GB", false);
 
-        public ClientService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ClientService(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment environment)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _environment = environment;
         }
 
         public async Task<int> AddAsync(ClientSaveResource resource)
@@ -171,10 +174,9 @@ namespace Tilbake.Application.Services
                 string nullDate = "01/01/1900";
                 string tableName = "Client";
 
-                var resources = await _unitOfWork.ClientBulks.GetAllAsync(r => r.PortfolioId == resource.PortfolioId);
-                if (resources != null)
+                var clientBulks = await _unitOfWork.ClientBulks.GetAllAsync(r => r.PortfolioId == resource.PortfolioId);
+                if (clientBulks != null)
                 {
-                    var clientBulks = _mapper.Map<IEnumerable<ClientBulkResource>, IEnumerable<ClientBulk>>(resources);
                     await _unitOfWork.ClientBulks.DeleteRangeAsync(clientBulks);
                     await _unitOfWork.SaveAsync();
                 }
@@ -317,8 +319,8 @@ namespace Tilbake.Application.Services
 
                                 if (worksheet.Cells[CountryPos + row].Value != null && CountryPos != null)
                                 {
-                                    var land = worksheet.Cells[CountryPos + row].Value.ToString().Trim();
-                                    clientDTO.CountryId = (land != null) ? await GetCountryId(land).ConfigureAwait(true) :
+                                    var country = worksheet.Cells[CountryPos + row].Value.ToString().Trim();
+                                    clientDTO.CountryId = (country != null) ? await GetCountryId(country).ConfigureAwait(true) :
                                                                             Guid.Parse(Constants.CountryId);
                                 }
                                 else
@@ -332,7 +334,7 @@ namespace Tilbake.Application.Services
                                 if (worksheet.Cells[MobilePos + row].Value != null && MobilePos != null)
                                     clientDTO.Mobile = worksheet.Cells[MobilePos + row].Value.ToString().Trim();
                                 else
-                                    clientDTO.Mobile = null;
+                                    clientDTO.Mobile = Constants.Mobile;
 
                                 if (worksheet.Cells[PhonePos + row].Value != null && PhonePos != null)
                                     clientDTO.Phone = worksheet.Cells[PhonePos + row].Value.ToString().Trim();
@@ -515,14 +517,14 @@ namespace Tilbake.Application.Services
 
                                 if (MobilePos == null)
                                 {
-                                    clientDTO.Mobile = null;
+                                    clientDTO.Mobile = Constants.Mobile;
                                 }
                                 else
                                 {
                                     if (cols[int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture)] != null)
                                         clientDTO.Mobile = cols[int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture)];
                                     else
-                                        clientDTO.Mobile = null;
+                                        clientDTO.Mobile = Constants.Mobile;
                                 }
 
                                 if (PhonePos == null)
@@ -560,7 +562,7 @@ namespace Tilbake.Application.Services
                             {
                                 switch (row.FieldName)
                                 {
-                                    case "IDNumber":
+                                    case "IdNumber":
                                         IDNumberLen = row.ColumnLength;
                                         break;
                                     case "FirstName":
@@ -680,7 +682,7 @@ namespace Tilbake.Application.Services
                                 if (line.Substring(int.Parse(EmailPos, numberStyle, CultureInfo.CurrentCulture), EmailLen) != null && EmailPos != null)
                                     clientDTO.Email = line.Substring(int.Parse(EmailPos, numberStyle, CultureInfo.CurrentCulture), EmailLen);
                                 else
-                                    clientDTO.Email = null;
+                                    clientDTO.Email = Constants.Email;
 
                                 if (line.Substring(int.Parse(MaritalStatusPos, numberStyle, CultureInfo.CurrentCulture), MaritalStatusLen) != null && MaritalStatusPos != null)
                                 {
@@ -694,7 +696,7 @@ namespace Tilbake.Application.Services
                                 if (line.Substring(int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture), MobileLen) != null && MobilePos != null)
                                     clientDTO.Mobile = line.Substring(int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture), MobileLen);
                                 else
-                                    clientDTO.Mobile = null;
+                                    clientDTO.Mobile = Constants.Mobile;
 
                                 if (line.Substring(int.Parse(PhonePos, numberStyle, CultureInfo.CurrentCulture), PhoneLen) != null && PhonePos != null)
                                     clientDTO.Phone = line.Substring(int.Parse(PhonePos, numberStyle, CultureInfo.CurrentCulture), PhoneLen);
@@ -744,17 +746,76 @@ namespace Tilbake.Application.Services
             }
         }
 
-        public async Task<int> AddBulkAsync(List<ClientBulkSaveResource> resources)
+        public async Task<int> AddBulkAsync(Guid portfolioId)
         {
-            if (resources == null)
-            {
-                throw new ArgumentNullException(nameof(resources));
-            }
-
             try
             {
-                var clientBulks = _mapper.Map<IEnumerable<ClientBulkSaveResource>, IEnumerable<ClientBulk>>(resources);
-                await _unitOfWork.ClientBulks.AddRangeAsync(clientBulks);
+                var clientBulks = await _unitOfWork.ClientBulks.GetAllAsync(
+                                    r => r.PortfolioId == portfolioId);
+
+                int recCount = clientBulks.Count();
+                var NewRecords = 0;
+                var ExistingRecords = 0;
+                var FolderName = "client";
+
+                foreach (var c in clientBulks)
+                {
+                    if (!(bool)c.IsExists)
+                    {
+                        Client client = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            ClientTypeId = c.ClientTypeId,
+                            TitleId = c.TitleId,
+                            FirstName = c.FirstName,
+                            LastName = c.LastName,
+                            BirthDate = c.BirthDate,
+                            GenderId = c.GenderId,
+                            IdNumber = c.IdNumber,
+                            Phone = c.Phone,
+                            Mobile = c.Mobile ?? "99999999",
+                            MaritalStatusId = c.MaritalStatusId,
+                            Email = c.Email ?? "someone@noemail.com",
+                            OccupationId = c.OccupationId,
+                            CountryId = c.CountryId
+                        };
+                        await _unitOfWork.Clients.AddAsync(client);
+                        NewRecords++;
+
+                        var FileName = "NewClient";
+                        string csvString = string.Join(",", c.IdNumber, c.LastName, c.FirstName);
+                        LogFiles.WriteLogFile(_environment, csvString, FolderName, FileName);
+
+                        //  Check if Client is already on Portfolio
+                        var IsPortfolioClientExists = await PortfolioClientExists(portfolioId, c.Id);
+
+                        if (!IsPortfolioClientExists)
+                        {
+                            PortfolioClient portfolioClient = new()
+                            {
+                                PortfolioId = portfolioId,
+                                ClientId = client.Id
+                            };
+                            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+                        }
+                    }
+                    else
+                    {
+                        //  Generate a log file and return
+                        ExistingRecords++;
+
+                        var FileName = "ExistingClient";
+                        string csvString = string.Join(",", c.IdNumber, c.LastName, c.FirstName);
+                        LogFiles.WriteLogFile(_environment, csvString, FolderName, FileName);
+                    }
+                }
+                await _unitOfWork.SaveAsync();
+
+                if (recCount > 0)
+                {
+                    await _unitOfWork.ClientBulks.DeleteRangeAsync(clientBulks);
+                }
+
                 return await _unitOfWork.SaveAsync();
             }
             catch (DbUpdateException ex)
@@ -800,8 +861,16 @@ namespace Tilbake.Application.Services
 
         public async Task<bool> ClientExists(string IdNumber)
         {
-            var client = await _unitOfWork.Clients.GetFirstOrDefaultAsync(e => e.IdNumber == IdNumber);
-            return (client != null);
+            var client = await _unitOfWork.Clients.GetAllAsync(e => e.IdNumber == IdNumber);
+            return client.Any();
+        }
+
+        private async Task<bool> PortfolioClientExists(Guid portfolioId, Guid clientId)
+        {
+            var portfolioClient = await _unitOfWork.PortfolioClients.GetAllAsync(
+                                            e => e.PortfolioId == portfolioId &&
+                                            e.ClientId == clientId);
+            return portfolioClient.Any();
         }
 
         public async Task<IEnumerable<ClientBulkResource>> GetBulkByPortfolioIdAsync(Guid portfolioId)

@@ -22,7 +22,7 @@ namespace Tilbake.Application.Resources
         public List<FileTemplateRecord> FileTemplateRecords { get; } = new List<FileTemplateRecord>();
 
         //  Descriptions
-        public string Portfolio { get; set; }
+        public string PortfolioName { get; set; }
 
         //  SelectLists
         public SelectList FileTypeList { get; set; }

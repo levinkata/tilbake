@@ -140,7 +140,25 @@ namespace Tilbake.MVC.Controllers
             }
         }
 
-        // GET: PortfolioClients/Details/5
+        [HttpGet]
+        public async Task<IActionResult> GetPortfoliolients(string category, string search)
+        {
+            object resources = null;
+            switch (category)
+            {
+                case "Client Number":
+                    break;
+                case "Id Number":
+                    resources = await _portfolioClientService.GetByIdAsync(Guid.Parse(search));
+                    break;
+                case "Last Number":
+                    break;
+                default:
+                    break;
+            }
+            return Json(resources);
+        }
+
         public async Task<IActionResult> Details(Guid portfolioId, Guid clientId)
         {
             var portfolioClientId = await _portfolioClientService.GetPortfolioClientId(portfolioId, clientId);

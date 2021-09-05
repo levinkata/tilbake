@@ -60,7 +60,13 @@ namespace Tilbake.MVC.Controllers
                 PortfolioName = portfolio.Name
             };
 
-            return await Task.Run(() => View(resource));
+            return View(resource);
+        }
+
+        public async Task<IActionResult> Search(Guid portfolioId)
+        {
+            var resource = await _portfolioService.GetByIdAsync(portfolioId);
+            return View(resource);
         }
 
         public async Task<IActionResult> ImportBulk(Guid portfolioId, Guid fileTemplateId, FileType fileType, string delimiter)

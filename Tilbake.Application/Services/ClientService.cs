@@ -40,7 +40,7 @@ namespace Tilbake.Application.Services
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Clients.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(ClientResource resource)
@@ -57,7 +57,6 @@ namespace Tilbake.Application.Services
             result = result.OrderBy(n => n.LastName);
 
             var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
-
             return resources;
         }
 
@@ -73,7 +72,6 @@ namespace Tilbake.Application.Services
                                                     r => r.Title);
 
             var resource = _mapper.Map<Client, ClientResource>(result);
-
             return resource;
         }
 
@@ -89,7 +87,6 @@ namespace Tilbake.Application.Services
                                             c => c.Title);
 
             var resource = _mapper.Map<Client, ClientResource>(result);
-
             return resource;
         }
 
@@ -236,7 +233,6 @@ namespace Tilbake.Application.Services
                 using (MemoryStream ms = new())
                 {
                     await resource.UpLoadFile.CopyToAsync(ms);
-
                     try
                     {
                         if (resource.FileType == FileType.Excel)

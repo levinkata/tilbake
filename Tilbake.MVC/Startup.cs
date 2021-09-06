@@ -53,7 +53,8 @@ namespace Tilbake.MVC
                     })
                     .AddRazorRuntimeCompilation();
             
-            services.AddRazorPages();
+            services.AddRazorPages()
+                    .AddRazorRuntimeCompilation();
 
             services.AddAuthorization(options =>
             {

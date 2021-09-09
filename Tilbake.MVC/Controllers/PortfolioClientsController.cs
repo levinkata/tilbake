@@ -63,10 +63,19 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        public async Task<IActionResult> Search(Guid portfolioId)
+        public async Task<IActionResult> Search(Guid portfolioId, string searchString)
         {
             var resource = await _portfolioService.GetByIdAsync(portfolioId);
-            return View(resource);
+            var resources = await _clientService.GetByPortfolioIdAsync(portfolioId);
+            ViewData["PortfolioId"] = portfolioId;
+            ViewData["PortfolioName"] = resource.Name;
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                resources = resources.Where(r => r.LastName.Contains(searchString)
+                                        || r.FirstName.Contains(searchString));
+            }
+            return View(resources);
         }
 
         public async Task<IActionResult> ImportBulk(Guid portfolioId, Guid fileTemplateId, FileType fileType, string delimiter)
@@ -141,17 +150,28 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPortfoliolients(string category, string search)
+        public async Task<IActionResult> GetPortfolioClients(Guid portfolioId, string category, string searchString)
         {
-            object resources = null;
+            var resources = await _clientService.GetByPortfolioIdAsync(portfolioId);
+
             switch (category)
             {
                 case "Client Number":
+                    bool isNumber = int.TryParse(searchString, out int n);
+                    if (isNumber)
+                    {
+                        resources = resources.Where(r => r.ClientNumber == n);
+                    }
                     break;
                 case "Id Number":
-                    resources = await _portfolioClientService.GetByIdAsync(Guid.Parse(search));
+                    resources = resources.Where(r => r.IdNumber == searchString);
                     break;
-                case "Last Number":
+                case "Name":
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        resources = resources.Where(r => r.LastName.Contains(searchString)
+                                                || r.FirstName.Contains(searchString));
+                    }
                     break;
                 default:
                     break;

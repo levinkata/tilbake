@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Tilbake.Domain.Models
+namespace Tilbake.Application.Resources
 {
-    public partial class Content
+    public class BuildingResource
     {
-        public Content()
-        {
-            Risks = new HashSet<Risk>();
-        }
-
         public Guid Id { get; set; }
         public string PhysicalAddress { get; set; }
         public Guid ResidenceTypeId { get; set; }
@@ -33,16 +33,29 @@ namespace Tilbake.Domain.Models
         public bool IsRetirementVillage { get; set; }
         public bool IsAdjacentOpenArea { get; set; }
         public string BondHolder { get; set; }
-        public Guid? AddedBy { get; set; }
-        public DateTime? DateAdded { get; set; }
-        public Guid? ModifiedBy { get; set; }
-        public DateTime? DateModified { get; set; }
 
-        public virtual BuildingCondition BuildingCondition { get; set; }
-        public virtual ResidenceType ResidenceType { get; set; }
-        public virtual ResidenceUse ResidenceUse { get; set; }
-        public virtual RoofType RoofType { get; set; }
-        public virtual WallType WallType { get; set; }
-        public virtual ICollection<Risk> Risks { get; set; }
+        //  Descriptions
+
+        [Display(Name = "Building Condition")]
+        public string BuildingCondition { get; set; }
+
+        [Display(Name = "Residence Use")]
+        public string ResidenceUse { get; set; }
+
+        [Display(Name = "Residence Type")]
+        public string ResidenceType { get; set; }
+
+        [Display(Name = "Roof Type")]
+        public string RoofType { get; set; }
+
+        [Display(Name = "Wall Type")]
+        public string WallType { get; set; }
+
+        //  SelectLists
+        public SelectList BuildingConditionList { get; set; }
+        public SelectList ResidenceUseList { get; set; }
+        public SelectList ResidenceTypeList { get; set; }
+        public SelectList RoofTypeList { get; set; }
+        public SelectList WallTypeList { get; set; }
     }
 }

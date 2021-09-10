@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace Tilbake.Application.Resources
 {
@@ -16,5 +17,12 @@ namespace Tilbake.Application.Resources
         public Guid? ThirdPartyId { get; set; }
         public Guid? TowTruckId { get; set; }
         public Guid? RoadsideAssistId { get; set; }
+
+        //  Description
+        public string CityName { get; set; }
+
+        //  SelectLists
+        public SelectList CityList { get; set; }
+        public SelectList CountryList { get; set; }
     }
 }

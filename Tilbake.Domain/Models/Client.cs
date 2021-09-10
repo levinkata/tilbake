@@ -24,12 +24,17 @@ namespace Tilbake.Domain.Models
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public Guid GenderId { get; set; }
+        public string IdDocument { get; set; }
         public string IdNumber { get; set; }
         public Guid MaritalStatusId { get; set; }
         public Guid CountryId { get; set; }
         public string Phone { get; set; }
         public string Mobile { get; set; }
+        public string Mobile1 { get; set; }
+        public string Mobile2 { get; set; }
         public string Email { get; set; }
+        public string Email1 { get; set; }
+        public string Email2 { get; set; }
         public Guid OccupationId { get; set; }
         public Guid? AddedById { get; set; }
         public DateTime? DateAdded { get; set; }

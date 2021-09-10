@@ -1,25 +1,24 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
-using Tilbake.Domain.Models.Common;
-using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Context
 {
     public partial class TilbakeDbContext : DbContext
     {
-        private readonly string _userId;
+        public TilbakeDbContext()
+        {
+        }
 
-        public TilbakeDbContext(DbContextOptions<TilbakeDbContext> options, IGetClaimsProvider userData)
+        public TilbakeDbContext(DbContextOptions<TilbakeDbContext> options)
             : base(options)
         {
-            _userId = userData.UserId;
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<AllRisk> AllRisks { get; set; }
+        public virtual DbSet<AllRiskSpecified> AllRiskSpecifieds { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
@@ -36,6 +35,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<BankBranch> BankBranches { get; set; }
         public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
         public virtual DbSet<BodyType> BodyTypes { get; set; }
+        public virtual DbSet<Building> Buildings { get; set; }
+        public virtual DbSet<BuildingCondition> BuildingConditions { get; set; }
         public virtual DbSet<Carrier> Carriers { get; set; }
         public virtual DbSet<ChartOfAccount> ChartOfAccounts { get; set; }
         public virtual DbSet<City> Cities { get; set; }
@@ -86,15 +87,19 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<InvoiceNumberGenerator> InvoiceNumberGenerators { get; set; }
         public virtual DbSet<InvoiceStatus> InvoiceStatuses { get; set; }
         public virtual DbSet<JobTitle> JobTitles { get; set; }
+        public virtual DbSet<Life> Lives { get; set; }
         public virtual DbSet<LossAdjuster> LossAdjusters { get; set; }
         public virtual DbSet<LossAdjusterAuthority> LossAdjusterAuthorities { get; set; }
         public virtual DbSet<LossAdjusterInstruction> LossAdjusterInstructions { get; set; }
         public virtual DbSet<MaritalStatus> MaritalStatuses { get; set; }
         public virtual DbSet<Motor> Motors { get; set; }
+        public virtual DbSet<MotorAccessory> MotorAccessories { get; set; }
+        public virtual DbSet<MotorCycle> MotorCycles { get; set; }
         public virtual DbSet<MotorCycleType> MotorCycleTypes { get; set; }
         public virtual DbSet<MotorImprovement> MotorImprovements { get; set; }
         public virtual DbSet<MotorMake> MotorMakes { get; set; }
         public virtual DbSet<MotorModel> MotorModels { get; set; }
+        public virtual DbSet<MotorRadio> MotorRadios { get; set; }
         public virtual DbSet<MotorUse> MotorUses { get; set; }
         public virtual DbSet<Occupation> Occupations { get; set; }
         public virtual DbSet<Payable> Payables { get; set; }
@@ -149,89 +154,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Title> Titles { get; set; }
         public virtual DbSet<TowTruck> TowTrucks { get; set; }
         public virtual DbSet<TracingAgent> TracingAgents { get; set; }
+        public virtual DbSet<Trailer> Trailers { get; set; }
+        public virtual DbSet<Travel> Travels { get; set; }
+        public virtual DbSet<TravelBeneficiary> TravelBeneficiaries { get; set; }
         public virtual DbSet<ValuationFeeRefund> ValuationFeeRefunds { get; set; }
         public virtual DbSet<ValuationFeeRefundClaim> ValuationFeeRefundClaims { get; set; }
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-        //            }
-        //        }
-
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            OnBeforeSaveChanges(_userId);
-            return base.SaveChanges(acceptAllChangesOnSuccess);
-        }
-
-        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
-        {
-            OnBeforeSaveChanges(_userId);
-            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
-
-        private void OnBeforeSaveChanges(string userId = null)
-        {
-            var timestamp = DateTime.Now;
-
-            ChangeTracker.DetectChanges();
-
-            var auditEntries = new List<AuditEntry>();
-            foreach (var entry in ChangeTracker.Entries())
+            if (!optionsBuilder.IsConfigured)
             {
-                if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
-                    continue;
-
-                var auditEntry = new AuditEntry(entry)
-                {
-                    TableName = entry.Entity.GetType().Name,
-                    UserId = userId
-                };
-                auditEntries.Add(auditEntry);
-
-                foreach (var property in entry.Properties)
-                {
-                    string propertyName = property.Metadata.Name;
-
-                    if (property.Metadata.IsPrimaryKey())
-                    {
-                        auditEntry.KeyValues[propertyName] = property.CurrentValue;
-                        continue;
-                    }
-
-                    switch (entry.State)
-                    {
-                        case EntityState.Added:
-                            auditEntry.AuditType = AuditType.Create;
-                            auditEntry.NewValues[propertyName] = property.CurrentValue;
-                            break;
-
-                        case EntityState.Deleted:
-                            auditEntry.AuditType = AuditType.Delete;
-                            auditEntry.OldValues[propertyName] = property.OriginalValue;
-                            break;
-
-                        case EntityState.Modified:
-                            if (property.IsModified)
-                            {
-                                auditEntry.ChangedColumns.Add(propertyName);
-                                auditEntry.AuditType = AuditType.Update;
-                                auditEntry.OldValues[propertyName] = property.OriginalValue;
-                                auditEntry.NewValues[propertyName] = property.CurrentValue;
-                            }
-                            break;
-                    }
-                }
-            }
-            foreach (var auditEntry in auditEntries)
-            {
-                Audits.Add(auditEntry.ToAudit());
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
             }
         }
 
@@ -321,6 +258,27 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.RiskItemId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AllRisk_RiskItem");
+            });
+
+            modelBuilder.Entity<AllRiskSpecified>(entity =>
+            {
+                entity.ToTable("AllRiskSpecified");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.SerialNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.RiskItem)
+                    .WithMany(p => p.AllRiskSpecifieds)
+                    .HasForeignKey(d => d.RiskItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AllRiskSpecified_RiskItem");
             });
 
             modelBuilder.Entity<AspNetRole>(entity =>
@@ -648,6 +606,72 @@ namespace Tilbake.Infrastructure.Persistence.Context
             modelBuilder.Entity<BodyType>(entity =>
             {
                 entity.ToTable("BodyType");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Building>(entity =>
+            {
+                entity.ToTable("Building");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.ArmedResponseName).HasMaxLength(50);
+
+                entity.Property(e => e.BondHolder).HasMaxLength(50);
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.PhysicalAddress)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.UnoccupancyPeriod).HasMaxLength(50);
+
+                entity.HasOne(d => d.BuildingCondition)
+                    .WithMany(p => p.Buildings)
+                    .HasForeignKey(d => d.BuildingConditionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Building_BuildingCondition");
+
+                entity.HasOne(d => d.ResidenceType)
+                    .WithMany(p => p.Buildings)
+                    .HasForeignKey(d => d.ResidenceTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Building_ResidenceType");
+
+                entity.HasOne(d => d.ResidenceUse)
+                    .WithMany(p => p.Buildings)
+                    .HasForeignKey(d => d.ResidenceUseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Building_ResidenceUse");
+
+                entity.HasOne(d => d.RoofType)
+                    .WithMany(p => p.Buildings)
+                    .HasForeignKey(d => d.RoofTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Building_RoofType");
+
+                entity.HasOne(d => d.WallType)
+                    .WithMany(p => p.Buildings)
+                    .HasForeignKey(d => d.WallTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Building_WallType");
+            });
+
+            modelBuilder.Entity<BuildingCondition>(entity =>
+            {
+                entity.ToTable("BuildingCondition");
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
@@ -1035,7 +1059,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
+                entity.Property(e => e.Email1).HasMaxLength(50);
+
+                entity.Property(e => e.Email2).HasMaxLength(50);
+
                 entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.IdDocument)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("(N'Omang')");
 
                 entity.Property(e => e.IdNumber)
                     .IsRequired()
@@ -1048,6 +1081,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.MiddleName).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
+
+                entity.Property(e => e.Mobile1).HasMaxLength(50);
+
+                entity.Property(e => e.Mobile2).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
 
@@ -1324,17 +1361,25 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.ArmedResponseName).HasMaxLength(50);
+
+                entity.Property(e => e.BondHolder).HasMaxLength(50);
+
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.PhysicalAddress)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.UnoccupancyPeriod).HasMaxLength(50);
+
+                entity.HasOne(d => d.BuildingCondition)
+                    .WithMany(p => p.Contents)
+                    .HasForeignKey(d => d.BuildingConditionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Content_BuildingCondition");
 
                 entity.HasOne(d => d.ResidenceType)
                     .WithMany(p => p.Contents)
@@ -1848,6 +1893,23 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Life>(entity =>
+            {
+                entity.ToTable("Life");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.RiskItem)
+                    .WithMany(p => p.Lives)
+                    .HasForeignKey(d => d.RiskItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Life_RiskItem");
+            });
+
             modelBuilder.Entity<LossAdjuster>(entity =>
             {
                 entity.ToTable("LossAdjuster");
@@ -1968,6 +2030,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.FinancialInterest).HasMaxLength(50);
+
                 entity.Property(e => e.RegNumber)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -1995,6 +2059,60 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.MotorUseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Motor_MotorUse");
+            });
+
+            modelBuilder.Entity<MotorAccessory>(entity =>
+            {
+                entity.ToTable("MotorAccessory");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PurchaseValue).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Motor)
+                    .WithMany(p => p.MotorAccessories)
+                    .HasForeignKey(d => d.MotorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MotorAccessory_Motor");
+            });
+
+            modelBuilder.Entity<MotorCycle>(entity =>
+            {
+                entity.ToTable("MotorCycle");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.FinancialInterest).HasMaxLength(50);
+
+                entity.Property(e => e.Make)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Model)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.RegistrationNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.MotorUse)
+                    .WithMany(p => p.MotorCycles)
+                    .HasForeignKey(d => d.MotorUseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MotorCycle_MotorUse");
             });
 
             modelBuilder.Entity<MotorCycleType>(entity =>
@@ -2085,6 +2203,37 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.MotorMakeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MotorModel_MotorMake");
+            });
+
+            modelBuilder.Entity<MotorRadio>(entity =>
+            {
+                entity.ToTable("MotorRadio");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Make)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Model)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PurchaseValue).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.SerialNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Motor)
+                    .WithMany(p => p.MotorRadios)
+                    .HasForeignKey(d => d.MotorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MotorRadio_Motor");
             });
 
             modelBuilder.Entity<MotorUse>(entity =>
@@ -3084,6 +3233,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.AllRiskId)
                     .HasConstraintName("FK_Risk_AllRisk");
 
+                entity.HasOne(d => d.AllRiskSpecified)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.AllRiskSpecifiedId)
+                    .HasConstraintName("FK_Risk_AllRiskSpecified");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("FK_Risk_Building");
+
                 entity.HasOne(d => d.Content)
                     .WithMany(p => p.Risks)
                     .HasForeignKey(d => d.ContentId)
@@ -3104,6 +3263,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.HouseId)
                     .HasConstraintName("FK_Risk_House");
 
+                entity.HasOne(d => d.Life)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.LifeId)
+                    .HasConstraintName("FK_Risk_Life");
+
+                entity.HasOne(d => d.MotorCycle)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.MotorCycleId)
+                    .HasConstraintName("FK_Risk_MotorCycle");
+
                 entity.HasOne(d => d.Motor)
                     .WithMany(p => p.Risks)
                     .HasForeignKey(d => d.MotorId)
@@ -3118,6 +3287,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .WithMany(p => p.Risks)
                     .HasForeignKey(d => d.StatedBenefitId)
                     .HasConstraintName("FK_Risk_StatedBenefit");
+
+                entity.HasOne(d => d.Trailer)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.TrailerId)
+                    .HasConstraintName("FK_Risk_Trailer");
+
+                entity.HasOne(d => d.Travel)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.TravelId)
+                    .HasConstraintName("FK_Risk_Travel");
 
                 entity.HasOne(d => d.WorkmanCompensation)
                     .WithMany(p => p.Risks)
@@ -3339,6 +3518,101 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Trailer>(entity =>
+            {
+                entity.ToTable("Trailer");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Make)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Model)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.RegNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Travel>(entity =>
+            {
+                entity.ToTable("Travel");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.DepatureDate).HasColumnType("date");
+
+                entity.Property(e => e.Destination)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.DoctorContact)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.DoctorName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PassportNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PersonVisited)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ReturnDate).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<TravelBeneficiary>(entity =>
+            {
+                entity.ToTable("TravelBeneficiary");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.BirthDate).HasColumnType("date");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PassportNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Country)
+                    .WithMany(p => p.TravelBeneficiaries)
+                    .HasForeignKey(d => d.CountryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TravelBeneficiary_Country");
+
+                entity.HasOne(d => d.Travel)
+                    .WithMany(p => p.TravelBeneficiaries)
+                    .HasForeignKey(d => d.TravelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TravelBeneficiary_Travel");
             });
 
             modelBuilder.Entity<ValuationFeeRefund>(entity =>

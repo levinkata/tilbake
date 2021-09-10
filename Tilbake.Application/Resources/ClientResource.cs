@@ -33,6 +33,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Gender")]
         public Guid GenderId { get; set; }
 
+        [Display(Name = "ID Document")]
+        public string IdDocument { get; set; }
+
         [Display(Name = "ID Number")]
         public string IdNumber { get; set; }
 
@@ -48,8 +51,20 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Mobile")]
         public string Mobile { get; set; }
 
+        [Display(Name = "Mobile 1")]
+        public string Mobile1 { get; set; }
+
+        [Display(Name = "Mobile 2")]
+        public string Mobile2 { get; set; }
+
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Display(Name = "Email 1")]
+        public string Email1 { get; set; }
+
+        [Display(Name = "Email 2")]
+        public string Email2 { get; set; }
 
         [Display(Name = "Occupation")]
         public Guid OccupationId { get; set; }
@@ -83,6 +98,7 @@ namespace Tilbake.Application.Resources
         public SelectList ClientTypeList { get; set; }
         public SelectList CountryList { get; set; }
         public SelectList GenderList { get; set; }
+        public SelectList IdDocumentList { get; set; }
         public SelectList MaritalStatusList { get; set; }
         public SelectList OccupationList { get; set; }
         public SelectList TitleList { get; set; }

@@ -23,6 +23,14 @@ namespace Tilbake.Application.Mapping
                     .ForMember(dest => dest.BankName, opt => opt.MapFrom(src => src.Bank.Name)).ReverseMap();
 
             CreateMap<BodyType, BodyTypeResource>().ReverseMap();
+
+            CreateMap<Building, BuildingResource>()
+                    .ForMember(dest => dest.BuildingCondition, opt => opt.MapFrom(src => src.BuildingCondition.Name))
+                    .ForMember(dest => dest.ResidenceUse, opt => opt.MapFrom(src => src.ResidenceUse.Name))
+                    .ForMember(dest => dest.ResidenceType, opt => opt.MapFrom(src => src.ResidenceType.Name))
+                    .ForMember(dest => dest.RoofType, opt => opt.MapFrom(src => src.RoofType.Name))
+                    .ForMember(dest => dest.WallType, opt => opt.MapFrom(src => src.WallType.Name)).ReverseMap();
+
             CreateMap<Carrier, CarrierResource>().ReverseMap();
             CreateMap<City, CityResource>().ReverseMap();
 
@@ -48,6 +56,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<CommissionRate, CommissionRateResource>().ReverseMap();
 
             CreateMap<Content, ContentResource>()
+                    .ForMember(dest => dest.BuildingCondition, opt => opt.MapFrom(src => src.BuildingCondition.Name))
                     .ForMember(dest => dest.ResidenceUse, opt => opt.MapFrom(src => src.ResidenceUse.Name))
                     .ForMember(dest => dest.ResidenceType, opt => opt.MapFrom(src => src.ResidenceType.Name))
                     .ForMember(dest => dest.RoofType, opt => opt.MapFrom(src => src.RoofType.Name))

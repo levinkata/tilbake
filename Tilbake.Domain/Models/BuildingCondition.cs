@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 namespace Tilbake.Domain.Models
 {
-    public partial class RoofType
+    public partial class BuildingCondition
     {
-        public RoofType()
+        public BuildingCondition()
         {
             Buildings = new HashSet<Building>();
             Contents = new HashSet<Content>();
-            Houses = new HashSet<House>();
         }
 
         public Guid Id { get; set; }
@@ -21,6 +20,5 @@ namespace Tilbake.Domain.Models
 
         public virtual ICollection<Building> Buildings { get; set; }
         public virtual ICollection<Content> Contents { get; set; }
-        public virtual ICollection<House> Houses { get; set; }
     }
 }

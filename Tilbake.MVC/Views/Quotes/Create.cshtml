@@ -168,14 +168,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label asp-for="Content.Name" class="control-label">Name</label>
-                                <input asp-for="Content.Name" id="ContentName" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label asp-for="Content.PhysicalAddress" class="control-label">Physical Address</label>
                                 <input asp-for="Content.PhysicalAddress" id="ContentPhysicalAddress" class="form-control" />
                             </div>
@@ -306,14 +298,14 @@
                             <div class="col">
                                 <div class="form-group">
                                     <div class="form-check form-check-inline form-switch">
-                                        <input class="form-check-input" asp-for="House.BurglarAlarm" type="checkbox" id="BurglarAlarm">
+                                        <input class="form-check-input" asp-for="House.BurglarAlarm" type="checkbox" id="IsBurglarAlarm">
                                         <label class="form-check-label" asp-for="House.BurglarAlarm">Burglar Alarm</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check form-check-inline form-switch">
-                                        <input class="form-check-input" asp-for="House.BurglarBars" type="checkbox" id="BurglarBars">
-                                        <label class="form-check-label" asp-for="House.BurglarBars">Alarm</label>
+                                        <input class="form-check-input" asp-for="House.BurglarBars" type="checkbox" id="IsBurglarBars">
+                                        <label class="form-check-label" asp-for="House.BurglarBars">Burglar Alarm</label>
                                     </div>
                                 </div>
                             </div>
@@ -448,8 +440,8 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <div class="form-check form-check-inlineform-switch">
-                                            <input class="form-check-input" asp-for="Motor.GreyImport" type="checkbox" id="GreyImport">
-                                            <label class="form-check-label" asp-for="Motor.GreyImport">Grey Import</label>
+                                            <input class="form-check-input" asp-for="Motor.IsImport" type="checkbox" id="IsImport">
+                                            <label class="form-check-label" asp-for="Motor.IsImport">Grey Import</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -460,22 +452,22 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.TrackingDevice" type="checkbox" id="TrackingDevice">
-                                            <label class="form-check-label" asp-for="Motor.TrackingDevice">Tracking Device</label>
+                                            <input class="form-check-input" asp-for="Motor.IsTrackingDevice" type="checkbox" id="IsTrackingDevice">
+                                            <label class="form-check-label" asp-for="Motor.IsTrackingDevice">Tracking Device</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.Immobiliser" type="checkbox" id="Immobiliser">
-                                            <label class="form-check-label" asp-for="Motor.Immobiliser">Immobiliser</label>
+                                            <input class="form-check-input" asp-for="Motor.IsImmobiliser" type="checkbox" id="IsImmobiliser">
+                                            <label class="form-check-label" asp-for="Motor.IsImmobiliser">IsImmobiliser</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch ">
-                                            <input class="form-check-input" asp-for="Motor.Alarm" type="checkbox" id="Alarm">
-                                            <label class="form-check-label" asp-for="Motor.Alarm">Alarm</label>
+                                            <input class="form-check-input" asp-for="Motor.IsAlarm" type="checkbox" id="IsAlarm">
+                                            <label class="form-check-label" asp-for="Motor.IsAlarm">IsAlarm</label>
                                         </div>
                                     </div>
                                 </div>
@@ -646,8 +638,8 @@
                 RoofTypeId: $('#HouseRoofTypeId option:selected').val(),
                 WallTypeId: $('#HouseWallTypeId option:selected').val(),
                 HouseConditionId: $('#HouseConditionId option:selected').val(),
-                BurglarAlarm: $('#BurglarAlarm').val(),
-                BurglarBars: $('#BurglarAlarm').val()               
+                BurglarIsAlarm: $('#BurglarIsAlarm').val(),
+                BurglarBars: $('#BurglarIsAlarm').val()               
             }
 
             //  2. Build QuoteItem Array to match model class QuoteItem
@@ -689,11 +681,11 @@
                 EngineCapacity: $('#EngineCapacity').val(),
                 Colour: $('#Colour').val(),
                 MotorUseId: $('#MotorUseId option:selected').val(),
-                GreyImport: $('#GreyImport').val(),
+                IsImport: $('#IsImport').val(),
                 SecurityFitting: $('#SecurityFitting').val(),
-                TrackingDevice: $('#TrackingDevice').val(),
-                Immobiliser: $('#Immobiliser').val(),
-                Alarm: $('#Alarm').val()
+                IsTrackingDevice: $('#IsTrackingDevice').val(),
+                IsImmobiliser: $('#IsImmobiliser').val(),
+                IsAlarm: $('#IsAlarm').val()
             };
 
             //  2. Build QuoteItem Array to match model class QuoteItem

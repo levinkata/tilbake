@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public ResidenceUse()
         {
+            Buildings = new HashSet<Building>();
             Contents = new HashSet<Content>();
         }
 
@@ -17,6 +18,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
+        public virtual ICollection<Building> Buildings { get; set; }
         public virtual ICollection<Content> Contents { get; set; }
     }
 }

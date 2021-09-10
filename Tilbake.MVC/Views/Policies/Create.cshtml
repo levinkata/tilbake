@@ -226,14 +226,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label asp-for="Content.Name" class="control-label">Name</label>
-                                <input asp-for="Content.Name" id="ContentName" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label asp-for="Content.PhysicalAddress" class="control-label">Physical Address</label>
                                 <input asp-for="Content.PhysicalAddress" id="ContentPhysicalAddress" class="form-control" />
                             </div>
@@ -509,8 +501,8 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.GreyImport" type="checkbox" id="GreyImport">
-                                            <label class="form-check-label" asp-for="Motor.GreyImport">Grey Import</label>
+                                            <input class="form-check-input" asp-for="Motor.IsImport" type="checkbox" id="IsImport">
+                                            <label class="form-check-label" asp-for="Motor.IsImport">Grey Import</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -521,22 +513,22 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.TrackingDevice" type="checkbox" id="TrackingDevice">
-                                            <label class="form-check-label" asp-for="Motor.TrackingDevice">Tracking Device</label>
+                                            <input class="form-check-input" asp-for="Motor.IsTrackingDevice" type="checkbox" id="TrackingDevice">
+                                            <label class="form-check-label" asp-for="Motor.IsTrackingDevice">Tracking Device</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.Immobiliser" type="checkbox" id="Immobiliser">
-                                            <label class="form-check-label" asp-for="Motor.Immobiliser">Immobiliser</label>
+                                            <input class="form-check-input" asp-for="Motor.IsImmobiliser" type="checkbox" id="Immobiliser">
+                                            <label class="form-check-label" asp-for="Motor.IsImmobiliser">Immobiliser</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch ">
-                                            <input class="form-check-input" asp-for="Motor.Alarm" type="checkbox" id="Alarm">
-                                            <label class="form-check-label" asp-for="Motor.Alarm">Alarm</label>
+                                            <input class="form-check-input" asp-for="Motor.IsAlarm" type="checkbox" id="IsAlarm">
+                                            <label class="form-check-label" asp-for="Motor.IsAlarm">Alarm</label>
                                         </div>
                                     </div>
                                 </div>

@@ -7,7 +7,9 @@ namespace Tilbake.Domain.Models
     {
         public Motor()
         {
+            MotorAccessories = new HashSet<MotorAccessory>();
             MotorImprovements = new HashSet<MotorImprovement>();
+            MotorRadios = new HashSet<MotorRadio>();
             Risks = new HashSet<Risk>();
         }
 
@@ -20,13 +22,18 @@ namespace Tilbake.Domain.Models
         public string EngineNumber { get; set; }
         public string ChassisNumber { get; set; }
         public string EngineCapacity { get; set; }
+        public int OdometerReading { get; set; }
         public string Colour { get; set; }
         public Guid MotorUseId { get; set; }
-        public bool GreyImport { get; set; }
+        public bool IsImport { get; set; }
         public bool SecurityFitting { get; set; }
-        public bool TrackingDevice { get; set; }
-        public bool Immobiliser { get; set; }
-        public bool Alarm { get; set; }
+        public bool IsTrackingDevice { get; set; }
+        public bool IsImmobiliser { get; set; }
+        public bool IsImmobiliserFactoryFitted { get; set; }
+        public bool IsAlarm { get; set; }
+        public bool IsGearLock { get; set; }
+        public int DaysOutOfCountry { get; set; }
+        public string FinancialInterest { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
@@ -36,7 +43,9 @@ namespace Tilbake.Domain.Models
         public virtual DriverType DriverType { get; set; }
         public virtual MotorModel MotorModel { get; set; }
         public virtual MotorUse MotorUse { get; set; }
+        public virtual ICollection<MotorAccessory> MotorAccessories { get; set; }
         public virtual ICollection<MotorImprovement> MotorImprovements { get; set; }
+        public virtual ICollection<MotorRadio> MotorRadios { get; set; }
         public virtual ICollection<Risk> Risks { get; set; }
     }
 }

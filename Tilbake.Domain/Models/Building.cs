@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Tilbake.Domain.Models
 {
-    public partial class Content
+    public partial class Building
     {
-        public Content()
+        public Building()
         {
             Risks = new HashSet<Risk>();
         }

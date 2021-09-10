@@ -75,6 +75,27 @@ namespace Tilbake.Application.Helpers
                                         new SelectList(items, "Value", "Text", fileFormatId);
         }
 
+        public static SelectList IdDocuments(Guid? IdDocumentId)
+        {
+            var IdDocuments = Enum.GetValues(typeof(IdDocument))
+                                    .Cast<FileType>().Select(c => new
+                                    {
+                                        Id = c.ToString(),
+                                        Name = c.GetDisplayName()
+                                    }).ToList();
+
+            List<SelectListItem> items = new();
+
+            foreach (var item in IdDocuments)
+            {
+                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
+            }
+
+            return (IdDocumentId == Guid.Empty || String.IsNullOrEmpty(IdDocumentId.ToString())) ?
+                                        new SelectList(items, "Value", "Text") :
+                                        new SelectList(items, "Value", "Text", IdDocumentId);
+        }
+
         public static SelectList InvoiceStatuses(IEnumerable<InvoiceStatusResource> invoiceStatuses, Guid? invoiceStatusId)
         {
             List<SelectListItem> items = new();

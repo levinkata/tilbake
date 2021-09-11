@@ -111,7 +111,7 @@ namespace Tilbake.MVC.Controllers
         // GET: Quotes/Create
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
-            var portfolioClient = await _portfolioClientService.FindAsync(portfolioClientId);
+            var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
             var clientId = portfolioClient.ClientId;
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
@@ -179,7 +179,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var result = await _portfolioClientService.FindAsync(resource.PortfolioClientId);
+            var result = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
             
 
             var quoteStatuses = await _quoteStatusService.GetAllAsync();

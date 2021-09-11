@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
@@ -16,6 +17,6 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Withdrawal")]
         public bool IsWithdrawal { get; set; }
 
-
+        public Client Client { get; set; }
     }
 }

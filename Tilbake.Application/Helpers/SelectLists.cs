@@ -78,7 +78,7 @@ namespace Tilbake.Application.Helpers
         public static SelectList IdDocuments(Guid? IdDocumentId)
         {
             var IdDocuments = Enum.GetValues(typeof(IdDocument))
-                                    .Cast<FileType>().Select(c => new
+                                    .Cast<IdDocument>().Select(c => new
                                     {
                                         Id = c.ToString(),
                                         Name = c.GetDisplayName()

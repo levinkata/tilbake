@@ -26,14 +26,26 @@ namespace Tilbake.Application.Services
             await _unitOfWork.Clients.AddAsync(client);
             var clientId = client.Id;
 
-            PortfolioClient portfolioClient = new()
+            PortfolioClient newPortfolioClient = new()
             {
                 Id = Guid.NewGuid(),
                 PortfolioId = resource.PortfolioId,
                 ClientId = clientId,
                 DateAdded = DateTime.Now
             };
-            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+            await _unitOfWork.PortfolioClients.AddAsync(newPortfolioClient);
+
+            var address = resource.AddressSaveResource;
+            
+            Address newAddress = new()
+            {
+                Id = Guid.NewGuid(),
+                ClientId = clientId,
+                PhysicalAddress = address.PhysicalAddress,
+                PostalAddress = address.PostalAddress,
+                CityId = address.CityId
+            };
+            await _unitOfWork.Addresses.AddAsync(newAddress);
 
             return await _unitOfWork.SaveAsync();
         }
@@ -53,20 +65,25 @@ namespace Tilbake.Application.Services
             return result.Any();
         }
 
-        public async Task<PortfolioClientResource> FindAsync(Guid id)
+        public async Task<PortfolioClientResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(p => p.Id == id);
-            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
+            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
+                                                            e => e.Id == id,
+                                                            e => e.Client);
 
+            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
             return resource;
         }
 
-        public async Task<PortfolioClientResource> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<PortfolioClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(id);
-            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
+            var result = await _unitOfWork.PortfolioClients.GetAllAsync(
+                                                            e => e.PortfolioId == portfolioId,
+                                                            e => e.OrderBy(n => n.Client.LastName),
+                                                            e => e.Client);
 
-            return resource;
+            var resources = _mapper.Map<IEnumerable<PortfolioClient>, IEnumerable< PortfolioClientResource>>(result);
+            return resources;
         }
 
         public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)

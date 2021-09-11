@@ -153,7 +153,7 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
-            var portfolioClient = await _portfolioClientService.FindAsync(portfolioClientId);
+            var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
             var clientId = portfolioClient.ClientId;
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();

@@ -21,8 +21,8 @@
     </div>
     <div class="col">
         <div class="form-group">
-            <label name="CountryId" class="control-label"></label>
-            <select name="CountryId" class ="form-control" asp-items="Model.CountryList"></select>
+            <label name="CountryId" class="control-label">Country</label>
+            <select name="CountryId" id="Country" class ="form-control" asp-items="Model.CountryList"></select>
         </div>
         <div class="form-group">
             <label asp-for="CityId" class="control-label"></label>
@@ -30,3 +30,34 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        $('#Country').change(function () {
+            var selectedCountryId = $('#Country option:selected').val();
+
+            if (selectedCountryId != null && selectedCountryId != '') {
+                $.ajax({
+                    url: '@(Url.Action("GetCities", "Cities"))',
+                    traditional: true,
+                    dataType: 'json',
+                    type: 'GET',
+                    data: { countryId: selectedCountryId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (cities) {
+
+                        $('#CityId').empty();   // clear before appending new list
+                        $.each(cities, function (index, city) {
+                            $('#CityId').append($('<option></option>').val(city.id).html(city.name));
+                        });
+                    }
+                });
+            }
+        });    
+    });
+
+</script>

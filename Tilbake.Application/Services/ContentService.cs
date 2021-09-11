@@ -47,10 +47,8 @@ namespace Tilbake.Application.Services
         public async Task<IEnumerable<ContentResource>> GetAllAsync()
         {
             var result = await Task.Run(() => _unitOfWork.Contents.GetAllAsync());
-            result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Content>, IEnumerable<ContentResource>>(result);
-
             return resources;
         }
 

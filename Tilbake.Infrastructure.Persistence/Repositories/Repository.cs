@@ -103,7 +103,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                 throw new Exception($"Couldn't retrieve entities: {ex.Message}");
             }
         }
-
+        
         public virtual async Task<TEntity> GetByIdAsync(Guid id)
         {
             try

@@ -67,6 +67,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Occupation")]
         public Guid OccupationId { get; set; }
 
+        public AddressSaveResource AddressSaveResource { get; set; }
+
         //  Descriptions
         public string PortfolioName { get; set; }
 

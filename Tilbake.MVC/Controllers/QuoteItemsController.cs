@@ -216,7 +216,7 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.Name;
+                    quoteItemResource.Description = resource.PhysicalAddress;
 
                     QuoteItemContentResource quoteItemContentResource = new()
                     {

@@ -212,6 +212,11 @@ namespace Tilbake.MVC.Controllers
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
+            AddressSaveResource addressResource = new()
+            {
+                CountryList = new SelectList(countries, "Id", "Name"),
+            };
+
             ClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
@@ -220,11 +225,13 @@ namespace Tilbake.MVC.Controllers
                 ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
                 CountryList = new SelectList(countries, "Id", "Name"),
                 GenderList = new SelectList(genders, "Id", "Name"),
+                IdDocumentList = SelectLists.IdDocuments(Guid.Empty),
                 MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
                 OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
-                TitleList = SelectLists.Titles(titles, Guid.Empty)
+                TitleList = SelectLists.Titles(titles, Guid.Empty),
+                AddressSaveResource = addressResource
             };
-            return View("CreateClient", resource);
+            return View(resource);
         }
 
         // POST: PortfolioClients/Create
@@ -253,7 +260,7 @@ namespace Tilbake.MVC.Controllers
             resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
             resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
 
-            return View("CreateClient", resource);
+            return View(resource);
         }
 
         [HttpGet]

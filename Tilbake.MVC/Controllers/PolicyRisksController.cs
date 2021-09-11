@@ -219,7 +219,7 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.PolicyRiskId);
-                    policyRiskResource.Description = resource.Name;
+                    policyRiskResource.Description = resource.PhysicalAddress;
 
                     PolicyRiskContentResource policyRiskContentResource = new()
                     {

@@ -234,16 +234,15 @@
         });
 
         $('#IdNumber').focusout(function() {
+            
             selectedIdNumber = $(this).val();
-
-            if (selectedIdNumber != null) && (selectedIdNumber != '') {
+            if(selectedIdNumber != null && selectedIdNumber != '') {
                 CheckClient(selectedIdNumber);
             }
         });
 
-
         $('#ClientModal').on('show.bs.modal', function (e) {
-            e.PreventDefault();
+            e.preventDefault();
 
             $('#modalFirstName').val('');
             $('#modalLastName').val('');
@@ -254,8 +253,9 @@
         });
 
         function CheckClient(idNumber) {
-            if (idNumber != null) && (idNumber != '') {
-
+            
+            if(idNumber != null && idNumber != '') {
+                
                 $.ajax({
                     url: '@(Url.Action("GetByIdNumber", "Clients"))',
                     traditional: true,
@@ -266,15 +266,18 @@
                         alert("An error occurred.");
                     },
                     success: function (client) {
-                        clientId = client.id
-                        if (clientId != null) && (clientId != '') {
-                             $('#modalFirstName').val(client.firstName);
-                             $('#modalLastName').val(client.lastName);
-                             $('#modalIdNumber').val(client.idNumber);
-                             $('#modalClientNumber').val(client.clientNumber);
-                             $('#modalMobile').val(client.mobile);
-                             $('#modalEmail').val(client.email);
-                             $('#ClientModal').toggle();
+                        console.log(client);
+                        clientId = client.id;
+                        if (clientId != null && clientId != '') {
+                            alert('About to load modal ' + clientId);
+                            $('#modalFirstName').val(client.firstName);
+                            $('#modalLastName').val(client.lastName);
+                            $('#modalIdNumber').val(client.idNumber);
+                            $('#modalClientNumber').val(client.clientNumber);
+                            $('#modalMobile').val(client.mobile);
+                            $('#modalEmail').val(client.email);
+                            var myModal = new bootstrap.Modal(document.getElementById('ClientModal'), options);
+                            myModal.show();
                         }
                     }
                 });
@@ -283,7 +286,7 @@
 
         function PostPortfolioClient() {
 
-            if (clientId != null) && (clientId != '') {
+            if(clientId != null && clientId != '') {
 
                 $.ajax({
                     url: '@(Url.Action("AddExistingClient"))',

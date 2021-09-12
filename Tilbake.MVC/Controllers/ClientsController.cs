@@ -55,8 +55,8 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> GetByIdNumber(string idNumber)
         {
-            var result = await _clientService.GetByIdNumberAsync(idNumber);
-            return Ok(new { result });
+            var resource = await _clientService.GetByIdNumberAsync(idNumber);
+            return Json(resource);
         }
 
         // GET: Clients/Details/5

@@ -27,9 +27,9 @@ namespace Tilbake.Application.Services
             _environment = environment;
         }
 
-        public async Task<int> AddAsync(ClientSaveResource resource)
+        public async Task<int> AddAsync(PortfolioClientSaveResource resource)
         {
-            var client = _mapper.Map<ClientSaveResource, Client>(resource);
+            var client = _mapper.Map<PortfolioClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
             client.DateAdded = DateTime.Now;
             await _unitOfWork.Clients.AddAsync(client);

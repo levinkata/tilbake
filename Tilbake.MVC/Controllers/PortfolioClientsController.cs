@@ -216,7 +216,7 @@ namespace Tilbake.MVC.Controllers
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
-            ClientSaveResource resource = new()
+            PortfolioClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
                 PortfolioName = portfolio.Name,
@@ -236,11 +236,11 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClientSaveResource resource)
+        public async Task<IActionResult> Create(PortfolioClientSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _portfolioClientService.AddClientAsync(resource);
+                await _portfolioClientService.AddAsync(resource);
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });
             }
 
@@ -264,6 +264,13 @@ namespace Tilbake.MVC.Controllers
             resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
 
             return View(resource);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddExistingClient(Guid portfolioId, Guid clientId)
+        {
+            var result = await _portfolioClientService.AddExistingClientAsync(portfolioId, clientId);
+            return Ok(new { result });
         }
 
         [HttpGet]

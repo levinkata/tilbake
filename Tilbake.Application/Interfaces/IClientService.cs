@@ -17,7 +17,7 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<ClientBulkResource>> GetBulkByPortfolioIdAsync(Guid portfolioId);
         Task<ClientResource> GetByClientIdAsync(Guid portfolioId, Guid clientId);
         Task<int> ImportBulkAsync(UpLoadFileResource resource);
-        Task<int> AddAsync(ClientSaveResource resource);
+        Task<int> AddAsync(PortfolioClientSaveResource resource);
         Task<int> AddBulkAsync(Guid portfolioId);
         Task<int> UpdateAsync(ClientResource resource);
         Task<int> DeleteAsync(Guid id);

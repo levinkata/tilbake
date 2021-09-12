@@ -1,4 +1,4 @@
-﻿@model ClientSaveResource
+﻿@model PortfolioClientSaveResource
 
 @{
     ViewData["Title"] = Model.PortfolioName;
@@ -160,10 +160,145 @@
     <a asp-controller="PortfolioClients" asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Back to Portfolio Clients</a>
 </div>
 
+<!-- Client Modal -->
+<div class="modal fade" id="ClientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="clientModalLabel">
+                    Client
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="modalFirstName" class="control-label">First Name</label>
+                            <input for="modalFirstName" id="modalFirstName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="modalLastName" class="control-label">Last Name</label>
+                            <input for="modalLastName" id="modalLastName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="modalIdNumber" class="control-label">ID Number</label>
+                            <input for="modalIdNumber" id="modalIdNumber" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="modalClientNumber" class="control-label">Client Number</label>
+                            <input for="modalClientNumber" id="modalClientNumber" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="modalMobile" class="control-label">Mobile</label>
+                            <input for="modalMobile" id="modalMobile" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="modalEmail" class="control-label">Email</label>
+                            <input for="modalEmail" id="modalEmail" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnAddClient" class="btn btn-primary" onclick="PostPortfolioClient()">Save this record</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
+    <script>
+        var portfolioClientId = '@Model.PortfolioId';
+        var clientId = null;
+        var selectedIdNumber = null;
 
-</script>
+        $(document).ready(function () {
+            //  Do someting here.
+        });
+
+        $('#IdNumber').focusout(function() {
+            selectedIdNumber = $(this).val();
+
+            if (selectedIdNumber != null) && (selectedIdNumber != '') {
+                CheckClient(selectedIdNumber);
+            }
+        });
+
+
+        $('#ClientModal').on('show.bs.modal', function (e) {
+            e.PreventDefault();
+
+            $('#modalFirstName').val('');
+            $('#modalLastName').val('');
+            $('#modalIdNumber').val('');
+            $('#modalClientNumber').val('');
+            $('#modalMobile').val('');
+            $('#modalEmail').val('');
+        });
+
+        function CheckClient(idNumber) {
+            if (idNumber != null) && (idNumber != '') {
+
+                $.ajax({
+                    url: '@(Url.Action("GetByIdNumber", "Clients"))',
+                    traditional: true,
+                    dataType: "json",
+                    type: 'GET',
+                    data: { idNumber: idNumber },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (client) {
+                        clientId = client.id
+                        if (clientId != null) && (clientId != '') {
+                             $('#modalFirstName').val(client.firstName);
+                             $('#modalLastName').val(client.lastName);
+                             $('#modalIdNumber').val(client.idNumber);
+                             $('#modalClientNumber').val(client.clientNumber);
+                             $('#modalMobile').val(client.mobile);
+                             $('#modalEmail').val(client.email);
+                             $('#ClientModal').toggle();
+                        }
+                    }
+                });
+            }
+        }
+
+        function PostPortfolioClient() {
+
+            if (clientId != null) && (clientId != '') {
+
+                $.ajax({
+                    url: '@(Url.Action("AddExistingClient"))',
+                    type: "POST",
+                    dataType: "json",
+                    data: { portfolioId: portfolioId, clientId: clientId },
+                    error: function (xhr, status, error) {
+                        alert("An error has occured." + error);
+                    },
+                    success: function (data) {
+                        
+                        window.location.href = "PortfolioClients/Index?PortfolioId=" + portfolioId;
+                    }
+                });
+            }
+        }
+    </script>
 }

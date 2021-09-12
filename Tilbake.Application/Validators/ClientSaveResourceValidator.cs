@@ -6,7 +6,7 @@ using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Validators
 {
-    public class ClientSaveResourceValidator : AbstractValidator<ClientSaveResource>
+    public class ClientSaveResourceValidator : AbstractValidator<PortfolioClientSaveResource>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -40,7 +40,7 @@ namespace Tilbake.Application.Validators
                 .MaximumLength(50);
         }
 
-        private bool IsIdNumberUnique(ClientSaveResource editedClient, string newIdNumber)
+        private bool IsIdNumberUnique(PortfolioClientSaveResource editedClient, string newIdNumber)
         {
             var result = _unitOfWork.Clients.GetAllAsync();
             return result.Result.All(e => e.Equals(editedClient) || e.IdNumber != newIdNumber);

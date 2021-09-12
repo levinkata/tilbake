@@ -17,9 +17,9 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddClientAsync(ClientSaveResource resource)
+        public async Task<int> AddAsync(PortfolioClientSaveResource resource)
         {
-            var client = _mapper.Map<ClientSaveResource, Client>(resource);
+            var client = _mapper.Map<PortfolioClientSaveResource, Client>(resource);
 
             client.Id = Guid.NewGuid();
             client.DateAdded = DateTime.Now;
@@ -65,6 +65,19 @@ namespace Tilbake.Application.Services
                 }
 
             }
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<int> AddExistingClientAsync(Guid portfolioId, Guid clientId)
+        {
+            PortfolioClient newPortfolioClient = new()
+            {
+                Id = Guid.NewGuid(),
+                PortfolioId = portfolioId,
+                ClientId = clientId,
+                DateAdded = DateTime.Now
+            };
+            await _unitOfWork.PortfolioClients.AddAsync(newPortfolioClient);
             return await _unitOfWork.SaveAsync();
         }
 

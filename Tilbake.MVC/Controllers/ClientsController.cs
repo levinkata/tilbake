@@ -53,6 +53,12 @@ namespace Tilbake.MVC.Controllers
             return await Task.Run(() => View(resource));
         }
 
+        public async Task<IActionResult> GetByIdNumber(string idNumber)
+        {
+            var result = await _clientService.GetByIdNumberAsync(idNumber);
+            return Ok(new { result });
+        }
+
         // GET: Clients/Details/5
         public async Task<ActionResult> Details(Guid? id)
         {
@@ -80,7 +86,7 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            ClientSaveResource resource = new()
+            PortfolioClientSaveResource resource = new()
             {
                 ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
                 CountryList = new SelectList(countries, "Id", "Name"),
@@ -96,7 +102,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Clients/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(ClientSaveResource resource)
+        public async Task<ActionResult> Create(PortfolioClientSaveResource resource)
         {
             if (resource == null)
             {

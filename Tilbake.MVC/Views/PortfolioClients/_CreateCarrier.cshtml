@@ -1,0 +1,18 @@
+﻿@model ClientSaveResource
+@{
+}
+
+<div class="row">
+    <div class="form-group">
+        <label asp-for="CarrierIds" class="control-label"></label>
+        <select asp-for="CarrierIds" id="SelectCarrier" multiple="multiple" class="form-control"
+                asp-items="@Model.CarrierList"></select>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#SelectCarrier').multiselect();
+    });
+</script>

@@ -67,11 +67,34 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Occupation")]
         public Guid OccupationId { get; set; }
 
-        public AddressSaveResource AddressSaveResource { get; set; }
-
         //  Descriptions
         public string PortfolioName { get; set; }
 
+        //  Carriers
+        [Display(Name = "Carriers")]
+        public Guid[] CarrierIds { get; set; }
+
+        public MultiSelectList CarrierList { get; set; }
+
+        //  ============================================
+
+        //  Address
+        [Display(Name = "Physical Address")]
+        public string PhysicalAddress { get; set; }
+
+        [Display(Name = "Postal Address")]
+        public string PostalAddress { get; set; }
+
+        [Display(Name = "City")]
+        public Guid? CityId { get; set; }
+
+        [Display(Name = "Country")]
+        public Guid AddressCountryId { get; set; }
+
+        public SelectList CityList { get; set; }
+        public SelectList AddressCountryList { get; set; }
+
+        //  ==========================================
 
         //  SelectLists
 

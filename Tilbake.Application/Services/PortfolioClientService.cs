@@ -35,18 +35,34 @@ namespace Tilbake.Application.Services
             };
             await _unitOfWork.PortfolioClients.AddAsync(newPortfolioClient);
 
-            var address = resource.AddressSaveResource;
-            
-            Address newAddress = new()
+            var physicalAddress = resource.PhysicalAddress;
+            if (physicalAddress != null)
             {
-                Id = Guid.NewGuid(),
-                ClientId = clientId,
-                PhysicalAddress = address.PhysicalAddress,
-                PostalAddress = address.PostalAddress,
-                CityId = address.CityId
-            };
-            await _unitOfWork.Addresses.AddAsync(newAddress);
+                Address newAddress = new()
+                {
+                    Id = Guid.NewGuid(),
+                    ClientId = clientId,
+                    PhysicalAddress = physicalAddress,
+                    PostalAddress = resource.PostalAddress,
+                    CityId = resource.CityId
+                };
+                await _unitOfWork.Addresses.AddAsync(newAddress);
+            }
 
+            var carrierIds = resource.CarrierIds;
+            if (carrierIds != null)
+            {
+                foreach (var carrierId in carrierIds)
+                {
+                    ClientCarrier newClientCarrier = new()
+                    {
+                        ClientId = clientId,
+                        CarrierId = carrierId
+                    };
+                    await _unitOfWork.ClientCarriers.AddAsync(newClientCarrier);
+                }
+
+            }
             return await _unitOfWork.SaveAsync();
         }
 

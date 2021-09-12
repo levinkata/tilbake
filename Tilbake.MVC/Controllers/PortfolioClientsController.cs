@@ -10,6 +10,7 @@ namespace Tilbake.MVC.Controllers
     public class PortfolioClientsController : Controller
     {
         private readonly IPortfolioClientService _portfolioClientService;
+        private readonly ICityService _cityService;
         private readonly IClientService _clientService;
         private readonly IClientTypeService _clientTypeService;
         private readonly ICountryService _countryService;
@@ -23,6 +24,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IAddressService _addressService;
 
         public PortfolioClientsController(IPortfolioClientService portfolioClientService,
+                                            ICityService cityService,
                                             IClientService clientService,
                                             IClientTypeService clientTypeService,
                                             ICountryService countryService,
@@ -36,6 +38,7 @@ namespace Tilbake.MVC.Controllers
                                             IAddressService addressService)
         {
             _portfolioClientService = portfolioClientService;
+            _cityService = cityService;
             _clientService = clientService;
             _clientTypeService = clientTypeService;
             _countryService = countryService;
@@ -203,6 +206,7 @@ namespace Tilbake.MVC.Controllers
         // GET: PortfolioClients/Create
         public async Task<IActionResult> Create(Guid portfolioId)
         {
+            var carriers = await _carrierService.GetAllAsync();
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -212,29 +216,24 @@ namespace Tilbake.MVC.Controllers
 
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
-            AddressSaveResource addressResource = new()
-            {
-                CountryList = new SelectList(countries, "Id", "Name"),
-            };
-
             ClientSaveResource resource = new()
             {
                 PortfolioId = portfolioId,
                 PortfolioName = portfolio.Name,
                 BirthDate = DateTime.Now.Date,
+                AddressCountryList = new SelectList(countries, "Id", "Name"),
                 ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
                 CountryList = new SelectList(countries, "Id", "Name"),
                 GenderList = new SelectList(genders, "Id", "Name"),
                 IdDocumentList = SelectLists.IdDocuments(Guid.Empty),
                 MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
                 OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
-                TitleList = SelectLists.Titles(titles, Guid.Empty),
-                AddressSaveResource = addressResource
+                TitleList = SelectLists.Titles(titles, Guid.Empty)
             };
+            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
             return View(resource);
         }
 
-        // POST: PortfolioClients/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ClientSaveResource resource)
@@ -245,6 +244,7 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });
             }
 
+            var cities = await _cityService.GetByCountryId(resource.CountryId);
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -253,6 +253,9 @@ namespace Tilbake.MVC.Controllers
             var titles = await _titleService.GetAllAsync();
             var carriers = await _carrierService.GetAllAsync();
 
+            resource.AddressCountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
+            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
+            resource.CityList = new SelectList(cities, "Id", "Name", resource.CityId);
             resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
             resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
             resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);

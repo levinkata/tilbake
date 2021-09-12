@@ -142,8 +142,13 @@
             </div>
         </div>
         
-        <div class="row border pt-3">
-            <partial name="_CreateAddress" model="Model.AddressSaveResource"/>
+        <div class="row gx-2 border p-3">
+            <div class="col-6">
+                <partial name="_CreateAddress" model="Model"/>
+            </div>
+            <div class="col offset-md-1">
+                <partial name="_CreateCarrier" model="Model"/>
+            </div>
         </div>
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />

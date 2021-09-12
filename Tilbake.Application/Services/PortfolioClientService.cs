@@ -44,7 +44,8 @@ namespace Tilbake.Application.Services
                     ClientId = clientId,
                     PhysicalAddress = physicalAddress,
                     PostalAddress = resource.PostalAddress,
-                    CityId = resource.CityId
+                    CityId = resource.CityId,
+                    DateAdded = DateTime.Now
                 };
                 await _unitOfWork.Addresses.AddAsync(newAddress);
             }
@@ -57,7 +58,8 @@ namespace Tilbake.Application.Services
                     ClientCarrier newClientCarrier = new()
                     {
                         ClientId = clientId,
-                        CarrierId = carrierId
+                        CarrierId = carrierId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.ClientCarriers.AddAsync(newClientCarrier);
                 }

@@ -25,9 +25,10 @@ namespace Tilbake.Application.Services
         {
             var portfolio = _mapper.Map<PortfolioSaveResource, Portfolio>(resource);
             portfolio.Id = Guid.NewGuid();
-
+            portfolio.DateAdded = DateTime.Now;
             await _unitOfWork.Portfolios.AddAsync(portfolio);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -40,14 +41,14 @@ namespace Tilbake.Application.Services
             await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios);
             await _unitOfWork.Portfolios.DeleteAsync(portfolio);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(PortfolioResource resource)
         {
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
             await _unitOfWork.Portfolios.DeleteAsync(portfolio);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
@@ -72,17 +73,7 @@ namespace Tilbake.Application.Services
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
             await _unitOfWork.Portfolios.UpdateAsync(resource.Id, portfolio);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
-
-        //public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
-        //{
-        //    var result = await Task.Run(() => _unitOfWork.Portfolios.GetByNotUserIdAsync(aspNetUserId));
-        //    result = result.OrderBy(n => n.Name);
-
-        //    var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
-
-        //    return resources;
-        //}
     }
 }

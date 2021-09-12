@@ -29,7 +29,6 @@ namespace Tilbake.Application.Services
                 r => r.Carrier);
 
             var resources = _mapper.Map<IEnumerable<ClientCarrier>, IEnumerable<ClientCarrierResource>>(result);
-
             return resources;
         }
     }

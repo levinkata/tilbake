@@ -1,19 +1,21 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Tilbake.Domain.Enums;
 using Tilbake.Domain.Models;
+using Tilbake.Domain.Models.Common;
+using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Context
 {
     public partial class TilbakeDbContext : DbContext
     {
-        public TilbakeDbContext()
-        {
-        }
+        private readonly string _userId;
 
-        public TilbakeDbContext(DbContextOptions<TilbakeDbContext> options)
+        public TilbakeDbContext(DbContextOptions<TilbakeDbContext> options, IGetClaimsProvider userData)
             : base(options)
         {
+            _userId = userData.UserId;
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
@@ -163,12 +165,83 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+        //            }
+        //        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            if (!optionsBuilder.IsConfigured)
+            OnBeforeSaveChanges(_userId);
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            OnBeforeSaveChanges(_userId);
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void OnBeforeSaveChanges(string userId = null)
+        {
+            var timestamp = DateTime.Now;
+
+            ChangeTracker.DetectChanges();
+
+            var auditEntries = new List<AuditEntry>();
+            foreach (var entry in ChangeTracker.Entries())
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+                if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                    continue;
+
+                var auditEntry = new AuditEntry(entry)
+                {
+                    TableName = entry.Entity.GetType().Name,
+                    UserId = userId
+                };
+                auditEntries.Add(auditEntry);
+
+                foreach (var property in entry.Properties)
+                {
+                    string propertyName = property.Metadata.Name;
+
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                        continue;
+                    }
+
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            auditEntry.AuditType = AuditType.Create;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            break;
+
+                        case EntityState.Deleted:
+                            auditEntry.AuditType = AuditType.Delete;
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            break;
+
+                        case EntityState.Modified:
+                            if (property.IsModified)
+                            {
+                                auditEntry.ChangedColumns.Add(propertyName);
+                                auditEntry.AuditType = AuditType.Update;
+                                auditEntry.OldValues[propertyName] = property.OriginalValue;
+                                auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            }
+                            break;
+                    }
+                }
+            }
+            foreach (var auditEntry in auditEntries)
+            {
+                Audits.Add(auditEntry.ToAudit());
             }
         }
 
@@ -1184,6 +1257,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasKey(e => new { e.ClientId, e.CarrierId });
 
                 entity.ToTable("ClientCarrier");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Carrier)
                     .WithMany(p => p.ClientCarriers)

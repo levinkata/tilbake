@@ -53,18 +53,5 @@ namespace Tilbake.MVC.Controllers
 
             return Ok(new { result });
         }
-
-        [HttpPost]
-        public async Task<IActionResult> PostAddress(AddressSaveResource resource)
-        {
-            if (resource == null)
-            {
-                throw new ArgumentNullException(nameof(resource));
-            };
-
-            var result = await _addressService.AddAsync(resource);
-
-            return Ok(new { result });
-        }
     }
 }

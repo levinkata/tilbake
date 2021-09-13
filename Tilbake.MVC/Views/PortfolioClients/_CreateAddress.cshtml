@@ -17,8 +17,8 @@
     </div>
     <div class="col">
         <div class="form-group">
-            <label name="AddressCountryId" class="control-label"></label>
-            <select name="AddressCountryId" id="Country" class ="form-control" asp-items="Model.AddressCountryList"></select>
+            <label asp-for="AddressCountryId" class="control-label"></label>
+            <select asp-for="AddressCountryId" id="Country" class ="form-control" asp-items="Model.AddressCountryList"></select>
         </div>
         <div class="form-group">
             <label asp-for="CityId" class="control-label"></label>
@@ -26,7 +26,8 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
     
     $(document).ready(function () {

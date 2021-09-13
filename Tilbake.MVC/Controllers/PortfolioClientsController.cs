@@ -269,8 +269,14 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExistingClient(Guid portfolioId, Guid clientId)
         {
-            var result = await _portfolioClientService.AddExistingClientAsync(portfolioId, clientId);
-            return Ok(new { result });
+            var resource = await _portfolioClientService.AddExistingClientAsync(portfolioId, clientId);
+            return Json(resource);
+        }
+
+        public async Task<IActionResult> GetByIdNumber(Guid portfolioId, string idNumber)
+        {
+            var resource = await _portfolioClientService.GetByIdNumberAsync(portfolioId, idNumber);
+            return Json(resource);
         }
 
         [HttpGet]

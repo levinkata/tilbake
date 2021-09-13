@@ -77,6 +77,55 @@
                     <span asp-validation-for="IdNumber" class="text-danger"></span>
                 </div>
             </div>
+            <div class="row border p-3 m-3 bg-danger bg-opacity-10 text-white" id="DivDuplicate" style="display:none">
+                <div clas="mt-3">
+                    <h6 class="fw-bolder">Client already exists on the database</h6>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="modalFirstName" class="control-label">First Name</label>
+                            <input for="modalFirstName" id="modalFirstName" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="modalLastName" class="control-label">Last Name</label>
+                            <input for="modalLastName" id="modalLastName" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="modalIdNumber" class="control-label">ID Number</label>
+                            <input for="modalIdNumber" id="modalIdNumber" class="form-control" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="modalClientNumber" class="control-label">Client Number</label>
+                            <input for="modalClientNumber" id="modalClientNumber" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="modalMobile" class="control-label">Mobile</label>
+                            <input for="modalMobile" id="modalMobile" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="modalEmail" class="control-label">Email</label>
+                            <input for="modalEmail" id="modalEmail" class="form-control" readonly />
+                        </div>
+                    </div>
+                </div>                
+                <div class="form-group mb-3">
+                    <button type="button" id="btnAddClient" class="btn btn-primary" onclick="PostPortfolioClient()">Use this Record</button>
+                    <button type="button" class="btn btn-secondary">Change ID Number</button>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-4">
@@ -108,36 +157,58 @@
             </div>
             <div class="col-3">
                 <div class="form-group">
-                    <label asp-for="Mobile" class="control-label"></label>
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Mobile" class="control-label"></label>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="flexSwitchMobile">
+                            </div>
+                        </div>
+                    </div>
                     <input asp-for="Mobile" class="form-control" />
                     <span asp-validation-for="Mobile" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Mobile1" class="control-label"></label>
-                    <input asp-for="Mobile1" class="form-control" />
-                    <span asp-validation-for="Mobile1" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Mobile2" class="control-label"></label>
-                    <input asp-for="Mobile2" class="form-control" />
-                    <span asp-validation-for="Mobile2" class="text-danger"></span>
+                <div id="MobileDiv" class="row" style="display:none">
+                    <div class="form-group">
+                        <label asp-for="Mobile1" class="control-label"></label>
+                        <input asp-for="Mobile1" class="form-control" />
+                        <span asp-validation-for="Mobile1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Mobile2" class="control-label"></label>
+                        <input asp-for="Mobile2" class="form-control" />
+                        <span asp-validation-for="Mobile2" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label asp-for="Email" class="control-label"></label>
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Email" class="control-label"></label>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="flexSwitchEmail">
+                            </div>
+                        </div>
+                    </div>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Email1" class="control-label"></label>
-                    <input asp-for="Email1" class="form-control" />
-                    <span asp-validation-for="Email1" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Email2" class="control-label"></label>
-                    <input asp-for="Email2" class="form-control" />
-                    <span asp-validation-for="Email2" class="text-danger"></span>
+                <div id="EmailDiv" class="row" style="display:none">
+                    <div class="form-group">
+                        <label asp-for="Email1" class="control-label"></label>
+                        <input asp-for="Email1" class="form-control" />
+                        <span asp-validation-for="Email1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email2" class="control-label"></label>
+                        <input asp-for="Email2" class="form-control" />
+                        <span asp-validation-for="Email2" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,77 +231,26 @@
     <a asp-controller="PortfolioClients" asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Back to Portfolio Clients</a>
 </div>
 
-<!-- Client Modal -->
-<div class="modal fade" id="ClientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title" id="clientModalLabel">
-                    Client
-                </span>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="modalFirstName" class="control-label">First Name</label>
-                            <input for="modalFirstName" id="modalFirstName" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="modalLastName" class="control-label">Last Name</label>
-                            <input for="modalLastName" id="modalLastName" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="modalIdNumber" class="control-label">ID Number</label>
-                            <input for="modalIdNumber" id="modalIdNumber" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="modalClientNumber" class="control-label">Client Number</label>
-                            <input for="modalClientNumber" id="modalClientNumber" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="modalMobile" class="control-label">Mobile</label>
-                            <input for="modalMobile" id="modalMobile" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="modalEmail" class="control-label">Email</label>
-                            <input for="modalEmail" id="modalEmail" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="btnAddClient" class="btn btn-primary" onclick="PostPortfolioClient()">Save this record</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        var portfolioClientId = '@Model.PortfolioId';
-        var clientId = null;
+        var portfolioId = '@Model.PortfolioId';
+        var existingClientId = null;
         var selectedIdNumber = null;
+        var duplicateFound = false;
+        var duplicateIdNumber ='';
 
         $(document).ready(function () {
             //  Do someting here.
+        });
+
+        $('#flexSwitchEmail').change(function() {
+            $('#EmailDiv').toggle('show');
+        });
+
+        $('#flexSwitchMobile').change(function() {
+            $('#MobileDiv').toggle('show');
         });
 
         $('#IdNumber').focusout(function() {
@@ -239,17 +259,6 @@
             if(selectedIdNumber != null && selectedIdNumber != '') {
                 CheckClient(selectedIdNumber);
             }
-        });
-
-        $('#ClientModal').on('show.bs.modal', function (e) {
-            e.preventDefault();
-
-            $('#modalFirstName').val('');
-            $('#modalLastName').val('');
-            $('#modalIdNumber').val('');
-            $('#modalClientNumber').val('');
-            $('#modalMobile').val('');
-            $('#modalEmail').val('');
         });
 
         function CheckClient(idNumber) {
@@ -266,18 +275,23 @@
                         alert("An error occurred.");
                     },
                     success: function (client) {
-                        console.log(client);
-                        clientId = client.id;
-                        if (clientId != null && clientId != '') {
-                            alert('About to load modal ' + clientId);
-                            $('#modalFirstName').val(client.firstName);
-                            $('#modalLastName').val(client.lastName);
-                            $('#modalIdNumber').val(client.idNumber);
-                            $('#modalClientNumber').val(client.clientNumber);
-                            $('#modalMobile').val(client.mobile);
-                            $('#modalEmail').val(client.email);
-                            var myModal = new bootstrap.Modal(document.getElementById('ClientModal'), options);
-                            myModal.show();
+                        if(client) {
+                            
+                            existingClientId = client.id;
+                            if (existingClientId != null && existingClientId != '') {
+                                $('#ClientId').val(existingClientId);
+                                $('#modalFirstName').val(client.firstName);
+                                $('#modalLastName').val(client.lastName);
+                                $('#modalIdNumber').val(client.idNumber);
+                                $('#modalClientNumber').val(client.clientNumber);
+                                $('#modalMobile').val(client.mobile);
+                                $('#modalEmail').val(client.email);
+                                duplicateFound = true;
+                                duplicateIdNumber = client.idNumber;
+                                $('#DivDuplicate').toggle('show');
+                            }
+                        } else {
+                            duplicateFound = false;
                         }
                     }
                 });
@@ -286,19 +300,20 @@
 
         function PostPortfolioClient() {
 
-            if(clientId != null && clientId != '') {
-
+            if(existingClientId != null && existingClientId != '') {
+                
                 $.ajax({
                     url: '@(Url.Action("AddExistingClient"))',
                     type: "POST",
                     dataType: "json",
-                    data: { portfolioId: portfolioId, clientId: clientId },
+                    data: { portfolioId: portfolioId, clientId: existingClientId },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },
                     success: function (data) {
-                        
-                        window.location.href = "PortfolioClients/Index?PortfolioId=" + portfolioId;
+                        $('#DivDuplicate').toggle('hide');
+                        $('#DivExists').toggle('hide');
+                        window.location.href = "/PortfolioClients/Index?portfolioId=" + portfolioId;
                     }
                 });
             }

@@ -106,6 +106,17 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
+        public async Task<PortfolioClientResource> GetByIdNumberAsync(Guid portfolioId, string idNumber)
+        {
+            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
+                                                            e => e.PortfolioId == portfolioId &&
+                                                            e.Client.IdNumber == idNumber,
+                                                            e => e.Client);
+
+            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
+            return resource;
+        }
+
         public async Task<IEnumerable<PortfolioClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
             var result = await _unitOfWork.PortfolioClients.GetAllAsync(

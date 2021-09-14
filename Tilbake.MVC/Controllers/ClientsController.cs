@@ -42,6 +42,25 @@ namespace Tilbake.MVC.Controllers
             return await Task.Run(() => View());
         }
 
+        public async Task<IActionResult> Search(string searchString = "~#")
+        {
+            var resources = await _clientService.GetAllAsync();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                resources = resources.Where(r => r.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                        || r.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                        || r.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
+            }
+
+            ClientSearchResource searchResource = new()
+            {
+                SearchString = "",
+                ClientResources = resources.ToList()
+            };
+            return View(searchResource);
+        }
+
         // GET: Clients/GetByPortfolio/5
         public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
         {

@@ -66,21 +66,26 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        public async Task<IActionResult> Search(Guid portfolioId, string searchString)
+        public async Task<IActionResult> Search(Guid portfolioId, string searchString = "~#")
         {
             var resource = await _portfolioService.GetByIdAsync(portfolioId);
             var resources = await _clientService.GetByPortfolioIdAsync(portfolioId);
 
-            ViewData["PortfolioId"] = portfolioId;
-            ViewData["PortfolioName"] = resource.Name;
-            ViewData["CurrentFilter"] = searchString;
-
             if (!String.IsNullOrEmpty(searchString) && portfolioId != Guid.Empty)
             {
-                resources = resources.Where(r => r.LastName.Contains(searchString)
-                                        || r.FirstName.Contains(searchString));
+                resources = resources.Where(r => r.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                        || r.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                        || r.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
             }
-            return View(resources);
+
+            PortfolioClientSearchResource searchResource = new()
+            {
+                PortfolioId = portfolioId,
+                PortfolioName = resource.Name,
+                SearchString = "",
+                ClientResources = resources.ToList()
+            };
+            return View(searchResource);
         }
 
         public async Task<IActionResult> ImportBulk(Guid portfolioId, Guid fileTemplateId, FileType fileType, string delimiter)

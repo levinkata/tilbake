@@ -5,6 +5,8 @@ namespace Tilbake.Application.Resources
 {
     public class ClientResource
     {
+        string _firstName = string.Empty;
+
         public Guid Id { get; set; }
         public Guid PortfolioId { get; set; }
         public Guid PortfolioClientId { get; set; }
@@ -19,7 +21,11 @@ namespace Tilbake.Application.Resources
         public Guid ClientTypeId { get; set; }
 
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string FirstName 
+         { 
+            get { return _firstName; }
+            set { _firstName = value ?? string.Empty; }
+        }
 
         [Display(Name = "Middle Name")]
         public string MiddleName { get; set; }

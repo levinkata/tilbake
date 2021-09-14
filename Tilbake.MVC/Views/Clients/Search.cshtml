@@ -1,4 +1,4 @@
-﻿@model PortfolioClientSearchResource
+﻿@model ClientSearchResource
 @{
     ViewData["Title"] = ViewData["PortfolioName"];
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,12 +6,8 @@
 
 <h1>@ViewData["Title"]</h1>
 <br />
-<p>
-    <a asp-action="Create" asp-route-portfolioId="@@Model.PortfolioId">Create New</a>
-</p>
 
 <form asp-action="Search" method="get">
-    <input type="hidden" asp-for="PortfolioId" />
     <div class="form-inline border border-primary justify-content-end text-right">  
         <label asp-for="SearchString" style="display: block; text-align: right;">Enter search string: </label>        
         <input type="search" asp-for="SearchString" placeholder="Enter Keywords?" class="form-control" />        

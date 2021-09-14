@@ -2,20 +2,19 @@
 @{
     ViewData["Title"] = ViewData["PortfolioName"];
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var portfolioId = ViewData["PortfolioId"];
 }
 
 <h1>@ViewData["Title"]</h1>
 <br />
 <p>
-    <a asp-action="Create" asp-route-portfolioId="@portfolioId">Create New</a>
+    <a asp-action="Create" asp-route-portfolioId="@ViewData["PortfolioId"]">Create New</a>
 </p>
 
-<form asp-action="Search" asp-route-portfolioId="@ViewData["PortfolioId"]" method="get">
-    <input type="hidden" name="portfolioId" value="@ViewData["PortfolioId"]" />
+<form asp-action="Search" method="get">
     <div class="form-actions no-color">
+        <input type="hidden" name="portfolioId" value="@ViewData["PortfolioId"]" />
         <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            Find by name: <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
             <input type="submit" value="Search" class="btn btn-default" /> |
             <a asp-action="Search">Back to Full List</a>
         </p>

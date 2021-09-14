@@ -70,10 +70,12 @@ namespace Tilbake.MVC.Controllers
         {
             var resource = await _portfolioService.GetByIdAsync(portfolioId);
             var resources = await _clientService.GetByPortfolioIdAsync(portfolioId);
+
             ViewData["PortfolioId"] = portfolioId;
             ViewData["PortfolioName"] = resource.Name;
             ViewData["CurrentFilter"] = searchString;
-            if (!String.IsNullOrEmpty(searchString))
+
+            if (!String.IsNullOrEmpty(searchString) && portfolioId != Guid.Empty)
             {
                 resources = resources.Where(r => r.LastName.Contains(searchString)
                                         || r.FirstName.Contains(searchString));

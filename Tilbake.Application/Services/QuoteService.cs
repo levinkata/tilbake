@@ -236,9 +236,9 @@ namespace Tilbake.Application.Services
                                                 r => r.Insurer,
                                                 r => r.QuoteStatus);
 
-            var resources = _mapper.Map<Quote, QuoteResource>(result);
+            var resource = _mapper.Map<Quote, QuoteResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioAsync(Guid portfolioId)
@@ -252,7 +252,6 @@ namespace Tilbake.Application.Services
                                                   r => r.PortfolioClient);
             
             var resources = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteResource>>(result);
-
             return resources;
         }
 

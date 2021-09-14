@@ -36,7 +36,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tilbake.MVC</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tilbake</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -48,15 +48,6 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Banks" asp-action="Index">Banks</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Occupations" asp-action="Index">Occupations</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">Clients</a>
-                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarAccounting" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Accounting
@@ -75,11 +66,14 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" asp-area="" asp-controller="Portfolios" asp-action="Index">Portfolios</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="UserPortfolios" asp-action="Index">Assign Portfolios</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Clients" asp-action="Search">Clients</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Claims">Claims</a>
                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Banks" asp-action="Index">Banks</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Carriers" asp-action="Index">Carriers</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Occupations" asp-action="Index">Occupations</a>
                                 </div>
                             </li>
                         }

@@ -13,7 +13,7 @@
 <form asp-action="Search" method="get">
     <input type="hidden" asp-for="PortfolioId" />
     <div class="form-inline border border-primary justify-content-end text-right">  
-        <label asp-for="SearchString" style="display: block; text-align: right;">Enter search string: </label>        
+        <label asp-for="SearchString" style="display: block; padding-right: 10px; text-align: right;">Enter search string: </label>        
         <input type="search" asp-for="SearchString" placeholder="Enter Keywords?" class="form-control" />        
         <button type="submit" id="SearchButton" class="btn btn-primary">
             <i class="fas fa-search"></i>

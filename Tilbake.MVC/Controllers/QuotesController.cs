@@ -67,7 +67,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index(Guid portfolioId)
         {
             var resources = await _quoteService.GetByPortfolioAsync(portfolioId);
-            return await Task.Run(() => View(resources));
+            return View(resources);
         }
 
         public async Task<IActionResult> Quotation()

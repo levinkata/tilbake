@@ -34,6 +34,8 @@ namespace Tilbake.Application.Resources
 
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
+        public PortfolioClient PortfolioClient { get; set; }
+
         //  Descriptions
         [Display(Name = "Insurer")]
         public string Insurer { get; set; }

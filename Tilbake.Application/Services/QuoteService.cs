@@ -237,7 +237,6 @@ namespace Tilbake.Application.Services
                                                 r => r.QuoteStatus);
 
             var resource = _mapper.Map<Quote, QuoteResource>(result);
-
             return resource;
         }
 

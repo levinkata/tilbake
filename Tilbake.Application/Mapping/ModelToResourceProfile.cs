@@ -9,6 +9,7 @@ namespace Tilbake.Application.Mapping
         public ModelToResourceProfile()
         {
             CreateMap<Address, AddressResource>()
+                .ForMember(dest => dest.CountryId, opt => opt.MapFrom(src => src.City.CountryId))
                 .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name)).ReverseMap();
 
             CreateMap<AllRisk, AllRiskResource>()
@@ -19,6 +20,7 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<Audit, AuditResource>().ReverseMap();
             CreateMap<Bank, BankResource>().ReverseMap();
+
             CreateMap<BankBranch, BankBranchResource>()
                     .ForMember(dest => dest.BankName, opt => opt.MapFrom(src => src.Bank.Name)).ReverseMap();
 

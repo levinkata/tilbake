@@ -38,7 +38,10 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<AddressResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Addresses.GetAllAsync();
+            var result = await _unitOfWork.Addresses.GetAllAsync(
+                                                    null,
+                                                    r => r.OrderBy(n => n.PhysicalAddress),
+                                                    r => r.City);
             var resources = _mapper.Map<IEnumerable<Address>, IEnumerable<AddressResource>>(result);
 
             return resources;
@@ -56,9 +59,11 @@ namespace Tilbake.Application.Services
 
         public async Task<AddressResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Addresses.GetFirstOrDefaultAsync(r => r.Id == id);
-            var resource = _mapper.Map<Address, AddressResource>(result);
+            var result = await _unitOfWork.Addresses.GetFirstOrDefaultAsync(
+                                                    r => r.Id == id,
+                                                    r => r.City);
 
+            var resource = _mapper.Map<Address, AddressResource>(result);
             return resource;
         }
 

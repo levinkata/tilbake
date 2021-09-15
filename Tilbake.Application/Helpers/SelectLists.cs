@@ -39,6 +39,21 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", cityId);
         }
 
+        public static SelectList ClientTypes(IEnumerable<ClientTypeResource> clientTypes, Guid? clientTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Client Type", Value = "" });
+
+            foreach (var item in clientTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (clientTypeId == Guid.Empty || String.IsNullOrEmpty(clientTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", clientTypeId);
+        }
+
         public static SelectList Countries(IEnumerable<CountryResource> countries, Guid? countryId)
         {
             List<SelectListItem> items = new();

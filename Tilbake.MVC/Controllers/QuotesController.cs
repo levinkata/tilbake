@@ -29,6 +29,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IRoofTypeService _roofTypeService;
         private readonly IWallTypeService _wallTypeService;
         private readonly IPortfolioClientService _portfolioClientService;
+        private readonly IPortfolioService _portfolioService;
 
         public QuotesController(IQuoteService quoteService,
                                 ICoverTypeService coverTypeService,
@@ -44,7 +45,8 @@ namespace Tilbake.MVC.Controllers
                                 IResidenceUseService residenceUseService,
                                 IRoofTypeService roofTypeService,
                                 IWallTypeService wallTypeService,
-                                IPortfolioClientService portfolioClientService)
+                                IPortfolioClientService portfolioClientService,
+                                IPortfolioService portfolioService)
         {
             _quoteService = quoteService;
             _coverTypeService = coverTypeService;
@@ -61,6 +63,7 @@ namespace Tilbake.MVC.Controllers
             _roofTypeService = roofTypeService;
             _wallTypeService = wallTypeService;
             _portfolioClientService = portfolioClientService;
+            _portfolioService = portfolioService;
         }
 
         // GET: Quotes
@@ -68,6 +71,35 @@ namespace Tilbake.MVC.Controllers
         {
             var resources = await _quoteService.GetByPortfolioAsync(portfolioId);
             return View(resources);
+        }
+
+        public async Task<IActionResult> Search(Guid portfolioid, string searchString = "~#")
+        {
+            var resource = await _portfolioService.GetByIdAsync(portfolioid);
+            var resources = await _quoteService.GetByPortfolioAsync(portfolioid);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var isNumeric = int.TryParse(searchString, out int quoteNumber);
+                if (isNumeric)
+                {
+                    resources = resources.Where(r => r.QuoteNumber.Equals(quoteNumber));
+                } else
+                {
+                    resources = resources.Where(r => r.Client.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                            || r.Client.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                            || r.Client.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
+                }
+            }
+            
+            QuoteSearchResource searchResource = new()
+            {
+                PortfolioId = portfolioid,
+                PortfolioName = resource.Name,
+                SearchString = "",
+                QuoteResources = resources.ToList()
+            };
+            return View(searchResource);
         }
 
         public async Task<IActionResult> Quotation()

@@ -1,4 +1,4 @@
-﻿@model PortfolioClientSearchResource
+﻿@model QuoteSearchResource
 @{
     ViewData["Title"] = ViewData["PortfolioName"];
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,9 +6,6 @@
 
 <h1>@ViewData["Title"]</h1>
 <br />
-<p>
-    <a asp-action="Create" asp-route-portfolioId="@Model.PortfolioId">Create New</a>
-</p>
 
 <form asp-action="Search" method="get">
     <input type="hidden" asp-for="PortfolioId" />
@@ -25,40 +22,40 @@
     <thead>
         <tr>
             <th>
-                <strong>Client Number</strong>
+                <strong>Quote Number</strong>
             </th>
             <th>
-                <strong>First Name</strong>
+                <strong>Quote Date</strong>
             </th>
             <th>
                 <strong>Last Name</strong>
             </th>
             <th>
-                <strong>Id Number</strong>
+                <strong>First Name</strong>
             </th>
             <th>
-                <strong>Email</strong>
+                <strong>Status</strong>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.ClientResources) {
+@foreach (var item in Model.QuoteResources) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ClientNumber)
+                @Html.DisplayFor(modelItem => item.QuoteNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.QuoteDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.Client.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdNumber)
+                @Html.DisplayFor(modelItem => item.Client.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => item.QuoteStatus)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>

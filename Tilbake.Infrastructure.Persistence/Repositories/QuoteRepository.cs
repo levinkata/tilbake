@@ -7,7 +7,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 {
     public class QuoteRepository : Repository<Quote>, IQuoteRepository
     {
-
         public QuoteRepository(TilbakeDbContext context) : base(context)
         {
 

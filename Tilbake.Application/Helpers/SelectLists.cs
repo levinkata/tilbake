@@ -24,6 +24,21 @@ namespace Tilbake.Application.Helpers
                                 new MultiSelectList(items, "Value", "Text", carrierIds);
         }
 
+        public static SelectList Cities(IEnumerable<CityResource> cities, Guid? cityId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select City", Value = "" });
+
+            foreach (var item in cities)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (cityId == Guid.Empty || String.IsNullOrEmpty(cityId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", cityId);
+        }
+
         public static SelectList Countries(IEnumerable<CountryResource> countries, Guid? countryId)
         {
             List<SelectListItem> items = new();

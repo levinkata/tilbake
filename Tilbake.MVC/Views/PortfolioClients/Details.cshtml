@@ -47,7 +47,7 @@
                     <p class="card-text text-muted"><small>@Model.Address.CityName</small></p>
                 }
                 <div class="form-group">
-                    <button type="button" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</button>
+                    <a asp-controller="Addresses" asp-action="Edit" asp-route-id="@Model.Address.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</a>
                 </div>
             </div>
         </div>
@@ -118,9 +118,6 @@
         <div class="row">
             <div class="col">
                 @await Component.InvokeAsync("Policy", new { portfolioClientId = @Model.PortfolioClientId })
-                <div class="form-group">
-                    <a asp-controller="Policies" asp-action="Create" asp-route-portfolioClientId="@Model.PortfolioClientId" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Policy</a>
-                </div>
             </div>
             <div class="col justify-content-end">
                 <div class="card mb-3">Premiums</div>

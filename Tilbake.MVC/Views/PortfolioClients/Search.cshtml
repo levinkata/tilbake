@@ -61,7 +61,7 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a asp-action="Details" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@item.Id">Details</a>
             </td>
         </tr>
 }

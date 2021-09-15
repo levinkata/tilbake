@@ -17,7 +17,7 @@ namespace Tilbake.MVC.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid clientId)
         {
             ViewBag.ClientId = clientId;
-            return View(await Task.Run(() => _clientDocumentService.GetByClientIdAsync(clientId)));
+            return View(await _clientDocumentService.GetByClientIdAsync(clientId));
         }
     }
 }

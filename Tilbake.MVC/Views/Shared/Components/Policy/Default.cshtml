@@ -51,5 +51,8 @@
                 <a asp-controller="Policies" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Details</a>
             </div>
         }
+        <div class="form-group">
+            <a asp-controller="Policies" asp-action="Create" asp-route-portfolioClientId="@ViewBag.PortfolioClientId" class="btn btn-outline-dark btn-sm"><i class="fas fa-plus"></i> Policy</a>
+        </div>
     </div>
 </div>

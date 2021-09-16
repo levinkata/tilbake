@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
@@ -73,6 +76,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<DriverType> DriverTypes { get; set; }
         public virtual DbSet<Eftfile> Eftfiles { get; set; }
         public virtual DbSet<ElectronicEquipment> ElectronicEquipments { get; set; }
+        public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
         public virtual DbSet<Extension> Extensions { get; set; }
         public virtual DbSet<FileTemplate> FileTemplates { get; set; }
         public virtual DbSet<FileTemplateRecord> FileTemplateRecords { get; set; }
@@ -80,6 +84,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Glass> Glasses { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseCondition> HouseConditions { get; set; }
+        public virtual DbSet<IdDocumentType> IdDocumentTypes { get; set; }
         public virtual DbSet<Incident> Incidents { get; set; }
         public virtual DbSet<IncidentAuditLog> IncidentAuditLogs { get; set; }
         public virtual DbSet<Insurer> Insurers { get; set; }
@@ -94,6 +99,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<LossAdjusterAuthority> LossAdjusterAuthorities { get; set; }
         public virtual DbSet<LossAdjusterInstruction> LossAdjusterInstructions { get; set; }
         public virtual DbSet<MaritalStatus> MaritalStatuses { get; set; }
+        public virtual DbSet<MobileNumber> MobileNumbers { get; set; }
         public virtual DbSet<Motor> Motors { get; set; }
         public virtual DbSet<MotorAccessory> MotorAccessories { get; set; }
         public virtual DbSet<MotorCycle> MotorCycles { get; set; }
@@ -136,6 +142,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Receivable> Receivables { get; set; }
         public virtual DbSet<ReceivableDocument> ReceivableDocuments { get; set; }
         public virtual DbSet<ReceivableInvoice> ReceivableInvoices { get; set; }
+        public virtual DbSet<ReceivableQuote> ReceivableQuotes { get; set; }
         public virtual DbSet<Reconcilliation> Reconcilliations { get; set; }
         public virtual DbSet<RefundStatus> RefundStatuses { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
@@ -188,8 +195,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
         private void OnBeforeSaveChanges(string userId = null)
         {
-            var timestamp = DateTime.Now;
-
             ChangeTracker.DetectChanges();
 
             var auditEntries = new List<AuditEntry>();
@@ -1130,18 +1135,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(50);
-
-                entity.Property(e => e.Email1).HasMaxLength(50);
-
-                entity.Property(e => e.Email2).HasMaxLength(50);
-
                 entity.Property(e => e.FirstName).HasMaxLength(50);
-
-                entity.Property(e => e.IdDocument)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasDefaultValueSql("(N'Omang')");
 
                 entity.Property(e => e.IdNumber)
                     .IsRequired()
@@ -1152,12 +1146,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(100);
 
                 entity.Property(e => e.MiddleName).HasMaxLength(50);
-
-                entity.Property(e => e.Mobile).HasMaxLength(50);
-
-                entity.Property(e => e.Mobile1).HasMaxLength(50);
-
-                entity.Property(e => e.Mobile2).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
 
@@ -1178,6 +1166,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.GenderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Client_Gender");
+
+                entity.HasOne(d => d.IdDocumentType)
+                    .WithMany(p => p.Clients)
+                    .HasForeignKey(d => d.IdDocumentTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Client_IdDocumentType");
 
                 entity.HasOne(d => d.MaritalStatus)
                     .WithMany(p => p.Clients)
@@ -1493,6 +1487,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
+                entity.Property(e => e.DialingCode)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("((267))");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
@@ -1630,6 +1628,27 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.RiskItemId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ElectronicEquipment_RiskItem");
+            });
+
+            modelBuilder.Entity<EmailAddress>(entity =>
+            {
+                entity.ToTable("EmailAddress");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.EmailAddresses)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmailAddress_Client");
             });
 
             modelBuilder.Entity<Extension>(entity =>
@@ -1792,6 +1811,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<IdDocumentType>(entity =>
+            {
+                entity.ToTable("IdDocumentType");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Incident>(entity =>
             {
                 entity.ToTable("Incident");
@@ -1879,9 +1913,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.InstallmentAmount).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.InvoiceDate).HasColumnType("datetime");
-
-                entity.Property(e => e.InvoiceDueDate).HasColumnType("datetime");
+                entity.Property(e => e.InvoiceDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ReducingBalance).HasColumnType("decimal(18, 2)");
 
@@ -2070,6 +2104,27 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<MobileNumber>(entity =>
+            {
+                entity.ToTable("MobileNumber");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.MobileNumbers)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MobileNumber_Client");
             });
 
             modelBuilder.Entity<Motor>(entity =>
@@ -3100,6 +3155,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.ReceivableId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ReceivableInvoice_Receivable");
+            });
+
+            modelBuilder.Entity<ReceivableQuote>(entity =>
+            {
+                entity.HasKey(e => new { e.QuoteId, e.ReceivableId });
+
+                entity.ToTable("ReceivableQuote");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Quote)
+                    .WithMany(p => p.ReceivableQuotes)
+                    .HasForeignKey(d => d.QuoteId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceivableQuote_Quote");
+
+                entity.HasOne(d => d.Receivable)
+                    .WithMany(p => p.ReceivableQuotes)
+                    .HasForeignKey(d => d.ReceivableId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceivableQuote_Receivable");
             });
 
             modelBuilder.Entity<Reconcilliation>(entity =>

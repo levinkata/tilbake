@@ -52,7 +52,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(p => p.Name));
 
             var resources = _mapper.Map<IEnumerable<Carrier>, IEnumerable<CarrierResource>>(result);
-
             return resources;
         }
 
@@ -60,7 +59,6 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Carriers.GetByIdAsync(id);
             var resource = _mapper.Map<Carrier, CarrierResource>(result);
-
             return resource;
         }
 

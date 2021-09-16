@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Tilbake.Application.Extensions;
 using Tilbake.Application.Resources;
 using Tilbake.Domain.Enums;
@@ -105,25 +105,19 @@ namespace Tilbake.Application.Helpers
                                         new SelectList(items, "Value", "Text", fileFormatId);
         }
 
-        public static SelectList IdDocuments(Guid? IdDocumentId)
+        public static SelectList IdDocumentTypes(IEnumerable<IdDocumentTypeResource> idDocumentTypes, Guid? IdDocumentTypeId)
         {
-            var IdDocuments = Enum.GetValues(typeof(IdDocument))
-                                    .Cast<IdDocument>().Select(c => new
-                                    {
-                                        Id = c.ToString(),
-                                        Name = c.GetDisplayName()
-                                    }).ToList();
-
             List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select ID Document Type", Value = "" });
 
-            foreach (var item in IdDocuments)
+            foreach (var item in idDocumentTypes)
             {
-                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }
 
-            return (IdDocumentId == Guid.Empty || String.IsNullOrEmpty(IdDocumentId.ToString())) ?
-                                        new SelectList(items, "Value", "Text") :
-                                        new SelectList(items, "Value", "Text", IdDocumentId);
+            return (IdDocumentTypeId == Guid.Empty || String.IsNullOrEmpty(IdDocumentTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", IdDocumentTypeId);
         }
 
         public static SelectList InvoiceStatuses(IEnumerable<InvoiceStatusResource> invoiceStatuses, Guid? invoiceStatusId)
@@ -139,6 +133,21 @@ namespace Tilbake.Application.Helpers
             return (invoiceStatusId == Guid.Empty || String.IsNullOrEmpty(invoiceStatusId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", invoiceStatusId);
+        }
+
+        public static SelectList MaritalStatuses(IEnumerable<MaritalStatusResource> maritalStatuses, Guid? maritalStatusId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Marital Status", Value = "" });
+
+            foreach (var item in maritalStatuses)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (maritalStatusId == Guid.Empty || String.IsNullOrEmpty(maritalStatusId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", maritalStatusId);
         }
 
         public static SelectList Occupations(IEnumerable<OccupationResource> occupations, Guid? occupationId)

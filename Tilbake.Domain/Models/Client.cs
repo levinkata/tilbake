@@ -12,6 +12,8 @@ namespace Tilbake.Domain.Models
             ClientCarriers = new HashSet<ClientCarrier>();
             ClientDocuments = new HashSet<ClientDocument>();
             ClientRisks = new HashSet<ClientRisk>();
+            EmailAddresses = new HashSet<EmailAddress>();
+            MobileNumbers = new HashSet<MobileNumber>();
             PortfolioClients = new HashSet<PortfolioClient>();
         }
 
@@ -24,17 +26,11 @@ namespace Tilbake.Domain.Models
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public Guid GenderId { get; set; }
-        public string IdDocument { get; set; }
+        public Guid IdDocumentTypeId { get; set; }
         public string IdNumber { get; set; }
         public Guid MaritalStatusId { get; set; }
         public Guid CountryId { get; set; }
         public string Phone { get; set; }
-        public string Mobile { get; set; }
-        public string Mobile1 { get; set; }
-        public string Mobile2 { get; set; }
-        public string Email { get; set; }
-        public string Email1 { get; set; }
-        public string Email2 { get; set; }
         public Guid OccupationId { get; set; }
         public Guid? AddedById { get; set; }
         public DateTime? DateAdded { get; set; }
@@ -44,6 +40,7 @@ namespace Tilbake.Domain.Models
         public virtual ClientType ClientType { get; set; }
         public virtual Country Country { get; set; }
         public virtual Gender Gender { get; set; }
+        public virtual IdDocumentType IdDocumentType { get; set; }
         public virtual MaritalStatus MaritalStatus { get; set; }
         public virtual Occupation Occupation { get; set; }
         public virtual Title Title { get; set; }
@@ -52,6 +49,8 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<ClientCarrier> ClientCarriers { get; set; }
         public virtual ICollection<ClientDocument> ClientDocuments { get; set; }
         public virtual ICollection<ClientRisk> ClientRisks { get; set; }
+        public virtual ICollection<EmailAddress> EmailAddresses { get; set; }
+        public virtual ICollection<MobileNumber> MobileNumbers { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
     }
 }

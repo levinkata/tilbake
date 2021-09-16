@@ -36,9 +36,6 @@
             <th>
                 <strong>Id Number</strong>
             </th>
-            <th>
-                <strong>Email</strong>
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -56,9 +53,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
                 <a asp-action="Details" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@item.Id">Details</a>

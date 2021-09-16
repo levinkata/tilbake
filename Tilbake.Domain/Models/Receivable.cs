@@ -9,6 +9,7 @@ namespace Tilbake.Domain.Models
         {
             ReceivableDocuments = new HashSet<ReceivableDocument>();
             ReceivableInvoices = new HashSet<ReceivableInvoice>();
+            ReceivableQuotes = new HashSet<ReceivableQuote>();
         }
 
         public Guid Id { get; set; }
@@ -25,5 +26,6 @@ namespace Tilbake.Domain.Models
         public virtual PaymentType PaymentType { get; set; }
         public virtual ICollection<ReceivableDocument> ReceivableDocuments { get; set; }
         public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
+        public virtual ICollection<ReceivableQuote> ReceivableQuotes { get; set; }
     }
 }

@@ -39,10 +39,13 @@ namespace Tilbake.Application.Mapping
             CreateMap<Client, ClientResource>()
                     .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType.Name)) 
                     .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
+                    .ForMember(dest => dest.IdDocumentType, opt => opt.MapFrom(src => src.IdDocumentType.Name))
                     .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name))
                     .ForMember(dest => dest.MaritalStatus, opt => opt.MapFrom(src => src.MaritalStatus.Name))
                     .ForMember(dest => dest.Occupation, opt => opt.MapFrom(src => src.Occupation.Name))
                     .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Name))
+                    .ForMember(dest => dest.EmailAddresses, opt => opt.MapFrom(src => src.EmailAddresses))
+                    .ForMember(dest => dest.MobileNumbers, opt => opt.MapFrom(src => src.MobileNumbers))
                     .ForMember(dest => dest.ClientCarriers, opt => opt.MapFrom(src => src.ClientCarriers)).ReverseMap();
 
             CreateMap<ClientBulk, ClientBulkResource>().ReverseMap();
@@ -68,6 +71,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<CoverType, CoverTypeResource>().ReverseMap();
             CreateMap<DocumentType, DocumentTypeResource>().ReverseMap();
             CreateMap<DriverType, DriverTypeResource>().ReverseMap();
+            CreateMap<EmailAddress, EmailAddressResource>().ReverseMap();
             CreateMap<Gender, GenderResource>().ReverseMap();
 
             CreateMap<FileTemplate, FileTemplateResource>()
@@ -84,6 +88,7 @@ namespace Tilbake.Application.Mapping
                     .ForMember(dest => dest.WallType, opt => opt.MapFrom(src => src.WallType.Name)).ReverseMap();
 
             CreateMap<HouseCondition, HouseConditionResource>().ReverseMap();
+            CreateMap<IdDocumentType, IdDocumentTypeResource>().ReverseMap();
             CreateMap<Insurer, InsurerResource>().ReverseMap();
 
             CreateMap<Invoice, InvoiceResource>()
@@ -98,6 +103,7 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<InvoiceStatus, InvoiceStatusResource>().ReverseMap();
             CreateMap<MaritalStatus, MaritalStatusResource>().ReverseMap();
+            CreateMap<MobileNumber, MobileNumberResource>().ReverseMap();
 
             CreateMap<Motor, MotorResource>()
                 .ForMember(dest => dest.BodyType, opt => opt.MapFrom(src => src.BodyType.Name))

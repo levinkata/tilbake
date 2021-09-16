@@ -59,8 +59,8 @@
                 <span asp-validation-for="GenderId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IdDocument" class="control-label"></label>
-                <select asp-for="IdDocument" class="form-control" asp-items="@Model.IdDocumentList">
+                <label asp-for="IdDocumentTypeId" class="control-label"></label>
+                <select asp-for="IdDocumentTypeId" class="form-control" asp-items="@Model.IdDocumentTypeList">
                 </select>
             </div>
             <div class="form-group">
@@ -86,16 +86,6 @@
                 <label asp-for="Phone" class="control-label"></label>
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mobile" class="control-label"></label>
-                <input asp-for="Mobile" class="form-control" />
-                <span asp-validation-for="Mobile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OccupationId" class="control-label"></label>

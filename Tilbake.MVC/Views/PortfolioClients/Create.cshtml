@@ -67,8 +67,8 @@
             </div>
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="IdDocument" class="control-label"></label>
-                    <select asp-for="IdDocument" class="form-control" asp-items="@Model.IdDocumentList">
+                    <label asp-for="IdDocumentTypeId" class="control-label"></label>
+                    <select asp-for="IdDocumentTypeId" class="form-control" asp-items="@Model.IdDocumentTypeList">
                     </select>
                 </div>
                 <div class="form-group">
@@ -108,18 +108,6 @@
                             <input for="modalClientNumber" id="modalClientNumber" class="form-control" readonly />
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label for="modalMobile" class="control-label">Mobile</label>
-                            <input for="modalMobile" id="modalMobile" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label for="modalEmail" class="control-label">Email</label>
-                            <input for="modalEmail" id="modalEmail" class="form-control" readonly />
-                        </div>
-                    </div>
                 </div>                
                 <div class="form-group mb-3">
                     <button type="button" id="btnAddClient" class="btn btn-primary" onclick="PostPortfolioClient()">Use this Record</button>
@@ -153,62 +141,6 @@
                     <label asp-for="Phone" class="control-label"></label>
                     <input asp-for="Phone" class="form-control" />
                     <span asp-validation-for="Phone" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            <label asp-for="Mobile" class="control-label"></label>
-                        </div>
-                        <div class="col-auto">
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" id="flexSwitchMobile">
-                            </div>
-                        </div>
-                    </div>
-                    <input asp-for="Mobile" class="form-control" />
-                    <span asp-validation-for="Mobile" class="text-danger"></span>
-                </div>
-                <div id="MobileDiv" class="row" style="display:none">
-                    <div class="form-group">
-                        <label asp-for="Mobile1" class="control-label"></label>
-                        <input asp-for="Mobile1" class="form-control" />
-                        <span asp-validation-for="Mobile1" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Mobile2" class="control-label"></label>
-                        <input asp-for="Mobile2" class="form-control" />
-                        <span asp-validation-for="Mobile2" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            <label asp-for="Email" class="control-label"></label>
-                        </div>
-                        <div class="col-auto">
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" id="flexSwitchEmail">
-                            </div>
-                        </div>
-                    </div>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div id="EmailDiv" class="row" style="display:none">
-                    <div class="form-group">
-                        <label asp-for="Email1" class="control-label"></label>
-                        <input asp-for="Email1" class="form-control" />
-                        <span asp-validation-for="Email1" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Email2" class="control-label"></label>
-                        <input asp-for="Email2" class="form-control" />
-                        <span asp-validation-for="Email2" class="text-danger"></span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -245,14 +177,6 @@
             //  Do someting here.
         });
 
-        $('#flexSwitchEmail').change(function() {
-            $('#EmailDiv').toggle('show');
-        });
-
-        $('#flexSwitchMobile').change(function() {
-            $('#MobileDiv').toggle('show');
-        });
-
         $('#IdNumber').focusout(function() {
             
             selectedIdNumber = $(this).val();
@@ -284,8 +208,6 @@
                                 $('#modalLastName').val(client.lastName);
                                 $('#modalIdNumber').val(client.idNumber);
                                 $('#modalClientNumber').val(client.clientNumber);
-                                $('#modalMobile').val(client.mobile);
-                                $('#modalEmail').val(client.email);
                                 duplicateFound = true;
                                 duplicateIdNumber = client.idNumber;
                                 $('#DivDuplicate').toggle('show');

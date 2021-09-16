@@ -2,7 +2,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Tilbake.Application.Extensions;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
@@ -66,6 +71,7 @@ namespace Tilbake.Application.Services
                                                     r => r.Id == id,
                                                     r => r.ClientType,
                                                     r => r.Country,
+                                                    c => c.IdDocumentType,
                                                     r => r.Gender,
                                                     r => r.MaritalStatus,
                                                     r => r.Occupation,
@@ -81,6 +87,7 @@ namespace Tilbake.Application.Services
                                             c => c.IdNumber == idNumber,
                                             c => c.ClientType,
                                             c => c.Country,
+                                            c => c.IdDocumentType,
                                             c => c.Gender,
                                             c => c.MaritalStatus,
                                             c => c.Occupation,
@@ -98,6 +105,7 @@ namespace Tilbake.Application.Services
                                                         e => e.PortfolioClients,
                                                         c => c.ClientType,
                                                         c => c.Country,
+                                                        c => c.IdDocumentType,
                                                         c => c.Gender,
                                                         c => c.MaritalStatus,
                                                         c => c.Occupation,
@@ -114,6 +122,7 @@ namespace Tilbake.Application.Services
                                                     c => c.PortfolioClients,
                                                     c => c.ClientType,
                                                     c => c.Country,
+                                                    c => c.IdDocumentType,
                                                     c => c.Gender,
                                                     c => c.MaritalStatus,
                                                     c => c.Occupation,
@@ -162,8 +171,6 @@ namespace Tilbake.Application.Services
                 string OccupationPos = null;
                 string CountryPos = null;
                 string MaritalStatusPos = null;
-                string EmailPos = null;
-                string MobilePos = null;
                 string PhonePos = null;
 
                 NumberStyles numberStyle = NumberStyles.Integer;
@@ -213,12 +220,6 @@ namespace Tilbake.Application.Services
                             break;
                         case "Carrier":
                             MaritalStatusPos = row.Position;
-                            break;
-                        case "Email":
-                            EmailPos = row.Position;
-                            break;
-                        case "Mobile":
-                            MobilePos = row.Position;
                             break;
                         case "Phone":
                             PhonePos = row.Position;
@@ -321,16 +322,6 @@ namespace Tilbake.Application.Services
                                 }
                                 else
                                     clientDTO.CountryId = Guid.Parse(Constants.CountryId);
-
-                                if (worksheet.Cells[EmailPos + row].Value != null && EmailPos != null)
-                                    clientDTO.Email = worksheet.Cells[EmailPos + row].Value.ToString().Trim();
-                                else
-                                    clientDTO.Email = Constants.Email;
-
-                                if (worksheet.Cells[MobilePos + row].Value != null && MobilePos != null)
-                                    clientDTO.Mobile = worksheet.Cells[MobilePos + row].Value.ToString().Trim();
-                                else
-                                    clientDTO.Mobile = Constants.Mobile;
 
                                 if (worksheet.Cells[PhonePos + row].Value != null && PhonePos != null)
                                     clientDTO.Phone = worksheet.Cells[PhonePos + row].Value.ToString().Trim();
@@ -499,30 +490,6 @@ namespace Tilbake.Application.Services
                                         clientDTO.MaritalStatusId = Guid.Parse(Constants.MaritalStatusId);
                                 }
 
-                                if (EmailPos == null)
-                                {
-                                    clientDTO.Email = Constants.Email; ;
-                                }
-                                else
-                                {
-                                    if (cols[int.Parse(EmailPos, numberStyle, CultureInfo.CurrentCulture)] != null)
-                                        clientDTO.Email = cols[int.Parse(EmailPos, numberStyle, CultureInfo.CurrentCulture)];
-                                    else
-                                        clientDTO.Email = Constants.Email; ;
-                                }
-
-                                if (MobilePos == null)
-                                {
-                                    clientDTO.Mobile = Constants.Mobile;
-                                }
-                                else
-                                {
-                                    if (cols[int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture)] != null)
-                                        clientDTO.Mobile = cols[int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture)];
-                                    else
-                                        clientDTO.Mobile = Constants.Mobile;
-                                }
-
                                 if (PhonePos == null)
                                 {
                                     clientDTO.Phone = null;
@@ -550,8 +517,6 @@ namespace Tilbake.Application.Services
                             int OccupationLen = 0;
                             int CountryLen = 0;
                             int MaritalStatusLen = 0;
-                            int EmailLen = 0;
-                            int MobileLen = 0;
                             int PhoneLen = 0;
 
                             foreach (var row in fileTemplateRecords)
@@ -584,12 +549,6 @@ namespace Tilbake.Application.Services
                                         break;
                                     case "MaritalStatus":
                                         MaritalStatusLen = row.ColumnLength;
-                                        break;
-                                    case "Email":
-                                        EmailLen = row.ColumnLength;
-                                        break;
-                                    case "Mobile":
-                                        MobileLen = row.ColumnLength;
                                         break;
                                     case "Phone":
                                         PhoneLen = row.ColumnLength;
@@ -675,11 +634,6 @@ namespace Tilbake.Application.Services
                                 else
                                     clientDTO.CountryId = Guid.Parse(Constants.CountryId);
 
-                                if (line.Substring(int.Parse(EmailPos, numberStyle, CultureInfo.CurrentCulture), EmailLen) != null && EmailPos != null)
-                                    clientDTO.Email = line.Substring(int.Parse(EmailPos, numberStyle, CultureInfo.CurrentCulture), EmailLen);
-                                else
-                                    clientDTO.Email = Constants.Email;
-
                                 if (line.Substring(int.Parse(MaritalStatusPos, numberStyle, CultureInfo.CurrentCulture), MaritalStatusLen) != null && MaritalStatusPos != null)
                                 {
                                     var maritalStatus = line.Substring(int.Parse(MaritalStatusPos, numberStyle, CultureInfo.CurrentCulture), MaritalStatusLen);
@@ -688,11 +642,6 @@ namespace Tilbake.Application.Services
                                 }
                                 else
                                     clientDTO.MaritalStatusId = Guid.Parse(Constants.MaritalStatusId);
-
-                                if (line.Substring(int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture), MobileLen) != null && MobilePos != null)
-                                    clientDTO.Mobile = line.Substring(int.Parse(MobilePos, numberStyle, CultureInfo.CurrentCulture), MobileLen);
-                                else
-                                    clientDTO.Mobile = Constants.Mobile;
 
                                 if (line.Substring(int.Parse(PhonePos, numberStyle, CultureInfo.CurrentCulture), PhoneLen) != null && PhonePos != null)
                                     clientDTO.Phone = line.Substring(int.Parse(PhonePos, numberStyle, CultureInfo.CurrentCulture), PhoneLen);
@@ -769,9 +718,7 @@ namespace Tilbake.Application.Services
                             GenderId = c.GenderId,
                             IdNumber = c.IdNumber,
                             Phone = c.Phone,
-                            Mobile = c.Mobile ?? "99999999",
                             MaritalStatusId = c.MaritalStatusId,
-                            Email = c.Email ?? "someone@noemail.com",
                             OccupationId = c.OccupationId,
                             CountryId = c.CountryId
                         };

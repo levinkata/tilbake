@@ -16,7 +16,6 @@ namespace Tilbake.Domain.Models
         public Guid PolicyId { get; set; }
         public int InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
-        public DateTime InvoiceDueDate { get; set; }
         public decimal Amount { get; set; }
         public Guid TaxId { get; set; }
         public decimal TaxAmount { get; set; }

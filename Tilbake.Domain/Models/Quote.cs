@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public Quote()
         {
             QuoteItems = new HashSet<QuoteItem>();
+            ReceivableQuotes = new HashSet<ReceivableQuote>();
         }
 
         public Guid Id { get; set; }
@@ -18,6 +19,7 @@ namespace Tilbake.Domain.Models
         public Guid? InsurerId { get; set; }
         public string ClientInfo { get; set; }
         public string InternalInfo { get; set; }
+        public int RunDay { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
@@ -27,5 +29,6 @@ namespace Tilbake.Domain.Models
         public virtual PortfolioClient PortfolioClient { get; set; }
         public virtual QuoteStatus QuoteStatus { get; set; }
         public virtual ICollection<QuoteItem> QuoteItems { get; set; }
+        public virtual ICollection<ReceivableQuote> ReceivableQuotes { get; set; }
     }
 }

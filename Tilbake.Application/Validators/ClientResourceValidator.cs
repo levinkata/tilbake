@@ -28,15 +28,15 @@ namespace Tilbake.Application.Validators
             RuleFor(p => p.BirthDate)
                 .LessThan(DateTime.Now);
                 
-            RuleFor(p => p.Email)
-                .Cascade(CascadeMode.Stop)
-                .EmailAddress()
-                .MaximumLength(50);
+            //RuleFor(p => p.Email)
+            //    .Cascade(CascadeMode.Stop)
+            //    .EmailAddress()
+            //    .MaximumLength(50);
 
-            RuleFor(p => p.Mobile)
-                .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithMessage("Please enter Mobile Number")
-                .MaximumLength(50);
+            //RuleFor(p => p.Mobile)
+            //    .Cascade(CascadeMode.Stop)
+            //    .NotEmpty().WithMessage("Please enter Mobile Number")
+            //    .MaximumLength(50);
         }
 
         private bool IsIdNumberUnique(ClientResource editedClient, string newIdNumber)

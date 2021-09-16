@@ -15,6 +15,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IClientTypeService _clientTypeService;
         private readonly ICountryService _countryService;
         private readonly IGenderService _genderService;
+        private readonly IIdDocumentTypeService _idDocumentTypeService;
         private readonly IMaritalStatusService _maritalStatusService;
         private readonly IOccupationService _occupationService;
         private readonly ITitleService _titleService;
@@ -29,6 +30,7 @@ namespace Tilbake.MVC.Controllers
                                             IClientTypeService clientTypeService,
                                             ICountryService countryService,
                                             IGenderService genderService,
+                                            IIdDocumentTypeService idDocumentTypeService,
                                             IMaritalStatusService maritalStatusService,
                                             IOccupationService occupationService,
                                             ITitleService titleService,
@@ -43,6 +45,7 @@ namespace Tilbake.MVC.Controllers
             _clientTypeService = clientTypeService;
             _countryService = countryService;
             _genderService = genderService;
+            _idDocumentTypeService = idDocumentTypeService;
             _maritalStatusService = maritalStatusService;
             _occupationService = occupationService;
             _titleService = titleService;
@@ -196,6 +199,7 @@ namespace Tilbake.MVC.Controllers
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
             var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
             var address = await _addressService.GetByClientIdAsync(clientId);
+
             resource.Address = address;
             resource.ClientCarriers.AddRange(clientCarriers);
 
@@ -217,6 +221,7 @@ namespace Tilbake.MVC.Controllers
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
+            var idDocumentTypes = await _idDocumentTypeService.GetAllAsync();
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
@@ -228,12 +233,12 @@ namespace Tilbake.MVC.Controllers
                 PortfolioId = portfolioId,
                 PortfolioName = portfolio.Name,
                 BirthDate = DateTime.Now.Date,
-                AddressCountryList = new SelectList(countries, "Id", "Name"),
-                ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
-                CountryList = new SelectList(countries, "Id", "Name"),
-                GenderList = new SelectList(genders, "Id", "Name"),
-                IdDocumentList = SelectLists.IdDocuments(Guid.Empty),
-                MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
+                AddressCountryList = SelectLists.Countries(countries, Guid.Empty),
+                ClientTypeList = SelectLists.ClientTypes(clientTypes, Guid.Empty),
+                CountryList = SelectLists.Countries(countries, Guid.Empty),
+                GenderList = SelectLists.Genders(genders, Guid.Empty),
+                IdDocumentTypeList = SelectLists.IdDocumentTypes(idDocumentTypes, Guid.Empty),
+                MaritalStatusList = SelectLists.MaritalStatuses(maritalStatuses, Guid.Empty),
                 OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
                 TitleList = SelectLists.Titles(titles, Guid.Empty)
             };
@@ -255,6 +260,7 @@ namespace Tilbake.MVC.Controllers
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
+            var idDocumentTypes = await _idDocumentTypeService.GetAllAsync();
             var maritalStatuses = await _maritalStatusService.GetAllAsync();
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
@@ -266,6 +272,7 @@ namespace Tilbake.MVC.Controllers
             resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
             resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
             resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
+            resource.IdDocumentTypeList = SelectLists.IdDocumentTypes(idDocumentTypes, resource.IdDocumentTypeId);
             resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
             resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
             resource.TitleList = SelectLists.Titles(titles, resource.TitleId);

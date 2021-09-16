@@ -25,16 +25,19 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         ICoverTypeRepository CoverTypes { get; }
         IDocumentTypeRepository DocumentTypes { get; }
         IDriverTypeRepository DriverTypes { get; }
+        IEmailAddressRepository EmailAddresses { get; }
         IFileTemplateRepository FileTemplates { get; }
         IFileTemplateRecordRepository FileTemplateRecords { get; }
         IGenderRepository Genders { get; }
         IHouseRepository Houses { get; }
         IHouseConditionRepository HouseConditions { get; }
+        IIdDocumentTypeRepository IdDocumentTypes { get; }
         IInsurerRepository Insurers { get; }
         IInvoiceRepository Invoices { get; }
         IInvoiceItemRepository InvoiceItems { get; }
         IInvoiceStatusRepository InvoiceStatuses { get; }
         IMaritalStatusRepository MaritalStatuses { get; }
+        IMobileNumberRepository MobileNumbers { get; }
         IMotorRepository Motors { get; }
         IMotorMakeRepository MotorMakes { get; }
         IMotorModelRepository MotorModels { get; }

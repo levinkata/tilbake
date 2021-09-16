@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.Application.Resources
@@ -39,8 +41,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Gender")]
         public Guid GenderId { get; set; }
 
-        [Display(Name = "ID Document")]
-        public string IdDocument { get; set; }
+        [Display(Name = "ID Document Type")]
+        public Guid IdDocumentTypeId { get; set; }
 
         [Display(Name = "ID Number")]
         public string IdNumber { get; set; }
@@ -54,24 +56,6 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Phone")]
         public string Phone { get; set; }
 
-        [Display(Name = "Mobile")]
-        public string Mobile { get; set; }
-
-        [Display(Name = "Mobile 1")]
-        public string Mobile1 { get; set; }
-
-        [Display(Name = "Mobile 2")]
-        public string Mobile2 { get; set; }
-
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Display(Name = "Email 1")]
-        public string Email1 { get; set; }
-
-        [Display(Name = "Email 2")]
-        public string Email2 { get; set; }
-
         [Display(Name = "Occupation")]
         public Guid OccupationId { get; set; }
 
@@ -84,6 +68,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Nationality")]        
         public string Country { get; set; }
 
+        [Display(Name = "ID Document Type")]
+        public string IdDocumentType { get; set; }
+
         [Display(Name = "Gender")]
         public string Gender { get; set; }
 
@@ -93,19 +80,24 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Occupation")]
         public string Occupation { get; set; }
 
-        public List<ClientCarrierResource> ClientCarriers = new();
-        public AddressResource Address { get; set; }
-
         [Display(Name = "Title")]
         public string Title { get; set; }
+
+        public List<ClientCarrierResource> ClientCarriers = new();
+        public List<EmailAddressResource> EmailAddresses = new();
+        public List<MobileNumberResource> MobileNumbers = new();
+
+        public AddressResource Address { get; set; }
 
         //  SelectLists
 
         public SelectList ClientTypeList { get; set; }
         public SelectList CountryList { get; set; }
+        public SelectList EmailAddressList { get; set; }
         public SelectList GenderList { get; set; }
-        public SelectList IdDocumentList { get; set; }
+        public SelectList IdDocumentTypeList { get; set; }
         public SelectList MaritalStatusList { get; set; }
+        public SelectList MobileNumberList { get; set; }
         public SelectList OccupationList { get; set; }
         public SelectList TitleList { get; set; }
     }

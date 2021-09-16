@@ -132,12 +132,12 @@ namespace Tilbake.MVC.Controllers
 
             await _quoteService.AddAsync(quoteObject);
 
-            return await Task.Run(() => Ok(new
+            return Json(new
             {
                 quoteObject.Quote.Id,
                 quoteObject.Quote.PortfolioClientId,
                 quoteObject.Quote.QuoteNumber
-            }));
+            });
         }
 
         // GET: Quotes/Create

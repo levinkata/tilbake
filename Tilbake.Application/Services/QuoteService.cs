@@ -34,6 +34,8 @@ namespace Tilbake.Application.Services
             var quote = resource.Quote;
             quote.Id = Guid.NewGuid();
             quote.QuoteDate = DateTime.Now;
+            quote.DateAdded = DateTime.Now;
+
             await _unitOfWork.Quotes.AddAsync(quote);
             var quoteId = quote.Id;
 

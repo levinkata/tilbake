@@ -10,6 +10,21 @@ namespace Tilbake.Application.Helpers
 {
     public class SelectLists
     {
+        public static SelectList BodyTypes(IEnumerable<BodyTypeResource> bodyTypes, Guid? bodyTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Body Type", Value = "" });
+
+            foreach (var item in bodyTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (bodyTypeId == Guid.Empty || String.IsNullOrEmpty(bodyTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", bodyTypeId);
+        }
+
         public static MultiSelectList Carriers(IEnumerable<CarrierResource> carriers, Guid[] carrierIds)
         {
             List<SelectListItem> items = new();
@@ -67,6 +82,21 @@ namespace Tilbake.Application.Helpers
             return (countryId == Guid.Empty || String.IsNullOrEmpty(countryId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", countryId);
+        }
+
+        public static SelectList CoverTypes(IEnumerable<CoverTypeResource> coverTypes, Guid? coverTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Cover Type", Value = "" });
+
+            foreach (var item in coverTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (coverTypeId == Guid.Empty || String.IsNullOrEmpty(coverTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", coverTypeId);
         }
 
         public static SelectList Genders(IEnumerable<GenderResource> genders, Guid? genderId)
@@ -148,6 +178,36 @@ namespace Tilbake.Application.Helpers
             return (maritalStatusId == Guid.Empty || String.IsNullOrEmpty(maritalStatusId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", maritalStatusId);
+        }
+
+        public static SelectList MotorMakes(IEnumerable<MotorMakeResource> motorMakes, Guid? motorMakeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Motor Make", Value = "" });
+
+            foreach (var item in motorMakes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (motorMakeId == Guid.Empty || String.IsNullOrEmpty(motorMakeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", motorMakeId);
+        }
+
+        public static SelectList MotorModels(IEnumerable<MotorModelResource> motorModels, Guid? motorModelId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Motor Model", Value = "" });
+
+            foreach (var item in motorModels)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (motorModelId == Guid.Empty || String.IsNullOrEmpty(motorModelId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", motorModelId);
         }
 
         public static SelectList Occupations(IEnumerable<OccupationResource> occupations, Guid? occupationId)

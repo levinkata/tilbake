@@ -145,6 +145,7 @@ namespace Tilbake.MVC.Controllers
         {
             var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
             var clientId = portfolioClient.ClientId;
+            var portfolioId = portfolioClient.PortfolioId;
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var driverTypes = await _driverTypeService.GetAllAsync();
@@ -165,6 +166,7 @@ namespace Tilbake.MVC.Controllers
             {
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
+                PortfolioId = portfolioId,
                 CoverTypeList = new SelectList(coverTypes, "Id", "Name"),
                 QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name"),
                 BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
@@ -180,7 +182,7 @@ namespace Tilbake.MVC.Controllers
                 DateRangeList = new SelectList(DateRanges.Years(), "Value", "Text")
             };
 
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         // POST: Quotes/Create
@@ -194,7 +196,7 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.Quote.PortfolioClientId });
             }
 
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         // GET: Quotes/Edit/5
@@ -222,7 +224,7 @@ namespace Tilbake.MVC.Controllers
             resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
             resource.InsurerList = new SelectList(insurers, "Id", "Name");
 
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         // POST: Quotes/Edit/5

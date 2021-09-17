@@ -32,6 +32,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Internal Info")]
         public string InternalInfo { get; set; }
 
+        [Display(Name = "Debit Order Day")]
+        public int RunDay { get; set; }
+
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
         public Client Client { get; set; }

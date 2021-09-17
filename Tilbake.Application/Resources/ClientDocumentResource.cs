@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
@@ -33,10 +34,13 @@ namespace Tilbake.Application.Resources
 
         public IFormFile File { get; set; }
 
+        public Client Client { get; set; }
+        public DocumentType DocumentType { get; set; }
+
         //  Descriptions
 
         [Display(Name = "Type")]
-        public string DocumentType { get; set; }
+        public string DocumentTypeName { get; set; }
 
         //  SelectLists
 

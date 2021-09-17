@@ -354,7 +354,7 @@ namespace Tilbake.MVC.Controllers
                     throw;
                 }
 
-                return RedirectToAction(nameof(Edit), "Quotes", new { Id = resource.QuoteId });
+                return RedirectToAction(nameof(Details), "Quotes", new { Id = resource.QuoteId });
             }
             return View(resource);
         }

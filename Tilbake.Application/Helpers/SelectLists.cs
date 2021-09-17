@@ -150,6 +150,21 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", IdDocumentTypeId);
         }
 
+        public static SelectList Insurers(IEnumerable<InsurerResource> insurers, Guid? insurerId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Insurer", Value = "" });
+
+            foreach (var item in insurers)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (insurerId == Guid.Empty || String.IsNullOrEmpty(insurerId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", insurerId);
+        }
+
         public static SelectList InvoiceStatuses(IEnumerable<InvoiceStatusResource> invoiceStatuses, Guid? invoiceStatusId)
         {
             List<SelectListItem> items = new();
@@ -240,6 +255,36 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", paymentTypeId);
         }
 
+        public static SelectList QuoteStatuses(IEnumerable<QuoteStatusResource> quoteStatuses, Guid? quoteStatusId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Quote Status", Value = "" });
+
+            foreach (var item in quoteStatuses)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (quoteStatusId == Guid.Empty || String.IsNullOrEmpty(quoteStatusId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", quoteStatusId);
+        }
+
+        public static SelectList RoofTypes(IEnumerable<RoofTypeResource> roofTypes, Guid? roofTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Roof Type", Value = "" });
+
+            foreach (var item in roofTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (roofTypeId == Guid.Empty || String.IsNullOrEmpty(roofTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", roofTypeId);
+        }
+
         public static SelectList Taxes(IEnumerable<TaxResource> taxes, Guid? taxId)
         {
             List<SelectListItem> items = new();
@@ -268,6 +313,21 @@ namespace Tilbake.Application.Helpers
             return (titleId == Guid.Empty || String.IsNullOrEmpty(titleId.ToString())) ?
                                 new SelectList(items, "Value", "Text") :
                                 new SelectList(items, "Value", "Text", titleId);
-        }        
+        }
+
+        public static SelectList WallTypes(IEnumerable<WallTypeResource> wallTypes, Guid? wallTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Wall Type", Value = "" });
+
+            foreach (var item in wallTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (wallTypeId == Guid.Empty || String.IsNullOrEmpty(wallTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", wallTypeId);
+        }
     }
 }

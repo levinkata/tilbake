@@ -39,6 +39,8 @@ namespace Tilbake.Application.Resources
 
         public Client Client { get; set; }
 
+        public string FullName => String.IsNullOrEmpty(Client.FirstName) ? Client.LastName : Client.FirstName + " " + Client.LastName;
+
         //  Descriptions
         [Display(Name = "Insurer")]
         public string Insurer { get; set; }

@@ -808,18 +808,7 @@
                         alert("An error has occured." + error);
                     },
                     success: function (data) {
-                        // Empty tblCart.
-
-                        quote.empty();
-                        quoteItems.splice(0, quoteItems.length);
-                        allRisks.splice(0, allRisks.length);
-                        contents.splice(0, contents.length);
-                        houses.splice(0, houses.length);
-                        motors.splice(0, motors.length);
-                        riskItems.splice(0, riskItems.length);
-                        PolicyObject.splice(0, PolicyObject.length);
-                        //window.location.reload();
-                        window.location.href ='/PortfolioClients/Details/?portfolioId=' +  portfolioId + '&clientId=' + clientId;
+                        window.location.href ='/PortfolioClients/Details?portfolioId=' +  portfolioId + '&clientId=' + clientId;
                     }
                 });
             }

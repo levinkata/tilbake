@@ -17,10 +17,6 @@
                         <th>
                             <strong>Status</strong>
                         </th>
-                        @*<th>
-                            <strong>@Html.DisplayNameFor(model => model.Insurer)</strong>
-                        </th>
-                        <th></th>*@
                     </tr>
                 </thead>
                 <tbody>
@@ -28,7 +24,7 @@
                     {
                         <tr>
                             <td>
-                                @item.QuoteNumber
+                                <a asp-controller="Quotes" asp-action="Details" asp-route-id="@item.Id">@item.QuoteNumber</a>
                             </td>
                             <td>
                                 @item.QuoteDate.ToString("dd/MM/yyyy")

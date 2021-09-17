@@ -1,4 +1,5 @@
-﻿@{ 
+﻿@model QuoteResource
+@{
     ViewData["Title"] = "Quotation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -21,15 +22,14 @@
             <p>[Company Website]</p>
         </div>
         <div class="col text-end">
-            <p>Date: 31/07/2021</p>
-            <p>Invoice #: [######]</p>
-            <p>Due Date: 31/07/2021</p>
+            <p>Date: @Model.QuoteDate.ToString("dd/MM/yyyy")</p>
+            <p>Quote #: @Model.QuoteNumber</p>
         </div>
     </div>
     <div class="row justify-content-around mb-3">
         <div class="col">
             <p class="p-2 bg-primary text-white">BILL TO</p>
-            <p>[Recipient Name]</p>
+            <p>@Model.FullName]</p>
             <p>[Company Name]</p>
             <p>[Street Address]</p>
             <p>[City, State, ZIP Code]</p>
@@ -39,7 +39,7 @@
         <div class="col"></div>
         <div class="col">
             <p class="p-2 bg-primary text-white">SHIP TO</p>
-            <p>[Recipient Name]</p>
+            <p>@Model.FullName</p>
             <p>[Company Name]</p>
             <p>[Street Address]</p>
             <p>[City, State, ZIP Code]</p>

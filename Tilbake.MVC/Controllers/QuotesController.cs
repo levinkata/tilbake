@@ -128,16 +128,9 @@ namespace Tilbake.MVC.Controllers
                 throw new ArgumentNullException(nameof(quoteObject));
             };
 
-            var portfolioClientId = quoteObject.Quote.PortfolioClientId;
-
             await _quoteService.AddAsync(quoteObject);
 
-            return Json(new
-            {
-                quoteObject.Quote.Id,
-                quoteObject.Quote.PortfolioClientId,
-                quoteObject.Quote.QuoteNumber
-            });
+            return Json(new { quoteObject.ClientId });
         }
 
         // GET: Quotes/Create
@@ -167,9 +160,9 @@ namespace Tilbake.MVC.Controllers
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
                 PortfolioId = portfolioId,
-                CoverTypeList = new SelectList(coverTypes, "Id", "Name"),
-                QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name"),
-                BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
+                CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
+                QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, Guid.Empty),
+                BodyTypeList = SelectLists.BodyTypes(bodyTypes, Guid.Empty),
                 DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
                 HouseConditionList = new SelectList(houseConditions, "Id", "Name"),
                 MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
@@ -177,8 +170,8 @@ namespace Tilbake.MVC.Controllers
                 MotorUseList = new SelectList(motorUses, "Id", "Name"),
                 ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name"),
                 ResidenceUseList = new SelectList(residenceUses, "Id", "Name"),
-                RoofTypeList = new SelectList(roofTypes, "Id", "Name"),
-                WallTypeList = new SelectList(wallTypes, "Id", "Name"),
+                RoofTypeList = SelectLists.RoofTypes(roofTypes, Guid.Empty),
+                WallTypeList = SelectLists.WallTypes(wallTypes, Guid.Empty),
                 DateRangeList = new SelectList(DateRanges.Years(), "Value", "Text")
             };
 
@@ -199,15 +192,9 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // GET: Quotes/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _quoteService.GetByIdAsync((Guid)id);
+            var resource = await _quoteService.GetByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
@@ -215,19 +202,17 @@ namespace Tilbake.MVC.Controllers
 
             var result = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
             
-
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
 
             resource.ClientId = result.ClientId;
             resource.PortfolioId = result.PortfolioId;
-            resource.QuoteStatusList = new SelectList(quoteStatuses, "Id", "Name");
-            resource.InsurerList = new SelectList(insurers, "Id", "Name");
+            resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
+            resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
 
             return View(resource);
         }
 
-        // POST: Quotes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid? id, QuoteResource resource)
@@ -248,8 +233,14 @@ namespace Tilbake.MVC.Controllers
                     throw;
                 }
 
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioId, resource.ClientId });
+                return RedirectToAction(nameof(Details), new { id = resource.Id });
             }
+
+            var quoteStatuses = await _quoteStatusService.GetAllAsync();
+            var insurers = await _insurerService.GetAllAsync();
+
+            resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
+            resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
             return View(resource);
         }
 

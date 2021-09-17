@@ -34,18 +34,25 @@
     <input type="hidden" asp-for="QuoteNumber" />
     <input type="hidden" asp-for="QuoteDate" />
     <div class="row">
-        <div class="col-6">
+        <div class="col-5">
             <div class="form-group">
                 <label asp-for="InsurerId" class="control-label"></label>
                 <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList"></select>
                 <span asp-validation-for="InsurerId" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-5">
             <div class="form-group">
                 <label asp-for="QuoteStatusId" class="control-label"></label>
                 <select asp-for="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
                 <span asp-validation-for="QuoteStatusId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label asp-for="RunDay" class="control-label"></label>
+                <input asp-for="RunDay" class="form-control"/>
+                <span asp-validation-for="RunDay" class="text-danger"></span>
             </div>
         </div>
     </div>
@@ -53,27 +60,21 @@
         <div class="col-6">
             <div class="form-group">
                 <label asp-for="ClientInfo" class="control-label"></label>
-                <input asp-for="ClientInfo" class="form-control" />
+                <textarea asp-for="ClientInfo" class="form-control"></textarea>
                 <span asp-validation-for="ClientInfo" class="text-danger"></span>
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
                 <label asp-for="InternalInfo" class="control-label"></label>
-                <input asp-for="InternalInfo" class="form-control" />
+                <textarea asp-for="InternalInfo" class="form-control"></textarea>
                 <span asp-validation-for="InternalInfo" class="text-danger"></span>
             </div>
         </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <input type="submit" value="Save" class="btn btn-primary" /> |
+        <a asp-action="Details" asp-route-id="@Model.Id">Back</a>
     </div>
 </form>
-
-<div class="form-group">
-    @await Component.InvokeAsync("QuoteItems", new { quoteId = @Model.Id })
-</div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

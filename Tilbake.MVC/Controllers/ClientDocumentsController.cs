@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
@@ -56,7 +57,7 @@ namespace Tilbake.MVC.Controllers
             {
                 ClientId = clientId,
                 PortfolioId = portfolioId,
-                DocumentTypeList = new SelectList(documentTypes, "Id", "Name"),
+                DocumentTypeList = SelectLists.DocumentTypes(documentTypes, Guid.Empty),
             };
 
             return View(resource);
@@ -74,7 +75,7 @@ namespace Tilbake.MVC.Controllers
             }
             var documentTypes = await _documentTypeService.GetAllAsync();
 
-            resource.DocumentTypeList = new SelectList(documentTypes, "Id", "Name", resource.DocumentTypeId);
+            resource.DocumentTypeList = SelectLists.DocumentTypes(documentTypes, resource.DocumentTypeId);
             return View(resource);
         }
 

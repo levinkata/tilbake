@@ -7,11 +7,6 @@ namespace Tilbake.Application.Validators
     {
         public ClientDocumentSaveResourceValidator()
         {
-            RuleFor(p => p.Name)
-                .Cascade(CascadeMode.Stop)
-                .NotEmpty()
-                .Length(2, 50);
-
             RuleFor(p => p.File).SetValidator(new FormFileValidator());
         }
     }

@@ -10,9 +10,6 @@
                     <tr>
                         <th><strong>Name</strong></th>
                         <th><strong>Description</strong></th>
-                        @*<th><strong>Type</strong></th>
-                        <th><strong>Date</strong></th>
-                        <th></th>*@
                     </tr>
                 </thead>
                 <tbody>
@@ -21,27 +18,13 @@
                         <tr>
                             <td>@file.Name</td>
                             <td>@file.Description</td>
-                            @*<td>@file.FileType</td>
-                            <td>@file.DocumentDate</td>
-                            <td class="justify-content-end">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="DownloadFile" asp-route-id="@file.Id"><i class="fas fa-file-download"></i> Download</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="#">Print</a></li>
-                                        <li><a class="dropdown-item" asp-controller="ClientDocuments" asp-action="Delete" asp-route-id="@file.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
-                                    </ul>
-                                </div>
-                            </td>*@
                         </tr>
                     }
                 </tbody>
             </table>
         }
         <div class="form-group">
-            <a asp-controller="ClientDocuments" asp-action="Create" asp-route-clientId="@ViewBag.ClientId" class="btn btn-outline-dark btn-sm"><i class="fas fa-plus"></i> New Document</a>
+            <a asp-controller="ClientDocuments" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@ViewBag.ClientId" class="btn btn-outline-dark btn-sm"><i class="fas fa-plus"></i> New Document</a>
         </div>
     </div>
 </div>

@@ -126,14 +126,14 @@
         </div>
         <div class="row">
             <div class="col">
-                @await Component.InvokeAsync("ClientDocuments", new { clientId = @Model.Id })
+                @await Component.InvokeAsync("ClientDocuments", new { portfolioid = @Model.PortfolioId, clientId = @Model.Id })
             </div>
             <div class="col">
                 @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
         </div>
         <div class="form-group">
-            <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Back to List</a>
+            <a asp-action="Search" asp-route-portfolioId="@Model.PortfolioId">Back</a>
         </div>
     </div>
 </div>

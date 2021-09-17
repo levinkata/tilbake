@@ -9,13 +9,13 @@ namespace Tilbake.Application.Validators
         {
             RuleFor(p => p.Length)
                     .NotNull()
-                    .LessThanOrEqualTo(10240)
+                    .LessThanOrEqualTo(10240000)
                     .WithMessage("File size is larger than allowed");
 
             RuleFor(p => p.ContentType)
                     .NotNull()
-                    .Must(p => p.Equals("image/jpeg") || p.Equals("image/jpg") || p.Equals("image/png"))
-                    .WithMessage("File type is larger than allowed");
+                    .Must(p => p.Equals("image/jpeg") || p.Equals("image/jpg") || p.Equals("image/png") || p.Equals("application/pdf"))
+                    .WithMessage("File type is not allowed");
         }
     }
 }

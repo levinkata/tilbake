@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post" asp-action="Create" asp-route-clientId="@Model.ClientId" enctype="multipart/form-data">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ClientId" />
             <input type="hidden" asp-for="PortfolioId" />
@@ -37,6 +37,6 @@
 </div>
 
 <div>
-    <a asp-action="Index" asp-route-clientId="@Model.ClientId">Back to List</a>
+    <a asp-action="Index" asp-route-clientId="@Model.ClientId">Back</a>
 </div>
 

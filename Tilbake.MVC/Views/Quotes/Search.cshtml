@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.QuoteNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.QuoteDate)
+                @item.QuoteDate.ToString("dd/MM/yyyy")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Client.LastName)

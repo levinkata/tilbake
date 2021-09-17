@@ -49,6 +49,7 @@ namespace Tilbake.Application.Services
                 clientDocument.Name = fileName;
                 clientDocument.DocumentDate = DateTime.Now;
                 clientDocument.DocumentPath = filePath;
+                clientDocument.DateAdded = DateTime.Now;
 
                 await _unitOfWork.ClientDocuments.AddAsync(clientDocument);
             }

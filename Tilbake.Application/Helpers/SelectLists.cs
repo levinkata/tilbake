@@ -99,6 +99,21 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", coverTypeId);
         }
 
+        public static SelectList DocumentTypes(IEnumerable<DocumentTypeResource> documentTypes, Guid? documentTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Document Type", Value = "" });
+
+            foreach (var item in documentTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (documentTypeId == Guid.Empty || String.IsNullOrEmpty(documentTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", documentTypeId);
+        }
+
         public static SelectList Genders(IEnumerable<GenderResource> genders, Guid? genderId)
         {
             List<SelectListItem> items = new();

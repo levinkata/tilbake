@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     bool IsComplete = true;
+     var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
 
     if (Model.InsurerId == Guid.Empty)
     {
@@ -41,9 +42,10 @@
 </div>
 <div class="row">
     <div class="form-group">
-        <h6>@Model.FullName</h6>
+        <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@Model.PortfolioClient.PortfolioId", asp-route-clientId="@Model.Client.Id"><h6>@FullName</h6></a>
     </div>
 </div>
+
 @if (Model.IsConverted)
 {
     <div class="alert alert-danger" role="alert">

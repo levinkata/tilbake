@@ -165,10 +165,16 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <div class="form-group">
                             <label asp-for="Building.PhysicalAddress" class="control-label">Physical Address</label>
                             <textarea asp-for="Building.PhysicalAddress" id="BuildingPhysicalAddress" class="form-control" ></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Building.BondHolder" class="control-label">Bond Holder</label>
+                            <textarea asp-for="Building.BondHolder" id="BuildingBondHolder" class="form-control" ></textarea>
                         </div>
                     </div>
                 </div>
@@ -188,40 +194,38 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.BuildingConditionId" class="control-label">Building Condition</label>
-                            <select asp-for="Building.BuildingConditionId" id="BuildingeConditionId" class="form-control" asp-items="Model.BuildingConditionList"></select>
+                            <select asp-for="Building.BuildingConditionId" id="BuildingConditionId" class="form-control" asp-items="Model.BuildingConditionList"></select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.WallTypeId" class="control-label">Wall Type</label>
                             <select asp-for="Building.WallTypeId" id="BuildingWallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.RoofTypeId" class="control-label">Roof Type</label>
                             <select asp-for="Building.RoofTypeId" id="BuildingRoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <div class="form-check form-check-inline form-switch">
-                                <input class="form-check-input" asp-for="Building.IsOccupied" type="checkbox" id="BuildingIsOccupied">
-                                <label class="form-check-label" asp-for="Building.IsOccupied">Is Occupied?</label>
+                                <input class="form-check-input" asp-for="Building.IsUnoccupied" type="checkbox" id="BuildingIsUnoccupied">
+                                <label class="form-check-label" asp-for="Building.IsUnoccupied">Is Unoccupied?</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
                         <div class="form-group">
-                            <label asp-for="Building.OccupancyPeriod" class="control-label">OccupancyPeriod</label>
-                            <input asp-for="Building.OccupancyPeriod" id="BuildingOccupancyPeriod" class="form-control" />
+                            <label asp-for="Building.UnoccupancyPeriod" class="control-label">Unoccupancy Period</label>
+                            <input asp-for="Building.UnoccupancyPeriod" id="BuildingUnoccupancyPeriod" class="form-control" />
                         </div>
                     </div>
                 </div>
-                <div class="col-6 border bg-light mb-3 py-2">
-                    <div class="row gx-6">
+                <div class="row border bg-light mb-3 p-3 mx-auto">
+                    <div class="row">
                         <div class="col">
                             <div class="form-group">
                                 <div class="form-check form-check-inline form-switch">
@@ -247,6 +251,8 @@
                                     <label class="form-check-label" asp-for="Building.IsSecurityGates">Security Gates?</label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col">
                             <div class="form-group">
                                 <div class="form-check form-check-inline form-switch">
                                     <input class="form-check-input" asp-for="Building.IsElectronicGate" type="checkbox" id="BuildingIsElectronicGate">
@@ -259,22 +265,20 @@
                                     <label class="form-check-label" asp-for="Building.IsElectricFence">Electric Fence?</label>
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div class="col">
                             <div class="form-group">
                                 <div class="form-check form-check-inline form-switch">
-                                    <input class="form-check-input" asp-for="Building.IsRentedOut" type="checkbox" id="BuildingIIsRentedOut">
+                                    <input class="form-check-input" asp-for="Building.IsRentedOut" type="checkbox" id="BuildingIsRentedOut">
                                     <label class="form-check-label" asp-for="Building.IsRentedOut">Rented Out?</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-check-inline form-switch">
-                                    <input class="form-check-input" asp-for="Building.IsHouseSitters" type="checkbox" id="BuildingIsHouseSitters">
-                                    <label class="form-check-label" asp-for="Building.IsHouseSitters">House Sitters?</label>
+                                    <input class="form-check-input" asp-for="Building.IsUseHouseSitters" type="checkbox" id="BuildingIsUseHouseSitters">
+                                    <label class="form-check-label" asp-for="Building.IsUseHouseSitters">House Sitters?</label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col">
                             <div class="form-group">
                                 <div class="form-check form-check-inline form-switch">
                                     <input class="form-check-input" asp-for="Building.IsSecurityComplex" type="checkbox" id="BuildingIsSecurityComplex">
@@ -296,24 +300,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <div class="form-check form-check-inline form-switch">
                                     <input class="form-check-input" asp-for="Building.IsArmedResponse" type="checkbox" id="BuildingIsArmedResponse">
                                     <label class="form-check-label" asp-for="Building.IsArmedResponse">Armed Response?</label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label asp-for="Building.ArmedResponseName" class="control-label">Armed Response Name</label>
                                 <input asp-for="Building.ArmedResponseName" id="BuildingArmedResponseName" class="form-control" />
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label asp-for="Building.BondHolder" class="control-label">Bond Holder</label>
-                                <textarea asp-for="Building.BondHolder" id="BuildingBondHolder" class="form-control" ></textarea>
-                            </div>
-                        </div>
+
                     </div>
                 </div>                    
                 <div class="container border bg-light p-3">

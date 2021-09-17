@@ -38,8 +38,7 @@ namespace Tilbake.Application.Resources
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
         public Client Client { get; set; }
-
-        public string FullName => String.IsNullOrEmpty(Client.FirstName) ? Client.LastName : Client.FirstName + " " + Client.LastName;
+        public PortfolioClient PortfolioClient { get; set; }
 
         //  Descriptions
         [Display(Name = "Insurer")]

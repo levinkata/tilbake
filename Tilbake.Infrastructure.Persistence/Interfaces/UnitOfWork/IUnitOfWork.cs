@@ -12,6 +12,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IBankBranchRepository BankBranches { get; }
         IBodyTypeRepository BodyTypes { get; }
         IBuildingRepository Buildings { get; }
+        IBuildingConditionRepository BuildingConditions { get; }
         ICarrierRepository Carriers { get; }
         ICityRepository Cities { get; }
         IClientRepository Clients { get; }

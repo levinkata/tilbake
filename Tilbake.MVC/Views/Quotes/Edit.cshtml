@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
 }
 
 <div class="col-md-4 offset-md-8 bd-highlight mb-3">
@@ -22,6 +23,12 @@
                 @Model.QuoteNumber
             </dd>
         </dl>
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-group">
+        <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@Model.PortfolioClient.PortfolioId", asp-route-clientId="@Model.Client.Id"><h6>@FullName</h6></a>
     </div>
 </div>
 

@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Quotation";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
 }
 
 <div class="container mt-3 w-75">
@@ -29,7 +30,7 @@
     <div class="row justify-content-around mb-3">
         <div class="col">
             <p class="p-2 bg-primary text-white">BILL TO</p>
-            <p>@Model.FullName]</p>
+            <p>@FullName]</p>
             <p>[Company Name]</p>
             <p>[Street Address]</p>
             <p>[City, State, ZIP Code]</p>
@@ -39,7 +40,7 @@
         <div class="col"></div>
         <div class="col">
             <p class="p-2 bg-primary text-white">SHIP TO</p>
-            <p>@Model.FullName</p>
+            <p>@FullName</p>
             <p>[Company Name]</p>
             <p>[Street Address]</p>
             <p>[City, State, ZIP Code]</p>

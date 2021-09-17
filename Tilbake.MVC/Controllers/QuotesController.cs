@@ -15,6 +15,7 @@ namespace Tilbake.MVC.Controllers
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;
+        private readonly IBuildingConditionService _buildingConditionService;
         private readonly ICoverTypeService _coverTypeService;
         private readonly IInsurerService _insurerService;
         private readonly IQuoteStatusService _quoteStatusService;
@@ -32,6 +33,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IPortfolioService _portfolioService;
 
         public QuotesController(IQuoteService quoteService,
+                                IBuildingConditionService buildingConditionService,
                                 ICoverTypeService coverTypeService,
                                 IInsurerService insurerService,
                                 IQuoteStatusService quoteStatusService,
@@ -49,6 +51,7 @@ namespace Tilbake.MVC.Controllers
                                 IPortfolioService portfolioService)
         {
             _quoteService = quoteService;
+            _buildingConditionService = buildingConditionService;
             _coverTypeService = coverTypeService;
             _insurerService = insurerService;
             _quoteStatusService = quoteStatusService;
@@ -141,6 +144,7 @@ namespace Tilbake.MVC.Controllers
             var portfolioId = portfolioClient.PortfolioId;
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
+            var buildingConditions = await _buildingConditionService.GetAllAsync();
             var driverTypes = await _driverTypeService.GetAllAsync();
             var houseConditions = await _houseConditionService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
@@ -160,6 +164,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
                 PortfolioId = portfolioId,
+                BuildingConditionList = new SelectList(buildingConditions, "Id", "Name"),
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
                 QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, Guid.Empty),
                 BodyTypeList = SelectLists.BodyTypes(bodyTypes, Guid.Empty),

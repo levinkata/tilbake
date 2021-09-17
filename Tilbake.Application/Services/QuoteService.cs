@@ -60,7 +60,8 @@ namespace Tilbake.Application.Services
                         Risk risk = new()
                         {
                             Id = Guid.NewGuid(),
-                            AllRiskId = allRiskId
+                            AllRiskId = allRiskId,
+                            DateAdded = DateTime.Now
                         };
                         await _unitOfWork.Risks.AddAsync(risk);
 
@@ -70,7 +71,8 @@ namespace Tilbake.Application.Services
                         {
                             Id = Guid.NewGuid(),
                             ClientId = clientId,
-                            RiskId = riskId
+                            RiskId = riskId,
+                            DateAdded = DateTime.Now
                         };
                         await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
@@ -99,7 +101,8 @@ namespace Tilbake.Application.Services
                     Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
-                        BuildingId = buildingId
+                        BuildingId = buildingId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.Risks.AddAsync(risk);
 
@@ -109,7 +112,8 @@ namespace Tilbake.Application.Services
                     {
                         Id = Guid.NewGuid(),
                         ClientId = clientId,
-                        RiskId = riskId
+                        RiskId = riskId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
@@ -137,7 +141,8 @@ namespace Tilbake.Application.Services
                     Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
-                        ContentId = contentId
+                        ContentId = contentId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.Risks.AddAsync(risk);
 
@@ -147,7 +152,8 @@ namespace Tilbake.Application.Services
                     {
                         Id = Guid.NewGuid(),
                         ClientId = clientId,
-                        RiskId = riskId
+                        RiskId = riskId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
@@ -175,7 +181,8 @@ namespace Tilbake.Application.Services
                     Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
-                        HouseId = houseId
+                        HouseId = houseId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.Risks.AddAsync(risk);
 
@@ -185,7 +192,8 @@ namespace Tilbake.Application.Services
                     {
                         Id = Guid.NewGuid(),
                         ClientId = clientId,
-                        RiskId = riskId
+                        RiskId = riskId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
@@ -213,7 +221,8 @@ namespace Tilbake.Application.Services
                     Risk risk = new()
                     {
                         Id = Guid.NewGuid(),
-                        MotorId = motorId
+                        MotorId = motorId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.Risks.AddAsync(risk);
 
@@ -223,7 +232,8 @@ namespace Tilbake.Application.Services
                     {
                         Id = Guid.NewGuid(),
                         ClientId = clientId,
-                        RiskId = riskId
+                        RiskId = riskId,
+                        DateAdded = DateTime.Now
                     };
                     await _unitOfWork.ClientRisks.AddAsync(clientRisk);
 
@@ -329,6 +339,7 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.Insurer,
+                                                    r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
             var resource = _mapper.Map<Quote, QuoteResource>(result);
@@ -343,8 +354,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(QuoteResource resource)
         {
             var quote = _mapper.Map<QuoteResource, Quote>(resource);
-            await _unitOfWork.Quotes.UpdateAsync(resource.Id, quote);
+            quote.DateModified = DateTime.Now;
 
+            await _unitOfWork.Quotes.UpdateAsync(resource.Id, quote);
             return await _unitOfWork.SaveAsync();
         }
     }

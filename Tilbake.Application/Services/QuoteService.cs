@@ -85,6 +85,44 @@ namespace Tilbake.Application.Services
                 }
             }
 
+            if (resource.Buildings != null)
+            {
+                //  Update QuoteItems with BuildingId
+                int ho = resource.Buildings.Length;
+                var buildings = resource.Buildings;
+                await _unitOfWork.Buildings.AddRangeAsync(buildings);
+
+                for (int i = 0; i < ho; i++)
+                {
+                    var buildingId = buildings[i].Id;
+
+                    Risk risk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        BuildingId = buildingId
+                    };
+                    await _unitOfWork.Risks.AddAsync(risk);
+
+                    var riskId = risk.Id;
+
+                    ClientRisk clientRisk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = clientId,
+                        RiskId = riskId
+                    };
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                    var clientRiskId = clientRisk.Id;
+
+                    foreach (var item in quoteItems.Where(x => x.ClientRiskId == buildingId))
+                    {
+                        item.QuoteId = quoteId;
+                        item.ClientRiskId = clientRiskId;
+                    }
+                }
+            }
+
             if (resource.Contents != null)
             {
                 //  Update QuoteItems with ContentId

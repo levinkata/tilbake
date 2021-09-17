@@ -12,6 +12,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<BankSaveResource, Bank>();
             CreateMap<BankBranchSaveResource, BankBranch>();
             CreateMap<BodyTypeSaveResource, BodyType>();
+            CreateMap<BuildingSaveResource, Building>();
             CreateMap<CarrierSaveResource, Carrier>();
             CreateMap<CitySaveResource, City>();
             CreateMap<PortfolioClientSaveResource, Client>();

@@ -4,6 +4,7 @@
     ViewData["Title"] = "Quote";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="col-md-4 offset-md-8 bd-highlight mb-3">
     <div class="mr-auto p-2 bg-light">
         <h1>Quote</h1>
@@ -54,6 +55,7 @@
 
 <div class="p-2 bg-light mb-3">
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#allRiskModal">All Risks</button>
+    <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#buildingModal">Building</button>
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#contentModal">Contents</button>
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#houseModal">House</button>
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#motorModal">Motor</button>
@@ -136,9 +138,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label asp-for="AllRiskCoverTypeId" class="control-label"></label>
-                                    <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
+                                    <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
                                 </div>
                             </div>
                         </div>
@@ -148,6 +148,194 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" id="btnAddAllRisk" class="btn btn-primary" onclick="LoadAllRisks()">Save this record</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Building Modal -->
+<div class="modal fade" id="buildingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="buildingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="buildingModalLabel">
+                    Building (Homeowners)
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Building.PhysicalAddress" class="control-label">Physical Address</label>
+                            <textarea asp-for="Building.PhysicalAddress" id="BuildingPhysicalAddress" class="form-control" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Building.ResidenceTypeId" class="control-label">Residence Type</label>
+                            <select asp-for="Building.ResidenceTypeId" id="BuildingResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Building.ResidenceUseId" class="control-label">Residence Use</label>
+                            <select asp-for="Building.ResidenceUseId" id="BuildingResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Building.BuildingConditionId" class="control-label">Building Condition</label>
+                            <select asp-for="Building.BuildingConditionId" id="BuildingeConditionId" class="form-control" asp-items="Model.BuildingConditionList"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="Building.WallTypeId" class="control-label">Wall Type</label>
+                            <select asp-for="Building.WallTypeId" id="BuildingWallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="Building.RoofTypeId" class="control-label">Roof Type</label>
+                            <select asp-for="Building.RoofTypeId" id="BuildingRoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="Building.IsOccupied" type="checkbox" id="BuildingIsOccupied">
+                                <label class="form-check-label" asp-for="Building.IsOccupied">Is Occupied?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="Building.OccupancyPeriod" class="control-label">OccupancyPeriod</label>
+                            <input asp-for="Building.OccupancyPeriod" id="BuildingOccupancyPeriod" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 border bg-light mb-3 py-2">
+                    <div class="row gx-6">
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsBurglarAlarm" type="checkbox" id="BuildingIsBurglarAlarm">
+                                    <label class="form-check-label" asp-for="Building.IsBurglarAlarm">Burglar Alarm?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsBurglarBars" type="checkbox" id="BuildingIsBurglarBars">
+                                    <label class="form-check-label" asp-for="Building.IsBurglarBars">Burglar Bars?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsKeepDogs" type="checkbox" id="BuildingIsKeepDogs">
+                                    <label class="form-check-label" asp-for="Building.IsKeepDogs">Keep Dogs?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsSecurityGates" type="checkbox" id="BuildingIsSecurityGates">
+                                    <label class="form-check-label" asp-for="Building.IsSecurityGates">Security Gates?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsElectronicGate" type="checkbox" id="BuildingIsElectronicGate">
+                                    <label class="form-check-label" asp-for="Building.IsElectronicGate">Electronic Gate?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsElectricFence" type="checkbox" id="BuildingIsElectricFence">
+                                    <label class="form-check-label" asp-for="Building.IsElectricFence">Electric Fence?</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsRentedOut" type="checkbox" id="BuildingIIsRentedOut">
+                                    <label class="form-check-label" asp-for="Building.IsRentedOut">Rented Out?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsHouseSitters" type="checkbox" id="BuildingIsHouseSitters">
+                                    <label class="form-check-label" asp-for="Building.IsHouseSitters">House Sitters?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsSecurityComplex" type="checkbox" id="BuildingIsSecurityComplex">
+                                    <label class="form-check-label" asp-for="Building.IsSecurityComplex">Security Complex?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsRetirementVillage" type="checkbox" id="BuildingIsRetirementVillage">
+                                    <label class="form-check-label" asp-for="Building.IsRetirementVillage">Retirement Village?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsAdjacentOpenArea" type="checkbox" id="BuildingIsAdjacentOpenArea">
+                                    <label class="form-check-label" asp-for="Building.IsAdjacentOpenArea">Adjacent Open Area?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="Building.IsArmedResponse" type="checkbox" id="BuildingIsArmedResponse">
+                                    <label class="form-check-label" asp-for="Building.IsArmedResponse">Armed Response?</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Building.ArmedResponseName" class="control-label">Armed Response Name</label>
+                                <input asp-for="Building.ArmedResponseName" id="BuildingArmedResponseName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label asp-for="Building.BondHolder" class="control-label">Bond Holder</label>
+                                <textarea asp-for="Building.BondHolder" id="BuildingBondHolder" class="form-control" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>                    
+                <div class="container border bg-light p-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="BuildingSumInsured" class="control-label"></label>
+                                <input asp-for="BuildingSumInsured" id="BuildingSumInsured" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="BuildingCoverTypeId" class="control-label"></label>
+                                <select asp-for="BuildingCoverTypeId" id="BuildingCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnBuildingRisk" class="btn btn-primary" onclick="LoadBuildings()">Save this record</button>
             </div>
         </div>
     </div>
@@ -177,17 +365,13 @@
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.ResidenceTypeId" class="control-label">Residence Type</label>
-                                <select asp-for="Content.ResidenceTypeId" id="ContentResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
-                                    <option value="">Select Residence Type</option>
-                                </select>
+                                <select asp-for="Content.ResidenceTypeId" id="ContentResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList"></select>
                             </div>
                         </div>
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.ResidenceUseId" class="control-label">Residence Type</label>
-                                <select asp-for="Content.ResidenceUseId" id="ContentResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList">
-                                    <option value="">Select Residence Use</option>
-                                </select>
+                                <select asp-for="Content.ResidenceUseId" id="ContentResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList"></select>
                             </div>
                         </div>
                     </div>
@@ -195,17 +379,13 @@
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.WallTypeId" class="control-label">Wall Type</label>
-                                <select asp-for="Content.WallTypeId" id="ContentWallTypeId" class="form-control" asp-items="Model.WallTypeList">
-                                    <option value="">Select Wall Type</option>
-                                </select>
+                                <select asp-for="Content.WallTypeId" id="ContentWallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
                             </div>
                         </div>
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Content.RoofTypeId" class="control-label">Roof Type</label>
-                                <select asp-for="Content.RoofTypeId" id="ContentRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
-                                    <option value="">Select Roof Type</option>
-                                </select>
+                                <select asp-for="Content.RoofTypeId" id="ContentRoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
                             </div>
                         </div>
                     </div>                    
@@ -220,9 +400,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label asp-for="ContentCoverTypeId" class="control-label"></label>
-                                    <select asp-for="ContentCoverTypeId" id="ContentCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
+                                    <select asp-for="ContentCoverTypeId" id="ContentCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
                                 </div>
                             </div>
                         </div>
@@ -508,6 +686,7 @@
         var clientId = '@Model.ClientId';
         var portfolioId = '@Model.PortfolioId';
         var allRisks = [];
+        var buildings = [];
         var contents = [];
         var houses = [];
         var motors = [];
@@ -585,6 +764,59 @@
             quoteItems.push(quoteItem);
             riskItems.push(riskItem);
             
+            AddToCart(clientRiskId, description, coverType, sumInsured);
+        }
+        
+        function LoadBuildings() {
+            var clientRiskId = uuidv4();
+            var description = $('#BuildingPhysicalAddress').val();
+            var sumInsured = $('#BuildingSumInsured').val();
+            var coverType = $('#BuildingCoverTypeId option:selected').text();
+
+            //  1. Build House Array to match model class House
+            var building = {
+                Id: clientRiskId,
+                PhysicalAddress: description,
+                ResidenceTypeId: $('#BuildingResidenceTypeId option:selected').val(),
+                ResidenceUseId: $('#BuildingResidenceUseId option:selected').val(),
+                RoofTypeId: $('#BuildingRoofTypeId option:selected').val(),
+                WallTypeId: $('#BuildingWallTypeId option:selected').val(),
+                BuildingConditionId: $('#BuildingConditionId option:selected').val(),
+                IsBurglarBars: $('#BuildingIsBurglarBars').val(),
+                IsBurglarAlarm: $('#BuildingIsBurglarAlarm').val(),
+                IsRentedOut: $('#BuildingIsRentedOut').val(),
+                IsUnoccupied: $('#BuildingIsUnoccupied').val(),
+                UnoccupancyPeriod: $('#BuildingUnoccupancyPeriod').val(),
+                IsUseHouseSitters: $('#BuildingIsUseHouseSitters').val(),
+                IsKeepDogs: $('#BuildingIsKeepDogs').val(),
+                IsSecurityGates: $('#BuildingIsSecurityGates').val(),
+                IsArmedResponse: $('#BuildingIsArmedResponse').val(),
+                ArmedResponseName: $('#BuildingArmedResponseName').val(),
+                IsElectronicGate: $('#BuildingIsElectronicGate').val(),
+                IsElectricFence: $('#BuildingIsElectricFence').val(),
+                IsSecurityComplex: $('#BuildingIsSecurityComplex').val(),
+                IsRetirementVillage: $('#BuildingIsRetirementVillage').val(),
+                IsAdjacentOpenArea: $('#BuildingIsAdjacentOpenArea').val(),
+                BondHolder: $('#BuildingBondHolder').val()
+            }
+
+            //  2. Build QuoteItem Array to match model class QuoteItem
+            var quoteItem = {
+                Id: uuidv4(),
+                QuoteId: quoteId,
+                ClientRiskId: clientRiskId,
+                CoverTypeId: $('#BuildingCoverTypeId option:selected').val(),
+                Description: description,
+                SumInsured: sumInsured,
+                Premium: 0,
+                Excess: '',
+                CoverType: coverType
+            }
+
+            //  3. Append to the Arrays
+            buildings.push(building);
+            quoteItems.push(quoteItem);
+
             AddToCart(clientRiskId, description, coverType, sumInsured);
         }
 
@@ -793,6 +1025,7 @@
                     Quote: quote,
                     QuoteItems: quoteItems,
                     AllRisks: allRisks,
+                    Buildings: buildings,
                     Contents: contents,
                     Houses: houses,
                     Motors: motors,
@@ -822,6 +1055,12 @@
 
                 if (allRisks.length != 0) {
                     allRisks = allRisks.filter(function (obj) {
+                        return obj.Id !== clientRiskId;
+                    });
+                }
+
+                if (buildings.length != 0) {
+                    buildings = buildings.filter(function (obj) {
                         return obj.Id !== clientRiskId;
                     });
                 }

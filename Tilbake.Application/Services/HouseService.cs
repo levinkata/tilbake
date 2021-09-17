@@ -25,15 +25,16 @@ namespace Tilbake.Application.Services
         {
             var house = _mapper.Map<HouseSaveResource, House>(resource);
             house.Id = Guid.NewGuid();
+            house.DateAdded = DateTime.Now;
 
             await _unitOfWork.Houses.AddAsync(house);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Houses.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(HouseResource resource)
@@ -41,25 +42,34 @@ namespace Tilbake.Application.Services
             var house = _mapper.Map<HouseResource, House>(resource);
             await _unitOfWork.Houses.DeleteAsync(house);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<HouseResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Houses.GetAllAsync());
-            result = result.OrderBy(n => n.PhysicalAddress);
+            var result = await _unitOfWork.Houses.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.PhysicalAddress),
+                                            r => r.HouseCondition,
+                                            r => r.ResidenceType,
+                                            r => r.RoofType,
+                                            r => r.WallType);
 
             var resources = _mapper.Map<IEnumerable<House>, IEnumerable<HouseResource>>(result);
-
             return resources;
         }
 
         public async Task<HouseResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Houses.GetByIdAsync(id);
-            var resources = _mapper.Map<House, HouseResource>(result);
+            var result = await _unitOfWork.Houses.GetFirstOrDefaultAsync(
+                                            r => r.Id == id,
+                                            r => r.HouseCondition,
+                                            r => r.ResidenceType,
+                                            r => r.RoofType,
+                                            r => r.WallType);
 
-            return resources;
+            var resource = _mapper.Map<House, HouseResource>(result);
+            return resource;
         }
 
         public async Task<int> UpdateAsync(HouseResource resource)
@@ -67,7 +77,7 @@ namespace Tilbake.Application.Services
             var house = _mapper.Map<HouseResource, House>(resource);
             await _unitOfWork.Houses.UpdateAsync(resource.Id, house);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

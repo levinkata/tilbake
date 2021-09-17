@@ -12,6 +12,7 @@ namespace Tilbake.Application.Resources
 
         //  Risk Arrays
         public AllRisk[] AllRisks { get; set; }
+        public Building[] Buildings { get; set; }
         public Content[] Contents { get; set; }
         public House[] Houses { get; set; }
         public Motor[] Motors { get; set; }

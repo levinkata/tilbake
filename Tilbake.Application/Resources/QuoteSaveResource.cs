@@ -42,6 +42,13 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Description")]
         public string Description { get; set; }
 
+        //  Building
+        [Display(Name = "Sum Insured")]
+        public decimal BuildingSumInsured { get; set; }
+
+        [Display(Name = "Cover Type")]
+        public Guid BuildingCoverTypeId { get; set; }
+
         //  Content
         [Display(Name = "Sum Insured")]
         public decimal ContentSumInsured { get; set; }
@@ -68,6 +75,7 @@ namespace Tilbake.Application.Resources
 
         //  Risks
         public AllRisk AllRisk { get; set; }
+        public Building Building { get; set; }
         public Content Content { get; set; }
         public House House { get; set; }
         public Motor Motor { get; set; }
@@ -76,6 +84,7 @@ namespace Tilbake.Application.Resources
         public SelectList CoverTypeList { get; set; }
         public SelectList QuoteStatusList { get; set; }
         public SelectList BodyTypeList { get; set; }
+        public SelectList BuildingConditionList { get; set; }
         public SelectList DriverTypeList { get; set; }
         public SelectList HouseConditionList { get; set; }
         public SelectList MotorMakeList { get; set; }

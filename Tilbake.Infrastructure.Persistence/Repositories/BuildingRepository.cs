@@ -4,9 +4,9 @@ using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Repositories
 {
-    public class HouseRepository : Repository<House>, IHouseRepository
+    public class BuildingRepository : Repository<Building>, IBuildingRepository
     {
-        public HouseRepository(TilbakeDbContext context) : base(context)
+        public BuildingRepository(TilbakeDbContext context) : base(context)
         {
 
         }

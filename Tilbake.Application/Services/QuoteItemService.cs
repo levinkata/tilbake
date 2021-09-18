@@ -76,6 +76,9 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(QuoteItemResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource);
+
+            quoteItem.TaxRate = 0;
+            quoteItem.TaxAmount = 0;
             await _unitOfWork.QuoteItems.UpdateAsync(resource.Id, quoteItem);
 
             return await _unitOfWork.SaveAsync();

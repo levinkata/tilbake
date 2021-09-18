@@ -42,12 +42,6 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="InvoiceDueDate" class="control-label"></label>
-                <input asp-for="InvoiceDueDate" id="InvoiceDueDate" class="form-control" />
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
                 <label asp-for="InvoiceStatusId" class="control-label"></label>
                 <select asp-for="InvoiceStatusId" id="InvoiceStatusId" class="form-control" asp-items="Model.InvoiceStatusList"></select>
             </div>
@@ -58,18 +52,6 @@
             <div class="form-group">
                 <label asp-for="Amount" class="control-label"></label>
                 <input asp-for="Amount" id="Amount" class="form-control" aria-label="readonly input" readonly/>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label asp-for="TaxId" class="control-label"></label>
-                <select asp-for="TaxId" id="TaxId" class="form-control" asp-items="Model.TaxList"></select>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label asp-for="TaxAmount" class="control-label"></label>
-                <input asp-for="TaxAmount" id="TaxAmount" class="form-control" aria-label="readonly input" readonly />
             </div>
         </div>
     </div>

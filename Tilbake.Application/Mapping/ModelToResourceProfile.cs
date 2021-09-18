@@ -97,7 +97,6 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Policy.PortfolioClient.Client.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Policy.PortfolioClient.Client.LastName))
                 .ForMember(dest => dest.InvoiceStatus, opt => opt.MapFrom(src => src.InvoiceStatus.Name))
-                .ForMember(dest => dest.Tax, opt => opt.MapFrom(src => src.Tax.Name))
                 .ForMember(dest => dest.InvoiceItems, opt => opt.MapFrom(src => src.InvoiceItems)).ReverseMap();
 
             CreateMap<InvoiceItem, InvoiceItemResource>()

@@ -22,6 +22,8 @@ namespace Tilbake.Domain.Models
         public decimal Premium { get; set; }
         public string Excess { get; set; }
         public string Description { get; set; }
+        public decimal TaxRate { get; set; }
+        public decimal TaxAmount { get; set; }
         public Guid? AddedById { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedById { get; set; }

@@ -65,20 +65,37 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        $(document).ready(function () {
-            // do something
-        });
+        var startDate = '';
 
-        function isValidDate(s) {
-          var bits = s.split('/');
-          var d = new Date(bits[2] + '/' + bits[1] + '/' + bits[0]);
-          return !!(d && (d.getMonth() + 1) == bits[1] && d.getDate() == Number(bits[0]));
-        }
+        $(document).ready(function () {
+            startDate = new Date($('#CoverStartDate').val());
+            if(startDate != '' && startDate != null)
+            {
+                setEndDate(startDate);
+            }
+        });
 
         $('#CoverStartDate').change(function () {
-            var startDate = $(this).val();
-            alert('Start date!! ' + startDate);
+            startDate = new Date($(this).val());
+            if(startDate != '' && startDate != null)
+            {
+                setEndDate(startDate);
+            }
         });
+
+        function setEndDate()
+        {   
+            alert('Start date!! ' + startDate.getFullYear());
+            var year = startDate.getFullYear();
+            var month = String(startDate.getMonth() + 1).padStart(2, '0');
+            var day = String(startDate.getDate()).padStart(2, '0');
+
+            var endDate = new Date(year + 1, month, day - 1);
+            // sendDate.setDate(endDate.getDate() - 1);
+            var foramttedDate = year + '-' + month + '-' + day;
+            $('#CoverEndDate').val(endDate);
+            alert('End date!! ' + foramttedDate);
+        }
 
     </script>
 

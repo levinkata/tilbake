@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Domain.Enums;
@@ -1921,6 +1918,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.TaxRate).HasColumnType("decimal(18, 2)");
+
                 entity.HasOne(d => d.InvoiceStatus)
                     .WithMany(p => p.Invoices)
                     .HasForeignKey(d => d.InvoiceStatusId)
@@ -1932,12 +1931,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.PolicyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Invoice_Policy");
-
-                entity.HasOne(d => d.Tax)
-                    .WithMany(p => p.Invoices)
-                    .HasForeignKey(d => d.TaxId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Invoice_Tax");
             });
 
             modelBuilder.Entity<InvoiceItem>(entity =>
@@ -2668,6 +2661,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.SumInsured).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TaxRate).HasColumnType("decimal(18, 2)");
+
                 entity.HasOne(d => d.ClientRisk)
                     .WithMany(p => p.PolicyRisks)
                     .HasForeignKey(d => d.ClientRiskId)
@@ -3028,6 +3025,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Premium).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.SumInsured).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TaxRate).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.ClientRisk)
                     .WithMany(p => p.QuoteItems)

@@ -17,7 +17,7 @@ namespace Tilbake.Domain.Models
         public int InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
         public decimal Amount { get; set; }
-        public Guid TaxId { get; set; }
+        public decimal TaxRate { get; set; }
         public decimal TaxAmount { get; set; }
         public Guid InvoiceStatusId { get; set; }
         public decimal ReducingBalance { get; set; }
@@ -29,7 +29,6 @@ namespace Tilbake.Domain.Models
 
         public virtual InvoiceStatus InvoiceStatus { get; set; }
         public virtual Policy Policy { get; set; }
-        public virtual Tax Tax { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
         public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
         public virtual ICollection<Reconcilliation> Reconcilliations { get; set; }

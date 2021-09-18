@@ -255,6 +255,21 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", occupationId);
         }
 
+        public static SelectList PaymentMethods(IEnumerable<PaymentMethodResource> paymentMethods, Guid? paymentMethodId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Payment Method", Value = "" });
+
+            foreach (var item in paymentMethods)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (paymentMethodId == Guid.Empty || String.IsNullOrEmpty(paymentMethodId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", paymentMethodId);
+        }
+
         public static SelectList PaymentTypes(IEnumerable<PaymentTypeResource> paymentTypes, Guid? paymentTypeId)
         {
             List<SelectListItem> items = new();
@@ -268,6 +283,36 @@ namespace Tilbake.Application.Helpers
             return (paymentTypeId == Guid.Empty || String.IsNullOrEmpty(paymentTypeId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", paymentTypeId);
+        }
+
+        public static SelectList PolicyStatuses(IEnumerable<PolicyStatusResource> policyStatuses, Guid? policyStatusId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Policy Status", Value = "" });
+
+            foreach (var item in policyStatuses)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (policyStatusId == Guid.Empty || String.IsNullOrEmpty(policyStatusId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", policyStatusId);
+        }
+
+        public static SelectList PolicyTypes(IEnumerable<PolicyTypeResource> policyTypes, Guid? policyTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Policy Type", Value = "" });
+
+            foreach (var item in policyTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (policyTypeId == Guid.Empty || String.IsNullOrEmpty(policyTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", policyTypeId);
         }
 
         public static SelectList QuoteStatuses(IEnumerable<QuoteStatusResource> quoteStatuses, Guid? quoteStatusId)
@@ -298,6 +343,21 @@ namespace Tilbake.Application.Helpers
             return (roofTypeId == Guid.Empty || String.IsNullOrEmpty(roofTypeId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", roofTypeId);
+        }
+
+        public static SelectList SalesTypes(IEnumerable<SalesTypeResource> salesTypes, Guid? salesTypeId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Sales Type", Value = "" });
+
+            foreach (var item in salesTypes)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (salesTypeId == Guid.Empty || String.IsNullOrEmpty(salesTypeId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", salesTypeId);
         }
 
         public static SelectList Taxes(IEnumerable<TaxResource> taxes, Guid? taxId)

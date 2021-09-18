@@ -24,11 +24,23 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
+        public async Task<Building> GetBuildingAsync(Guid id)
+        {
+            var result = (from q in _context.PolicyRisks
+                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join r in _context.Risks on c.RiskId equals r.Id
+                          join a in _context.Buildings on r.BuildingId equals a.Id
+                          where q.Id == id && r.BuildingId != null
+                          select a).FirstOrDefault();
+
+            return await Task.FromResult(result);
+        }
+
         public async Task<IEnumerable<PolicyRisk>> GetByPolicyIdAsync(Guid policyId)
         {
-            return await Task.Run(() => _context.PolicyRisks
-                                                .Include(q => q.CoverType)
-                                                .Where(e => e.PolicyId == policyId));
+            return await _context.PolicyRisks
+                                    .Include(q => q.CoverType)
+                                    .Where(e => e.PolicyId == policyId).ToListAsync();
         }
 
         public async Task<Content> GetContentAsync(Guid id)

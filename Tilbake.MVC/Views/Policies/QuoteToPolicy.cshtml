@@ -24,22 +24,17 @@
                 <select asp-for="PolicyTypeId" class ="form-control" asp-items="Model.PolicyTypeList"></select>
             </div>
             <div class="form-group">
-                <label asp-for="RunDay" class="control-label"></label>
-                <input asp-for="RunDay" class="form-control" />
-                <span asp-validation-for="RunDay" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="PaymentMethodId" class="control-label"></label>
                 <select asp-for="PaymentMethodId" class ="form-control" asp-items="Model.PaymentMethodList"></select>
             </div>
             <div class="form-group">
                 <label asp-for="CoverStartDate" class="control-label"></label>
-                <input asp-for="CoverStartDate" class="form-control" />
+                <input type="date" asp-for="CoverStartDate" class="form-control" />
                 <span asp-validation-for="CoverStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CoverEndDate" class="control-label"></label>
-                <input asp-for="CoverEndDate" class="form-control" />
+                <input type="date" asp-for="CoverEndDate" class="form-control" readonly />
                 <span asp-validation-for="CoverEndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -66,3 +61,26 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            // do something
+        });
+
+        function isValidDate(s) {
+          var bits = s.split('/');
+          var d = new Date(bits[2] + '/' + bits[1] + '/' + bits[0]);
+          return !!(d && (d.getMonth() + 1) == bits[1] && d.getDate() == Number(bits[0]));
+        }
+
+        $('#CoverStartDate').change(function () {
+            var startDate = $(this).val();
+            alert('Start date!! ' + startDate);
+        });
+
+    </script>
+
+
+}

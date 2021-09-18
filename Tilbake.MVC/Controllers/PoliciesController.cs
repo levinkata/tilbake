@@ -90,10 +90,12 @@ namespace Tilbake.MVC.Controllers
             PolicySaveResource resource = new()
             {
                 QuoteId = quoteId,
-                PaymentMethodList = new SelectList(paymentMethods, "Id", "Name", Guid.Empty),
-                PolicyStatusList = new SelectList(policyStatuses, "Id", "Name", Guid.Empty),
-                PolicyTypeList = new SelectList(policyTypes, "Id", "Name", Guid.Empty),
-                SalesTypeList = new SelectList(salesTypes, "Id", "Name", Guid.Empty)
+                InsurerPolicyNumber = "TBA",
+                CoverStartDate = DateTime.Now,
+                PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, Guid.Empty),
+                PolicyStatusList = SelectLists.PolicyStatuses(policyStatuses, Guid.Empty),
+                PolicyTypeList = SelectLists.PolicyTypes(policyTypes, Guid.Empty),
+                SalesTypeList = SelectLists.SalesTypes(salesTypes, Guid.Empty)
             };
             return View(resource);
         }
@@ -123,6 +125,7 @@ namespace Tilbake.MVC.Controllers
                 }
 
                 resource.InceptionDate = resource.CoverStartDate;
+                resource.RunDay = quoteResource.RunDay;
 
                 QuotePolicyObjectResource quotePolicyObjectResource = new()
                 {

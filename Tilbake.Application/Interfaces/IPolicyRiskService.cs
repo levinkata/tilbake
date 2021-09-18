@@ -13,6 +13,7 @@ namespace Tilbake.Application.Interfaces
         Task<PolicyRiskResource> GetByIdAsync(Guid id);
         Task<int> AddAsync(PolicyRiskSaveResource resource);
         Task<int> UpdateAsync(PolicyRiskResource resource);
+        Task<int> UpdatePolicyRiskBuildingAsync(PolicyRiskBuildingResource resource);
         Task<int> UpdatePolicyRiskRiskItemAsync(PolicyRiskRiskItemResource resource);
         Task<int> UpdatePolicyRiskContentAsync(PolicyRiskContentResource resource);
         Task<int> UpdatePolicyRiskHouseAsync(PolicyRiskHouseResource resource);

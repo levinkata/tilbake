@@ -29,6 +29,12 @@ namespace Tilbake.Application.Services
                 return -1;
             }
 
+            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+                                            null,
+                                            r => r.OrderByDescending(n => n.TaxDate));
+
+            var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
+
             var clientId = resource.ClientId;
             
             var quote = resource.Quote;
@@ -41,7 +47,6 @@ namespace Tilbake.Application.Services
 
             if (resource.AllRisks != null)
             {
-  
                 if (resource.RiskItems != null)
                 {
                     //  Create RiskItem Record
@@ -82,6 +87,9 @@ namespace Tilbake.Application.Services
                         {
                             item.QuoteId = quoteId;
                             item.ClientRiskId = clientRiskId;
+                            item.DateAdded = DateTime.Now;
+                            item.TaxRate = taxRate;
+                            item.TaxAmount = item.Premium * taxRate / 100;
                         }
                     }
                 }
@@ -123,6 +131,9 @@ namespace Tilbake.Application.Services
                     {
                         item.QuoteId = quoteId;
                         item.ClientRiskId = clientRiskId;
+                        item.DateAdded = DateTime.Now;
+                        item.TaxRate = taxRate;
+                        item.TaxAmount = item.Premium * taxRate / 100;
                     }
                 }
             }
@@ -163,6 +174,9 @@ namespace Tilbake.Application.Services
                     {
                         item.QuoteId = quoteId;
                         item.ClientRiskId = clientRiskId;
+                        item.DateAdded = DateTime.Now;
+                        item.TaxRate = taxRate;
+                        item.TaxAmount = item.Premium * taxRate / 100;
                     }
                 }
             }
@@ -203,6 +217,9 @@ namespace Tilbake.Application.Services
                     {
                         item.QuoteId = quoteId;
                         item.ClientRiskId = clientRiskId;
+                        item.DateAdded = DateTime.Now;
+                        item.TaxRate = taxRate;
+                        item.TaxAmount = item.Premium * taxRate / 100;
                     }
                 }
             }
@@ -243,6 +260,9 @@ namespace Tilbake.Application.Services
                     {
                         item.QuoteId = quoteId;
                         item.ClientRiskId = clientRiskId;
+                        item.DateAdded = DateTime.Now;
+                        item.TaxRate = taxRate;
+                        item.TaxAmount = item.Premium * taxRate / 100;
                     }
                 }
             }

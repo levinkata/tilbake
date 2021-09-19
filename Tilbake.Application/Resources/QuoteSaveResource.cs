@@ -32,6 +32,9 @@ namespace Tilbake.Application.Resources
 
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
+        //  Other
+        public Client Client { get; set; }
+
         //  AllRisk
         [Display(Name = "Sum Insured")]
         public decimal AllRiskSumInsured { get; set; }

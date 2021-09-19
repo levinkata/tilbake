@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -77,8 +78,16 @@ namespace Tilbake.Application.Services
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource);
 
-            quoteItem.TaxRate = 0;
-            quoteItem.TaxAmount = 0;
+            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+                                            null,
+                                            r => r.OrderByDescending(n => n.TaxDate));
+
+            var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
+
+            quoteItem.DateModified = DateTime.Now;
+            quoteItem.TaxRate = taxRate;
+            quoteItem.TaxAmount = quoteItem.Premium * taxRate / 100;
+
             await _unitOfWork.QuoteItems.UpdateAsync(resource.Id, quoteItem);
 
             return await _unitOfWork.SaveAsync();
@@ -87,6 +96,17 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateQuoteItemRiskItemAsync(QuoteItemRiskItemResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
+
+            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+                                            null,
+                                            r => r.OrderByDescending(n => n.TaxDate));
+
+            var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
+
+            quoteItem.DateModified = DateTime.Now;
+            quoteItem.TaxRate = taxRate;
+            quoteItem.TaxAmount = quoteItem.Premium * taxRate / 100;
+
             await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
 
             var riskItem = _mapper.Map<RiskItemResource, RiskItem>(resource.RiskItem);

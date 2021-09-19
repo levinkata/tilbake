@@ -142,6 +142,7 @@ namespace Tilbake.MVC.Controllers
             var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
             var clientId = portfolioClient.ClientId;
             var portfolioId = portfolioClient.PortfolioId;
+            var client = portfolioClient.Client;
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var buildingConditions = await _buildingConditionService.GetAllAsync();
@@ -164,6 +165,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
                 PortfolioId = portfolioId,
+                Client = client,
                 BuildingConditionList = new SelectList(buildingConditions, "Id", "Name"),
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
                 QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, Guid.Empty),

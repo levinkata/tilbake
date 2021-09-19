@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
@@ -327,10 +328,9 @@ namespace Tilbake.MVC.Controllers
             }
 
             var coverTypes = await _coverTypeService.GetAllAsync();
+            resource.CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty);
 
-            resource.CoverTypeList = new SelectList(coverTypes, "Id", "Name");
-
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         // POST: QuoteItems/Edit/5
@@ -356,6 +356,9 @@ namespace Tilbake.MVC.Controllers
 
                 return RedirectToAction(nameof(Details), "Quotes", new { Id = resource.QuoteId });
             }
+
+            var coverTypes = await _coverTypeService.GetAllAsync();
+            resource.CoverTypeList = SelectLists.CoverTypes(coverTypes, resource.CoverTypeId);
             return View(resource);
         }
 

@@ -3,6 +3,7 @@
 @{ 
     ViewData["Title"] = "Quote";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
 }
 
 <div class="col-md-4 offset-md-8 bd-highlight mb-3">
@@ -30,6 +31,13 @@
         <input type="button" id="btnCreateQuote" class="btn btn-primary invisible" value="Create Quote" />
     </div>
 </div>
+
+<div class="row">
+    <div class="form-group">
+        <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@Model.PortfolioId", asp-route-clientId="@Model.Client.Id"><h6>@FullName</h6></a>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
@@ -46,9 +54,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="QuoteStatusId" class="control-label"></label>
-            <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList">
-                <option value="">Select Quote Status</option>
-            </select>
+            <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
         </div>
     </div>
 </div>

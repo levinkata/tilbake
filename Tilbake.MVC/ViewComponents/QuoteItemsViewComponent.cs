@@ -10,16 +10,24 @@ namespace Tilbake.MVC.ViewComponents
     public class QuoteItemsViewComponent : ViewComponent
     {
         private readonly IQuoteItemService _quoteItemService;
+        private readonly ITaxService _taxService;
 
-        public QuoteItemsViewComponent(IQuoteItemService quoteItemService)
+        public QuoteItemsViewComponent(IQuoteItemService quoteItemService,
+                                        ITaxService taxService)
         {
             _quoteItemService = quoteItemService;
+            _taxService = taxService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid quoteId)
         {
+            var taxes = await _taxService.GetAllAsync();
+            var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
+
+            ViewBag.TaxRate = taxRate;
             var resources = await _quoteItemService.GetByQuoteIdAsync(quoteId);
-            return await Task.Run(() => View(resources));
+            
+            return View(resources);
         }
     }
 }

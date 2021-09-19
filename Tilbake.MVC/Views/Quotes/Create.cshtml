@@ -446,17 +446,13 @@
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.ResidenceTypeId" class="control-label">Residence Type</label>
-                                <select asp-for="House.ResidenceTypeId" id="HouseResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
-                                    <option value="">Select Residence Type</option>
-                                </select>
+                                <select asp-for="House.ResidenceTypeId" id="HouseResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList"></select>
                             </div>
                         </div>
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.HouseConditionId" class="control-label">House Condition</label>
-                                <select asp-for="House.HouseConditionId" id="HouseConditionId" class="form-control" asp-items="Model.HouseConditionList">
-                                    <option value="">Select House Condition</option>
-                                </select>
+                                <select asp-for="House.HouseConditionId" id="HouseConditionId" class="form-control" asp-items="Model.HouseConditionList"></select>
                             </div>
                         </div>
                     </div>
@@ -464,17 +460,13 @@
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.WallTypeId" class="control-label">Wall Type</label>
-                                <select asp-for="House.WallTypeId" id="HouseWallTypeId" class="form-control" asp-items="Model.WallTypeList">
-                                    <option value="">Select Roof Type</option>
-                                </select>
+                                <select asp-for="House.WallTypeId" id="HouseWallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
                             </div>
                         </div>
                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="House.RoofTypeId" class="control-label">Roof Type</label>
-                                <select asp-for="House.RoofTypeId" id="HouseRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
-                                    <option value="">Select Roof Type</option>
-                                </select>
+                                <select asp-for="House.RoofTypeId" id="HouseRoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
                             </div>
                         </div>
                     </div>
@@ -507,9 +499,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label asp-for="HouseCoverTypeId" class="control-label"></label>
-                                    <select asp-for="HouseCoverTypeId" id="HouseCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
+                                    <select asp-for="HouseCoverTypeId" id="HouseCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
                                 </div>
                             </div>
                         </div>
@@ -560,24 +550,19 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label asp-for="MotorMakeId" class="control-label">Make</label>
-                                <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList">
-                                    <option value="">Select Motor Make</option>
-                                </select>
+                                <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList"></select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="Motor.MotorModelId" class="control-label">Model</label>
-                                <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList">
-                                    <option value="">Select Motor Model</option>
-                                </select>
+                                <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList"></select>
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Motor.RegYear" class="control-label">Year</label>
-                                <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList">
-                                </select>
+                                <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList"></select>
                             </div> 
                         </div>
                     </div>
@@ -585,9 +570,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label asp-for="Motor.DriverTypeId" class="control-label">Driver Type</label>
-                                <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList">
-                                    <option value="">Select Driver Type</option>
-                                </select>
+                                <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList"></select>
                             </div>
                         </div>
                     </div>
@@ -615,30 +598,28 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
-                                <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList">
-                                    <option value="">Select Motor Use</option>
-                                </select>
+                                <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
                             </div>
                         </div>
                         <div class="col-6 border bg-light mb-3 py-2">
                             <div class="row gx-6">
                                 <div class="col">
                                     <div class="form-group">
-                                        <div class="form-check form-check-inlineform-switch">
+                                        <div class="form-check form-check-inline form-switch">
                                             <input class="form-check-input" asp-for="Motor.IsImport" type="checkbox" id="IsImport">
-                                            <label class="form-check-label" asp-for="Motor.IsImport">Grey Import</label>
+                                            <label class="form-check-label" asp-for="Motor.IsImport">Import?</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
                                             <input class="form-check-input" asp-for="Motor.SecurityFitting" type="checkbox" id="SecurityFitting">
-                                            <label class="form-check-label" asp-for="Motor.SecurityFitting">Security Fitting</label>
+                                            <label class="form-check-label" asp-for="Motor.SecurityFitting">Security Fitting?</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
                                             <input class="form-check-input" asp-for="Motor.IsTrackingDevice" type="checkbox" id="IsTrackingDevice">
-                                            <label class="form-check-label" asp-for="Motor.IsTrackingDevice">Tracking Device</label>
+                                            <label class="form-check-label" asp-for="Motor.IsTrackingDevice">Tracking Device?</label>
                                         </div>
                                     </div>
                                 </div>
@@ -646,13 +627,13 @@
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
                                             <input class="form-check-input" asp-for="Motor.IsImmobiliser" type="checkbox" id="IsImmobiliser">
-                                            <label class="form-check-label" asp-for="Motor.IsImmobiliser">IsImmobiliser</label>
+                                            <label class="form-check-label" asp-for="Motor.IsImmobiliser">Immobiliser?</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch ">
                                             <input class="form-check-input" asp-for="Motor.IsAlarm" type="checkbox" id="IsAlarm">
-                                            <label class="form-check-label" asp-for="Motor.IsAlarm">IsAlarm</label>
+                                            <label class="form-check-label" asp-for="Motor.IsAlarm">Alarm?</label>
                                         </div>
                                     </div>
                                 </div>
@@ -670,9 +651,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label asp-for="MotorCoverTypeId" class="control-label"></label>
-                                    <select asp-for="MotorCoverTypeId" id="MotorCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
+                                    <select asp-for="MotorCoverTypeId" id="MotorCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
                                 </div>
                             </div>
                         </div>
@@ -737,7 +716,7 @@
 
         function LoadAllRisks() {
             var clientRiskId = uuidv4();
-            var description = $('#Description').val();
+            var description = 'AllRisks - ' + $('#Description').val();
             var sumInsured = $('#AllRiskSumInsured').val();
             var coverType = $('#AllRiskCoverTypeId option:selected').text();
             var riskItemId = uuidv4();
@@ -776,7 +755,7 @@
         
         function LoadBuildings() {
             var clientRiskId = uuidv4();
-            var description = $('#BuildingPhysicalAddress').val();
+            var description = 'Building - ' + $('#BuildingPhysicalAddress').val();
             var sumInsured = $('#BuildingSumInsured').val();
             var coverType = $('#BuildingCoverTypeId option:selected').text();
 
@@ -829,11 +808,11 @@
 
         function LoadContents() {
             var clientRiskId = uuidv4();
-            var description = $('#ContentName').val();
+            var description = 'Contents - ' + $('#ContentName').val();
             var sumInsured = $('#ContentSumInsured').val();
             var coverType = $('#ContentCoverTypeId option:selected').text();
 
-            //  1. Build Content Array to match model class Content
+            //  1. Build Content Array to match model class Building
             var content = {
                 Id: clientRiskId,
                 RoofTypeId: $('#ContentRoofTypeId option:selected').val(),
@@ -866,7 +845,7 @@
 
         function LoadHouses() {
             var clientRiskId = uuidv4();
-            var description = $('#HousePhysicalAddress').val();
+            var description = 'House - ' + $('#HousePhysicalAddress').val();
             var sumInsured = $('#HouseSumInsured').val();
             var coverType = $('#HouseCoverTypeId option:selected').text();
 
@@ -904,7 +883,7 @@
 
         function LoadMotors() {
             var clientRiskId = uuidv4();
-            var description = $('#RegYear').val() + ' ' + $('#MotorMakeId option:selected').text() + ' ' + $('#RegNumber').val();
+            var description = 'Motor - ' + $('#RegYear').val() + ' ' + $('#MotorMakeId option:selected').text() + ' ' + $('#RegNumber').val();
             var sumInsured = $('#MotorSumInsured').val();
             var coverType = $('#MotorCoverTypeId option:selected').text();
 
@@ -938,6 +917,8 @@
                 SumInsured: sumInsured,
                 Premium: 0,
                 Excess: '',
+                TaxRate: 0,
+                TaxAmount: 0,
                 CoverType: coverType
             }
 

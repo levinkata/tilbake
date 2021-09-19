@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<QuoteItemResource>
-
+@{
+    var subTotal = 0M;
+    var taxAmount = 0M;
+    var totalAmount = 0M;
+    var taxRate = ViewBag.TaxRate;
+}
 @if (Model.Any())
 {
     <div class="form-group">
@@ -49,6 +54,24 @@
                             </div>
                         </td>
                     </tr>
+                    subTotal = subTotal + @item.Premium;
+                    taxAmount = subTotal * taxRate/100;
+                    totalAmount = subTotal + taxAmount;
+                }
+                @if (subTotal > 0)
+                {
+                    <tr>
+                        <td colspan="4">Sub total</td>
+                        <td>@subTotal</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">VAT (@taxRate)</td>
+                        <td>@taxAmount</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><strong>Total</strong></td>
+                        <td>@totalAmount</td>
+                    </tr>                    
                 }
             </tbody>
         </table>

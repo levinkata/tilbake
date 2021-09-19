@@ -25,31 +25,32 @@ namespace Tilbake.Application.Services
         {
             var tax = _mapper.Map<TaxSaveResource, Tax>(resource);
             tax.Id = Guid.NewGuid();
+            tax.DateAdded = DateTime.Now;
 
             await _unitOfWork.Taxes.AddAsync(tax);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Taxes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(TaxResource resource)
         {
             var tax = _mapper.Map<TaxResource, Tax>(resource);
             await _unitOfWork.Taxes.DeleteAsync(tax);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TaxResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Taxes.GetAllAsync());
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.Taxes.GetAllAsync(
+                                        null,
+                                        r => r.OrderByDescending(n => n.TaxDate));
 
             var resources = _mapper.Map<IEnumerable<Tax>, IEnumerable<TaxResource>>(result);
-
             return resources;
         }
 

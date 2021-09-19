@@ -179,7 +179,6 @@ namespace Tilbake.MVC.Controllers
                 WallTypeList = SelectLists.WallTypes(wallTypes, Guid.Empty),
                 DateRangeList = new SelectList(DateRanges.Years(), "Value", "Text")
             };
-
             return View(resource);
         }
 

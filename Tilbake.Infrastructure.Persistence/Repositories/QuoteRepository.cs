@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Tilbake.Domain.Models;
 using Tilbake.Infrastructure.Persistence.Context;
 using Tilbake.Infrastructure.Persistence.Interfaces;

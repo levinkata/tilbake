@@ -8,7 +8,6 @@ namespace Tilbake.Domain.Models
         public AspNetUser()
         {
             AspNetUserClaims = new HashSet<AspNetUserClaim>();
-            AspNetUserRoles = new HashSet<AspNetUserRole>();
             AspnetUserPortfolios = new HashSet<AspnetUserPortfolio>();
         }
 
@@ -35,7 +34,8 @@ namespace Tilbake.Domain.Models
         public int AccessFailedCount { get; set; }
 
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual ICollection<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
+
+        public virtual ICollection<AspNetRole> Roles { get; set; }
     }
 }

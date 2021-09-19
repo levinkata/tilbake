@@ -12,7 +12,6 @@ namespace Tilbake.Application.Resources
         public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
         public Guid ClientId { get; set; }
-        public bool IsConverted { get; set; }
 
         [Display(Name = "Quote Number")]
         public int QuoteNumber { get; set; }
@@ -34,6 +33,10 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Debit Order Day")]
         public int RunDay { get; set; }
+
+        public bool IsFulfilled { get; set;  }
+        public bool IsPaid { get; set; }
+        public bool IsPolicySet { get; set; }
 
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 

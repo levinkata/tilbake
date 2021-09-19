@@ -110,7 +110,6 @@ namespace Tilbake.MVC.Controllers
             return await Task.Run(() => View());
         }
 
-        // GET: Quotes/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
             var resource = await _quoteService.GetFirstOrDefaultAsync(id);
@@ -118,7 +117,6 @@ namespace Tilbake.MVC.Controllers
             {
                 return NotFound();
             }
-            resource.IsConverted = await _quoteService.IsConvertedToPolicy(id);
 
             return View(resource);
         }

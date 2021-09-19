@@ -9,7 +9,7 @@
 <br />
 <div class="card mb-4 p-3">
     <div class="row">
-        <div class="col-md-3 mb-3 p-3">
+        <div class="col-md-3 p-3">
             <h6 class="fw-bolder mb-3">Client Management</h6>
             <ul>
                 <li>
@@ -27,7 +27,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-3 mb-3 p-3">
+        <div class="col-md-3 p-3">
             <h6 class="fw-bolder mb-3">New Business</h6>
             <ul>
                 <li>
@@ -61,7 +61,7 @@
             </ul>
 
         </div>
-        <div class="col-md-3 mb-3 p-3">
+        <div class="col-md-3 p-3">
             <h6 class="fw-bolder mb-3">Integration with Other Systems</h6>
             <ul>
                 <li>
@@ -86,7 +86,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-3 mb-3 p-3">
+        <div class="col-md-3 p-3">
             <h6 class="fw-bolder mb-3">Third Party Integration</h6>
             <ul>
                 <li>
@@ -95,9 +95,8 @@
             </ul>
         </div>
     </div>
-
     <div class="row">
-        <div class="col-md-3 mb-3 p-3">
+        <div class="col-md-3 p-3">
             <h6 class="fw-bolder mb-3">In-Force Policy Administration</h6>
             <ul>
                 <li>
@@ -114,7 +113,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-3 mb-3 p-3">
+        <div class="col-md-3 p-3">
             <h6 class="fw-bolder mb-3">Security/User Management</h6>
             <ul>
                 <li>
@@ -137,7 +136,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-3 mb-3 p-3">
+        <div class="col-md-3 p-3">
             <h6 class="fw-bolder mb-3">Broker Functions</h6>
             <ul>
                 <li>
@@ -147,7 +146,11 @@
                     Commission Rates
                 </li>
                 <li>
-                    Policy Fee
+                    <a asp-controller="PortfolioPolicyFees"
+                       asp-action="Details"
+                       asp-route-portfolioId="@Model.Id">
+                        Policy Fee
+                    </a>
                 </li>
                 <li>
                     Administration Fee

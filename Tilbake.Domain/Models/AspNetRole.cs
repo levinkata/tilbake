@@ -8,7 +8,6 @@ namespace Tilbake.Domain.Models
         public AspNetRole()
         {
             AspNetRoleClaims = new HashSet<AspNetRoleClaim>();
-            AspNetUserRoles = new HashSet<AspNetUserRole>();
         }
 
         public string Id { get; set; }
@@ -17,6 +16,7 @@ namespace Tilbake.Domain.Models
         public string ConcurrencyStamp { get; set; }
 
         public virtual ICollection<AspNetRoleClaim> AspNetRoleClaims { get; set; }
-        public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; }
+
+        public virtual ICollection<AspNetUser> Users { get; set; }
     }
 }

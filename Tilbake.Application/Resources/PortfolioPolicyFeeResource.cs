@@ -21,8 +21,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Fee")]
         public decimal Fee { get; set; }
 
+        //  Description
         [Display(Name = "Insurer")]
-        public string Insurer { get; set; }
+        public string InsurerName { get; set; }
 
         //  SelectList
         public SelectList InsurerList { get; set; }

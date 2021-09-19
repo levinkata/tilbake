@@ -25,6 +25,14 @@ namespace Tilbake.Application.Services
         {
             var portfolioPolicyFee = _mapper.Map<PortfolioPolicyFeeSaveResource, PortfolioPolicyFee>(resource);
             portfolioPolicyFee.Id = Guid.NewGuid();
+            portfolioPolicyFee.DateAdded = DateTime.Now;
+            if (portfolioPolicyFee.IsFeeFixed)
+            {
+                portfolioPolicyFee.Rate = 0;
+            } else
+            {
+                portfolioPolicyFee.Fee = 0;
+            }
 
             await _unitOfWork.PortfolioPolicyFees.AddAsync(portfolioPolicyFee);
             return await _unitOfWork.SaveAsync();
@@ -47,7 +55,7 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.PortfolioPolicyFees.GetAllAsync(
                                                 null,
-                                                r => r.OrderBy(n => n.Insurer),
+                                                r => r.OrderBy(n => n.Insurer.Name),
                                                 r => r.Insurer);
 
             var resources = _mapper.Map<IEnumerable<PortfolioPolicyFee>, IEnumerable<PortfolioPolicyFeeResource>>(result);
@@ -58,7 +66,7 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.PortfolioPolicyFees.GetAllAsync(
                                             e => e.PortfolioId == portfolioId,
-                                            e => e.OrderBy(r => r.Insurer),
+                                            e => e.OrderBy(r => r.Insurer.Name),
                                             e => e.Insurer);
 
             var resources = _mapper.Map<IEnumerable<PortfolioPolicyFee>, IEnumerable<PortfolioPolicyFeeResource>>(result);
@@ -67,7 +75,10 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioPolicyFeeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioPolicyFees.GetByIdAsync(id);
+            var result = await _unitOfWork.PortfolioPolicyFees.GetFirstOrDefaultAsync(
+                                            r => r.Id == id,
+                                            r => r.Insurer);
+
             var resource = _mapper.Map<PortfolioPolicyFee, PortfolioPolicyFeeResource>(result);
 
             return resource;
@@ -76,6 +87,16 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(PortfolioPolicyFeeResource resource)
         {
             var portfolioPolicyFee = _mapper.Map<PortfolioPolicyFeeResource, PortfolioPolicyFee>(resource);
+
+            portfolioPolicyFee.DateModified = DateTime.Now;
+            if (portfolioPolicyFee.IsFeeFixed)
+            {
+                portfolioPolicyFee.Rate = 0;
+            }
+            else
+            {
+                portfolioPolicyFee.Fee = 0;
+            }
             await _unitOfWork.PortfolioPolicyFees.UpdateAsync(resource.Id, portfolioPolicyFee);
 
             return await _unitOfWork.SaveAsync();

@@ -46,7 +46,7 @@
     </div>
 </div>
 
-@if (Model.IsConverted)
+@if (Model.IsPolicySet)
 {
     <div class="alert alert-danger" role="alert">
         Quote was converted to policy!
@@ -108,7 +108,7 @@ else
     </dl>
 </div>
 <div>
-    @if (Model.IsConverted)
+    @if (Model.IsPolicySet)
     {
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn disabled">Edit Quote</a>
     } else

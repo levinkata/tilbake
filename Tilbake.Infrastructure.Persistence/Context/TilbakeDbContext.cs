@@ -29,7 +29,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
         public virtual DbSet<Attorney> Attorneys { get; set; }
@@ -252,8 +251,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<Address>(entity =>
             {
                 entity.ToTable("Address");
@@ -408,6 +405,23 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(256);
+
+                entity.HasMany(d => d.Roles)
+                    .WithMany(p => p.Users)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "AspNetUserRole",
+                        l => l.HasOne<AspNetRole>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_AspNetUserRoles_AspNetUsers"),
+                        r => r.HasOne<AspNetUser>().WithMany().HasForeignKey("RoleId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_AspNetUserRoles_AspNetRoles"),
+                        j =>
+                        {
+                            j.HasKey("UserId", "RoleId").HasName("PK__AspNetUs__AF2760ADEB228D7E");
+
+                            j.ToTable("AspNetUserRoles");
+
+                            j.IndexerProperty<string>("UserId").HasMaxLength(250);
+
+                            j.IndexerProperty<string>("RoleId").HasMaxLength(250);
+                        });
             });
 
             modelBuilder.Entity<AspNetUserClaim>(entity =>
@@ -438,28 +452,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasMaxLength(250);
-            });
-
-            modelBuilder.Entity<AspNetUserRole>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK__AspNetUs__AF2760ADEB228D7E");
-
-                entity.Property(e => e.UserId).HasMaxLength(250);
-
-                entity.Property(e => e.RoleId).HasMaxLength(250);
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AspNetUserRoles_AspNetRoles");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AspNetUserRoles_AspNetUsers");
             });
 
             modelBuilder.Entity<AspNetUserToken>(entity =>
@@ -3022,6 +3014,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).IsRequired();
 
                 entity.Property(e => e.Excess).HasMaxLength(50);
 

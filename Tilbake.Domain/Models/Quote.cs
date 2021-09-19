@@ -20,6 +20,9 @@ namespace Tilbake.Domain.Models
         public string ClientInfo { get; set; }
         public string InternalInfo { get; set; }
         public int RunDay { get; set; }
+        public bool IsFulfilled { get; set; }
+        public bool IsPaid { get; set; }
+        public bool IsPolicySet { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }

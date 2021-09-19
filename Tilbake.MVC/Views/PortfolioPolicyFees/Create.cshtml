@@ -1,0 +1,82 @@
+﻿@model PortfolioPolicyFeeSaveResource
+
+@{
+    ViewData["Title"] = "Policy Fee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Create</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PortfolioId" />
+            <div class="form-group">
+                <label asp-for="InsurerId" class="control-label"></label>
+                <select asp-for="InsurerId" class="form-control" asp-items="@Model.InsurerList"></select>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <div class="form-check form-check-inline form-switch ">
+                            <input class="form-check-input" asp-for="IsFeeFixed" type="checkbox" id="IsFeeFixed">
+                            <label class="form-check-label" asp-for="IsFeeFixed">Is Fee Fixed?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" id="DivFee">
+                        <label asp-for="Fee" class="control-label"></label>
+                        <input asp-for="Fee" class="form-control" />
+                        <span asp-validation-for="Fee" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="DivRate">
+                <label asp-for="Rate" class="control-label"></label>
+                <input asp-for="Rate" class="form-control" />
+                <span asp-validation-for="Rate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Carousel" asp-route-portfolioId="@Model.PortfolioId">Back</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var isFixed = $('#IsFeeFixed').val();
+
+        $(document).ready(function() {
+            CheckIsFixed(isFixed);
+        });
+
+        $('#IsFeeFixed').change(function () {
+
+            isFixed = $(this).val();
+            CheckIsFixed(isFixed);
+        });
+
+        function CheckIsFixed(isFixed)
+        {
+            if ($('#IsFeeFixed').is(':checked'))
+            {
+                $('#DivRate').hide();
+                $('#DivFee').show();
+            } else {
+                $('#DivFee').hide();
+                $('#DivRate').show();
+            }
+        }
+    </script>
+}

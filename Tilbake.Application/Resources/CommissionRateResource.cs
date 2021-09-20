@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.Application.Resources
@@ -15,5 +16,8 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Rate")]
         public decimal Rate { get; set; }
+
+        //  Selects
+        public SelectList RiskList { get; set;  }
     }
 }

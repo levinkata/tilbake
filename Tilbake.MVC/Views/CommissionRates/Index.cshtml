@@ -1,0 +1,67 @@
+﻿@model IEnumerable<CommissionRateResource>
+
+@{
+    ViewData["Title"] = "Commission Rates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@if (Model.Any())
+{
+    <table id="tblRate" class="display">
+        <thead>
+            <tr>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.RiskName)</strong>
+                </th>
+                <th>
+                    <strong>@Html.DisplayNameFor(model => model.Rate)</strong>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RiskName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rate)
+                    </td>
+                    <td class="justify-content-end">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">View</a></li>
+                                <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Print</a></li>
+                                <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <caption>No Records Found</caption>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tblRate').DataTable();
+        });
+    </script>
+}

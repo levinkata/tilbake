@@ -55,4 +55,11 @@
     <None Include="Views\Shared\_LayoutDashboard.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\CommissionRates\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

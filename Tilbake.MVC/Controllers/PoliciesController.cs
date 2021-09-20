@@ -182,24 +182,24 @@ namespace Tilbake.MVC.Controllers
             {
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
-                InsurerList = new SelectList(insurers, "Id", "Name", Guid.Empty),
-                PaymentMethodList = new SelectList(paymentMethods, "Id", "Name", Guid.Empty),
+                InsurerList = SelectLists.Insurers(insurers, Guid.Empty),
+                PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, Guid.Empty),
                 PolicyStatusList = new SelectList(policyStatuses, "Id", "Name", Guid.Empty),
                 PolicyTypeList = new SelectList(policyTypes, "Id", "Name", Guid.Empty),
-                SalesTypeList = new SelectList(salesTypes, "Id", "Name", Guid.Empty),
+                SalesTypeList = SelectLists.SalesTypes(salesTypes, Guid.Empty),
 
-                CoverTypeList = new SelectList(coverTypes, "Id", "Name"),
-                DateRangeList = new SelectList(DateRanges.Years(), "Value", "Text"),
-                BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
-                DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
-                HouseConditionList = new SelectList(houseConditions, "Id", "Name"),
-                MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
+                CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
+                DateRangeList = SelectLists.RegisteredYears(0),
+                BodyTypeList = SelectLists.BodyTypes(bodyTypes, Guid.Empty),
+                DriverTypeList = SelectLists.DriverTypes(driverTypes, Guid.Empty),
+                HouseConditionList = SelectLists.HouseConditions(houseConditions, Guid.Empty),
+                MotorMakeList = SelectLists.MotorMakes(motorMakes, Guid.Empty),
                 
-                MotorUseList = new SelectList(motorUses, "Id", "Name"),
-                ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name"),
-                ResidenceUseList = new SelectList(residenceUses, "Id", "Name"),
-                RoofTypeList = new SelectList(roofTypes, "Id", "Name"),
-                WallTypeList = new SelectList(wallTypes, "Id", "Name")
+                MotorUseList = SelectLists.MotorUses(motorUses, Guid.Empty),
+                ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, Guid.Empty),
+                ResidenceUseList = SelectLists.ResidenceUses(residenceUses, Guid.Empty),
+                RoofTypeList = SelectLists.RoofTypes(roofTypes, Guid.Empty),
+                WallTypeList = SelectLists.WallTypes(wallTypes, Guid.Empty)
             };
 
             return View(resource);

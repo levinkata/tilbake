@@ -390,6 +390,64 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", quoteStatusId);
         }
 
+        public static SelectList RegisteredRisks(string risk)
+        {
+            List<string> registeredRisks = new();
+            registeredRisks.Add("AllRisks");
+            registeredRisks.Add("Building");
+            registeredRisks.Add("Content");
+            registeredRisks.Add("House");
+            registeredRisks.Add("Motor");
+
+            var risks = registeredRisks.Select(c => new
+                                        {
+                                            Id = c.ToString(),
+                                            Name = c.ToString()
+                                        }).ToList();
+
+            List<SelectListItem> items = new();
+
+            foreach (var item in risks)
+            {
+                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
+            }
+
+            return (risk == "" || String.IsNullOrEmpty(risk)) ?
+                                        new SelectList(items, "Value", "Text") :
+                                        new SelectList(items, "Value", "Text", risk);
+        }
+
+        public static SelectList RegisteredYears(int year)
+        {
+            var range = 20;
+            var currentYear = DateTime.Now.Year;
+
+            List<int> years = new();
+
+            for (int i = 0; i < range; i++)
+            {
+                years.Add(currentYear);
+                currentYear--;
+            }
+
+            var dateRanges = years.Select(c => new
+            {
+                Id = c.ToString(),
+                Name = c.ToString()
+            }).ToList();
+
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Year", Value = "" });
+
+            foreach (var item in dateRanges)
+            {
+                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
+            }
+
+            return (year == 0) ? new SelectList(items, "Value", "Text") :
+                                new SelectList(items, "Value", "Text", year);
+        }
+
         public static SelectList ResidenceTypes(IEnumerable<ResidenceTypeResource> residenceTypes, Guid? residenceTypeId)
         {
             List<SelectListItem> items = new();
@@ -493,27 +551,6 @@ namespace Tilbake.Application.Helpers
             return (wallTypeId == Guid.Empty || String.IsNullOrEmpty(wallTypeId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", wallTypeId);
-        }
-
-        public static SelectList Years(int currentYear)
-        {
-            var dateRanges = DateRanges.Years().Select(c => new
-            {
-                Id = c.Value.ToString(),
-                Name = c.Value.ToString()
-            }).ToList();
-
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Year", Value = "" });
-
-            foreach (var item in dateRanges)
-            {
-                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
-            }
-
-            return (currentYear == 0 || String.IsNullOrEmpty(currentYear.ToString())) ?
-                                        new SelectList(items, "Value", "Text") :
-                                        new SelectList(items, "Value", "Text", currentYear);
         }
     }
 }

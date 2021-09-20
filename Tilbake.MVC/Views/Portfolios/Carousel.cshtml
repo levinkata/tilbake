@@ -143,9 +143,6 @@
                     Commission Reports
                 </li>
                 <li>
-                    Commission Rates
-                </li>
-                <li>
                     <a asp-controller="PortfolioPolicyFees"
                        asp-action="Details"
                        asp-route-portfolioId="@Model.Id">
@@ -153,7 +150,11 @@
                     </a>
                 </li>
                 <li>
-                    Administration Fee
+                    <a asp-controller="PortfolioAdministrationFees"
+                       asp-action="Details"
+                       asp-route-portfolioId="@Model.Id">
+                        Administration Fee
+                    </a>
                 </li>
             </ul>
         </div>

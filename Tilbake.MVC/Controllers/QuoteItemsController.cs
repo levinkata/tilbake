@@ -190,7 +190,7 @@ namespace Tilbake.MVC.Controllers
                 motorResource.MotorMakeList = SelectLists.MotorMakes(motorMakes, selectedMotorMakeId);
                 motorResource.MotorModelList = SelectLists.MotorModels(motorModels, motorResource.MotorModelId);
                 motorResource.MotorUseList = SelectLists.MotorUses(motorUses, motorResource.MotorUseId);
-                motorResource.DateRangeList = SelectLists.Years(motorResource.RegYear);
+                motorResource.DateRangeList = SelectLists.RegisteredYears(motorResource.RegYear);
 
                 model = motorResource;
             }

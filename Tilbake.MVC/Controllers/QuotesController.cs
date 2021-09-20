@@ -177,7 +177,7 @@ namespace Tilbake.MVC.Controllers
                 ResidenceUseList = SelectLists.ResidenceUses(residenceUses, Guid.Empty),
                 RoofTypeList = SelectLists.RoofTypes(roofTypes, Guid.Empty),
                 WallTypeList = SelectLists.WallTypes(wallTypes, Guid.Empty),
-                DateRangeList = SelectLists.Years(0)
+                DateRangeList = SelectLists.RegisteredYears(0)
             };
             return View(resource);
         }

@@ -58,22 +58,26 @@
                     taxAmount = subTotal * taxRate/100;
                     totalAmount = subTotal + taxAmount;
                 }
-                @if (subTotal > 0)
-                {
-                    <tr>
-                        <td colspan="4">Sub total</td>
-                        <td>@subTotal</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4">VAT (@taxRate)</td>
-                        <td>@taxAmount</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"><strong>Total</strong></td>
-                        <td>@totalAmount</td>
-                    </tr>                    
-                }
             </tbody>
+            @if (subTotal > 0)
+            {
+            <tfoot>
+                <tr>
+                    <td colspan="4">Sub total</td>
+                    <td>@subTotal</td>
+                </tr>
+                <tr>
+                    <td colspan="4">VAT (@taxRate)</td>
+                    <td>@taxAmount</td>
+                </tr>
+                <tr>
+                    <td colspan="4"><strong>Total</strong></td>
+                    <td>@totalAmount</td>
+                </tr>
+            </tfoot>                
+                    
+            }            
+
         </table>
     </div>
 }

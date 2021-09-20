@@ -1,0 +1,177 @@
+﻿@model BuildingResource
+
+@{
+    ViewData["Title"] = "QuoteBuilding";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Building</h4>
+<hr />
+<div class="row">
+    <form asp-action="EditBuilding">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="QuoteItemId" />
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label asp-for="PhysicalAddress" class="control-label">Physical Address</label>
+                        <textarea asp-for="PhysicalAddress" id="PhysicalAddress" class="form-control" ></textarea>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="BondHolder" class="control-label">Bond Holder</label>
+                        <textarea asp-for="BondHolder" id="BondHolder" class="form-control" ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ResidenceTypeId" class="control-label">Residence Type</label>
+                        <select asp-for="ResidenceTypeId" id="ResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ResidenceUseId" class="control-label">Residence Use</label>
+                        <select asp-for="ResidenceUseId" id="ResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="BuildingConditionId" class="control-label">Building Condition</label>
+                        <select asp-for="BuildingConditionId" id="BuildingConditionId" class="form-control" asp-items="Model.BuildingConditionList"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="WallTypeId" class="control-label">Wall Type</label>
+                        <select asp-for="WallTypeId" id="WallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="RoofTypeId" class="control-label">Roof Type</label>
+                        <select asp-for="RoofTypeId" id="RoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-check form-check-inline form-switch">
+                            <input class="form-check-input" asp-for="IsUnoccupied" type="checkbox" id="IsUnoccupied">
+                            <label class="form-check-label" asp-for="IsUnoccupied">Is Unoccupied?</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UnoccupancyPeriod" class="control-label">Unoccupancy Period</label>
+                        <input asp-for="UnoccupancyPeriod" id="UnoccupancyPeriod" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row border bg-light mb-3 p-3 mx-auto">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsBurglarAlarm" type="checkbox" id="IsBurglarAlarm">
+                                <label class="form-check-label" asp-for="IsBurglarAlarm">Burglar Alarm?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsBurglarBars" type="checkbox" id="IsBurglarBars">
+                                <label class="form-check-label" asp-for="IsBurglarBars">Burglar Bars?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsKeepDogs" type="checkbox" id="IsKeepDogs">
+                                <label class="form-check-label" asp-for="IsKeepDogs">Keep Dogs?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsSecurityGates" type="checkbox" id="IsSecurityGates">
+                                <label class="form-check-label" asp-for="IsSecurityGates">Security Gates?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsElectronicGate" type="checkbox" id="IsElectronicGate">
+                                <label class="form-check-label" asp-for="IsElectronicGate">Electronic Gate?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsElectricFence" type="checkbox" id="IsElectricFence">
+                                <label class="form-check-label" asp-for="IsElectricFence">Electric Fence?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsRentedOut" type="checkbox" id="IsRentedOut">
+                                <label class="form-check-label" asp-for="IsRentedOut">Rented Out?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsUseHouseSitters" type="checkbox" id="IsUseHouseSitters">
+                                <label class="form-check-label" asp-for="IsUseHouseSitters">House Sitters?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsSecurityComplex" type="checkbox" id="IsSecurityComplex">
+                                <label class="form-check-label" asp-for="IsSecurityComplex">Security Complex?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsRetirementVillage" type="checkbox" id="IsRetirementVillage">
+                                <label class="form-check-label" asp-for="IsRetirementVillage">Retirement Village?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsAdjacentOpenArea" type="checkbox" id="IsAdjacentOpenArea">
+                                <label class="form-check-label" asp-for="IsAdjacentOpenArea">Adjacent Open Area?</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsArmedResponse" type="checkbox" id="IsArmedResponse">
+                                <label class="form-check-label" asp-for="IsArmedResponse">Armed Response?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label asp-for="ArmedResponseName" class="control-label">Armed Response Name</label>
+                            <input asp-for="ArmedResponseName" id="ArmedResponseName" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>               
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+<div>
+    <a asp-controller="Quotes" asp-action="Details" asp-route-id="@Model.QuoteId">Back</a>
+</div>
+

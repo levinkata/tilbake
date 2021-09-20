@@ -10,96 +10,159 @@
 <h4>Motor</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+
         <form asp-action="EditMotor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="QuoteItemId" />
-            <div class="form-group">
-                <label asp-for="RegNumber" class="control-label"></label>
-                <input asp-for="RegNumber" class="form-control text-uppercase" />
-                <span asp-validation-for="RegNumber" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="RegNumber" class="control-label">Registration Number</label>
+                        <input asp-for="RegNumber" id="RegNumber" class="form-control text-uppercase" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="BodyTypeId" class="control-label">Body Type</label>
+                        <select asp-for="BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList"></select>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="Colour" class="control-label">Colour</label>
+                        <input asp-for="Colour" id="Colour" class="form-control" />
+                    </div>
+                </div>                        
             </div>
-            <div class="form-group">
-                <label asp-for="BodyTypeId" class="control-label"></label>
-                <select asp-for="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList"></select>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="MotorMakeId" class="control-label">Make</label>
+                        <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList"></select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="MotorModelId" class="control-label">Model</label>
+                        <select asp-for="MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList"></select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="RegYear" class="control-label">Year</label>
+                        <select asp-for="RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList"></select>
+                    </div> 
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MotorMakeId" class="control-label"></label>
-                <select asp-for="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList"></select>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="DriverTypeId" class="control-label">Driver Type</label>
+                        <select asp-for="DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList"></select>
+                    </div>
+                </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="OdometerReading" class="control-label">Odometer Reading</label>
+                            <input asp-for="OdometerReading" id="OdometerReading" class="form-control text-uppercase" />
+                        </div> 
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="DaysOutOfCountry" class="control-label">Days Out of Country</label>
+                            <input asp-for="DaysOutOfCountry" id="DaysOutOfCountry" class="form-control text-uppercase" />
+                        </div> 
+                    </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MotorModelId" class="control-label"></label>
-                <select asp-for="MotorModelId" class="form-control" asp-items="Model.MotorModelList"></select>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="EngineNumber" class="control-label">Engine Number</label>
+                        <input asp-for="EngineNumber" id="EngineNumber" class="form-control text-uppercase" />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="ChassisNumber" class="control-label">Chassis Number</label>
+                        <input asp-for="ChassisNumber" id="ChassisNumber" class="form-control text-uppercase" />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="EngineCapacity" class="control-label">Engine Capacity</label>
+                        <input asp-for="EngineCapacity" id="EngineCapacity" class="form-control" />
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="RegYear" class="control-label"></label>
-                <input asp-for="RegYear" class="form-control" />
-                <span asp-validation-for="RegYear" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DriverTypeId" class="control-label"></label>
-                <select asp-for="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="EngineNumber" class="control-label"></label>
-                <input asp-for="EngineNumber" class="form-control text-uppercase" />
-                <span asp-validation-for="EngineNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChassisNumber" class="control-label"></label>
-                <input asp-for="ChassisNumber" class="form-control text-uppercase" />
-                <span asp-validation-for="ChassisNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EngineCapacity" class="control-label"></label>
-                <input asp-for="EngineCapacity" class="form-control" />
-                <span asp-validation-for="EngineCapacity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Colour" class="control-label"></label>
-                <input asp-for="Colour" class="form-control" />
-                <span asp-validation-for="Colour" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MotorUseId" class="control-label"></label>
-                <select asp-for="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
-            </div>
-            <div class="form-group form-check form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="GreyImport" /> @Html.DisplayNameFor(model => model.GreyImport)
-                </label>
-            </div>
-            <div class="form-group form-check form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SecurityFitting" /> @Html.DisplayNameFor(model => model.SecurityFitting)
-                </label>
-            </div>
-            <div class="form-group form-check form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="TrackingDevice" /> @Html.DisplayNameFor(model => model.TrackingDevice)
-                </label>
-            </div>
-            <div class="form-group form-check form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Immobiliser" /> @Html.DisplayNameFor(model => model.Immobiliser)
-                </label>
-            </div>
-            <div class="form-group form-check form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Alarm" /> @Html.DisplayNameFor(model => model.Alarm)
-                </label>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="MotorUseId" class="control-label">Motor Use</label>
+                        <select asp-for="MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
+                    </div>
+                </div>
+                <div class="row col-8 mb-3 py-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsImport" type="checkbox" id="IsImport">
+                                <label class="form-check-label" asp-for="IsImport">Import?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsSecurityFitting" type="checkbox" id="IsSecurityFitting">
+                                <label class="form-check-label" asp-for="IsSecurityFitting">Security Fitting?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsTrackingDevice" type="checkbox" id="IsTrackingDevice">
+                                <label class="form-check-label" asp-for="IsTrackingDevice">Tracking Device?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsImmobiliser" type="checkbox" id="IsImmobiliser">
+                                <label class="form-check-label" asp-for="IsImmobiliser">Immobiliser?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" asp-for="IsImmobiliserFactoryFitted" type="checkbox" id="IsImmobiliserFactoryFitted">
+                                <label class="form-check-label" asp-for="IsImmobiliserFactoryFitted">Factory Fitted?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch ">
+                                <input class="form-check-input" asp-for="IsAlarm" type="checkbox" id="IsAlarm">
+                                <label class="form-check-label" asp-for="IsAlarm">Alarm?</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline form-switch ">
+                                <input class="form-check-input" asp-for="IsGearLock" type="checkbox" id="IsGearLock">
+                                <label class="form-check-label" asp-for="IsGearLock">Gear Lock?</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-    </div>
+
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Quotes" asp-action="Details" asp-route-id="@Model.QuoteId">Back</a>
 </div>
+
 @section Scripts{
     <script>
 
@@ -132,7 +195,5 @@
                 });
             });
         });
-
-
     </script>
 }

@@ -35,6 +35,18 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
                                                 .Where(e => e.QuoteId == quoteId));
         }
 
+        public async Task<Building> GetBuildingAsync(Guid id)
+        {
+            var result = (from q in _context.QuoteItems
+                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join r in _context.Risks on c.RiskId equals r.Id
+                          join a in _context.Buildings on r.BuildingId equals a.Id
+                          where q.Id == id && r.BuildingId != null
+                          select a).FirstOrDefault();
+
+            return await Task.FromResult(result);
+        }
+
         public async Task<Content> GetContentAsync(Guid id)
         {
             var result = (from q in _context.QuoteItems

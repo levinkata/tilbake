@@ -36,6 +36,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Engine Capacity")]
         public string EngineCapacity { get; set; }
 
+        [Display(Name = "Odometer Reading")]
+        public int OdometerReading { get; set; }
+
         [Display(Name = "Colour")]
         public string Colour { get; set; }
 
@@ -43,19 +46,31 @@ namespace Tilbake.Application.Resources
         public Guid MotorUseId { get; set; }
 
         [Display(Name = "Grey Import?")]
-        public bool GreyImport { get; set; }
+        public bool IsImport { get; set; }
 
         [Display(Name = "Security Fitting?")]
-        public bool SecurityFitting { get; set; }
+        public bool IsSecurityFitting { get; set; }
 
         [Display(Name = "Tracking Device?")]
-        public bool TrackingDevice { get; set; }
+        public bool IsTrackingDevice { get; set; }
 
         [Display(Name = "Immobiliser?")]
-        public bool Immobiliser { get; set; }
+        public bool IsImmobiliser { get; set; }
+
+        [Display(Name = " Factory Fitted Immobiliser?")]
+        public bool IsImmobiliserFactoryFitted { get; set; }
 
         [Display(Name = "Alarm?")]
-        public bool Alarm { get; set; }
+        public bool IsAlarm { get; set; }
+
+        [Display(Name = "GearLock?")]
+        public bool IsGearLock { get; set; }
+
+        [Display(Name = "Days Out of Country")]
+        public int DaysOutOfCountry { get; set; }
+
+        [Display(Name = "Make")]
+        public Guid MotorMakeId { get; set; }
 
         //  Descriptions
 

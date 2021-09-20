@@ -31,7 +31,6 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.QuoteItems.GetByIdAsync(id);
             var resource = _mapper.Map<QuoteItem, QuoteItemResource>(result);
-
             return resource;
         }
 
@@ -54,11 +53,13 @@ namespace Tilbake.Application.Services
         public async Task<QuoteItemObjectResource> GetRisksAsync(Guid id)
         {
             var resultAllRisk = await _unitOfWork.QuoteItems.GetAllRiskAsync(id);
+            var resultBuilding = await _unitOfWork.QuoteItems.GetBuildingAsync(id);
             var resultContent = await _unitOfWork.QuoteItems.GetContentAsync(id);
             var resultHouse = await _unitOfWork.QuoteItems.GetHouseAsync(id);
             var resultMotor = await _unitOfWork.QuoteItems.GetMotorAsync(id);
 
             var resourceAllRisk = _mapper.Map<AllRisk, AllRiskResource>(resultAllRisk);
+            var resourceBuilding = _mapper.Map<Building, BuildingResource>(resultBuilding);
             var resourceContent = _mapper.Map<Content, ContentResource>(resultContent);
             var resourceHouse = _mapper.Map<House, HouseResource>(resultHouse);
             var resourceMotor = _mapper.Map<Motor, MotorResource>(resultMotor);
@@ -66,6 +67,7 @@ namespace Tilbake.Application.Services
             QuoteItemObjectResource quoteItemObjectResource = new()
             {
                 AllRisk = resourceAllRisk,
+                Building = resourceBuilding,
                 Content = resourceContent,
                 House = resourceHouse,
                 Motor = resourceMotor
@@ -111,6 +113,17 @@ namespace Tilbake.Application.Services
 
             var riskItem = _mapper.Map<RiskItemResource, RiskItem>(resource.RiskItem);
             await _unitOfWork.RiskItems.UpdateAsync(resource.RiskItem.Id, riskItem);
+
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<int> UpdateQuoteItemBuildingAsync(QuoteItemBuildingResource resource)
+        {
+            var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
+            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+
+            var building = _mapper.Map<BuildingResource, Building>(resource.Building);
+            await _unitOfWork.Buildings.UpdateAsync(resource.Building.Id, building);
 
             return await _unitOfWork.SaveAsync();
         }

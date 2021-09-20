@@ -171,14 +171,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-        //            }
-        //        }
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//         {
+//             if (!optionsBuilder.IsConfigured)
+//             {
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+//             }
+//         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -248,7 +248,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>

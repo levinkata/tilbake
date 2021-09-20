@@ -42,7 +42,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _portfolioPolicyFeeService.AddAsync(resource);
-                return RedirectToAction("Carousel", "Portfolios", new { portfolioId = resource.PortfolioId });
+                return RedirectToAction(nameof(Details), new { portfolioId = resource.PortfolioId });
             }
 
             var insurers = await _insurerService.GetAllAsync();
@@ -88,7 +88,7 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     await _portfolioPolicyFeeService.UpdateAsync(resource);
-                    return RedirectToAction("Carousel", "Portfolios", new { portfolioId = resource.PortfolioId });
+                    return RedirectToAction(nameof(Details), new { portfolioId = resource.PortfolioId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {

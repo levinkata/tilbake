@@ -164,20 +164,20 @@ namespace Tilbake.MVC.Controllers
                 ClientId = clientId,
                 PortfolioId = portfolioId,
                 Client = client,
-                BuildingConditionList = new SelectList(buildingConditions, "Id", "Name"),
+                BuildingConditionList = SelectLists.BuildingConditions(buildingConditions, Guid.Empty),
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
                 QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, Guid.Empty),
                 BodyTypeList = SelectLists.BodyTypes(bodyTypes, Guid.Empty),
-                DriverTypeList = new SelectList(driverTypes, "Id", "Name"),
-                HouseConditionList = new SelectList(houseConditions, "Id", "Name"),
-                MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
-                MotorModelList = new SelectList(motorModels, "Id", "Name"),
-                MotorUseList = new SelectList(motorUses, "Id", "Name"),
-                ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name"),
-                ResidenceUseList = new SelectList(residenceUses, "Id", "Name"),
+                DriverTypeList = SelectLists.DriverTypes(driverTypes, Guid.Empty),
+                HouseConditionList = SelectLists.HouseConditions(houseConditions, Guid.Empty),
+                MotorMakeList = SelectLists.MotorMakes(motorMakes, Guid.Empty),
+                MotorModelList = SelectLists.MotorModels(motorModels, Guid.Empty),
+                MotorUseList = SelectLists.MotorUses(motorUses, Guid.Empty),
+                ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, Guid.Empty),
+                ResidenceUseList = SelectLists.ResidenceUses(residenceUses, Guid.Empty),
                 RoofTypeList = SelectLists.RoofTypes(roofTypes, Guid.Empty),
                 WallTypeList = SelectLists.WallTypes(wallTypes, Guid.Empty),
-                DateRangeList = new SelectList(DateRanges.Years(), "Value", "Text")
+                DateRangeList = SelectLists.Years(0)
             };
             return View(resource);
         }

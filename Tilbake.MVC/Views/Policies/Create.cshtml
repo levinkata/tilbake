@@ -507,13 +507,13 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.SecurityFitting" type="checkbox" id="SecurityFitting">
-                                            <label class="form-check-label" asp-for="Motor.SecurityFitting">Security Fitting</label>
+                                            <input class="form-check-input" asp-for="Motor.IsSecurityFitting" type="checkbox" id="IsSecurityFitting">
+                                            <label class="form-check-label" asp-for="Motor.IsSecurityFitting">Security Fitting</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.IsTrackingDevice" type="checkbox" id="TrackingDevice">
+                                            <input class="form-check-input" asp-for="Motor.IsTrackingDevice" type="checkbox" id="IsTrackingDevice">
                                             <label class="form-check-label" asp-for="Motor.IsTrackingDevice">Tracking Device</label>
                                         </div>
                                     </div>
@@ -521,7 +521,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.IsImmobiliser" type="checkbox" id="Immobiliser">
+                                            <input class="form-check-input" asp-for="Motor.IsImmobiliser" type="checkbox" id="IsImmobiliser">
                                             <label class="form-check-label" asp-for="Motor.IsImmobiliser">Immobiliser</label>
                                         </div>
                                     </div>
@@ -751,11 +751,11 @@
                 EngineCapacity: $('#EngineCapacity').val(),
                 Colour: $('#Colour').val(),
                 MotorUseId: $('#MotorUseId option:selected').val(),
-                GreyImport: $('#GreyImport').val(),
-                SecurityFitting: $('#SecurityFitting').val(),
-                TrackingDevice: $('#TrackingDevice').val(),
-                Immobiliser: $('#Immobiliser').val(),
-                Alarm: $('#Alarm').val()
+                IsImport: $('#IsImport').val(),
+                IsSecurityFitting: $('#IsSecurityFitting').val(),
+                TrackingDevice: $('#IsTrackingDevice').val(),
+                IsImmobiliser: $('#IsImmobiliser').val(),
+                IsAlarm: $('#IsAlarm').val()
             };
 
             //  2. Build PolicyItem Array to match model class PolicyItem

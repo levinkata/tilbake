@@ -26,7 +26,7 @@ namespace Tilbake.Domain.Models
         public string Colour { get; set; }
         public Guid MotorUseId { get; set; }
         public bool IsImport { get; set; }
-        public bool SecurityFitting { get; set; }
+        public bool IsSecurityFitting { get; set; }
         public bool IsTrackingDevice { get; set; }
         public bool IsImmobiliser { get; set; }
         public bool IsImmobiliserFactoryFitted { get; set; }

@@ -14,6 +14,9 @@ namespace Tilbake.MVC.Controllers
         private readonly IQuoteItemService _quoteItemService;
         private readonly ICoverTypeService _coverTypeService;
 
+        private readonly IBuildingService _buildingService;
+        private readonly IBuildingConditionService _buildingConditionService;
+
         private readonly IHouseService _houseService;
         private readonly IHouseConditionService _houseConditionService;
 
@@ -34,6 +37,8 @@ namespace Tilbake.MVC.Controllers
 
         public QuoteItemsController(IQuoteItemService quoteItemService,
                                     ICoverTypeService coverTypeService,
+                                    IBuildingService buildingService,
+                                    IBuildingConditionService buildingConditionService,
                                     IHouseService houseService,
                                     IHouseConditionService houseConditionService,
                                     IContentService contentService,
@@ -52,6 +57,9 @@ namespace Tilbake.MVC.Controllers
         {
             _quoteItemService = quoteItemService;
             _coverTypeService = coverTypeService;
+
+            _buildingService = buildingService;
+            _buildingConditionService = buildingConditionService;
 
             _houseService = houseService;
             _houseConditionService = houseConditionService;
@@ -81,6 +89,8 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> QuoteItemRisk(Guid quoteItemId)
         {
             var resource = await _quoteItemService.GetRisksAsync(quoteItemId);
+            var quote = await _quoteItemService.GetByIdAsync(quoteItemId);
+
             if (resource == null)
             {
                 return NotFound();
@@ -97,8 +107,29 @@ namespace Tilbake.MVC.Controllers
                 var result = await _riskItemService.GetByIdAsync(riskItem);
 
                 allRiskResource.QuoteItemId = quoteItemId;
+                allRiskResource.QuoteId = quote.QuoteId;
                 allRiskResource.RiskItem = result.Description;
                 model = allRiskResource;
+            }
+
+            if (resource.Building != null)
+            {
+                var residenceTypes = await _residenceTypeService.GetAllAsync();
+                var residenceUses = await _residenceUseService.GetAllAsync();
+                var buildingConditions = await _buildingConditionService.GetAllAsync();
+                var roofTypes = await _roofTypeService.GetAllAsync();
+                var wallTypes = await _wallTypeService.GetAllAsync();
+
+                returnView = "QuoteBuilding";
+                BuildingResource buildingResource = resource.Building;
+                buildingResource.QuoteItemId = quoteItemId;
+                buildingResource.QuoteId = quote.QuoteId;
+                buildingResource.ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, buildingResource.ResidenceTypeId);
+                buildingResource.ResidenceUseList = SelectLists.ResidenceUses(residenceUses, buildingResource.ResidenceUseId);
+                buildingResource.BuildingConditionList = SelectLists.BuildingConditions(buildingConditions, buildingResource.BuildingConditionId);
+                buildingResource.RoofTypeList = SelectLists.RoofTypes(roofTypes, buildingResource.RoofTypeId);
+                buildingResource.WallTypeList = SelectLists.WallTypes(wallTypes, buildingResource.WallTypeId);
+                model = buildingResource;
             }
 
             if (resource.Content != null)
@@ -111,10 +142,11 @@ namespace Tilbake.MVC.Controllers
                 returnView = "QuoteContent";
                 ContentResource contentResource = resource.Content;
                 contentResource.QuoteItemId = quoteItemId;
-                contentResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", contentResource.ResidenceTypeId);
-                contentResource.ResidenceUseList = new SelectList(residenceUses, "Id", "Name", contentResource.ResidenceUseId);
-                contentResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", contentResource.RoofTypeId);
-                contentResource.WallTypeList = new SelectList(wallTypes, "Id", "Name", contentResource.WallTypeId);
+                contentResource.QuoteId = quote.QuoteId;
+                contentResource.ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, contentResource.ResidenceTypeId);
+                contentResource.ResidenceUseList = SelectLists.ResidenceUses(residenceUses, contentResource.ResidenceUseId);
+                contentResource.RoofTypeList = SelectLists.RoofTypes(roofTypes, contentResource.RoofTypeId);
+                contentResource.WallTypeList = SelectLists.WallTypes(wallTypes, contentResource.WallTypeId);
                 model = contentResource;
             }
 
@@ -128,10 +160,11 @@ namespace Tilbake.MVC.Controllers
                 returnView = "QuoteHouse";
                 HouseResource houseResource = resource.House;
                 houseResource.QuoteItemId = quoteItemId;
-                houseResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", houseResource.ResidenceTypeId);
-                houseResource.HouseConditionList = new SelectList(houseConditions, "Id", "Name", houseResource.HouseConditionId);
-                houseResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", houseResource.RoofTypeId);
-                houseResource.WallTypeList = new SelectList(wallTypes, "Id", "Name", houseResource.WallTypeId);
+                houseResource.QuoteId = quote.QuoteId;
+                houseResource.ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, houseResource.ResidenceTypeId);
+                houseResource.HouseConditionList = SelectLists.HouseConditions(houseConditions, houseResource.HouseConditionId);
+                houseResource.RoofTypeList = SelectLists.RoofTypes(roofTypes, houseResource.RoofTypeId);
+                houseResource.WallTypeList = SelectLists.WallTypes(wallTypes, houseResource.WallTypeId);
                 model = houseResource;
             }
 
@@ -150,11 +183,15 @@ namespace Tilbake.MVC.Controllers
                 var motorModels = await _motorModelService.GetByMotorMakeIdAsync(selectedMotorMakeId);
 
                 motorResource.QuoteItemId = quoteItemId;
-                motorResource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", motorResource.BodyTypeId);
-                motorResource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", motorResource.DriverTypeId);
-                motorResource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", selectedMotorMakeId);
-                motorResource.MotorModelList = new SelectList(motorModels, "Id", "Name", motorResource.MotorModelId);
-                motorResource.MotorUseList = new SelectList(motorUses, "Id", "Name", motorResource.MotorUseId);
+                motorResource.QuoteId = quote.QuoteId;
+                motorResource.MotorMakeId = selectedMotorMakeId;
+                motorResource.BodyTypeList = SelectLists.BodyTypes(bodyTypes, motorResource.BodyTypeId);
+                motorResource.DriverTypeList = SelectLists.DriverTypes(driverTypes, motorResource.DriverTypeId);
+                motorResource.MotorMakeList = SelectLists.MotorMakes(motorMakes, selectedMotorMakeId);
+                motorResource.MotorModelList = SelectLists.MotorModels(motorModels, motorResource.MotorModelId);
+                motorResource.MotorUseList = SelectLists.MotorUses(motorUses, motorResource.MotorUseId);
+                motorResource.DateRangeList = SelectLists.Years(motorResource.RegYear);
+
                 model = motorResource;
             }
 
@@ -191,12 +228,47 @@ namespace Tilbake.MVC.Controllers
                         RiskItem = riskResource
                     };
                     await _quoteItemService.UpdateQuoteItemRiskItemAsync(quoteItemRiskItemResource);
+                    return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemResource.QuoteId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
+
+            }
+
+            return View(resource);
+        }
+
+        // POST: QuoteItems/EditBuilding/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBuilding(Guid? id, BuildingResource resource)
+        {
+            if (id != resource.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
+                    quoteItemResource.Description = resource.PhysicalAddress;
+
+                    QuoteItemBuildingResource quoteItemBuildingResource = new()
+                    {
+                        QuoteItem = quoteItemResource,
+                        Building = resource
+                    };
+                    await _quoteItemService.UpdateQuoteItemBuildingAsync(quoteItemBuildingResource);
+                    return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemResource.QuoteId });
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
             }
 
             return View(resource);
@@ -290,12 +362,12 @@ namespace Tilbake.MVC.Controllers
                         Motor = resource
                     };
                     await _quoteItemService.UpdateQuoteItemMotorAsync(quoteItemMotorResource);
+                    return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemResource.QuoteId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = resource.QuoteItemId });
             }
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
@@ -376,7 +448,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         // GET: QuoteItems/Delete/5

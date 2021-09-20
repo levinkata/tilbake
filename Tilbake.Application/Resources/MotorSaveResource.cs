@@ -69,6 +69,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Days Out of Country")]
         public int DaysOutOfCountry { get; set; }
 
+        [Display(Name = "Financial Interest")]
+        public string FinancialInterest { get; set; }
+
         [Display(Name = "Make")]
         public Guid MotorMakeId { get; set; }
 

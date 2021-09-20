@@ -224,7 +224,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Building.UnoccupancyPeriod" class="control-label">Unoccupancy Period</label>
-                            <input asp-for="Building.UnoccupancyPeriod" id="BuildingUnoccupancyPeriod" class="form-control" />
+                            <input asp-for="Building.UnoccupancyPeriod" id="BuildingUnoccupancyPeriod" value="0" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -605,6 +605,10 @@
                             <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
                             <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
                         </div>
+                        <div class="form-group">
+                            <label asp-for="Motor.FinancialInterest" class="control-label">Financial Interest</label>
+                            <input asp-for="Motor.FinancialInterest" id="FinancialInterest" class="form-control" />
+                        </div>
                     </div>
                     <div class="row col-8 mb-3 py-2">
                         <div class="col">
@@ -738,7 +742,7 @@
             //  1. Build RiskItem Array to match model class RiskItem
             var riskItem = {
                 Id: riskItemId,
-                Description: description
+                Description: $('#Description').val()
             }
 
             //  2. Build AllRisk Array to match model class AllRisk
@@ -776,7 +780,7 @@
             //  1. Build House Array to match model class House
             var building = {
                 Id: clientRiskId,
-                PhysicalAddress: description,
+                PhysicalAddress: $('#BuildingPhysicalAddress').val(),
                 ResidenceTypeId: $('#BuildingResidenceTypeId option:selected').val(),
                 ResidenceUseId: $('#BuildingResidenceUseId option:selected').val(),
                 RoofTypeId: $('#BuildingRoofTypeId option:selected').val(),
@@ -831,7 +835,7 @@
                 Id: clientRiskId,
                 RoofTypeId: $('#ContentRoofTypeId option:selected').val(),
                 WallTypeId: $('#ContentWallTypeId option:selected').val(),
-                Name: description,
+                Name: $('#ContentName').val(),
                 PhysicalAddress: $('#ContentPhysicalAddress').val(),
                 ResidenceTypeId: $('#ContentResidenceTypeId option:selected').val(),
                 ResidenceUseId: $('#ContentResidenceUseId option:selected').val()                
@@ -866,7 +870,7 @@
             //  1. Build House Array to match model class House
             var house = {
                 Id: clientRiskId,
-                PhysicalAddress: description,
+                PhysicalAddress: $('#HousePhysicalAddress').val();,
                 ResidenceTypeId: $('#HouseResidenceTypeId option:selected').val(),
                 RoofTypeId: $('#HouseRoofTypeId option:selected').val(),
                 WallTypeId: $('#HouseWallTypeId option:selected').val(),
@@ -922,7 +926,8 @@
                 IsImmobiliser: $('#IsImmobiliser').val(),
                 IsAlarm: $('#IsAlarm').val(),
                 IsGearLock: $('#IsGearLock').val(),
-                DaysOutOfCountry: $('#DaysOutOfCountry').val()
+                DaysOutOfCountry: $('#DaysOutOfCountry').val(),
+                FinancialInterest: $('#FinancialInterest').val()
             };
 
             //  2. Build QuoteItem Array to match model class QuoteItem

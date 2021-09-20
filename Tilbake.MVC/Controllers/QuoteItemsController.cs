@@ -214,7 +214,7 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.RiskItem;
+                    quoteItemResource.Description = "AllRisks - " + resource.RiskItem;
 
                     RiskItemResource riskResource = new()
                     {
@@ -255,7 +255,7 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.PhysicalAddress;
+                    quoteItemResource.Description = "Building - " + resource.PhysicalAddress;
 
                     QuoteItemBuildingResource quoteItemBuildingResource = new()
                     {
@@ -289,7 +289,7 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.PhysicalAddress;
+                    quoteItemResource.Description = "Contents - " + resource.PhysicalAddress;
 
                     QuoteItemContentResource quoteItemContentResource = new()
                     {
@@ -323,7 +323,7 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
-                    quoteItemResource.Description = resource.PhysicalAddress;
+                    quoteItemResource.Description = "House - " + resource.PhysicalAddress;
 
                     QuoteItemHouseResource quoteItemHouseResource = new()
                     {
@@ -354,7 +354,7 @@ namespace Tilbake.MVC.Controllers
                     var quoteItemResource = await _quoteItemService.GetByIdAsync(resource.QuoteItemId);
 
                     var motorMake = await _motorMakeService.GetByIdAsync(resource.MotorMakeId);
-                    quoteItemResource.Description = resource.RegYear + " " + motorMake.Name + " " + resource.RegNumber;
+                    quoteItemResource.Description = "Motor - " + resource.RegYear + " " + motorMake.Name + " " + resource.RegNumber;
 
                     QuoteItemMotorResource quoteItemMotorResource = new()
                     {

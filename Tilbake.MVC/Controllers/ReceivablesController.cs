@@ -36,6 +36,7 @@ namespace Tilbake.MVC.Controllers
             ReceivableSaveResource resource = new()
             {
                 InvoiceId = invoiceId,
+                ReceivableDate = DateTime.Now,
                 PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
             };
 
@@ -56,5 +57,36 @@ namespace Tilbake.MVC.Controllers
 
             return View(resource);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> QuotePayment(Guid quoteId)
+        {
+            var paymentTypes = await _paymentTypeService.GetAllAsync();
+
+            ReceivableSaveResource resource = new()
+            {
+                QuoteId = quoteId,
+                ReceivableDate = DateTime.Now,
+                PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
+            };
+
+            return View(resource);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> QuotePayment(ReceivableSaveResource resource)
+        {
+            if (ModelState.IsValid)
+            {
+                await _receivableService.AddQuoteAsync(resource);
+                return RedirectToAction("Details", "Quotes", new { id = resource.QuoteId });
+            }
+
+            var paymentTypes = await _paymentTypeService.GetAllAsync();
+            resource.PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, resource.PaymentTypeId);
+
+            return View(resource);
+        }
+
     }
 }

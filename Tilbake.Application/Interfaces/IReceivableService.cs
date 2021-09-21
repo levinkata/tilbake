@@ -11,6 +11,7 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<ReceivableResource>> GetByInvoiceIdAsync(Guid invoiceId);
         Task<ReceivableResource> GetByIdAsync(Guid id);
         Task<int> AddAsync(ReceivableSaveResource resource);
+        Task<int> AddQuoteAsync(ReceivableSaveResource resource);
         Task<int> UpdateAsync(ReceivableResource resource);
         Task<int> DeleteAsync(Guid id);
         Task<int> DeleteAsync(ReceivableResource resource);

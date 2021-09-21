@@ -1,64 +1,101 @@
 ﻿@model PolicySaveResource
 
 @{
-    ViewData["Title"] = "QuoteToPolicy";
+    ViewData["Title"] = "Quote to Policy";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Quote To Policy</h1>
+<h1>@ViewData["Title"]</h1>
 
 <h4>Policy</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="QuoteToPolicy">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="QuoteId" />
-            <div class="form-group">
-                <label asp-for="InsurerPolicyNumber" class="control-label"></label>
-                <input asp-for="InsurerPolicyNumber" class="form-control" />
-                <span asp-validation-for="InsurerPolicyNumber" class="text-danger"></span>
+
+    <form asp-action="QuoteToPolicy">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="QuoteId" />
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="InsurerPolicyNumber" class="control-label"></label>
+                    <input asp-for="InsurerPolicyNumber" class="form-control" />
+                    <span asp-validation-for="InsurerPolicyNumber" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PolicyTypeId" class="control-label"></label>
-                <select asp-for="PolicyTypeId" class ="form-control" asp-items="Model.PolicyTypeList"></select>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="PolicyTypeId" class="control-label"></label>
+                    <select asp-for="PolicyTypeId" class="form-control" asp-items="Model.PolicyTypeList"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PaymentMethodId" class="control-label"></label>
-                <select asp-for="PaymentMethodId" class ="form-control" asp-items="Model.PaymentMethodList"></select>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="RunDay" class="control-label"></label>
+                    <input asp-for="RunDay" class="form-control" />
+                    <span asp-validation-for="RunDay" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CoverStartDate" class="control-label"></label>
-                <input type="date" asp-for="CoverStartDate" class="form-control" />
-                <span asp-validation-for="CoverStartDate" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="CoverStartDate" class="control-label"></label>
+                    <input type="date" asp-for="CoverStartDate" class="form-control" />
+                    <span asp-validation-for="CoverStartDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CoverEndDate" class="control-label"></label>
-                <input type="date" asp-for="CoverEndDate" class="form-control" readonly />
-                <span asp-validation-for="CoverEndDate" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="CoverEndDate" class="control-label"></label>
+                    <input type="date" asp-for="CoverEndDate" class="form-control" readonly/>
+                    <span asp-validation-for="CoverEndDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PolicyStatusId" class="control-label"></label>
-                <select asp-for="PolicyStatusId" class ="form-control" asp-items="Model.PolicyStatusList"></select>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="InceptionDate" class="control-label"></label>
+                    <input type="date" asp-for="InceptionDate" class="form-control" readonly/>
+                    <span asp-validation-for="InceptionDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="SalesTypeId" class="control-label"></label>
-                <select asp-for="SalesTypeId" class ="form-control" asp-items="Model.SalesTypeList"></select>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="PolicyStatusId" class="control-label"></label>
+                    <select asp-for="PolicyStatusId" class="form-control" asp-items="Model.PolicyStatusList"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Comment" class="control-label"></label>
-                <input asp-for="Comment" class="form-control" />
-                <span asp-validation-for="Comment" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="SalesTypeId" class="control-label"></label>
+                    <select asp-for="SalesTypeId" class="form-control" asp-items="Model.SalesTypeList"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="PaymentMethodId" class="control-label"></label>
+                    <select asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethodList"></select>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label asp-for="Comment" class="control-label"></label>
+                    <textarea  asp-for="Comment" class="form-control"></textarea>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back</a>
 </div>
 
 @section Scripts {

@@ -7,18 +7,19 @@ namespace Tilbake.Application.Resources
     public class ReceivableSaveResource
     {
         public Guid InvoiceId { get; set; }
+        public Guid QuoteId { get; set; }
 
         [Display(Name = "Reference")]
         public string Reference { get; set; }
 
         [Display(Name = "Date")]
-        public DateTime? ReceivableDate { get; set; }
+        public DateTime ReceivableDate { get; set; }
 
         [Display(Name = "Payment Type")]
         public Guid PaymentTypeId { get; set; }
 
         [Display(Name = "Amount")]
-        public decimal? Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Display(Name = "Batch Number")]
         public string BatchNumber { get; set; }

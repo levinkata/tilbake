@@ -145,10 +145,10 @@ namespace Tilbake.MVC.Controllers
             var policyTypes = await _policyTypeService.GetAllAsync();
             var salesTypes = await _salesTypeService.GetAllAsync();
 
-            resource.PaymentMethodList = new SelectList(paymentMethods, "Id", "Name", resource.PaymentMethodId);
-            resource.PolicyStatusList = new SelectList(policyStatuses, "Id", "Name", resource.PolicyStatusId);
-            resource.PolicyTypeList = new SelectList(policyTypes, "Id", "Name", resource.PolicyTypeId);
-            resource.SalesTypeList = new SelectList(salesTypes, "Id", "Name", resource.SalesTypeId);
+            resource.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, resource.PaymentMethodId);
+            resource.PolicyStatusList = SelectLists.PolicyStatuses(policyStatuses, resource.PolicyStatusId);
+            resource.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, resource.PolicyTypeId);
+            resource.SalesTypeList = SelectLists.SalesTypes(salesTypes, resource.SalesTypeId);
 
             return View(resource);
         }
@@ -182,10 +182,12 @@ namespace Tilbake.MVC.Controllers
             {
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
+                InsurerPolicyNumber = "TBA",
+                CoverStartDate = DateTime.Now,
                 InsurerList = SelectLists.Insurers(insurers, Guid.Empty),
                 PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, Guid.Empty),
-                PolicyStatusList = new SelectList(policyStatuses, "Id", "Name", Guid.Empty),
-                PolicyTypeList = new SelectList(policyTypes, "Id", "Name", Guid.Empty),
+                PolicyStatusList = SelectLists.PolicyStatuses(policyStatuses, Guid.Empty),
+                PolicyTypeList = SelectLists.PolicyTypes(policyTypes, Guid.Empty),
                 SalesTypeList = SelectLists.SalesTypes(salesTypes, Guid.Empty),
 
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
@@ -214,7 +216,7 @@ namespace Tilbake.MVC.Controllers
                 await _policyService.AddAsync(resource);
                 return RedirectToAction(nameof(Index), new { portfolioClientId = resource.Policy.PortfolioClientId });
             }
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         [HttpPost]
@@ -225,16 +227,14 @@ namespace Tilbake.MVC.Controllers
                 throw new ArgumentNullException(nameof(policyObject));
             };
 
-            var portfolioClientId = policyObject.Policy.PortfolioClientId;
-
             await _policyService.AddAsync(policyObject);
 
-            return await Task.Run(() => Ok(new
-            {
-                policyObject.Policy.Id,
-                policyObject.Policy.PortfolioClientId,
-                policyObject.Policy.PolicyNumber
-            }));
+            return Ok(new
+                    {
+                        policyObject.Policy.Id,
+                        policyObject.Policy.PortfolioClientId,
+                        policyObject.Policy.PolicyNumber
+                    });
         }
 
         public async Task<IActionResult> Details(Guid id)

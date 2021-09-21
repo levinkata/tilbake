@@ -52,7 +52,8 @@ namespace Tilbake.Application.Services
                 Commission=0,
                 TaxAmount =0,
                 PolicyFee=0,
-                AdministrationFee =0
+                AdministrationFee =0,
+                DateAdded = DateTime.Now
             };
             await _unitOfWork.Premiums.AddAsync(newPremium);
             return await _unitOfWork.SaveAsync();
@@ -113,6 +114,29 @@ namespace Tilbake.Application.Services
             var receivable = _mapper.Map<ReceivableResource, Receivable>(resource);
             await _unitOfWork.Receivables.UpdateAsync(resource.Id, receivable);
 
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<int> AddQuoteAsync(ReceivableSaveResource resource)
+        {
+            var receivable = _mapper.Map<ReceivableSaveResource, Receivable>(resource);
+            var quoteId = resource.QuoteId;
+
+            var quote = await _unitOfWork.Quotes.GetByIdAsync(quoteId);
+
+            receivable.Id = Guid.NewGuid();
+            receivable.DateAdded = DateTime.Now;
+            await _unitOfWork.Receivables.AddAsync(receivable);
+
+            ReceivableQuote receivableQuote = new()
+            {
+                QuoteId = quoteId,
+                ReceivableId = receivable.Id
+            };
+            await _unitOfWork.ReceivableQuotes.AddAsync(receivableQuote);
+
+            quote.IsPaid = true;
+            await _unitOfWork.Quotes.UpdateAsync(quoteId, quote);
             return await _unitOfWork.SaveAsync();
         }
     }

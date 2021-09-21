@@ -36,29 +36,25 @@
         <div class="col-12">
             <div class="form-group">
                 <label asp-for="InsurerId" class="control-label"></label>
-                <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList">
-                    <option value="">Select Insurer</option>
-                </select>
+                <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList"></select>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-5">
+        <div class="col-4">
             <div class="form-group">
                 <label asp-for="InsurerPolicyNumber" class="control-label"></label>
                 <input asp-for="InsurerPolicyNumber" class="form-control" />
                 <span asp-validation-for="InsurerPolicyNumber" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-5">
+        <div class="col-4">
             <div class="form-group">
                 <label asp-for="PolicyTypeId" class="control-label"></label>
-                <select asp-for="PolicyTypeId" class="form-control" asp-items="Model.PolicyTypeList">
-                    <option value="">Select Policy Type</option>
-                </select>
+                <select asp-for="PolicyTypeId" class="form-control" asp-items="Model.PolicyTypeList"></select>
             </div>
         </div>
-        <div class="col-2">
+        <div class="col-4">
             <div class="form-group">
                 <label asp-for="RunDay" class="control-label"></label>
                 <input asp-for="RunDay" class="form-control" />
@@ -70,21 +66,21 @@
         <div class="col-4">
             <div class="form-group">
                 <label asp-for="CoverStartDate" class="control-label"></label>
-                <input asp-for="CoverStartDate" class="form-control" />
+                <input type="date" asp-for="CoverStartDate" class="form-control" />
                 <span asp-validation-for="CoverStartDate" class="text-danger"></span>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
                 <label asp-for="CoverEndDate" class="control-label"></label>
-                <input asp-for="CoverEndDate" class="form-control" />
+                <input type="date" asp-for="CoverEndDate" class="form-control" readonly/>
                 <span asp-validation-for="CoverEndDate" class="text-danger"></span>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
                 <label asp-for="InceptionDate" class="control-label"></label>
-                <input asp-for="InceptionDate" class="form-control" />
+                <input type="date" asp-for="InceptionDate" class="form-control" readonly/>
                 <span asp-validation-for="InceptionDate" class="text-danger"></span>
             </div>
         </div>
@@ -93,25 +89,19 @@
         <div class="col-4">
             <div class="form-group">
                 <label asp-for="PolicyStatusId" class="control-label"></label>
-                <select asp-for="PolicyStatusId" class="form-control" asp-items="Model.PolicyStatusList">
-                    <option value="">Select Policy Status</option>
-                </select>
+                <select asp-for="PolicyStatusId" class="form-control" asp-items="Model.PolicyStatusList"></select>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
                 <label asp-for="SalesTypeId" class="control-label"></label>
-                <select asp-for="SalesTypeId" class="form-control" asp-items="Model.SalesTypeList">
-                    <option value="">Select Sales Type</option>
-                </select>
+                <select asp-for="SalesTypeId" class="form-control" asp-items="Model.SalesTypeList"></select>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
                 <label asp-for="PaymentMethodId" class="control-label"></label>
-                <select asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethodList">
-                    <option value="">Select Payment Method</option>
-                </select>
+                <select asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethodList"></select>
             </div>
         </div>
     </div>
@@ -163,192 +153,331 @@
     </div>
 </div>
 
-<div class="ms-2">
-    <!-- All Risks Modal -->
-    <div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="modal-title" id="allRiskModalLabel">
-                        All Risks
-                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- All Risks Modal -->
+<div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="allRiskModalLabel">
+                    All Risks
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label">Description</label>
+                            <input asp-for="Description" id="Description" class="form-control" />
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
+                <div class="container border bg-light p-3">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-6">
                             <div class="form-group">
-                                <label asp-for="Description" class="control-label">Description</label>
-                                <input asp-for="Description" id="Description" class="form-control" />
+                                <label asp-for="AllRiskSumInsured" class="control-label"></label>
+                                <input asp-for="AllRiskSumInsured" id="AllRiskSumInsured" class="form-control" />
                             </div>
                         </div>
-                    </div>
-                    <div class="container border bg-light p-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="AllRiskSumInsured" class="control-label"></label>
-                                    <input asp-for="AllRiskSumInsured" id="AllRiskSumInsured" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="AllRiskCoverTypeId" class="control-label"></label>
-                                    <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
-                                </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="AllRiskCoverTypeId" class="control-label"></label>
+                                <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
+                                    <option value="">Select Cover Type</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnAddAllRisk" class="btn btn-primary" onclick="LoadAllRisks()">Save this record</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnAddAllRisk" class="btn btn-primary" onclick="LoadAllRisks()">Save this record</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="ms-2">
-    <!-- Content Modal -->
-    <div class="modal fade" id="contentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="contentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="modal-title" id="contentModalLabel">
-                        Contents
-                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label asp-for="Content.PhysicalAddress" class="control-label">Physical Address</label>
-                                <input asp-for="Content.PhysicalAddress" id="ContentPhysicalAddress" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="Content.ResidenceTypeId" class="control-label">Residence Type</label>
-                                <select asp-for="Content.ResidenceTypeId" id="ContentResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
-                                    <option value="">Select Residence Type</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="Content.ResidenceUseId" class="control-label">Residence Type</label>
-                                <select asp-for="Content.ResidenceUseId" id="ContentResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList">
-                                    <option value="">Select Residence Use</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="Content.WallTypeId" class="control-label">Wall Type</label>
-                                <select asp-for="Content.WallTypeId" id="ContentWallTypeId" class="form-control" asp-items="Model.WallTypeList">
-                                    <option value="">Select Wall Type</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="Content.RoofTypeId" class="control-label">Roof Type</label>
-                                <select asp-for="Content.RoofTypeId" id="ContentRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
-                                    <option value="">Select Roof Type</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container border bg-light p-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="ContentSumInsured" class="control-label"></label>
-                                    <input asp-for="ContentSumInsured" id="ContentSumInsured" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="ContentCoverTypeId" class="control-label"></label>
-                                    <select asp-for="ContentCoverTypeId" id="ContentCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
-                                </div>
-                            </div>
+
+<!-- Content Modal -->
+<div class="modal fade" id="contentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="contentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="contentModalLabel">
+                    Contents
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Content.PhysicalAddress" class="control-label">Physical Address</label>
+                            <input asp-for="Content.PhysicalAddress" id="ContentPhysicalAddress" class="form-control" />
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnContentRisk" class="btn btn-primary" onclick="LoadContents()">Save this record</button>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Content.ResidenceTypeId" class="control-label">Residence Type</label>
+                            <select asp-for="Content.ResidenceTypeId" id="ContentResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
+                                <option value="">Select Residence Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Content.ResidenceUseId" class="control-label">Residence Type</label>
+                            <select asp-for="Content.ResidenceUseId" id="ContentResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList">
+                                <option value="">Select Residence Use</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Content.WallTypeId" class="control-label">Wall Type</label>
+                            <select asp-for="Content.WallTypeId" id="ContentWallTypeId" class="form-control" asp-items="Model.WallTypeList">
+                                <option value="">Select Wall Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Content.RoofTypeId" class="control-label">Roof Type</label>
+                            <select asp-for="Content.RoofTypeId" id="ContentRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
+                                <option value="">Select Roof Type</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="container border bg-light p-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="ContentSumInsured" class="control-label"></label>
+                                <input asp-for="ContentSumInsured" id="ContentSumInsured" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="ContentCoverTypeId" class="control-label"></label>
+                                <select asp-for="ContentCoverTypeId" id="ContentCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
+                                    <option value="">Select Cover Type</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnContentRisk" class="btn btn-primary" onclick="LoadContents()">Save this record</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="ms-2">
-    <!-- House Modal -->
-    <div class="modal fade" id="houseModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="houseModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="modal-title" id="houseModalLabel">
-                        House
-                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- House Modal -->
+<div class="modal fade" id="houseModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="houseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="houseModalLabel">
+                    House
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="House.PhysicalAddress" class="control-label">Physical Address</label>
+                            <input asp-for="House.PhysicalAddress" id="HousePhysicalAddress" class="form-control" />
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="House.ResidenceTypeId" class="control-label">Residence Type</label>
+                            <select asp-for="House.ResidenceTypeId" id="HouseResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
+                                <option value="">Select Residence Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="House.HouseConditionId" class="control-label">House Condition</label>
+                            <select asp-for="House.HouseConditionId" id="HouseConditionId" class="form-control" asp-items="Model.HouseConditionList">
+                                <option value="">Select House Condition</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="House.WallTypeId" class="control-label">Wall Type</label>
+                            <select asp-for="House.WallTypeId" id="HouseWallTypeId" class="form-control" asp-items="Model.WallTypeList">
+                                <option value="">Select Wall Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="House.RoofTypeId" class="control-label">Roof Type</label>
+                            <select asp-for="House.RoofTypeId" id="HouseRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
+                                <option value="">Select Roof Type</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 border bg-light mb-3 py-2">
+                    <div class="row gx-6">
+                        <div class="col">
                             <div class="form-group">
-                                <label asp-for="House.PhysicalAddress" class="control-label">Physical Address</label>
-                                <input asp-for="House.PhysicalAddress" id="HousePhysicalAddress" class="form-control" />
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="House.BurglarAlarm" type="checkbox" id="BurglarAlarm">
+                                    <label class="form-check-label" asp-for="House.BurglarAlarm">Burglar Alarm</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline form-switch">
+                                    <input class="form-check-input" asp-for="House.BurglarBars" type="checkbox" id="BurglarBars">
+                                    <label class="form-check-label" asp-for="House.BurglarBars">Alarm</label>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="container border bg-light p-3">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-6">
                             <div class="form-group">
-                                <label asp-for="House.ResidenceTypeId" class="control-label">Residence Type</label>
-                                <select asp-for="House.ResidenceTypeId" id="HouseResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList">
-                                    <option value="">Select Residence Type</option>
-                                </select>
+                                <label asp-for="HouseSumInsured" class="control-label"></label>
+                                <input asp-for="HouseSumInsured" id="HouseSumInsured" class="form-control" />
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-6">
                             <div class="form-group">
-                                <label asp-for="House.HouseConditionId" class="control-label">House Condition</label>
-                                <select asp-for="House.HouseConditionId" id="HouseConditionId" class="form-control" asp-items="Model.HouseConditionList">
-                                    <option value="">Select House Condition</option>
+                                <label asp-for="HouseCoverTypeId" class="control-label"></label>
+                                <select asp-for="HouseCoverTypeId" id="HouseCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
+                                    <option value="">Select Cover Type</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="House.WallTypeId" class="control-label">Wall Type</label>
-                                <select asp-for="House.WallTypeId" id="HouseWallTypeId" class="form-control" asp-items="Model.WallTypeList">
-                                    <option value="">Select Wall Type</option>
-                                </select>
-                            </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnHouseRisk" class="btn btn-primary" onclick="LoadHouses()">Save this record</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Motor Modal -->
+<div class="modal fade" id="motorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="motorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered needs-validation" role="document" novalidate>
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="motorModalLabel">
+                    Motor Details
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="MotorError"></div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Motor.RegNumber" class="control-label">Registration Number</label>
+                            <input asp-for="Motor.RegNumber" id="RegNumber" class="form-control text-uppercase" />
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="House.RoofTypeId" class="control-label">Roof Type</label>
-                                <select asp-for="House.RoofTypeId" id="HouseRoofTypeId" class="form-control" asp-items="Model.RoofTypeList">
-                                    <option value="">Select Roof Type</option>
-                                </select>
-                            </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label asp-for="Motor.BodyTypeId" class="control-label">Body Type</label>
+                            <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList">
+                                <option value="">Select Body Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label asp-for="Motor.Colour" class="control-label">Colour</label>
+                            <input asp-for="Motor.Colour" id="Colour" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="MotorMakeId" class="control-label">Make</label>
+                            <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList">
+                                <option value="">Select Motor Make</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="Motor.MotorModelId" class="control-label">Model</label>
+                            <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList">
+                                <option value="">Select Motor Model</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="Motor.RegYear" class="control-label">Year</label>
+                            <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="Motor.DriverTypeId" class="control-label">Driver Type</label>
+                            <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList">
+                                <option value="">Select Driver Type</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="Motor.EngineNumber" class="control-label">Engine Number</label>
+                            <input asp-for="Motor.EngineNumber" id="EngineNumber" class="form-control text-uppercase" />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="Motor.ChassisNumber" class="control-label">Chassis Number</label>
+                            <input asp-for="Motor.ChassisNumber" id="ChassisNumber" class="form-control text-uppercase" />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="Motor.EngineCapacity" class="control-label">Engine Capacity</label>
+                            <input asp-for="Motor.EngineCapacity" id="EngineCapacity" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
+                            <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList">
+                                <option value="">Select Motor Use</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-6 border bg-light mb-3 py-2">
@@ -356,208 +485,62 @@
                             <div class="col">
                                 <div class="form-group">
                                     <div class="form-check form-check-inline form-switch">
-                                        <input class="form-check-input" asp-for="House.BurglarAlarm" type="checkbox" id="BurglarAlarm">
-                                        <label class="form-check-label" asp-for="House.BurglarAlarm">Burglar Alarm</label>
+                                        <input class="form-check-input" asp-for="Motor.IsImport" type="checkbox" id="IsImport">
+                                        <label class="form-check-label" asp-for="Motor.IsImport">Grey Import</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check form-check-inline form-switch">
-                                        <input class="form-check-input" asp-for="House.BurglarBars" type="checkbox" id="BurglarBars">
-                                        <label class="form-check-label" asp-for="House.BurglarBars">Alarm</label>
+                                        <input class="form-check-input" asp-for="Motor.IsSecurityFitting" type="checkbox" id="IsSecurityFitting">
+                                        <label class="form-check-label" asp-for="Motor.IsSecurityFitting">Security Fitting</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline form-switch">
+                                        <input class="form-check-input" asp-for="Motor.IsTrackingDevice" type="checkbox" id="IsTrackingDevice">
+                                        <label class="form-check-label" asp-for="Motor.IsTrackingDevice">Tracking Device</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline form-switch">
+                                        <input class="form-check-input" asp-for="Motor.IsImmobiliser" type="checkbox" id="IsImmobiliser">
+                                        <label class="form-check-label" asp-for="Motor.IsImmobiliser">Immobiliser</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline form-switch ">
+                                        <input class="form-check-input" asp-for="Motor.IsAlarm" type="checkbox" id="IsAlarm">
+                                        <label class="form-check-label" asp-for="Motor.IsAlarm">Alarm</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="container border bg-light p-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="HouseSumInsured" class="control-label"></label>
-                                    <input asp-for="HouseSumInsured" id="HouseSumInsured" class="form-control" />
-                                </div>
+                </div>
+                <div class="container border bg-light p-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="MotorSumInsured" class="control-label"></label>
+                                <input asp-for="MotorSumInsured" id="MotorSumInsured" class="form-control" />
                             </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="HouseCoverTypeId" class="control-label"></label>
-                                    <select asp-for="HouseCoverTypeId" id="HouseCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="MotorCoverTypeId" class="control-label"></label>
+                                <select asp-for="MotorCoverTypeId" id="MotorCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
+                                    <option value="">Select Cover Type</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnHouseRisk" class="btn btn-primary" onclick="LoadHouses()">Save this record</button>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="ms-2">
-    <!-- Motor Modal -->
-    <div class="modal fade" id="motorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="motorModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered needs-validation" role="document" novalidate>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="modal-title" id="motorModalLabel">
-                        Motor Details
-                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="MotorError"></div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label asp-for="Motor.RegNumber" class="control-label">Registration Number</label>
-                                <input asp-for="Motor.RegNumber" id="RegNumber" class="form-control text-uppercase" />
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label asp-for="Motor.BodyTypeId" class="control-label">Body Type</label>
-                                <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList">
-                                    <option value="">Select Body Type</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label asp-for="Motor.Colour" class="control-label">Colour</label>
-                                <input asp-for="Motor.Colour" id="Colour" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label asp-for="MotorMakeId" class="control-label">Make</label>
-                                <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList">
-                                    <option value="">Select Motor Make</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label asp-for="Motor.MotorModelId" class="control-label">Model</label>
-                                <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList">
-                                    <option value="">Select Motor Model</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label asp-for="Motor.RegYear" class="control-label">Year</label>
-                                <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label asp-for="Motor.DriverTypeId" class="control-label">Driver Type</label>
-                                <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList">
-                                    <option value="">Select Driver Type</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label asp-for="Motor.EngineNumber" class="control-label">Engine Number</label>
-                                <input asp-for="Motor.EngineNumber" id="EngineNumber" class="form-control text-uppercase" />
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label asp-for="Motor.ChassisNumber" class="control-label">Chassis Number</label>
-                                <input asp-for="Motor.ChassisNumber" id="ChassisNumber" class="form-control text-uppercase" />
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label asp-for="Motor.EngineCapacity" class="control-label">Engine Capacity</label>
-                                <input asp-for="Motor.EngineCapacity" id="EngineCapacity" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
-                                <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList">
-                                    <option value="">Select Motor Use</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-6 border bg-light mb-3 py-2">
-                            <div class="row gx-6">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.IsImport" type="checkbox" id="IsImport">
-                                            <label class="form-check-label" asp-for="Motor.IsImport">Grey Import</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.IsSecurityFitting" type="checkbox" id="IsSecurityFitting">
-                                            <label class="form-check-label" asp-for="Motor.IsSecurityFitting">Security Fitting</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.IsTrackingDevice" type="checkbox" id="IsTrackingDevice">
-                                            <label class="form-check-label" asp-for="Motor.IsTrackingDevice">Tracking Device</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline form-switch">
-                                            <input class="form-check-input" asp-for="Motor.IsImmobiliser" type="checkbox" id="IsImmobiliser">
-                                            <label class="form-check-label" asp-for="Motor.IsImmobiliser">Immobiliser</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline form-switch ">
-                                            <input class="form-check-input" asp-for="Motor.IsAlarm" type="checkbox" id="IsAlarm">
-                                            <label class="form-check-label" asp-for="Motor.IsAlarm">Alarm</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container border bg-light p-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="MotorSumInsured" class="control-label"></label>
-                                    <input asp-for="MotorSumInsured" id="MotorSumInsured" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="MotorCoverTypeId" class="control-label"></label>
-                                    <select asp-for="MotorCoverTypeId" id="MotorCoverTypeId" class="form-control" asp-items="Model.CoverTypeList">
-                                        <option value="">Select Cover Type</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnAddMotor" class="btn btn-primary" onclick="LoadMotors()">Save this record</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnAddMotor" class="btn btn-primary" onclick="LoadMotors()">Save this record</button>
             </div>
         </div>
     </div>

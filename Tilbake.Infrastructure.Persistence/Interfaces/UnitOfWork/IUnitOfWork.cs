@@ -62,6 +62,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IReceivableRepository Receivables { get; }
         IReceivableDocumentRepository ReceivableDocuments { get; }
         IReceivableInvoiceRepository ReceivableInvoices { get; }
+        IReceivableQuoteRepository ReceivableQuotes { get; }
         IResidenceTypeRepository ResidenceTypes { get; }
         IResidenceUseRepository ResidenceUses { get; }
         IRiskRepository Risks { get; }

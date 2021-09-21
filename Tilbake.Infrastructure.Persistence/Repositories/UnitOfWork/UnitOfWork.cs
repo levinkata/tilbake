@@ -68,6 +68,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             Receivables = new ReceivableRepository(_context);
             ReceivableDocuments = new ReceivableDocumentRepository(_context);
             ReceivableInvoices = new ReceivableInvoiceRepository(_context);
+            ReceivableQuotes = new ReceivableQuoteRepository(_context);
             ResidenceTypes = new ResidenceTypeRepository(_context);
             ResidenceUses = new ResidenceUseRepository(_context);
             Quotes = new QuoteRepository(_context);
@@ -142,6 +143,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IReceivableRepository Receivables { get; private set; }
         public IReceivableDocumentRepository ReceivableDocuments { get; private set; }
         public IReceivableInvoiceRepository ReceivableInvoices { get; private set; }
+        public IReceivableQuoteRepository ReceivableQuotes { get; private set; }
         public IResidenceTypeRepository ResidenceTypes { get; private set; }
         public IResidenceUseRepository ResidenceUses { get; private set; }
         public IRoofTypeRepository RoofTypes { get; private set; }

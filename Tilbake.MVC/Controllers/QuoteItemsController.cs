@@ -393,7 +393,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
+            var resource = await _quoteItemService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -442,7 +442,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
+            var resource = await _quoteItemService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -459,7 +459,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteItemService.GetFirstOrDefaultAsync((Guid)id);
+            var resource = await _quoteItemService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();

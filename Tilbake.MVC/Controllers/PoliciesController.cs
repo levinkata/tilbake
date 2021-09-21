@@ -105,7 +105,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                QuoteResource quoteResource = await _quoteService.GetFirstOrDefaultAsync(resource.QuoteId);
+                QuoteResource quoteResource = await _quoteService.GetByIdAsync(resource.QuoteId);
 
                 List<QuoteItemResource> quoteItemResources = new();
                 foreach (var item in quoteResource.QuoteItems)

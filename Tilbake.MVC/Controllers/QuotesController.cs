@@ -112,12 +112,11 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _quoteService.GetFirstOrDefaultAsync(id);
+            var resource = await _quoteService.GetByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
-            }
-
+            }      
             return View(resource);
         }
         

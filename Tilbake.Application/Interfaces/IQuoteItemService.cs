@@ -8,7 +8,6 @@ namespace Tilbake.Application.Interfaces
     public interface IQuoteItemService
     {
         Task<QuoteItemResource> GetByIdAsync(Guid id);
-        Task<QuoteItemResource> GetFirstOrDefaultAsync(Guid id);
         Task<QuoteItemObjectResource> GetRisksAsync(Guid id);
         Task<IEnumerable<QuoteItemResource>> GetByQuoteIdAsync(Guid quoteId);
         Task<int> UpdateAsync(QuoteItemResource resource);

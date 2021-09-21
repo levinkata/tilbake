@@ -29,7 +29,8 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteItemResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.QuoteItems.GetByIdAsync(id);
+            var result = await _unitOfWork.QuoteItems.GetFirstOrDefaultAsync(p => p.Id == id, p => p.CoverType);
+
             var resource = _mapper.Map<QuoteItem, QuoteItemResource>(result);
             return resource;
         }
@@ -45,8 +46,8 @@ namespace Tilbake.Application.Services
         public async Task<QuoteItemResource> GetFirstOrDefaultAsync(Guid id)
         {
             var result = await _unitOfWork.QuoteItems.GetFirstOrDefaultAsync(p => p.Id == id, p => p.CoverType);
-            var resource = _mapper.Map<QuoteItem, QuoteItemResource>(result);
 
+            var resource = _mapper.Map<QuoteItem, QuoteItemResource>(result);
             return resource;
         }
 

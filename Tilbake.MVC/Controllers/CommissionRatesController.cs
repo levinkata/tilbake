@@ -32,7 +32,7 @@ namespace Tilbake.MVC.Controllers
             {
                 RiskList = SelectLists.RegisteredRisks(null)
             };
-            return View(resource);
+            return await Task.Run(() => View(resource));
         }
 
         [HttpPost]

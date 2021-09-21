@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public City()
         {
             Addresses = new HashSet<Address>();
+            InsurerBranches = new HashSet<InsurerBranch>();
         }
 
         public Guid Id { get; set; }
@@ -20,5 +21,6 @@ namespace Tilbake.Domain.Models
 
         public virtual Country Country { get; set; }
         public virtual ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<InsurerBranch> InsurerBranches { get; set; }
     }
 }

@@ -14,9 +14,9 @@ namespace Tilbake.Domain.Models
 
         public Guid Id { get; set; }
         public string Reference { get; set; }
-        public DateTime? ReceivableDate { get; set; }
+        public DateTime ReceivableDate { get; set; }
         public Guid PaymentTypeId { get; set; }
-        public decimal? Amount { get; set; }
+        public decimal Amount { get; set; }
         public string BatchNumber { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }

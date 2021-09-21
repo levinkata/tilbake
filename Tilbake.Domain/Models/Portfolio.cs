@@ -13,6 +13,10 @@ namespace Tilbake.Domain.Models
             PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
             PortfolioClients = new HashSet<PortfolioClient>();
             PortfolioPolicyFees = new HashSet<PortfolioPolicyFee>();
+            RatingMotorDiscounts = new HashSet<RatingMotorDiscount>();
+            RatingMotorExcesses = new HashSet<RatingMotorExcess>();
+            RatingMotorPremia = new HashSet<RatingMotorPremium>();
+            RatingMotors = new HashSet<RatingMotor>();
         }
 
         public Guid Id { get; set; }
@@ -30,5 +34,9 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
         public virtual ICollection<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
+        public virtual ICollection<RatingMotorDiscount> RatingMotorDiscounts { get; set; }
+        public virtual ICollection<RatingMotorExcess> RatingMotorExcesses { get; set; }
+        public virtual ICollection<RatingMotorPremium> RatingMotorPremia { get; set; }
+        public virtual ICollection<RatingMotor> RatingMotors { get; set; }
     }
 }

@@ -88,6 +88,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<IncidentAuditLog> IncidentAuditLogs { get; set; }
         public virtual DbSet<Insurer> Insurers { get; set; }
         public virtual DbSet<InsurerAuditLog> InsurerAuditLogs { get; set; }
+        public virtual DbSet<InsurerBranch> InsurerBranches { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<InvoiceItem> InvoiceItems { get; set; }
         public virtual DbSet<InvoiceNumberGenerator> InvoiceNumberGenerators { get; set; }
@@ -138,6 +139,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<QuoteItem> QuoteItems { get; set; }
         public virtual DbSet<QuoteNumberGenerator> QuoteNumberGenerators { get; set; }
         public virtual DbSet<QuoteStatus> QuoteStatuses { get; set; }
+        public virtual DbSet<RatingMotor> RatingMotors { get; set; }
+        public virtual DbSet<RatingMotorDiscount> RatingMotorDiscounts { get; set; }
+        public virtual DbSet<RatingMotorExcess> RatingMotorExcesses { get; set; }
+        public virtual DbSet<RatingMotorPremium> RatingMotorPremia { get; set; }
         public virtual DbSet<Receivable> Receivables { get; set; }
         public virtual DbSet<ReceivableDocument> ReceivableDocuments { get; set; }
         public virtual DbSet<ReceivableInvoice> ReceivableInvoices { get; set; }
@@ -1888,6 +1893,43 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.TrxTimestamp).HasColumnType("datetime");
             });
 
+            modelBuilder.Entity<InsurerBranch>(entity =>
+            {
+                entity.ToTable("InsurerBranch");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Fax)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Phone)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PhysicalAddress)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PostalAddress)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.InsurerBranches)
+                    .HasForeignKey(d => d.CityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InsurerBranch_City");
+            });
+
             modelBuilder.Entity<Invoice>(entity =>
             {
                 entity.ToTable("Invoice");
@@ -3072,6 +3114,128 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<RatingMotor>(entity =>
+            {
+                entity.ToTable("RatingMotor");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.EndValue).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.RateImport).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.RateLocal).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.StartValue).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.RatingMotors)
+                    .HasForeignKey(d => d.InsurerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotor_Insurer");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.RatingMotors)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotor_Portfolio");
+            });
+
+            modelBuilder.Entity<RatingMotorDiscount>(entity =>
+            {
+                entity.ToTable("RatingMotorDiscount");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.RatingMotorDiscounts)
+                    .HasForeignKey(d => d.InsurerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotorDiscount_Insurer");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.RatingMotorDiscounts)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotorDiscount_Portfolio");
+            });
+
+            modelBuilder.Entity<RatingMotorExcess>(entity =>
+            {
+                entity.ToTable("RatingMotorExcess");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.EndValue).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.RateImport)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.RateLocal)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.StartValue).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.RatingMotorExcesses)
+                    .HasForeignKey(d => d.InsurerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotorExcess_Insurer");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.RatingMotorExcesses)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotorExcess_Portfolio");
+            });
+
+            modelBuilder.Entity<RatingMotorPremium>(entity =>
+            {
+                entity.ToTable("RatingMotorPremium");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.MinimumAnnual).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.MinimumAnnualThirdParty).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.MinimumMonthly).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.RatingMotorPremia)
+                    .HasForeignKey(d => d.InsurerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotorPremium_Insurer");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.RatingMotorPremia)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RatingMotorPremium_Portfolio");
+            });
+
             modelBuilder.Entity<Receivable>(entity =>
             {
                 entity.ToTable("Receivable");
@@ -3088,7 +3252,9 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.ReceivableDate).HasColumnType("date");
 
-                entity.Property(e => e.Reference).HasMaxLength(50);
+                entity.Property(e => e.Reference)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.PaymentType)
                     .WithMany(p => p.Receivables)

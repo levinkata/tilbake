@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BankResource>
+﻿@model IEnumerable<InsurerResource>
 
 @{
-    ViewData["Title"] = "Banks";
+    ViewData["Title"] = "Insurers";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -14,7 +14,7 @@
 
 @if (Model.Any())
 {
-    <table id="tblBank" class="display">
+    <table id="tblInsurer" class="display">
         <thead>
             <tr>
                 <th>
@@ -28,19 +28,18 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                     </td>
                     <td class="justify-content-end">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="dropdown" aria-expanded="false">
+                                More...
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">View</a></li>
-                                <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="BankBranches" asp-action="Index" asp-route-bankId="@item.Id">Branches</a></li>
                                 <li><a class="dropdown-item" href="#">Print</a></li>
-                                <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
                             </ul>
                         </div>
                     </td>
@@ -54,14 +53,10 @@ else
     <caption>No records Found</caption>
 }
 
-<div>
-    <a asp-controller="Home" asp-action="Index">Back</a>
-</div>
-
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $('#tblBank').DataTable();
-        });
+        //$(document).ready(function () {
+        //    $('#tblInsurer').DataTable();
+        //});
     </script>
 }

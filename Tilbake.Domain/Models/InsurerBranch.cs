@@ -19,5 +19,6 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual City City { get; set; }
+        public virtual Insurer Insurer { get; set; }
     }
 }

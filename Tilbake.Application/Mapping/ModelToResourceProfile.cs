@@ -91,7 +91,12 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<HouseCondition, HouseConditionResource>().ReverseMap();
             CreateMap<IdDocumentType, IdDocumentTypeResource>().ReverseMap();
-            CreateMap<Insurer, InsurerResource>().ReverseMap();
+
+            CreateMap<Insurer, InsurerResource>()
+                .ForMember(dest => dest.InsurerBranches, opt => opt.MapFrom(src => src.InsurerBranches)).ReverseMap();
+
+            CreateMap<InsurerBranch, InsurerBranchResource>()
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City.Name)).ReverseMap();            
 
             CreateMap<Invoice, InvoiceResource>()
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Policy.PortfolioClient.Client.FirstName))

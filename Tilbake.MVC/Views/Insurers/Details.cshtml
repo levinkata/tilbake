@@ -1,4 +1,4 @@
-﻿@model BankResource
+﻿@model InsurerResource
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Bank</h4>
+    <h4>Insurer</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -18,6 +18,11 @@
         </dd>
     </dl>
 </div>
+
+<div class="form-group">
+    @await Component.InvokeAsync("InsurerBranches", new { insurerId = @Model.Id })
+</div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back</a>

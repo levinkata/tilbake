@@ -44,6 +44,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             HouseConditions = new HouseConditionRepository(_context);
             IdDocumentTypes = new IdDocumentTypeRepository(_context);
             Insurers = new InsurerRepository(_context);
+            InsurerBranches = new InsurerBranchRepository(_context);
             Invoices = new InvoiceRepository(_context);
             InvoiceItems = new InvoiceItemRepository(_context);
             InvoiceStatuses = new InvoiceStatusRepository(_context);
@@ -114,6 +115,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IHouseConditionRepository HouseConditions { get; private set; }
         public IIdDocumentTypeRepository IdDocumentTypes { get; private set; }
         public IInsurerRepository Insurers { get; private set; }
+        public IInsurerBranchRepository InsurerBranches { get; private set; }        
         public IInvoiceRepository Invoices { get; private set; }
         public IInvoiceItemRepository InvoiceItems { get; private set; }
         public IInvoiceStatusRepository InvoiceStatuses { get; private set; }

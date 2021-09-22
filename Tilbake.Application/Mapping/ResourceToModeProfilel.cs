@@ -32,6 +32,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<HouseSaveResource, House>();
             CreateMap<HouseConditionSaveResource, HouseCondition>();
             CreateMap<InsurerSaveResource, Insurer>();
+            CreateMap<InsurerBranchSaveResource, InsurerBranch>();
             CreateMap<InvoiceSaveResource, Invoice>();
             CreateMap<InvoiceItemSaveResource, InvoiceItem>();
             CreateMap<InvoiceStatusSaveResource, InvoiceStatus>();

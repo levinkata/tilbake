@@ -35,6 +35,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IHouseConditionRepository HouseConditions { get; }
         IIdDocumentTypeRepository IdDocumentTypes { get; }
         IInsurerRepository Insurers { get; }
+        IInsurerBranchRepository InsurerBranches { get; }        
         IInvoiceRepository Invoices { get; }
         IInvoiceItemRepository InvoiceItems { get; }
         IInvoiceStatusRepository InvoiceStatuses { get; }

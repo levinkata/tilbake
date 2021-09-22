@@ -49,7 +49,8 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.InsurerBranches.GetAllAsync(
                                             null,
                                             e => e.OrderBy(r => r.Name),
-                                            e => e.City);
+                                            e => e.City,
+                                            e => e.Insurer);
 
             var resources = _mapper.Map<IEnumerable<InsurerBranch>, IEnumerable<InsurerBranchResource>>(result);
             return resources;
@@ -60,7 +61,8 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.InsurerBranches.GetAllAsync(
                                             e => e.InsurerId == insurerId,
                                             e => e.OrderBy(r => r.Name),
-                                            e => e.City);
+                                            e => e.City,
+                                            e => e.Insurer);
 
             var resources = _mapper.Map<IEnumerable<InsurerBranch>, IEnumerable<InsurerBranchResource>>(result);
             return resources;
@@ -70,7 +72,8 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.InsurerBranches.GetFirstOrDefaultAsync(
                                             e => e.Id == id,
-                                            e => e.City);
+                                            e => e.City,
+                                            e => e.Insurer);
 
             var resource = _mapper.Map<InsurerBranch, InsurerBranchResource>(result);
             return resource;

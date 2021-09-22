@@ -1,12 +1,12 @@
 ﻿@model InsurerBranchResource
 
 @{
-    ViewData["Title"] = "Insurer Branch";
+    ViewData["Title"] = Model.Insurer.Name;
 }
 
-<h1>Delete</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this Insurer Branch?</h3>
 <div>
     <h4>@ViewData["Title"]</h4>
     <hr />

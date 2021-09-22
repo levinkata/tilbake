@@ -27,9 +27,14 @@ namespace Tilbake.Application.Resources
         public string Fax { get; set; }
 
         //  Descriptions
-        public string CityName { get; set; }
-        
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Display(Name = "Insurer")]
+        public string Insurer { get; set; }
+
         //  Others
+        [Display(Name = "Country")]
         public Guid CountryId { get; set;  }
 
         //  SelectLists

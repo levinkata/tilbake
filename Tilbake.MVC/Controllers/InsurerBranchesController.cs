@@ -15,14 +15,17 @@ namespace Tilbake.MVC.Controllers
         private readonly IInsurerBranchService _insurerBranchService;
         private readonly ICountryService _countryService;
         private readonly ICityService _cityService;
+        private readonly IInsurerService _insurerService;
 
         public InsurerBranchesController(IInsurerBranchService insurerBranchService,
                                         ICountryService countryService,
-                                        ICityService cityService)
+                                        ICityService cityService,
+                                        IInsurerService insurerService)
         {
             _insurerBranchService = insurerBranchService;
             _countryService = countryService;
             _cityService = cityService;
+            _insurerService = insurerService;
         }
 
         // GET: InsurerBranches
@@ -53,10 +56,12 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Create(Guid insurerId)
         {
             var countries = await _countryService.GetAllAsync();
+            var insurer = await _insurerService.GetByIdAsync(insurerId);
 
             InsurerBranchSaveResource resource = new()
             {
                 InsurerId = insurerId,
+                Insurer = insurer.Name,
                 CountryList = SelectLists.Countries(countries, Guid.Empty)
             };
             return View(resource);
@@ -104,6 +109,7 @@ namespace Tilbake.MVC.Controllers
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
+            resource.CountryId = countryId;
             resource.CityList = SelectLists.Cities(cities, cityId);
             resource.CountryList = SelectLists.Countries(countries, countryId);
             return View(resource);
@@ -138,6 +144,7 @@ namespace Tilbake.MVC.Controllers
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
+            resource.CountryId = countryId;
             resource.CityList = SelectLists.Cities(cities, cityId);
             resource.CountryList = SelectLists.Countries(countries, countryId);
             return View(resource);

@@ -41,16 +41,16 @@
                         <td>@item.PhysicalAddress</td>
                         <td>@item.PostalAddress</td>
                         <td>@item.City</td>
-                        <td class="justify-content-end">
+                        <td class="d-flex justify-content-end">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="dropdown" aria-expanded="false">
+                                    More...
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Details" asp-route-id="@item.Id">View</a></li>
-                                    <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                    <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="#">Print</a></li>
-                                    <li><a class="dropdown-item" asp-controller="InsurerBranches"asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                    <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
                                 </ul>
                             </div>
                         </td>

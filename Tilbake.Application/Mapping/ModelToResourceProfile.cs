@@ -96,6 +96,7 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.InsurerBranches, opt => opt.MapFrom(src => src.InsurerBranches)).ReverseMap();
 
             CreateMap<InsurerBranch, InsurerBranchResource>()
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City.Name)).ReverseMap();            
 
             CreateMap<Invoice, InvoiceResource>()

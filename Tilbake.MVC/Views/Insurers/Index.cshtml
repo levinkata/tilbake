@@ -30,7 +30,7 @@
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                     </td>
-                    <td class="justify-content-end">
+                    <td class="d-flex justify-content-end">
                         <div class="btn-group">
                             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="dropdown" aria-expanded="false">
                                 More...
@@ -52,6 +52,10 @@ else
 {
     <caption>No records Found</caption>
 }
+
+<div>
+    <a asp-controller="Home" asp-action="Index">Back</a>
+</div>
 
 @section Scripts {
     <script>

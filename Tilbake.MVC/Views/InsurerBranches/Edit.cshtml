@@ -1,57 +1,73 @@
 ﻿@model InsurerBranchResource
 
 @{
-    ViewData["Title"] = "Insurer Branch";
+    ViewData["Title"] = Model.Insurer.Name;
 }
 
-<h1>Edit</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>@ViewData["Title"]</h4>
+<h4>Edit Insurer Branch</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Id" type="hidden" />
-            <input asp-for="InsurerId" type="hidden" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="InsurerId" type="hidden" />
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PhysicalAddress" class="control-label"></label>
-                <input asp-for="PhysicalAddress" class="form-control" />
-                <span asp-validation-for="PhysicalAddress" class="text-danger"></span>
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="PhysicalAddress" class="control-label"></label>
+                    <input asp-for="PhysicalAddress" class="form-control" />
+                    <span asp-validation-for="PhysicalAddress" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PostalAddress" class="control-label"></label>
-                <input asp-for="PostalAddress" class="form-control" />
-                <span asp-validation-for="PostalAddress" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="PostalAddress" class="control-label"></label>
+                    <input asp-for="PostalAddress" class="form-control" />
+                    <span asp-validation-for="PostalAddress" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class="form-control" asp-items="@Model.CountryList"></select>
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="CountryId" class="control-label"></label>
+                    <select asp-for="CountryId" class="form-control" asp-items="@Model.CountryList"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CityId" class="control-label"></label>
+                    <select asp-for="CityId" class="form-control" asp-items="@Model.CityList"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" class="form-control" asp-items="@Model.CityList"></select>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Fax" class="control-label"></label>
+                    <input asp-for="Fax" class="form-control" />
+                    <span asp-validation-for="Fax" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Fax" class="control-label"></label>
-                <input asp-for="Fax" class="form-control" />
-                <span asp-validation-for="Fax" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
 <div>

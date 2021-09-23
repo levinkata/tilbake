@@ -22,7 +22,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<Bank, BankResource>().ReverseMap();
 
             CreateMap<BankBranch, BankBranchResource>()
-                    .ForMember(dest => dest.BankName, opt => opt.MapFrom(src => src.Bank.Name)).ReverseMap();
+                    .ForMember(dest => dest.Bank, opt => opt.MapFrom(src => src.Bank)).ReverseMap();
 
             CreateMap<BodyType, BodyTypeResource>().ReverseMap();
 

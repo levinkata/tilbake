@@ -68,7 +68,10 @@ namespace Tilbake.Application.Services
 
         public async Task<BankBranchResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.BankBranches.GetByIdAsync(id);
+            var result = await _unitOfWork.BankBranches.GetFirstOrDefaultAsync(
+                                            e => e.Id == id,
+                                            e => e.Bank);
+                                            
             var resource = _mapper.Map<BankBranch, BankBranchResource>(result);
 
             return resource;

@@ -13,5 +13,8 @@ namespace Tilbake.Application.Resources
 
         [Required(ErrorMessage = "Please select Bank")]
         public Guid BankId { get; set; }
+
+        [Display(Name = "Bank")]
+        public string Bank { get; set; }
     }
 }

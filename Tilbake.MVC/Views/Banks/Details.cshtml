@@ -18,7 +18,12 @@
         </dd>
     </dl>
 </div>
+
+<div class="form-group">
+    @await Component.InvokeAsync("BankBranches", new { bankId = @Model.Id })
+</div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit Bank</a> |
+    <a asp-action="Index">Return</a>
 </div>

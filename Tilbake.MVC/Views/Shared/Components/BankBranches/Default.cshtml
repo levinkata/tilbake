@@ -1,0 +1,56 @@
+﻿@model IEnumerable<BankBranchResource>
+
+@{ 
+    var bankid = ViewBag.BankId;
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-md-flex justify-content-md-end">
+            <div class="form-group">
+                <a asp-controller="BankBranches" asp-action="Create" asp-route-bankId="@bankid">New Branch</i></a>
+            </div>
+        </div>        
+        @if (Model.Any())
+        {
+            <div class="form-group">
+                <table id="tblBankBranches" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>Name</strong>
+                            </th>
+                            <th>
+                                <strong>Sort Code</strong>
+                            </th>
+                            <th>
+                                <strong>Swift Code</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="BankBranches" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                                </td>
+                                <td>
+                                    @item.SortCode
+                                </td>
+                               <td>
+                                    @item.SwiftCode
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <caption>No Records Found</caption>
+
+        }
+    </div>
+</div>

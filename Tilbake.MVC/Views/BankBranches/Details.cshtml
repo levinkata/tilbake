@@ -1,13 +1,13 @@
-﻿@model Tilbake.Domain.Models.BankBranch
+﻿@model BankBranchResource
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Bank.Name;
 }
 
-<h1>Details</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div>
-    <h4>BankBranch</h4>
+    <h4>Branch Details</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -28,39 +28,9 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.SwiftCode)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AddedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AddedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateModified)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateModified)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Bank)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Bank.Name)
-        </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Banks" asp-action="Details" asp-route-id="@Model.BankId">Return</a>
 </div>

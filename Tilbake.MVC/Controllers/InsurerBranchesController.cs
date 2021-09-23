@@ -134,7 +134,7 @@ namespace Tilbake.MVC.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Details), "Insurers", new { id = resource.InsurerId });
+                return RedirectToAction(nameof(Details), new { id = resource.Id });
             }
 
             var cityId = resource.CityId;

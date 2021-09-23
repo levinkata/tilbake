@@ -12,10 +12,13 @@ namespace Tilbake.MVC.Controllers
     public class BankBranchesController : Controller
     {
         private readonly IBankBranchService _bankBranchService;
+        private readonly IBankService _bankService;
 
-        public BankBranchesController(IBankBranchService bankBranchService)
+        public BankBranchesController(IBankBranchService bankBranchService,
+                                        IBankService bankService)
         {
             _bankBranchService = bankBranchService;
+            _bankService = bankService;
         }
 
         // GET: BankBranches
@@ -43,9 +46,16 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: BankBranches/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(Guid bankId)
         {
-            return View();
+            var bank = await _bankService.GetByIdAsync(bankId);
+
+            BankBranchSaveResource resource = new()
+            {
+                BankId = bankId,
+                Bank = bank.Name
+            };
+            return View(resource);
         }
 
         // POST: BankBranches/Create
@@ -56,7 +66,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _bankBranchService.AddAsync(resource);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
             }
             return View(resource);
         }
@@ -77,9 +87,6 @@ namespace Tilbake.MVC.Controllers
             return View(resource);
         }
 
-        // POST: BankBranches/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid? id, BankBranchResource resource)
@@ -99,7 +106,7 @@ namespace Tilbake.MVC.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = resource.Id });
             }
             return View(resource);
         }
@@ -124,10 +131,10 @@ namespace Tilbake.MVC.Controllers
         // POST: BankBranches/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(BankBranchResource resource)
         {
-            await _bankBranchService.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            await _bankBranchService.DeleteAsync(resource.Id);
+                return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
         }
     }
 }

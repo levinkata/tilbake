@@ -7,7 +7,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    <h4>Insurer Branch Details</h4>
+    <h4>Branch Details</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -38,5 +38,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-controller="Insurers" asp-action="Details" asp-route-id="@Model.InsurerId">Back</a>
+    <a asp-controller="Insurers" asp-action="Details" asp-route-id="@Model.InsurerId">Return</a>
 </div>

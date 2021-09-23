@@ -6,7 +6,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<h4>Edit Insurer Branch</h4>
+<h4>Edit Branch</h4>
 <hr />
 <div class="row">
     <form asp-action="Edit">
@@ -71,7 +71,7 @@
 </div>
 
 <div>
-    <a asp-controller="Insurers" asp-action="Details" asp-route-id="@Model.InsurerId">Back</a>
+    <a asp-action="Details" asp-route-id="@Model.Id">Return</a>
 </div>
 
 @section Scripts {

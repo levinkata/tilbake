@@ -4,64 +4,67 @@
     var insurerid = ViewBag.InsurerId;
 }
 
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <div class="form-group">
-        <a asp-controller="InsurerBranches" asp-action="Create" asp-route-insurerId="@insurerid"><i class="far fa-plus-square"></i></a>
+<div class="card">
+    <div class="card-body">
+        <div class="d-md-flex justify-content-md-end">
+            <div class="form-group">
+                <a asp-controller="InsurerBranches" asp-action="Create" asp-route-insurerId="@insurerid">New Branch</i></a>
+            </div>
+        </div>        
+        @if (Model.Any())
+        {
+            <div class="form-group">
+                <table id="tblInsurerBranches" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>Name</strong>
+                            </th>
+                            <th>
+                                <strong>Physical Address</strong>
+                            </th>
+                            <th>
+                                <strong>Postal Address</strong>
+                            </th>
+                            <th>
+                                <strong>City</strong>
+                            </th>
+                            @* <th></th> *@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="InsurerBranches" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                                </td>
+                                <td>@item.PhysicalAddress</td>
+                                <td>@item.PostalAddress</td>
+                                <td>@item.City</td>
+                                @* <td class="d-flex justify-content-end">
+                                    <div class="btn-group">
+                                        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="dropdown" aria-expanded="false">
+                                            More...
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#">Print</a></li>
+                                            <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td> *@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <caption>No Records Found</caption>
+
+        }
     </div>
 </div>
-
-@if (Model.Any())
-{
-    <div class="form-group">
-        <table id="tblInsurerBranches" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        <strong>Name</strong>
-                    </th>
-                    <th>
-                        <strong>Physical Address</strong>
-                    </th>
-                    <th>
-                        <strong>Postal Address</strong>
-                    </th>
-                    <th>
-                        <strong>City</strong>
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            <a asp-controller="InsurerBranches" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                        </td>
-                        <td>@item.PhysicalAddress</td>
-                        <td>@item.PostalAddress</td>
-                        <td>@item.City</td>
-                        <td class="d-flex justify-content-end">
-                            <div class="btn-group">
-                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="dropdown" aria-expanded="false">
-                                    More...
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i> Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                    <li><a class="dropdown-item" asp-controller="InsurerBranches" asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i> Delete</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
-else
-{
-    <caption>No Records Found</caption>
-
-}

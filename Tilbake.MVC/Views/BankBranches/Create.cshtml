@@ -1,12 +1,12 @@
 ﻿@model BankBranchSaveResource
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Model.Bank;
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>BankBranch</h4>
+<h4>New Branch</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -36,7 +36,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Banks" asp-action="Details" asp-route-id="@Model.BankId">Return</a>
 </div>
 
 @section Scripts {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
@@ -25,9 +26,7 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Excess")]
         public string Excess { get; set; }
 
-        //  Descriptions
-        [Display(Name = "Cover Type")]
-        public string CoverType { get; set; }
+        public CoverType CoverType { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }

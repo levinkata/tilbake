@@ -162,7 +162,7 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.QuoteItems, opt => opt.MapFrom(src => src.QuoteItems)).ReverseMap();
             
             CreateMap<QuoteItem, QuoteItemResource>()
-                .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType.Name)).ReverseMap();
+                .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType)).ReverseMap();
 
             CreateMap<QuoteStatus, QuoteStatusResource>().ReverseMap();
 

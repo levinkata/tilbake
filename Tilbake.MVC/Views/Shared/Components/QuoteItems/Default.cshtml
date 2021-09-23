@@ -23,9 +23,6 @@
                     <th>
                         <strong>Premium</strong>
                     </th>
-                    <th>
-                        <strong>Excess</strong>
-                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -36,14 +33,12 @@
                         <td>
                             <a asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">@item.Description</a>
                         </td>
-                        <td>@item.CoverType</td>
+                        <td>@item.CoverType.Name</td>
                         <td>@item.SumInsured</td>
                         <td>@item.Premium</td>
-                        <td>@item.Excess</td>
-                        <td class="justify-content-center">
+                        <td class="d-flex justify-content-end">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-outline-dark rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                </button>
+                                <a class="btn btn-link dropdown-toggle text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false"></a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">View</a></li>
                                     <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
@@ -63,15 +58,15 @@
             {
             <tfoot>
                 <tr>
-                    <td colspan="4">Sub total</td>
+                    <td colspan="3">Sub total</td>
                     <td>@subTotal</td>
                 </tr>
                 <tr>
-                    <td colspan="4">VAT (@taxRate)</td>
+                    <td colspan="3">VAT (@taxRate)</td>
                     <td>@taxAmount</td>
                 </tr>
                 <tr>
-                    <td colspan="4"><strong>Total</strong></td>
+                    <td colspan="3"><strong>Total</strong></td>
                     <td>@totalAmount</td>
                 </tr>
             </tfoot>                

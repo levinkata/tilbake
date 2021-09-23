@@ -32,24 +32,6 @@
                             <td>
                                 @item.QuoteStatus
                             </td>
-                            @*<td>
-                                @Html.DisplayFor(modelItem => item.Insurer)
-                            </td>
-                            <td class="justify-content-center">
-                                <a asp-controller="Quotes" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-controller="Quotes" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-dark rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Quotes" asp-action="Details" asp-route-id="@item.Id">View</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Quotes" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="#">Print</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Quotes" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
-                                    </ul>
-                                </div>
-                            </td>*@
                         </tr>
                     }
                 </tbody>

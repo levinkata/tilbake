@@ -5,78 +5,82 @@
     var totalAmount = 0M;
     var taxRate = ViewBag.TaxRate;
 }
-@if (Model.Any())
-{
-    <div class="form-group">
-        <table id="tblQuoteItems" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        <strong>Description</strong>
-                    </th>
-                    <th>
-                        <strong>Cover Type</strong>
-                    </th>
-                    <th>
-                        <strong>Sum Insured</strong>
-                    </th>
-                    <th>
-                        <strong>Premium</strong>
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            <a asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">@item.Description</a>
-                        </td>
-                        <td>@item.CoverType.Name</td>
-                        <td>@item.SumInsured</td>
-                        <td>@item.Premium</td>
-                        <td class="d-flex justify-content-end">
-                            <div class="btn-group">
-                                <a class="btn btn-link dropdown-toggle text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false"></a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">View</a></li>
-                                    <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                    <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    subTotal = subTotal + @item.Premium;
-                    taxAmount = subTotal * taxRate/100;
-                    totalAmount = subTotal + taxAmount;
-                }
-            </tbody>
-            @if (subTotal > 0)
-            {
-            <tfoot>
-                <tr>
-                    <td colspan="3">Sub total</td>
-                    <td>@subTotal</td>
-                </tr>
-                <tr>
-                    <td colspan="3">VAT (@taxRate)</td>
-                    <td>@taxAmount</td>
-                </tr>
-                <tr>
-                    <td colspan="3"><strong>Total</strong></td>
-                    <td>@totalAmount</td>
-                </tr>
-            </tfoot>                
-                    
-            }            
 
-        </table>
+<div class="card">
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="form-group">
+                <table id="tblQuoteItems" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>Description</strong>
+                            </th>
+                            <th>
+                                <strong>Cover Type</strong>
+                            </th>
+                            <th>
+                                <strong>Sum Insured</strong>
+                            </th>
+                            <th>
+                                <strong>Premium</strong>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">@item.Description</a>
+                                </td>
+                                <td>@item.CoverType.Name</td>
+                                <td>@item.SumInsured</td>
+                                <td>@item.Premium</td>
+                                <td class="d-flex justify-content-end">
+                                    <div class="btn-group">
+                                        <a class="btn btn-link dropdown-toggle text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">View</a></li>
+                                            <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#">Print</a></li>
+                                            <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            subTotal = subTotal + @item.Premium;
+                            taxAmount = subTotal * taxRate/100;
+                            totalAmount = subTotal + taxAmount;
+                        }
+                    </tbody>
+                    @if (subTotal > 0)
+                    {
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right"><strong>Sub total</strong></td>
+                            <td>@subTotal</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right"><strong>VAT (@taxRate)</strong></td>
+                            <td>@taxAmount</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right"><strong>Total</strong></td>
+                            <td>@totalAmount</td>
+                        </tr>
+                    </tfoot>
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <caption>No Records Found</caption>
+        }
+
     </div>
-}
-else
-{
-    <caption>No Records Found</caption>
-}
+</div>

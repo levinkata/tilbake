@@ -31,6 +31,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IWallTypeService _wallTypeService;
         private readonly IPortfolioClientService _portfolioClientService;
         private readonly IPortfolioService _portfolioService;
+        private readonly ITaxService _taxService;
 
         public QuotesController(IQuoteService quoteService,
                                 IBuildingConditionService buildingConditionService,
@@ -48,7 +49,8 @@ namespace Tilbake.MVC.Controllers
                                 IRoofTypeService roofTypeService,
                                 IWallTypeService wallTypeService,
                                 IPortfolioClientService portfolioClientService,
-                                IPortfolioService portfolioService)
+                                IPortfolioService portfolioService,
+                                ITaxService taxService)
         {
             _quoteService = quoteService;
             _buildingConditionService = buildingConditionService;
@@ -67,6 +69,7 @@ namespace Tilbake.MVC.Controllers
             _wallTypeService = wallTypeService;
             _portfolioClientService = portfolioClientService;
             _portfolioService = portfolioService;
+            _taxService = taxService;
         }
 
         // GET: Quotes
@@ -103,11 +106,6 @@ namespace Tilbake.MVC.Controllers
                 QuoteResources = resources.ToList()
             };
             return View(searchResource);
-        }
-
-        public async Task<IActionResult> Quotation()
-        {
-            return await Task.Run(() => View());
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -192,6 +190,16 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.Quote.PortfolioClientId });
             }
 
+            return View(resource);
+        }
+
+        public async Task<IActionResult> Quotation(Guid id)
+        {
+            var taxes = await _taxService.GetAllAsync();
+            var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
+
+            ViewBag.TaxRate = taxRate;
+            var resource = await _quoteService.GetByIdAsync(id);
             return View(resource);
         }
 

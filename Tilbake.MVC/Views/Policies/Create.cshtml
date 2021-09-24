@@ -550,6 +550,7 @@
     <script>
         var portfolioClientId = '@Model.PortfolioClientId';
         var clientId = '@Model.ClientId';
+        var startDate = '';
         var allRisks = [];
         var contents = [];
         var houses = [];
@@ -565,8 +566,41 @@
         }
 
         $(document).ready(function () {
-            //  LoadBankAccount(selectedklientId);
+            startDate = new Date($('#CoverStartDate').val());
+            if(startDate != '' && startDate != null)
+            {
+                setEndDate(startDate);
+            }
         });
+
+        $('#CoverStartDate').change(function () {
+            startDate = new Date($(this).val());
+            if(startDate != '' && startDate != null)
+            {
+                setEndDate(startDate);
+            }
+        });
+
+        function setEndDate()
+        {
+            var year = startDate.getFullYear();
+            var month = ('0' + (startDate.getMonth() + 1)).slice(-2);
+            var day = ('0' + startDate.getDate()).slice(-2);
+
+            var addYearDate = new Date(year + 1, month - 1, day);
+            
+            var insurerEndDate = new Date(addYearDate);
+            insurerEndDate.setDate(insurerEndDate.getDate() - 1);
+
+            var newDay = ('0' + insurerEndDate.getDate()).slice(-2);
+            var newMonth = ('0' + (insurerEndDate.getMonth() + 1)).slice(-2);
+            
+            var formattedDate = insurerEndDate.getFullYear()+'-'+(newMonth)+'-'+(newDay);
+            var formattedCurrentDate = year+'-'+(month)+'-'+(day) ;
+
+            $('#CoverEndDate').val(formattedDate);
+            $('#InceptionDate').val(formattedCurrentDate);
+        }
 
         $("#MotorMakeId").change(function () {
             var selectedMotorMakeId = $("#MotorMakeId option:selected").val();

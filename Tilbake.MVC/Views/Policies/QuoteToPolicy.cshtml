@@ -31,8 +31,7 @@
             <div class="col-4">
                 <div class="form-group">
                     <label asp-for="RunDay" class="control-label"></label>
-                    <input asp-for="RunDay" class="form-control" />
-                    <span asp-validation-for="RunDay" class="text-danger"></span>
+                    <select asp-for="RunDay" class="form-control" asp-items="Model.DayList"></select>
                 </div>
             </div>
         </div>
@@ -121,19 +120,25 @@
         });
 
         function setEndDate()
-        {   
-            alert('Start date!! ' + startDate.getFullYear());
+        {
             var year = startDate.getFullYear();
-            var month = String(startDate.getMonth() + 1).padStart(2, '0');
-            var day = String(startDate.getDate()).padStart(2, '0');
+            var month = ('0' + (startDate.getMonth() + 1)).slice(-2);
+            var day = ('0' + startDate.getDate()).slice(-2);
 
-            var endDate = new Date(year + 1, month, day - 1);
-            // sendDate.setDate(endDate.getDate() - 1);
-            var foramttedDate = year + '-' + month + '-' + day;
-            $('#CoverEndDate').val(endDate);
-            alert('End date!! ' + foramttedDate);
+            var addYearDate = new Date(year + 1, month - 1, day);
+            
+            var insurerEndDate = new Date(addYearDate);
+            insurerEndDate.setDate(insurerEndDate.getDate() - 1);
+
+            var newDay = ('0' + insurerEndDate.getDate()).slice(-2);
+            var newMonth = ('0' + (insurerEndDate.getMonth() + 1)).slice(-2);
+            
+            var formattedDate = insurerEndDate.getFullYear()+'-'+(newMonth)+'-'+(newDay);
+            var formattedCurrentDate = year+'-'+(month)+'-'+(day) ;
+
+            $('#CoverEndDate').val(formattedDate);
+            $('#InceptionDate').val(formattedCurrentDate);
         }
-
     </script>
 
 

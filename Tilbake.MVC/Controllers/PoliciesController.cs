@@ -92,6 +92,7 @@ namespace Tilbake.MVC.Controllers
                 QuoteId = quoteId,
                 InsurerPolicyNumber = "TBA",
                 CoverStartDate = DateTime.Now,
+                DayList = SelectLists.RegisteredDays(0),
                 PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, Guid.Empty),
                 PolicyStatusList = SelectLists.PolicyStatuses(policyStatuses, Guid.Empty),
                 PolicyTypeList = SelectLists.PolicyTypes(policyTypes, Guid.Empty),

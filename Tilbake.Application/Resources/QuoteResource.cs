@@ -43,13 +43,11 @@ namespace Tilbake.Application.Resources
         public Client Client { get; set; }
         public Insurer Insurer { get; set; }
         public PortfolioClient PortfolioClient { get; set; }
-
-        //  Descriptions
-        [Display(Name = "Quote Status")]
-        public string QuoteStatus { get; set; }
+        public QuoteStatus QuoteStatus { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }
+        public SelectList DayList { get; set; }
         public SelectList InsurerList { get; set; }
         public SelectList QuoteStatusList { get; set; }
     }

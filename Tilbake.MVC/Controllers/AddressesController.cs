@@ -54,14 +54,16 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var countryId = resource.CountryId;
+            var cityId = resource.CityId;
+            var city = await _cityService.GetByIdAsync(cityId);
+            var countryId = city.CountryId;
 
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
             resource.CountryId = countryId;
             resource.CountryList = SelectLists.Countries(countries, countryId);
-            resource.CityList = SelectLists.Cities(cities, resource.CityId);
+            resource.CityList = SelectLists.Cities(cities, cityId);
             return View(resource);
         }
 
@@ -87,12 +89,14 @@ namespace Tilbake.MVC.Controllers
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { portfolioId = Guid.Empty, clientId = resource.ClientId });
             }
 
-            var countryId = resource.CountryId;
+            var cityId = resource.CityId;
+            var city = await _cityService.GetByIdAsync(cityId);
+            var countryId = city.CountryId;
 
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
-            resource.CityList = SelectLists.Cities(cities, resource.CityId);
+            resource.CityList = SelectLists.Cities(cities, cityId);
             resource.CountryList = SelectLists.Countries(countries, countryId);
 
             return View(resource);

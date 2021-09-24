@@ -10,7 +10,7 @@ namespace Tilbake.Application.Mapping
         {
             CreateMap<Address, AddressResource>()
                 .ForMember(dest => dest.CountryId, opt => opt.MapFrom(src => src.City.CountryId))
-                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name)).ReverseMap();
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City)).ReverseMap();
 
             CreateMap<AllRisk, AllRiskResource>()
                     .ForMember(dest => dest.RiskItem, opt => opt.MapFrom(src => src.RiskItem.Description)).ReverseMap();
@@ -158,7 +158,7 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.PortfolioClient.Client))
                 .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer))
-                .ForMember(dest => dest.QuoteStatus, opt => opt.MapFrom(src => src.QuoteStatus.Name))
+                .ForMember(dest => dest.QuoteStatus, opt => opt.MapFrom(src => src.QuoteStatus))
                 .ForMember(dest => dest.QuoteItems, opt => opt.MapFrom(src => src.QuoteItems)).ReverseMap();
             
             CreateMap<QuoteItem, QuoteItemResource>()

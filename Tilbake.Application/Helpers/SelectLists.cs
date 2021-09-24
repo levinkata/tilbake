@@ -390,6 +390,33 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", quoteStatusId);
         }
 
+        public static SelectList RegisteredDays(int day)
+        {
+            List<int> days = new();
+
+            for (int i = 1; i < 32; i++)
+            {
+                days.Add(i);
+            }
+
+            var dayRanges = days.Select(c => new
+                                {
+                                    Id = c.ToString(),
+                                    Name = c.ToString()
+                                }).ToList();
+
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Day", Value = "" });
+
+            foreach (var item in dayRanges)
+            {
+                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
+            }
+
+            return (day == 0) ? new SelectList(items, "Value", "Text") :
+                                new SelectList(items, "Value", "Text", day);
+        }
+
         public static SelectList RegisteredRisks(string risk)
         {
             List<string> registeredRisks = new();

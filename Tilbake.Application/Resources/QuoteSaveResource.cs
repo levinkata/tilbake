@@ -88,6 +88,7 @@ namespace Tilbake.Application.Resources
         public SelectList QuoteStatusList { get; set; }
         public SelectList BodyTypeList { get; set; }
         public SelectList BuildingConditionList { get; set; }
+        public SelectList DayList { get; set; }
         public SelectList DriverTypeList { get; set; }
         public SelectList HouseConditionList { get; set; }
         public SelectList MotorMakeList { get; set; }

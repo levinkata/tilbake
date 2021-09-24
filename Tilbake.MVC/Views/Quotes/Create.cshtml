@@ -705,9 +705,8 @@
         }
 
         $(document).ready(function () {
-            $('#RegNumber, #EngineNumber, #ChassisNumber').keyup(function () {
-                $(this).val($(this).val().toUpperCase());
-            });
+            // Do something here
+            alert('Before error');
         });
 
         $("#MotorMakeId").change(function () {
@@ -870,7 +869,7 @@
             //  1. Build House Array to match model class House
             var house = {
                 Id: clientRiskId,
-                PhysicalAddress: $('#HousePhysicalAddress').val();,
+                PhysicalAddress: $('#HousePhysicalAddress').val(),
                 ResidenceTypeId: $('#HouseResidenceTypeId option:selected').val(),
                 RoofTypeId: $('#HouseRoofTypeId option:selected').val(),
                 WallTypeId: $('#HouseWallTypeId option:selected').val(),

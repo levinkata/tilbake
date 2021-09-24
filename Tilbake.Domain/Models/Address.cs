@@ -10,7 +10,6 @@ namespace Tilbake.Domain.Models
         public string PostalAddress { get; set; }
         public Guid? CityId { get; set; }
         public Guid? ClientId { get; set; }
-        public Guid? CompanyId { get; set; }
         public Guid? LossAdjusterId { get; set; }
         public Guid? RepairerId { get; set; }
         public Guid? TracingAgentId { get; set; }
@@ -26,7 +25,6 @@ namespace Tilbake.Domain.Models
         public virtual Attorney Attorney { get; set; }
         public virtual City City { get; set; }
         public virtual Client Client { get; set; }
-        public virtual Company Company { get; set; }
         public virtual LossAdjuster LossAdjuster { get; set; }
         public virtual Repairer Repairer { get; set; }
         public virtual RoadsideAssist RoadsideAssist { get; set; }

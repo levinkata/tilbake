@@ -67,6 +67,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<ClientType> ClientTypes { get; set; }
         public virtual DbSet<CommissionRate> CommissionRates { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
+        public virtual DbSet<CompanyBankAccount> CompanyBankAccounts { get; set; }
         public virtual DbSet<Content> Contents { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<CoverType> CoverTypes { get; set; }
@@ -176,15 +177,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-        //            }
-        //        }
-
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//         {
+//             if (!optionsBuilder.IsConfigured)
+//             {
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+//             }
+//         }
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaveChanges(_userId);
@@ -286,11 +286,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .WithMany(p => p.Addresses)
                     .HasForeignKey(d => d.ClientId)
                     .HasConstraintName("FK_Address_Client");
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.Addresses)
-                    .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK_Address_Company");
 
                 entity.HasOne(d => d.LossAdjuster)
                     .WithMany(p => p.Addresses)
@@ -1414,13 +1409,62 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.Fax)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.Phone).HasMaxLength(50);
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Phone)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PhysicalAddress)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PostalAddress)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.TaxNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Website).HasMaxLength(100);
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.Companies)
+                    .HasForeignKey(d => d.CityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Company_City");
+            });
+
+            modelBuilder.Entity<CompanyBankAccount>(entity =>
+            {
+                entity.ToTable("CompanyBankAccount");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.BankAccount)
+                    .WithMany(p => p.CompanyBankAccounts)
+                    .HasForeignKey(d => d.BankAccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CompanyBankAccount_BankAccount");
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.CompanyBankAccounts)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CompanyBankAccount_Company");
             });
 
             modelBuilder.Entity<Content>(entity =>

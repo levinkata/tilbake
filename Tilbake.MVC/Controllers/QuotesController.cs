@@ -165,6 +165,7 @@ namespace Tilbake.MVC.Controllers
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
                 QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, Guid.Empty),
                 BodyTypeList = SelectLists.BodyTypes(bodyTypes, Guid.Empty),
+                DayList = SelectLists.RegisteredDays(0),
                 DriverTypeList = SelectLists.DriverTypes(driverTypes, Guid.Empty),
                 HouseConditionList = SelectLists.HouseConditions(houseConditions, Guid.Empty),
                 MotorMakeList = SelectLists.MotorMakes(motorMakes, Guid.Empty),
@@ -218,6 +219,7 @@ namespace Tilbake.MVC.Controllers
 
             resource.ClientId = result.ClientId;
             resource.PortfolioId = result.PortfolioId;
+            resource.DayList = SelectLists.RegisteredDays(resource.RunDay);
             resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
             resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
 

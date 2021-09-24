@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
@@ -17,7 +18,6 @@ namespace Tilbake.Application.Resources
         [Display(Name = "City")]
         public Guid CityId { get; set; }
         public Guid? ClientId { get; set; }
-        public Guid? CompanyId { get; set; }
         public Guid? LossAdjusterId { get; set; }
         public Guid? RepairerId { get; set; }
         public Guid? TracingAgentId { get; set; }
@@ -26,12 +26,11 @@ namespace Tilbake.Application.Resources
         public Guid? TowTruckId { get; set; }
         public Guid? RoadsideAssistId { get; set; }
 
+        public City City { get; set; }
+
         //  Other
         [Display(Name = "Country")]
         public Guid CountryId { get; set; }
-
-        //  Description
-        public string CityName { get; set; }
 
         //  SelectLists
         public SelectList CityList { get; set; }

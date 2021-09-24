@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public BankAccount()
         {
             ClientBankAccounts = new HashSet<ClientBankAccount>();
+            CompanyBankAccounts = new HashSet<CompanyBankAccount>();
             PayeeBankAccounts = new HashSet<PayeeBankAccount>();
         }
 
@@ -21,6 +22,7 @@ namespace Tilbake.Domain.Models
 
         public virtual BankBranch BankBranch { get; set; }
         public virtual ICollection<ClientBankAccount> ClientBankAccounts { get; set; }
+        public virtual ICollection<CompanyBankAccount> CompanyBankAccounts { get; set; }
         public virtual ICollection<PayeeBankAccount> PayeeBankAccounts { get; set; }
     }
 }

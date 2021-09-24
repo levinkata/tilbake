@@ -23,6 +23,7 @@ namespace Tilbake.Domain.Models
         public string ChassisNumber { get; set; }
         public string EngineCapacity { get; set; }
         public int OdometerReading { get; set; }
+        public int ClaimFreeGroup { get; set; }
         public string Colour { get; set; }
         public Guid MotorUseId { get; set; }
         public bool IsImport { get; set; }

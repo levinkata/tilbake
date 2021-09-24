@@ -19,7 +19,7 @@
                     </tr>
                     <tr>
                         <th><strong>Insurer</strong></th>
-                        <td>@Model.Insurer</td>
+                        <td>@Model.Insurer.Name</td>
                     </tr>
                     <tr>
                         <th><strong>Cover Start Date</strong></th>
@@ -35,15 +35,15 @@
                     </tr>
                     <tr>
                         <th><strong>Status</strong></th>
-                        <td>@Model.PolicyStatus</td>
+                        <td>@Model.PolicyStatus.Name</td>
                     </tr>
                     <tr>
                         <th><strong>Type</strong></th>
-                        <td>@Model.PolicyType</td>
+                        <td>@Model.PolicyType.Name</td>
                     </tr>
                     <tr>
                         <th><strong>Payment Method</strong></th>
-                        <td>@Model.PaymentMethod</td>
+                        <td>@Model.PaymentMethod.Name</td>
                     </tr>
                 </tbody>
             </table>
@@ -51,8 +51,5 @@
                 <a asp-controller="Policies" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Details</a>
             </div>
         }
-        <div class="form-group">
-            <a asp-controller="Policies" asp-action="Create" asp-route-portfolioClientId="@ViewBag.PortfolioClientId" class="btn btn-outline-dark btn-sm"><i class="fas fa-plus"></i> Policy</a>
-        </div>
     </div>
 </div>

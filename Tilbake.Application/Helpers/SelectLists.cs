@@ -394,7 +394,7 @@ namespace Tilbake.Application.Helpers
         {
             List<int> days = new();
 
-            for (int i = 1; i < 32; i++)
+            for (int i = 0; i < 32; i++)
             {
                 days.Add(i);
             }

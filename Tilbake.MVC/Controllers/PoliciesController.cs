@@ -82,6 +82,7 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> QuoteToPolicy(Guid quoteId)
         {
+            var quote = await _quoteService.GetByIdAsync(quoteId);
             var paymentMethods = await _paymentMethodService.GetAllAsync();
             var policyStatuses = await _policyStatusService.GetAllAsync();
             var policyTypes = await _policyTypeService.GetAllAsync();
@@ -92,7 +93,9 @@ namespace Tilbake.MVC.Controllers
                 QuoteId = quoteId,
                 InsurerPolicyNumber = "TBA",
                 CoverStartDate = DateTime.Now,
-                DayList = SelectLists.RegisteredDays(0),
+                QuoteNumber = quote.QuoteNumber,
+                RunDay = quote.RunDay,
+                DayList = SelectLists.RegisteredDays(quote.RunDay),
                 PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, Guid.Empty),
                 PolicyStatusList = SelectLists.PolicyStatuses(policyStatuses, Guid.Empty),
                 PolicyTypeList = SelectLists.PolicyTypes(policyTypes, Guid.Empty),
@@ -245,7 +248,6 @@ namespace Tilbake.MVC.Controllers
             {
                 return NotFound();
             }
-
             return View(resource);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
@@ -52,20 +53,12 @@ namespace Tilbake.Application.Resources
         //  Descriptions
         public string BankAccount { get; set; }
 
-        [Display(Name = "Insurer")]
-        public string Insurer { get; set; }
-
-        [Display(Name = "Payment Method")]
-        public string PaymentMethod { get; set; }
-
-        [Display(Name = "Policy Status")]
-        public string PolicyStatus { get; set; }
-
-        [Display(Name = "Policy Type")]
-        public string PolicyType { get; set; }
-
-        [Display(Name = "Policy Status")]
-        public string SalesType { get; set; }
+        //  Tables
+        public Insurer Insurer { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
+        public PolicyStatus PolicyStatus { get; set; }
+        public PolicyType PolicyType { get; set; }
+        public SalesType SalesType { get; set; }
 
         //  SelectLists
         public SelectList BankAccountList { get; set; }
@@ -73,6 +66,7 @@ namespace Tilbake.Application.Resources
         public SelectList PaymentMethodList { get; set; }
         public SelectList PolicyStatusList { get; set; }
         public SelectList PolicyTypeList { get; set; }
+        public PortfolioClient PortfolioClient { get; set; }
         public SelectList SalesTypeList { get; set; }
 
     }

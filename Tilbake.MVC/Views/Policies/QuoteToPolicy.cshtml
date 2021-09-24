@@ -7,7 +7,13 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<h4>Policy</h4>
+<div class="alert alert-success" role="alert">
+    <h4>Quote Conversion</h4>
+    <p>This process will convert quotation to policy.</p>
+    <hr />
+    <p class="mb-0">Covert Quotation @Model.QuoteNumber to Policy</p>
+</div>
+
 <hr />
 <div class="row">
 
@@ -94,7 +100,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back</a>
+    <a asp-controller="Quotes" asp-action="Details" asp-route-id="@Model.QuoteId">Return</a>
 </div>
 
 @section Scripts {

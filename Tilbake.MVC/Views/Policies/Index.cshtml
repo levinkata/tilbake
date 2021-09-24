@@ -34,19 +34,19 @@
                     <strong>@Html.DisplayNameFor(model => model.InceptionDate)</strong>
                 </th>
                 <th>
-                    <strong>@Html.DisplayNameFor(model => model.Insurer)</strong>
+                    <strong>@Html.DisplayNameFor(model => model.Insurer.Name)</strong>
                 </th>
                 <th>
-                    <strong>@Html.DisplayNameFor(model => model.PaymentMethod)</strong>
+                    <strong>@Html.DisplayNameFor(model => model.PaymentMethod.Name)</strong>
                 </th>
                 <th>
-                    <strong>@Html.DisplayNameFor(model => model.PolicyStatus)</strong>
+                    <strong>@Html.DisplayNameFor(model => model.PolicyStatus.Name)</strong>
                 </th>
                 <th>
-                    <strong>@Html.DisplayNameFor(model => model.PolicyType)</strong>
+                    <strong>@Html.DisplayNameFor(model => model.PolicyType.Name)</strong>
                 </th>
                 <th>
-                    <strong>@Html.DisplayNameFor(model => model.SalesType)</strong>
+                    <strong>@Html.DisplayNameFor(model => model.SalesType.Name)</strong>
                 </th>
                 <th></th>
             </tr>
@@ -71,19 +71,19 @@
                         @Html.DisplayFor(modelItem => item.InceptionDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Insurer)
+                        @Html.DisplayFor(modelItem => item.Insurer.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PaymentMethod)
+                        @Html.DisplayFor(modelItem => item.PaymentMethod.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PolicyStatus)
+                        @Html.DisplayFor(modelItem => item.PolicyStatus.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PolicyType)
+                        @Html.DisplayFor(modelItem => item.PolicyType.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.SalesType)
+                        @Html.DisplayFor(modelItem => item.SalesType.Name)
                     </td>
                     <td class="justify-content-end">
                         <div class="btn-group">

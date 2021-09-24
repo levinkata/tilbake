@@ -36,10 +36,10 @@
             <div class="col">
                 <dl class="row">
                     <dt class="col-sm-6">
-                        @Html.DisplayNameFor(model => model.Insurer)
+                        @Html.DisplayNameFor(model => model.Insurer.Name)
                     </dt>
                     <dd class="col-sm-6">
-                        @Html.DisplayFor(model => model.Insurer)
+                        @Html.DisplayFor(model => model.Insurer.Name)
                     </dd>
                     <dt class="col-sm-6">
                         @Html.DisplayNameFor(model => model.InsurerPolicyNumber)
@@ -82,28 +82,28 @@
                         @Html.DisplayFor(model => model.Comment)
                     </dd>
                     <dt class="col-sm-6">
-                        @Html.DisplayNameFor(model => model.PaymentMethod)
+                        @Html.DisplayNameFor(model => model.PaymentMethod.Name)
                     </dt>
                     <dd class="col-sm-6">
-                        @Html.DisplayFor(model => model.PaymentMethod)
+                        @Html.DisplayFor(model => model.PaymentMethod.Name)
                     </dd>
                     <dt class="col-sm-6">
-                        @Html.DisplayNameFor(model => model.PolicyStatus)
+                        @Html.DisplayNameFor(model => model.PolicyStatus.Name)
                     </dt>
                     <dd class="col-sm-6">
-                        @Html.DisplayFor(model => model.PolicyStatus)
+                        @Html.DisplayFor(model => model.PolicyStatus.Name)
                     </dd>
                     <dt class="col-sm-6">
-                        @Html.DisplayNameFor(model => model.PolicyType)
+                        @Html.DisplayNameFor(model => model.PolicyType.Name)
                     </dt>
                     <dd class="col-sm-6">
-                        @Html.DisplayFor(model => model.PolicyType)
+                        @Html.DisplayFor(model => model.PolicyType.Name)
                     </dd>
                     <dt class="col-sm-6">
-                        @Html.DisplayNameFor(model => model.SalesType)
+                        @Html.DisplayNameFor(model => model.SalesType.Name)
                     </dt>
                     <dd class="col-sm-6">
-                        @Html.DisplayFor(model => model.SalesType)
+                        @Html.DisplayFor(model => model.SalesType.Name)
                     </dd>
                 </dl>
             </div>
@@ -116,5 +116,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@Model.PortfolioClient.PortfolioId" asp-route-clientId="@Model.PortfolioClient.ClientId">Return</a>
 </div>

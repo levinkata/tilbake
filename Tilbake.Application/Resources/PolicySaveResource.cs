@@ -52,6 +52,7 @@ namespace Tilbake.Application.Resources
         public string Comment { get; set; }
 
         public List<PolicyRisk> QuoteItems { get; } = new List<PolicyRisk>();
+        public int QuoteNumber { get; set; }
 
         //  AllRisk
         [Display(Name = "Sum Insured")]
@@ -62,6 +63,13 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        //  Building
+        [Display(Name = "Sum Insured")]
+        public decimal BuildingSumInsured { get; set; }
+
+        [Display(Name = "Cover Type")]
+        public Guid BuildingCoverTypeId { get; set; }
 
         //  Content
         [Display(Name = "Sum Insured")]
@@ -89,6 +97,7 @@ namespace Tilbake.Application.Resources
 
         //  Risks
         public AllRisk AllRisk { get; set; }
+        public Building Building { get; set; }
         public Content Content { get; set; }
         public House House { get; set; }
         public Motor Motor { get; set; }

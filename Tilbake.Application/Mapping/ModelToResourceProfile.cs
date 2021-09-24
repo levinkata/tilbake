@@ -128,11 +128,12 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<Policy, PolicyResource>()
                 .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.ClientBankAccount.BankAccount.AccountNumber))
-                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer.Name))
-                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod.Name))
-                .ForMember(dest => dest.PolicyStatus, opt => opt.MapFrom(src => src.PolicyStatus.Name))
-                .ForMember(dest => dest.PolicyType, opt => opt.MapFrom(src => src.PolicyType.Name))
-                .ForMember(dest => dest.SalesType, opt => opt.MapFrom(src => src.SalesType.Name)).ReverseMap();
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer))
+                .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
+                .ForMember(dest => dest.PolicyStatus, opt => opt.MapFrom(src => src.PolicyStatus))
+                .ForMember(dest => dest.PolicyType, opt => opt.MapFrom(src => src.PolicyType))
+                .ForMember(dest => dest.SalesType, opt => opt.MapFrom(src => src.SalesType)).ReverseMap();
 
             CreateMap<PolicyRisk, PolicyRiskResource>()
                 .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType.Name)).ReverseMap();

@@ -29,8 +29,8 @@ namespace Tilbake.MVC.Controllers
             var insurers = await _insurerService.GetAllAsync();
 
             RatingMotorSelectResource resource = new();
-
-            if(insurerId == null || insurerId == Guid.Empty)
+            
+            if (insurerId == null || insurerId == Guid.Empty)
             {
                 resource.InsurerList = SelectLists.Insurers(insurers, Guid.Empty);
             } else

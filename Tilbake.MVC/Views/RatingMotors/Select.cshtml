@@ -4,20 +4,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
-<br />
-
-<div class="row mb-3">
+<div class="bg-light p-5 rounded mt-3">
+    <h1>Select Insurer</h1>
+    <p class="lead">Rates listed per Insurer</p>
     <form asp-action="Select" method="get">
-        <div class="form-inline border border-warning justify-content-center">  
+        <div class="row ">  
             <div class="form-group">
-                <label asp-for="InsurerId" class="control-label" style="display: block; padding-right: 10px; text-align: right;"></label>
+                <label asp-for="InsurerId" class="control-label"></label>
                 <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList"></select>
                 </div>
         </div>
     </form>
-</div>
-
+  </div>
 
 @if(Model.InsurerId != Guid.Empty)
 {
@@ -35,13 +33,14 @@ else
     <script>
         $(document).ready(function() {
             $('#InsurerId').on('change', function() {
+                
                 var selectedInsurerId = $("#InsurerId option:selected").val();
                 if(selectedInsurerId != null && selectedInsurerId != '')
                 {
                     var $form = $(this).closest('form');
-                    $form.find('button[type=submit]').click();
+                    $form.submit();
                 }
             });
-        });        
+        });
     </script>    
 }

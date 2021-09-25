@@ -8,7 +8,7 @@
             @if (Model.Any())
             {
                 <div class="form-group">
-                    <table id="tblRatingMotors" class="table">
+                    <table id="tblRatingMotors" class="table table-borderless">
                         <thead>
                             <tr>
                                 <th>
@@ -30,11 +30,11 @@
                             {
                                 <tr>
                                     <td>
-                                        <a asp-controller="RatingMotors" asp-action="Details" asp-route-id="@item.Id">@item.StartValue</a>
+                                        <a asp-controller="RatingMotors" asp-action="Details" asp-route-id="@item.Id">@item.StartValue.ToString("N2")</a>
                                     </td>
-                                    <td>@item.EndValue</td>
-                                    <td>@item.RateLocal</td>
-                                    <td>@item.RateImport</td>
+                                    <td>@item.EndValue.ToString("N2")</td>
+                                    <td>@item.RateLocal%</td>
+                                    <td>@item.RateImport%</td>
                                 </tr>
                             }
                         </tbody>
@@ -45,7 +45,26 @@
             {
                 <caption>No Records Found</caption>
             }
-
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-link text-decoration-none">Add New</button>
+            </div>
+            <div class="form row">
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="From" aria-label="From">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="To" aria-label="To">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="Rate (Local)" aria-label="Rate (Local)">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="Rate (Import)" aria-label="Rate (Import)">
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-link text-decoration-none">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

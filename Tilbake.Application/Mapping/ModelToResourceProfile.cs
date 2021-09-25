@@ -176,6 +176,9 @@ namespace Tilbake.Application.Mapping
             CreateMap<RatingMotorExcess, RatingMotorExcessResource>()
                 .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer)).ReverseMap();
 
+            CreateMap<RatingMotorPremium, RatingMotorPremiumResource>()
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer)).ReverseMap();
+
             CreateMap<Receivable, ReceivableResource>()
                 .ForMember(dest => dest.PaymentType, opt => opt.MapFrom(src => src.PaymentType.Name))
                 .ForMember(dest => dest.ReceivableInvoices, opt => opt.MapFrom(src => src.ReceivableInvoices))

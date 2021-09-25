@@ -1,0 +1,53 @@
+﻿@model IEnumerable<RatingMotorResource>
+@{
+    ViewData["Title"] = "InsurerName";
+}
+
+<div class="card">
+    <div class="card-header">
+        @ViewData["Title"]
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="form-group">
+                <table id="tblRatingMotors" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>From</strong>
+                            </th>
+                            <th>
+                                <strong>To</strong>
+                            </th>
+                            <th>
+                                <strong>Rate (Local)</strong>
+                            </th>
+                            <th>
+                                <strong>Rate (Import)</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="RatingMotors" asp-action="Details" asp-route-id="@item.Id">@item.StartValue</a>
+                                </td>
+                                <td>@item.EndValue</td>
+                                <td>@item.RateLocal</td>
+                                <td>@item.RateImport</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <caption>No Records Found</caption>
+        }
+
+    </div>
+</div>

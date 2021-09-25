@@ -22,5 +22,8 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Rate (Import)")]
         public decimal RateImport { get; set; }
+
+        //  Description
+        public string InsurerName { get; set; }
     }
 }

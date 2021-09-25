@@ -1,0 +1,56 @@
+﻿@model RatingMotorSelectResource
+@{
+    ViewData["Title"] = "Select";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<br />
+
+<form asp-action="Index" method="get">
+    <div class="form-inline border border-warning justify-content-center">  
+        <div class="form-group">
+            <label asp-for="InsurerId" class="control-label" style="display: block; padding-right: 10px; text-align: right;"></label>
+            <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList"></select>
+            </div>
+                    <button type="submit" id="SearchButton" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
+    </div>
+</form>
+
+@if(Model.InsurerId != Guid.Empty)
+{
+     <div class="form-control">
+        @await Component.InvokeAsync("RatingMotors", new { insurer = Model.InsurerId })
+     </div>
+}
+else
+{
+    <p>No rates for this Insurer</p>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        @* $("#InsurerId").change(function () {
+            var selectedInsurerId = $("#InsurerId option:selected").val();
+            if(selectedInsurerId != null && selectedInsurerId != '')
+            {
+                window.location.href = '/RatingMotors/Select?insurer=' + selectedInsurerId;
+            }
+        }); *@
+
+        $(document).ready(function() {
+            $('#InsurerId').on('change', function() {
+                var selectedInsurerId = $("#InsurerId option:selected").val();
+                if(selectedInsurerId != null && selectedInsurerId != '')
+                {
+                    var $form = $(this).closest('form');
+                    $form.find('input[type=submit]').click();
+                }
+            });
+        });        
+    </script>    
+}

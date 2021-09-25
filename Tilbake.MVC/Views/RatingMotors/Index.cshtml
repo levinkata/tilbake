@@ -4,43 +4,4 @@
 
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <strong>From</strong>
-            </th>
-            <th>
-                <strong>To</strong>
-            </th>
-            <th>
-                <strong>Rate (Local)</strong>
-            </th>
-            <th>
-                <strong>Rate (Import)</strong>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RateLocal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RateImport)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@await Component.InvokeAsync("RatingMotors", new { insurer = Model.FirstOrDefault().InsurerId })

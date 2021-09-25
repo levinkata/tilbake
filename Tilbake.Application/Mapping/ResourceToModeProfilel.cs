@@ -61,6 +61,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<RatingMotorSaveResource, RatingMotor>();
             CreateMap<RatingMotorDiscountSaveResource, RatingMotorDiscount>();
             CreateMap<RatingMotorExcessSaveResource, RatingMotorExcess>();
+            CreateMap<RatingMotorPremiumSaveResource, RatingMotorPremium>();
             CreateMap<ReceivableSaveResource, Receivable>();
             CreateMap<ReceivableDocumentSaveResource, ReceivableDocument>();
             CreateMap<ResidenceTypeSaveResource, ResidenceType>();

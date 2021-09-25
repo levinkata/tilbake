@@ -72,6 +72,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             RatingMotors = new RatingMotorRepository(_context);
             RatingMotorDiscounts = new RatingMotorDiscountRepository(_context);
             RatingMotorExcesses = new RatingMotorExcessRepository(_context);
+            RatingMotorPremiums = new RatingMotorPremiumRepository(_context);
             Receivables = new ReceivableRepository(_context);
             ReceivableDocuments = new ReceivableDocumentRepository(_context);
             ReceivableInvoices = new ReceivableInvoiceRepository(_context);
@@ -146,6 +147,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IRatingMotorRepository RatingMotors { get; private set; }
         public IRatingMotorDiscountRepository RatingMotorDiscounts { get; private set; }
         public IRatingMotorExcessRepository RatingMotorExcesses { get; private set; }
+        public IRatingMotorPremiumRepository RatingMotorPremiums { get; private set; }
         public IRiskRepository Risks { get; private set; }
         public IRiskItemRepository RiskItems { get; private set; }
         public IReceivableRepository Receivables { get; private set; }

@@ -1,55 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class RatingMotorsController : Controller
+    public class RatingMotorPremiumsController : Controller
     {
-        private readonly IRatingMotorService _ratingMotorService;
+        private readonly IRatingMotorPremiumService _ratingMotorPremiumService;
         private readonly IInsurerService _insurerService;
 
-        public RatingMotorsController(IRatingMotorService ratingMotorService,
+        public RatingMotorPremiumsController(IRatingMotorPremiumService ratingMotorPremiumService,
                                     IInsurerService insurerService)
         {
-            _ratingMotorService = ratingMotorService;
+            _ratingMotorPremiumService = ratingMotorPremiumService;
             _insurerService = insurerService;
         }
 
         public async Task<IActionResult> Index(Guid insurerId)
         {
-            var resources = await _ratingMotorService.GetByInsurerAsync(insurerId);
+            var resources = await _ratingMotorPremiumService.GetByInsurerAsync(insurerId);
             return View(resources);
-        }
-
-        public async Task<IActionResult> Select(Guid? insurerId)
-        {
-            var insurers = await _insurerService.GetAllAsync();
-
-            RatingMotorSelectResource resource = new();
-
-            if(insurerId == null || insurerId == Guid.Empty)
-            {
-                resource.InsurerList = SelectLists.Insurers(insurers, Guid.Empty);
-            } else
-            {
-                resource.InsurerList = SelectLists.Insurers(insurers, insurerId);
-                resource.InsurerId = (Guid)insurerId;
-            }
-
-            return View(resource);
         }
 
         public async Task<IActionResult> Create(Guid insurerId)
         {
-            var insurer = await _insurerService.GetByIdAsync(insurerId);
-
-            RatingMotorSaveResource resource = new()
+            RatingMotorPremiumSaveResource resource = new()
             {
-                InsurerId = insurerId,
-                InsurerName = insurer.Name
+                InsurerId = insurerId
             };
             
             return await Task.Run(() => View(resource));
@@ -57,11 +35,11 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RatingMotorSaveResource resource)
+        public async Task<IActionResult> Create(RatingMotorPremiumSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _ratingMotorService.AddAsync(resource);
+                await _ratingMotorPremiumService.AddAsync(resource);
                 return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
             }
             return View(resource);
@@ -74,7 +52,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorService.GetByIdAsync((Guid)id);
+            var resource = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -90,7 +68,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorService.GetByIdAsync((Guid)id);
+            var resource = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -100,7 +78,7 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, RatingMotorResource resource)
+        public async Task<IActionResult> Edit(Guid id, RatingMotorPremiumResource resource)
         {
             if (id != resource.Id)
             {
@@ -111,7 +89,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _ratingMotorService.UpdateAsync(resource);
+                    await _ratingMotorPremiumService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,7 +107,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorService.GetByIdAsync((Guid)id);
+            var resource = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
             if (resource == null)
             {
                 return NotFound();
@@ -140,9 +118,9 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(RatingMotorResource resource)
+        public async Task<IActionResult> DeleteConfirmed(RatingMotorPremiumResource resource)
         {
-            await _ratingMotorService.DeleteAsync(resource.Id);
+            await _ratingMotorPremiumService.DeleteAsync(resource.Id);
             return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
         }        
     }

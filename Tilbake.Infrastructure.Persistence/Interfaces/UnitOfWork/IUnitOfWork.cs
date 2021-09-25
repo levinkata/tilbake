@@ -63,6 +63,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IRatingMotorRepository RatingMotors { get; }
         IRatingMotorDiscountRepository RatingMotorDiscounts { get; }
         IRatingMotorExcessRepository RatingMotorExcesses { get; }
+        IRatingMotorPremiumRepository RatingMotorPremiums { get; }
         IReceivableRepository Receivables { get; }
         IReceivableDocumentRepository ReceivableDocuments { get; }
         IReceivableInvoiceRepository ReceivableInvoices { get; }

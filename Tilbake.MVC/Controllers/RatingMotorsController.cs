@@ -62,9 +62,25 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _ratingMotorService.AddAsync(resource);
-                return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
+                return RedirectToAction(nameof(Index), new { insurerId = resource.InsurerId });
             }
             return View(resource);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> PostRatingMotor(Guid insurerId, decimal startValue, decimal endValue, decimal rateLocal, decimal rateImport)
+        {
+            RatingMotorSaveResource resource = new()
+            {
+                InsurerId = insurerId,
+                StartValue = startValue,
+                EndValue = endValue,
+                RateLocal = rateLocal,
+                RateImport = rateImport
+            };
+            await _ratingMotorService.AddAsync(resource);
+            return RedirectToAction(nameof(Index), new { insurerId });
         }
 
         public async Task<IActionResult> Details(Guid? id)
@@ -117,7 +133,7 @@ namespace Tilbake.MVC.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
+                return RedirectToAction(nameof(Index), new { insurerId = resource.InsurerId });
             }
             return View(resource);
         }
@@ -143,7 +159,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> DeleteConfirmed(RatingMotorResource resource)
         {
             await _ratingMotorService.DeleteAsync(resource.Id);
-            return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
+            return RedirectToAction(nameof(Index), new { insurerId = resource.InsurerId });
         }        
     }
 }

@@ -46,26 +46,73 @@
                 <caption>No Records Found</caption>
             }
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-link text-decoration-none">Add New</button>
+                <a asp-controller="RatingMotors" asp-action="Create" asp-route-insurerId="@Model.FirstOrDefault().InsurerId" type="button" class="btn btn-link text-decoration-none">Add New</a>
             </div>
-            <div class="form row">
+            <form method="post" class="row" asp-controller="RatingMotors" asp-action="PostRatingMotor" id="ratingMotorForm">
+                <input name="InsurerId" type="hidden" value="@Model.FirstOrDefault().InsurerId" />
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="From" aria-label="From">
+                    <input type="number" name="StartValue" class="form-control" placeholder="From" aria-label="From">
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="To" aria-label="To">
+                    <input type="number" name="EndValue" class="form-control" placeholder="To" aria-label="To">
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="Rate (Local)" aria-label="Rate (Local)">
+                    <input type="number" name="RateLocal" class="form-control" placeholder="Rate (Local)" aria-label="Rate (Local)">
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="Rate (Import)" aria-label="Rate (Import)">
+                    <input type="number" name="RateImport"class="form-control" placeholder="Rate (Import)" aria-label="Rate (Import)">
                 </div>
                 <div class="col-12 mt-3">
                     <button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-link text-decoration-none">Cancel</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            @* $('#ratingMotorForm').submit(function( e ) {
+                alert( "Handler for .submit() called." );
+                e.preventDefault();
+
+            }); *@
+
+            $('#ratingMotorForm').validate({
+                // Specify validation rules
+                rules: {
+                    // The key name on the left side is the name attribute
+                    // of an input field. Validation rules are defined
+                    // on the right side
+                    StartValue: {
+                        required: true,
+                        number: true
+                    },
+                    EndValue: {
+                        required: true,
+                        number: true
+                    }
+                },
+                // Specify validation error messages
+                messages: {
+                    StartValue: "Please enter your From",
+                    EndValue: "Please enter your To"
+                },
+                // Make sure the form is submitted to the destination defined
+                // in the "action" attribute of the form when valid
+                submitHandler: function(form) {
+                    @* var startValue = $('#StartValue').val();
+                    var endValue = $('#EndValue').val();
+                    var rateLocal = $('#RateLocal').val();
+                    var rateImport = $('#RateImport').val();                     *@
+                    form.submit();
+                }
+            });
+        });
+    </script>
+}
+
+@* return RedirectToAction(nameof(Select), new { insurerId = resource.InsurerId }); *@

@@ -24,6 +24,9 @@
     <!-- Multiselect -->
     <link rel="stylesheet" href="~/css/bootstrap-multiselect.css" />
     
+    <!-- Formvalidation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.2-dev/css/formValidation.min.css" integrity="sha512-B9GRVQaYJ7aMZO3WC2UvS9xds1D+gWQoNiXiZYRlqIVszL073pHXi0pxWxVycBk0fnacKIE3UHuWfSeETDCe7w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -69,10 +72,10 @@
                                     <a class="dropdown-item" asp-area="" asp-controller="UserPortfolios" asp-action="Index">Assign Portfolios</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Clients" asp-action="Search">Clients</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="CommissionRates" asp-action="Index">Commission Rates</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="RatingTables" asp-action="Index">Rating Tables</a>                                    
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Claims">Claims</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="RatingTables" asp-action="Index">Rating Tables</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="" asp-controller="Banks" asp-action="Index">Banks</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Carriers" asp-action="Index">Carriers</a>
@@ -104,7 +107,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="~/js/jquery.validate.min.js"></script>
 
     <!-- Bootstrap 5.1 Javascript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
@@ -114,6 +117,10 @@
 
     <!-- Multiselect -->
     <script type="text/javascript" src="~/js/bootstrap-multiselect.js"></script>
+
+    <!-- Formvalidation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.2-dev/js/formValidation.min.js" integrity="sha512-DlXWqMPKer3hZZMFub5hMTfj9aMQTNDrf0P21WESBefJSwvJguz97HB007VuOEecCApSMf5SY7A7LkQwfGyVfg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 
     <!-- Syncfusion Essential JS 2 ScriptManager -->

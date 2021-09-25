@@ -58,6 +58,9 @@ namespace Tilbake.Application.Mapping
             CreateMap<PremiumSaveResource, Premium>();
             CreateMap<RiskSaveResource, Risk>();
             CreateMap<RiskItemSaveResource, RiskItem>();
+            CreateMap<RatingMotorSaveResource, RatingMotor>();
+            CreateMap<RatingMotorDiscountSaveResource, RatingMotorDiscount>();
+            CreateMap<RatingMotorExcessSaveResource, RatingMotorExcess>();
             CreateMap<ReceivableSaveResource, Receivable>();
             CreateMap<ReceivableDocumentSaveResource, ReceivableDocument>();
             CreateMap<ResidenceTypeSaveResource, ResidenceType>();

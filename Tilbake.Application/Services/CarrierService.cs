@@ -57,7 +57,9 @@ namespace Tilbake.Application.Services
 
         public async Task<CarrierResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Carriers.GetByIdAsync(id);
+            var result = await _unitOfWork.Carriers.GetFirstOrDefaultAsync(
+                                            r => r.Id == id);
+
             var resource = _mapper.Map<Carrier, CarrierResource>(result);
             return resource;
         }

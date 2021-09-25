@@ -1,0 +1,67 @@
+﻿@model PortfolioRatingMotorResource
+@{
+    ViewData["Title"] = ViewData["PortfolioName"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<br />
+
+<form asp-action="Index" method="get">
+    <input type="hidden" asp-for="PortfolioId" />
+    <div class="form-inline border border-warning justify-content-center">  
+        <div class="form-group">
+            <label asp-for="InsurerId" class="control-label" style="display: block; padding-right: 10px; text-align: right;"></label>
+            <select asp-for="InsurerId" class="form-control" asp-items="Model.InsurerList"></select>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-controller="RatingMotors" asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" asp-route-insurerId="@Model.InsurerId">Create New</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <strong>From</strong>
+            </th>
+            <th>
+                <strong>To</strong>
+            </th>
+            <th>
+                <strong>Rate (Local)</strong>
+            </th>
+            <th>
+                <strong>Rate (Import)</strong>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.RatingMotors) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RateLocal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RateImport)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -131,6 +131,10 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual DbSet<PortfolioClient> PortfolioClients { get; set; }
         public virtual DbSet<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
+        public virtual DbSet<PortfolioRatingMotor> PortfolioRatingMotors { get; set; }
+        public virtual DbSet<PortfolioRatingMotorDiscount> PortfolioRatingMotorDiscounts { get; set; }
+        public virtual DbSet<PortfolioRatingMotorExcess> PortfolioRatingMotorExcesses { get; set; }
+        public virtual DbSet<PortfolioRatingMotorPremium> PortfolioRatingMotorPremia { get; set; }
         public virtual DbSet<Premium> Premia { get; set; }
         public virtual DbSet<PremiumBulk> PremiumBulks { get; set; }
         public virtual DbSet<PremiumRefund> PremiumRefunds { get; set; }
@@ -177,14 +181,15 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-//             }
-//         }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+        //            }
+        //        }
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaveChanges(_userId);
@@ -2941,6 +2946,98 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasConstraintName("FK_PortfolioPolicyFee_Portfolio");
             });
 
+            modelBuilder.Entity<PortfolioRatingMotor>(entity =>
+            {
+                entity.HasKey(e => new { e.PortfolioId, e.RatingMotorId });
+
+                entity.ToTable("PortfolioRatingMotor");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioRatingMotors)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotor_Portfolio");
+
+                entity.HasOne(d => d.RatingMotor)
+                    .WithMany(p => p.PortfolioRatingMotors)
+                    .HasForeignKey(d => d.RatingMotorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotor_RatingMotor");
+            });
+
+            modelBuilder.Entity<PortfolioRatingMotorDiscount>(entity =>
+            {
+                entity.HasKey(e => new { e.PortfolioId, e.RatingMotorDiscountId });
+
+                entity.ToTable("PortfolioRatingMotorDiscount");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioRatingMotorDiscounts)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotorDiscount_Portfolio");
+
+                entity.HasOne(d => d.RatingMotorDiscount)
+                    .WithMany(p => p.PortfolioRatingMotorDiscounts)
+                    .HasForeignKey(d => d.RatingMotorDiscountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotorDiscount_RatingMotorDiscount");
+            });
+
+            modelBuilder.Entity<PortfolioRatingMotorExcess>(entity =>
+            {
+                entity.HasKey(e => new { e.PortfolioId, e.RatingMotorExcessId });
+
+                entity.ToTable("PortfolioRatingMotorExcess");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioRatingMotorExcesses)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotorExcess_Portfolio");
+
+                entity.HasOne(d => d.RatingMotorExcess)
+                    .WithMany(p => p.PortfolioRatingMotorExcesses)
+                    .HasForeignKey(d => d.RatingMotorExcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotorExcess_RatingMotorExcess");
+            });
+
+            modelBuilder.Entity<PortfolioRatingMotorPremium>(entity =>
+            {
+                entity.HasKey(e => new { e.PortfolioId, e.RatingMotorPremiumId });
+
+                entity.ToTable("PortfolioRatingMotorPremium");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioRatingMotorPremia)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotorPremium_Portfolio");
+
+                entity.HasOne(d => d.RatingMotorPremium)
+                    .WithMany(p => p.PortfolioRatingMotorPremia)
+                    .HasForeignKey(d => d.RatingMotorPremiumId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioRatingMotorPremium_RatingMotorPremium");
+            });
+
             modelBuilder.Entity<Premium>(entity =>
             {
                 entity.ToTable("Premium");
@@ -3187,12 +3284,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.InsurerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RatingMotor_Insurer");
-
-                entity.HasOne(d => d.Portfolio)
-                    .WithMany(p => p.RatingMotors)
-                    .HasForeignKey(d => d.PortfolioId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RatingMotor_Portfolio");
             });
 
             modelBuilder.Entity<RatingMotorDiscount>(entity =>
@@ -3212,12 +3303,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.InsurerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RatingMotorDiscount_Insurer");
-
-                entity.HasOne(d => d.Portfolio)
-                    .WithMany(p => p.RatingMotorDiscounts)
-                    .HasForeignKey(d => d.PortfolioId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RatingMotorDiscount_Portfolio");
             });
 
             modelBuilder.Entity<RatingMotorExcess>(entity =>
@@ -3249,12 +3334,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.InsurerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RatingMotorExcess_Insurer");
-
-                entity.HasOne(d => d.Portfolio)
-                    .WithMany(p => p.RatingMotorExcesses)
-                    .HasForeignKey(d => d.PortfolioId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RatingMotorExcess_Portfolio");
             });
 
             modelBuilder.Entity<RatingMotorPremium>(entity =>
@@ -3278,12 +3357,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.InsurerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RatingMotorPremium_Insurer");
-
-                entity.HasOne(d => d.Portfolio)
-                    .WithMany(p => p.RatingMotorPremia)
-                    .HasForeignKey(d => d.PortfolioId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RatingMotorPremium_Portfolio");
             });
 
             modelBuilder.Entity<Receivable>(entity =>

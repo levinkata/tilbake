@@ -13,10 +13,10 @@ namespace Tilbake.Domain.Models
             PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
             PortfolioClients = new HashSet<PortfolioClient>();
             PortfolioPolicyFees = new HashSet<PortfolioPolicyFee>();
-            RatingMotorDiscounts = new HashSet<RatingMotorDiscount>();
-            RatingMotorExcesses = new HashSet<RatingMotorExcess>();
-            RatingMotorPremia = new HashSet<RatingMotorPremium>();
-            RatingMotors = new HashSet<RatingMotor>();
+            PortfolioRatingMotorDiscounts = new HashSet<PortfolioRatingMotorDiscount>();
+            PortfolioRatingMotorExcesses = new HashSet<PortfolioRatingMotorExcess>();
+            PortfolioRatingMotorPremia = new HashSet<PortfolioRatingMotorPremium>();
+            PortfolioRatingMotors = new HashSet<PortfolioRatingMotor>();
         }
 
         public Guid Id { get; set; }
@@ -34,9 +34,9 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
         public virtual ICollection<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
-        public virtual ICollection<RatingMotorDiscount> RatingMotorDiscounts { get; set; }
-        public virtual ICollection<RatingMotorExcess> RatingMotorExcesses { get; set; }
-        public virtual ICollection<RatingMotorPremium> RatingMotorPremia { get; set; }
-        public virtual ICollection<RatingMotor> RatingMotors { get; set; }
+        public virtual ICollection<PortfolioRatingMotorDiscount> PortfolioRatingMotorDiscounts { get; set; }
+        public virtual ICollection<PortfolioRatingMotorExcess> PortfolioRatingMotorExcesses { get; set; }
+        public virtual ICollection<PortfolioRatingMotorPremium> PortfolioRatingMotorPremia { get; set; }
+        public virtual ICollection<PortfolioRatingMotor> PortfolioRatingMotors { get; set; }
     }
 }

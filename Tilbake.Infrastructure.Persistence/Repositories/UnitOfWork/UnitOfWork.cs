@@ -66,15 +66,18 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             PortfolioClients = new PortfolioClientRepository(_context);
             PortfolioPolicyFees = new PortfolioPolicyFeeRepository(_context);
             Premiums = new PremiumRepository(_context);
+            Quotes = new QuoteRepository(_context);
+            QuoteItems = new QuoteItemRepository(_context);
+            QuoteStatuses = new QuoteStatusRepository(_context);
+            RatingMotors = new RatingMotorRepository(_context);
+            RatingMotorDiscounts = new RatingMotorDiscountRepository(_context);
+            RatingMotorExcesses = new RatingMotorExcessRepository(_context);
             Receivables = new ReceivableRepository(_context);
             ReceivableDocuments = new ReceivableDocumentRepository(_context);
             ReceivableInvoices = new ReceivableInvoiceRepository(_context);
             ReceivableQuotes = new ReceivableQuoteRepository(_context);
             ResidenceTypes = new ResidenceTypeRepository(_context);
             ResidenceUses = new ResidenceUseRepository(_context);
-            Quotes = new QuoteRepository(_context);
-            QuoteItems = new QuoteItemRepository(_context);
-            QuoteStatuses = new QuoteStatusRepository(_context);
             Risks = new RiskRepository(_context);
             RiskItems = new RiskItemRepository(_context);
             RoofTypes = new RoofTypeRepository(_context);
@@ -140,6 +143,9 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IQuoteRepository Quotes { get; private set; }
         public IQuoteItemRepository QuoteItems { get; private set; }
         public IQuoteStatusRepository QuoteStatuses { get; private set; }
+        public IRatingMotorRepository RatingMotors { get; private set; }
+        public IRatingMotorDiscountRepository RatingMotorDiscounts { get; private set; }
+        public IRatingMotorExcessRepository RatingMotorExcesses { get; private set; }
         public IRiskRepository Risks { get; private set; }
         public IRiskItemRepository RiskItems { get; private set; }
         public IReceivableRepository Receivables { get; private set; }

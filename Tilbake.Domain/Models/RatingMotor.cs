@@ -5,8 +5,12 @@ namespace Tilbake.Domain.Models
 {
     public partial class RatingMotor
     {
+        public RatingMotor()
+        {
+            PortfolioRatingMotors = new HashSet<PortfolioRatingMotor>();
+        }
+
         public Guid Id { get; set; }
-        public Guid PortfolioId { get; set; }
         public Guid InsurerId { get; set; }
         public decimal StartValue { get; set; }
         public decimal EndValue { get; set; }
@@ -18,6 +22,6 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual Insurer Insurer { get; set; }
-        public virtual Portfolio Portfolio { get; set; }
+        public virtual ICollection<PortfolioRatingMotor> PortfolioRatingMotors { get; set; }
     }
 }

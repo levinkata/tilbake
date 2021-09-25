@@ -60,6 +60,9 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IQuoteRepository Quotes { get; }
         IQuoteItemRepository QuoteItems { get; }
         IQuoteStatusRepository QuoteStatuses { get; }
+        IRatingMotorRepository RatingMotors { get; }
+        IRatingMotorDiscountRepository RatingMotorDiscounts { get; }
+        IRatingMotorExcessRepository RatingMotorExcesses { get; }
         IReceivableRepository Receivables { get; }
         IReceivableDocumentRepository ReceivableDocuments { get; }
         IReceivableInvoiceRepository ReceivableInvoices { get; }

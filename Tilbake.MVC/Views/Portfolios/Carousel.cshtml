@@ -90,7 +90,12 @@
             <h6 class="fw-bolder mb-3">Third Party Integration</h6>
             <ul>
                 <li>
-                    Rating Engines
+                    
+                    <a asp-controller="RatingEngines"
+                       asp-action="Index"
+                       asp-route-portfolioId="@Model.Id">
+                       Rating Engines
+                   </a>
                 </li>
             </ul>
         </div>

@@ -21,12 +21,76 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
+        public async Task<int> AddAsync(ClientCarrierSaveResource resource)
+        {
+            var carrierIds = resource.CarrierIds;
+            var clientId = resource.ClientId;
+
+            var existingClientCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
+                                                r => r.ClientId == clientId);
+
+            if(existingClientCarriers.Any())
+            {
+                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingClientCarriers);
+            }
+
+            if(carrierIds.Any())
+            {
+                List<ClientCarrier> clientCarriers = new();
+
+                foreach (var item in carrierIds)
+                {
+                    ClientCarrier clientCarrier = new()
+                    {
+                        ClientId = clientId,
+                        CarrierId = item,
+                        DateAdded = DateTime.Now
+                    };
+                    clientCarriers.Add(clientCarrier);
+                }
+                await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
+            }
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<int> UpdateAsync(ClientCarrierResource resource)
+        {
+            var carrierIds = resource.CarrierIds;
+            var clientId = resource.ClientId;
+
+            var existingClientCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
+                                                r => r.ClientId == clientId);
+
+            if(existingClientCarriers.Any())
+            {
+                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingClientCarriers);
+            }
+
+            if(carrierIds.Any())
+            {
+                List<ClientCarrier> clientCarriers = new();
+
+                foreach (var item in carrierIds)
+                {
+                    ClientCarrier clientCarrier = new()
+                    {
+                        ClientId = clientId,
+                        CarrierId = item,
+                        DateAdded = DateTime.Now
+                    };
+                    clientCarriers.Add(clientCarrier);
+                }
+                await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
+            }
+            return await _unitOfWork.SaveAsync();
+        }
+
         public async Task<IEnumerable<ClientCarrierResource>> GetByClientIdAsync(Guid clientId)
         {
             var result = await _unitOfWork.ClientCarriers.GetAllAsync(
-                r => r.ClientId == clientId,
-                r => r.OrderBy(p => p.Carrier.Name),
-                r => r.Carrier);
+                                                            r => r.ClientId == clientId,
+                                                            r => r.OrderBy(p => p.Carrier.Name),
+                                                            r => r.Carrier);
 
             var resources = _mapper.Map<IEnumerable<ClientCarrier>, IEnumerable<ClientCarrierResource>>(result);
             return resources;

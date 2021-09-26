@@ -8,14 +8,14 @@
 
 <h1>@Model.PortfolioName</h1>
 
-<div class="row g-2">
+<div class="row">
     <div class="col-3">
         <div class="card text-center mb-4">
             <div class="card-body text-center">
                 <div class="card-img mx-auto d-flex justify-content-center" style="max-height: 8rem;">
                     <div class="position-relative overflow-hidden rounded-circle">
                         <div style="overflow: hidden; box-sizing: border-box; display: inline-block; position: relative; width: 122px; height: 122px;">
-                            <img src="~/images/Profile.jpg" alt="Profile Picture" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;" />
+                            <img src="~/images/UserDefault.png" alt="Profile Picture" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;" />
                         </div>
                     </div>
                 </div>
@@ -29,15 +29,13 @@
                         <p class="card-text text-muted"><small>@Model.BirthDate.ToString("dd/MM/yyyy")</small></p>
                     </div>
                 </div>
-@*                <p class="card-text mb-0"><small>@Model.Mobile</small></p>
-                <p class="card-text mb-0"><small>@Model.Email</small></p>*@
                 <p class="card-text text-muted"><small>@Model.Occupation</small></p>
                 <div class="form-group">
                     <a asp-action="EditClient" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</a>
                 </div>
             </div>
         </div>
-        <div class="card text-center">
+        <div class="card mb-3 text-center">
             <div class="card-body">
                 <h6 class="card-title mb-3">Address</h6>
                 @if (Model.Address != null)
@@ -51,16 +49,38 @@
                 }
             </div>
         </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title mb-3">Carriers</h6>
+                @if(Model.ClientCarriers.Any())
+                { 
+                    @foreach(var item in Model.ClientCarriers)
+                    {
+                        <div class="d-flex justify-content-center">
+                            <span class="fs-6 text-muted"><small>@item.Carrier.Name</small></span>
+                        </div>
+                    }
+                    <div class="form-group mt-3">
+                        <a asp-controller="ClientCarriers" asp-action="Edit" asp-route-clientId="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Update</a>
+                    </div>
+                } else {
+                    <span class="card-text text-muted mb-3"><small>No Carriers</small></span>
+                    <div class="form-group">
+                        <a asp-controller="ClientCarriers" asp-action="Create" asp-route-clientId="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Add</a>
+                    </div>
+                }
+             </div>
+        </div>
     </div>
     <div class="col-9">
-        <div class="row g-2 mb-3">
+        <div class="row mb-3">
             <div class="col-md-3">
                 <div class="card text-center">
                     <div class="card-body">
                         <h6 class="card-title">Total Premiums</h6>
                         <div class="row">
                             <div class="col">
-                                <p class="card-text font-weight-bolder mb-1 h4">$47K</p><span class="badge badge-danger rounded-pill fs--2">+3.5%</span>
+                                <p class="card-text font-weight-bolder mb-1 h4">$47K</p><span class="badge badge-danger rounded-pill">+3.5%</span>
                             </div>
                             <div class="col-auto">
                                 <small class="text-muted">Sat : 120</small>
@@ -75,7 +95,7 @@
                         <h6 class="card-title">Sum Insured</h6>
                         <div class="row">
                             <div class="col">
-                                <p class="card-text font-weight-bolder mb-1 h4">$90K</p><span class="badge badge-primary rounded-pill fs--2">+3.5%</span>
+                                <p class="card-text font-weight-bolder mb-1 h4">$90K</p><span class="badge badge-primary rounded-pill">+3.5%</span>
                             </div>
                             <div class="col-auto">
                                 <small class="text-muted">Sat : 120</small>
@@ -90,7 +110,7 @@
                         <h6 class="card-title">Risks</h6>
                         <div class="row">
                             <div class="col">
-                                <p class="card-text font-weight-bolder mb-1 h4">5</p><span class="badge badge-success rounded-pill fs--2">+3.5%</span>
+                                <p class="card-text font-weight-bolder mb-1 h4">5</p><span class="badge badge-success rounded-pill">+3.5%</span>
                             </div>
                             <div class="col-auto">
                                 <small class="text-muted">Sat : 120</small>
@@ -105,7 +125,7 @@
                         <h6 class="card-title">Total Claims</h6>
                         <div class="row">
                             <div class="col">
-                                <p class="card-text font-weight-bolder mb-1 h4">$0</p><span class="badge badge-warning rounded-pill fs--2">+3.5%</span>
+                                <p class="card-text font-weight-bolder mb-1 h4">$0</p><span class="badge badge-warning rounded-pill">+3.5%</span>
                             </div>
                             <div class="col-auto">
                                 <small class="text-muted">Sat : 120</small>
@@ -116,10 +136,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
+            <div class="col-md-9">
                 @await Component.InvokeAsync("Policy", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
-            <div class="col justify-content-end">
+            <div class="col-md-3 justify-content-end">
                 <div class="card mb-3">Premiums</div>
                 <div class="card">Claims</div>
             </div>

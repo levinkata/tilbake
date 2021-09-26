@@ -18,6 +18,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<CitySaveResource, City>();
             CreateMap<PortfolioClientSaveResource, Client>();
             CreateMap<ClientBulkSaveResource, ClientBulk>();
+            CreateMap<ClientCarrierSaveResource, ClientCarrier>();
             CreateMap<ClientTypeSaveResource, ClientType>();
             CreateMap<CommissionRateSaveResource, CommissionRate>();
             CreateMap<CountrySaveResource, Country>();

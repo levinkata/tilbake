@@ -4,7 +4,20 @@
 
 <div class="card mb-3">
     <div class="card-body">
-        <h6 class="card-title mb-3">Policy</h6>
+        <div class="d-flex justify-content-between">
+            <h6 class="card-title mb-3">Policy</h6>
+            <div class="dropdown position-static">
+                <button class="btn btn-link btn-sm dropdown text-reset" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false">
+                    <span class="fas fa-ellipsis-h text-muted"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end border py-0">
+                    <div class="bg-white py-2">
+                        <a class="dropdown-item" href="#!">Edit</a>
+                        <a class="dropdown-item text-danger" href="#!">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         @if (Model != null)
         {
             <table class="table table-sm py-2">

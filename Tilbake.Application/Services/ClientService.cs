@@ -58,8 +58,16 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Clients.GetAllAsync());
-            result = result.OrderBy(n => n.LastName);
+            var result = await _unitOfWork.Clients.GetAllAsync(
+                                                    null,
+                                                    r => r.OrderBy(n => n.LastName),
+                                                    r => r.ClientType,
+                                                    r => r.Country,
+                                                    r => r.IdDocumentType,
+                                                    r => r.Gender,
+                                                    r => r.MaritalStatus,
+                                                    r => r.Occupation,
+                                                    r => r.Title);
 
             var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
             return resources;
@@ -71,7 +79,7 @@ namespace Tilbake.Application.Services
                                                     r => r.Id == id,
                                                     r => r.ClientType,
                                                     r => r.Country,
-                                                    c => c.IdDocumentType,
+                                                    r => r.IdDocumentType,
                                                     r => r.Gender,
                                                     r => r.MaritalStatus,
                                                     r => r.Occupation,
@@ -84,14 +92,14 @@ namespace Tilbake.Application.Services
         public async Task<ClientResource> GetByIdNumberAsync(string idNumber)
         {
             var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
-                                            c => c.IdNumber == idNumber,
-                                            c => c.ClientType,
-                                            c => c.Country,
-                                            c => c.IdDocumentType,
-                                            c => c.Gender,
-                                            c => c.MaritalStatus,
-                                            c => c.Occupation,
-                                            c => c.Title);
+                                                    c => c.IdNumber == idNumber,
+                                                    c => c.ClientType,
+                                                    c => c.Country,
+                                                    c => c.IdDocumentType,
+                                                    c => c.Gender,
+                                                    c => c.MaritalStatus,
+                                                    c => c.Occupation,
+                                                    c => c.Title);
 
             var resource = _mapper.Map<Client, ClientResource>(result);
             return resource;
@@ -100,16 +108,16 @@ namespace Tilbake.Application.Services
         public async Task<IEnumerable<ClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
             var result = await _unitOfWork.Clients.GetAllAsync(
-                                                        e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId),
-                                                        e => e.OrderBy(r => r.LastName),
-                                                        e => e.PortfolioClients,
-                                                        c => c.ClientType,
-                                                        c => c.Country,
-                                                        c => c.IdDocumentType,
-                                                        c => c.Gender,
-                                                        c => c.MaritalStatus,
-                                                        c => c.Occupation,
-                                                        c => c.Title);
+                                                    e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId),
+                                                    e => e.OrderBy(r => r.LastName),
+                                                    e => e.PortfolioClients,
+                                                    c => c.ClientType,
+                                                    c => c.Country,
+                                                    c => c.IdDocumentType,
+                                                    c => c.Gender,
+                                                    c => c.MaritalStatus,
+                                                    c => c.Occupation,
+                                                    c => c.Title);
 
             var resources = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientResource>>(result);
             return resources;

@@ -25,6 +25,7 @@ namespace Tilbake.Application.Services
         {
             var insurer = _mapper.Map<InsurerSaveResource, Insurer>(resource);
             insurer.Id = Guid.NewGuid();
+            insurer.DateAdded = DateTime.Now;
 
             await _unitOfWork.Insurers.AddAsync(insurer);
             return await _unitOfWork.SaveAsync();
@@ -69,6 +70,7 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(InsurerResource resource)
         {
             var insurer = _mapper.Map<InsurerResource, Insurer>(resource);
+            insurer.DateModified = DateTime.Now;
             await _unitOfWork.Insurers.UpdateAsync(resource.Id, insurer);
 
             return await _unitOfWork.SaveAsync();

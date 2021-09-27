@@ -61,7 +61,7 @@ namespace Tilbake.MVC.Controllers
             var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
             var selectedCarrierIds = clientCarriers.Select(r => r.CarrierId).ToArray();
 
-            ClientCarrierSaveResource resource = new()
+            ClientCarrierResource resource = new()
             {
                 PortfolioId = portfolioId,
                 ClientId = clientId

@@ -16,8 +16,7 @@
             <input asp-for="PortfolioId" type="hidden" />
             <div class="form-group">
                 <label asp-for="CarrierIds" class="control-label"></label>
-                <select asp-for="CarrierIds" class="form-control form-select js-choice" id="CarrierIds" multiple="multiple" asp-items="Model.CarrierList" size="5" name="CarrierIds" data-options='{"removeItemButton":true,"placeholder":true}'>
-                </select>                
+                <select asp-for="CarrierIds" class="form-control" id="CarrierIds" multiple="multiple" asp-items="Model.CarrierList"></select>                
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -1,16 +1,17 @@
 ﻿@model PortfolioClientSaveResource
 
-<div class="row">
-    <div class="form-group">
-        <label asp-for="CarrierIds" class="control-label"></label>
-        <select asp-for="CarrierIds" id="SelectCarrier" multiple="multiple" class="form-control"
-                asp-items="@Model.CarrierList"></select>
+<div class="card">
+    <div class="card-body">
+        <div class="form-group">
+            <label asp-for="CarrierIds" class="control-label"></label>
+            <select asp-for="CarrierIds" multiple aria-label="multiple select" size="8" class="form-control" asp-items="@Model.CarrierList"></select>
+        </div>
     </div>
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    @* $(document).ready(function() {
         $('#SelectCarrier').multiselect();
-    });
+    }); *@
 </script>

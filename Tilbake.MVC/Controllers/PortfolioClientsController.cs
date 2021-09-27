@@ -253,7 +253,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _portfolioClientService.AddAsync(resource);
-                return RedirectToAction(nameof(Index), new { resource.PortfolioId });
+                return RedirectToAction(nameof(Search), new { portfolioId = resource.PortfolioId, searchString = resource.LastName});
             }
 
             var cities = await _cityService.GetByCountryId(resource.CountryId);

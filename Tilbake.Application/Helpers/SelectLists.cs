@@ -43,7 +43,7 @@ namespace Tilbake.Application.Helpers
         public static MultiSelectList Carriers(IEnumerable<CarrierResource> carriers, Guid[] carrierIds)
         {
             List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Carrier", Value = "" });
+            items.Add(new SelectListItem() { Text = "None", Value = "" });
 
             foreach (var item in carriers)
             {

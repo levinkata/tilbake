@@ -1,31 +1,38 @@
 ﻿@model PortfolioClientSaveResource
 
-<div class="row">
-    <div class="form-group">
-        <label asp-for="PhysicalAddress" class="control-label"></label>
-        <textarea asp-for="PhysicalAddress" class="form-control"></textarea>
-        <span asp-validation-for="PhysicalAddress" class="text-danger"></span>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="PhysicalAddress" class="control-label"></label>
+                <input asp-for="PhysicalAddress" class="form-control" />
+                <span asp-validation-for="PhysicalAddress" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="PostalAddress" class="control-label"></label>
+                    <input asp-for="PostalAddress" class="form-control" />
+                    <span asp-validation-for="PostalAddress" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="AddressCountryId" class="control-label"></label>
+                    <select asp-for="AddressCountryId" id="Country" class ="form-control" asp-items="Model.AddressCountryList"></select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="CityId" class="control-label"></label>
+                    <select asp-for="CityId" class ="form-control" asp-items="Model.CityList"></select>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col">
-        <div class="form-group">
-            <label asp-for="PostalAddress" class="control-label"></label>
-            <textarea asp-for="PostalAddress" class="form-control"></textarea>
-            <span asp-validation-for="PostalAddress" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="col">
-        <div class="form-group">
-            <label asp-for="AddressCountryId" class="control-label"></label>
-            <select asp-for="AddressCountryId" id="Country" class ="form-control" asp-items="Model.AddressCountryList"></select>
-        </div>
-        <div class="form-group">
-            <label asp-for="CityId" class="control-label"></label>
-            <select asp-for="CityId" class ="form-control" asp-items="Model.CityList"></select>
-        </div>
-    </div>
-</div>
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">

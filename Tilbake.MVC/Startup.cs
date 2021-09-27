@@ -72,7 +72,7 @@ namespace Tilbake.MVC
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //Register Syncfusion license
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDY3MzY0QDMxMzkyZTMyMmUzMGpPNGZYUWRadXdCdFNBVHZGOEs2dzl3QWxHUXZUdmxEeEFpY1p6Qm1Delk9");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDY3MzY0QDMxMzkyZTMyMmUzMGpPNGZYUWRadXdCdFNBVHZGOEs2dzl3QWxHUXZUdmxEeEFpY1p6Qm1Delk9");
 
             if (env.IsDevelopment())
             {

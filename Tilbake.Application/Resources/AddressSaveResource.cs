@@ -5,10 +5,9 @@ using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
-    public class AddressResource
+    public class AddressSaveResource
     {
         public Guid PortfolioId { get; set; }
-        public Guid Id { get; set; }
 
         [Display(Name = "Physical Address")]
         public string PhysicalAddress { get; set; }

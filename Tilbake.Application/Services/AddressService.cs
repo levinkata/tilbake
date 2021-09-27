@@ -22,6 +22,16 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
+        public async Task<int> AddAsync(AddressSaveResource resource)
+        {
+            var address = _mapper.Map<AddressSaveResource, Address>(resource);
+            address.DateAdded = DateTime.Now;
+
+            await _unitOfWork.Addresses.AddAsync(address);
+
+            return await _unitOfWork.SaveAsync();            
+        }
+
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Addresses.DeleteAsync(id);
@@ -70,6 +80,8 @@ namespace Tilbake.Application.Services
         public async Task<int> UpdateAsync(AddressResource resource)
         {
             var address = _mapper.Map<AddressResource, Address>(resource);
+            address.DateModified = DateTime.Now;
+
             await _unitOfWork.Addresses.UpdateAsync(resource.Id, address);
 
             return await _unitOfWork.SaveAsync();

@@ -39,6 +39,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Odometer Reading")]
         public int OdometerReading { get; set; }
 
+        [Display(Name = "Claim Free Group")]
+        public int ClaimFreeGroup { get; set; }
+        
         [Display(Name = "Colour")]
         public string Colour { get; set; }
 

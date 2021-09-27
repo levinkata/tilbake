@@ -19,7 +19,6 @@ namespace Tilbake.Application.Resources
         public IFormFile File { get; set; }
 
         //  SelectLists
-
         public SelectList DocumentTypeList { get; set; }
     }
 }

@@ -29,6 +29,50 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Create(Guid portfolioId, Guid clientId)
+        {
+            var countries = await _countryService.GetAllAsync();
+            var cities = await _cityService.GetByCountryId(Guid.Empty);
+
+            AddressSaveResource resource = new()
+            {
+                PortfolioId = portfolioId,
+                ClientId = clientId,
+                CountryList = SelectLists.Countries(countries, Guid.Empty),
+                CityList = SelectLists.Cities(cities, Guid.Empty)
+            };
+            
+            return View(resource);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AddressSaveResource resource)
+        {
+            if (ModelState.IsValid)
+            {
+                await _addressService.AddAsync(resource);
+                if (resource.PortfolioId != Guid.Empty && resource.ClientId != Guid.Empty)
+                {
+                    return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            var cityId = resource.CityId;
+            var city = await _cityService.GetByIdAsync(cityId);
+            var countryId = city.CountryId;
+
+            var countries = await _countryService.GetAllAsync();
+            var cities = await _cityService.GetByCountryId(countryId);
+
+            resource.CountryId = countryId;
+            resource.CountryList = SelectLists.Countries(countries, countryId);
+            resource.CityList = SelectLists.Cities(cities, cityId);            
+            return View(resource);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
             var resource = await _addressService.GetByIdAsync(id);
@@ -41,7 +85,7 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid portfolioId, Guid? id)
         {
             if (id == null)
             {
@@ -61,6 +105,7 @@ namespace Tilbake.MVC.Controllers
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
+            resource.PortfolioId = portfolioId;
             resource.CountryId = countryId;
             resource.CountryList = SelectLists.Countries(countries, countryId);
             resource.CityList = SelectLists.Cities(cities, cityId);
@@ -81,6 +126,10 @@ namespace Tilbake.MVC.Controllers
                 try
                 {
                     await _addressService.UpdateAsync(resource);
+                    if (resource.PortfolioId != Guid.Empty && resource.ClientId != Guid.Empty)
+                    {
+                        return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
+                    }                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -659,6 +659,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="Motor.ClaimFreeGroup" class="form-label">Claim Free Group</label>
+                        <input type="range" asp-for="Motor.ClaimFreeGroup" class="form-range" min="0" max="6" step="0.5" id="ClaimFreeGroup">
+                    </div>
+                </div>
                 <div class="container border bg-light p-3">
                     <div class="row">
                         <div class="col-6">
@@ -915,6 +921,7 @@
                 ChassisNumber: $('#ChassisNumber').val(),
                 EngineCapacity: $('#EngineCapacity').val(),
                 OdometerReading: $('#OdometerReading').val(),
+                ClaimFreeGroup: $('#ClaimFreeGroup').val(),
                 Colour: $('#Colour').val(),
                 MotorUseId: $('#MotorUseId option:selected').val(),
                 IsImport: $('#IsImport').val(),

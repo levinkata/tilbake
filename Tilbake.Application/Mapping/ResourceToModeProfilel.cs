@@ -8,6 +8,7 @@ namespace Tilbake.Application.Mapping
     {
         public ResourceToModeProfilel()
         {
+            CreateMap<AddressSaveResource, Address>();
             CreateMap<AllRiskSaveResource, AllRisk>();
             CreateMap<BankSaveResource, Bank>();
             CreateMap<BankBranchSaveResource, BankBranch>();

@@ -127,7 +127,8 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<Policy, PolicyResource>()
                 .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.ClientBankAccount.BankAccount.AccountNumber))
-                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer))
+                .ForMember(dest => dest.InsurerName, opt => opt.MapFrom(src => src.InsurerBranch.Insurer.Name))
+                .ForMember(dest => dest.InsurerBranch, opt => opt.MapFrom(src => src.InsurerBranch))
                 .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
                 .ForMember(dest => dest.PolicyStatus, opt => opt.MapFrom(src => src.PolicyStatus))
@@ -158,7 +159,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<Quote, QuoteResource>()
                 .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.PortfolioClient.Client))
-                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer))
+                .ForMember(dest => dest.InsurerBranch, opt => opt.MapFrom(src => src.InsurerBranch))
                 .ForMember(dest => dest.QuoteStatus, opt => opt.MapFrom(src => src.QuoteStatus))
                 .ForMember(dest => dest.QuoteItems, opt => opt.MapFrom(src => src.QuoteItems)).ReverseMap();
             

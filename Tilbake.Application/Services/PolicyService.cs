@@ -230,7 +230,8 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.Policies.GetAllAsync(
                                         e => e.PortfolioClientId == portfolioClientId,
                                         e => e.OrderByDescending(n => n.PolicyNumber),
-                                        e => e.Insurer,
+                                        e => e.InsurerBranch,
+                                        e => e.InsurerBranch.Insurer,
                                         e => e.PortfolioClient,
                                         e => e.PaymentMethod,
                                         e => e.PolicyStatus,
@@ -248,14 +249,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Policies.GetFirstOrDefaultAsync(
                                         e => e.Id == id,
-                                        e => e.Insurer,
+                                        e => e.InsurerBranch,
+                                        e => e.InsurerBranch.Insurer,
                                         e => e.PortfolioClient,
                                         e => e.PaymentMethod,
                                         e => e.PolicyStatus,
                                         e => e.PolicyType,
                                         e => e.SalesType);
-            var resources = _mapper.Map<Policy, PolicyResource>(result);
 
+            var resources = _mapper.Map<Policy, PolicyResource>(result);
             return resources;
         }
 
@@ -268,11 +270,11 @@ namespace Tilbake.Application.Services
                                             p => p.PolicyStatus,
                                             p => p.PolicyType,
                                             p => p.SalesType,
-                                            p => p.Insurer,
+                                            p => p.InsurerBranch,
+                                            p => p.InsurerBranch.Insurer,
                                             e => e.PortfolioClient);
 
             var resources = _mapper.Map<IEnumerable<Policy>, IEnumerable<PolicyResource>>(result);
-
             return resources;
         }
 
@@ -284,8 +286,9 @@ namespace Tilbake.Application.Services
                                              p => p.PolicyStatus,
                                              p => p.PolicyType,
                                              p => p.SalesType,
-                                             p => p.Insurer,
-                                             e => e.PortfolioClient);
+                                             p => p.InsurerBranch,
+                                             p => p.InsurerBranch.Insurer,
+                                             p => p.PortfolioClient);
 
             var resource = _mapper.Map<Policy, PolicyResource>(result);
             return resource;
@@ -293,7 +296,7 @@ namespace Tilbake.Application.Services
 
         public async Task<int> QuoteToPolicy(QuotePolicyObjectResource resource)
         {
-            var insurerId = resource.Quote.InsurerId;
+            var insurerBranchId = resource.Quote.InsurerBranchId;
 
             var portfolioClientId = resource.Quote.PortfolioClientId;
 
@@ -301,7 +304,7 @@ namespace Tilbake.Application.Services
             var policy = _mapper.Map<PolicySaveResource, Policy>(resource.Policy);
 
             policy.Id = Guid.NewGuid();
-            policy.InsurerId = insurerId;
+            policy.InsurerBranchId = insurerBranchId;
             policy.PortfolioClientId = portfolioClientId;
             policy.DateAdded = DateTime.Now;
             await _unitOfWork.Policies.AddAsync(policy);

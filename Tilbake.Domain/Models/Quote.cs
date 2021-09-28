@@ -16,7 +16,7 @@ namespace Tilbake.Domain.Models
         public int QuoteNumber { get; set; }
         public DateTime QuoteDate { get; set; }
         public Guid QuoteStatusId { get; set; }
-        public Guid? InsurerId { get; set; }
+        public Guid InsurerBranchId { get; set; }
         public string ClientInfo { get; set; }
         public string InternalInfo { get; set; }
         public int RunDay { get; set; }
@@ -28,7 +28,7 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Insurer Insurer { get; set; }
+        public virtual InsurerBranch InsurerBranch { get; set; }
         public virtual PortfolioClient PortfolioClient { get; set; }
         public virtual QuoteStatus QuoteStatus { get; set; }
         public virtual ICollection<QuoteItem> QuoteItems { get; set; }

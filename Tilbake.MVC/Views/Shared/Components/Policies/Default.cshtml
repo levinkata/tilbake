@@ -15,7 +15,7 @@
                             <strong>@Html.DisplayNameFor(model => model.PolicyNumber)</strong>
                         </th>
                         <th>
-                            <strong>@Html.DisplayNameFor(model => model.Insurer)</strong>
+                            <strong>Insurer</strong>
                         </th>
                         <th>
                             <strong>@Html.DisplayNameFor(model => model.CoverStartDate)</strong>
@@ -40,7 +40,7 @@
                                 <code>@Html.DisplayFor(modelItem => item.PolicyNumber)</code>
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Insurer.Name)
+                                @Html.DisplayFor(modelItem => item.InsurerBranch.Insurer.Name)
                             </td>
                             <td>
                                 @item.CoverStartDate.ToString("dd/MM/yyyy")

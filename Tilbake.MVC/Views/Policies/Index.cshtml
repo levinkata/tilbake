@@ -34,7 +34,7 @@
                     <strong>@Html.DisplayNameFor(model => model.InceptionDate)</strong>
                 </th>
                 <th>
-                    <strong>@Html.DisplayNameFor(model => model.Insurer.Name)</strong>
+                    <strong>Insurer</strong>
                 </th>
                 <th>
                     <strong>@Html.DisplayNameFor(model => model.PaymentMethod.Name)</strong>
@@ -71,7 +71,7 @@
                         @Html.DisplayFor(modelItem => item.InceptionDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Insurer.Name)
+                        @Html.DisplayFor(modelItem => item.InsurerBranch.Insurer.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PaymentMethod.Name)

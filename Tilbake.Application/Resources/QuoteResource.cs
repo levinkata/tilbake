@@ -22,8 +22,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Quote Status")]
         public Guid QuoteStatusId { get; set; }
 
-        [Display(Name = "Insurer")]
-        public Guid InsurerId { get; set; }
+        [Display(Name = "Insurer Branch")]
+        public Guid InsurerBranchId { get; set; }
 
         [Display(Name = "Client Info")]
         public string ClientInfo { get; set; }
@@ -38,6 +38,9 @@ namespace Tilbake.Application.Resources
         public bool IsPaid { get; set; }
         public bool IsPolicySet { get; set; }
 
+        // Other
+        public Guid InsurerId { get ;set; }
+
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
         //  Other
@@ -46,7 +49,7 @@ namespace Tilbake.Application.Resources
         
         //  Tables
         public Client Client { get; set; }
-        public Insurer Insurer { get; set; }
+        public InsurerBranch InsurerBranch { get; set; }
         public PortfolioClient PortfolioClient { get; set; }
         public QuoteStatus QuoteStatus { get; set; }
 
@@ -54,6 +57,7 @@ namespace Tilbake.Application.Resources
         public SelectList CoverTypeList { get; set; }
         public SelectList DayList { get; set; }
         public SelectList InsurerList { get; set; }
+        public SelectList InsurerBranchList { get; set; }
         public SelectList QuoteStatusList { get; set; }
     }
 }

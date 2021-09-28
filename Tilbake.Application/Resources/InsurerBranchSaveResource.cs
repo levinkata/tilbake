@@ -26,6 +26,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Fax")]
         public string Fax { get; set; }
 
+        [Display(Name = "Primary")]
+        public string IsPrimary { get; set; }
+        
         //  Descriptions
         [Display(Name = "City")]
         public string City { get; set; }

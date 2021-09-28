@@ -28,6 +28,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Fax")]
         public string Fax { get; set; }
      
+        [Display(Name = "Primary")]
+        public string IsPrimary { get; set; }
+
         public Insurer Insurer { get; set; }
 
         //  Descriptions

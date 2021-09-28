@@ -30,8 +30,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Bank Account")]
         public Guid ClientBankAccountId { get; set; }
 
-        [Display(Name = "Insurer")]
-        public Guid InsurerId { get; set; }
+        [Display(Name = "Insurer Branch")]
+        public Guid InsurerBranchId { get; set; }
 
         [Display(Name = "Cover Start Date")]
         public DateTime CoverStartDate { get; set; }
@@ -50,6 +50,9 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Comment")]
         public string Comment { get; set; }
+
+        //  Other
+        public Guid InsurerId { get; set; }
 
         public List<PolicyRisk> QuoteItems { get; } = new List<PolicyRisk>();
         public int QuoteNumber { get; set; }
@@ -108,6 +111,7 @@ namespace Tilbake.Application.Resources
         //  SelectLists
         public SelectList BankAccountList { get; set; }
         public SelectList InsurerList { get; set; }
+        public SelectList InsurerBranchList { get; set; }
         public SelectList PaymentMethodList { get; set; }
         public SelectList PolicyStatusList { get; set; }
         public SelectList PolicyTypeList { get; set; }

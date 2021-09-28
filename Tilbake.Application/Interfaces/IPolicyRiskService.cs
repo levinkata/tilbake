@@ -11,6 +11,8 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<PolicyRiskResource>> GetByPolicyIdAsync(Guid policyId);
         Task<PolicyRiskObjectResource> GetRisksAsync(Guid id);
         Task<PolicyRiskResource> GetByIdAsync(Guid id);
+        Task<decimal> GetSumInsuredByPortfolioClientIdAsync(Guid portfolioClientId);
+        Task<decimal> GetPremiumByPortfolioClientIdAsync(Guid portfolioClientId);
         Task<int> AddAsync(PolicyRiskSaveResource resource);
         Task<int> UpdateAsync(PolicyRiskResource resource);
         Task<int> UpdatePolicyRiskBuildingAsync(PolicyRiskBuildingResource resource);

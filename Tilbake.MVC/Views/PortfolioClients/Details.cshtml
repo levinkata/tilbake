@@ -85,34 +85,10 @@
     <div class="col-9">
         <div class="row mb-3">
             <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h6 class="card-title">Total Premiums</h6>
-                        <div class="row">
-                            <div class="col">
-                                <p class="card-text font-weight-bolder mb-1 h4">$47K</p><span class="badge badge-danger rounded-pill">+3.5%</span>
-                            </div>
-                            <div class="col-auto">
-                                <small class="text-muted">Sat : 120</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @await Component.InvokeAsync("PortfolioClientPremium", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
             <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h6 class="card-title">Sum Insured</h6>
-                        <div class="row">
-                            <div class="col">
-                                <p class="card-text font-weight-bolder mb-1 h4">$90K</p><span class="badge badge-primary rounded-pill">+3.5%</span>
-                            </div>
-                            <div class="col-auto">
-                                <small class="text-muted">Sat : 120</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @await Component.InvokeAsync("PortfolioClientSumInsured", new { portfolioClientId = @Model.PortfolioClientId })
             </div>
             <div class="col-md-3">
                 <div class="card text-center">

@@ -1,0 +1,21 @@
+@model decimal
+@using System
+
+@{
+    var roundedValue = Math.Round(Model/1000);
+}
+
+<div class="card text-center">
+    <div class="card-body">
+        <h6 class="card-title">Sum Insured</h6>
+        <div class="row">
+            <div class="col">
+                <p class="card-text fw-bolder mb-1 h4">@roundedValue.ToString("C0")K</p>
+                <span class="badge badge-danger rounded-pill">+3.5%</span>
+            </div>
+            <div class="col-auto">
+                <small class="text-muted">Sat : 120</small>
+            </div>
+        </div>
+    </div>
+</div>

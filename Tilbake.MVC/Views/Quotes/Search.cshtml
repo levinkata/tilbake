@@ -28,9 +28,9 @@
                 <h5 class="mb-0 py-2">Quotations</h5>
             </div>
             <div class="col text-end ps-2">
-                <a asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" class="btn btn-outline-secondary btn-sm">
+@*                 <a asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" class="btn btn-outline-secondary btn-sm">
                     <span class="fas fa-plus"></span> New
-                </a>
+                </a> *@
             </div>
         </div>
     </div>
@@ -85,54 +85,6 @@
         </table>
     </div>
 </div>
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <strong>Quote Number</strong>
-            </th>
-            <th>
-                <strong>Quote Date</strong>
-            </th>
-            <th>
-                <strong>Last Name</strong>
-            </th>
-            <th>
-                <strong>First Name</strong>
-            </th>
-            <th>
-                <strong>Status</strong>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.QuoteResources) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuoteNumber)
-            </td>
-            <td>
-                @item.QuoteDate.ToString("dd/MM/yyyy")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuoteStatus.Name)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

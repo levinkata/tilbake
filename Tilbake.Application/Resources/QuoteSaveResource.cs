@@ -21,14 +21,17 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Status")]
         public Guid QuoteStatusId { get; set; }
 
-        [Display(Name = "Insurer")]
-        public Guid InsurerId { get; set; }
+        [Display(Name = "Insurer Branch")]
+        public Guid InsurerBranchId { get; set; }
 
         [Display(Name = "Client Info")]
         public string ClientInfo { get; set; }
 
         [Display(Name = "Internal Info")]
         public string InternalInfo { get; set; }
+
+        // Other
+        public Guid InsurerId { get ;set; }
 
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 

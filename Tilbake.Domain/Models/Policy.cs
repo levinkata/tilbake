@@ -22,7 +22,7 @@ namespace Tilbake.Domain.Models
         public int RunDay { get; set; }
         public Guid PaymentMethodId { get; set; }
         public Guid? ClientBankAccountId { get; set; }
-        public Guid InsurerId { get; set; }
+        public Guid InsurerBranchId { get; set; }
         public DateTime CoverStartDate { get; set; }
         public DateTime CoverEndDate { get; set; }
         public DateTime InceptionDate { get; set; }
@@ -35,7 +35,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual ClientBankAccount ClientBankAccount { get; set; }
-        public virtual Insurer Insurer { get; set; }
+        public virtual InsurerBranch InsurerBranch { get; set; }
         public virtual PaymentMethod PaymentMethod { get; set; }
         public virtual PolicyStatus PolicyStatus { get; set; }
         public virtual PolicyType PolicyType { get; set; }

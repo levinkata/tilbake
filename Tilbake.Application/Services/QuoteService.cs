@@ -292,7 +292,7 @@ namespace Tilbake.Application.Services
                                                     r => r.OrderBy(n => n.QuoteNumber),
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
-                                                    r => r.Insurer,
+                                                    r => r.InsurerBranch,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
@@ -306,17 +306,17 @@ namespace Tilbake.Application.Services
                                                     r => r.Id == id,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
-                                                    r => r.Insurer,
+                                                    r => r.InsurerBranch,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
-            var insurerId = result.InsurerId;
+            var insurerBranchId = result.InsurerBranchId;
             var quoteitems = result.QuoteItems;
             var isFulfilled = result.IsFulfilled;
 
             if (!isFulfilled)
             {
-                if (insurerId != Guid.Empty && insurerId != null)
+                if (insurerBranchId != Guid.Empty)
                 {
                     var isRated = false;
                     foreach (var item in quoteitems)
@@ -342,7 +342,7 @@ namespace Tilbake.Application.Services
                                                     r => r.Id == id,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
-                                                    r => r.Insurer,
+                                                    r => r.InsurerBranch,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
                     }
@@ -360,7 +360,7 @@ namespace Tilbake.Application.Services
                                                     r => r.OrderBy(p => p.QuoteNumber),
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
-                                                    r => r.Insurer,
+                                                    r => r.InsurerBranch,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
@@ -374,7 +374,7 @@ namespace Tilbake.Application.Services
                                                     r => r.OrderBy(p => p.QuoteNumber),
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
-                                                    r => r.Insurer,
+                                                    r => r.InsurerBranch,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
@@ -388,7 +388,7 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteNumber == quoteNumber,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
-                                                    r => r.Insurer,
+                                                    r => r.InsurerBranch,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 

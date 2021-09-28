@@ -7,23 +7,23 @@
 }
 
 <div class="card">
-    <div class="card-body">
+    <div class="card-body p-0">
         @if (Model.Any())
         {
             <div class="form-group">
-                <table id="tblQuoteItems" class="table">
+                <table id="tblQuoteItems" class="table table-sm mb-0">
                     <thead>
                         <tr>
-                            <th>
+                            <th class="px-3 align-middle">
                                 <strong>Description</strong>
                             </th>
-                            <th>
+                            <th class="px-3 align-middle">
                                 <strong>Cover Type</strong>
                             </th>
-                            <th>
+                            <th class="px-3 align-middle">
                                 <strong>Sum Insured</strong>
                             </th>
-                            <th>
+                            <th class="px-3 align-middle">
                                 <strong>Premium</strong>
                             </th>
                             <th></th>
@@ -33,22 +33,35 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>
+                                <td class="px-3 align-middle">
                                     <a asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">@item.Description</a>
                                 </td>
-                                <td>@item.CoverType.Name</td>
-                                <td>@item.SumInsured</td>
-                                <td>@item.Premium</td>
-                                <td class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <a class="btn btn-link dropdown-toggle text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">View</a></li>
-                                            <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#">Print</a></li>
-                                            <li><a class="dropdown-item" asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
-                                        </ul>
+                                <td class="px-3 align-middle">@item.CoverType.Name</td>
+                                @if(item.SumInsured == 0)
+                                {
+                                    <td class="px-3 align-middle"><p class="alert-danger">@item.SumInsured.ToString("C2")</p></td>
+                                } else {
+                                    <td class="px-3 align-middle">@item.SumInsured.ToString("C2")</td>
+                                }
+                                @if(item.Premium == 0)
+                                {
+                                    <td class="px-3 align-middle"><p class="alert-danger">@item.Premium.ToString("C2")</p></td>
+                                } else {
+                                    <td class="px-3 align-middle">@item.Premium.ToString("C2")</td>
+                                }
+                                
+                                <td class="align-middle text-end">
+                                    <button class="btn btn-link btn-sm dropdown text-reset" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false">
+                                        <span class="fas fa-ellipsis-h text-muted"></span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end border py-0">
+                                        <div class="bg-white py-2">
+                                            <a class="dropdown-item" asp-controller="QuoteItems" asp-action="QuoteItemRisk" asp-route-quoteItemId="@item.Id">View</a>
+                                            <a class="dropdown-item" asp-controller="QuoteItems" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                            <hr class="dropdown-divider">
+                                            <a class="dropdown-item" href="#">Print</a>
+                                            <a class="dropdown-item" asp-controller="QuoteItems" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -62,7 +75,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-right"><strong>Sub total</strong></td>
-                            <td>@subTotal</td>
+                            <td>@subTotal.ToString("C2")</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right"><strong>VAT (@taxRate)</strong></td>
@@ -70,7 +83,7 @@
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right"><strong>Total</strong></td>
-                            <td>@totalAmount</td>
+                            <td>@totalAmount.ToString("C2")</td>
                         </tr>
                     </tfoot>
                     }
@@ -79,7 +92,7 @@
         }
         else
         {
-            <caption>No Records Found</caption>
+            <span class="text-muted">No Records Found</span>
         }
 
     </div>

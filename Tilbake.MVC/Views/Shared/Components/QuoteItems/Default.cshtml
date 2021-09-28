@@ -75,15 +75,18 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-right"><strong>Sub total</strong></td>
-                            <td>@subTotal.ToString("C2")</td>
+                            <td class="px-3 align-middle">@subTotal.ToString("C2")</td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right"><strong>VAT (@taxRate)</strong></td>
-                            <td>@taxAmount</td>
+                            <td class="px-3 align-middle">@taxAmount.ToString("C2")</td>
+                            <td></td>
                         </tr>
-                        <tr>
+                        <tr class="alert-success">
                             <td colspan="3" class="text-right"><strong>Total</strong></td>
-                            <td>@totalAmount.ToString("C2")</td>
+                            <td class="px-3 align-middle">@totalAmount.ToString("C2")</td>
+                            <td></td>
                         </tr>
                     </tfoot>
                     }

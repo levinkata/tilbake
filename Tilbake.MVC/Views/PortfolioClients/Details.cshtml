@@ -185,55 +185,8 @@
                 </div>
             </div>
         </div>
-        <div clss="row">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h6 class="mb-0">Policy History</h6>
-                </div>
-                <div class="card-body border-top p-0">
-                    <div class="row g-0 align-items-center border-bottom py-2 px-3">
-                        <div class="col-md-auto pe-3"><span class="badge badge-success rounded-pill">200</span></div>
-                        <div class="col-md mt-1 mt-md-0"><code>Policy Version 1</code></div>
-                        <div class="col-md-auto">
-                        <p class="mb-0">2019/02/23 15:29:45</p>
-                        </div>
-                    </div>
-                    <div class="row g-0 align-items-center border-bottom py-2 px-3">
-                        <div class="col-md-auto pe-3"><span class="badge badge-warning rounded-pill">400</span></div>
-                        <div class="col-md mt-1 mt-md-0"><code>Policy Version 2</code></div>
-                        <div class="col-md-auto">
-                        <p class="mb-0">2019/02/19 21:32:12</p>
-                        </div>
-                    </div>
-                    <div class="row g-0 align-items-center border-bottom py-2 px-3">
-                        <div class="col-md-auto pe-3"><span class="badge badge-success rounded-pill">200</span></div>
-                        <div class="col-md mt-1 mt-md-0"><code>Policy Version 3</code></div>
-                        <div class="col-md-auto">
-                        <p class="mb-0">2019/02/26 12:23:43</p>
-                        </div>
-                    </div>
-                    <div class="row g-0 align-items-center border-bottom py-2 px-3">
-                        <div class="col-md-auto pe-3"><span class="badge badge-success rounded-pill">200</span></div>
-                        <div class="col-md mt-1 mt-md-0"><code>Policy Version 4</code></div>
-                        <div class="col-md-auto">
-                        <p class="mb-0">2019/02/12 23:32:12</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-light p-0">
-                    <a class="btn btn-link d-block w-100" href="#!">View more policies
-                        <span class="fas fa-chevron-right ms-1"></span>
-                    </a>
-                </div>
-            </div>
-        </div>
         <div class="row">
-            <div class="col">
-                @await Component.InvokeAsync("ClientDocuments", new { portfolioid = @Model.PortfolioId, clientId = @Model.Id })
-            </div>
-            <div class="col">
-                @await Component.InvokeAsync("Quotes", new { portfolioClientId = @Model.PortfolioClientId })
-            </div>
+            @await Component.InvokeAsync("Policies", new { portfolioClientId = @Model.PortfolioClientId })
         </div>
         <div class="form-group">
             <a asp-action="Search" asp-route-portfolioId="@Model.PortfolioId">Return</a>

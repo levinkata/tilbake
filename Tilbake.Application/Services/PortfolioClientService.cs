@@ -95,7 +95,10 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.PortfolioClients.GetAllAsync(
                                                             e => e.PortfolioId == portfolioId &&
-                                                            e.ClientId == clientId);
+                                                            e.ClientId == clientId,
+                                                            null,
+                                                            e => e.Client,
+                                                            e => e.Portfolio);
             
             return result.Any();
         }
@@ -104,7 +107,8 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
                                                             e => e.Id == id,
-                                                            e => e.Client);
+                                                            e => e.Client,
+                                                            e => e.Portfolio);
 
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
             return resource;
@@ -115,7 +119,8 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.Client.IdNumber == idNumber,
-                                                            e => e.Client);
+                                                            e => e.Client,
+                                                            e => e.Portfolio);
 
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
             return resource;
@@ -126,7 +131,8 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.PortfolioClients.GetAllAsync(
                                                             e => e.PortfolioId == portfolioId,
                                                             e => e.OrderBy(n => n.Client.LastName),
-                                                            e => e.Client);
+                                                            e => e.Client,
+                                                            e => e.Portfolio);
 
             var resources = _mapper.Map<IEnumerable<PortfolioClient>, IEnumerable< PortfolioClientResource>>(result);
             return resources;

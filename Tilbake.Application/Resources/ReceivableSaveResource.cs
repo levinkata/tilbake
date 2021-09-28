@@ -24,6 +24,9 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Batch Number")]
         public string BatchNumber { get; set; }
 
+        //  Other
+        public int QuoteNumber {get; set; }
+
         //  Descriptions
         [Display(Name = "Payment Type")]
         public string PaymentType { get; set; }

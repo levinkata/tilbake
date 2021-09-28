@@ -31,7 +31,7 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Internal Info")]
         public string InternalInfo { get; set; }
 
-        [Display(Name = "Debit Order Day")]
+        [Display(Name = "Debit Order")]
         public int RunDay { get; set; }
 
         public bool IsFulfilled { get; set;  }
@@ -40,6 +40,11 @@ namespace Tilbake.Application.Resources
 
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
+        //  Other
+        public decimal TaxRate { get; set; }
+        public string PortfolioName { get; set; }
+        
+        //  Tables
         public Client Client { get; set; }
         public Insurer Insurer { get; set; }
         public PortfolioClient PortfolioClient { get; set; }

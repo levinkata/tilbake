@@ -18,5 +18,6 @@ namespace Tilbake.Application.Resources
         public bool IsWithdrawal { get; set; }
 
         public Client Client { get; set; }
+        public Portfolio Portfolio { get; set; }        
     }
 }

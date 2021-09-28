@@ -110,11 +110,19 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
+            var taxes = await _taxService.GetAllAsync();
+            var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
+
             var resource = await _quoteService.GetByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
-            }      
+            }
+            var portfolioClient = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
+            
+            resource.PortfolioId = portfolioClient.PortfolioId;
+            resource.PortfolioName = portfolioClient.Portfolio.Name;            
+            resource.TaxRate = taxRate;
             return View(resource);
         }
         
@@ -206,19 +214,24 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
+            var taxes = await _taxService.GetAllAsync();
+            var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
+
             var resource = await _quoteService.GetByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
             }
 
-            var result = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
+            var portfolioClient = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
             
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
 
-            resource.ClientId = result.ClientId;
-            resource.PortfolioId = result.PortfolioId;
+            resource.ClientId = portfolioClient.ClientId;
+            resource.PortfolioId = portfolioClient.PortfolioId;
+            resource.PortfolioName = portfolioClient.Portfolio.Name;
+            resource.TaxRate = taxRate;
             resource.DayList = SelectLists.RegisteredDays(resource.RunDay);
             resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
             resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);

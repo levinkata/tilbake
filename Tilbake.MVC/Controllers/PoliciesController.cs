@@ -88,12 +88,17 @@ namespace Tilbake.MVC.Controllers
             var policyTypes = await _policyTypeService.GetAllAsync();
             var salesTypes = await _salesTypeService.GetAllAsync();
 
+            var FullName = String.IsNullOrEmpty(quote.Client.FirstName) ? quote.Client.LastName : 
+                            quote.Client.FirstName + " " + 
+                            quote.Client.LastName;
+
             PolicySaveResource resource = new()
             {
                 QuoteId = quoteId,
                 InsurerPolicyNumber = "TBA",
                 CoverStartDate = DateTime.Now,
                 QuoteNumber = quote.QuoteNumber,
+
                 RunDay = quote.RunDay,
                 DayList = SelectLists.RegisteredDays(quote.RunDay),
                 PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, Guid.Empty),

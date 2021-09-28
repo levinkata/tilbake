@@ -147,7 +147,8 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.InsurerName, opt => opt.MapFrom(src => src.Insurer.Name)).ReverseMap();
 
             CreateMap<PortfolioClient, PortfolioClientResource>()
-                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client)).ReverseMap();
+                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
+                .ForMember(dest => dest.Portfolio, opt => opt.MapFrom(src => src.Portfolio)).ReverseMap();
 
             CreateMap<PortfolioPolicyFee, PortfolioPolicyFeeResource>()
                 .ForMember(dest => dest.InsurerName, opt => opt.MapFrom(src => src.Insurer.Name)).ReverseMap();

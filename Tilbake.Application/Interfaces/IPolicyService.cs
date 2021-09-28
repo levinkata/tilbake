@@ -7,7 +7,7 @@ namespace Tilbake.Application.Interfaces
 {
     public interface IPolicyService
     {
-        Task<IEnumerable<PolicyResource>> GetAllAsync();
+        Task<IEnumerable<PolicyResource>> GetAllAsync(Guid portfolioClientId);
         Task<IEnumerable<PolicyResource>> GetByPorfolioClientIdAsync(Guid portfolioClientId);
         Task<PolicyResource> GetByIdAsync(Guid id);
         Task<PolicyResource> GetCurrentPolicyAsync(Guid portfolioClientId);

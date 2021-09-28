@@ -310,13 +310,13 @@ namespace Tilbake.Application.Services
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
-            var insurerid = result.InsurerId;
+            var insurerId = result.InsurerId;
             var quoteitems = result.QuoteItems;
             var isFulfilled = result.IsFulfilled;
 
             if (!isFulfilled)
             {
-                if (insurerid != Guid.Empty)
+                if (insurerId != Guid.Empty && insurerId != null)
                 {
                     var isRated = false;
                     foreach (var item in quoteitems)

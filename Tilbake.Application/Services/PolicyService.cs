@@ -225,13 +225,22 @@ namespace Tilbake.Application.Services
             return await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<PolicyResource>> GetAllAsync()
+        public async Task<IEnumerable<PolicyResource>> GetAllAsync(Guid portfolioClientId)
         {
-            var result = await Task.Run(() => _unitOfWork.Policies.GetAllAsync());
-            result = result.OrderBy(n => n.PolicyNumber);
+            var result = await _unitOfWork.Policies.GetAllAsync(
+                                        e => e.PortfolioClientId == portfolioClientId,
+                                        e => e.OrderByDescending(n => n.PolicyNumber),
+                                        e => e.Insurer,
+                                        e => e.PortfolioClient,
+                                        e => e.PaymentMethod,
+                                        e => e.PolicyStatus,
+                                        e => e.PolicyType,
+                                        e => e.SalesType);
 
+            //  Skip top record as this is collecting historical policies
+            result = result.Skip(1);
+            
             var resources = _mapper.Map<IEnumerable<Policy>, IEnumerable<PolicyResource>>(result);
-
             return resources;
         }
 

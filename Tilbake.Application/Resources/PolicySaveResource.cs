@@ -54,6 +54,9 @@ namespace Tilbake.Application.Resources
         public List<PolicyRisk> QuoteItems { get; } = new List<PolicyRisk>();
         public int QuoteNumber { get; set; }
 
+        //  Other
+        public string FullName { get; set; }
+        
         //  AllRisk
         [Display(Name = "Sum Insured")]
         public decimal AllRiskSumInsured { get; set; }

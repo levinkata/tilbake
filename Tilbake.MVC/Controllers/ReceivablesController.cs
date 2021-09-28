@@ -13,12 +13,15 @@ namespace Tilbake.MVC.Controllers
     {
         private readonly IReceivableService _receivableService;
         private readonly IPaymentTypeService _paymentTypeService;
+        private readonly IQuoteService _quoteService;
 
         public ReceivablesController(IReceivableService receivableService,
-                                    IPaymentTypeService paymentTypeService)
+                                    IPaymentTypeService paymentTypeService,
+                                    IQuoteService quoteService)
         {
             _receivableService = receivableService;
             _paymentTypeService = paymentTypeService;
+            _quoteService = quoteService;
         }
 
         public async Task<IActionResult> Index(Guid invoiceId)
@@ -62,10 +65,12 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> QuotePayment(Guid quoteId)
         {
             var paymentTypes = await _paymentTypeService.GetAllAsync();
+            var quote = await _quoteService.GetByIdAsync(quoteId);
 
             ReceivableSaveResource resource = new()
             {
                 QuoteId = quoteId,
+                QuoteNumber = quote.QuoteNumber,
                 ReceivableDate = DateTime.Now,
                 PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
             };

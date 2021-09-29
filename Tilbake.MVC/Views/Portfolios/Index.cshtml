@@ -7,7 +7,54 @@
 }
 
 <h1>Portfolios</h1>
+<hr>
 
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div class="col">
+                <h5 class="mb-0 py-2">Portfolios</h5>
+            </div>
+            <div class="col text-end ps-2">
+                <a asp-action="Create" class="btn btn-outline-secondary btn-sm">
+                    <span class="fas fa-plus"></span> New
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-sm mb-0 overflow-hidden">
+            <thead>
+                <tr>
+                    <th class="px-3 align-middle">
+                        <strong>Name</strong>
+                    </th>
+                    <th class="px-3 align-middle">
+                        <strong>Scheme?</strong>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                <tr>
+                    <td class="px-3 align-middle">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td class="px-3 align-middle">
+                        @Html.DisplayFor(modelItem => item.IsScheme)
+                    </td>
+                    <td class="align-middle text-end">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-link btn-sm dropdown text-reset">
+                            <span class="fas fa-ellipsis-h text-muted"></span></a>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    </div>
+</div>
+@* 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <div class="form-group">
         <a asp-action="Create"><i class="far fa-plus-square"></i></a>
@@ -58,7 +105,7 @@
 else
 {
     <caption>No Records Found</caption>
-}
+} *@
 
 @section Scripts {
     <script>

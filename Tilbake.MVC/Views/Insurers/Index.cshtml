@@ -13,29 +13,16 @@
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Insurers</h5>
             </div>
             <div class="col-8 col-sm-auto text-end ps-2">
-                <div class="d-none">
-                    <div class="d-flex">
-                        <select class="form-select form-select-sm" aria-label="Bulk actions">
-                            <option selected="">Bulk actions</option>
-                            <option value="Refund">Refund</option>
-                            <option value="Delete">Delete</option>
-                            <option value="Archive">Archive</option>
-                        </select>
-                        <button class="btn btn-falcon-default btn-sm ms-2" type="button">Apply</button>
-                    </div>
-                </div>
                 <div>
                     <a asp-action="Create" class="btn btn-outline-secondary btn-sm">
                         <span class="fas fa-plus text-muted"></span> New
                     </a>
-                    <button class="btn btn-outline-secondary btn-sm mx-2" type="button">
-                        <span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ms-1">Filter</span>
-                    </button>
-                    <button class="btn btn-outline-secondary btn-sm" type="button">
-                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ms-1">Export</span>
-                    </button>
+                    <a asp-action="Create" class="btn btn-outline-secondary btn-sm mx-2">
+                        <span class="fas fa-filter text-muted"></span> Filter
+                    </a>
+                    <a asp-action="Create" class="btn btn-outline-secondary btn-sm">
+                        <span class="fas fa-external-link-alt text-muted"></span> Export
+                    </a>
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IBuildingConditionService _buildingConditionService;
         private readonly ICoverTypeService _coverTypeService;
         private readonly IInsurerService _insurerService;
+        private readonly IInsurerBranchService _insurerBranchService;
         private readonly IQuoteStatusService _quoteStatusService;
         private readonly IBodyTypeService _bodyTypeService;
         private readonly IDriverTypeService _driverTypeService;
@@ -37,6 +38,7 @@ namespace Tilbake.MVC.Controllers
                                 IBuildingConditionService buildingConditionService,
                                 ICoverTypeService coverTypeService,
                                 IInsurerService insurerService,
+                                IInsurerBranchService insurerBranchService,
                                 IQuoteStatusService quoteStatusService,
                                 IBodyTypeService bodyTypeService,
                                 IDriverTypeService driverTypeService,
@@ -56,6 +58,7 @@ namespace Tilbake.MVC.Controllers
             _buildingConditionService = buildingConditionService;
             _coverTypeService = coverTypeService;
             _insurerService = insurerService;
+            _insurerBranchService = insurerBranchService;
             _quoteStatusService = quoteStatusService;
             _bodyTypeService = bodyTypeService;
             _driverTypeService = driverTypeService;
@@ -79,10 +82,23 @@ namespace Tilbake.MVC.Controllers
             return View(resources);
         }
 
-        public async Task<IActionResult> Search(Guid portfolioid, string searchString = "~#")
+        public async Task<IActionResult> PortfolioClientQuotes(Guid portfolioClientId)
         {
-            var resource = await _portfolioService.GetByIdAsync(portfolioid);
-            var resources = await _quoteService.GetByPortfolioAsync(portfolioid);
+            var resources = await _quoteService.GetByPortfolioClientAsync(portfolioClientId);
+            var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
+            
+            ViewBag.PortfolioClientId = portfolioClientId;
+            ViewBag.ClientId = portfolioClient.ClientId;
+            ViewBag.PortfolioId = portfolioClient.PortfolioId;
+            ViewBag.Client = resources.FirstOrDefault().Client;
+            ViewBag.PortfolioName = portfolioClient.Portfolio.Name;
+            return View(resources);
+        }
+
+        public async Task<IActionResult> Search(Guid portfolioId, string searchString = "~#")
+        {
+            var resource = await _portfolioService.GetByIdAsync(portfolioId);
+            var resources = await _quoteService.GetByPortfolioAsync(portfolioId);
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -100,7 +116,7 @@ namespace Tilbake.MVC.Controllers
             
             QuoteSearchResource searchResource = new()
             {
-                PortfolioId = portfolioid,
+                PortfolioId = portfolioId,
                 PortfolioName = resource.Name,
                 SearchString = "",
                 QuoteResources = resources.ToList()
@@ -143,9 +159,11 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
             var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
+
             var clientId = portfolioClient.ClientId;
             var portfolioId = portfolioClient.PortfolioId;
             var client = portfolioClient.Client;
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var buildingConditions = await _buildingConditionService.GetAllAsync();
@@ -168,6 +186,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
                 PortfolioId = portfolioId,
+                PortfolioName = portfolio.Name,
                 Client = client,
                 BuildingConditionList = SelectLists.BuildingConditions(buildingConditions, Guid.Empty),
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
@@ -196,7 +215,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _quoteService.AddAsync(resource);
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.Quote.PortfolioClientId });
+                return RedirectToAction("PortfolioClientQuotes", "Quotes", new { resource.Quote.PortfolioClientId });
             }
 
             return View(resource);

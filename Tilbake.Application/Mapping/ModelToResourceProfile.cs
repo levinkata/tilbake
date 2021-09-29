@@ -159,6 +159,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<Quote, QuoteResource>()
                 .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.PortfolioClient.Client))
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.InsurerBranch.Insurer))
                 .ForMember(dest => dest.InsurerBranch, opt => opt.MapFrom(src => src.InsurerBranch))
                 .ForMember(dest => dest.QuoteStatus, opt => opt.MapFrom(src => src.QuoteStatus))
                 .ForMember(dest => dest.QuoteItems, opt => opt.MapFrom(src => src.QuoteItems)).ReverseMap();

@@ -16,7 +16,7 @@ namespace Tilbake.Domain.Models
         public int QuoteNumber { get; set; }
         public DateTime QuoteDate { get; set; }
         public Guid QuoteStatusId { get; set; }
-        public Guid InsurerBranchId { get; set; }
+        public Guid? InsurerBranchId { get; set; }
         public string ClientInfo { get; set; }
         public string InternalInfo { get; set; }
         public int RunDay { get; set; }

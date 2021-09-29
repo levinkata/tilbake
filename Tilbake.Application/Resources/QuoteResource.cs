@@ -49,6 +49,7 @@ namespace Tilbake.Application.Resources
         
         //  Tables
         public Client Client { get; set; }
+        public Insurer Insurer { get; set; }
         public InsurerBranch InsurerBranch { get; set; }
         public PortfolioClient PortfolioClient { get; set; }
         public QuoteStatus QuoteStatus { get; set; }

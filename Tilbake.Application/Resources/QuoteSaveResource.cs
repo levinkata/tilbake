@@ -32,7 +32,7 @@ namespace Tilbake.Application.Resources
 
         // Other
         public Guid InsurerId { get ;set; }
-
+        public string PortfolioName { get; set; }
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
         //  Other

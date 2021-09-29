@@ -127,7 +127,7 @@
             <div class="col-5">
                 <div class="row">
                     <div class="col-5">
-                        @if(Model.InsurerId == Guid.Empty)
+                        @if(Model.InsurerBranchId == Guid.Empty)
                         {
                             <p class="alert-danger fw-bolder mb-1">Insurer</p>
                             
@@ -136,7 +136,7 @@
                         }
                     </div>
                     <div class="col">
-                        @Html.DisplayFor(model => model.InsurerBranch.Insurer.Name)
+                        @Html.DisplayFor(model => model.Insurer.Name)
                     </div>
                 </div>
                 <div class="row">

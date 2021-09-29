@@ -1,0 +1,94 @@
+﻿@model IEnumerable<QuoteResource>
+
+@{
+    ViewData["Title"] = ViewBag.PortfolioName;
+
+        var FullName = String.IsNullOrEmpty(ViewBag.Client.FirstName) ? ViewBag.Client.LastName : 
+                    ViewBag.Client.FirstName + " " + 
+                    ViewBag.Client.LastName;
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>@FullName</h4>
+<hr>
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Quotes</h5>
+            </div>
+            <div class="col-8 col-sm-auto text-end ps-2">
+                <div>
+                    <a asp-action="Create" asp-route-portfolioClientId="@ViewBag.PortfolioClientId" class="btn btn-outline-secondary btn-sm">
+                        <span class="fas fa-plus text-muted"></span> New Quote
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <table id="tblQuote" class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-3 align-middle">
+                                @Html.DisplayNameFor(model => model.QuoteNumber)
+                            </th>
+                            <th class="px-3 align-middle">
+                                @Html.DisplayNameFor(model => model.QuoteDate)
+                            </th>
+                            <th class="px-3 align-middle">
+                                @Html.DisplayNameFor(model => model.QuoteStatus.Name)
+                            </th>                                                                                                
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="align-middle px-3">
+                                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.QuoteNumber)</a>
+                                </td>
+                                <td class="px-3 align-middle">
+                                    @item.QuoteDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td class="px-3 align-middle">
+                                    @Html.DisplayFor(modelItem => item.QuoteStatus.Name)
+                                </td>
+                                <td class="align-middle text-end">
+                                    <div class="dropdown position-static">
+                                        <button class="btn btn-link btn-sm dropdown text-reset" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false">
+                                            <span class="fas fa-ellipsis-h text-muted"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end border py-0">
+                                            <div class="bg-white py-2">
+                                                <a class="dropdown-item" href="#!">Edit</a>
+                                                <a class="dropdown-item text-danger" href="#!">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="d-flex justify-content-center">
+                    <span class="py-2">No records found</span>
+                </div>
+            }  
+        </div>
+</div>
+
+<div>
+    <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@ViewBag.ClientId">Return</a>
+</div>
+
+@section Scripts {
+
+}

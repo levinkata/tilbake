@@ -3179,7 +3179,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasOne(d => d.InsurerBranch)
                     .WithMany(p => p.Quotes)
                     .HasForeignKey(d => d.InsurerBranchId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Quote_InsurerBranch");
 
                 entity.HasOne(d => d.PortfolioClient)

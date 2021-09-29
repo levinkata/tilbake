@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var FullName = Model.FirstName + " " + Model.LastName;
+    
+    var FullName = String.IsNullOrEmpty(Model.FirstName) ? Model.LastName : 
+                    Model.FirstName + " " + 
+                    Model.LastName;    
+
 }
 
 <h1>@Model.PortfolioName</h1>
@@ -108,7 +112,7 @@
             <div class="col-md-3">
                 <div class="card text-center">
                     <div class="card-body">
-                        <h6 class="card-title">Total Claims</h6>
+                        <h6 class="card-title">Claims</h6>
                         <div class="row">
                             <div class="col">
                                 <p class="card-text font-weight-bolder mb-1 h4">$0</p><span class="badge badge-warning rounded-pill">+3.5%</span>
@@ -132,7 +136,10 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <div class="border-start border-3 border-primary ps-3">
-                                    <span class="mb-1 fw-bold fs-6"><a href="#" class="card-link link-info">Quotations</a></span>
+                                    <span class="mb-1 fw-bold">
+                                        <a asp-controller="Quotes" asp-action="PortfolioClientQuotes" asp-route-portfolioClientId="@Model.PortfolioClientId" class="card-link link-info">
+                                            Quotations</a>
+                                    </span>
                                 </div>
                             </li>
                             <li class="list-group-item">

@@ -5,12 +5,7 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-
-<div class="d-md-flex justify-content-md-end">
-    <div class="form-group">
-        <a asp-action="Create" class="btn btn-primary">New Insurer</a>
-    </div>
-</div>
+<hr>
 <div class="card mb-3">
     <div class="card-header">
         <div class="d-flex justify-content-between">
@@ -30,10 +25,9 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-outline-secondary btn-sm" type="button">
-                        <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ms-1">New</span>
-                    </button>
+                    <a asp-action="Create" class="btn btn-outline-secondary btn-sm">
+                        <span class="fas fa-plus text-muted"></span> New
+                    </a>
                     <button class="btn btn-outline-secondary btn-sm mx-2" type="button">
                         <span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span>
                         <span class="d-none d-sm-inline-block ms-1">Filter</span>
@@ -49,7 +43,7 @@
     @if (Model.Any())
     {
         <div class="card-body p-0">
-            <table id="tblInsurer" class="table table-sm mb-0 overflow-hidden">
+            <table id="tblInsurer" class="table table-sm mb-0">
                 <thead>
                     <tr>
                         <th class="px-3 align-middle">
@@ -111,31 +105,6 @@
         
     }    
 
-</div>
-
-<div class="accordion" id="accordionPanelsStayOpenExample">
-    @if (Model.Any())
-    {
-        @foreach (var item in Model)
-        {
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </button>
-                    </h2>
-                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                    <div class="accordion-body">
-                        @foreach (var itemList in item.InsurerBranches)
-                        {
-                            <p>@itemList.Name</p>
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-
-    }
 </div>
 
 <div>

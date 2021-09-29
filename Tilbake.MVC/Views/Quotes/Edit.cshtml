@@ -48,31 +48,41 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
+                            <label asp-for="InsurerBranchId" class="control-label"></label>
+                            <select asp-for="InsurerBranchId" class="form-control" asp-items="Model.InsurerBranchList"></select>
+                            <span asp-validation-for="InsurerBranchId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
                             <label asp-for="QuoteStatusId" class="control-label"></label>
                             <select asp-for="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
                             <span asp-validation-for="QuoteStatusId" class="text-danger"></span>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                                <label asp-for="RunDay" class="control-label"></label>
-                                <select asp-for="RunDay" class="form-control" asp-items="Model.DayList"></select>
+                            <label asp-for="ClientInfo" class="control-label"></label>
+                            <input asp-for="ClientInfo" class="form-control">
+                            <span asp-validation-for="ClientInfo" class="text-danger"></span>
+                        </div>                        
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="InternalInfo" class="control-label"></label>
+                            <input asp-for="InternalInfo" class="form-control">
+                            <span asp-validation-for="InternalInfo" class="text-danger"></span>
+                        </div>
+                    </div>                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="RunDay" class="control-label"></label>
+                            <select asp-for="RunDay" class="form-control" asp-items="Model.DayList"></select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label asp-for="ClientInfo" class="control-label"></label>
-                        <input asp-for="ClientInfo" class="form-control">
-                        <span asp-validation-for="ClientInfo" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label asp-for="InternalInfo" class="control-label"></label>
-                        <input asp-for="InternalInfo" class="form-control">
-                        <span asp-validation-for="InternalInfo" class="text-danger"></span>
-                    </div>
+ 
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-outline-secondary" /> |
@@ -82,3 +92,29 @@
         </div>
     </form>
 </div>
+
+@section Scripts{
+    <script>
+        $('#InsurerId').change(function () {
+            var selectedInsurerId = $('#InsurerId option:selected').val();
+
+            $.ajax({
+                url: '@(Url.Action("GetInsurerBranches", "InsurerBranches"))',
+                traditional: true,
+                dataType: 'JSON',
+                type: 'GET',
+                data: { insurerId: selectedInsurerId },
+                error: function () {
+                    alert('An error occurred.');
+                },
+                success: function (models) {
+
+                    $('#InsurerBranchId').empty();   // clear before appending new list
+                    $.each(models, function (index, model) {
+                        $('#InsurerBranchId').append($('<option></option>').val(model.id).html(model.name));
+                    });
+                }
+            });
+        });
+    </script>
+}        

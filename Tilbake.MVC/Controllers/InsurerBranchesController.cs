@@ -35,6 +35,20 @@ namespace Tilbake.MVC.Controllers
             return View(await _insurerBranchService.GetByInsurerIdAsync(insurerId));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetInsurerBranches(Guid insurerId)
+        {
+            var resources = await _insurerBranchService.GetByInsurerIdAsync(insurerId);
+            var insurerBranches = from m in resources
+                              select new
+                              {
+                                  m.Id,
+                                  m.Name
+                              };
+
+            return Json(insurerBranches);
+        }
+
         // GET: InsurerBranches/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {

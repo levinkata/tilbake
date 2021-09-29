@@ -12,13 +12,7 @@
                 Date:
             </dt>
             <dd class="col-6">
-                @Html.DisplayFor(model => model.InvoiceDate)
-            </dd>
-            <dt class="col-6">
-                Due Date:
-            </dt>
-            <dd class="col-6">
-                @Html.DisplayFor(model => model.InvoiceDueDate)
+                @Model.InvoiceDate.ToShortDateString()
             </dd>
             <dt class="col-6">
                 Invoice Number:

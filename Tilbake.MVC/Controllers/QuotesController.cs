@@ -109,7 +109,7 @@ namespace Tilbake.MVC.Controllers
                 } else
                 {
                     resources = resources.Where(r => r.Client.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
-                                            || r.Client.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                            //|| r.Client.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
                                             || r.Client.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
                 }
             }
@@ -242,18 +242,31 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
+            var insurerBranchId = resource.InsurerBranchId;
+
+            var insurerBranch = await _insurerBranchService.GetByIdAsync(insurerBranchId);
+            var insurerId = Guid.Empty;
+
+            if(insurerBranch != null)
+            {
+                insurerId = insurerBranch.InsurerId;
+            }
+
             var portfolioClient = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
             
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
+            var insurerBranches = await _insurerBranchService.GetByInsurerIdAsync(insurerId);
 
             resource.ClientId = portfolioClient.ClientId;
             resource.PortfolioId = portfolioClient.PortfolioId;
             resource.PortfolioName = portfolioClient.Portfolio.Name;
+            resource.InsurerId = insurerId;
             resource.TaxRate = taxRate;
             resource.DayList = SelectLists.RegisteredDays(resource.RunDay);
             resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
-            resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
+            resource.InsurerList = SelectLists.Insurers(insurers, insurerId);
+            resource.InsurerBranchList = SelectLists.InsurerBranches(insurerBranches, insurerBranchId);
 
             return View(resource);
         }

@@ -40,9 +40,13 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteItemResource>> GetByQuoteIdAsync(Guid quoteId)
         {
-            var result = await Task.Run(() => _unitOfWork.QuoteItems.GetByQuoteIdAsync(quoteId));
+            var result = await _unitOfWork.QuoteItems.GetAllAsync(
+                                            p => p.QuoteId == quoteId,
+                                            p => p.OrderBy(n => n.Description),
+                                            p => p.CoverType,
+                                            p => p.Quote);
+
             var resources = _mapper.Map<IEnumerable<QuoteItem>, IEnumerable<QuoteItemResource>>(result);
-            
             return resources;
         }
 

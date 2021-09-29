@@ -61,7 +61,7 @@
 
                             <tr>
                                 <th class="text-sm-right">Quotation Date:</th>
-                                <td>@Model.QuoteDate.ToString("dd MMMM yyyy")</td>
+                                <td>@Model.QuoteDate.ToLongDateString()</td>
                             </tr>
                             <tr class="alert-success fw-bold">
                                 <th class="text-sm-right">Amount Due:</th>

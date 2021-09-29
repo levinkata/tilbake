@@ -45,7 +45,7 @@
                 <div class="col border p-3">
                     <div class="row">
                         <div class="col fw-bolder"><p>Quote Date:</p></div>
-                        <div class="col"><p>@Model.QuoteDate.ToString("dd MMMM yyyy")</p></div>
+                        <div class="col"><p>@Model.QuoteDate.ToLongDateString()</p></div>
                     </div>
                     <div class="row">
                         <div class="col fw-bolder"><p>Quote Number:</p></div>
@@ -69,7 +69,7 @@
                         <div class="col fw-bolder"><p>VAT Due:</p></div>
                         <div class="col text-right"><p>@totalTaxAmount.ToString("C2")</p></div>
                     </div>
-                   <div class="row align-bottom">
+                   <div class="row">
                         <div class="col fw-bolder"><p>Total Amount Due:</p></div>
                         <div class="col text-right"><p>@grandTotal.ToString("C2")</p></div>
                     </div>                      
@@ -111,7 +111,7 @@
             }
             else
             {
-                <caption>No Records Found</caption>
+                <span class="py-2 text-muted">No Records Found</span>
             }
             <div class="row py-3">
                 <div class="row mb-3">
@@ -119,7 +119,7 @@
                         <span class="fw-bolder">Reference:</span> SERETK01 / ST-GAB-@Model.Client.ClientNumber-@Model.QuoteNumber-002
                     </div>
                     <div class="col-md-auto">
-                        @Model.QuoteDate.ToString("dd MMMM yyyy")
+                        @Model.QuoteDate.ToLongDateString()
                     </div>
                 </div>
                 <p class="fw-bolder">Your premium is now due for payment. Failure to pay your premium on time will result in the voiding of your policy

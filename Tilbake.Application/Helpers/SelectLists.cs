@@ -226,6 +226,21 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", insurerId);
         }
 
+        public static SelectList InsurerBranches(IEnumerable<InsurerBranchResource> insurerBranches, Guid? insurerBranchId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Insurer Branch", Value = "" });
+
+            foreach (var item in insurerBranches)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (insurerBranchId == Guid.Empty || String.IsNullOrEmpty(insurerBranchId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", insurerBranchId);
+        }
+
         public static SelectList InvoiceStatuses(IEnumerable<InvoiceStatusResource> invoiceStatuses, Guid? invoiceStatusId)
         {
             List<SelectListItem> items = new();

@@ -90,7 +90,7 @@
                                     @Html.DisplayFor(modelItem => item.FullName)
                                 </td>
                                 <td>
-                                    @item.InvoiceDate.ToString("dd/MM/yyyy")
+                                    @item.InvoiceDate.ToShortDateString()
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Amount)

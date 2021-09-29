@@ -27,6 +27,7 @@ namespace Tilbake.Application.Resources
         public string Excess { get; set; }
 
         public CoverType CoverType { get; set; }
+        public Quote Quote { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }

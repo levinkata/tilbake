@@ -1,85 +1,93 @@
 ﻿@model UserPortfolioResource
 
 @{
-    ViewBag.Title = "Assign Portfolios";
+    ViewBag.Title = "Portfolios";
 }
 
-<h2>User Portfolios</h2>
-
-<div class="form-group">
-    <label asp-for="UserId" class="col-md-2 control-label">Risk</label>
-    <div class="col-md-10">
-        <select asp-for="UserId" class="form-control" asp-items="@Model.Users"></select>
-    </div>
-</div>
-<div class="row offset-md-0">
-    <div class="col-md-5">
-        <div class="form-group">
-            <label asp-for="UnAssignedPortfolios" class="control-label"></label>
-            <select asp-for="UnAssignedPortfolios" class="form-control"
-                    asp-items="@Model.PortfolioList"></select>
+<h2>@ViewBag.Title</h2>
+<hr />
+<div class="d-flex justify-content-center">
+    <div class="col-md-9">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5>Assign Portfolios</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Click on the buttons to assign/de-assign portfolio to selected user.</p>
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="UserId" control-label">User</label>
+                        <select asp-for="UserId" class="form-control" asp-items="@Model.Users"></select>
+                    </div>
+                </div>
+                <div class="d-flex gx-0 justify-content-between align-self-end">
+                    <div class="col p-2">
+                        <div class="form-group">
+                            <label asp-for="UnAssignedPortfolios" class="control-label"></label>
+                            <select asp-for="UnAssignedPortfolios" class="form-control" asp-items="@Model.PortfolioList"></select>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 p-2 col-auto">
+                        <button class="btn  btn-danger btn-sm" id="right" type="button"><i class="las la-angle-right"></i></button>
+                        <button class="btn btn-warning btn-sm" id="left" type="button"><i class="las la-angle-left"></i></button>
+                        <button class="btn  btn-success btn-sm" id="rightAll" type="button"><i class="las la-angle-double-right"></i></button>
+                        <button class="btn btn-primary btn-sm" id="leftAll" type="button"><i class="las la-angle-double-left"></i></button>
+                    </div>
+                    <div class="col p-2">
+                        <div class="form-group">
+                            <label asp-for="AssignedPortfolios" class="control-label"></label>
+                            <select asp-for="AssignedPortfolios" class="form-control" asp-items="@Model.UserPortfolioList"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="d-grid gap-2 col-1 mx-auto">
-        <button class="btn  btn-danger" id="right" type="button"><i class="las la-angle-right"></i></button>
-        <button class="btn btn-warning" id="left" type="button"><i class="las la-angle-left"></i></button>
-        <button class="btn  btn-success" id="rightAll" type="button"><i class="las la-angle-double-right"></i></button>
-        <button class="btn btn-primary" id="leftAll" type="button"><i class="las la-angle-double-left"></i></button>
-    </div>
-    <div class="col-md-5">
-        <div class="form-group">
-            <label asp-for="AssignedPortfolios" class="control-label"></label>
-            <select asp-for="AssignedPortfolios" class="form-control"
-                    asp-items="@Model.UserPortfolioList"></select>
-        </div>
+        <a asp-action="Index" >Return</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="btn btn-info">Return</a>
-</div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-<script type="text/javascript">
+    <script>
 
-    $(document).ready(function () {
-        var selectedUserId = null;
+        $(document).ready(function () {
+            var selectedUserId = null;
 
-        UserIdChanged();
-
-        function LoadLists(aPortfolios, uPortfolios) {
-
-            $('#AssignedPortfolios').empty();   // clear before appending new list
-            $('#UnAssignedPortfolios').empty();   // clear before appending new list
-
-            $.each(aPortfolios, function (index, value) {
-                $('#AssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
-            });
-
-            $.each(uPortfolios, function (index, value) {
-                $('#UnAssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
-            });
-        }
-
-        function UserIdChanged() {
-            selectedUserId = $("#UserId").val();
-
-            $.ajax({
-                url: '@(Url.Action("FillMultiSelectLists"))',
-                type: 'GET',
-                dataType: 'JSON',
-                data: { userId: selectedUserId },
-                success: function (data) {
-                    LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
-                }
-            });
-        }
-
-        $('#UserId').on('change', function () {
             UserIdChanged();
-        });
+
+            $('#UserId').on('change', function () {
+                UserIdChanged();
+            });
+
+            function LoadLists(aPortfolios, uPortfolios) {
+
+                $('#AssignedPortfolios').empty();   // clear before appending new list
+                $('#UnAssignedPortfolios').empty();   // clear before appending new list
+
+                $.each(aPortfolios, function (index, value) {
+                    $('#AssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
+                });
+
+                $.each(uPortfolios, function (index, value) {
+                    $('#UnAssignedPortfolios').append($('<option></option>').val(value.id).html(value.name));
+                });
+            }
+            
+            function UserIdChanged() {
+                selectedUserId = $("#UserId").val();
+
+                $.ajax({
+                    url: '@(Url.Action("FillMultiSelectLists"))',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: { userId: selectedUserId },
+                    success: function (data) {
+                        LoadLists(data.assignedPortfolios, data.unAssignedPortfolios);
+                    }
+                });
+            }
 
             $('#right').on('click', function () {
                 var itemsSelected = [];
@@ -125,7 +133,7 @@
                 } else {
                     return false;
                 }
-            })
+            });
 
             $('#left').on('click', function () {
                 var itemsSelected = [];
@@ -148,7 +156,7 @@
                 } else {
                     return false;
                 }
-            })
+            });
 
             $('#leftAll').on('click', function () {
                 var itemsAll = [];
@@ -173,5 +181,5 @@
                 }
             });
         });
-</script>
+    </script>
 }

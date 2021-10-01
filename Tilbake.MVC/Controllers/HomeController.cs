@@ -28,6 +28,10 @@ namespace Tilbake.MVC.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var resources = await _userPortfolioService.GetByUserIdAsync(user.Id);
+
+            string message = $"User logged in: {user.LastName}";
+            _logger.LogInformation(message);
+
             return View(resources);
         }
 

@@ -41,6 +41,6 @@
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="PortfolioId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Carousel" asp-route-portfolioId="@Model.PortfolioId">Back</a>
+        <a asp-controller="Portfolios" asp-action="Carousel" asp-route-portfolioId="@Model.PortfolioId">Return</a>
     </form>
 </div>

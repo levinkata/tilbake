@@ -20,17 +20,17 @@
                         <select asp-for="UserId" class="form-control" asp-items="@Model.Users"></select>
                     </div>
                 </div>
-                <div class="d-flex gx-0 justify-content-between align-self-end">
+                <div class="d-flex justify-content-between align-self-end">
                     <div class="col p-2">
                         <div class="form-group">
                             <label asp-for="UnAssignedPortfolios" class="control-label"></label>
                             <select asp-for="UnAssignedPortfolios" class="form-control" asp-items="@Model.PortfolioList"></select>
                         </div>
                     </div>
-                    <div class="d-grid gap-2 p-2 col-auto">
-                        <button class="btn  btn-danger btn-sm" id="right" type="button"><i class="las la-angle-right"></i></button>
+                    <div class="vstack gap-1 p-2 col-md-1 mx-auto">
+                        <button class="btn btn-danger btn-sm" id="right" type="button"><i class="las la-angle-right"></i></button>
                         <button class="btn btn-warning btn-sm" id="left" type="button"><i class="las la-angle-left"></i></button>
-                        <button class="btn  btn-success btn-sm" id="rightAll" type="button"><i class="las la-angle-double-right"></i></button>
+                        <button class="btn btn-success btn-sm" id="rightAll" type="button"><i class="las la-angle-double-right"></i></button>
                         <button class="btn btn-primary btn-sm" id="leftAll" type="button"><i class="las la-angle-double-left"></i></button>
                     </div>
                     <div class="col p-2">

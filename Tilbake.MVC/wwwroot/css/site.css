@@ -62,11 +62,11 @@ html {
 }
 
 body {
-    /* Margin bottom by footer height */
-    margin-bottom: 60px;
-    font-family: 'Roboto', sans-serif;
-    color: #5e6e82; /*  Added by Levi - 09/08/2021 */
-    background-color: #edf2f9; /*  Added by Levi - 09/08/2021 */
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  font-family: 'Roboto', sans-serif;
+  color: #5e6e82; /*  Added by Levi - 09/08/2021 */
+  background-color: #edf2f9; /*  Added by Levi - 09/08/2021 */
 }
 
 .footer {
@@ -79,4 +79,3 @@ body {
 
 /* Levi styles
 -------------------------------------------------- */
-

@@ -73,7 +73,7 @@ namespace Tilbake.Application.Resources
         public bool RecoverFromThirdPartyIsKey { get; set; }
 
         //  Descriptions
-        public string Portfolio { get; set; }
+        public string PortfolioName { get; set; }
         public string FileTemplate { get; set; }
     }
 }

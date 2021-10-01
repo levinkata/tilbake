@@ -62,10 +62,12 @@ namespace Tilbake.Application.Resources
         //  Descriptions
         public string PortfolioName { get; set; }
 
+        //  Tables
+        
         [Display(Name = "Client Type")]        
         public string ClientType { get; set; }
 
-        [Display(Name = "Nationality")]        
+        [Display(Name = "Nationality")]  
         public string Country { get; set; }
 
         [Display(Name = "ID Document Type")]

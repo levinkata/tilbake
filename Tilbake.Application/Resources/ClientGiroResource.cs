@@ -19,6 +19,7 @@ namespace Tilbake.Application.Resources
         public string TitlePosition { get; set; }
         public int TitleColumnLength { get; set; }
         public bool TitleIsKey { get; set; }
+
         public Guid ClientTypeId { get; set; }
 
         [Display(Name = "Client Type")]
@@ -26,6 +27,7 @@ namespace Tilbake.Application.Resources
         public string ClientTypePosition { get; set; }
         public int ClientTypeColumnLength { get; set; }
         public bool ClientTypeIsKey { get; set; }
+
         public Guid FirstNameId { get; set; }
 
         [Display(Name = "First Name")]
@@ -33,6 +35,7 @@ namespace Tilbake.Application.Resources
         public string FirstNamePosition { get; set; }
         public int FirstNameColumnLength { get; set; }
         public bool FirstNameIsKey { get; set; }
+
         public Guid LastNameId { get; set; }
 
         [Display(Name = "Last Name")]
@@ -40,6 +43,7 @@ namespace Tilbake.Application.Resources
         public string LastNamePosition { get; set; }
         public int LastNameColumnLength { get; set; }
         public bool LastNameIsKey { get; set; }
+
         public Guid BirthDateId { get; set; }
 
         [Display(Name = "Birth Date")]
@@ -47,6 +51,7 @@ namespace Tilbake.Application.Resources
         public string BirthDatePosition { get; set; }
         public int BirthDateColumnLength { get; set; }
         public bool BirthDateIsKey { get; set; }
+
         public Guid GenderId { get; set; }
 
         [Display(Name = "Gender")]
@@ -54,8 +59,9 @@ namespace Tilbake.Application.Resources
         public string GenderPosition { get; set; }
         public int GenderColumnLength { get; set; }
         public bool GenderIsKey { get; set; }
-        public Guid IdNumberId { get; set; }
 
+        public Guid IdNumberId { get; set; }
+        
         [Display(Name = "Id Number")]
         public string IdNumberFieldLabel { get; set; }
         public string IdNumberPosition { get; set; }
@@ -77,20 +83,7 @@ namespace Tilbake.Application.Resources
         public string PhonePosition { get; set; }
         public int PhoneColumnLength { get; set; }
         public bool PhoneIsKey { get; set; }
-        public Guid MobileId { get; set; }
 
-        [Display(Name = "Mobile")]
-        public string MobileFieldLabel { get; set; }
-        public string MobilePosition { get; set; }
-        public int MobileColumnLength { get; set; }
-        public bool MobileIsKey { get; set; }
-        public Guid EmailId { get; set; }
-
-        [Display(Name = "Email")]
-        public string EmailFieldLabel { get; set; }
-        public string EmailPosition { get; set; }
-        public int EmailColumnLength { get; set; }
-        public bool EmailIsKey { get; set; }
         public Guid CountryId { get; set; }
 
         [Display(Name = "Nationality")]
@@ -98,6 +91,7 @@ namespace Tilbake.Application.Resources
         public string CountryPosition { get; set; }
         public int CountryColumnLength { get; set; }
         public bool CountryIsKey { get; set; }
+
         public Guid OccupationId { get; set; }
 
         [Display(Name = "Occupation")]
@@ -107,7 +101,7 @@ namespace Tilbake.Application.Resources
         public bool OccupationIsKey { get; set; }
 
         //  Descriptions
-        public string Portfolio { get; set; }
+        public string PortfolioName { get; set; }
         public string FileTemplate { get; set; }
     }
 }

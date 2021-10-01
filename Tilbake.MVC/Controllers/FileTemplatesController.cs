@@ -121,7 +121,7 @@ namespace Tilbake.MVC.Controllers
         {
             var fileTemplate = await _fileTemplateService.GetByIdAsync(fileTemplateId);
             var portfolioId = fileTemplate.PortfolioId;
-            var portfolio = fileTemplate.PortfolioName;
+            var portfolioName = fileTemplate.PortfolioName;
             var fileTemplateRecords = await _fileTemplateRecordService.GetTableFileTemplate(fileTemplateId, tableName);
 
             if (tableName == "Client")
@@ -129,7 +129,7 @@ namespace Tilbake.MVC.Controllers
                 ClientGiroResource resource = new()
                 {
                     PortfolioId = portfolioId,
-                    Portfolio = portfolio,
+                    PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
@@ -205,25 +205,11 @@ namespace Tilbake.MVC.Controllers
                             resource.PhoneColumnLength = item.ColumnLength;
                             break;
 
-                        case "Mobile":
-                            resource.MobileId = item.Id;
-                            resource.MobileFieldLabel = item.FieldLabel;
-                            resource.MobilePosition = item.Position;
-                            resource.MobileColumnLength = item.ColumnLength;
-                            break;
-
                         case "Country":
                             resource.CountryId = item.Id;
                             resource.CountryFieldLabel = item.FieldLabel;
                             resource.CountryPosition = item.Position;
                             resource.CountryColumnLength = item.ColumnLength;
-                            break;
-
-                        case "Email":
-                            resource.EmailId = item.Id;
-                            resource.EmailFieldLabel = item.FieldLabel;
-                            resource.EmailPosition = item.Position;
-                            resource.EmailColumnLength = item.ColumnLength;
                             break;
 
                         case "Occupation":
@@ -244,7 +230,7 @@ namespace Tilbake.MVC.Controllers
                 PremiumGiroResource resource = new()
                 {
                     PortfolioId = portfolioId,
-                    Portfolio = portfolio,
+                    PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
@@ -302,7 +288,7 @@ namespace Tilbake.MVC.Controllers
                 PolicyGiroResource resource = new()
                 {
                     PortfolioId = portfolioId,
-                    Portfolio = portfolio,
+                    PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
@@ -354,7 +340,7 @@ namespace Tilbake.MVC.Controllers
                 ClaimGiroResource resource = new()
                 {
                     PortfolioId = portfolioId,
-                    Portfolio = portfolio,
+                    PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
@@ -485,11 +471,6 @@ namespace Tilbake.MVC.Controllers
                     fileTemplateRecord.ColumnLength = resource.PhoneColumnLength;
                     await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.MobileId);
-                    fileTemplateRecord.Position = resource.MobilePosition;
-                    fileTemplateRecord.ColumnLength = resource.MobileColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
-
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.MaritalStatusId);
                     fileTemplateRecord.Position = resource.MaritalStatusPosition;
                     fileTemplateRecord.ColumnLength = resource.MaritalStatusColumnLength;
@@ -498,11 +479,6 @@ namespace Tilbake.MVC.Controllers
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.CountryId);
                     fileTemplateRecord.Position = resource.CountryPosition;
                     fileTemplateRecord.ColumnLength = resource.CountryColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
-
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.EmailId);
-                    fileTemplateRecord.Position = resource.EmailPosition;
-                    fileTemplateRecord.ColumnLength = resource.EmailColumnLength;
                     await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.OccupationId);

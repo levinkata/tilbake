@@ -15,6 +15,7 @@ using Tilbake.Application.Services;
 using Tilbake.Application.Validators;
 using Tilbake.Infrastructure.IoC;
 using Tilbake.Infrastructure.Persistence.Context;
+using Tilbake.MVC.Extensions;
 
 namespace Tilbake.MVC
 {
@@ -86,12 +87,15 @@ namespace Tilbake.MVC
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                
+                // app.UseExceptionHandler("/Home/Error");
+                app.UseGlobalExceptionMiddleware();     //  Added by Levi Nkata 02/10/2021 for Global Error Handling
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

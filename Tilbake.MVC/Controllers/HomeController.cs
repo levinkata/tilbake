@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
@@ -29,8 +30,7 @@ namespace Tilbake.MVC.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var resources = await _userPortfolioService.GetByUserIdAsync(user.Id);
 
-            string message = $"User logged in: {user.LastName}";
-            _logger.LogInformation(message);
+            _logger.LogInformation("User logged in: {LastName}", user.LastName);
             return View(resources);
         }
 

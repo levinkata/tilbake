@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using Tilbake.Application.Resources;
 
 namespace Tilbake.MVC.Controllers
 {
+    [Authorize]
     public class PoliciesController : Controller
     {
         private readonly IPolicyService _policyService;

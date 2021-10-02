@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Serilog;
+using System;
 using System.Net;
+using System.Threading.Tasks;
 using Tilbake.Application.Resources;
 
 namespace Tilbake.MVC.CustomExceptionMiddleware

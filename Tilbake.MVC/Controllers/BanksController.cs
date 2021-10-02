@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -29,7 +30,7 @@ namespace Tilbake.MVC.Controllers
             
             ViewBag.datasource = resources;
             
-            _logger.LogInformation($"Returning {resources.Count()} banks.");
+            _logger.LogInformation("Returning {Count} banks.", resources.Count());
             return View(resources);
         }
 

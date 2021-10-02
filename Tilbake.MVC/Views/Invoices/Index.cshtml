@@ -1,140 +1,135 @@
 ﻿@model IEnumerable<InvoiceResource>
 
 @{
-    ViewData["Title"] = "Invoices";
+    ViewData["Title"] = "Portfolio Name";
 }
 
 <h1>@ViewData["Title"]</h1>
+<h4>Invoices</h4>
+<hr />
+<div class="card p-3 mb-3">
+    <div class="card-body p-0">
+        <div class="row mb-2 justify-content-start">
+            <div class="col-2">
+                <span class="d-flex"><small>Overdue</small></span>
+                <span><strong>P645,268.80</strong></span>
+                <span class="text-black-50"><small>BWP</small></span>
+            </div>
+            <div class="col-3">
 
-<div class="container border rounded-0 p-3 mb-3">
-    <div class="row mb-2 justify-content-start">
-        <div class="col-2">
-            <span class="d-flex"><small>Overdue</small></span>
-            <span><strong>P645,268.80</strong></span>
-            <span class="text-black-50"><small>BWP</small></span>
-        </div>
-        <div class="col-3">
+            </div>
+            <div class="col-2">
+                <span class="d-flex"><small>Due within next 30 days</small></span>
+                <span><strong>P0.00</strong></span>
+                <span class="text-black-50"><small>BWP</small></span>
+            </div>
+            <div class="col-3">
 
+            </div>
+            <div class="col-2">
+                <span class="d-flex"><small>Average time to get paid</small></span>
+                <span><strong>9</strong></span>
+                <span class="text-black-50"><small>days</small></span>
+            </div>
         </div>
-        <div class="col-2">
-            <span class="d-flex"><small>Due within next 30 days</small></span>
-            <span><strong>P0.00</strong></span>
-            <span class="text-black-50"><small>BWP</small></span>
+        <div class="d-flex align-content-center">
+            <span>Last updated </span><span>an hour ago</span>
         </div>
-        <div class="col-3">
-
-        </div>
-        <div class="col-2">
-            <span class="d-flex"><small>Average time to get paid</small></span>
-            <span><strong>9</strong></span>
-            <span class="text-black-50"><small>days</small></span>
-        </div>
-    </div>
-    <div class="d-flex align-content-center">
-        <span>Last updated </span><span>an hour ago</span>
     </div>
 </div>
 
 @if (Model.Any())
 {
-
-    <div>
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-unpaid-tab" data-bs-toggle="pill" data-bs-target="#pills-unpaid" type="button" role="tab" aria-controls="pills-unpaid" aria-selected="true">Unpaid<span class="badge bg-info ml-1">16</span></button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-draft-tab" data-bs-toggle="pill" data-bs-target="#pills-draft" type="button" role="tab" aria-controls="pills-draft" aria-selected="false">Draft<span class="badge bg-info ml-1">0</span></button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-all" aria-selected="false">All invoices</button>
-            </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-unpaid" role="tabpanel" aria-labelledby="pills-home-tab">
-                No unpaid invoices.
-            </div>
-            <div class="tab-pane fade" id="pills-draft" role="tabpanel" aria-labelledby="pills-draft-tab">
-                No draft invoices.
-            </div>
-            <div class="tab-pane fade" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
-                <table id="tblInvoice" class="display">
-                    <thead>
-                        <tr>
-                            <th>
-                                <strong>@Html.DisplayNameFor(model => model.InvoiceNumber)</strong>
-                            </th>
-                            <th>
-                                <strong>@Html.DisplayNameFor(model => model.FullName)</strong>
-                            </th>
-                            <th>
-                                <strong>@Html.DisplayNameFor(model => model.InvoiceDate)</strong>
-                            </th>
-                            <th>
-                                <strong>@Html.DisplayNameFor(model => model.Amount)</strong>
-                            </th>
-                            <th>
-                                <strong>@Html.DisplayNameFor(model => model.InvoiceStatus)</strong>
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.InvoiceNumber)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FullName)
-                                </td>
-                                <td>
-                                    @item.InvoiceDate.ToShortDateString()
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Amount)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.InvoiceStatus)
-                                </td>
-                                <td class="text-right">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">View</a></li>
-                                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                                            <li><a class="dropdown-item" href="#">Duplicate</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#">Record payment</a></li>
-                                            <li><a class="dropdown-item" href="#">Resend</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#">Export as PDF</a></li>
-                                            <li><a class="dropdown-item" href="#">Print</a></li>
-                                            <li><a class="dropdown-item" href="#">Delete</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+    <div class="card mb-3">
+        <div class="card-body">
+            <ul class="nav nav-tabs mb-3" id="myTabs" role="tablist">
+                <li class="nav-item"><a class="nav-link ps-0" id="unpaid-tab" data-bs-toggle="tab" href="#tab-unpaid" role="tab" aria-controls="tab-unpaid" aria-selected="false">Unpaid<span class="badge bg-primary ms-1">16</span></a></li>
+                <li class="nav-item"><a class="nav-link px-2 px-md-3 active" id="draft-tab" data-bs-toggle="tab" href="#tab-draft" role="tab" aria-controls="tab-draft" aria-selected="true">Draft<span class="badge bg-primary ms-1">0</span></a></li>
+                <li class="nav-item"><a class="nav-link px-2 px-md-3" id="all-tab" data-bs-toggle="tab" href="#tab-all" role="tab" aria-controls="tab-all" aria-selected="false">All</a></li>
+            </ul>
+            <div class="tab-content" id="myTabsContent">
+                <div class="tab-pane fade show active" id="tab-unpaid" role="tabpanel" aria-labelledby="unpaid-tab">
+                    <div class="mt-3">
+                        <p>No unpaid invoices.</p>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-draft" role="tabpanel" aria-labelledby="draft-tab">
+                    <div class="mt-3">
+                        <p>No draft invoices.</p>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-all" role="tabpanel" aria-labelledby="all-tab">
+                    <div class="row mt-3 mx-1">
+                        <table id="tblInvoice" class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <strong>@Html.DisplayNameFor(model => model.InvoiceNumber)</strong>
+                                    </th>
+                                    <th>
+                                        <strong>@Html.DisplayNameFor(model => model.FullName)</strong>
+                                    </th>
+                                    <th>
+                                        <strong>@Html.DisplayNameFor(model => model.InvoiceDate)</strong>
+                                    </th>
+                                    <th>
+                                        <strong>@Html.DisplayNameFor(model => model.Amount)</strong>
+                                    </th>
+                                    <th>
+                                        <strong>@Html.DisplayNameFor(model => model.InvoiceStatus)</strong>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.InvoiceNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FullName)
+                                        </td>
+                                        <td>
+                                            @item.InvoiceDate.ToShortDateString()
+                                        </td>
+                                        <td>
+                                            @item.Amount.ToString("C2")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.InvoiceStatus)
+                                        </td>
+                                        <td class="align-middle text-end">
+                                            <div class="dropdown position-static">
+                                                <button class="btn btn-link btn-sm dropdown text-reset" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="fas fa-ellipsis-h text-muted"></span>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end border py-0">
+                                                    <div class="bg-white py-2">
+                                                        <a class="dropdown-item" href="#!">Edit</a>
+                                                        <a class="dropdown-item text-danger" href="#!">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 
+
 }
 else
 {
-    <caption>No Records Found</caption>
+    <span class="text-muted">No Records Found</span>
 }
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#tblInvoice').DataTable();
-        });
-    </script>
 }

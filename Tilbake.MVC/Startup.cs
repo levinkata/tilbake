@@ -94,10 +94,10 @@ namespace Tilbake.MVC
                 app.UseHsts();
             }
 
-            
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSerilogRequestLogging(); // Added by Levi Nkata 02/10/2021
 
             app.UseRouting();
 

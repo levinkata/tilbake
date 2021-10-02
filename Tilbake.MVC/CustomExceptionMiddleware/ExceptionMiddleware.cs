@@ -10,9 +10,10 @@ namespace Tilbake.MVC.CustomExceptionMiddleware
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
-        public ExceptionMiddleware(RequestDelegate next)
+        public ExceptionMiddleware(RequestDelegate next, ILogger logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)

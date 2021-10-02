@@ -19,7 +19,7 @@ namespace Tilbake.MVC.Controllers
 
         public HomeController(IUserPortfolioService userPortfolioService, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _userPortfolioService = userPortfolioService;
             _userManager = userManager;
         }

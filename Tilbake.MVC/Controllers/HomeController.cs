@@ -31,7 +31,6 @@ namespace Tilbake.MVC.Controllers
 
             string message = $"User logged in: {user.LastName}";
             _logger.LogInformation(message);
-
             return View(resources);
         }
 

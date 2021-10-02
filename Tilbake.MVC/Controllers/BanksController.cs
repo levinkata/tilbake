@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
@@ -12,19 +13,24 @@ namespace Tilbake.MVC.Controllers
     public class BanksController : Controller
     {
         private readonly IBankService _bankService;
-
-        public BanksController(IBankService bankService)
+        private readonly ILogger<BanksController> _logger;
+        public BanksController(IBankService bankService, ILogger<BanksController> logger)
         {
             _bankService = bankService;
+            _logger = logger;
         }
 
         // GET: Banks
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation($"Fetching all the Banks");
+
             var resources = await _bankService.GetAllAsync();
             
             ViewBag.datasource = resources;
-            return await Task.Run(() => View(resources));
+            
+            _logger.LogInformation($"Returning {resources.Count()} banks.");
+            return View(resources);
         }
 
         // GET: Banks/Details/5

@@ -1,25 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Tilbake.Application.Resources
 {
     public class ErrorResource
     {
-        public static bool Success => false;
-        public List<string> Messages { get; private set; }
-
-        public ErrorResource(List<string> messages)
+        public int StatusCode { get; set; }
+        public string Message { get; set; }
+        public override string ToString()
         {
-            this.Messages = messages ?? new List<string>();
-        }
-
-        public ErrorResource(string message)
-        {
-            this.Messages = new List<string>();
-
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                this.Messages.Add(message);
-            }
+            return JsonSerializer.Serialize(this);
         }
     }
 }

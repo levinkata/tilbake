@@ -10,12 +10,11 @@ namespace Tilbake.MVC.CustomExceptionMiddleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
+        static readonly ILogger _logger = Serilog.Log.ForContext<ExceptionMiddleware>();
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger logger)
+        public ExceptionMiddleware(RequestDelegate next)
         {
-            _next = next;
-            _logger = logger;
+            _next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
         public async Task InvokeAsync(HttpContext httpContext)

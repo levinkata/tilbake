@@ -90,7 +90,7 @@ namespace Tilbake.MVC.Controllers
             ViewBag.PortfolioClientId = portfolioClientId;
             ViewBag.ClientId = portfolioClient.ClientId;
             ViewBag.PortfolioId = portfolioClient.PortfolioId;
-            ViewBag.Client = resources.FirstOrDefault().Client;
+            ViewBag.Client = portfolioClient.Client;
             ViewBag.PortfolioName = portfolioClient.Portfolio.Name;
             return View(resources);
         }

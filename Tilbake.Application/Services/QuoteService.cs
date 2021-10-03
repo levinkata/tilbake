@@ -36,12 +36,20 @@ namespace Tilbake.Application.Services
             var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
             var clientId = resource.ClientId;
+            var branch = await _unitOfWork.InsurerBranches.GetFirstOrDefaultAsync(
+                                                            e => e.Name == "No Insurer Branch");
             
             var quote = resource.Quote;
             quote.Id = Guid.NewGuid();
             quote.QuoteDate = DateTime.Now;
             quote.DateAdded = DateTime.Now;
-
+            if (branch != null)
+            {
+                quote.InsurerBranchId = branch.Id;
+            } else
+            {
+                return -1;
+            }
             await _unitOfWork.Quotes.AddAsync(quote);
             var quoteId = quote.Id;
 

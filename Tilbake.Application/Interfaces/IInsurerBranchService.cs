@@ -10,6 +10,7 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<InsurerBranchResource>> GetAllAsync();
         Task<IEnumerable<InsurerBranchResource>> GetByInsurerIdAsync(Guid insurerId);
         Task<InsurerBranchResource> GetByIdAsync(Guid id);
+        Task<InsurerBranchResource> GetByNameAsync(string name);
         Task<int> AddAsync(InsurerBranchSaveResource resource);
         Task<int> UpdateAsync(InsurerBranchResource resource);
         Task<int> DeleteAsync(Guid id);

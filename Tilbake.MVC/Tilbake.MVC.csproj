@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+	  <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <LangVersion>preview</LangVersion>
     <UserSecretsId>aspnet-Tilbake.MVC-66166B20-EC38-4912-9BF8-166FF2E099DB</UserSecretsId>
     <ApplicationIcon />

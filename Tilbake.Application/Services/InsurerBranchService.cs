@@ -87,5 +87,16 @@ namespace Tilbake.Application.Services
 
             return await _unitOfWork.SaveAsync();
         }
+
+        public async Task<InsurerBranchResource> GetByNameAsync(string name)
+        {
+            var result = await _unitOfWork.InsurerBranches.GetFirstOrDefaultAsync(
+                                e => e.Name == name,
+                                e => e.City,
+                                e => e.Insurer);
+
+            var resource = _mapper.Map<InsurerBranch, InsurerBranchResource>(result);
+            return resource;
+        }
     }
 }

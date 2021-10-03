@@ -10,7 +10,7 @@ namespace Tilbake.MVC.CustomExceptionMiddleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        static readonly ILogger _logger = Serilog.Log.ForContext<ExceptionMiddleware>();
+        private readonly ILogger _logger = Serilog.Log.ForContext<ExceptionMiddleware>();
 
         public ExceptionMiddleware(RequestDelegate next)
         {

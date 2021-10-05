@@ -3,13 +3,10 @@
     ViewData["Title"] = "Quotation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var subTotal = 0M;
-    var taxAmount = 0M;
-    var totalAmount = 0M;
     var taxRate = ViewBag.TaxRate;
     var totalPremium = Model.QuoteItems.Sum(r => r.Premium);
-    var totalTaxAmount = totalPremium * taxRate/100;
-    var grandTotal = totalPremium + totalTaxAmount;
+    var totalPremiumNetTax = totalPremium/(1+ taxRate/100);
+    var totalTaxAmount = totalPremium - totalPremiumNetTax;
 
     var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
 }
@@ -63,7 +60,7 @@
                 <div class="col border p-3">
                     <div class="row">
                         <div class="col fw-bolder"><p>Premium:</p></div>
-                        <div class="col text-right"><p>@totalPremium.ToString("C2")</p></div>
+                        <div class="col text-right"><p>@totalPremiumNetTax.ToString("C2")</p></div>
                     </div>
                     <div class="row">
                         <div class="col fw-bolder"><p>VAT Due:</p></div>
@@ -71,7 +68,7 @@
                     </div>
                    <div class="row">
                         <div class="col fw-bolder"><p>Total Amount Due:</p></div>
-                        <div class="col text-right"><p>@grandTotal.ToString("C2")</p></div>
+                        <div class="col text-right"><p>@totalPremium.ToString("C2")</p></div>
                     </div>                      
                 </div>                
             </div>
@@ -95,14 +92,11 @@
                         </thead>
                         <tbody>
                             @foreach (var item in Model.QuoteItems)
-                            {
-                                subTotal = subTotal + @item.Premium;
-                                taxAmount = subTotal * taxRate/100;
-                                totalAmount = subTotal + taxAmount;                                
+                            {                                
                                 <tr>
                                     <td>@item.Description</td>
                                     <td>@item.SumInsured.ToString("C2")</td>
-                                    <td class="text-right">@totalAmount.ToString("C2")</td>
+                                    <td class="text-right">@item.Premium.ToString("C2")</td>
                                 </tr>
                             }
                         </tbody>

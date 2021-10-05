@@ -10,9 +10,6 @@
 
     var taxRate = Model.TaxRate;
     var totalPremium = Model.QuoteItems.Sum(r => r.Premium);
-    var totalTaxAmount = totalPremium * taxRate/100;
-    var quoteTotal = totalPremium + totalTaxAmount;
-
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -65,7 +62,7 @@
                             </tr>
                             <tr class="alert-success fw-bold">
                                 <th class="text-sm-right">Amount Due:</th>
-                                <td>@quoteTotal.ToString("C2")</td>
+                                <td>@totalPremium.ToString("C2")</td>
                             </tr>
                         </tbody>
                     </table>

@@ -97,7 +97,7 @@ namespace Tilbake.Application.Services
                             item.ClientRiskId = clientRiskId;
                             item.DateAdded = DateTime.Now;
                             item.TaxRate = taxRate;
-                            item.TaxAmount = item.Premium * taxRate / 100;
+                            item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                         }
                     }
                 }
@@ -141,7 +141,7 @@ namespace Tilbake.Application.Services
                         item.ClientRiskId = clientRiskId;
                         item.DateAdded = DateTime.Now;
                         item.TaxRate = taxRate;
-                        item.TaxAmount = item.Premium * taxRate / 100;
+                        item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                     }
                 }
             }
@@ -184,7 +184,7 @@ namespace Tilbake.Application.Services
                         item.ClientRiskId = clientRiskId;
                         item.DateAdded = DateTime.Now;
                         item.TaxRate = taxRate;
-                        item.TaxAmount = item.Premium * taxRate / 100;
+                        item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                     }
                 }
             }
@@ -227,7 +227,7 @@ namespace Tilbake.Application.Services
                         item.ClientRiskId = clientRiskId;
                         item.DateAdded = DateTime.Now;
                         item.TaxRate = taxRate;
-                        item.TaxAmount = item.Premium * taxRate / 100;
+                        item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                     }
                 }
             }
@@ -270,7 +270,7 @@ namespace Tilbake.Application.Services
                         item.ClientRiskId = clientRiskId;
                         item.DateAdded = DateTime.Now;
                         item.TaxRate = taxRate;
-                        item.TaxAmount = item.Premium * taxRate / 100;
+                        item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                     }
                 }
             }

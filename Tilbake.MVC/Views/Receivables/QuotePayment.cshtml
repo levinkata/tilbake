@@ -10,7 +10,7 @@
 <hr />
 <div class="d-flex justify-content-center">
     <div class="col-md-9">
-        <form asp-action="QuotePayment">
+        <form asp-action="QuotePayment" id="PaymentForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="QuoteId" />
             <div class="card mb-3">
@@ -21,6 +21,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="card-text">
+                        <p>Quote Amount @Model.QuoteAmount.ToString("C2")</p>
+                    </div>
                     <div class="row">
                         <div class="col-4">
                             <div class="form-group">
@@ -45,7 +48,7 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <div class="form-group">
+                            <div class="form-group" id="AmountDiv">
                                 <label asp-for="Amount" class="control-label"></label>
                                 <input asp-for="Amount" class="form-control" />
                                 <span asp-validation-for="Amount" class="text-danger"></span>
@@ -73,4 +76,29 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var quoteAmount = '@Model.QuoteAmount';
+
+        $('#Amount').keyup(function() {
+          $(this).removeClass('border border-danger');
+        });
+
+        $('#PaymentForm').submit(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+
+            var amount = $('#Amount').val();
+
+            if(amount > quoteAmount || amount < 1)
+            {
+                $('#Amount').addClass('border border-danger');
+                $('#Amount').attr("aria-invalid","true");
+                $('#Amount').focus();
+
+                return false;
+            }
+        });
+
+    </script>
 }

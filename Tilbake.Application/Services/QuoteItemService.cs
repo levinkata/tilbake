@@ -88,7 +88,7 @@ namespace Tilbake.Application.Services
 
             quoteItem.DateModified = DateTime.Now;
             quoteItem.TaxRate = taxRate;
-            quoteItem.TaxAmount = quoteItem.Premium * taxRate / 100;
+            quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
             await _unitOfWork.QuoteItems.UpdateAsync(resource.Id, quoteItem);
 
@@ -107,7 +107,7 @@ namespace Tilbake.Application.Services
 
             quoteItem.DateModified = DateTime.Now;
             quoteItem.TaxRate = taxRate;
-            quoteItem.TaxAmount = quoteItem.Premium * taxRate / 100;
+            quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
             await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
 

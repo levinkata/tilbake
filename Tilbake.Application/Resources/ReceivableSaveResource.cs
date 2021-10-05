@@ -26,6 +26,7 @@ namespace Tilbake.Application.Resources
 
         //  Other
         public int QuoteNumber {get; set; }
+        public decimal QuoteAmount { get; set; }
 
         //  Descriptions
         [Display(Name = "Payment Type")]

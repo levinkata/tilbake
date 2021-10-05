@@ -66,11 +66,13 @@ namespace Tilbake.MVC.Controllers
         {
             var paymentTypes = await _paymentTypeService.GetAllAsync();
             var quote = await _quoteService.GetByIdAsync(quoteId);
+            var quoteAmount = quote.QuoteItems.Sum(r => r.Premium);
 
             ReceivableSaveResource resource = new()
             {
                 QuoteId = quoteId,
                 QuoteNumber = quote.QuoteNumber,
+                QuoteAmount = quoteAmount,
                 ReceivableDate = DateTime.Now,
                 PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
             };

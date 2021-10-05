@@ -37,9 +37,33 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Return</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('#IdDocumentTypeId').change(function() {
+            selectedIdDocumentTypeId = $(this).val();
+            if(selectedIdDocumentTypeId != null && selectedIdDocumentTypeId != '') {
+                $.ajax({
+                    url: '@(Url.Action("GetIdDocumentType", "IdDocumentTypes"))',
+                    traditional: true,
+                    dataType: "json",
+                    type: 'GET',
+                    data: { id : selectedIdDocumentTypeId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (IdDocumentType) {
+                        if(IdDocumentType) {
+                            $('#lblIdNumber', '#modallblIdNumber').text(IdDocumentType.name);
+                        }
+                    }
+                });
+            }
+        });
+
+    </script>
 }

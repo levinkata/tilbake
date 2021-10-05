@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label asp-for="IdNumber" class="control-label"></label>
+                            <label asp-for="IdNumber" id="lblIdNumber" class="control-label"></label>
                             <input asp-for="IdNumber" class="form-control text-uppercase"/>
                             <span asp-validation-for="IdNumber" class="text-danger"></span>
                         </div>
@@ -114,7 +114,7 @@
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label for="modalIdNumber" class="control-label">ID Number</label>
+                                <label for="modalIdNumber" id="modallblIdNumber" class="control-label">ID Number</label>
                                 <input for="modalIdNumber" id="modalIdNumber" class="form-control" readonly />
                             </div>
                         </div>
@@ -178,6 +178,28 @@
 
         $(document).ready(function () {
             //  Do someting here.
+        });
+
+        $('#IdDocumentTypeId').change(function() {
+            selectedIdDocumentTypeId = $(this).val();
+            if(selectedIdDocumentTypeId != null && selectedIdDocumentTypeId != '') {
+                $.ajax({
+                    url: '@(Url.Action("GetIdDocumentType", "IdDocumentTypes"))',
+                    traditional: true,
+                    dataType: "json",
+                    type: 'GET',
+                    data: { id : selectedIdDocumentTypeId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (IdDocumentType) {
+                        if(IdDocumentType) {
+                            $('#lblIdNumber').text(IdDocumentType.name);
+                            $('#modallblIdNumber').text(IdDocumentType.name);
+                        }
+                    }
+                });
+            }
         });
 
         $('#IdNumber').focusout(function() {

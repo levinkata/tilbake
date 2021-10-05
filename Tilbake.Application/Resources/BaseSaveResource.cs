@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.Application.Resources
 {
@@ -7,5 +8,7 @@ namespace Tilbake.Application.Resources
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "Please enter Name"), MaxLength(50)]
         public string Name { get; set; }
+
+        public Guid? AddedBy { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<QuoteItemResource>
 @{
-    var subTotal = 0M;
-    var taxAmount = 0M;
-    var totalAmount = 0M;
     var taxRate = ViewBag.TaxRate;
+    var totalPremium = Model.Sum(r => r.Premium);
+    var totalPremiumNetTax = totalPremium/(1+ taxRate/100);
+    var totalTaxAmount = totalPremium - totalPremiumNetTax;
 }
 
 <div class="card">
@@ -65,27 +65,24 @@
                                     </div>
                                 </td>
                             </tr>
-                            subTotal = subTotal + @item.Premium;
-                            taxAmount = subTotal * taxRate/100;
-                            totalAmount = subTotal + taxAmount;
                         }
                     </tbody>
-                    @if (subTotal > 0)
+                    @if (totalPremium > 0)
                     {
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-right"><strong>Sub total</strong></td>
-                            <td class="px-3 align-middle">@subTotal.ToString("C2")</td>
+                            <td class="px-3 align-middle">@totalPremiumNetTax.ToString("C2")</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right"><strong>VAT (@taxRate)</strong></td>
-                            <td class="px-3 align-middle">@taxAmount.ToString("C2")</td>
+                            <td class="px-3 align-middle">@totalTaxAmount.ToString("C2")</td>
                             <td></td>
                         </tr>
                         <tr class="alert-success">
                             <td colspan="3" class="text-right"><strong>Total</strong></td>
-                            <td class="px-3 align-middle">@totalAmount.ToString("C2")</td>
+                            <td class="px-3 align-middle">@totalPremium.ToString("C2")</td>
                             <td></td>
                         </tr>
                     </tfoot>

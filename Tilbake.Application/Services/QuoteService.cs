@@ -332,7 +332,8 @@ namespace Tilbake.Application.Services
 
             if (!isFulfilled)
             {
-                if (insurerBranchId != Guid.Empty)
+                if (insurerBranchId != Guid.Empty && result.PolicyTypeId != Guid.Empty && result.SalesTypeId != Guid.Empty && result.PaymentMethodId != Guid.Empty &&
+                    !string.IsNullOrEmpty(result.PolicyTypeId.ToString()) && !string.IsNullOrEmpty(result.SalesTypeId.ToString()) && !string.IsNullOrEmpty(result.PaymentMethodId.ToString()))
                 {
                     var isRated = false;
                     foreach (var item in quoteitems)

@@ -48,6 +48,7 @@ namespace Tilbake.Application.Resources
         public bool IsPolicySet { get; set; }
 
         // Other
+        [Display(Name = "Insurer")]
         public Guid InsurerId { get ;set; }
 
         public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
@@ -72,5 +73,9 @@ namespace Tilbake.Application.Resources
         public SelectList InsurerList { get; set; }
         public SelectList InsurerBranchList { get; set; }
         public SelectList QuoteStatusList { get; set; }
+
+        public SelectList PaymentMethodList { get; set; }
+        public SelectList PolicyTypeList { get; set; }
+        public SelectList SalesTypeList { get; set; }
     }
 }

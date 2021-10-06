@@ -86,6 +86,7 @@ namespace Tilbake.Application.Resources
         //  SelectLists
 
         public SelectList ClientTypeList { get; set; }
+        public SelectList ClientStatusList { get; set; }
         public SelectList CountryList { get; set; }
         public SelectList GenderList { get; set; }
         public SelectList IdDocumentTypeList { get; set; }

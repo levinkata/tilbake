@@ -13,7 +13,6 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-
 <hr />
 
 <div class="card mb-3">
@@ -113,7 +112,7 @@
     <div class="card-body p-3">
         @if(!Model.IsFulfilled)
         {
-            <p class="alert-danger text-muted p-2"><small>Quote is incomplete. Ensure that Insurer, Sum Insured, Premium or Excess are completed!</small></p>
+            <p class="alert-danger text-muted p-2"><small>Quote is incomplete.<br> Ensure that Insurer, Policy Type, Sales Type, Payment Method, <br> Sum Insured, Premium or Excess are completed!</small></p>
         }
         @if(Model.IsPolicySet)
         {
@@ -170,7 +169,30 @@
                 </div>
             </div>
             <div class="col-5">
-
+                <div class="row">
+                    <div class="col-5">
+                        <p class="fw-bolder mb-1">Policy Type</p>
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(model => model.PolicyType.Name)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <p class="fw-bolder mb-1">Sales Type</p>
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(model => model.SalesType.Name)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <p class="fw-bolder mb-1">Payment Method</p>
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(model => model.PaymentMethod.Name)
+                    </div>
+                </div>
             </div>
         </div>
     </div>

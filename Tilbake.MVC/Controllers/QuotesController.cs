@@ -19,6 +19,9 @@ namespace Tilbake.MVC.Controllers
         private readonly ICoverTypeService _coverTypeService;
         private readonly IInsurerService _insurerService;
         private readonly IInsurerBranchService _insurerBranchService;
+        private readonly ISalesTypeService _salesTypeService;
+        private readonly IPolicyTypeService _policyTypeService;
+        private readonly IPaymentMethodService _paymentMethodService;
         private readonly IQuoteStatusService _quoteStatusService;
         private readonly IBodyTypeService _bodyTypeService;
         private readonly IDriverTypeService _driverTypeService;
@@ -39,6 +42,9 @@ namespace Tilbake.MVC.Controllers
                                 ICoverTypeService coverTypeService,
                                 IInsurerService insurerService,
                                 IInsurerBranchService insurerBranchService,
+                                ISalesTypeService salesTypeService,
+                                IPolicyTypeService policyTypeService,
+                                IPaymentMethodService paymentMethodService,
                                 IQuoteStatusService quoteStatusService,
                                 IBodyTypeService bodyTypeService,
                                 IDriverTypeService driverTypeService,
@@ -59,6 +65,9 @@ namespace Tilbake.MVC.Controllers
             _coverTypeService = coverTypeService;
             _insurerService = insurerService;
             _insurerBranchService = insurerBranchService;
+            _salesTypeService = salesTypeService;
+            _policyTypeService = policyTypeService;
+            _paymentMethodService = paymentMethodService;
             _quoteStatusService = quoteStatusService;
             _bodyTypeService = bodyTypeService;
             _driverTypeService = driverTypeService;
@@ -256,6 +265,9 @@ namespace Tilbake.MVC.Controllers
             
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
+            var salesTypes = await _salesTypeService.GetAllAsync();
+            var policyTypes = await _policyTypeService.GetAllAsync();
+            var paymentMethods = await _paymentMethodService.GetAllAsync();
             var insurerBranches = await _insurerBranchService.GetByInsurerIdAsync(insurerId);
 
             resource.ClientId = portfolioClient.ClientId;
@@ -265,6 +277,9 @@ namespace Tilbake.MVC.Controllers
             resource.TaxRate = taxRate;
             resource.DayList = SelectLists.RegisteredDays(resource.RunDay);
             resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
+            resource.SalesTypeList = SelectLists.SalesTypes(salesTypes, resource.SalesTypeId);
+            resource.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, resource.PolicyTypeId);
+            resource.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, resource.PaymentMethodId);
             resource.InsurerList = SelectLists.Insurers(insurers, insurerId);
             resource.InsurerBranchList = SelectLists.InsurerBranches(insurerBranches, insurerBranchId);
 
@@ -296,9 +311,17 @@ namespace Tilbake.MVC.Controllers
 
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
+            var insurerBranches = await _insurerBranchService.GetByInsurerIdAsync(resource.InsurerId);
+            var salesTypes = await _salesTypeService.GetAllAsync();
+            var policyTypes = await _policyTypeService.GetAllAsync();
+            var paymentMethods = await _paymentMethodService.GetAllAsync();
 
             resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
+            resource.SalesTypeList = SelectLists.SalesTypes(salesTypes, resource.SalesTypeId);
+            resource.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, resource.PolicyTypeId);
+            resource.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, resource.PaymentMethodId);
             resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
+            resource.InsurerBranchList = SelectLists.InsurerBranches(insurerBranches, resource.InsurerBranchId);
             return View(resource);
         }
 

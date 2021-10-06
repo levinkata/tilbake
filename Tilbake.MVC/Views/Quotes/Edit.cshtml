@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Model.PortfolioName;
     Layout = "~/Views/Shared/_Layout.cshtml";
+
     var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : 
                     Model.Client.FirstName + " " + 
                     Model.Client.LastName;
@@ -58,6 +59,29 @@
                             <label asp-for="QuoteStatusId" class="control-label"></label>
                             <select asp-for="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
                             <span asp-validation-for="QuoteStatusId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="PolicyTypeId" class="control-label"></label>
+                            <select asp-for="PolicyTypeId" class="form-control" asp-items="Model.PolicyTypeList"></select>
+                            <span asp-validation-for="PolicyTypeId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="SalesTypeId" class="control-label"></label>
+                            <select asp-for="SalesTypeId" class="form-control" asp-items="Model.SalesTypeList"></select>
+                            <span asp-validation-for="SalesTypeId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="PaymentMethodId" class="control-label"></label>
+                            <select asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethodList"></select>
+                            <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

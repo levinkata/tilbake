@@ -85,10 +85,10 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Title")]
         public string Title { get; set; }
 
-        public List<ClientCarrierResource> ClientCarriers = new List<ClientCarrierResource>();
+        public List<ClientCarrierResource> ClientCarriers = new();
         
-        public List<EmailAddressResource> EmailAddresses = new List<EmailAddressResource>();
-        public List<MobileNumberResource> MobileNumbers = new List<MobileNumberResource>();
+        public List<EmailAddressResource> EmailAddresses = new();
+        public List<MobileNumberResource> MobileNumbers = new();
         
         public AddressResource Address { get; set; }
 

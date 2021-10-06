@@ -27,20 +27,20 @@ namespace Tilbake.Application.Services
             motorModel.Id = Guid.NewGuid();
 
             await _unitOfWork.MotorModels.AddAsync(motorModel);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.MotorModels.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(MotorModelResource resource)
         {
             var motorModel = _mapper.Map<MotorModelResource, MotorModel>(resource);
             await _unitOfWork.MotorModels.DeleteAsync(motorModel);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<MotorModelResource>> GetAllAsync()
@@ -79,7 +79,7 @@ namespace Tilbake.Application.Services
             var motorModel = _mapper.Map<MotorModelResource, MotorModel>(resource);
             await _unitOfWork.MotorModels.UpdateAsync(resource.Id, motorModel);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

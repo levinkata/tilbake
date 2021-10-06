@@ -53,7 +53,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Portfolios.GetAllAsync());
+            var result = await _unitOfWork.Portfolios.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);

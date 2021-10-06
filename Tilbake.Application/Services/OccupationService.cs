@@ -46,7 +46,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<OccupationResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Occupations.GetAllAsync());
+            var result = await _unitOfWork.Occupations.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Occupation>, IEnumerable<OccupationResource>>(result);

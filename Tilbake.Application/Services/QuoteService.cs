@@ -301,6 +301,9 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
+                                                    r => r.PaymentMethod,
+                                                    r => r.PolicyType,
+                                                    r => r.SalesType,
                                                     r => r.InsurerBranch.Insurer,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
@@ -316,6 +319,9 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
+                                                    r => r.PaymentMethod,
+                                                    r => r.PolicyType,
+                                                    r => r.SalesType,
                                                     r => r.InsurerBranch.Insurer,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
@@ -353,6 +359,9 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
+                                                    r => r.PaymentMethod,
+                                                    r => r.PolicyType,
+                                                    r => r.SalesType,
                                                     r => r.InsurerBranch.Insurer,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
@@ -372,6 +381,9 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
+                                                    r => r.PaymentMethod,
+                                                    r => r.PolicyType,
+                                                    r => r.SalesType,
                                                     r => r.InsurerBranch.Insurer,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
@@ -387,6 +399,9 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
+                                                    r => r.PaymentMethod,
+                                                    r => r.PolicyType,
+                                                    r => r.SalesType,
                                                     r => r.InsurerBranch.Insurer,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
@@ -402,6 +417,9 @@ namespace Tilbake.Application.Services
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
+                                                    r => r.PaymentMethod,
+                                                    r => r.PolicyType,
+                                                    r => r.SalesType,
                                                     r => r.InsurerBranch.Insurer,
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);

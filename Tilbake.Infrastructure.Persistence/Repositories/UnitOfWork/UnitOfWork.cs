@@ -27,6 +27,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             ClientCarriers = new ClientCarrierRepository(_context);
             ClientDocuments = new ClientDocumentRepository(_context);
             ClientRisks = new ClientRiskRepository(_context);
+            ClientStatuses = new ClientStatusRepository(_context);
             ClientTypes = new ClientTypeRepository(_context);
             Carriers = new CarrierRepository(_context);
             Cities = new CityRepository(_context);
@@ -104,6 +105,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IClientCarrierRepository ClientCarriers { get; private set; }
         public IClientDocumentRepository ClientDocuments { get; private set; }
         public IClientRiskRepository ClientRisks { get; private set; }
+        public IClientStatusRepository ClientStatuses { get; private set; }
         public IClientTypeRepository ClientTypes { get; private set; }
         public ICommissionRateRepository CommissionRates { get; private set; }
         public IContentRepository Contents { get; private set; }

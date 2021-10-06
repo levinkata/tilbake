@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public PolicyType()
         {
             Policies = new HashSet<Policy>();
+            Quotes = new HashSet<Quote>();
         }
 
         public Guid Id { get; set; }
@@ -18,5 +19,6 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual ICollection<Policy> Policies { get; set; }
+        public virtual ICollection<Quote> Quotes { get; set; }
     }
 }

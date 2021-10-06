@@ -27,25 +27,25 @@ namespace Tilbake.Application.Services
             policyStatus.Id = Guid.NewGuid();
 
             await _unitOfWork.PolicyStatuses.AddAsync(policyStatus);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.PolicyStatuses.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(PolicyStatusResource resource)
         {
             var policyStatus = _mapper.Map<PolicyStatusResource, PolicyStatus>(resource);
             await _unitOfWork.PolicyStatuses.DeleteAsync(policyStatus);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyStatusResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.PolicyStatuses.GetAllAsync());
+            var result = await _unitOfWork.PolicyStatuses.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<PolicyStatus>, IEnumerable<PolicyStatusResource>>(result);
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             var policyStatus = _mapper.Map<PolicyStatusResource, PolicyStatus>(resource);
             await _unitOfWork.PolicyStatuses.UpdateAsync(resource.Id, policyStatus);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

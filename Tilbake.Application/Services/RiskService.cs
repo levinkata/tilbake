@@ -27,25 +27,25 @@ namespace Tilbake.Application.Services
             risk.Id = Guid.NewGuid();
 
             await _unitOfWork.Risks.AddAsync(risk);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Risks.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(RiskResource resource)
         {
             var risk = _mapper.Map<RiskResource, Risk>(resource);
             await _unitOfWork.Risks.DeleteAsync(risk);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<RiskResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Risks.GetAllAsync());
+            var result = await _unitOfWork.Risks.GetAllAsync();
             var resources = _mapper.Map<IEnumerable<Risk>, IEnumerable<RiskResource>>(result);
 
             return resources;
@@ -64,7 +64,7 @@ namespace Tilbake.Application.Services
             var risk = _mapper.Map<RiskResource, Risk>(resource);
             await _unitOfWork.Risks.UpdateAsync(resource.Id, risk);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

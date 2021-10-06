@@ -14,10 +14,14 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Client")]
         public Guid ClientId { get; set; }
 
+        [Display(Name = "Client Status")]
+        public Guid ClientStatusId { get; set; }
+
         [Display(Name = "Withdrawal")]
         public bool IsWithdrawal { get; set; }
 
         public Client Client { get; set; }
+        public ClientStatus ClientStatus { get; set; }
         public Portfolio Portfolio { get; set; }        
     }
 }

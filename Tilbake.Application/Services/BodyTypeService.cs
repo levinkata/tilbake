@@ -27,25 +27,25 @@ namespace Tilbake.Application.Services
             bodyType.Id = Guid.NewGuid();
 
             await _unitOfWork.BodyTypes.AddAsync(bodyType);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.BodyTypes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(BodyTypeResource resource)
         {
             var bodyType = _mapper.Map<BodyTypeResource, BodyType>(resource);
             await _unitOfWork.BodyTypes.DeleteAsync(bodyType);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BodyTypeResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.BodyTypes.GetAllAsync());
+            var result = await _unitOfWork.BodyTypes.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<BodyType>, IEnumerable<BodyTypeResource>>(result);
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             var bodyType = _mapper.Map<BodyTypeResource, BodyType>(resource);
             await _unitOfWork.BodyTypes.UpdateAsync(resource.Id, bodyType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

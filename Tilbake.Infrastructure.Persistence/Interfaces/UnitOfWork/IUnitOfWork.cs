@@ -21,6 +21,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IClientCarrierRepository ClientCarriers { get; }
         IClientRiskRepository ClientRisks { get; }
         IClientTypeRepository ClientTypes{ get; }
+        IClientStatusRepository ClientStatuses { get; }
         ICommissionRateRepository CommissionRates { get; }
         IContentRepository Contents { get; }
         ICountryRepository Countries { get; }

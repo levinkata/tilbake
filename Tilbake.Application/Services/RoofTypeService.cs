@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             roofType.Id = Guid.NewGuid();
 
             await _unitOfWork.RoofTypes.AddAsync(roofType);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.RoofTypes.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(RoofTypeResource resource)
@@ -41,12 +41,12 @@ namespace Tilbake.Application.Services
             var roofType = _mapper.Map<RoofTypeResource, RoofType>(resource);
             await _unitOfWork.RoofTypes.DeleteAsync(roofType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<RoofTypeResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.RoofTypes.GetAllAsync());
+            var result = await _unitOfWork.RoofTypes.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<RoofType>, IEnumerable<RoofTypeResource>>(result);
@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
             var roofType = _mapper.Map<RoofTypeResource, RoofType>(resource);
             await _unitOfWork.RoofTypes.UpdateAsync(resource.Id, roofType);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

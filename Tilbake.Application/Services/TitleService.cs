@@ -27,25 +27,25 @@ namespace Tilbake.Application.Services
             title.Id = Guid.NewGuid();
 
             await _unitOfWork.Titles.AddAsync(title);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Titles.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(TitleResource resource)
         {
             var title = _mapper.Map<TitleResource, Title>(resource);
             await _unitOfWork.Titles.DeleteAsync(title);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TitleResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Titles.GetAllAsync());
+            var result = await _unitOfWork.Titles.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<Title>, IEnumerable<TitleResource>>(result);
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             var title = _mapper.Map<TitleResource, Title>(resource);
             await _unitOfWork.Titles.UpdateAsync(resource.Id, title);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

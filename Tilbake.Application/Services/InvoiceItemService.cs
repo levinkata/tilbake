@@ -23,7 +23,7 @@ namespace Tilbake.Application.Services
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.InvoiceItems.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<InvoiceItemResource> GetByIdAsync(Guid id)
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var invoiceItem = _mapper.Map<InvoiceItemResource, InvoiceItem>(resource);
             await _unitOfWork.InvoiceItems.UpdateAsync(resource.Id, invoiceItem);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

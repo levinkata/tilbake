@@ -27,7 +27,7 @@ namespace Tilbake.Application.Services
             allRisk.Id = Guid.NewGuid();
 
             await _unitOfWork.AllRisks.AddAsync(allRisk);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -46,7 +46,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<AllRiskResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.AllRisks.GetAllAsync());
+            var result = await _unitOfWork.AllRisks.GetAllAsync();
             result = result.OrderBy(n => n.RiskItem.Description);
 
             var resources = _mapper.Map<IEnumerable<AllRisk>, IEnumerable<AllRiskResource>>(result);

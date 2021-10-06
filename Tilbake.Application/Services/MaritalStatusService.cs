@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             maritalStatus.Id = Guid.NewGuid();
 
             await _unitOfWork.MaritalStatuses.AddAsync(maritalStatus);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.MaritalStatuses.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(MaritalStatusResource resource)
@@ -41,12 +41,12 @@ namespace Tilbake.Application.Services
             var maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(resource);
             await _unitOfWork.MaritalStatuses.DeleteAsync(maritalStatus);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<MaritalStatusResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.MaritalStatuses.GetAllAsync());
+            var result = await _unitOfWork.MaritalStatuses.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<MaritalStatus>, IEnumerable<MaritalStatusResource>>(result);
@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
             var maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(resource);
             await _unitOfWork.MaritalStatuses.UpdateAsync(resource.Id, maritalStatus);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

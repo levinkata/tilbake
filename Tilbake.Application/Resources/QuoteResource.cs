@@ -25,6 +25,15 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Insurer Branch")]
         public Guid InsurerBranchId { get; set; }
 
+        [Display(Name = "Sales Type")]
+        public Guid? SalesTypeId { get; set; }
+
+        [Display(Name = "Policy Type")]
+        public Guid? PolicyTypeId { get; set; }
+
+        [Display(Name = "Payment Method")]
+        public Guid? PaymentMethodId { get; set; }
+
         [Display(Name = "Client Info")]
         public string ClientInfo { get; set; }
 
@@ -51,8 +60,11 @@ namespace Tilbake.Application.Resources
         public Client Client { get; set; }
         public Insurer Insurer { get; set; }
         public InsurerBranch InsurerBranch { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
+        public PolicyType PolicyType { get; set; }
         public PortfolioClient PortfolioClient { get; set; }
         public QuoteStatus QuoteStatus { get; set; }
+        public SalesType SalesType { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }

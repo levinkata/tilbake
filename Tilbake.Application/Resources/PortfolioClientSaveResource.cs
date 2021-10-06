@@ -9,6 +9,9 @@ namespace Tilbake.Application.Resources
         public Guid PortfolioId { get; set; }
         public Guid ClientId { get; set; }
 
+        [Display(Name = "Client Status")]
+        public Guid ClientStatusId { get; set; }
+
         [Display(Name = "Title")]
         public Guid TitleId { get; set; }
 

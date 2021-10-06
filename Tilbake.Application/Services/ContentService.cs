@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             content.Id = Guid.NewGuid();
 
             await _unitOfWork.Contents.AddAsync(content);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Contents.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(ContentResource resource)
@@ -41,12 +41,12 @@ namespace Tilbake.Application.Services
             var content = _mapper.Map<ContentResource, Content>(resource);
             await _unitOfWork.Contents.DeleteAsync(content);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ContentResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Contents.GetAllAsync());
+            var result = await _unitOfWork.Contents.GetAllAsync();
 
             var resources = _mapper.Map<IEnumerable<Content>, IEnumerable<ContentResource>>(result);
             return resources;
@@ -65,7 +65,7 @@ namespace Tilbake.Application.Services
             var content = _mapper.Map<ContentResource, Content>(resource);
             await _unitOfWork.Contents.UpdateAsync(resource.Id, content);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

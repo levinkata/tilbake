@@ -8,6 +8,7 @@ namespace Tilbake.Domain.Models
         public PaymentMethod()
         {
             Policies = new HashSet<Policy>();
+            Quotes = new HashSet<Quote>();
             Reconcilliations = new HashSet<Reconcilliation>();
         }
 
@@ -19,6 +20,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual ICollection<Policy> Policies { get; set; }
+        public virtual ICollection<Quote> Quotes { get; set; }
         public virtual ICollection<Reconcilliation> Reconcilliations { get; set; }
     }
 }

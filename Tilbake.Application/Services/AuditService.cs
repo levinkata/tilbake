@@ -23,19 +23,19 @@ namespace Tilbake.Application.Services
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.Audits.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(AuditResource resource)
         {
             var audit = _mapper.Map<AuditResource, Audit>(resource);
             await _unitOfWork.Audits.DeleteAsync(audit);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AuditResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.Audits.GetAllAsync());
+            var result = await _unitOfWork.Audits.GetAllAsync();
 
             var resources = _mapper.Map<IEnumerable<Audit>, IEnumerable<AuditResource>>(result);
 

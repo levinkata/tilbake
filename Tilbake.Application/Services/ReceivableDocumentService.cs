@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             receivableDocument.Id = Guid.NewGuid();
 
             await _unitOfWork.ReceivableDocuments.AddAsync(receivableDocument);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.ReceivableDocuments.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(ReceivableDocumentResource resource)
@@ -41,7 +41,7 @@ namespace Tilbake.Application.Services
             var receivableDocument = _mapper.Map<ReceivableDocumentResource, ReceivableDocument>(resource);
             await _unitOfWork.ReceivableDocuments.DeleteAsync(receivableDocument);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ReceivableDocumentResource>> GetAllAsync()
@@ -84,7 +84,7 @@ namespace Tilbake.Application.Services
             var receivableDocument = _mapper.Map<ReceivableDocumentResource, ReceivableDocument>(resource);
             await _unitOfWork.ReceivableDocuments.UpdateAsync(resource.Id, receivableDocument);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

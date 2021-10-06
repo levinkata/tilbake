@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
             var tax = _mapper.Map<TaxResource, Tax>(resource);
             await _unitOfWork.Taxes.UpdateAsync(resource.Id, tax);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

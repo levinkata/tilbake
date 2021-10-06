@@ -4,9 +4,9 @@ using Tilbake.Infrastructure.Persistence.Interfaces;
 
 namespace Tilbake.Infrastructure.Persistence.Repositories
 {
-    public class ClientTypeRepository : Repository<ClientType>, IClientTypeRepository
+    public class ClientStatusRepository : Repository<ClientStatus>, IClientStatusRepository
     {
-        public ClientTypeRepository(TilbakeDbContext context) : base(context)
+        public ClientStatusRepository(TilbakeDbContext context) : base(context)
         {
 
         }

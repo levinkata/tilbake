@@ -22,12 +22,12 @@ namespace Tilbake.Application.Services
 
         public async Task<int> AddRangeAsync(UserPortfolioResource resources)
         {
-            if (resources.PortfolioIds == null)
+            if (resources == null)
             {
-                throw new ArgumentNullException(nameof(resources.PortfolioIds));
+                throw new ArgumentNullException(nameof(resources));
             }
 
-            List<AspnetUserPortfolio> aspnetUserPortfolios = new List<AspnetUserPortfolio>();
+            List<AspnetUserPortfolio> aspnetUserPortfolios = new();
 
             int ro = resources.PortfolioIds.Length;
 
@@ -36,7 +36,7 @@ namespace Tilbake.Application.Services
 
             for (int i = 0; i < ro; i++)
             {
-                AspnetUserPortfolio aspnetUserPortfolio = new AspnetUserPortfolio()
+                AspnetUserPortfolio aspnetUserPortfolio = new()
                 {
                     AspNetUserId = aspNetUserId,
                     PortfolioId = Guid.Parse(portfolioIds[i].ToString())
@@ -45,17 +45,17 @@ namespace Tilbake.Application.Services
             }
 
             await _unitOfWork.UserPortfolios.AddRangeAsync(aspnetUserPortfolios);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteRangeAsync(UserPortfolioResource resources)
         {
-            if (resources.PortfolioIds == null)
+            if (resources == null)
             {
-                throw new ArgumentNullException(nameof(resources.PortfolioIds));
+                throw new ArgumentNullException(nameof(resources));
             }
 
-            List<AspnetUserPortfolio> aspnetUserPortfolios = new List<AspnetUserPortfolio>();
+            List<AspnetUserPortfolio> aspnetUserPortfolios = new();
 
             int ro = resources.PortfolioIds.Length;
             var aspNetUserId = resources.UserId;
@@ -63,7 +63,7 @@ namespace Tilbake.Application.Services
 
             for (int i = 0; i < ro; i++)
             {
-                AspnetUserPortfolio aspnetUserPortfolio = new AspnetUserPortfolio()
+                AspnetUserPortfolio aspnetUserPortfolio = new()
                 {
                     AspNetUserId = aspNetUserId,
                     PortfolioId = Guid.Parse(portfolioIds[i].ToString())
@@ -72,7 +72,7 @@ namespace Tilbake.Application.Services
             }
 
             await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)

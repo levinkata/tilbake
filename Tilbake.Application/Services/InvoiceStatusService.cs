@@ -27,25 +27,25 @@ namespace Tilbake.Application.Services
             invoiceStatus.Id = Guid.NewGuid();
 
             await _unitOfWork.InvoiceStatuses.AddAsync(invoiceStatus);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(Guid id)
         {
             await _unitOfWork.InvoiceStatuses.DeleteAsync(id);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> DeleteAsync(InvoiceStatusResource resource)
         {
             var invoiceStatus = _mapper.Map<InvoiceStatusResource, InvoiceStatus>(resource);
             await _unitOfWork.InvoiceStatuses.DeleteAsync(invoiceStatus);
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceStatusResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.InvoiceStatuses.GetAllAsync());
+            var result = await _unitOfWork.InvoiceStatuses.GetAllAsync();
             result = result.OrderBy(n => n.Name);
 
             var resources = _mapper.Map<IEnumerable<InvoiceStatus>, IEnumerable<InvoiceStatusResource>>(result);
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             var invoiceStatus = _mapper.Map<InvoiceStatusResource, InvoiceStatus>(resource);
             await _unitOfWork.InvoiceStatuses.UpdateAsync(resource.Id, invoiceStatus);
 
-            return await Task.Run(() => _unitOfWork.SaveAsync());
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

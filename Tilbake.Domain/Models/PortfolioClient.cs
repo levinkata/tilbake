@@ -16,6 +16,7 @@ namespace Tilbake.Domain.Models
         public Guid Id { get; set; }
         public Guid PortfolioId { get; set; }
         public Guid ClientId { get; set; }
+        public Guid ClientStatusId { get; set; }
         public bool IsWithdrawal { get; set; }
         public Guid? AddedById { get; set; }
         public DateTime? DateAdded { get; set; }
@@ -23,6 +24,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual Client Client { get; set; }
+        public virtual ClientStatus ClientStatus { get; set; }
         public virtual Portfolio Portfolio { get; set; }
         public virtual ICollection<Beneficiary> Beneficiaries { get; set; }
         public virtual ICollection<Policy> Policies { get; set; }

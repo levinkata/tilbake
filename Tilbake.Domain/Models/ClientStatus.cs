@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace Tilbake.Domain.Models
 {
-    public partial class SalesType
+    public partial class ClientStatus
     {
-        public SalesType()
+        public ClientStatus()
         {
-            Policies = new HashSet<Policy>();
-            Quotes = new HashSet<Quote>();
+            PortfolioClients = new HashSet<PortfolioClient>();
         }
 
         public Guid Id { get; set; }
@@ -18,7 +17,6 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual ICollection<Policy> Policies { get; set; }
-        public virtual ICollection<Quote> Quotes { get; set; }
+        public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
     }
 }

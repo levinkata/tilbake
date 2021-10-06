@@ -64,6 +64,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<ClientNumberGenerator> ClientNumberGenerators { get; set; }
         public virtual DbSet<ClientRisk> ClientRisks { get; set; }
         public virtual DbSet<ClientRiskDocument> ClientRiskDocuments { get; set; }
+        public virtual DbSet<ClientStatus> ClientStatuses { get; set; }
         public virtual DbSet<ClientType> ClientTypes { get; set; }
         public virtual DbSet<CommissionRate> CommissionRates { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
@@ -181,14 +182,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                 optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-//             }
-//         }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+        //            }
+        //        }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -258,7 +259,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>
@@ -1368,6 +1369,21 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.DocumentTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ClientRiskDocument_DocumentType");
+            });
+
+            modelBuilder.Entity<ClientStatus>(entity =>
+            {
+                entity.ToTable("ClientStatus");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<ClientType>(entity =>
@@ -2912,6 +2928,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PortfolioClient_Client");
 
+                entity.HasOne(d => d.ClientStatus)
+                    .WithMany(p => p.PortfolioClients)
+                    .HasForeignKey(d => d.ClientStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioClient_ClientStatus");
+
                 entity.HasOne(d => d.Portfolio)
                     .WithMany(p => p.PortfolioClients)
                     .HasForeignKey(d => d.PortfolioId)
@@ -3181,6 +3203,16 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.InsurerBranchId)
                     .HasConstraintName("FK_Quote_InsurerBranch");
 
+                entity.HasOne(d => d.PaymentMethod)
+                    .WithMany(p => p.Quotes)
+                    .HasForeignKey(d => d.PaymentMethodId)
+                    .HasConstraintName("FK_Quote_PaymentMethod");
+
+                entity.HasOne(d => d.PolicyType)
+                    .WithMany(p => p.Quotes)
+                    .HasForeignKey(d => d.PolicyTypeId)
+                    .HasConstraintName("FK_Quote_PolicyType");
+
                 entity.HasOne(d => d.PortfolioClient)
                     .WithMany(p => p.Quotes)
                     .HasForeignKey(d => d.PortfolioClientId)
@@ -3192,6 +3224,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.QuoteStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Quote_QuoteStatus");
+
+                entity.HasOne(d => d.SalesType)
+                    .WithMany(p => p.Quotes)
+                    .HasForeignKey(d => d.SalesTypeId)
+                    .HasConstraintName("FK_Quote_SalesType");
             });
 
             modelBuilder.Entity<QuoteItem>(entity =>

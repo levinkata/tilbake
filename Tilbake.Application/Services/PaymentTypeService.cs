@@ -46,9 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PaymentTypeResource>> GetAllAsync()
         {
-            var result = await Task.Run(() => _unitOfWork.PaymentTypes.GetAllAsync(
+            var result = await _unitOfWork.PaymentTypes.GetAllAsync(
                                                         null,
-                                                        r => r.OrderBy(n => n.Name)));
+                                                        r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<PaymentType>, IEnumerable<PaymentTypeResource>>(result);
 

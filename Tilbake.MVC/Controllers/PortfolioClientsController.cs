@@ -323,7 +323,7 @@ namespace Tilbake.MVC.Controllers
             resource.Address = address;
             resource.ClientCarriers.AddRange(clientCarriers);
 
-            return View("EditClient", resource);
+            return View(resource);
         }
 
         [HttpPost]
@@ -335,7 +335,7 @@ namespace Tilbake.MVC.Controllers
                 await _clientService.UpdateAsync(resource);
                 return RedirectToAction(nameof(Edit), new { portfolioId = resource.PortfolioId, clientId = resource.Id });
             }
-            return View("EditClient", resource);
+            return View(resource);
         }
 
         // GET: PortfolioClients/Delete/5

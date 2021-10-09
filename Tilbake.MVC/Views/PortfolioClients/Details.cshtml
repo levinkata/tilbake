@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <h6 class="card-title mb-3">@FullName</h6>
-                <p class="card-text"><strong>@Model.IdNumber</strong></p>
+                <p class="card-text"><strong>@Model.ClientNumber</strong></p>
                 <div class="row mb-0">
                     <div class="col">
                         <p class="card-text text-muted"><small>@Model.Gender</small></p>
@@ -33,7 +33,7 @@
                         <p class="card-text text-muted"><small>@Model.BirthDate.ToShortDateString()</small></p>
                     </div>
                 </div>
-                <p class="card-text text-muted"><small>@Model.Occupation</small></p>
+                <p class="card-text text-muted"><small>@Model.Occupation</small></p>                
                 <div class="form-group">
                     <a asp-action="Edit" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</a>
                 </div>

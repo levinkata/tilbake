@@ -323,7 +323,7 @@ namespace Tilbake.MVC.Controllers
             resource.Address = address;
             resource.ClientCarriers.AddRange(clientCarriers);
 
-            return View(resource);
+            return View("EditClient", resource);
         }
 
         [HttpPost]
@@ -352,7 +352,7 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            return View(resource);
+            return View("EditClient", resource);
         }
 
         // POST: PortfolioClients/Delete/5

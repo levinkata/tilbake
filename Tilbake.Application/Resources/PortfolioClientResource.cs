@@ -20,8 +20,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Withdrawal")]
         public bool IsWithdrawal { get; set; }
 
-        public Client Client { get; set; }
-        public ClientStatus ClientStatus { get; set; }
-        public Portfolio Portfolio { get; set; }        
+        public virtual Client Client { get; set; }
+        public virtual ClientStatus ClientStatus { get; set; }
+        public virtual Portfolio Portfolio { get; set; }        
     }
 }

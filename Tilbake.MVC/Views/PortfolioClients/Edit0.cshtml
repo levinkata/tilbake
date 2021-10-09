@@ -1,0 +1,61 @@
+﻿@model PortfolioClientResource
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>PortfolioClient</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="PortfolioId" />
+            <input type="hidden" asp-for="ClientId" />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsWithdrawal" /> @Html.DisplayNameFor(model => model.IsWithdrawal)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Return</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('#IdDocumentTypeId').change(function() {
+            selectedIdDocumentTypeId = $(this).val();
+            if(selectedIdDocumentTypeId != null && selectedIdDocumentTypeId != '') {
+                $.ajax({
+                    url: '@(Url.Action("GetIdDocumentType", "IdDocumentTypes"))',
+                    traditional: true,
+                    dataType: "json",
+                    type: 'GET',
+                    data: { id : selectedIdDocumentTypeId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (IdDocumentType) {
+                        if(IdDocumentType) {
+                            $('#lblIdNumber', '#modallblIdNumber').text(IdDocumentType.name);
+                        }
+                    }
+                });
+            }
+        });
+
+    </script>
+}

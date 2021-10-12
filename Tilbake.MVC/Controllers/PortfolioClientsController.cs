@@ -307,21 +307,20 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
-            var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
-            var address = await _addressService.GetByClientIdAsync(clientId);
-            var resource = await _clientService.GetByIdAsync(clientId);
+            // var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            // var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
+            // var address = await _addressService.GetByClientIdAsync(clientId);
+            var resource = await _portfolioClientService.GetByPortfolioClientAsync(portfolioId, clientId);
 
             resource.PortfolioId = portfolioId;
-            resource.PortfolioName = portfolio.Name;
-            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
-            resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
-            resource.Address = address;
-            resource.ClientCarriers.AddRange(clientCarriers);
+            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.Client.ClientTypeId);
+            resource.CountryList = new SelectList(countries, "Id", "Name", resource.Client.CountryId);
+            resource.GenderList = new SelectList(genders, "Id", "Name", resource.Client.GenderId);
+            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.Client.MaritalStatusId);
+            resource.OccupationList = SelectLists.Occupations(occupations, resource.Client.OccupationId);
+            resource.TitleList = SelectLists.Titles(titles, resource.Client.TitleId);
+            //resource.Addresses = address;
+            //resource.ClientCarriers.AddRange(clientCarriers);
 
             return View("EditClient", resource);
         }

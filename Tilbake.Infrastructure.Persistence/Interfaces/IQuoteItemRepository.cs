@@ -11,6 +11,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces
         Task<AllRisk> GetAllRiskAsync(Guid id);
         Task<Building> GetBuildingAsync(Guid id);
         Task<Content> GetContentAsync(Guid id);
+        Task<ExcessBuyBack> GetExcessBuyBackAsync(Guid id);
         Task<House> GetHouseAsync(Guid id);
         Task<Motor> GetMotorAsync(Guid id);
     }

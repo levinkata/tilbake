@@ -53,6 +53,7 @@ namespace Tilbake.Application.Services
             await _unitOfWork.Quotes.AddAsync(quote);
             var quoteId = quote.Id;
 
+            //  AllRisk
             if (resource.AllRisks != null)
             {
                 if (resource.RiskItems != null)
@@ -103,6 +104,7 @@ namespace Tilbake.Application.Services
                 }
             }
 
+            //  Building
             if (resource.Buildings != null)
             {
                 //  Update QuoteItems with BuildingId
@@ -146,6 +148,7 @@ namespace Tilbake.Application.Services
                 }
             }
 
+            //  Content
             if (resource.Contents != null)
             {
                 //  Update QuoteItems with ContentId
@@ -189,7 +192,52 @@ namespace Tilbake.Application.Services
                 }
             }
 
-            if(resource.Houses != null)
+            //  ExcessBuyBack
+            if (resource.ExcessBuyBacks != null)
+            {
+                //  Update QuoteItems with ExcessBuyBackId
+                int co = resource.ExcessBuyBacks.Length;
+                var excessBuyBacks = resource.ExcessBuyBacks;
+                await _unitOfWork.ExcessBuyBacks.AddRangeAsync(excessBuyBacks);
+
+                for (int i = 0; i < co; i++)
+                {
+                    var excessBuyBackId = excessBuyBacks[i].Id;
+
+                    Risk risk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ExcessBuyBackId = excessBuyBackId,
+                        DateAdded = DateTime.Now
+                    };
+                    await _unitOfWork.Risks.AddAsync(risk);
+
+                    var riskId = risk.Id;
+
+                    ClientRisk clientRisk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = clientId,
+                        RiskId = riskId,
+                        DateAdded = DateTime.Now
+                    };
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                    var clientRiskId = clientRisk.Id;
+
+                    foreach (var item in quoteItems.Where(x => x.ClientRiskId == excessBuyBackId))
+                    {
+                        item.QuoteId = quoteId;
+                        item.ClientRiskId = clientRiskId;
+                        item.DateAdded = DateTime.Now;
+                        item.TaxRate = taxRate;
+                        item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
+                    }
+                }
+            }
+
+            //  House
+            if (resource.Houses != null)
             {
                 //  Update QuoteItems with HouseId
                 int ho = resource.Houses.Length;
@@ -232,6 +280,7 @@ namespace Tilbake.Application.Services
                 }
             }
 
+            //  Motor
             if(resource.Motors != null)
             {
                 //  Update QuoteItems with MotorId

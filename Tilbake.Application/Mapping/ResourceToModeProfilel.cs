@@ -29,6 +29,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<CoverTypeSaveResource, CoverType>();
             CreateMap<DocumentTypeSaveResource, DocumentType>();
             CreateMap<DriverTypeSaveResource, DriverType>();
+            CreateMap<ExcessBuyBackSaveResource, ExcessBuyBack>();
             CreateMap<FileTemplateSaveResource, FileTemplate>();
             CreateMap<GenderSaveResource, Gender>();
             CreateMap<HouseSaveResource, House>();
@@ -72,6 +73,8 @@ namespace Tilbake.Application.Mapping
             CreateMap<SalesTypeSaveResource, SalesType>();
             CreateMap<TitleSaveResource, Title>();
             CreateMap<TaxSaveResource, Tax>();
+            CreateMap<TravelSaveResource, Travel>();
+            CreateMap<TravelBeneficiarySaveResource, TravelBeneficiary>();
             CreateMap<WallTypeSaveResource, WallType>();
         }
     }

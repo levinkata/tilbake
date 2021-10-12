@@ -20,6 +20,8 @@ namespace Tilbake.MVC.Controllers
         private readonly IHouseService _houseService;
         private readonly IHouseConditionService _houseConditionService;
 
+        private readonly IExcessBuyBackService _excessBuyBackService;
+
         private readonly IContentService _contentService;
         private readonly IResidenceTypeService _residenceTypeService;
         private readonly IResidenceUseService _residenceUseService;
@@ -41,6 +43,7 @@ namespace Tilbake.MVC.Controllers
                                     IBuildingConditionService buildingConditionService,
                                     IHouseService houseService,
                                     IHouseConditionService houseConditionService,
+                                    IExcessBuyBackService excessBuyBackService,
                                     IContentService contentService,
                                     IResidenceTypeService residenceTypeService,
                                     IResidenceUseService residenceUseService,
@@ -65,6 +68,7 @@ namespace Tilbake.MVC.Controllers
             _houseConditionService = houseConditionService;
 
             _contentService = contentService;
+            _excessBuyBackService = excessBuyBackService;
             _residenceTypeService = residenceTypeService;
             _residenceUseService = residenceUseService;
             _roofTypeService = roofTypeService;
@@ -99,6 +103,7 @@ namespace Tilbake.MVC.Controllers
             var returnView = "";
             object model = null;
 
+            //  AllRisk
             if (resource.AllRisk != null)
             {
                 returnView = "QuoteAllRisk";
@@ -112,6 +117,7 @@ namespace Tilbake.MVC.Controllers
                 model = allRiskResource;
             }
 
+            //  Building
             if (resource.Building != null)
             {
                 var residenceTypes = await _residenceTypeService.GetAllAsync();
@@ -132,6 +138,7 @@ namespace Tilbake.MVC.Controllers
                 model = buildingResource;
             }
 
+            //  Content
             if (resource.Content != null)
             {
                 var residenceTypes = await _residenceTypeService.GetAllAsync();
@@ -150,6 +157,18 @@ namespace Tilbake.MVC.Controllers
                 model = contentResource;
             }
 
+            //  ExcessBuyBack
+            if (resource.ExcessBuyBack != null)
+            {
+
+                returnView = "QuoteExcessBuyBack";
+                ExcessBuyBackResource excessBuyBackResource = resource.ExcessBuyBack;
+                excessBuyBackResource.QuoteItemId = quoteItemId;
+                excessBuyBackResource.QuoteId = quote.QuoteId;
+                model = excessBuyBackResource;
+            }
+
+            //  House
             if (resource.House != null)
             {
                 var residenceTypes = await _residenceTypeService.GetAllAsync();
@@ -168,6 +187,7 @@ namespace Tilbake.MVC.Controllers
                 model = houseResource;
             }
 
+            //  Motor
             if (resource.Motor != null)
             {
                 var bodyTypes = await _bodyTypeService.GetAllAsync();

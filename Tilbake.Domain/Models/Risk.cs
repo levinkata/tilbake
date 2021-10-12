@@ -20,6 +20,7 @@ namespace Tilbake.Domain.Models
         public Guid? HouseId { get; set; }
         public Guid? LifeId { get; set; }
         public Guid? MotorId { get; set; }
+        public Guid? ExcessBuyBackId { get; set; }
         public Guid? MotorCycleId { get; set; }
         public Guid? PublicLiabilityId { get; set; }
         public Guid? StatedBenefitId { get; set; }
@@ -36,6 +37,7 @@ namespace Tilbake.Domain.Models
         public virtual Building Building { get; set; }
         public virtual Content Content { get; set; }
         public virtual ElectronicEquipment ElectronicEquipment { get; set; }
+        public virtual ExcessBuyBack ExcessBuyBack { get; set; }
         public virtual Glass Glass { get; set; }
         public virtual House House { get; set; }
         public virtual Life Life { get; set; }

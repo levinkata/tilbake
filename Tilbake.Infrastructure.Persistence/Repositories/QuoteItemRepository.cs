@@ -82,5 +82,17 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
             return await Task.FromResult(result);
         }
+
+        public async Task<ExcessBuyBack> GetExcessBuyBackAsync(Guid id)
+        {
+            var result = (from q in _context.QuoteItems
+                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join r in _context.Risks on c.RiskId equals r.Id
+                          join a in _context.ExcessBuyBacks on r.ExcessBuyBackId equals a.Id
+                          where q.Id == id && r.ExcessBuyBackId != null
+                          select a).FirstOrDefault();
+
+            return await Task.FromResult(result);
+        }
     }
 }

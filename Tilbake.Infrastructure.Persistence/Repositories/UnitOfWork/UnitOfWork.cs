@@ -38,6 +38,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             DocumentTypes = new DocumentTypeRepository(_context);
             DriverTypes = new DriverTypeRepository(_context);
             EmailAddresses = new EmailAddressRepository(_context);
+            ExcessBuyBacks = new ExcessBuyBackRepository(_context);
             FileTemplates = new FileTemplateRepository(_context);
             FileTemplateRecords = new FileTemplateRecordRepository(_context);
             Genders = new GenderRepository(_context);
@@ -86,6 +87,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             SalesTypes = new SalesTypeRepository(_context);
             Titles = new TitleRepository(_context);
             Taxes = new TaxRepository(_context);
+            Travels = new TravelRepository(_context);
+            TravelBeneficiaries = new TravelBeneficiaryRepository(_context);
             UserPortfolios = new UserPortfolioRepository(_context);
             WallTypes = new WallTypeRepository(_context);
         }
@@ -114,6 +117,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IDocumentTypeRepository DocumentTypes { get; private set; }
         public IDriverTypeRepository DriverTypes { get; private set; }
         public IEmailAddressRepository EmailAddresses { get; private set; }
+        public IExcessBuyBackRepository ExcessBuyBacks { get; private set; }
         public IFileTemplateRepository FileTemplates { get; private set; }
         public IFileTemplateRecordRepository FileTemplateRecords { get; private set; }
         public IGenderRepository Genders { get; private set; }
@@ -162,6 +166,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public ISalesTypeRepository SalesTypes { get; private set; }
         public ITaxRepository Taxes { get; private set; }
         public ITitleRepository Titles { get; private set; }
+        public ITravelRepository Travels { get; private set; }
+        public ITravelBeneficiaryRepository TravelBeneficiaries { get; private set; }
         public IUserPortfolioRepository UserPortfolios { get; private set; }
         public IWallTypeRepository WallTypes { get; private set; }
 

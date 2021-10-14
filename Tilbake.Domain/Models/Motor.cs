@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public Motor()
         {
+            ExcessBuyBacks = new HashSet<ExcessBuyBack>();
             MotorAccessories = new HashSet<MotorAccessory>();
             MotorImprovements = new HashSet<MotorImprovement>();
             MotorRadios = new HashSet<MotorRadio>();
@@ -44,6 +45,7 @@ namespace Tilbake.Domain.Models
         public virtual DriverType DriverType { get; set; }
         public virtual MotorModel MotorModel { get; set; }
         public virtual MotorUse MotorUse { get; set; }
+        public virtual ICollection<ExcessBuyBack> ExcessBuyBacks { get; set; }
         public virtual ICollection<MotorAccessory> MotorAccessories { get; set; }
         public virtual ICollection<MotorImprovement> MotorImprovements { get; set; }
         public virtual ICollection<MotorRadio> MotorRadios { get; set; }

@@ -7,6 +7,7 @@ namespace Tilbake.Application.Resources
     public class ContentResource
     {
         public Guid Id { get; set; }
+        public Guid PortfolioClientId { get; set; }
         public Guid QuoteItemId { get; set; }
         public Guid QuoteId { get; set; }
         public Guid PolicyRiskId { get; set; }

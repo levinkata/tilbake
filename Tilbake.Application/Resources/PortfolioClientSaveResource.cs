@@ -63,8 +63,6 @@ namespace Tilbake.Application.Resources
 
         public MultiSelectList CarrierList { get; set; }
 
-        //  ============================================
-
         //  Address
         [Display(Name = "Physical Address")]
         public string PhysicalAddress { get; set; }
@@ -81,10 +79,7 @@ namespace Tilbake.Application.Resources
         public SelectList CityList { get; set; }
         public SelectList AddressCountryList { get; set; }
 
-        //  ==========================================
-
         //  SelectLists
-
         public SelectList ClientTypeList { get; set; }
         public SelectList ClientStatusList { get; set; }
         public SelectList CountryList { get; set; }

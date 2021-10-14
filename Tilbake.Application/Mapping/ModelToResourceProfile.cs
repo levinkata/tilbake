@@ -73,6 +73,11 @@ namespace Tilbake.Application.Mapping
             CreateMap<DocumentType, DocumentTypeResource>().ReverseMap();
             CreateMap<DriverType, DriverTypeResource>().ReverseMap();
             CreateMap<EmailAddress, EmailAddressResource>().ReverseMap();
+
+            CreateMap<ExcessBuyBack, ExcessBuyBackResource>()
+                    .ForMember(dest => dest.Motor, opt => opt.MapFrom(src => src.Motor))
+                    .ForMember(dest => dest.ParentPolicy, opt => opt.MapFrom(src => src.ParentPolicy)).ReverseMap();
+
             CreateMap<Gender, GenderResource>().ReverseMap();
 
             CreateMap<FileTemplate, FileTemplateResource>()
@@ -148,6 +153,10 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.InsurerName, opt => opt.MapFrom(src => src.Insurer.Name)).ReverseMap();
 
             CreateMap<PortfolioClient, PortfolioClientResource>()
+                .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Client.Addresses))
+                .ForMember(dest => dest.EmailAddresses, opt => opt.MapFrom(src => src.Client.EmailAddresses))
+                .ForMember(dest => dest.MobileNumbers, opt => opt.MapFrom(src => src.Client.MobileNumbers))
+                .ForMember(dest => dest.ClientCarriers, opt => opt.MapFrom(src => src.Client.ClientCarriers))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
                 .ForMember(dest => dest.ClientStatus, opt => opt.MapFrom(src => src.ClientStatus))
                 .ForMember(dest => dest.Portfolio, opt => opt.MapFrom(src => src.Portfolio)).ReverseMap();
@@ -202,6 +211,14 @@ namespace Tilbake.Application.Mapping
             CreateMap<SalesType, SalesTypeResource>().ReverseMap();
             CreateMap<Tax, TaxResource>().ReverseMap();
             CreateMap<Title, TitleResource>().ReverseMap();
+
+            CreateMap<Travel, TravelResource>()
+                .ForMember(dest => dest.TravelBeneficiaries, opt => opt.MapFrom(src => src.TravelBeneficiaries)).ReverseMap();
+
+            CreateMap<TravelBeneficiary, TravelBeneficiaryResource>()
+                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+                .ForMember(dest => dest.Travel, opt => opt.MapFrom(src => src.Travel)).ReverseMap();
+
             CreateMap<WallType, WallTypeResource>().ReverseMap();
         }
     }

@@ -14,6 +14,7 @@ namespace Tilbake.Application.Interfaces
         Task<int> UpdateQuoteItemRiskItemAsync(QuoteItemRiskItemResource resource);
         Task<int> UpdateQuoteItemBuildingAsync(QuoteItemBuildingResource resource);
         Task<int> UpdateQuoteItemContentAsync(QuoteItemContentResource resource);
+        Task<int> UpdateQuoteItemExcessBuyBackAsync(QuoteItemExcessBuyBackResource resource);
         Task<int> UpdateQuoteItemHouseAsync(QuoteItemHouseResource resource);
         Task<int> UpdateQuoteItemMotorAsync(QuoteItemMotorResource resource);
         Task<int> DeleteAsync(Guid id);

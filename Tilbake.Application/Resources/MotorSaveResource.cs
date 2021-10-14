@@ -6,7 +6,6 @@ namespace Tilbake.Application.Resources
 {
     public class MotorSaveResource
     {
-        public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
 
         [Display(Name = "Cover Type")]

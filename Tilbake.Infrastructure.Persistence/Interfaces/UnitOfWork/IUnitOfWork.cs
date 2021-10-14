@@ -29,6 +29,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IDocumentTypeRepository DocumentTypes { get; }
         IDriverTypeRepository DriverTypes { get; }
         IEmailAddressRepository EmailAddresses { get; }
+        IExcessBuyBackRepository ExcessBuyBacks { get; }
         IFileTemplateRepository FileTemplates { get; }
         IFileTemplateRecordRepository FileTemplateRecords { get; }
         IGenderRepository Genders { get; }
@@ -78,6 +79,8 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         ITitleRepository Titles { get; }
         IUserPortfolioRepository UserPortfolios { get; }
         ITaxRepository Taxes { get; }
+        ITravelRepository Travels { get; }
+        ITravelBeneficiaryRepository TravelBeneficiaries { get; }
         IWallTypeRepository WallTypes { get; }
 
         Task<int> SaveAsync();

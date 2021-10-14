@@ -21,6 +21,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
             _userId = userData.UserId;
         }
 
+
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<AllRisk> AllRisks { get; set; }
         public virtual DbSet<AllRiskSpecified> AllRiskSpecifieds { get; set; }
@@ -78,6 +79,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Eftfile> Eftfiles { get; set; }
         public virtual DbSet<ElectronicEquipment> ElectronicEquipments { get; set; }
         public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
+        public virtual DbSet<ExcessBuyBack> ExcessBuyBacks { get; set; }
         public virtual DbSet<Extension> Extensions { get; set; }
         public virtual DbSet<FileTemplate> FileTemplates { get; set; }
         public virtual DbSet<FileTemplateRecord> FileTemplateRecords { get; set; }
@@ -1711,6 +1713,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmailAddress_Client");
+            });
+
+            modelBuilder.Entity<ExcessBuyBack>(entity =>
+            {
+                entity.ToTable("ExcessBuyBack");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Motor)
+                    .WithMany(p => p.ExcessBuyBacks)
+                    .HasForeignKey(d => d.MotorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExcessBuyBack_Motor");
+
+                entity.HasOne(d => d.ParentPolicy)
+                    .WithMany(p => p.ExcessBuyBacks)
+                    .HasForeignKey(d => d.ParentPolicyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExcessBuyBack_Policy");
             });
 
             modelBuilder.Entity<Extension>(entity =>
@@ -3731,6 +3756,11 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .WithMany(p => p.Risks)
                     .HasForeignKey(d => d.ElectronicEquipmentId)
                     .HasConstraintName("FK_Risk_ElectronicEquipment");
+
+                entity.HasOne(d => d.ExcessBuyBack)
+                    .WithMany(p => p.Risks)
+                    .HasForeignKey(d => d.ExcessBuyBackId)
+                    .HasConstraintName("FK_Risk_ExcessBuyBack");
 
                 entity.HasOne(d => d.Glass)
                     .WithMany(p => p.Risks)

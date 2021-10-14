@@ -98,6 +98,10 @@ namespace Tilbake.Application.Services
                                                             e.ClientId == clientId,
                                                             null,
                                                             e => e.Client,
+                                                            e => e.Client.Addresses,
+                                                            e => e.Client.ClientCarriers,
+                                                            e => e.Client.EmailAddresses,
+                                                            e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
             
             return result.Any();
@@ -108,6 +112,10 @@ namespace Tilbake.Application.Services
             var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
                                                             e => e.Id == id,
                                                             e => e.Client,
+                                                            e => e.Client.Addresses,
+                                                            e => e.Client.ClientCarriers,
+                                                            e => e.Client.EmailAddresses,
+                                                            e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
 
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
@@ -120,6 +128,10 @@ namespace Tilbake.Application.Services
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.Client.IdNumber == idNumber,
                                                             e => e.Client,
+                                                            e => e.Client.Addresses,
+                                                            e => e.Client.ClientCarriers,
+                                                            e => e.Client.EmailAddresses,
+                                                            e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
 
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
@@ -132,6 +144,10 @@ namespace Tilbake.Application.Services
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.ClientId == clientId,
                                                             e => e.Client,
+                                                            e => e.Client.Addresses,
+                                                            e => e.Client.ClientCarriers,
+                                                            e => e.Client.EmailAddresses,
+                                                            e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
 
             var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
@@ -144,6 +160,10 @@ namespace Tilbake.Application.Services
                                                             e => e.PortfolioId == portfolioId,
                                                             e => e.OrderBy(n => n.Client.LastName),
                                                             e => e.Client,
+                                                            e => e.Client.Addresses,
+                                                            e => e.Client.ClientCarriers,
+                                                            e => e.Client.EmailAddresses,
+                                                            e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
 
             var resources = _mapper.Map<IEnumerable<PortfolioClient>, IEnumerable< PortfolioClientResource>>(result);

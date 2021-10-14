@@ -55,12 +55,14 @@ namespace Tilbake.Application.Services
             var resultAllRisk = await _unitOfWork.QuoteItems.GetAllRiskAsync(id);
             var resultBuilding = await _unitOfWork.QuoteItems.GetBuildingAsync(id);
             var resultContent = await _unitOfWork.QuoteItems.GetContentAsync(id);
+            var resultExcessBuyBack = await _unitOfWork.QuoteItems.GetExcessBuyBackAsync(id);
             var resultHouse = await _unitOfWork.QuoteItems.GetHouseAsync(id);
             var resultMotor = await _unitOfWork.QuoteItems.GetMotorAsync(id);
 
             var resourceAllRisk = _mapper.Map<AllRisk, AllRiskResource>(resultAllRisk);
             var resourceBuilding = _mapper.Map<Building, BuildingResource>(resultBuilding);
             var resourceContent = _mapper.Map<Content, ContentResource>(resultContent);
+            var resourceExcessBuyBack = _mapper.Map<ExcessBuyBack, ExcessBuyBackResource>(resultExcessBuyBack);
             var resourceHouse = _mapper.Map<House, HouseResource>(resultHouse);
             var resourceMotor = _mapper.Map<Motor, MotorResource>(resultMotor);
 
@@ -69,6 +71,7 @@ namespace Tilbake.Application.Services
                 AllRisk = resourceAllRisk,
                 Building = resourceBuilding,
                 Content = resourceContent,
+                ExcessBuyBack = resourceExcessBuyBack,
                 House = resourceHouse,
                 Motor = resourceMotor
             };
@@ -157,6 +160,17 @@ namespace Tilbake.Application.Services
 
             var motor = _mapper.Map<MotorResource, Motor>(resource.Motor);
             await _unitOfWork.Motors.UpdateAsync(resource.Motor.Id, motor);
+
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<int> UpdateQuoteItemExcessBuyBackAsync(QuoteItemExcessBuyBackResource resource)
+        {
+            var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
+            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+
+            var motor = _mapper.Map<ExcessBuyBackResource, ExcessBuyBack>(resource.ExcessBuyBack);
+            await _unitOfWork.ExcessBuyBacks.UpdateAsync(resource.ExcessBuyBack.Id, motor);
 
             return await _unitOfWork.SaveAsync();
         }

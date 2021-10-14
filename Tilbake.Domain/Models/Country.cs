@@ -10,6 +10,7 @@ namespace Tilbake.Domain.Models
             Cities = new HashSet<City>();
             Clients = new HashSet<Client>();
             TravelBeneficiaries = new HashSet<TravelBeneficiary>();
+            Travels = new HashSet<Travel>();
         }
 
         public Guid Id { get; set; }
@@ -23,5 +24,6 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<City> Cities { get; set; }
         public virtual ICollection<Client> Clients { get; set; }
         public virtual ICollection<TravelBeneficiary> TravelBeneficiaries { get; set; }
+        public virtual ICollection<Travel> Travels { get; set; }
     }
 }

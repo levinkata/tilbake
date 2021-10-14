@@ -213,10 +213,13 @@ namespace Tilbake.Application.Mapping
             CreateMap<Title, TitleResource>().ReverseMap();
 
             CreateMap<Travel, TravelResource>()
+                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.TravelBeneficiaries, opt => opt.MapFrom(src => src.TravelBeneficiaries)).ReverseMap();
 
             CreateMap<TravelBeneficiary, TravelBeneficiaryResource>()
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Travel, opt => opt.MapFrom(src => src.Travel)).ReverseMap();
 
             CreateMap<WallType, WallTypeResource>().ReverseMap();

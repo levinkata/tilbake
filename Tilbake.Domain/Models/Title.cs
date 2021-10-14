@@ -8,6 +8,8 @@ namespace Tilbake.Domain.Models
         public Title()
         {
             Clients = new HashSet<Client>();
+            TravelBeneficiaries = new HashSet<TravelBeneficiary>();
+            Travels = new HashSet<Travel>();
         }
 
         public Guid Id { get; set; }
@@ -18,5 +20,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual ICollection<Client> Clients { get; set; }
+        public virtual ICollection<TravelBeneficiary> TravelBeneficiaries { get; set; }
+        public virtual ICollection<Travel> Travels { get; set; }
     }
 }

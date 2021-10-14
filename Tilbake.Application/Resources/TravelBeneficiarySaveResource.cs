@@ -8,6 +8,9 @@ namespace Tilbake.Application.Resources
     {
         public Guid TravelId { get; set; }
 
+        [Display(Name = "Title")]
+        public Guid TitleId { get; set; }
+
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
@@ -26,9 +29,11 @@ namespace Tilbake.Application.Resources
         public Guid? AddedBy { get; set; }
 
         public CountryResource Country { get; set; }
+        public TitleResource Title { get; set; }
         public TravelResource Travel { get; set; }
 
         //  SelectLists
         public SelectList CountryList { get; set; }
+        public SelectList TitleList { get; set; }
     }
 }

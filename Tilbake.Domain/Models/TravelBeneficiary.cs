@@ -7,6 +7,7 @@ namespace Tilbake.Domain.Models
     {
         public Guid Id { get; set; }
         public Guid TravelId { get; set; }
+        public Guid TitleId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
@@ -18,6 +19,7 @@ namespace Tilbake.Domain.Models
         public DateTime? DateModified { get; set; }
 
         public virtual Country Country { get; set; }
+        public virtual Title Title { get; set; }
         public virtual Travel Travel { get; set; }
     }
 }

@@ -48,8 +48,8 @@ namespace Tilbake.Application.Services
         public async Task<IEnumerable<CarrierResource>> GetAllAsync()
         {
             var result = await _unitOfWork.Carriers.GetAllAsync(
-                                            null,
-                                            r => r.OrderBy(p => p.Name));
+                                                    null,
+                                                    r => r.OrderBy(p => p.Name));
 
             var resources = _mapper.Map<IEnumerable<Carrier>, IEnumerable<CarrierResource>>(result);
             return resources;
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
         public async Task<CarrierResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.Carriers.GetFirstOrDefaultAsync(
-                                            r => r.Id == id);
+                                                    r => r.Id == id);
 
             var resource = _mapper.Map<Carrier, CarrierResource>(result);
             return resource;

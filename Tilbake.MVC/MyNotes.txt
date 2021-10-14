@@ -1,8 +1,5 @@
 ﻿$ dotnet ef dbcontext scaffold 'Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;' Microsoft.EntityFrameworkCore.SqlServer --context TilbakeDbContext --context-dir ~/source/repos/tilbake/Tilbake.Infrastructure.Persistence/Context --context-namespace Tilbake.Infrastructure.Persistence.Context --force --project Tilbake.Domain --output-dir Models --startup-project Tilbake.MVC
 
---
-$ dotnet ef dbcontext scaffold 'Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;' Microsoft.EntityFrameworkCore.SqlServer --context TilbakeDbContext --context-dir ~/source/repos/tilbake/Tilbake.Infrastructure.Persistence/Context --context-namespace Tilbake.Infrastructure.Persistence.Context --force --project Tilbake.Domain --output-dir Models --startup-project Tilbake.MVC
-
 EF GroupBy
 var cinemaCustomers = _context.Customers.
                             Where(x => x.Groups.Any(x => x.Name.Contains("cinema")));

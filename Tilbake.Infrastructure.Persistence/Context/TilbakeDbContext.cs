@@ -21,7 +21,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
             _userId = userData.UserId;
         }
 
-
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<AllRisk> AllRisks { get; set; }
         public virtual DbSet<AllRiskSpecified> AllRiskSpecifieds { get; set; }
@@ -4058,21 +4057,43 @@ namespace Tilbake.Infrastructure.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.Beneficiary)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.BirthDate).HasColumnType("date");
+
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.DepatureDate).HasColumnType("date");
+                entity.Property(e => e.DepartureDate).HasColumnType("date");
 
                 entity.Property(e => e.Destination)
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.DoctorContact)
+                entity.Property(e => e.DoctorName)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.DoctorName)
+                entity.Property(e => e.DoctorPhone)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Mobile)
                     .IsRequired()
                     .HasMaxLength(50);
 
@@ -4084,7 +4105,29 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.Phone).HasMaxLength(50);
+
+                entity.Property(e => e.PhysicalAddress)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PostalAddress)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.ReturnDate).HasColumnType("date");
+
+                entity.HasOne(d => d.Country)
+                    .WithMany(p => p.Travels)
+                    .HasForeignKey(d => d.CountryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Travel_Country");
+
+                entity.HasOne(d => d.Title)
+                    .WithMany(p => p.Travels)
+                    .HasForeignKey(d => d.TitleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Travel_Title");
             });
 
             modelBuilder.Entity<TravelBeneficiary>(entity =>
@@ -4116,6 +4159,12 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TravelBeneficiary_Country");
+
+                entity.HasOne(d => d.Title)
+                    .WithMany(p => p.TravelBeneficiaries)
+                    .HasForeignKey(d => d.TitleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TravelBeneficiary_Title");
 
                 entity.HasOne(d => d.Travel)
                     .WithMany(p => p.TravelBeneficiaries)

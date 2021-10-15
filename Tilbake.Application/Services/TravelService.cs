@@ -49,9 +49,9 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Travels.GetAllAsync(
                                             null,
-                                            r => r.OrderBy(p => p.LastName),
-                                            r => r.Country,
-                                            r => r.Title);
+                                            r => r.OrderBy(p => p.PortfolioClient.Client.LastName),
+                                            r => r.PortfolioClient,
+                                            r => r.PortfolioClient.Client);
             
             var resources = _mapper.Map<IEnumerable<Travel>, IEnumerable<TravelResource>>(result);
             return resources;
@@ -61,8 +61,8 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Travels.GetFirstOrDefaultAsync(
                                             r => r.Id == id,
-                                            r => r.Country,
-                                            r => r.Title);
+                                            r => r.PortfolioClient,
+                                            r => r.PortfolioClient.Client);
 
             var resource = _mapper.Map<Travel, TravelResource>(result);
             return resource;

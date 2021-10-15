@@ -10,6 +10,7 @@ namespace Tilbake.Domain.Models
             Beneficiaries = new HashSet<Beneficiary>();
             Policies = new HashSet<Policy>();
             Quotes = new HashSet<Quote>();
+            Travels = new HashSet<Travel>();
             Withdrawals = new HashSet<Withdrawal>();
         }
 
@@ -29,6 +30,7 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<Beneficiary> Beneficiaries { get; set; }
         public virtual ICollection<Policy> Policies { get; set; }
         public virtual ICollection<Quote> Quotes { get; set; }
+        public virtual ICollection<Travel> Travels { get; set; }
         public virtual ICollection<Withdrawal> Withdrawals { get; set; }
     }
 }

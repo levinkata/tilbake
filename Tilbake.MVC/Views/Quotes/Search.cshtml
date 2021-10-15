@@ -10,12 +10,9 @@
     <div class="card-body p-0">
         <form asp-action="Search" method="get">
             <input type="hidden" asp-for="PortfolioId" />
-            <div class="form-inline justify-content-end text-right">
-                <label asp-for="SearchString" class="pe-3 text-right">Enter search string: </label>  
-                <input type="search" asp-for="SearchString" placeholder="Enter Keywords?" class="form-control" />        
-                <button type="submit" id="SearchButton" class="btn btn-secondary">
-                    <i class="fas fa-search"></i>
-                </button>
+            <div class="input-group">
+                <input type="search" asp-for="SearchString" class="form-control" placeholder="Enter Keywords?">
+                <button class="btn btn-secondary" type="submit" id="SearchButton"><i class="fas fa-search"></i></button>
             </div>
         </form>
     </div>

@@ -183,14 +183,14 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        //                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-        //            }
-        //        }
+/*         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+            }
+        } */
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -260,7 +260,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>
@@ -4061,8 +4061,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.BirthDate).HasColumnType("date");
-
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
@@ -4081,22 +4079,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Mobile)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.PassportNumber)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -4105,29 +4087,13 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Phone).HasMaxLength(50);
-
-                entity.Property(e => e.PhysicalAddress)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.PostalAddress)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.ReturnDate).HasColumnType("date");
 
-                entity.HasOne(d => d.Country)
+                entity.HasOne(d => d.PortfolioClient)
                     .WithMany(p => p.Travels)
-                    .HasForeignKey(d => d.CountryId)
+                    .HasForeignKey(d => d.PortfolioClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Travel_Country");
-
-                entity.HasOne(d => d.Title)
-                    .WithMany(p => p.Travels)
-                    .HasForeignKey(d => d.TitleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Travel_Title");
+                    .HasConstraintName("FK_Travel_PortfolioClient");
             });
 
             modelBuilder.Entity<TravelBeneficiary>(entity =>

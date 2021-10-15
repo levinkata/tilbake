@@ -9,38 +9,8 @@ namespace Tilbake.Application.Resources
     {
         public Guid PortfolioClientId { get; set; }
 
-        [Display(Name = "Title")]
-        public Guid TitleId { get; set; }
-
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-
-        [Display(Name = "Birth Date")]
-        public DateTime BirthDate { get; set; }
-
         [Display(Name = "Passport Number")]
         public string PassportNumber { get; set; }
-
-        [Display(Name = "Nationality")]
-        public Guid CountryId { get; set; }
-
-        [Display(Name = "Postal Address")]
-        public string PostalAddress { get; set; }
-
-        [Display(Name = "Physical Address")]
-        public string PhysicalAddress { get; set; }
-
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Display(Name = "Phone")]
-        public string Phone { get; set; }
-
-        [Display(Name = "Mobile")]
-        public string Mobile { get; set; }
 
         [Display(Name = "Departure Date")]
         public DateTime DepartureDate { get; set; }
@@ -65,8 +35,5 @@ namespace Tilbake.Application.Resources
         public Guid? AddedBy { get; set; }
 
         public List<TravelBeneficiaryResource> TravelBeneficiaries { get; } = new();
-
-        public SelectList CountryList { get; set; }
-        public SelectList TitleList { get; set; }
     }
 }

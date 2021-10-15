@@ -16,6 +16,7 @@ namespace Tilbake.MVC.Controllers
     {
         private readonly IQuoteService _quoteService;
         private readonly IBuildingConditionService _buildingConditionService;
+        private readonly ICountryService _countryService;
         private readonly ICoverTypeService _coverTypeService;
         private readonly IInsurerService _insurerService;
         private readonly IInsurerBranchService _insurerBranchService;
@@ -36,9 +37,11 @@ namespace Tilbake.MVC.Controllers
         private readonly IPortfolioClientService _portfolioClientService;
         private readonly IPortfolioService _portfolioService;
         private readonly ITaxService _taxService;
+        private readonly ITitleService _titleService;
 
         public QuotesController(IQuoteService quoteService,
                                 IBuildingConditionService buildingConditionService,
+                                ICountryService countryService,
                                 ICoverTypeService coverTypeService,
                                 IInsurerService insurerService,
                                 IInsurerBranchService insurerBranchService,
@@ -58,11 +61,13 @@ namespace Tilbake.MVC.Controllers
                                 IWallTypeService wallTypeService,
                                 IPortfolioClientService portfolioClientService,
                                 IPortfolioService portfolioService,
-                                ITaxService taxService)
+                                ITaxService taxService,
+                                ITitleService titleService)
         {
             _quoteService = quoteService;
             _buildingConditionService = buildingConditionService;
             _coverTypeService = coverTypeService;
+            _countryService = countryService;
             _insurerService = insurerService;
             _insurerBranchService = insurerBranchService;
             _salesTypeService = salesTypeService;
@@ -82,6 +87,7 @@ namespace Tilbake.MVC.Controllers
             _portfolioClientService = portfolioClientService;
             _portfolioService = portfolioService;
             _taxService = taxService;
+            _titleService = titleService;
         }
 
         // GET: Quotes
@@ -177,6 +183,7 @@ namespace Tilbake.MVC.Controllers
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var buildingConditions = await _buildingConditionService.GetAllAsync();
             var driverTypes = await _driverTypeService.GetAllAsync();
+            var countries = await _countryService.GetAllAsync();
             var houseConditions = await _houseConditionService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
             var motorMakeId = motorMakes.FirstOrDefault().Id;
@@ -185,6 +192,7 @@ namespace Tilbake.MVC.Controllers
             var residenceTypes = await _residenceTypeService.GetAllAsync();
             var residenceUses = await _residenceUseService.GetAllAsync();
             var roofTypes = await _roofTypeService.GetAllAsync();
+            var titles = await _titleService.GetAllAsync();
             var wallTypes = await _wallTypeService.GetAllAsync();
 
             var coverTypes = await _coverTypeService.GetAllAsync();
@@ -201,6 +209,7 @@ namespace Tilbake.MVC.Controllers
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
                 QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, Guid.Empty),
                 BodyTypeList = SelectLists.BodyTypes(bodyTypes, Guid.Empty),
+                CountryList = SelectLists.Countries(countries, Guid.Empty),
                 DayList = SelectLists.RegisteredDays(0),
                 DriverTypeList = SelectLists.DriverTypes(driverTypes, Guid.Empty),
                 HouseConditionList = SelectLists.HouseConditions(houseConditions, Guid.Empty),
@@ -211,6 +220,7 @@ namespace Tilbake.MVC.Controllers
                 ResidenceUseList = SelectLists.ResidenceUses(residenceUses, Guid.Empty),
                 RoofTypeList = SelectLists.RoofTypes(roofTypes, Guid.Empty),
                 WallTypeList = SelectLists.WallTypes(wallTypes, Guid.Empty),
+                TitleList = SelectLists.Titles(titles, Guid.Empty),
                 DateRangeList = SelectLists.RegisteredYears(0)
             };
             return View(resource);
@@ -347,7 +357,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var resource = await _quoteService.GetByIdAsync((Guid)id);
+            var resource = await _quoteService.GetByIdAsync(id);
             await _quoteService.DeleteAsync(resource);
 
             return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });

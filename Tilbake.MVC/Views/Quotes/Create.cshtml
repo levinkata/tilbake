@@ -45,18 +45,19 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="QuoteStatusId" class="control-label"></label>
-                            <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-control" asp-items="Model.QuoteStatusList"></select>
+                            <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-control" asp-items="@Model.QuoteStatusList"></select>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
-                <div class="d-flex justify-content-center py-2">
-                    <button class="btn btn-outline-secondary me-1" type="button" data-bs-toggle="modal" data-bs-target="#allRiskModal">All Risks</button>
-                    <button class="btn btn-outline-secondary me-1" type="button" data-bs-toggle="modal" data-bs-target="#buildingModal">Building</button>
-                    <button class="btn btn-outline-secondary me-1" type="button" data-bs-toggle="modal" data-bs-target="#contentModal">Contents</button>
-                    <button class="btn btn-outline-secondary me-1" type="button" data-bs-toggle="modal" data-bs-target="#houseModal">House</button>
+                <div class="d-flex justify-content-center py-2 gap-2">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#allRiskModal">All Risks</button>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#buildingModal">Building</button>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#contentModal">Contents</button>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#houseModal">House</button>
                     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#motorModal">Motor</button>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#travelModal">Travel</button>
                 </div>
             </div>
 
@@ -140,7 +141,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="AllRiskCoverTypeId" class="control-label"></label>
-                                <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-control" asp-items="Model.CoverTypeList" ></select>
+                                <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-control" asp-items="@Model.CoverTypeList" ></select>
                             </div>
                         </div>
                     </div>
@@ -183,19 +184,19 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.ResidenceTypeId" class="control-label">Residence Type</label>
-                            <select asp-for="Building.ResidenceTypeId" id="BuildingResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList"></select>
+                            <select asp-for="Building.ResidenceTypeId" id="BuildingResidenceTypeId" class="form-control" asp-items="@Model.ResidenceTypeList"></select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.ResidenceUseId" class="control-label">Residence Use</label>
-                            <select asp-for="Building.ResidenceUseId" id="BuildingResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList"></select>
+                            <select asp-for="Building.ResidenceUseId" id="BuildingResidenceUseId" class="form-control" asp-items="@Model.ResidenceUseList"></select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.BuildingConditionId" class="control-label">Building Condition</label>
-                            <select asp-for="Building.BuildingConditionId" id="BuildingConditionId" class="form-control" asp-items="Model.BuildingConditionList"></select>
+                            <select asp-for="Building.BuildingConditionId" id="BuildingConditionId" class="form-control" asp-items="@Model.BuildingConditionList"></select>
                         </div>
                     </div>
                 </div>
@@ -203,13 +204,13 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.WallTypeId" class="control-label">Wall Type</label>
-                            <select asp-for="Building.WallTypeId" id="BuildingWallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
+                            <select asp-for="Building.WallTypeId" id="BuildingWallTypeId" class="form-control" asp-items="@Model.WallTypeList"></select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Building.RoofTypeId" class="control-label">Roof Type</label>
-                            <select asp-for="Building.RoofTypeId" id="BuildingRoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
+                            <select asp-for="Building.RoofTypeId" id="BuildingRoofTypeId" class="form-control" asp-items="@Model.RoofTypeList"></select>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -329,7 +330,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="BuildingCoverTypeId" class="control-label"></label>
-                                <select asp-for="BuildingCoverTypeId" id="BuildingCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
+                                <select asp-for="BuildingCoverTypeId" id="BuildingCoverTypeId" class="form-control" asp-items="@Model.CoverTypeList"></select>
                             </div>
                         </div>
                     </div>
@@ -366,13 +367,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="Content.ResidenceTypeId" class="control-label">Residence Type</label>
-                            <select asp-for="Content.ResidenceTypeId" id="ContentResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList"></select>
+                            <select asp-for="Content.ResidenceTypeId" id="ContentResidenceTypeId" class="form-control" asp-items="@Model.ResidenceTypeList"></select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="Content.ResidenceUseId" class="control-label">Residence Type</label>
-                            <select asp-for="Content.ResidenceUseId" id="ContentResidenceUseId" class="form-control" asp-items="Model.ResidenceUseList"></select>
+                            <select asp-for="Content.ResidenceUseId" id="ContentResidenceUseId" class="form-control" asp-items="@Model.ResidenceUseList"></select>
                         </div>
                     </div>
                 </div>
@@ -380,13 +381,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="Content.WallTypeId" class="control-label">Wall Type</label>
-                            <select asp-for="Content.WallTypeId" id="ContentWallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
+                            <select asp-for="Content.WallTypeId" id="ContentWallTypeId" class="form-control" asp-items="@Model.WallTypeList"></select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="Content.RoofTypeId" class="control-label">Roof Type</label>
-                            <select asp-for="Content.RoofTypeId" id="ContentRoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
+                            <select asp-for="Content.RoofTypeId" id="ContentRoofTypeId" class="form-control" asp-items="@Model.RoofTypeList"></select>
                         </div>
                     </div>
                 </div>                    
@@ -401,7 +402,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="ContentCoverTypeId" class="control-label"></label>
-                                <select asp-for="ContentCoverTypeId" id="ContentCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
+                                <select asp-for="ContentCoverTypeId" id="ContentCoverTypeId" class="form-control" asp-items="@Model.CoverTypeList"></select>
                             </div>
                         </div>
                     </div>
@@ -438,13 +439,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="House.ResidenceTypeId" class="control-label">Residence Type</label>
-                            <select asp-for="House.ResidenceTypeId" id="HouseResidenceTypeId" class="form-control" asp-items="Model.ResidenceTypeList"></select>
+                            <select asp-for="House.ResidenceTypeId" id="HouseResidenceTypeId" class="form-control" asp-items="@Model.ResidenceTypeList"></select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="House.HouseConditionId" class="control-label">House Condition</label>
-                            <select asp-for="House.HouseConditionId" id="HouseConditionId" class="form-control" asp-items="Model.HouseConditionList"></select>
+                            <select asp-for="House.HouseConditionId" id="HouseConditionId" class="form-control" asp-items="@Model.HouseConditionList"></select>
                         </div>
                     </div>
                 </div>
@@ -452,13 +453,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="House.WallTypeId" class="control-label">Wall Type</label>
-                            <select asp-for="House.WallTypeId" id="HouseWallTypeId" class="form-control" asp-items="Model.WallTypeList"></select>
+                            <select asp-for="House.WallTypeId" id="HouseWallTypeId" class="form-control" asp-items="@Model.WallTypeList"></select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="House.RoofTypeId" class="control-label">Roof Type</label>
-                            <select asp-for="House.RoofTypeId" id="HouseRoofTypeId" class="form-control" asp-items="Model.RoofTypeList"></select>
+                            <select asp-for="House.RoofTypeId" id="HouseRoofTypeId" class="form-control" asp-items="@Model.RoofTypeList"></select>
                         </div>
                     </div>
                 </div>
@@ -491,7 +492,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="HouseCoverTypeId" class="control-label"></label>
-                                <select asp-for="HouseCoverTypeId" id="HouseCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
+                                <select asp-for="HouseCoverTypeId" id="HouseCoverTypeId" class="form-control" asp-items="@Model.CoverTypeList"></select>
                             </div>
                         </div>
                     </div>
@@ -526,7 +527,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Motor.BodyTypeId" class="control-label">Body Type</label>
-                            <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="Model.BodyTypeList"></select>
+                            <select asp-for="Motor.BodyTypeId" id="BodyTypeId" class="form-control" asp-items="@Model.BodyTypeList"></select>
                         </div>
                     </div>
                     <div class="col-4">
@@ -540,19 +541,19 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label asp-for="MotorMakeId" class="control-label">Make</label>
-                            <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="Model.MotorMakeList"></select>
+                            <select asp-for="MotorMakeId" id="MotorMakeId" class="form-control" asp-items="@Model.MotorMakeList"></select>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-group">
                             <label asp-for="Motor.MotorModelId" class="control-label">Model</label>
-                            <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="Model.MotorModelList"></select>
+                            <select asp-for="Motor.MotorModelId" id="MotorModelId" class="form-control" asp-items="@Model.MotorModelList"></select>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-group">
                             <label asp-for="Motor.RegYear" class="control-label">Year</label>
-                            <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="Model.DateRangeList"></select>
+                            <select asp-for="Motor.RegYear" id="RegYear" class="form-control" asp-items="@Model.DateRangeList"></select>
                         </div> 
                     </div>
                 </div>
@@ -560,7 +561,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label asp-for="Motor.DriverTypeId" class="control-label">Driver Type</label>
-                            <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="Model.DriverTypeList"></select>
+                            <select asp-for="Motor.DriverTypeId" id="DriverTypeId" class="form-control" asp-items="@Model.DriverTypeList"></select>
                         </div>
                     </div>
                     <div class="col-4">
@@ -600,7 +601,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label asp-for="Motor.MotorUseId" class="control-label">Motor Use</label>
-                            <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="Model.MotorUseList"></select>
+                            <select asp-for="Motor.MotorUseId" id="MotorUseId" class="form-control" asp-items="@Model.MotorUseList"></select>
                         </div>
                         <div class="form-group">
                             <label asp-for="Motor.FinancialInterest" class="control-label">Financial Interest</label>
@@ -673,7 +674,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="MotorCoverTypeId" class="control-label"></label>
-                                <select asp-for="MotorCoverTypeId" id="MotorCoverTypeId" class="form-control" asp-items="Model.CoverTypeList"></select>
+                                <select asp-for="MotorCoverTypeId" id="MotorCoverTypeId" class="form-control" asp-items="@Model.CoverTypeList"></select>
                             </div>
                         </div>
                     </div>
@@ -682,6 +683,168 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="btnAddMotor" class="btn btn-primary" onclick="LoadMotors()">Save this record</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Travel Modal -->
+<div class="modal fade" id="travelModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="travelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="travelModalLabel">
+                    Travel
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.TitleId" class="control-label"></label>
+                            <select asp-for="Travel.TitleId" id="TravelTitleId" class="form-control" asp-items="@Model.TitleList"></select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.FirstName" class="control-label"></label>
+                            <input asp-for="Travel.FirstName" id="TravelFirstName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.LastName" class="control-label"></label>
+                            <input asp-for="Travel.LastName" id="TravelLastName" class="form-control" />
+                        </div>
+                    </div>                                        
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.BirthDate" class="control-label"></label>
+                             <input type="date" asp-for="Travel.BirthDate" id="TravelBirthDate" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.PassportNumber" class="control-label"></label>
+                            <input asp-for="Travel.PassportNumber" id="TravelPassportNumber" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.CountryId" class="control-label"></label>
+                            <select asp-for="Travel.CountryId" id="TravelCountryId" class="form-control" asp-items="@Model.CountryList"></select>
+                        </div>
+                    </div>                                        
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.PhysicalAddress" class="control-label"></label>
+                             <input asp-for="Travel.PhysicalAddress" id="TravelPhysicalAddress" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.PhysicalAddress" class="control-label"></label>
+                            <input asp-for="Travel.PhysicalAddress" id="TravelPhysicalAddress" class="form-control" />
+                        </div>
+                    </div>                                       
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.Email" class="control-label"></label>
+                             <input asp-for="Travel.Email" id="TravelEmail" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.Phone" class="control-label"></label>
+                            <input asp-for="Travel.Phone" id="TravelPhone" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.Mobile" class="control-label"></label>
+                            <input asp-for="Travel.Mobile" id="TravelMobile" class="form-control" />
+                        </div>
+                    </div>                                        
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.DepartureDate" class="control-label"></label>
+                             <input type="date" asp-for="Travel.DepartureDate" id="TravelDepartureDate" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.ReturnDate" class="control-label"></label>
+                            <input type="date" asp-for="Travel.ReturnDate" id="TravelReturnDate" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.Destination" class="control-label"></label>
+                             <input asp-for="Travel.Destination" id="TravelDestination" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.PersonVisited" class="control-label"></label>
+                            <input asp-for="Travel.PersonVisited" id="TravelPersonVisited" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.Beneficiary" class="control-label"></label>
+                            <input asp-for="Travel.Beneficiary" id="TravelBeneficiary" class="form-control" />
+                        </div>
+                    </div>  
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.DoctorName" class="control-label"></label>
+                             <input asp-for="Travel.DoctorName" id="TravelDoctorName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="Travel.DoctorPhone" class="control-label"></label>
+                            <input asp-for="Travel.DoctorPhone" id="TravelDoctorPhone" class="form-control" />
+                        </div>
+                    </div> 
+                </div>
+                <div class="row mb-3 px-3">
+                    <button id="btnAdditionalMembers" class="btn btn-secondary" type="button">Additional Members</button>
+                </div>
+                <div id="AdditionalMembers" class="row mb-3 px-3"></div>
+                <div class="container border bg-light p-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="TravelSumInsured" class="control-label"></label>
+                                <input asp-for="TravelSumInsured" id="TravelSumInsured" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="TravelCoverTypeId" class="control-label"></label>
+                                <select asp-for="TravelCoverTypeId" id="TravelCoverTypeId" class="form-control" asp-items="@Model.CoverTypeList" ></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnAddTravel" class="btn btn-primary" onclick="LoadTravel()">Save this record</button>
             </div>
         </div>
     </div>
@@ -700,6 +863,8 @@
         var quoteItems = [];
         var riskItems = [];
         var quoteId = uuidv4();
+        var maxRows = 10;
+        var x = 1;
 
         function uuidv4() {
             return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -709,6 +874,20 @@
 
         $(document).ready(function () {
             // Do something here
+        });
+
+        $('#btnAdditionalMembers').click(function(e) {
+            e.preventDefault();
+
+            $('#AdditionalMembers').append($('<div id="MembersFields"><div>')
+                .append($('<input type="text" placeholder="First Name">').addClass('form-control'))
+                .append($('<a>').attr('href', '#')
+                                    .append($('<span>&minus;</span>').addClass('btn btn-danger btn-sm float-right delete'))))
+        });
+
+        $('#AdditionalMembers').on('click', '.delete', function() {
+            console.log('Click! 1');
+            $(this).parent(this).parent('div').remove();
         });
 
         $("#MotorMakeId").change(function () {

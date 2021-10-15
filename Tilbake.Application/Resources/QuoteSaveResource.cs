@@ -88,18 +88,27 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Motor Make")]
         public Guid MotorMakeId { get; set; }
 
+        //  Travel
+        [Display(Name = "Sum Insured")]
+        public decimal TravelSumInsured { get; set; }
+
+        [Display(Name = "Cover Type")]
+        public Guid TravelCoverTypeId { get; set; }
+
         //  Risks
         public AllRisk AllRisk { get; set; }
         public Building Building { get; set; }
         public Content Content { get; set; }
         public House House { get; set; }
         public Motor Motor { get; set; }
+        public TravelResource Travel { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }
         public SelectList QuoteStatusList { get; set; }
         public SelectList BodyTypeList { get; set; }
         public SelectList BuildingConditionList { get; set; }
+        public SelectList CountryList { get; set; }
         public SelectList DayList { get; set; }
         public SelectList DriverTypeList { get; set; }
         public SelectList HouseConditionList { get; set; }
@@ -109,6 +118,7 @@ namespace Tilbake.Application.Resources
         public SelectList ResidenceTypeList { get; set; }
         public SelectList ResidenceUseList { get; set; }
         public SelectList RoofTypeList { get; set; }
+        public SelectList TitleList { get; set; }
         public SelectList WallTypeList { get; set; }
         public SelectList DateRangeList { get; set; }
     }

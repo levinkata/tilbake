@@ -57,7 +57,7 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Beneficiary")]
         public string Beneficiary { get; set; }
 
-        [Display(Name = "Doctor's name")]
+        [Display(Name = "Doctor's Name")]
         public string DoctorName { get; set; }
 
         [Display(Name = "Doctor's Phone")]

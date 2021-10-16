@@ -787,6 +787,7 @@
         var portfolioClientId = '@Model.PortfolioClientId';
         var clientId = '@Model.ClientId';
         var portfolioId = '@Model.PortfolioId';
+        var countryList = '@Model.CountryList';
         var allRisks = [];
         var buildings = [];
         var contents = [];
@@ -811,15 +812,20 @@
         $('#btnAdditionalMembers').click(function(e) {
             e.preventDefault();
 
-            $('#AdditionalMembers').append($('<div id="MembersFields">')
-                .append($('<input type="text" placeholder="First Name">').addClass('form-control'))
-                .append($('<a>').attr('href', '#')
-                .append($('<span>&minus;</span>').addClass('btn btn-danger btn-sm float-right delete'))))
+            $('#AdditionalMembers').append(`
+                <div class="input-group form-group">
+                    <input type="text" id="FirstName" asp-for="Travel.TravelBeneficiaries[].FirstName" placeholder="First Name" class="form-control form-control-sm" />
+                    <input type="text" id="LastName" asp-for="Travel.TravelBeneficiaries[].LastName" placeholder="Last Name" class="form-control form-control-sm" />
+                    <input type="date" id="BirthDate" asp-for="Travel.TravelBeneficiaries[].BirthDate" placeholder="Birth Date" class="form-control form-control-sm" />
+                    <input type="text" id="PassportNumber" asp-for="Travel.TravelBeneficiaries[].PassportNumber" placeholder="Passport Number" class="form-control form-control-sm" />
+                    <select asp-for="Travel.TravelBeneficiaries[].CountryId" id="CountryId" class="form-control form-control-sm" asp-items="@Model.CountryList" ></select>
+                    <span class="btn btn-danger btn-sm float-right delete">&minus;</span>
+                </div>
+            `);
         });
 
         $('#AdditionalMembers').on('click', '.delete', function() {
-            console.log('Click! 1');
-            $(this).parent(this).parent('div').remove();
+            $(this).parent('div').remove();
         });
 
         $("#MotorMakeId").change(function () {

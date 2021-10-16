@@ -811,10 +811,10 @@
         $('#btnAdditionalMembers').click(function(e) {
             e.preventDefault();
 
-            $('#AdditionalMembers').append($('<div id="MembersFields"><div>')
+            $('#AdditionalMembers').append($('<div id="MembersFields">')
                 .append($('<input type="text" placeholder="First Name">').addClass('form-control'))
                 .append($('<a>').attr('href', '#')
-                                    .append($('<span>&minus;</span>').addClass('btn btn-danger btn-sm float-right delete'))))
+                .append($('<span>&minus;</span>').addClass('btn btn-danger btn-sm float-right delete'))))
         });
 
         $('#AdditionalMembers').on('click', '.delete', function() {

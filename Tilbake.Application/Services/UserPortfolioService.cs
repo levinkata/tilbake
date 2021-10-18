@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -29,17 +30,27 @@ namespace Tilbake.Application.Services
 
             List<AspnetUserPortfolio> aspnetUserPortfolios = new();
 
-            int ro = resources.PortfolioIds.Length;
+            //int ro = resources.PortfolioIds.Length;
 
             var aspNetUserId = resources.UserId;
             var portfolioIds = resources.PortfolioIds;
 
-            for (int i = 0; i < ro; i++)
+/*             for (int i = 0; i < ro; i++)
             {
                 AspnetUserPortfolio aspnetUserPortfolio = new()
                 {
                     AspNetUserId = aspNetUserId,
                     PortfolioId = Guid.Parse(portfolioIds[i].ToString())
+                };
+                aspnetUserPortfolios.Add(aspnetUserPortfolio);
+            } */
+
+            foreach (var portfolioId in portfolioIds)
+            {
+                AspnetUserPortfolio aspnetUserPortfolio = new()
+                {
+                    AspNetUserId = aspNetUserId,
+                    PortfolioId = Guid.Parse(portfolioId.ToString())
                 };
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
@@ -57,16 +68,26 @@ namespace Tilbake.Application.Services
 
             List<AspnetUserPortfolio> aspnetUserPortfolios = new();
 
-            int ro = resources.PortfolioIds.Length;
+            //int ro = resources.PortfolioIds.Length;
             var aspNetUserId = resources.UserId;
             var portfolioIds = resources.PortfolioIds;
 
-            for (int i = 0; i < ro; i++)
+/*             for (int i = 0; i < ro; i++)
             {
                 AspnetUserPortfolio aspnetUserPortfolio = new()
                 {
                     AspNetUserId = aspNetUserId,
                     PortfolioId = Guid.Parse(portfolioIds[i].ToString())
+                };
+                aspnetUserPortfolios.Add(aspnetUserPortfolio);
+            } */
+
+            foreach (var portfolioId in portfolioIds)
+            {
+                AspnetUserPortfolio aspnetUserPortfolio = new()
+                {
+                    AspNetUserId = aspNetUserId,
+                    PortfolioId = Guid.Parse(portfolioId.ToString())
                 };
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
@@ -77,7 +98,19 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
         {
-            var result = await  _unitOfWork.UserPortfolios.GetByNotUserIdAsync(aspNetUserId);
+/*             return await _context.Portfolios
+                    .Where(c => !c.AspnetUserPortfolios
+                    .Any(u => u.AspNetUserId == aspNetUserId))
+                    .Include(c => c.PortfolioClients)
+                    .OrderBy(n => n.Name).AsNoTracking().ToListAsync(); */
+
+            var result = await _unitOfWork.Portfolios.GetAllAsync(
+                                            r => !r.AspnetUserPortfolios
+                                            .Any(r => r.AspNetUserId == aspNetUserId),
+                                            r => r.OrderBy(n => n.Name),
+                                            r => r.PortfolioClients);
+
+            // var result = await  _unitOfWork.UserPortfolios.GetByNotUserIdAsync(aspNetUserId);
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
 
             return resources;
@@ -85,9 +118,20 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId)
         {
-            var result = await _unitOfWork.UserPortfolios.GetByUserIdAsync(aspNetUserId);
-            var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
+/*             return await _context.Portfolios
+                                .Where(c => c.AspnetUserPortfolios
+                                .Any(p => p.AspNetUserId == aspNetUserId))
+                                .Include(c => c.PortfolioClients)
+                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync(); */
 
+            var result = await _unitOfWork.Portfolios.GetAllAsync(
+                                            r => r.AspnetUserPortfolios
+                                            .Any(r => r.AspNetUserId == aspNetUserId),
+                                            r => r.OrderBy(n => n.Name),
+                                            r => r.PortfolioClients);
+
+            //var result = await _unitOfWork.UserPortfolios.GetByUserIdAsync(aspNetUserId);
+            var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
             return resources;
         }
     }

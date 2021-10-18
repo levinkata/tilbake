@@ -5,6 +5,6 @@ namespace Tilbake.Application.Resources
 {
     public class InsurerResource : BaseResource
     {
-        public List<InsurerBranch> InsurerBranches { get; } = new List<InsurerBranch>();
+        public List<InsurerBranch> InsurerBranches { get; } = new();
     }
 }

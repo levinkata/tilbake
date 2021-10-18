@@ -18,7 +18,9 @@ namespace Tilbake.Application.Mapping
                     .ForMember(dest => dest.PortfolioName, opt => opt.MapFrom(src => src.Portfolio.Name)).ReverseMap();
 
             CreateMap<Audit, AuditResource>().ReverseMap();
-            CreateMap<Bank, BankResource>().ReverseMap();
+            
+            CreateMap<Bank, BankResource>()
+            .ForMember(dest => dest.BankBranches, opt => opt.MapFrom(src => src.BankBranches)).ReverseMap();
 
             CreateMap<BankBranch, BankBranchResource>()
                     .ForMember(dest => dest.Bank, opt => opt.MapFrom(src => src.Bank)).ReverseMap();

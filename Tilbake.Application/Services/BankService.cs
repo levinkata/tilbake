@@ -48,7 +48,8 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Banks.GetAllAsync(
                                             null,
-                                            r => r.OrderBy(p => p.Name));
+                                            r => r.OrderBy(p => p.Name),
+                                            r => r.BankBranches);
 
             var resources = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankResource>>(result);
             return resources;
@@ -56,7 +57,10 @@ namespace Tilbake.Application.Services
 
         public async Task<BankResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Banks.GetByIdAsync(id);
+            var result = await _unitOfWork.Banks.GetFirstOrDefaultAsync(
+                                            r => r.Id == id,
+                                            r => r.BankBranches);
+
             var resource = _mapper.Map<Bank, BankResource>(result);
 
             return resource;

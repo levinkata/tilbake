@@ -26,24 +26,24 @@ namespace Tilbake.Application.Services
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
 
-            var existingClientCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
+            var existingCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
                                                 r => r.ClientId == clientId);
 
-            if(existingClientCarriers.Any())
+            if(existingCarriers.Any())
             {
-                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingClientCarriers);
+                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingCarriers);
             }
 
             if(carrierIds.Any())
             {
                 List<ClientCarrier> clientCarriers = new();
 
-                foreach (var item in carrierIds)
+                foreach (var carrierId in carrierIds)
                 {
                     ClientCarrier clientCarrier = new()
                     {
                         ClientId = clientId,
-                        CarrierId = item,
+                        CarrierId = carrierId,
                         DateAdded = DateTime.Now
                     };
                     clientCarriers.Add(clientCarrier);
@@ -58,24 +58,24 @@ namespace Tilbake.Application.Services
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
 
-            var existingClientCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
+            var existingCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
                                                 r => r.ClientId == clientId);
 
-            if(existingClientCarriers.Any())
+            if(existingCarriers.Any())
             {
-                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingClientCarriers);
+                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingCarriers);
             }
 
             if(carrierIds.Any())
             {
                 List<ClientCarrier> clientCarriers = new();
 
-                foreach (var item in carrierIds)
+                foreach (var carrierId in carrierIds)
                 {
                     ClientCarrier clientCarrier = new()
                     {
                         ClientId = clientId,
-                        CarrierId = item,
+                        CarrierId = carrierId,
                         DateAdded = DateTime.Now
                     };
                     clientCarriers.Add(clientCarrier);

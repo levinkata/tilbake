@@ -15,22 +15,22 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
         }
 
-        public async Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId)
+/*         public async Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId)
         {
-            return await Task.Run(() => _context.Portfolios
-                                                .Where(c => !c.AspnetUserPortfolios
-                                                .Any(u => u.AspNetUserId == aspNetUserId))
-                                                .Include(c => c.PortfolioClients)
-                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
+            return await _context.Portfolios
+                                .Where(c => !c.AspnetUserPortfolios
+                                .Any(u => u.AspNetUserId == aspNetUserId))
+                                .Include(c => c.PortfolioClients)
+                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync();
         }
-
-        public async Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId)
+ */
+/*         public async Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId)
         {
-            return await Task.Run(() => _context.Portfolios
-                                                .Where(c => c.AspnetUserPortfolios
-                                                .Any(p => p.AspNetUserId == aspNetUserId))
-                                                .Include(c => c.PortfolioClients)
-                                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync());
-        }
+            return await _context.Portfolios
+                                .Where(c => c.AspnetUserPortfolios
+                                .Any(p => p.AspNetUserId == aspNetUserId))
+                                .Include(c => c.PortfolioClients)
+                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync();
+        } */
     }
 }

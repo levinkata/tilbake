@@ -46,7 +46,6 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
         IMotorRepository Motors { get; }
         IMotorMakeRepository MotorMakes { get; }
         IMotorModelRepository MotorModels { get; }
-        IMotorUseRepository MotorUses { get; }
         IOccupationRepository Occupations { get; }
         IPaymentMethodRepository PaymentMethods { get; }
         IPaymentTypeRepository PaymentTypes { get; }

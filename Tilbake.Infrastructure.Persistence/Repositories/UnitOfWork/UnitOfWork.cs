@@ -55,7 +55,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             Motors = new MotorRepository(_context);
             MotorMakes = new MotorMakeRepository(_context);
             MotorModels = new MotorModelRepository(_context);
-            MotorUses = new MotorUseRepository(_context);
             Occupations = new OccupationRepository(_context);
             PaymentMethods = new PaymentMethodRepository(_context);
             PaymentTypes = new PaymentTypeRepository(_context);
@@ -134,7 +133,6 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IMotorRepository Motors { get; private set; }
         public IMotorMakeRepository MotorMakes { get; private set; }
         public IMotorModelRepository MotorModels { get; private set; }
-        public IMotorUseRepository MotorUses { get; private set; }
         public IOccupationRepository Occupations { get; private set; }
         public IPaymentMethodRepository PaymentMethods { get; private set; }
         public IPaymentTypeRepository PaymentTypes { get; private set; }

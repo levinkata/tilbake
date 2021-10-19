@@ -46,7 +46,7 @@ namespace Tilbake.Application.Resources
         public string Colour { get; set; }
 
         [Display(Name = "Motor Use")]
-        public Guid MotorUseId { get; set; }
+        public bool IsPrivateOrBusiness { get; set; }
 
         [Display(Name = "Grey Import?")]
         public bool IsImport { get; set; }
@@ -98,7 +98,6 @@ namespace Tilbake.Application.Resources
         public SelectList DriverTypeList { get; set; }
         public SelectList MotorMakeList { get; set; }
         public SelectList MotorModelList { get; set; }
-        public SelectList MotorUseList { get; set; }
         public SelectList DateRangeList { get; set; }
     }
 }

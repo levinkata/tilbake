@@ -111,7 +111,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<MotorMake> MotorMakes { get; set; }
         public virtual DbSet<MotorModel> MotorModels { get; set; }
         public virtual DbSet<MotorRadio> MotorRadios { get; set; }
-        public virtual DbSet<MotorUse> MotorUses { get; set; }
         public virtual DbSet<Occupation> Occupations { get; set; }
         public virtual DbSet<Payable> Payables { get; set; }
         public virtual DbSet<PayableRequisition> PayableRequisitions { get; set; }
@@ -183,15 +182,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-/*         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-            }
-        } */
-
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaveChanges(_userId);
@@ -260,7 +250,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>
@@ -2310,12 +2300,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.MotorModelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Motor_MotorModel");
-
-                entity.HasOne(d => d.MotorUse)
-                    .WithMany(p => p.Motors)
-                    .HasForeignKey(d => d.MotorUseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Motor_MotorUse");
             });
 
             modelBuilder.Entity<MotorAccessory>(entity =>
@@ -2364,12 +2348,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.RegistrationNumber)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.HasOne(d => d.MotorUse)
-                    .WithMany(p => p.MotorCycles)
-                    .HasForeignKey(d => d.MotorUseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MotorCycle_MotorUse");
             });
 
             modelBuilder.Entity<MotorCycleType>(entity =>
@@ -2491,21 +2469,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasForeignKey(d => d.MotorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MotorRadio_Motor");
-            });
-
-            modelBuilder.Entity<MotorUse>(entity =>
-            {
-                entity.ToTable("MotorUse");
-
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.DateAdded).HasColumnType("datetime");
-
-                entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Occupation>(entity =>
@@ -3219,6 +3182,8 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
                 entity.Property(e => e.InternalInfo).HasMaxLength(150);
+
+                entity.Property(e => e.PaymentTypeId).HasDefaultValueSql("(N'70d0d854-75b6-4f61-a039-8a21acd2c3d0')");
 
                 entity.Property(e => e.QuoteDate).HasColumnType("date");
 

@@ -45,7 +45,7 @@ namespace Tilbake.Application.Resources
         public string Colour { get; set; }
 
         [Display(Name = "Motor Use")]
-        public Guid MotorUseId { get; set; }
+        public bool IsPrivateOrBusiness { get; set; }
 
         [Display(Name = "Grey Import?")]
         public bool IsImport { get; set; }
@@ -90,9 +90,6 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Model")]
         public string MotorModel { get; set; }
-
-        [Display(Name = "Motor Use")]
-        public string MotorUse { get; set; }
 
         //  SelectLists
 

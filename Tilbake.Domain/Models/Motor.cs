@@ -26,7 +26,7 @@ namespace Tilbake.Domain.Models
         public int OdometerReading { get; set; }
         public int ClaimFreeGroup { get; set; }
         public string Colour { get; set; }
-        public Guid MotorUseId { get; set; }
+        public bool IsPrivateOrBusiness { get; set; }
         public bool IsImport { get; set; }
         public bool IsSecurityFitting { get; set; }
         public bool IsTrackingDevice { get; set; }
@@ -44,7 +44,6 @@ namespace Tilbake.Domain.Models
         public virtual BodyType BodyType { get; set; }
         public virtual DriverType DriverType { get; set; }
         public virtual MotorModel MotorModel { get; set; }
-        public virtual MotorUse MotorUse { get; set; }
         public virtual ICollection<ExcessBuyBack> ExcessBuyBacks { get; set; }
         public virtual ICollection<MotorAccessory> MotorAccessories { get; set; }
         public virtual ICollection<MotorImprovement> MotorImprovements { get; set; }

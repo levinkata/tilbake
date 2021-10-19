@@ -20,6 +20,7 @@ namespace Tilbake.Domain.Models
         public Guid? SalesTypeId { get; set; }
         public Guid? PolicyTypeId { get; set; }
         public Guid? PaymentMethodId { get; set; }
+        public Guid PaymentTypeId { get; set; }
         public string ClientInfo { get; set; }
         public string InternalInfo { get; set; }
         public int RunDay { get; set; }

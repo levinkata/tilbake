@@ -35,7 +35,6 @@ namespace Tilbake.MVC.Controllers
         private readonly IDriverTypeService _driverTypeService;
         private readonly IMotorMakeService _motorMakeService;
         private readonly IMotorModelService _motorModelService;
-        private readonly IMotorUseService _motorUseService;
 
         public QuoteItemsController(IQuoteItemService quoteItemService,
                                     ICoverTypeService coverTypeService,
@@ -55,8 +54,7 @@ namespace Tilbake.MVC.Controllers
                                     IBodyTypeService bodyTypeService,
                                     IDriverTypeService driverTypeService,
                                     IMotorMakeService motorMakeService,
-                                    IMotorModelService motorModelService,
-                                    IMotorUseService motorUseService)
+                                    IMotorModelService motorModelService)
         {
             _quoteItemService = quoteItemService;
             _coverTypeService = coverTypeService;
@@ -82,7 +80,6 @@ namespace Tilbake.MVC.Controllers
             _driverTypeService = driverTypeService;
             _motorMakeService = motorMakeService;
             _motorModelService = motorModelService;
-            _motorUseService = motorUseService;
         }
 
         public IActionResult Index()
@@ -193,7 +190,6 @@ namespace Tilbake.MVC.Controllers
                 var bodyTypes = await _bodyTypeService.GetAllAsync();
                 var driverTypes = await _driverTypeService.GetAllAsync();
                 var motorMakes = await _motorMakeService.GetAllAsync();
-                var motorUses = await _motorUseService.GetAllAsync();
 
                 returnView = "QuoteMotor";
                 MotorResource motorResource = resource.Motor;
@@ -209,7 +205,6 @@ namespace Tilbake.MVC.Controllers
                 motorResource.DriverTypeList = SelectLists.DriverTypes(driverTypes, motorResource.DriverTypeId);
                 motorResource.MotorMakeList = SelectLists.MotorMakes(motorMakes, selectedMotorMakeId);
                 motorResource.MotorModelList = SelectLists.MotorModels(motorModels, motorResource.MotorModelId);
-                motorResource.MotorUseList = SelectLists.MotorUses(motorUses, motorResource.MotorUseId);
                 motorResource.DateRangeList = SelectLists.RegisteredYears(motorResource.RegYear);
 
                 model = motorResource;
@@ -394,13 +389,11 @@ namespace Tilbake.MVC.Controllers
             var driverTypes = await _driverTypeService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
             var motorModels = await _motorModelService.GetByMotorMakeIdAsync(resource.MotorMakeId);
-            var motorUses = await _motorUseService.GetAllAsync();
 
             resource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", resource.BodyTypeId);
             resource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", resource.DriverTypeId);
             resource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", resource.MotorMakeId);
             resource.MotorModelList = new SelectList(motorModels, "Id", "Name", resource.MotorModelId);
-            resource.MotorUseList = new SelectList(motorUses, "Id", "Name", resource.MotorUseId);
 
             return View(resource);
         }

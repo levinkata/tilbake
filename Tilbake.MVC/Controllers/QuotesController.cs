@@ -29,7 +29,6 @@ namespace Tilbake.MVC.Controllers
         private readonly IHouseConditionService _houseConditionService;
         private readonly IMotorMakeService _motorMakeService;
         private readonly IMotorModelService _motorModelService;
-        private readonly IMotorUseService _motorUseService;
         private readonly IResidenceTypeService _residenceTypeService;
         private readonly IResidenceUseService _residenceUseService;
         private readonly IRoofTypeService _roofTypeService;
@@ -54,7 +53,6 @@ namespace Tilbake.MVC.Controllers
                                 IHouseConditionService houseConditionService,
                                 IMotorMakeService motorMakeService,
                                 IMotorModelService motorModelService,
-                                IMotorUseService motorUseService,
                                 IResidenceTypeService residenceTypeService,
                                 IResidenceUseService residenceUseService,
                                 IRoofTypeService roofTypeService,
@@ -79,7 +77,6 @@ namespace Tilbake.MVC.Controllers
             _houseConditionService = houseConditionService;
             _motorMakeService = motorMakeService;
             _motorModelService = motorModelService;
-            _motorUseService = motorUseService;
             _residenceTypeService = residenceTypeService;
             _residenceUseService = residenceUseService;
             _roofTypeService = roofTypeService;
@@ -188,7 +185,6 @@ namespace Tilbake.MVC.Controllers
             var motorMakes = await _motorMakeService.GetAllAsync();
             var motorMakeId = motorMakes.FirstOrDefault().Id;
             var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
-            var motorUses = await _motorUseService.GetAllAsync();
             var residenceTypes = await _residenceTypeService.GetAllAsync();
             var residenceUses = await _residenceUseService.GetAllAsync();
             var roofTypes = await _roofTypeService.GetAllAsync();
@@ -215,7 +211,6 @@ namespace Tilbake.MVC.Controllers
                 HouseConditionList = SelectLists.HouseConditions(houseConditions, Guid.Empty),
                 MotorMakeList = SelectLists.MotorMakes(motorMakes, Guid.Empty),
                 MotorModelList = SelectLists.MotorModels(motorModels, Guid.Empty),
-                MotorUseList = SelectLists.MotorUses(motorUses, Guid.Empty),
                 ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, Guid.Empty),
                 ResidenceUseList = SelectLists.ResidenceUses(residenceUses, Guid.Empty),
                 RoofTypeList = SelectLists.RoofTypes(roofTypes, Guid.Empty),

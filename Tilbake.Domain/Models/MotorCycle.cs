@@ -14,7 +14,7 @@ namespace Tilbake.Domain.Models
         public string RegistrationNumber { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
-        public Guid MotorUseId { get; set; }
+        public bool IsPrivateOrBusiness { get; set; }
         public bool IsAlarm { get; set; }
         public bool IsTrackingDevice { get; set; }
         public bool IsLockedInGarage { get; set; }
@@ -24,7 +24,6 @@ namespace Tilbake.Domain.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual MotorUse MotorUse { get; set; }
         public virtual ICollection<Risk> Risks { get; set; }
     }
 }

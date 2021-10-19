@@ -44,7 +44,6 @@ namespace Tilbake.Application.Mapping
             CreateMap<MotorSaveResource, Motor>();
             CreateMap<MotorMakeSaveResource, MotorMake>();
             CreateMap<MotorModelSaveResource, MotorModel>();
-            CreateMap<MotorUseSaveResource, MotorUse>();
             CreateMap<OccupationSaveResource, Occupation>();
             CreateMap<PaymentMethodSaveResource, PaymentMethod>();
             CreateMap<PaymentTypeSaveResource, PaymentType>();

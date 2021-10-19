@@ -301,21 +301,6 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", motorModelId);
         }
 
-        public static SelectList MotorUses(IEnumerable<MotorUseResource> motorUses, Guid? motorUseId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Motor Use", Value = "" });
-
-            foreach (var item in motorUses)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (motorUseId == Guid.Empty || String.IsNullOrEmpty(motorUseId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", motorUseId);
-        }
-
         public static SelectList Occupations(IEnumerable<OccupationResource> occupations, Guid? occupationId)
         {
             List<SelectListItem> items = new();

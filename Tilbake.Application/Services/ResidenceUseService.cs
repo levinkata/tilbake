@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ResidenceUseResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ResidenceUses.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.ResidenceUses.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<ResidenceUse>, IEnumerable<ResidenceUseResource>>(result);
 
@@ -57,9 +58,9 @@ namespace Tilbake.Application.Services
         public async Task<ResidenceUseResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.ResidenceUses.GetByIdAsync(id);
-            var resources = _mapper.Map<ResidenceUse, ResidenceUseResource>(result);
+            var resource = _mapper.Map<ResidenceUse, ResidenceUseResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(ResidenceUseResource resource)

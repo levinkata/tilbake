@@ -45,8 +45,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceStatusResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.InvoiceStatuses.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.InvoiceStatuses.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<InvoiceStatus>, IEnumerable<InvoiceStatusResource>>(result);
 

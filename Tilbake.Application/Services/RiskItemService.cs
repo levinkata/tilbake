@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<RiskItemResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.RiskItems.GetAllAsync();
-            result = result.OrderBy(n => n.Description);
+            var result = await _unitOfWork.RiskItems.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Description));
 
             var resources = _mapper.Map<IEnumerable<RiskItem>, IEnumerable<RiskItemResource>>(result);
 
@@ -57,9 +58,9 @@ namespace Tilbake.Application.Services
         public async Task<RiskItemResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.RiskItems.GetByIdAsync(id);
-            var resources = _mapper.Map<RiskItem, RiskItemResource>(result);
+            var resource = _mapper.Map<RiskItem, RiskItemResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(RiskItemResource resource)

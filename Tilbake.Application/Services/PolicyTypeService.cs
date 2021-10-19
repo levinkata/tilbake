@@ -45,8 +45,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PolicyTypes.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.PolicyTypes.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<PolicyType>, IEnumerable<PolicyTypeResource>>(result);
 
@@ -56,9 +57,9 @@ namespace Tilbake.Application.Services
         public async Task<PolicyTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.PolicyTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<PolicyType, PolicyTypeResource>(result);
+            var resource = _mapper.Map<PolicyType, PolicyTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(PolicyTypeResource resource)

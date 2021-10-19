@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<MaritalStatusResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.MaritalStatuses.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.MaritalStatuses.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<MaritalStatus>, IEnumerable<MaritalStatusResource>>(result);
 
@@ -57,9 +58,9 @@ namespace Tilbake.Application.Services
         public async Task<MaritalStatusResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.MaritalStatuses.GetByIdAsync(id);
-            var resources = _mapper.Map<MaritalStatus, MaritalStatusResource>(result);
+            var resource = _mapper.Map<MaritalStatus, MaritalStatusResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(MaritalStatusResource resource)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +22,17 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(CarrierSaveResource resource)
+        public async Task<CarrierResource> AddAsync(CarrierSaveResource resource)
         {
             var carrier = _mapper.Map<CarrierSaveResource, Carrier>(resource);
             carrier.Id = Guid.NewGuid();
             carrier.DateAdded = DateTime.Now;
 
             await _unitOfWork.Carriers.AddAsync(carrier);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Carrier, CarrierResource>(carrier);
+            return result;
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -64,13 +68,16 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(CarrierResource resource)
+        public async Task<CarrierResource> UpdateAsync(CarrierResource resource)
         {
             var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
             carrier.DateModified = DateTime.Now;
 
             await _unitOfWork.Carriers.UpdateAsync(resource.Id, carrier);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Carrier, CarrierResource>(carrier);
+            return result;
         }
     }
 }

@@ -45,20 +45,20 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<DocumentTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.DocumentTypes.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.DocumentTypes.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<DocumentType>, IEnumerable<DocumentTypeResource>>(result);
-
             return resources;
         }
 
         public async Task<DocumentTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.DocumentTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<DocumentType, DocumentTypeResource>(result);
+            var resource = _mapper.Map<DocumentType, DocumentTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(DocumentTypeResource resource)

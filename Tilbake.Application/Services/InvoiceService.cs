@@ -21,15 +21,10 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(InvoiceSaveResource resource)
+        public async Task<InvoiceResource> AddAsync(InvoiceSaveResource resource)
         {
             var policyId = resource.PolicyId;
             var policyRisks = await _unitOfWork.PolicyRisks.GetAllAsync(r => r.PolicyId == policyId);
-
-            if (resource == null)
-            {
-                throw new ArgumentNullException(nameof(resource));
-            }
 
             var invoice = _mapper.Map<InvoiceSaveResource, Invoice>(resource);
 
@@ -61,7 +56,10 @@ namespace Tilbake.Application.Services
                 invoiceItems.Add(invoiceItem);
             }
             await _unitOfWork.InvoiceItems.AddRangeAsync(invoiceItems);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Invoice, InvoiceResource>(invoice);
+            return result;
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -123,7 +121,7 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(InvoiceResource resource)
+        public async Task<InvoiceResource> UpdateAsync(InvoiceResource resource)
         {
             var invoice = _mapper.Map<InvoiceResource, Invoice>(resource);
 
@@ -138,7 +136,10 @@ namespace Tilbake.Application.Services
 
             await _unitOfWork.Invoices.UpdateAsync(resource.Id, invoice);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Invoice, InvoiceResource>(invoice);
+            return result;
         }
     }
 }

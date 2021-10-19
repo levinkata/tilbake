@@ -45,8 +45,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BodyTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.BodyTypes.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.BodyTypes.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<BodyType>, IEnumerable<BodyTypeResource>>(result);
 

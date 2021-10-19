@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<RoofTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.RoofTypes.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.RoofTypes.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<RoofType>, IEnumerable<RoofTypeResource>>(result);
 
@@ -57,9 +58,9 @@ namespace Tilbake.Application.Services
         public async Task<RoofTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.RoofTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<RoofType, RoofTypeResource>(result);
+            var resource = _mapper.Map<RoofType, RoofTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(RoofTypeResource resource)

@@ -45,8 +45,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<DriverTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.DriverTypes.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.DriverTypes.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<DriverType>, IEnumerable<DriverTypeResource>>(result);
 
@@ -56,9 +57,9 @@ namespace Tilbake.Application.Services
         public async Task<DriverTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.DriverTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<DriverType, DriverTypeResource>(result);
+            var resource = _mapper.Map<DriverType, DriverTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(DriverTypeResource resource)

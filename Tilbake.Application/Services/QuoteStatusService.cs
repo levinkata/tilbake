@@ -45,8 +45,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteStatusResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.QuoteStatuses.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.QuoteStatuses.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<QuoteStatus>, IEnumerable<QuoteStatusResource>>(result);
 
@@ -56,9 +57,9 @@ namespace Tilbake.Application.Services
         public async Task<QuoteStatusResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.QuoteStatuses.GetByIdAsync(id);
-            var resources = _mapper.Map<QuoteStatus, QuoteStatusResource>(result);
+            var resource = _mapper.Map<QuoteStatus, QuoteStatusResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(QuoteStatusResource resource)

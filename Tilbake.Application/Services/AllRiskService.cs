@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<AllRiskResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.AllRisks.GetAllAsync();
-            result = result.OrderBy(n => n.RiskItem.Description);
+            var result = await _unitOfWork.AllRisks.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.RiskItem.Description));
 
             var resources = _mapper.Map<IEnumerable<AllRisk>, IEnumerable<AllRiskResource>>(result);
 

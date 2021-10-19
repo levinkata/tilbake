@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<WallTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.WallTypes.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.WallTypes.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<WallType>, IEnumerable<WallTypeResource>>(result);
 
@@ -57,9 +58,9 @@ namespace Tilbake.Application.Services
         public async Task<WallTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.WallTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<WallType, WallTypeResource>(result);
+            var resource = _mapper.Map<WallType, WallTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(WallTypeResource resource)

@@ -21,13 +21,9 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(QuoteObjectResource resource)
+        public async Task<QuoteResource> AddAsync(QuoteObjectResource resource)
         {
             var quoteItems = resource.QuoteItems;
-            if(quoteItems == null)
-            {
-                return -1;
-            }
 
             var taxes = await _unitOfWork.Taxes.GetAllAsync(
                                             null,
@@ -46,10 +42,8 @@ namespace Tilbake.Application.Services
             if (branch != null)
             {
                 quote.InsurerBranchId = branch.Id;
-            } else
-            {
-                return -1;
             }
+            
             await _unitOfWork.Quotes.AddAsync(quote);
             var quoteId = quote.Id;
 
@@ -325,7 +319,10 @@ namespace Tilbake.Application.Services
             }
 
             await _unitOfWork.QuoteItems.AddRangeAsync(quoteItems);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Quote, QuoteResource>(quote);
+            return result;
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -478,13 +475,16 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(QuoteResource resource)
+        public async Task<QuoteResource> UpdateAsync(QuoteResource resource)
         {
             var quote = _mapper.Map<QuoteResource, Quote>(resource);
             quote.DateModified = DateTime.Now;
 
             await _unitOfWork.Quotes.UpdateAsync(resource.Id, quote);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Quote, QuoteResource>(quote);
+            return result;
         }
     }
 }

@@ -53,8 +53,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Portfolios.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.Portfolios.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioResource>>(result);
 
@@ -63,9 +64,12 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Portfolios.GetByIdAsync(id);
-            var resources = _mapper.Map<Portfolio, PortfolioResource>(result);
-            return resources;
+            var result = await _unitOfWork.Portfolios.GetFirstOrDefaultAsync(
+                                            r => r.Id == id,
+                                            r => r.PortfolioClients);
+                                            
+            var resource = _mapper.Map<Portfolio, PortfolioResource>(result);
+            return resource;
         }
 
         public async Task<int> UpdateAsync(PortfolioResource resource)

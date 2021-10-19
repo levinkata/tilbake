@@ -21,13 +21,9 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PolicyObjectResource resource)
+        public async Task<PolicyResource> AddAsync(PolicyObjectResource resource)
         {
             var policyRisks = resource.PolicyRisks;
-            if (policyRisks == null)
-            {
-                throw new NullReferenceException(nameof(policyRisks));
-            }
 
             var clientId = resource.ClientId;
 
@@ -209,7 +205,10 @@ namespace Tilbake.Application.Services
             }
 
             await _unitOfWork.PolicyRisks.AddRangeAsync(policyRisks);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+            
+            var result = _mapper.Map<Policy, PolicyResource>(policy);
+            return result;
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -239,10 +238,12 @@ namespace Tilbake.Application.Services
                                         e => e.SalesType);
 
             //  Skip top record as this is collecting historical policies
-            result = result.Skip(1);
+            //result = result.Skip(1);
             
             var resources = _mapper.Map<IEnumerable<Policy>, IEnumerable<PolicyResource>>(result);
-            return resources;
+
+            //  Skip top record as this is collecting historical policies
+            return resources.Skip(1);
         }
 
         public async Task<PolicyResource> GetByIdAsync(Guid id)
@@ -257,8 +258,8 @@ namespace Tilbake.Application.Services
                                         e => e.PolicyType,
                                         e => e.SalesType);
 
-            var resources = _mapper.Map<Policy, PolicyResource>(result);
-            return resources;
+            var resource = _mapper.Map<Policy, PolicyResource>(result);
+            return resource;
         }
 
         public async Task<IEnumerable<PolicyResource>> GetByPorfolioClientIdAsync(Guid portfolioClientId)
@@ -294,7 +295,7 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> QuoteToPolicy(QuotePolicyObjectResource resource)
+        public async Task<PolicyResource> QuoteToPolicy(QuotePolicyObjectResource resource)
         {
             var insurerBranchId = resource.Quote.InsurerBranchId;
 
@@ -335,15 +336,21 @@ namespace Tilbake.Application.Services
             quote.IsPolicySet = true;
             await _unitOfWork.Quotes.UpdateAsync(quote.Id, quote);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Policy, PolicyResource>(policy);
+            return result;
         }
 
-        public async Task<int> UpdateAsync(PolicyResource resource)
+        public async Task<PolicyResource> UpdateAsync(PolicyResource resource)
         {
             var policy = _mapper.Map<PolicyResource, Policy>(resource);
             await _unitOfWork.Policies.UpdateAsync(resource.Id, policy);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<Policy, PolicyResource>(policy);
+            return result;
         }
     }
 }

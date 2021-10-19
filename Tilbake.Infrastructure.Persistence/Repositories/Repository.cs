@@ -82,7 +82,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
             return entities;
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
+        public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes)

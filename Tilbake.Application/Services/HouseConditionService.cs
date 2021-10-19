@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<HouseConditionResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.HouseConditions.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.HouseConditions.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<HouseCondition>, IEnumerable<HouseConditionResource>>(result);
 
@@ -57,9 +58,9 @@ namespace Tilbake.Application.Services
         public async Task<HouseConditionResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.HouseConditions.GetByIdAsync(id);
-            var resources = _mapper.Map<HouseCondition, HouseConditionResource>(result);
+            var resource = _mapper.Map<HouseCondition, HouseConditionResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(HouseConditionResource resource)

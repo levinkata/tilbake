@@ -88,14 +88,7 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _carrierService.UpdateAsync(resource);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                await _carrierService.UpdateAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);

@@ -45,8 +45,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<SalesTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.SalesTypes.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.SalesTypes.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<SalesType>, IEnumerable<SalesTypeResource>>(result);
 
@@ -56,9 +57,9 @@ namespace Tilbake.Application.Services
         public async Task<SalesTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.SalesTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<SalesType, SalesTypeResource>(result);
+            var resource = _mapper.Map<SalesType, SalesTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(SalesTypeResource resource)

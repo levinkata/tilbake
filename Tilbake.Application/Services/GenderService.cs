@@ -46,8 +46,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<GenderResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Genders.GetAllAsync();
-            result = result.OrderBy(n => n.Name);
+            var result = await _unitOfWork.Genders.GetAllAsync(
+                                            null,
+                                            r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<Gender>, IEnumerable<GenderResource>>(result);
 
@@ -57,9 +58,9 @@ namespace Tilbake.Application.Services
         public async Task<GenderResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.Genders.GetByIdAsync(id);
-            var resources = _mapper.Map<Gender, GenderResource>(result);
+            var resource = _mapper.Map<Gender, GenderResource>(result);
 
-            return resources;
+            return resource;
         }
 
         public async Task<int> UpdateAsync(GenderResource resource)

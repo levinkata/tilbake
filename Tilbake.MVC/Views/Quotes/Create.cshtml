@@ -10,26 +10,62 @@
 <h1>@ViewData["Title"]</h1>
 <h4>@FullName</h4>
 <hr />
+
 <div class="d-flex justify-content-center">
     <div class="col-md-9">
-        <div class="card mb-3">
-            <div class="card-header">
-                <div class="d-flex justify-content-between">
-                    <h5>New Quote</h5>
-                    <div>
-                        <input type="button" id="btnCreateQuote" class="btn btn-outline-secondary btn-sm text-muted invisible" value="Create Quote" />
-                    </div>
-                </div>
-                
-            </div>
+        <div class="card border-primary mb-3">
             <div class="card-body">
-                <div class="row">
-                    <div class="form-group">
-                        <label class="control-label">Date</label>
-                        <input value="@quoteDate" class="form-control" readonly/>
+                <div class="align-items-center text-center mb-3 row">
+                    <div class="text-sm-left col-sm-6">
+                        <img src="~/images/minet.png" alt="minet" width="150"></div>
+                        <div class="text-sm-right mt-3 mt-sm-0 col">
+                            <h2 class="mb-3">Quote</h2>
+                            <h5>Minet House</h5>
+                            <p class="text-muted mb-0">
+                                Plot 50368 Gaborone Business Park<br>
+                                Fairgrounds, Gaborone
+                            </p>
+                        </div>
+                    <div class="col-12">
+                        <hr>
                     </div>
                 </div>
-                <div class="row">
+
+                <div class="justify-content-between align-items-center row">
+                    <div class="col">
+                        <h6 class="text-muted">Send to</h6>
+                        <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@Model.PortfolioId", asp-route-clientId="@Model.Client.Id">
+                            <h6 class="text-muted">@FullName</h6>
+                        </a>
+                        <p>
+                            1954 Bloor Street West<br>
+                            Torronto ON, M6P 3K9<br>
+                            Canada
+                        </p>
+                        <p>example@gmail.com<br>+4444-6666-7777</p>
+                    </div>
+                    <div class="ml-auto col-sm-auto">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-sm-right">Quotation No:</th>
+                                        <td>@Model.QuoteNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-sm-right">Quotation Date:</th>
+                                        <td>@Model.QuoteDate.ToLongDateString()</td>
+                                    </tr>
+                                    <tr class="alert-success fw-bold">
+                                        <th class="text-sm-right">Amount Due:</th>
+                                        <td>0.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="ClientInfo" class="control-label"></label>
@@ -49,20 +85,149 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex form-group">
+                    <div class="p-2 flex-grow-1">
+                        <select class="form-select">
+                            <option value="1">All Risk (Unspecified)</option>
+                            <option value="2">All Risk (Specified)</option>
+                            <option value="3">Building</option>
+                            <option value="4">Contents</option>
+                            <option value="5">House</option>
+                            <option value="6">Motor</option>
+                            <option value="7">Travel</option>
+                        </select>
+                    </div>
+                    <div class="p-2">
+                        <button type="button" class="btn btn-warning mx-auto">Add Selected Risk</button>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="card border-info mb-3">
+            <div class="card-body">
+                <table id="tblQuote" class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>Description</strong>
+                            </th>
+                            <th>
+                                <strong>Cover Type</strong>
+                            </th>
+                            <th>
+                                <strong>Sum Insured</strong>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        @* AllRisk - Unspecified *@
+        <div class="card border-warning mb-3">
+            <div class="form">
+                <div class="card-header">
+                    <h5>AllRisk - Unspecified</h5>
+                </div>
+                <div class="card-body">
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="AllRiskUnspecifiedDescription" class="control-label">Description</label>
+                                <input asp-for="AllRiskUnspecifiedDescription" id="AllRiskUnspecifiedDescription" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container border bg-light p-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="AllRiskUnspecifiedCoverTypeId" class="control-label"></label>
+                                    <select asp-for="AllRiskUnspecifiedCoverTypeId" id="AllRiskUnspecifiedCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList" ></select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="AllRiskUnspecifiedSumInsured" class="control-label"></label>
+                                    <input asp-for="AllRiskUnspecifiedSumInsured" id="AllRiskUnspecifiedSumInsured" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex gap-1 justify-content-end">
+                        <button type="button" class="btn btn-secondary" >Cancel</button>
+                        <button type="submit" class="btn btn-primary" >Save record</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        @* AllRisk - Specified *@
+        <div class="card border-success mb-3">
+            <div class="form">
+                <div class="card-header">
+                    <h5>AllRisk - Specified</h5>
+                </div>
+                <div class="card-body">
+                <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="AllRiskSpecifiedDescription" class="control-label">Description</label>
+                                <input asp-for="AllRiskSpecifiedDescription" id="AllRiskSpecifiedDescription" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="AllRiskSpecified.SerialNumber" class="control-label">Serial Number</label>
+                                <input asp-for="AllRiskSpecified.SerialNumber" id="AllRiskSpecifiedDescription" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container border bg-light p-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="AllRiskSpecifiedCoverTypeId" class="control-label"></label>
+                                    <select asp-for="AllRiskSpecifiedCoverTypeId" id="AllRiskSpecifiedCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList" ></select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="AllRiskSpecifiedSumInsured" class="control-label"></label>
+                                    <input asp-for="AllRiskSpecifiedSumInsured" id="AllRiskSpecifiedSumInsured" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex gap-1 justify-content-end">
+                        <button type="button" class="btn btn-secondary" >Cancel</button>
+                        <button type="submit" class="btn btn-primary" >Save record</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <h5>New Quote</h5>
+                    <div>
+                        <input type="button" id="btnCreateQuote" class="btn btn-outline-secondary btn-sm text-muted invisible" value="Create Quote" />
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
             </div>
             <div class="card-footer">
-                <div class="d-flex justify-content-center py-2 gap-2">
-                    <select class="form-select">
-                        <option value="1">All Risk (Unspecified)</option>
-                        <option value="2">All Risk (Specified)</option>
-                        <option value="3">Building</option>
-                        <option value="4">Contents</option>
-                        <option value="5">House</option>
-                        <option value="6">Motor</option>
-                        <option value="7">Travel</option>
-                    </select>
-                    <button type="button" class="btn btn-warning">Create</button>
-                </div>
+
                 <div class="d-flex justify-content-center py-2 gap-2">
                     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#allRiskModal">All Risks</button>
                     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#buildingModal">Building</button>
@@ -75,39 +240,12 @@
 
         </div>
         <a asp-controller="Quotes" asp-action="PortfolioClientQuotes" asp-route-portfolioClientId="@Model.PortfolioClientId">Return</a>
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <table id="tblCart" class="table table-sm mb-0 invisible">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <strong>Description</strong>
-                                </th>
-                                <th>
-                                    <strong>Cover Type</strong>
-                                </th>
-                                <th>
-                                    <strong>Sum Insured</strong>
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                    <div id="ErrorMsg" class="mt-3 invisible">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 </div>
 
 <!-- All Risks Modal -->
-<div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
+@* <div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -148,7 +286,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> *@
 
 <!-- Building Modal -->
 <div class="modal fade" id="buildingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="buildingModalLabel" aria-hidden="true">

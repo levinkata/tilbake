@@ -47,15 +47,25 @@ namespace Tilbake.Application.Resources
         //  Other
         public Client Client { get; set; }
 
-        //  AllRisk
+        //  AllRisk - Specified
         [Display(Name = "Sum Insured")]
-        public decimal AllRiskSumInsured { get; set; }
+        public decimal AllRiskSpecifiedSumInsured { get; set; }
 
         [Display(Name = "Cover Type")]
-        public Guid AllRiskCoverTypeId { get; set; }
+        public Guid AllRiskSpecifiedCoverTypeId { get; set; }
 
         [Display(Name = "Description")]
-        public string Description { get; set; }
+        public string AllRiskSpecifiedDescription { get; set; }
+
+        //  AllRisk - Unspecified
+        [Display(Name = "Sum Insured")]
+        public decimal AllRiskUnspecifiedSumInsured { get; set; }
+
+        [Display(Name = "Cover Type")]
+        public Guid AllRiskUnspecifiedCoverTypeId { get; set; }
+
+        [Display(Name = "Description")]
+        public string AllRiskUnspecifiedDescription { get; set; }
 
         //  Building
         [Display(Name = "Sum Insured")]
@@ -96,11 +106,12 @@ namespace Tilbake.Application.Resources
         public Guid TravelCoverTypeId { get; set; }
 
         //  Risks
-        public AllRisk AllRisk { get; set; }
-        public Building Building { get; set; }
-        public Content Content { get; set; }
-        public House House { get; set; }
-        public Motor Motor { get; set; }
+        public AllRiskResource AllRisk { get; set; }
+        public AllRiskSpecified AllRiskSpecified { get; set; }
+        public BuildingResource Building { get; set; }
+        public ContentResource Content { get; set; }
+        public HouseResource House { get; set; }
+        public MotorResource Motor { get; set; }
         public TravelResource Travel { get; set; }
 
         //  SelectLists

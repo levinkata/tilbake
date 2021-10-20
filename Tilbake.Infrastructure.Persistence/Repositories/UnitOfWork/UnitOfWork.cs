@@ -65,6 +65,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             Portfolios = new PortfolioRepository(_context);
             PortfolioAdministrationFees = new PortfolioAdministrationFeeRepository(_context);
             PortfolioClients = new PortfolioClientRepository(_context);
+            PortfolioExcessBuyBacks = new PortfolioExcessBuyBackRepository(_context);
             PortfolioPolicyFees = new PortfolioPolicyFeeRepository(_context);
             Premiums = new PremiumRepository(_context);
             Quotes = new QuoteRepository(_context);
@@ -143,6 +144,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
         public IPortfolioRepository Portfolios { get; private set; }
         public IPortfolioAdministrationFeeRepository PortfolioAdministrationFees { get; private set; }
         public IPortfolioClientRepository PortfolioClients { get; private set; }
+        public IPortfolioExcessBuyBackRepository PortfolioExcessBuyBacks { get; private set; }
         public IPortfolioPolicyFeeRepository PortfolioPolicyFees { get; private set; }
         public IPremiumRepository Premiums { get; private set; }
         public IQuoteRepository Quotes { get; private set; }

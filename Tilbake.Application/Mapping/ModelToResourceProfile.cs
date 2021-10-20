@@ -142,7 +142,7 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.SalesType, opt => opt.MapFrom(src => src.SalesType)).ReverseMap();
 
             CreateMap<PolicyRisk, PolicyRiskResource>()
-                .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType.Name)).ReverseMap();
+                .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType)).ReverseMap();
 
             CreateMap<PolicyStatus, PolicyStatusResource>().ReverseMap();
             CreateMap<PolicyType, PolicyTypeResource>().ReverseMap();
@@ -151,7 +151,7 @@ namespace Tilbake.Application.Mapping
                     .ForMember(dest => dest.TotalClients, opt => opt.MapFrom(src => src.PortfolioClients.Count)).ReverseMap();
             
             CreateMap<PortfolioAdministrationFee, PortfolioAdministrationFeeResource>()
-                .ForMember(dest => dest.InsurerName, opt => opt.MapFrom(src => src.Insurer.Name)).ReverseMap();
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer)).ReverseMap();
 
             CreateMap<PortfolioClient, PortfolioClientResource>()
                 .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Client.Addresses))
@@ -162,8 +162,11 @@ namespace Tilbake.Application.Mapping
                 .ForMember(dest => dest.ClientStatus, opt => opt.MapFrom(src => src.ClientStatus))
                 .ForMember(dest => dest.Portfolio, opt => opt.MapFrom(src => src.Portfolio)).ReverseMap();
 
+            CreateMap<PortfolioExcessBuyBack, PortfolioExcessBuyBackResource>()
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer)).ReverseMap();
+
             CreateMap<PortfolioPolicyFee, PortfolioPolicyFeeResource>()
-                .ForMember(dest => dest.InsurerName, opt => opt.MapFrom(src => src.Insurer.Name)).ReverseMap();
+                .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer)).ReverseMap();
 
             CreateMap<Premium, PremiumResource>().ReverseMap();
 

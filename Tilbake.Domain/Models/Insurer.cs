@@ -9,6 +9,7 @@ namespace Tilbake.Domain.Models
         {
             InsurerBranches = new HashSet<InsurerBranch>();
             PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
+            PortfolioExcessBuyBacks = new HashSet<PortfolioExcessBuyBack>();
             PortfolioPolicyFees = new HashSet<PortfolioPolicyFee>();
             RatingMotorDiscounts = new HashSet<RatingMotorDiscount>();
             RatingMotorExcesses = new HashSet<RatingMotorExcess>();
@@ -27,6 +28,7 @@ namespace Tilbake.Domain.Models
 
         public virtual ICollection<InsurerBranch> InsurerBranches { get; set; }
         public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
+        public virtual ICollection<PortfolioExcessBuyBack> PortfolioExcessBuyBacks { get; set; }
         public virtual ICollection<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
         public virtual ICollection<RatingMotorDiscount> RatingMotorDiscounts { get; set; }
         public virtual ICollection<RatingMotorExcess> RatingMotorExcesses { get; set; }

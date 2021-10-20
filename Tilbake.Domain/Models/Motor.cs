@@ -34,6 +34,7 @@ namespace Tilbake.Domain.Models
         public bool IsImmobiliserFactoryFitted { get; set; }
         public bool IsAlarm { get; set; }
         public bool IsGearLock { get; set; }
+        public bool IsExcessBuyBack { get; set; }
         public int DaysOutOfCountry { get; set; }
         public string FinancialInterest { get; set; }
         public Guid? AddedBy { get; set; }

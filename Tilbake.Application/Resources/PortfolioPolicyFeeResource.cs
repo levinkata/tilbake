@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {
@@ -20,10 +21,8 @@ namespace Tilbake.Application.Resources
 
         [Display(Name = "Fee")]
         public decimal Fee { get; set; }
-
-        //  Description
-        [Display(Name = "Insurer")]
-        public string InsurerName { get; set; }
+        
+        public InsurerResource Insurer { get; set; }
 
         //  SelectList
         public SelectList InsurerList { get; set; }

@@ -131,6 +131,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Portfolio> Portfolios { get; set; }
         public virtual DbSet<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual DbSet<PortfolioClient> PortfolioClients { get; set; }
+        public virtual DbSet<PortfolioExcessBuyBack> PortfolioExcessBuyBacks { get; set; }
         public virtual DbSet<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
         public virtual DbSet<PortfolioRatingMotor> PortfolioRatingMotors { get; set; }
         public virtual DbSet<PortfolioRatingMotorDiscount> PortfolioRatingMotorDiscounts { get; set; }
@@ -181,6 +182,15 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<WallType> WallTypes { get; set; }
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
+
+/*         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
+            }
+        } */
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -250,7 +260,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>
@@ -2928,6 +2938,33 @@ namespace Tilbake.Infrastructure.Persistence.Context
                     .HasConstraintName("FK_PortfolioClient_Portfolio");
             });
 
+            modelBuilder.Entity<PortfolioExcessBuyBack>(entity =>
+            {
+                entity.ToTable("PortfolioExcessBuyBack");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.BuyBackRate).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.ExcessRate).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Insurer)
+                    .WithMany(p => p.PortfolioExcessBuyBacks)
+                    .HasForeignKey(d => d.InsurerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioExcessBuyBack_Insurer");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioExcessBuyBacks)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioExcessBuyBack_Portfolio");
+            });
+
             modelBuilder.Entity<PortfolioPolicyFee>(entity =>
             {
                 entity.ToTable("PortfolioPolicyFee");
@@ -3425,8 +3462,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.Property(e => e.Description).HasMaxLength(100);
 
                 entity.Property(e => e.DocumentDate).HasColumnType("date");
-
-                entity.Property(e => e.DocumentPath).IsUnicode(false);
 
                 entity.Property(e => e.Extension).HasMaxLength(50);
 

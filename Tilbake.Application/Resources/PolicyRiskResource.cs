@@ -28,9 +28,7 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        //  Descriptions
-        [Display(Name = "Cover Type")]
-        public string CoverType { get; set; }
+        public CoverTypeResource CoverType { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }

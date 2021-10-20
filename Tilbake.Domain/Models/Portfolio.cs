@@ -12,6 +12,7 @@ namespace Tilbake.Domain.Models
             FileTemplates = new HashSet<FileTemplate>();
             PortfolioAdministrationFees = new HashSet<PortfolioAdministrationFee>();
             PortfolioClients = new HashSet<PortfolioClient>();
+            PortfolioExcessBuyBacks = new HashSet<PortfolioExcessBuyBack>();
             PortfolioPolicyFees = new HashSet<PortfolioPolicyFee>();
             PortfolioRatingMotorDiscounts = new HashSet<PortfolioRatingMotorDiscount>();
             PortfolioRatingMotorExcesses = new HashSet<PortfolioRatingMotorExcess>();
@@ -33,6 +34,7 @@ namespace Tilbake.Domain.Models
         public virtual ICollection<FileTemplate> FileTemplates { get; set; }
         public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
         public virtual ICollection<PortfolioClient> PortfolioClients { get; set; }
+        public virtual ICollection<PortfolioExcessBuyBack> PortfolioExcessBuyBacks { get; set; }
         public virtual ICollection<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
         public virtual ICollection<PortfolioRatingMotorDiscount> PortfolioRatingMotorDiscounts { get; set; }
         public virtual ICollection<PortfolioRatingMotorExcess> PortfolioRatingMotorExcesses { get; set; }

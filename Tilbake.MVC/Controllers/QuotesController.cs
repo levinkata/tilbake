@@ -171,7 +171,6 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
             var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
-
             var clientId = portfolioClient.ClientId;
             var portfolioId = portfolioClient.PortfolioId;
             var client = portfolioClient.Client;
@@ -201,6 +200,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioId = portfolioId,
                 PortfolioName = portfolio.Name,
                 Client = client,
+                QuoteDate = DateTime.Now.Date,
                 BuildingConditionList = SelectLists.BuildingConditions(buildingConditions, Guid.Empty),
                 CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty),
                 QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, Guid.Empty),

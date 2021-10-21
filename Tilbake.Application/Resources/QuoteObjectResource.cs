@@ -7,16 +7,19 @@ namespace Tilbake.Application.Resources
     {
         public Guid ClientId { get; set; }
 
-        public Quote Quote { get; set; }
-        public QuoteItem[] QuoteItems  { get; set; }
+        public QuoteResource Quote { get; set; }
+        public QuoteItemResource[] QuoteItems  { get; set; }
 
         //  Risk Arrays
-        public AllRisk[] AllRisks { get; set; }
-        public Building[] Buildings { get; set; }
-        public Content[] Contents { get; set; }
-        public ExcessBuyBack[] ExcessBuyBacks { get; set; }
-        public House[] Houses { get; set; }
-        public Motor[] Motors { get; set; }
-        public RiskItem[] RiskItems { get; set; }
+        public AllRiskResource[] AllRisks { get; set; }
+        public AllRiskSpecifiedResource[] AllRiskSpecifieds { get; set; }
+        public BuildingResource[] Buildings { get; set; }
+        public ContentResource[] Contents { get; set; }
+        public ExcessBuyBackResource[] ExcessBuyBacks { get; set; }
+        public HouseResource[] Houses { get; set; }
+        public MotorResource[] Motors { get; set; }
+        public TravelResource[] Travels { get; set; }
+        public RiskItemResource[] RiskItems { get; set; }
+        public RiskItemResource[] SpecifiedRiskItems { get; set; }
     }
 }

@@ -21,13 +21,17 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(AllRiskSaveResource resource)
+        public async Task<AllRiskResource> AddAsync(AllRiskSaveResource resource)
         {
             var allRisk = _mapper.Map<AllRiskSaveResource, AllRisk>(resource);
             allRisk.Id = Guid.NewGuid();
+            allRisk.DateAdded = DateTime.Now;
 
             await _unitOfWork.AllRisks.AddAsync(allRisk);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<AllRisk, AllRiskResource>(allRisk) ;
+            return result;
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -63,12 +67,16 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(AllRiskResource resource)
+        public async Task<AllRiskResource> UpdateAsync(AllRiskResource resource)
         {
             var allRisk = _mapper.Map<AllRiskResource, AllRisk>(resource);
-            await _unitOfWork.AllRisks.UpdateAsync(resource.Id, allRisk);
+            allRisk.DateModified = DateTime.Now;
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.AllRisks.UpdateAsync(resource.Id, allRisk);
+            await _unitOfWork.SaveAsync();
+
+            var result = _mapper.Map<AllRisk, AllRiskResource>(allRisk) ;
+            return result;
         }
     }
 }

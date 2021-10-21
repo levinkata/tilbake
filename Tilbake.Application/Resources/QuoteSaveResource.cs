@@ -59,13 +59,13 @@ namespace Tilbake.Application.Resources
 
         //  AllRisk - Unspecified
         [Display(Name = "Sum Insured")]
-        public decimal AllRiskUnspecifiedSumInsured { get; set; }
+        public decimal AllRiskSumInsured { get; set; }
 
         [Display(Name = "Cover Type")]
-        public Guid AllRiskUnspecifiedCoverTypeId { get; set; }
+        public Guid AllRiskCoverTypeId { get; set; }
 
         [Display(Name = "Description")]
-        public string AllRiskUnspecifiedDescription { get; set; }
+        public string AllRiskDescription { get; set; }
 
         //  Building
         [Display(Name = "Sum Insured")]

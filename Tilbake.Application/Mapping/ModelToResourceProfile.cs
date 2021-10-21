@@ -14,6 +14,9 @@ namespace Tilbake.Application.Mapping
             CreateMap<AllRisk, AllRiskResource>()
                     .ForMember(dest => dest.RiskItem, opt => opt.MapFrom(src => src.RiskItem.Description)).ReverseMap();
 
+            CreateMap<AllRiskSpecified, AllRiskSpecifiedResource>()
+                    .ForMember(dest => dest.RiskItem, opt => opt.MapFrom(src => src.RiskItem.Description)).ReverseMap();
+
             CreateMap<AspnetUserPortfolio, AspnetUserPortfolioResource>()
                     .ForMember(dest => dest.PortfolioName, opt => opt.MapFrom(src => src.Portfolio.Name)).ReverseMap();
 

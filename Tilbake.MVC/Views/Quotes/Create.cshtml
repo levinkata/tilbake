@@ -90,7 +90,8 @@
                 
                 <div class="d-flex bg-success bg-opacity-50">
                     <div class="p-2 flex-grow-1">
-                        <select class="form-select">
+                        <select id="SelectRisk" class="form-select">
+                            <option selected>Select Risk</option>
                             <option value="1">AllRisk (Unspecified)</option>
                             <option value="2">AllRisk (Specified)</option>
                             <option value="3">Building</option>
@@ -101,12 +102,12 @@
                         </select>
                     </div>
                     <div class="p-2">
-                        <button type="button" class="btn btn-warning mx-auto">Add Selected Risk</button>
+                        <button type="button" id="btnRisk" class="btn btn-warning mx-auto">Add Selected Risk</button>
                     </div>
                 </div>
             </div>
         </div>        
-        <div class="card border-info mb-3">
+        <div id="QuoteItemsCard" class="card border-info mb-3">
             <div class="card-body">
                 <table id="tblQuote" class="table table-sm">
                     <thead>
@@ -127,33 +128,34 @@
                 </table>
             </div>
         </div>
+        <div id="PlaceHolder"></div>
 
         <!-- AllRisk - Unspecified -->
-        <div class="card border-warning mb-3">
+@*         <div id="AllRiskCard" class="card border-warning mb-3 card-form invisible">
             <div class="card-header">
                 <h5>AllRisk - Unspecified</h5>
             </div>
             <div class="card-body">
-                <form class="row">
+                <form class="row" id="AllRiskForm">
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label asp-for="AllRiskUnspecifiedDescription" class="control-label">Description</label>
-                                <input asp-for="AllRiskUnspecifiedDescription" id="AllRiskUnspecifiedDescription" class="form-control" />
+                                <label asp-for="AllRiskDescription" class="control-label">Description</label>
+                                <input asp-for="AllRiskDescription" id="AllRiskDescription" class="form-control" />
                             </div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="AllRiskUnspecifiedCoverTypeId" class="control-label"></label>
-                                <select asp-for="AllRiskUnspecifiedCoverTypeId" id="AllRiskUnspecifiedCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList" ></select>
+                                <label asp-for="AllRiskCoverTypeId" class="control-label"></label>
+                                <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList" ></select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="AllRiskUnspecifiedSumInsured" class="control-label"></label>
-                                <input asp-for="AllRiskUnspecifiedSumInsured" id="AllRiskUnspecifiedSumInsured" class="form-control" />
+                                <label asp-for="AllRiskSumInsured" class="control-label"></label>
+                                <input asp-for="AllRiskSumInsured" id="AllRiskSumInsured" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -162,17 +164,16 @@
                         <button type="submit" class="btn btn-primary" >Save record</button>
                     </div>
                 </form>
-
             </div>
-        </div>
+        </div> *@
 
         <!-- AllRisk - Specified -->
-        <div class="card border-success mb-3">
+        <div id="AllRiskSpecifiedCard" class="card border-success mb-3 card-form invisible">
             <div class="card-header">
                 <h5>AllRisk - Specified</h5>
             </div>
             <div class="card-body">
-                <form class="row">
+                <form class="row" id="AllRiskSpecifiedForm">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -202,20 +203,20 @@
                         </div>
                     </div>
                     <div class="d-flex gap-1 justify-content-end">
-                        <button type="button" class="btn btn-secondary" >Cancel</button>
-                        <button type="submit" class="btn btn-primary" >Save record</button>
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save record</button>
                     </div>
                 </form>
             </div>
         </div>
 
         <!-- Building -->
-        <div class="card border-danger mb-3">
+        <div id="BuildingCard" class="card border-danger mb-3 card-form invisible">
             <div class="card-header">
                 <h5>Building (Homeowners)</h5>
             </div>
             <div class="card-body">
-                <form class="row">
+                <form class="row" id="BuildingForm">
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -385,20 +386,20 @@
                         </div>
                     </div>
                     <div class="d-flex gap-1 justify-content-end">
-                        <button type="button" class="btn btn-secondary" >Cancel</button>
-                        <button type="submit" class="btn btn-primary" >Save record</button>
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save record</button>
                     </div>
                 </form>
             </div>
         </div>
 
         <!-- Contents -->
-        <div class="card border-dark mb-3">
+        <div id="ContentCard" class="card border-dark mb-3 card-form invisible">
             <div class="card-header">
                 <h5>Contents</h5>
             </div>
             <div class="card-body">
-                <form class="row">
+                <form class="row" id="ContentForm">
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -458,12 +459,12 @@
         </div>
 
         <!-- House -->
-        <div class="card border-danger mb-3">
+        <div id="HouseCard" class="card border-danger mb-3 card-form invisible">
             <div class="card-header">
                 <h5>House</h5>
             </div>
             <div class="card-body">
-                <form class="row">
+                <form class="row" id="HouseForm">
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -530,20 +531,20 @@
                         </div>
                     </div>
                     <div class="d-flex gap-1 justify-content-end">
-                        <button type="button" class="btn btn-secondary" >Cancel</button>
-                        <button type="submit" class="btn btn-primary" >Save record</button>
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save record</button>
                     </div>
                 </form>
             </div>
         </div>
 
         <!-- Motor -->
-        <div class="card border-success mb-3">
+        <div id="MotorCard" class="card border-success mb-3 card-form invisible">
             <div class="card-header">
                 <h5>Motor</h5>
             </div>
             <div class="card-body">
-                <form class="row">
+                <form class="row" id="MotorForm">
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -699,9 +700,11 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="form-group">
-                            <label asp-for="Motor.ClaimFreeGroup" class="form-label">Claim Free Group</label>
-                            <input type="range" asp-for="Motor.ClaimFreeGroup" class="form-range" min="1" max="6" step="1" id="ClaimFreeGroup">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label asp-for="Motor.ClaimFreeGroup" class="form-label">Claim Free Group<span class="badge bg-secondary ms-2 fs-6" id="lblClaimFreeGroup"></span></label>
+                                <input type="range" asp-for="Motor.ClaimFreeGroup" class="form-range" min="0" max="6" step="1" id="ClaimFreeGroup">
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -728,12 +731,12 @@
         </div>
 
         <!-- Travel -->
-        <div class="card border-primary mb-3">
+        <div id="TravelCard" class="card border-primary mb-3 card-form invisible">
             <div class="card-header">
                 <h5>Travel</h5>
             </div>
             <div class="card-body">
-                <form class="row">
+                <form class="row" id="TravelForm">
                     <div class="row mb-3">
                         <div class="col">
                             <div class="form-group">
@@ -827,14 +830,13 @@
                 <div class="d-flex justify-content-between">
                     <h5>New Quote</h5>
                     <div>
-                        <input type="button" id="btnCreateQuote" class="btn btn-outline-secondary btn-sm text-muted invisible" value="Create Quote" />
+                        <input type="button" id="btnCreateQuote" class="btn btn-outline-secondary btn-sm text-muted" value="Create Quote" />
                     </div>
                 </div>
             </div>
             <div class="card-body">
             </div>
             <div class="card-footer">
-
                 <div class="d-flex justify-content-center py-2 gap-2">
                     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#allRiskModal">All Risks</button>
                     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#buildingModal">Building</button>
@@ -851,49 +853,54 @@
     </div>
 </div>
 
-<!-- All Risks Modal -->
-@* <div class="modal fade" id="allRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="allRiskModalLabel" aria-hidden="true">
+<!-- AllRisk Unspecidied Modal -->
+<div class="modal fade" id="AllRiskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="AllRiskModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="modal-title" id="allRiskModalLabel">
-                    All Risks
+                <span class="modal-title" id="AllRiskModalLabel">
+                    All Risks - Unspecified
                 </span>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="Description" class="control-label">Description</label>
-                            <input asp-for="Description" id="Description" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-                <div class="container border bg-light p-3">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label asp-for="AllRiskSumInsured" class="control-label"></label>
-                                <input asp-for="AllRiskSumInsured" id="AllRiskSumInsured" class="form-control" />
+                 <partial name="_AllRisk" />
+@*                 <div class="card border-warning mb-3">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="AllRiskDescription" class="control-label">Description</label>
+                                    <input asp-for="AllRiskDescription" id="AllRiskDescription" class="form-control" />
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label asp-for="AllRiskCoverTypeId" class="control-label"></label>
-                                <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList" ></select>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="AllRiskCoverTypeId" class="control-label"></label>
+                                    <select asp-for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="AllRiskSumInsured" class="control-label"></label>
+                                    <input asp-for="AllRiskSumInsured" id="AllRiskSumInsured" class="form-control" />
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div> *@
+            </div>
+             <div class="modal-footer">
+                <div class="d-flex gap-1 justify-content-end">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnAddAllRisk">Save record</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="btnAddAllRisk" class="btn btn-primary" onclick="LoadAllRisks()">Save this record</button>
-            </div>
+            </div> 
         </div>
     </div>
-</div> *@
+</div>
 
 <!-- Building Modal -->
 @* <div class="modal fade" id="buildingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="buildingModalLabel" aria-hidden="true">
@@ -1551,6 +1558,7 @@
         var portfolioId = '@Model.PortfolioId';
         var countryList = '@Model.CountryList';
         var allRisks = [];
+        var allRiskSpecifieds = [];
         var buildings = [];
         var contents = [];
         var houses = [];
@@ -1567,17 +1575,14 @@
             );
         }
 
+        const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'BWP',
+        minimumFractionDigits: 2
+        })
+
         $(document).ready(function () {
             // Do something here
-            var toastTrigger = document.getElementById('liveToastBtn')
-            var toastLiveExample = document.getElementById('liveToast')
-            if (toastTrigger) {
-                toastTrigger.addEventListener('click', function () {
-                    var toast = new bootstrap.Toast(toastLiveExample)
-
-                    toast.show()
-                })
-            }
         });
 
         $('#btnAdditionalMembers').click(function(e) {
@@ -1595,11 +1600,64 @@
             `);
         });
 
-        $('#AdditionalMembers').on('click', '.delete', function() {
+        $('#AdditionalMembers').on('click', '.delete', function(e) {
+            e.preventDefault();
+
             $(this).parent('div').remove();
         });
 
-        $("#MotorMakeId").change(function () {
+        $('#ClaimFreeGroup').change(function(e) {
+            e.preventDefault();
+
+            $('#lblClaimFreeGroup').html($(this).val());
+        })
+
+        $('#SelectRisk').change(function(e) {
+            e.preventDefault();
+
+            $('#PlaceHolder').children().remove();
+        })
+
+        $('#btnRisk').click(function (e) {
+            e.preventDefault();
+
+            var selectedRisk = $('#SelectRisk option:selected').val();
+            if(selectedRisk != null || selectedRisk != '')
+            {
+                switch (selectedRisk) {
+                    case '1':
+                        $('#AllRiskModal').modal("show");
+                        break;
+
+                    case '2':
+
+                        break;
+
+                    case '3':
+
+                        break;
+
+                    case '4':
+
+                        break;
+
+                    case '5':
+
+                        break;
+                    case '6':
+
+                        break;
+
+                    case '7':
+
+                        break;
+                }
+            }
+        })
+
+        $("#MotorMakeId").change(function (e) {
+            e.preventDefault();
+
             var selectedMotorMakeId = $("#MotorMakeId option:selected").val();
 
             $.ajax({
@@ -1621,9 +1679,11 @@
             });
         });
 
-        function LoadAllRisks() {
+        $('#btnAddAllRisk').click(function(e) {
+            e.preventDefault();
+
             var clientRiskId = uuidv4();
-            var description = 'AllRisks - ' + $('#Description').val();
+            var description = 'AllRisk - Unspecified - ' + $('#AllRiskDescription').val();
             var sumInsured = $('#AllRiskSumInsured').val();
             var coverType = $('#AllRiskCoverTypeId option:selected').text();
             var riskItemId = uuidv4();
@@ -1631,7 +1691,7 @@
             //  1. Build RiskItem Array to match model class RiskItem
             var riskItem = {
                 Id: riskItemId,
-                Description: $('#Description').val()
+                Description: $('#AllRiskDescription').val()
             }
 
             //  2. Build AllRisk Array to match model class AllRisk
@@ -1658,7 +1718,8 @@
             riskItems.push(riskItem);
             
             AddToCart(clientRiskId, description, coverType, sumInsured);
-        }
+            $('#AllRiskModal').modal("hide");
+        })
         
         function LoadBuildings() {
             var clientRiskId = uuidv4();
@@ -1844,7 +1905,7 @@
         }
 
         $('#btnCreateQuote').click(function () {
-            var cartItems = $('#tblCart tbody tr');
+            var cartItems = $('#tblQuote tbody tr');
             var numCart = cartItems.length;
 
             $("#ErrorMsg").empty();
@@ -1860,20 +1921,20 @@
         });
 
         function ResetBtnCreateQuote() {
-            var cartItems = $('#tblCart tbody tr').length;
+            var cartItems = $('#tblQuote tbody tr').length;
             if (cartItems == 0) {
-                $('#tblCart').removeClass("visible").addClass("invisible");
+                $('#tblQuote').removeClass("visible").addClass("invisible");
                 $('#btnCreateQuote').removeClass("visible").addClass("invisible");
             } else {
                 $('#btnCreateQuote').removeClass("invisible").addClass("visible");
-                $('#tblCart').removeClass("invisible").addClass("table visible");
+                $('#tblQuote').removeClass("invisible").addClass("table visible");
             }
         }
         
         function AddToCart(clientRiskId, description, coverType, sumInsured) {
 
             $("#ErrorMsg").empty();
-            var cartItem = $('#tblCart').find('tr[data-client-risk-id=' + clientRiskId + ']');
+            var cartItem = $('#tblQuote').find('tr[data-client-risk-id=' + clientRiskId + ']');
             if (cartItem.length > 0) {
                 $("#ErrorMsg").removeClass("invisible").addClass("text-danger visible");
                 $("#ErrorMsg").append('<label>Item already in Cart</label>');
@@ -1884,13 +1945,13 @@
                 return;
             }
 
-            cartItem = $('#tblCart tbody')
+            cartItem = $('#tblQuote tbody')
                 .append($('<tr>')
                     .attr({ 'data-client-risk-id': clientRiskId })
                     .append($('<td>').html(description))
                     .attr({ 'data-description': description })
                     .append($('<td>').html(coverType))
-                    .append($('<td>').html(sumInsured))
+                    .append($('<td>').html(formatter.format(sumInsured)))
                     .append($('<td>')
                         .append($('<a>')
                             .attr('href', '#')
@@ -1914,7 +1975,7 @@
                 QuoteNumber: 0,
                 QuoteDate: '@DateTime.Now',
                 QuoteStatusId: $('#QuoteStatusId option:selected').val(),
-                InsurerId: null,
+                InsurerBranchId: null,
                 ClientInfo: $('#ClientInfo').val(),
                 InternalInfo: $('#InternalInfo').val(),
                 RunDay: 0
@@ -1927,6 +1988,7 @@
                     Quote: quote,
                     QuoteItems: quoteItems,
                     AllRisks: allRisks,
+                    AllRiskSpecifieds: allRiskSpecifieds,
                     Buildings: buildings,
                     Contents: contents,
                     Houses: houses,
@@ -1943,6 +2005,7 @@
                         alert("An error has occured." + error);
                     },
                     success: function (data) {
+                        QuoteObject = [];
                         window.location.href ='/Quotes/PortfolioClientQuotes?portfolioClientId=' +  portfolioClientId;
                     }
                 });
@@ -1952,11 +2015,17 @@
         function DeleteCart(clientRiskId) {
             
             if (clientRiskId) {
-                var cartItem = $('#tblCart').find('tr[data-client-risk-id=' + clientRiskId + ']');
+                var cartItem = $('#tblQuote').find('tr[data-client-risk-id=' + clientRiskId + ']');
                 cartItem.remove();
 
                 if (allRisks.length != 0) {
                     allRisks = allRisks.filter(function (obj) {
+                        return obj.Id !== clientRiskId;
+                    });
+                }
+
+                if (allRiskSpecifieds.length != 0) {
+                    allRiskSpecifieds = allRiskSpecifieds.filter(function (obj) {
                         return obj.Id !== clientRiskId;
                     });
                 }

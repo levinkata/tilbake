@@ -10,6 +10,7 @@ namespace Tilbake.Application.Mapping
         {
             CreateMap<AddressSaveResource, Address>();
             CreateMap<AllRiskSaveResource, AllRisk>();
+            CreateMap<AllRiskSpecifiedSaveResource, AllRiskSpecified>();
             CreateMap<BankSaveResource, Bank>();
             CreateMap<BankBranchSaveResource, BankBranch>();
             CreateMap<BodyTypeSaveResource, BodyType>();

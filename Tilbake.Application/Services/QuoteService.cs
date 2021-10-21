@@ -23,7 +23,8 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> AddAsync(QuoteObjectResource resource)
         {
-            var quoteItems = resource.QuoteItems;
+            var resourceQuoteItems = resource.QuoteItems;
+            var quoteItems = _mapper.Map<IEnumerable<QuoteItemResource>, IEnumerable<QuoteItem>>(resourceQuoteItems);
 
             var taxes = await _unitOfWork.Taxes.GetAllAsync(
                                             null,
@@ -35,7 +36,9 @@ namespace Tilbake.Application.Services
             var branch = await _unitOfWork.InsurerBranches.GetFirstOrDefaultAsync(
                                                             e => e.Name == "No Insurer Branch");
             
-            var quote = resource.Quote;
+            var resourceQuote = resource.Quote;
+            var quote = _mapper.Map<QuoteResource, Quote>(resourceQuote);
+
             quote.Id = Guid.NewGuid();
             quote.QuoteDate = DateTime.Now;
             quote.DateAdded = DateTime.Now;
@@ -47,23 +50,24 @@ namespace Tilbake.Application.Services
             await _unitOfWork.Quotes.AddAsync(quote);
             var quoteId = quote.Id;
 
-            //  AllRisk
+            //  AllRisk Unspecified
             if (resource.AllRisks != null)
             {
                 if (resource.RiskItems != null)
                 {
                     //  Create RiskItem Record
-                    var riskItems = resource.RiskItems;
+                    var resourceRiskItems = resource.RiskItems;
+                    var riskItems = _mapper.Map<IEnumerable<RiskItemResource>, IEnumerable<RiskItem>>(resourceRiskItems);
                     await _unitOfWork.RiskItems.AddRangeAsync(riskItems);
 
                     //  Update QuoteItems with AllRiskId
-                    int ao = resource.AllRisks.Length;
-                    var allRisks = resource.AllRisks;
+                    var resourceAllRisks = resource.AllRisks;
+                    var allRisks = _mapper.Map<IEnumerable<AllRiskResource>, IEnumerable<AllRisk>>(resourceAllRisks);
                     await _unitOfWork.AllRisks.AddRangeAsync(allRisks);
 
-                    for (int i = 0; i < ao; i++)
+                    foreach (var allRisk in allRisks)
                     {
-                        var allRiskId = allRisks[i].Id;
+                        var allRiskId = allRisk.Id;
 
                         Risk risk = new()
                         {
@@ -98,17 +102,70 @@ namespace Tilbake.Application.Services
                 }
             }
 
+            //  AllRisk Specified
+            if (resource.AllRiskSpecifieds != null)
+            {
+                if (resource.SpecifiedRiskItems != null)
+                {
+                    //  Create RiskItem Record
+                    var resourceRiskItems = resource.SpecifiedRiskItems;
+                    var riskItems = _mapper.Map<IEnumerable<RiskItemResource>, IEnumerable<RiskItem>>(resourceRiskItems);
+                    await _unitOfWork.RiskItems.AddRangeAsync(riskItems);
+
+                    //  Update QuoteItems with AllRiskSpecifiedId
+                    var resourceAllRiskSpecifieds = resource.AllRiskSpecifieds;
+                    var allRiskSpecifieds = _mapper.Map<IEnumerable<AllRiskSpecifiedResource>, IEnumerable<AllRiskSpecified>>(resourceAllRiskSpecifieds);
+                    await _unitOfWork.AllRiskSpecifieds.AddRangeAsync(allRiskSpecifieds);
+
+                    foreach (var allRiskSpecified in allRiskSpecifieds)
+                    {
+                        var allRiskSpecifiedId = allRiskSpecified.Id;
+
+                        Risk risk = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            AllRiskSpecifiedId = allRiskSpecifiedId,
+                            DateAdded = DateTime.Now
+                        };
+                        await _unitOfWork.Risks.AddAsync(risk);
+
+                        var riskId = risk.Id;
+
+                        ClientRisk clientRisk = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            ClientId = clientId,
+                            RiskId = riskId,
+                            DateAdded = DateTime.Now
+                        };
+                        await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                        var clientRiskId = clientRisk.Id;
+
+                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskSpecifiedId))
+                        {
+                            item.QuoteId = quoteId;
+                            item.ClientRiskId = clientRiskId;
+                            item.DateAdded = DateTime.Now;
+                            item.TaxRate = taxRate;
+                            item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
+                        }
+                    }
+                }
+            }
+
             //  Building
             if (resource.Buildings != null)
             {
                 //  Update QuoteItems with BuildingId
-                int ho = resource.Buildings.Length;
-                var buildings = resource.Buildings;
+                //  int ho = resource.Buildings.Length;
+                var resourceBuildings = resource.Buildings;
+                var buildings = _mapper.Map<IEnumerable<BuildingResource>, IEnumerable<Building>>(resourceBuildings);
                 await _unitOfWork.Buildings.AddRangeAsync(buildings);
 
-                for (int i = 0; i < ho; i++)
+                foreach (var building in buildings)
                 {
-                    var buildingId = buildings[i].Id;
+                    var buildingId = building.Id;
 
                     Risk risk = new()
                     {
@@ -146,13 +203,14 @@ namespace Tilbake.Application.Services
             if (resource.Contents != null)
             {
                 //  Update QuoteItems with ContentId
-                int co = resource.Contents.Length;
-                var contents = resource.Contents;
+                //  int co = resource.Contents.Length;
+                var resourceContents = resource.Contents;
+                var contents = _mapper.Map<IEnumerable<ContentResource>, IEnumerable<Content>>(resourceContents);
                 await _unitOfWork.Contents.AddRangeAsync(contents);
 
-                for (int i = 0; i < co; i++)
+                foreach (var content in contents)
                 {
-                    var contentId = contents[i].Id;
+                    var contentId = content.Id;
 
                     Risk risk = new()
                     {
@@ -190,13 +248,14 @@ namespace Tilbake.Application.Services
             if (resource.ExcessBuyBacks != null)
             {
                 //  Update QuoteItems with ExcessBuyBackId
-                int co = resource.ExcessBuyBacks.Length;
-                var excessBuyBacks = resource.ExcessBuyBacks;
+                //  int co = resource.ExcessBuyBacks.Length;
+                var resourceExcessBuyBacks = resource.ExcessBuyBacks;
+                var excessBuyBacks = _mapper.Map<IEnumerable<ExcessBuyBackResource>, IEnumerable<ExcessBuyBack>>(resourceExcessBuyBacks);
                 await _unitOfWork.ExcessBuyBacks.AddRangeAsync(excessBuyBacks);
 
-                for (int i = 0; i < co; i++)
+                foreach (var excessBuyBack in excessBuyBacks)
                 {
-                    var excessBuyBackId = excessBuyBacks[i].Id;
+                    var excessBuyBackId = excessBuyBack.Id;
 
                     Risk risk = new()
                     {
@@ -234,13 +293,14 @@ namespace Tilbake.Application.Services
             if (resource.Houses != null)
             {
                 //  Update QuoteItems with HouseId
-                int ho = resource.Houses.Length;
-                var houses = resource.Houses;
+                //  int ho = resource.Houses.Length;
+                var resourceHouses = resource.Houses;
+                var houses = _mapper.Map<IEnumerable<HouseResource>, IEnumerable<House>>(resourceHouses);
                 await _unitOfWork.Houses.AddRangeAsync(houses);
 
-                for (int i = 0; i < ho; i++)
+                foreach (var house in houses)
                 {
-                    var houseId = houses[i].Id;
+                    var houseId = house.Id;
 
                     Risk risk = new()
                     {
@@ -278,13 +338,14 @@ namespace Tilbake.Application.Services
             if(resource.Motors != null)
             {
                 //  Update QuoteItems with MotorId
-                int mo = resource.Motors.Length;
-                var motors = resource.Motors;
+                //  int mo = resource.Motors.Length;
+                var resourceMotors = resource.Motors;
+                var motors = _mapper.Map<IEnumerable<MotorResource>, IEnumerable<Motor>>(resourceMotors);
                 await _unitOfWork.Motors.AddRangeAsync(motors);
 
-                for (int i = 0; i < mo; i++)
+                foreach (var motor in motors)
                 {
-                    var motorId = motors[i].Id;
+                    var motorId = motor.Id;
 
                     Risk risk = new()
                     {
@@ -308,6 +369,53 @@ namespace Tilbake.Application.Services
                     var clientRiskId = clientRisk.Id;
 
                     foreach (var item in quoteItems.Where(x => x.ClientRiskId == motorId))
+                    {
+                        item.QuoteId = quoteId;
+                        item.ClientRiskId = clientRiskId;
+                        item.DateAdded = DateTime.Now;
+                        item.TaxRate = taxRate;
+                        item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
+                    }
+                }
+            }
+
+            //  Travel
+            if(resource.Travels != null)
+            {
+                //  Update QuoteItems with TravelId
+                var resourceTravels = resource.Travels;
+                var travels = _mapper.Map<IEnumerable<TravelResource>, IEnumerable<Travel>>(resourceTravels);
+                await _unitOfWork.Travels.AddRangeAsync(travels);
+
+                foreach (var travel in travels)
+                {
+                    var travelId = travel.Id;
+
+                    var travelBeneficiaries = travel.TravelBeneficiaries;
+                    await _unitOfWork.TravelBeneficiaries.AddRangeAsync(travelBeneficiaries);
+
+                    Risk risk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        TravelId = travelId,
+                        DateAdded = DateTime.Now
+                    };
+                    await _unitOfWork.Risks.AddAsync(risk);
+
+                    var riskId = risk.Id;
+
+                    ClientRisk clientRisk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = clientId,
+                        RiskId = riskId,
+                        DateAdded = DateTime.Now
+                    };
+                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+
+                    var clientRiskId = clientRisk.Id;
+
+                    foreach (var item in quoteItems.Where(x => x.ClientRiskId == travelId))
                     {
                         item.QuoteId = quoteId;
                         item.ClientRiskId = clientRiskId;

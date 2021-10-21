@@ -7,6 +7,7 @@ namespace Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork
     {
         IAddressRepository Addresses { get; }
         IAllRiskRepository AllRisks { get; }
+        IAllRiskSpecifiedRepository AllRiskSpecifieds { get; }
         IAuditRepository Audits { get; }
         IBankRepository Banks { get; }
         IBankBranchRepository BankBranches { get; }

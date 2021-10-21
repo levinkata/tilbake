@@ -13,6 +13,8 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Description")]
         public string RiskItem { get; set; }
 
+        public Guid AddedBy { get; set; }
+
         //  SelectLists
         public SelectList RiskItemList { get; set; }
     }

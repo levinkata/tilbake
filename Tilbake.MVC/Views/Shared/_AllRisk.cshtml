@@ -1,0 +1,31 @@
+@{
+
+}
+
+<!-- AllRisk - Unspecified -->
+<div class="card border-warning mb-3">
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="AllRiskDescription" class="control-label">Description</label>
+                    <input for="AllRiskDescription" id="AllRiskDescription" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="AllRiskCoverTypeId" class="control-label"></label>
+                    <select for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList"></select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="AllRiskSumInsured" class="control-label"></label>
+                    <input for="AllRiskSumInsured" id="AllRiskSumInsured" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

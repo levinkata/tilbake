@@ -1,0 +1,163 @@
+@{
+    var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+       <div class="row">
+            <div class="form-group">
+                <label for="TravelName" class="control-label">Full Name</label>
+                <input for="TravelName" id="TravelName" class="form-control" value="@FullName" readonly/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelPassportNumber" class="control-label">Passport Number</label>
+                    <input for="TravelPassportNumber" id="TravelPassportNumber" class="form-control" />
+                </div>
+            </div>  
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelDepartureDate" class="control-label">Departure Date</label>
+                    <input type="date" for="TravelDepartureDate" id="TravelDepartureDate" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelReturnDate" class="control-label">Return Date</label>
+                    <input type="date" for="TravelReturnDate" id="TravelReturnDate" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelDestination" class="control-label">Destination</label>
+                    <input for="TravelDestination" id="TravelDestination" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelPersonVisited" class="control-label">Person Visited</label>
+                    <input for="TravelPersonVisited" id="TravelPersonVisited" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelBeneficiary" class="control-label">Beneficiary</label>
+                    <input for="TravelBeneficiary" id="TravelBeneficiary" class="form-control" />
+                </div>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelDoctorName" class="control-label">Doctor's Name</label>
+                    <input for="TravelDoctorName" id="TravelDoctorName" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="TravelDoctorPhone" class="control-label">Doctor's Phone</label>
+                    <input for="TravelDoctorPhone" id="TravelDoctorPhone" class="form-control" />
+                </div>
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="TravelCoverTypeId" class="control-label">Cover Type</label>
+                    <select for="TravelCoverTypeId" id="TravelCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList"></select>
+                </div>
+            </div>                        
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="TravelSumInsured" class="control-label">Sum Insured</label>
+                    <input for="TravelSumInsured" id="TravelSumInsured" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row px-3">
+            <button id="btnAddMembers" class="btn btn-secondary" type="button">Additional Members</button>
+        </div>
+        <div id="AddMembers"></div>
+@*         <div class="row mb-3 px-3">
+            
+            <div class="input-group form-group">
+                <input type="text" id="FirstName" asp-for="Travel.TravelBeneficiaries[1].FirstName" placeholder="First Name" class="form-control form-control-sm" />
+                <input type="text" id="LastName" asp-for="Travel.TravelBeneficiaries[1].LastName" placeholder="Last Name" class="form-control form-control-sm" />
+                <input type="date" id="BirthDate" asp-for="Travel.TravelBeneficiaries[1].BirthDate" placeholder="Birth Date" class="form-control form-control-sm" />
+                <input type="text" id="PassportNumber" asp-for="Travel.TravelBeneficiaries[1].PassportNumber" placeholder="Passport Number" class="form-control form-control-sm" />
+                <select asp-for="Travel.TravelBeneficiaries[1].CountryId" id="CountryId" class="form-select form-select-sm" asp-items="@Model.CountryList" ></select>
+                <span class="btn btn-danger btn-sm float-right delete">&minus;</span>
+            </div>
+        </div>
+        <div id="AdditionalMembers" class="row mb-3 px-3"></div>  *@       
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    var ddl = '@Model.CountryList';
+
+    $(document).ready(function () {
+            // Do something here
+    });
+
+    $('#btnAddMembers').click(function(e) {
+        e.preventDefault();
+
+        '@{
+            Model.tbr.Add(new TravelBeneficiaryResource());
+        }'
+
+        var index = $('#AddMembers').children('div').length;
+
+        // var firstNameCell = '<td><input id="tbr_' + index + '__FirstName" name="tbr[' + index + '].FirstName" type="text" value="" /></td>';
+
+        var html = '';
+        html += '<div id="inputFormRow">';
+        html += '<div class="input-group mb-3">';
+        html += '<input type="text" id="tbr_' + index + '_FirstName" name="tbr[' + index + '].FirstName" class="form-control form-control-sm m-input" placeholder="First Name">';
+        html += '<input type="text" id="tbr_' + index + '_LastName" name="tbr[' + index + '].LastName" class="form-control form-control-sm m-input" placeholder="Last Name">';
+        html += '<input type="date" id="tbr_' + index + '_BirthDate" name="tbr[' + index + '].BirthDate" class="form-control form-control-sm m-input" placeholder="Birth Date">';
+        html += '<input type="text" id="tbr_' + index + '_PassportNumber" name="tbr[' + index + '].PassportNumber" class="form-control form-control-sm m-input" placeholder="Passport Number">';
+        html += '<select id="tbr_' + index + '_CountryId" name="tbr[' + index + '].CountryId" class="form-select form-control-sm m-input" asp-items="@Model.CountryList"></select>';
+        
+        html += '<div class="input-group-append">';
+        html += '<button id="removeRow" type="button" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>';
+        html += '</div>';
+        html += '</div>';
+
+        $('#AddMembers').append(html);
+            
+    });
+
+    // remove row
+    $(document).on('click', '#removeRow', function () {
+        $(this).closest('#inputFormRow').remove();
+    });
+
+    function LoadCountries() {
+
+        $.ajax({
+            url: '@(Url.Action("GetCountries", "Countries"))',
+            traditional: true,
+            dataType: "JSON",
+            type: 'GET',
+            error: function () {
+                alert("An error occurred.");
+            },
+            success: function (countries) {
+
+                $("#TravelBeneficiarCountryId").empty();   // clear before appending new list
+                $.each(countries, function (index, country) {
+                    $('#TravelBeneficiarCountryId').append($('<option></option>').val(country.id).html(country.name));
+                });
+            }
+        });
+    }
+
+</script>

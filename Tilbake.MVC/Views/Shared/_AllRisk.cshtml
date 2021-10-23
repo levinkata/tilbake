@@ -3,9 +3,9 @@
 }
 
 <!-- AllRisk - Unspecified -->
-<div class="card border-warning mb-3">
+<div class="card mb-3">
     <div class="card-body">
-        <div class="row mb-3">
+        <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="AllRiskDescription" class="control-label">Description</label>
@@ -13,16 +13,16 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-3">
+        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="AllRiskCoverTypeId" class="control-label"></label>
+                    <label for="AllRiskCoverTypeId" class="control-label">Cover Type</label>
                     <select for="AllRiskCoverTypeId" id="AllRiskCoverTypeId" class="form-select" asp-items="@Model.CoverTypeList"></select>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="AllRiskSumInsured" class="control-label"></label>
+                    <label for="AllRiskSumInsured" class="control-label">Sum Insured</label>
                     <input for="AllRiskSumInsured" id="AllRiskSumInsured" class="form-control" />
                 </div>
             </div>

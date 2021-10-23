@@ -109,13 +109,7 @@
     $('#btnAddMembers').click(function(e) {
         e.preventDefault();
 
-        '@{
-            Model.tbr.Add(new TravelBeneficiaryResource());
-        }'
-
         var index = $('#AddMembers').children('div').length;
-
-        // var firstNameCell = '<td><input id="tbr_' + index + '__FirstName" name="tbr[' + index + '].FirstName" type="text" value="" /></td>';
 
         var html = '';
         html += '<div id="inputFormRow">';
@@ -132,7 +126,6 @@
         html += '</div>';
 
         $('#AddMembers').append(html);
-            
     });
 
     // remove row

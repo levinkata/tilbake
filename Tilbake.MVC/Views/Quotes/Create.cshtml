@@ -4,7 +4,7 @@
     ViewData["Title"] = Model.PortfolioName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    List<TravelBeneficiaryResource> tbr = new();
+
 
     var quoteDate = @DateTime.Now.Date.ToString("dd/MM/yyyy");
     var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
@@ -69,29 +69,27 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <form class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label asp-for="ClientInfo" class="control-label"></label>
-                                <input asp-for="ClientInfo" id="ClientInfo" class="form-control" />
-                            </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ClientInfo" class="control-label"></label>
+                            <input asp-for="ClientInfo" id="ClientInfo" class="form-control" />
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label asp-for="InternalInfo" class="control-label"></label>
-                                <input asp-for="InternalInfo" id="InternalInfo" class="form-control" />
-                            </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="InternalInfo" class="control-label"></label>
+                            <input asp-for="InternalInfo" id="InternalInfo" class="form-control" />
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label asp-for="QuoteStatusId" class="control-label"></label>
-                                <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-select" asp-items="@Model.QuoteStatusList"></select>
-                            </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="QuoteStatusId" class="control-label"></label>
+                            <select asp-for="QuoteStatusId" id="QuoteStatusId" class="form-select" asp-items="@Model.QuoteStatusList"></select>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 
-                <div class="d-flex bg-success bg-opacity-50">
+                <div class="d-flex bg-success bg-opacity-50 mb-3">
                     <div class="p-2 flex-grow-1">
                         <select id="SelectRisk" class="form-select">
                             <option selected>Select Risk</option>
@@ -108,29 +106,29 @@
                         <button type="button" id="btnRisk" class="btn btn-warning mx-auto">Add Selected Risk</button>
                     </div>
                 </div>
+                <div class="row mx-3">
+                    <table id="tblQuote" class="table table-sm invisible">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Cover Type
+                                </th>
+                                <th>
+                                    Sum Insured
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
             </div>
+
         </div>        
-        <div id="QuoteItemsCard" class="card border-info mb-3">
-            <div class="card-body">
-                <table id="tblQuote" class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>
-                                <strong>Description</strong>
-                            </th>
-                            <th>
-                                <strong>Cover Type</strong>
-                            </th>
-                            <th>
-                                <strong>Sum Insured</strong>
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
         <div id="PlaceHolder"></div>
 
         <!-- AllRisk - Unspecified -->
@@ -1463,7 +1461,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <partial name="_Travel" model="@tbr" />
+                <partial name="_Travel" />
 @*                 <div class="row">
                     <div class="col">
                         <div class="form-group">
@@ -1912,9 +1910,14 @@
             }
 
             //  2. Build TravelBeneficiary Array to match model class TravelBeneficiary
-            travelBeneficiaries = '@tbr';
-            console.log(travelBeneficiaries)
+            var index = $('#AddMembers').children('div').length;
 
+            console.log(travelBeneficiaries)
+            console.log('Parent View');
+            
+            console.log('Entries: ' + index);
+            console.log($('#tbr_0_FirstName').val());
+            console.log($('#tbr_1_FirstName').val());
             //  3. Build QuoteItem Array to match model class QuoteItem
             var quoteItem = {
                 Id: uuidv4(),

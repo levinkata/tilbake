@@ -1910,18 +1910,55 @@
             }
 
             //  2. Build TravelBeneficiary Array to match model class TravelBeneficiary
-            var index = $('#AddMembers').children('div').length;
+            $('#AddMembers #inputFormRow').each(function(index, value) {
 
-            
-            var firstName = $('div#AddMembers div#inputFormRow div.input-group.mb-3').children(0).val();
-            //var lastname = $('#AddMembers').children(0).children(0).children(0).children(0).val();            
-            console.log(firstName );
-            
-            console.log('Parent View');
-            
-            console.log('Entries: ' + index);
-            console.log($('#tbr_0_FirstName').val());
-            console.log($('#tbr_1_FirstName').val());
+                var firstName = '';
+                var lastName = '';
+                var birthDate = '';
+                var passportNumber = '';
+                var countryId = '';
+
+                $(this).each(function(index, value) {
+                    $(this).children(0).children(0).each(function (index, value) {
+
+                        switch (index) {
+                            case 0:
+                                firstName = $(this).val();
+                                break;
+
+                            case 1:
+                                lastName = $(this).val();
+                                break;
+
+                            case 2:
+                                birthDate = $(this).val();
+                                break;
+
+                            case 3:
+                                passportNumber = $(this).val();
+                                break;
+
+                            case 4:
+                                countryId = $(this).val();
+                                break;
+                        }
+                    });
+                });
+
+                var travelBeneficiary = {
+                    Id: uuidv4(),
+                    TravelId: clientRiskId,
+                    FirstName: firstName,
+                    LastName: lastName,
+                    BirthDate: birthDate,
+                    PassportNumber: passportNumber,
+                    countryId: countryId
+                }
+                travelBeneficiaries.push(travelBeneficiary);
+            });
+ 
+            console.log(travelBeneficiaries);
+
             //  3. Build QuoteItem Array to match model class QuoteItem
             var quoteItem = {
                 Id: uuidv4(),

@@ -1912,7 +1912,11 @@
             //  2. Build TravelBeneficiary Array to match model class TravelBeneficiary
             var index = $('#AddMembers').children('div').length;
 
-            console.log(travelBeneficiaries)
+            
+            var firstName = $('div#AddMembers div#inputFormRow div.input-group.mb-3').children(0).val();
+            //var lastname = $('#AddMembers').children(0).children(0).children(0).children(0).val();            
+            console.log(firstName );
+            
             console.log('Parent View');
             
             console.log('Entries: ' + index);

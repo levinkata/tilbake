@@ -114,6 +114,7 @@
         var html = '';
         html += '<div id="inputFormRow">';
         html += '<div class="input-group">';
+        html += '<select id="tbr_' + index + '_TitleId" name="tbr[' + index + '].TitleId" class="form-select form-control-sm m-input" asp-items="@Model.TitleList"></select>';
         html += '<input type="text" id="tbr_' + index + '_FirstName" name="tbr[' + index + '].FirstName" class="form-control form-control-sm m-input" placeholder="First Name">';
         html += '<input type="text" id="tbr_' + index + '_LastName" name="tbr[' + index + '].LastName" class="form-control form-control-sm m-input" placeholder="Last Name">';
         html += '<input type="date" id="tbr_' + index + '_BirthDate" name="tbr[' + index + '].BirthDate" class="form-control form-control-sm m-input" placeholder="Birth Date">';

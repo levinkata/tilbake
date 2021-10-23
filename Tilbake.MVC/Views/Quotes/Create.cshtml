@@ -125,7 +125,9 @@
                         <tbody></tbody>
                     </table>
                 </div>
-
+                <div class="row px-3">
+                    <button type="button" id="btnCreateQuote" class="btn btn-secondary invisible">Create Quote</button>
+                </div>
             </div>
 
         </div>        
@@ -830,9 +832,7 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <h5>New Quote</h5>
-                    <div>
-                        <input type="button" id="btnCreateQuote" class="btn btn-outline-secondary btn-sm text-muted" value="Create Quote" />
-                    </div>
+
                 </div>
             </div>
             <div class="card-body">
@@ -1900,7 +1900,7 @@
                 Id: clientRiskId,
                 PortfolioClientId: portfolioClientId,
                 PassportNumber: $('#TravelPassportNumber').val(),
-                DepartureDate: $('#TravelDepatureDate').val(),
+                DepartureDate: $('#TravelDepartureDate').val(),
                 ReturnDate: $('#TravelReturnDate').val(),
                 Destination: $('#TravelDestination').val(),
                 PersonVisited: $('#TravelPersonVisited').val(),
@@ -1912,6 +1912,7 @@
             //  2. Build TravelBeneficiary Array to match model class TravelBeneficiary
             $('#AddMembers #inputFormRow').each(function(index, value) {
 
+                var titleId = '';
                 var firstName = '';
                 var lastName = '';
                 var birthDate = '';
@@ -1923,22 +1924,25 @@
 
                         switch (index) {
                             case 0:
+                                titleId = $(this).val();
+                                break;                            
+                            case 1:
                                 firstName = $(this).val();
                                 break;
 
-                            case 1:
+                            case 2:
                                 lastName = $(this).val();
                                 break;
 
-                            case 2:
+                            case 3:
                                 birthDate = $(this).val();
                                 break;
 
-                            case 3:
+                            case 4:
                                 passportNumber = $(this).val();
                                 break;
 
-                            case 4:
+                            case 5:
                                 countryId = $(this).val();
                                 break;
                         }
@@ -1948,16 +1952,15 @@
                 var travelBeneficiary = {
                     Id: uuidv4(),
                     TravelId: clientRiskId,
+                    TitleId: titleId,
                     FirstName: firstName,
                     LastName: lastName,
                     BirthDate: birthDate,
                     PassportNumber: passportNumber,
-                    countryId: countryId
+                    CountryId: countryId
                 }
                 travelBeneficiaries.push(travelBeneficiary);
             });
- 
-            console.log(travelBeneficiaries);
 
             //  3. Build QuoteItem Array to match model class QuoteItem
             var quoteItem = {
@@ -1981,6 +1984,7 @@
         })
 
         $('#btnCreateQuote').click(function () {
+            
             var cartItems = $('#tblQuote tbody tr');
             var numCart = cartItems.length;
 
@@ -2042,7 +2046,7 @@
         }
 
         function GenerateQuote() {
-
+            
             //  Build Quote Arrat to match model class Quote
             var quote = {
                 Id: quoteId,
@@ -2068,7 +2072,9 @@
                     Contents: contents,
                     Houses: houses,
                     Motors: motors,
-                    RiskItems: riskItems
+                    RiskItems: riskItems,
+                    Travels: travels,
+                    TravelBeneficiaries: travelBeneficiaries
                 }
 
                 $.ajax({
@@ -2127,6 +2133,16 @@
                     motors = motors.filter(function (obj) {
                         return obj.Id !== clientRiskId;
                     });
+                }
+
+                if (travels.length != 0) {
+                    travels = travels.filter(function (obj) {
+                        return obj.Id !== clientRiskId;
+                    });
+
+                    travelBeneficiaries = travelBeneficiaries.filter(function (obj) {
+                        return obj.TravelId !== clientRiskId;
+                    });                    
                 }
             }
             ResetBtnCreateQuote();

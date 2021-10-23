@@ -19,6 +19,7 @@ namespace Tilbake.Application.Resources
         public HouseResource[] Houses { get; set; }
         public MotorResource[] Motors { get; set; }
         public TravelResource[] Travels { get; set; }
+        public TravelBeneficiaryResource[] TravelBeneficiaries { get; set; }
         public RiskItemResource[] RiskItems { get; set; }
         public RiskItemResource[] SpecifiedRiskItems { get; set; }
     }

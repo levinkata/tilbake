@@ -387,13 +387,17 @@ namespace Tilbake.Application.Services
                 var travels = _mapper.Map<IEnumerable<TravelResource>, IEnumerable<Travel>>(resourceTravels);
                 await _unitOfWork.Travels.AddRangeAsync(travels);
 
+                var resourceTravelBeneficiaries = resource.TravelBeneficiaries;
+                var travelBeneficiaries = _mapper.Map<IEnumerable<TravelBeneficiaryResource>, IEnumerable<TravelBeneficiary>>(resourceTravelBeneficiaries);
+                if(travelBeneficiaries != null)
+                {
+                    await _unitOfWork.TravelBeneficiaries.AddRangeAsync(travelBeneficiaries);
+                }
+
                 foreach (var travel in travels)
                 {
                     var travelId = travel.Id;
-
-                    var travelBeneficiaries = travel.TravelBeneficiaries;
-                    await _unitOfWork.TravelBeneficiaries.AddRangeAsync(travelBeneficiaries);
-
+                    
                     Risk risk = new()
                     {
                         Id = Guid.NewGuid(),

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -20,6 +21,20 @@ namespace Tilbake.MVC.Controllers
         {
             return View(await _titleService.GetAllAsync());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTitles()
+        {
+            var resources = await _titleService.GetAllAsync();
+            var titles = from m in resources
+                              select new
+                              {
+                                  m.Id,
+                                  m.Name
+                              };
+
+            return Json(titles);
+        }        
 
         // GET: Titles/Details/5
         public async Task<IActionResult> Details(Guid? id)

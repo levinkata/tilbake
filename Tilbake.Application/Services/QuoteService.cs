@@ -33,19 +33,13 @@ namespace Tilbake.Application.Services
             var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
             var clientId = resource.ClientId;
-            var branch = await _unitOfWork.InsurerBranches.GetFirstOrDefaultAsync(
-                                                            e => e.Name == "No Insurer Branch");
-            
+
             var resourceQuote = resource.Quote;
             var quote = _mapper.Map<QuoteResource, Quote>(resourceQuote);
 
             quote.Id = Guid.NewGuid();
             quote.QuoteDate = DateTime.Now;
             quote.DateAdded = DateTime.Now;
-            if (branch != null)
-            {
-                quote.InsurerBranchId = branch.Id;
-            }
             
             await _unitOfWork.Quotes.AddAsync(quote);
             var quoteId = quote.Id;
@@ -158,7 +152,6 @@ namespace Tilbake.Application.Services
             if (resource.Buildings != null)
             {
                 //  Update QuoteItems with BuildingId
-                //  int ho = resource.Buildings.Length;
                 var resourceBuildings = resource.Buildings;
                 var buildings = _mapper.Map<IEnumerable<BuildingResource>, IEnumerable<Building>>(resourceBuildings);
                 await _unitOfWork.Buildings.AddRangeAsync(buildings);
@@ -203,7 +196,6 @@ namespace Tilbake.Application.Services
             if (resource.Contents != null)
             {
                 //  Update QuoteItems with ContentId
-                //  int co = resource.Contents.Length;
                 var resourceContents = resource.Contents;
                 var contents = _mapper.Map<IEnumerable<ContentResource>, IEnumerable<Content>>(resourceContents);
                 await _unitOfWork.Contents.AddRangeAsync(contents);
@@ -248,7 +240,6 @@ namespace Tilbake.Application.Services
             if (resource.ExcessBuyBacks != null)
             {
                 //  Update QuoteItems with ExcessBuyBackId
-                //  int co = resource.ExcessBuyBacks.Length;
                 var resourceExcessBuyBacks = resource.ExcessBuyBacks;
                 var excessBuyBacks = _mapper.Map<IEnumerable<ExcessBuyBackResource>, IEnumerable<ExcessBuyBack>>(resourceExcessBuyBacks);
                 await _unitOfWork.ExcessBuyBacks.AddRangeAsync(excessBuyBacks);
@@ -293,7 +284,6 @@ namespace Tilbake.Application.Services
             if (resource.Houses != null)
             {
                 //  Update QuoteItems with HouseId
-                //  int ho = resource.Houses.Length;
                 var resourceHouses = resource.Houses;
                 var houses = _mapper.Map<IEnumerable<HouseResource>, IEnumerable<House>>(resourceHouses);
                 await _unitOfWork.Houses.AddRangeAsync(houses);
@@ -338,7 +328,6 @@ namespace Tilbake.Application.Services
             if(resource.Motors != null)
             {
                 //  Update QuoteItems with MotorId
-                //  int mo = resource.Motors.Length;
                 var resourceMotors = resource.Motors;
                 var motors = _mapper.Map<IEnumerable<MotorResource>, IEnumerable<Motor>>(resourceMotors);
                 await _unitOfWork.Motors.AddRangeAsync(motors);

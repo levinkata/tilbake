@@ -100,10 +100,13 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
 
-    var ddl = '@Model.CountryList';
+    var itemsCountry = '<option>Select Country</option>';
+    var itemsTitle = '<option>Select Title</option>';
 
     $(document).ready(function () {
-            // Do something here
+        // Do something here
+        LoadCountries();
+        LoadTitles();
     });
 
     $('#btnAddMembers').click(function(e) {
@@ -114,19 +117,21 @@
         var html = '';
         html += '<div id="inputFormRow">';
         html += '<div class="input-group">';
-        html += '<select id="tbr_' + index + '_TitleId" name="tbr[' + index + '].TitleId" class="form-select form-control-sm m-input" asp-items="@Model.TitleList"></select>';
+        html += '<select id="tbr_' + index + '_TitleId" name="tbr[' + index + '].TitleId" class="form-select form-control-sm select-title"><option value="">Select Title</option></select>';
         html += '<input type="text" id="tbr_' + index + '_FirstName" name="tbr[' + index + '].FirstName" class="form-control form-control-sm m-input" placeholder="First Name">';
         html += '<input type="text" id="tbr_' + index + '_LastName" name="tbr[' + index + '].LastName" class="form-control form-control-sm m-input" placeholder="Last Name">';
         html += '<input type="date" id="tbr_' + index + '_BirthDate" name="tbr[' + index + '].BirthDate" class="form-control form-control-sm m-input" placeholder="Birth Date">';
         html += '<input type="text" id="tbr_' + index + '_PassportNumber" name="tbr[' + index + '].PassportNumber" class="form-control form-control-sm m-input" placeholder="Passport Number">';
-        html += '<select id="tbr_' + index + '_CountryId" name="tbr[' + index + '].CountryId" class="form-select form-control-sm m-input" asp-items="@Model.CountryList"></select>';
+        html += '<select id="tbr_' + index + '_CountryId" name="tbr[' + index + '].CountryId" class="form-select form-control-sm select-country"><option value="">Select Country</option>/select>';
         
         html += '<div class="input-group-append">';
         html += '<button id="removeRow" type="button" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>';
         html += '</div>';
         html += '</div>';
 
-        $('#AddMembers').append(html);
+        $('#AddMembers').append(html).find('.input-group:last .select-title').html(itemsTitle);
+        $('#AddMembers').find('.input-group:last .select-country').html(itemsCountry);
+        // $('#AddMembers #inputFormRow:last .input-group:last').find('.select-country').html(items)
     });
 
     // remove row
@@ -135,7 +140,7 @@
     });
 
     function LoadCountries() {
-
+        
         $.ajax({
             url: '@(Url.Action("GetCountries", "Countries"))',
             traditional: true,
@@ -145,10 +150,26 @@
                 alert("An error occurred.");
             },
             success: function (countries) {
-
-                $("#TravelBeneficiarCountryId").empty();   // clear before appending new list
                 $.each(countries, function (index, country) {
-                    $('#TravelBeneficiarCountryId').append($('<option></option>').val(country.id).html(country.name));
+                    itemsCountry += "<option value='" + country.id + "'>" + country.name + "</option>";
+                });
+            }
+        });
+    }
+
+    function LoadTitles() {
+        
+        $.ajax({
+            url: '@(Url.Action("GetTitles", "Titles"))',
+            traditional: true,
+            dataType: "JSON",
+            type: 'GET',
+            error: function () {
+                alert("An error occurred.");
+            },
+            success: function (titles) {
+                $.each(titles, function (index, title) {
+                    itemsTitle += "<option value='" + title.id + "'>" + title.name + "</option>";
                 });
             }
         });

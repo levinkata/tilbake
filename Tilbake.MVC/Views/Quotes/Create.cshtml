@@ -1562,6 +1562,7 @@
         var portfolioId = '@Model.PortfolioId';
         var countryList = '@Model.CountryList';
         var fullName = '@FullName';
+        var insurerBranchId = '@Model.InsurerBranchId';
         var allRisks = [];
         var allRiskSpecifieds = [];
         var buildings = [];
@@ -2054,7 +2055,7 @@
                 QuoteNumber: 0,
                 QuoteDate: '@DateTime.Now',
                 QuoteStatusId: $('#QuoteStatusId option:selected').val(),
-                InsurerBranchId: null,
+                InsurerBranchId: insurerBranchId,
                 ClientInfo: $('#ClientInfo').val(),
                 InternalInfo: $('#InternalInfo').val(),
                 RunDay: 0

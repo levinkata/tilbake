@@ -1,5 +1,4 @@
 ﻿using System;
-using Tilbake.Domain.Models;
 
 namespace Tilbake.Application.Resources
 {

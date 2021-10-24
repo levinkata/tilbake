@@ -183,15 +183,6 @@ namespace Tilbake.Infrastructure.Persistence.Context
         public virtual DbSet<Withdrawal> Withdrawals { get; set; }
         public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-/*         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;");
-            }
-        } */
-
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaveChanges(_userId);
@@ -260,7 +251,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 Audits.Add(auditEntry.ToAudit());
             }
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>
@@ -1733,8 +1724,13 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasOne(d => d.ParentPolicy)
                     .WithMany(p => p.ExcessBuyBacks)
                     .HasForeignKey(d => d.ParentPolicyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExcessBuyBack_Policy");
+
+                entity.HasOne(d => d.ParentQuote)
+                    .WithMany(p => p.ExcessBuyBacks)
+                    .HasForeignKey(d => d.ParentQuoteId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExcessBuyBack_Quote");
             });
 
             modelBuilder.Entity<Extension>(entity =>
@@ -3227,6 +3223,7 @@ namespace Tilbake.Infrastructure.Persistence.Context
                 entity.HasOne(d => d.InsurerBranch)
                     .WithMany(p => p.Quotes)
                     .HasForeignKey(d => d.InsurerBranchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Quote_InsurerBranch");
 
                 entity.HasOne(d => d.PaymentMethod)

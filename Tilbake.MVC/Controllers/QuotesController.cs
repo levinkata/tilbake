@@ -170,11 +170,13 @@ namespace Tilbake.MVC.Controllers
         // GET: Quotes/Create
         public async Task<IActionResult> Create(Guid portfolioClientId)
         {
+            var branchName = "No Insurer Branch";
             var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
             var clientId = portfolioClient.ClientId;
             var portfolioId = portfolioClient.PortfolioId;
             var client = portfolioClient.Client;
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var insurerBranch = await _insurerBranchService.GetByNameAsync(branchName);
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var buildingConditions = await _buildingConditionService.GetAllAsync();
@@ -198,6 +200,7 @@ namespace Tilbake.MVC.Controllers
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
                 PortfolioId = portfolioId,
+                InsurerBranchId = insurerBranch.Id,
                 PortfolioName = portfolio.Name,
                 Client = client,
                 QuoteDate = DateTime.Now.Date,

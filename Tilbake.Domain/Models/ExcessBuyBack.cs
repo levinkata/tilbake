@@ -11,7 +11,8 @@ namespace Tilbake.Domain.Models
         }
 
         public Guid Id { get; set; }
-        public Guid ParentPolicyId { get; set; }
+        public Guid? ParentPolicyId { get; set; }
+        public Guid ParentQuoteId { get; set; }
         public Guid MotorId { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
@@ -20,6 +21,7 @@ namespace Tilbake.Domain.Models
 
         public virtual Motor Motor { get; set; }
         public virtual Policy ParentPolicy { get; set; }
+        public virtual Quote ParentQuote { get; set; }
         public virtual ICollection<Risk> Risks { get; set; }
     }
 }

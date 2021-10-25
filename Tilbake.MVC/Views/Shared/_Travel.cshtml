@@ -7,7 +7,7 @@
        <div class="row">
             <div class="form-group">
                 <label for="TravelName" class="control-label">Full Name</label>
-                <input for="TravelName" id="TravelName" class="form-control" value="@FullName" readonly/>
+                <input for="TravelName" id="TravelName" class="form-control" value="@FullName" readonly />
             </div>
         </div>
         <div class="row">
@@ -64,7 +64,7 @@
                 </div>
             </div> 
         </div>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-6">
                 <div class="form-group">
                     <label for="TravelCoverTypeId" class="control-label">Cover Type</label>
@@ -78,22 +78,10 @@
                 </div>
             </div>
         </div>
-        <div class="row px-3">
+        <div class="row px-3 mb-3">
             <button id="btnAddMembers" class="btn btn-secondary" type="button">Additional Members</button>
         </div>
-        <div id="AddMembers"></div>
-@*         <div class="row mb-3 px-3">
-            
-            <div class="input-group form-group">
-                <input type="text" id="FirstName" asp-for="Travel.TravelBeneficiaries[1].FirstName" placeholder="First Name" class="form-control form-control-sm" />
-                <input type="text" id="LastName" asp-for="Travel.TravelBeneficiaries[1].LastName" placeholder="Last Name" class="form-control form-control-sm" />
-                <input type="date" id="BirthDate" asp-for="Travel.TravelBeneficiaries[1].BirthDate" placeholder="Birth Date" class="form-control form-control-sm" />
-                <input type="text" id="PassportNumber" asp-for="Travel.TravelBeneficiaries[1].PassportNumber" placeholder="Passport Number" class="form-control form-control-sm" />
-                <select asp-for="Travel.TravelBeneficiaries[1].CountryId" id="CountryId" class="form-select form-select-sm" asp-items="@Model.CountryList" ></select>
-                <span class="btn btn-danger btn-sm float-right delete">&minus;</span>
-            </div>
-        </div>
-        <div id="AdditionalMembers" class="row mb-3 px-3"></div>  *@       
+        <div id="AddMembers" class="row"></div> 
     </div>
 </div>
 

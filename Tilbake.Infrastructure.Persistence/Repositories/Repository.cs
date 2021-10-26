@@ -11,8 +11,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly TilbakeDbContext _context;
-        protected readonly DbSet<TEntity> dbSet;
+        protected TilbakeDbContext _context;
+        protected DbSet<TEntity> dbSet;
 
         public Repository(TilbakeDbContext context)
         {
@@ -29,7 +29,7 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
             try
             {
-                await Task.Run(() => dbSet.AddAsync(entity));
+                await dbSet.AddAsync(entity);
                 return entity;
             }
             catch (Exception ex)

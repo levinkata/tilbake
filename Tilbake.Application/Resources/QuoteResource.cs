@@ -58,14 +58,14 @@ namespace Tilbake.Application.Resources
         public string PortfolioName { get; set; }
         
         //  Tables
-        public Client Client { get; set; }
-        public Insurer Insurer { get; set; }
+        public ClientResource Client { get; set; }
+        public InsurerResource Insurer { get; set; }
         public InsurerBranch InsurerBranch { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
-        public PolicyType PolicyType { get; set; }
-        public PortfolioClient PortfolioClient { get; set; }
-        public QuoteStatus QuoteStatus { get; set; }
-        public SalesType SalesType { get; set; }
+        public PaymentMethodResource PaymentMethod { get; set; }
+        public PolicyTypeResource PolicyType { get; set; }
+        public PortfolioClientResource PortfolioClient { get; set; }
+        public QuoteStatusResource QuoteStatus { get; set; }
+        public SalesTypeResource SalesType { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }

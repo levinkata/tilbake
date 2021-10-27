@@ -51,21 +51,21 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Insurer")]
         public Guid InsurerId { get ;set; }
 
-        public List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
+        public virtual List<QuoteItem> QuoteItems { get; } = new List<QuoteItem>();
 
         //  Other
         public decimal TaxRate { get; set; }
         public string PortfolioName { get; set; }
         
         //  Tables
-        public ClientResource Client { get; set; }
-        public InsurerResource Insurer { get; set; }
-        public InsurerBranch InsurerBranch { get; set; }
-        public PaymentMethodResource PaymentMethod { get; set; }
-        public PolicyTypeResource PolicyType { get; set; }
-        public PortfolioClientResource PortfolioClient { get; set; }
-        public QuoteStatusResource QuoteStatus { get; set; }
-        public SalesTypeResource SalesType { get; set; }
+        public virtual ClientResource Client { get; set; }
+        public virtual InsurerResource Insurer { get; set; }
+        public virtual InsurerBranch InsurerBranch { get; set; }
+        public virtual PaymentMethodResource PaymentMethod { get; set; }
+        public virtual PolicyTypeResource PolicyType { get; set; }
+        public virtual PortfolioClientResource PortfolioClient { get; set; }
+        public virtual QuoteStatusResource QuoteStatus { get; set; }
+        public virtual SalesTypeResource SalesType { get; set; }
 
         //  SelectLists
         public SelectList CoverTypeList { get; set; }

@@ -15,6 +15,6 @@ namespace Tilbake.Application.Resources
         [Display(Name = "Bank")]
         public Guid BankId { get; set; }
 
-        public Bank Bank { get; set; }
+        public virtual BankResource Bank { get; set; }
     }
 }

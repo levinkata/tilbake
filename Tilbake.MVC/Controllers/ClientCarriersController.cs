@@ -59,7 +59,7 @@ namespace Tilbake.MVC.Controllers
         {
             var carriers = await _carrierService.GetAllAsync();
             var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
-            var selectedCarrierIds = clientCarriers.Select(r => r.CarrierId).ToArray();
+            var selectedCarrierIds = clientCarriers.Select(r => r.CarrierId).ToList();
 
             ClientCarrierResource resource = new()
             {

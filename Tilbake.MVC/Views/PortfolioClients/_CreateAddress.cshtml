@@ -1,4 +1,4 @@
-﻿@model PortfolioClientSaveResource
+﻿@model AddressSaveResource
 
 <div class="card">
     <div class="card-body">
@@ -19,8 +19,8 @@
             </div>
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="AddressCountryId" class="control-label"></label>
-                    <select asp-for="AddressCountryId" id="Country" class ="form-select" asp-items="Model.AddressCountryList"></select>
+                    <label asp-for="CountryId" class="control-label"></label>
+                    <select asp-for="CountryId" id="CountryId" class ="form-select" asp-items="Model.CountryList"></select>
                 </div>
             </div>
             <div class="col-4">
@@ -38,8 +38,8 @@
 <script type="text/javascript">
     
     $(document).ready(function () {
-        $('#Country').change(function () {
-            var selectedCountryId = $('#Country option:selected').val();
+        $('#CountryId').change(function () {
+            var selectedCountryId = $('#CountryId option:selected').val();
 
             if (selectedCountryId != null && selectedCountryId != '') {
                 $.ajax({

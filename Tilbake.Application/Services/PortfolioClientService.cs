@@ -21,40 +21,98 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PortfolioClientSaveResource resource)
+        public async Task<ClientResource> AddAsync(PortfolioClientSaveResource resource)
         {
-            var client = _mapper.Map<PortfolioClientSaveResource, Client>(resource);
+            var resourceClient = resource.Client;
+
+            var client = _mapper.Map<ClientSaveResource, Client>(resourceClient);
 
             client.Id = Guid.NewGuid();
             client.DateAdded = DateTime.Now;
             await _unitOfWork.Clients.AddAsync(client);
             var clientId = client.Id;
 
-            PortfolioClient newPortfolioClient = new()
-            {
-                Id = Guid.NewGuid(),
-                PortfolioId = resource.PortfolioId,
-                ClientId = clientId,
-                DateAdded = DateTime.Now
-            };
-            await _unitOfWork.PortfolioClients.AddAsync(newPortfolioClient);
+            var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
 
-            var physicalAddress = resource.PhysicalAddress;
-            if (physicalAddress != null)
+            portfolioClient.Id = Guid.NewGuid();
+            portfolioClient. ClientId = clientId;
+            portfolioClient.DateAdded = DateTime.Now;
+
+            // PortfolioClient newPortfolioClient = new()
+            // {
+            //     Id = Guid.NewGuid(),
+            //     PortfolioId = resource.PortfolioId,
+            //     ClientId = clientId,
+            //     DateAdded = DateTime.Now
+            // };
+            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+
+            var resourceAddress = resource.Client.Address;
+            
+            if (resourceAddress != null)
             {
-                Address newAddress = new()
-                {
-                    Id = Guid.NewGuid(),
-                    ClientId = clientId,
-                    PhysicalAddress = physicalAddress,
-                    PostalAddress = resource.PostalAddress,
-                    CityId = resource.CityId,
-                    DateAdded = DateTime.Now
-                };
-                await _unitOfWork.Addresses.AddAsync(newAddress);
+                var address = _mapper.Map<AddressSaveResource, Address>(resourceAddress);
+
+                address. Id = Guid.NewGuid();
+                address.ClientId = clientId;
+                address.DateAdded = DateTime.Now;
+
+                // Address newAddress = new()
+                // {
+                //     Id = Guid.NewGuid(),
+                //     ClientId = clientId,
+                //     PhysicalAddress = resourceAddress.PhysicalAddress,
+                //     PostalAddress = resourceAddress.PostalAddress,
+                //     CityId = resourceAddress.CityId,
+                //     DateAdded = DateTime.Now
+                // };
+                await _unitOfWork.Addresses.AddAsync(address);
             }
+            
+            var resourceEmailAddresses = resource.Client.EmailAddresses;
+            if (resourceEmailAddresses != null)
+            {
+                var emailAddresses = _mapper.Map<IEnumerable<EmailAddressSaveResource>, IEnumerable<EmailAddress>>(resourceEmailAddresses);
 
-            var carrierIds = resource.CarrierIds;
+                foreach (var emailAddress in emailAddresses)
+                {
+                    emailAddress.Id = Guid.NewGuid();
+                    emailAddress.ClientId = clientId;
+                    emailAddress.DateAdded = DateTime.Now;
+
+                    // EmailAddress newEmailAddress = new()
+                    // {
+                    //     ClientId = clientId,
+                    //     Name = emailAddress.Name,
+                    //     IsPrimary = emailAddress.IsPrimary,
+                    //     DateAdded = DateTime.Now
+                    // };
+                    await _unitOfWork.EmailAddresses.AddAsync(emailAddress);
+                }
+            }            
+
+            var resourceMobileNumbers = resource.Client.MobileNumbers;
+            if (resourceMobileNumbers != null)
+            {
+                var mobileNumbers = _mapper.Map<IEnumerable<MobileNumberSaveResource>, IEnumerable<MobileNumber>>(resourceMobileNumbers);
+                foreach (var mobileNumber in mobileNumbers)
+                {
+                    mobileNumber.Id = Guid.NewGuid();
+                    mobileNumber.ClientId = clientId;
+                    mobileNumber.DateAdded = DateTime.Now;
+
+                    // MobileNumber newMobileNumber = new()
+                    // {
+                    //     ClientId = clientId,
+                    //     Name = mobileNumber.Name,
+                    //     IsPrimary = mobileNumber.IsPrimary,
+                    //     DateAdded = DateTime.Now
+                    // };
+                    await _unitOfWork.MobileNumbers.AddAsync(mobileNumber);
+                }
+            }  
+
+            var carrierIds = resource.Client.CarrierIds;
             if (carrierIds != null)
             {
                 foreach (var carrierId in carrierIds)
@@ -67,9 +125,21 @@ namespace Tilbake.Application.Services
                     };
                     await _unitOfWork.ClientCarriers.AddAsync(newClientCarrier);
                 }
-
             }
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
+
+            var newClient = _unitOfWork.Clients.GetFirstOrDefaultAsync(
+                                                r => r.Id == clientId,
+                                                r => r.ClientType,
+                                                r => r.Country,
+                                                r => r.IdDocumentType,
+                                                r => r.Gender,
+                                                r => r.MaritalStatus,
+                                                r => r.Occupation,
+                                                r => r.Title);
+
+            var result = _mapper.Map<Client, ClientResource>(client);
+            return result;
         }
 
         public async Task<int> AddExistingClientAsync(Guid portfolioId, Guid clientId)

@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace Tilbake.Application.Resources
 {
-    public class MobileNumberResource
+    public class EmailAddressSaveResource
     {
-        public Guid Id { get; set; }
         public Guid ClientId { get; set; }
 
-        [Display(Name = "Mobile")]                
+        [Display(Name = "Email")]                
         public string Name { get; set; }
 
-        [Display(Name = "Is Primary?")]                
+        [Display(Name = "Is primary?")]                
         public bool IsPrimary { get; set; }
     }
 }

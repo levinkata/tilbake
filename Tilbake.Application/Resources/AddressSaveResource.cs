@@ -26,8 +26,6 @@ namespace Tilbake.Application.Resources
         public Guid? TowTruckId { get; set; }
         public Guid? RoadsideAssistId { get; set; }
 
-        public City City { get; set; }
-
         //  Other
         [Display(Name = "Country")]
         public Guid CountryId { get; set; }

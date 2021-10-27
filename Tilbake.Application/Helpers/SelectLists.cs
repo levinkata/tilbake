@@ -40,7 +40,7 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", buildingConditionId);
         }
 
-        public static MultiSelectList Carriers(IEnumerable<CarrierResource> carriers, Guid[] carrierIds)
+        public static MultiSelectList Carriers(IEnumerable<CarrierResource> carriers, List<Guid> carrierIds)
         {
             List<SelectListItem> items = new();
             items.Add(new SelectListItem() { Text = "None", Value = "" });
@@ -68,6 +68,21 @@ namespace Tilbake.Application.Helpers
             return (cityId == Guid.Empty || String.IsNullOrEmpty(cityId.ToString())) ?
                                     new SelectList(items, "Value", "Text") :
                                     new SelectList(items, "Value", "Text", cityId);
+        }
+
+        public static SelectList ClientStatuses(IEnumerable<ClientStatusResource> clientStatuses, Guid? clientStatusId)
+        {
+            List<SelectListItem> items = new();
+            items.Add(new SelectListItem() { Text = "Select Client Status", Value = "" });
+
+            foreach (var item in clientStatuses)
+            {
+                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return (clientStatusId == Guid.Empty || String.IsNullOrEmpty(clientStatusId.ToString())) ?
+                                    new SelectList(items, "Value", "Text") :
+                                    new SelectList(items, "Value", "Text", clientStatusId);
         }
 
         public static SelectList ClientTypes(IEnumerable<ClientTypeResource> clientTypes, Guid? clientTypeId)

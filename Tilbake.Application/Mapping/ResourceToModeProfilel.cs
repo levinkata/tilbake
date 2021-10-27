@@ -18,9 +18,11 @@ namespace Tilbake.Application.Mapping
             CreateMap<BuildingConditionSaveResource, BuildingCondition>();
             CreateMap<CarrierSaveResource, Carrier>();
             CreateMap<CitySaveResource, City>();
+            CreateMap<ClientSaveResource, Client>();
             CreateMap<PortfolioClientSaveResource, Client>();
             CreateMap<ClientBulkSaveResource, ClientBulk>();
             CreateMap<ClientCarrierSaveResource, ClientCarrier>();
+            CreateMap<ClientStatusSaveResource, ClientStatus>();
             CreateMap<ClientTypeSaveResource, ClientType>();
             CreateMap<CommissionRateSaveResource, CommissionRate>();
             CreateMap<CountrySaveResource, Country>();
@@ -30,6 +32,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<CoverTypeSaveResource, CoverType>();
             CreateMap<DocumentTypeSaveResource, DocumentType>();
             CreateMap<DriverTypeSaveResource, DriverType>();
+            CreateMap<EmailAddressSaveResource, EmailAddress>();
             CreateMap<ExcessBuyBackSaveResource, ExcessBuyBack>();
             CreateMap<FileTemplateSaveResource, FileTemplate>();
             CreateMap<GenderSaveResource, Gender>();
@@ -42,6 +45,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<InvoiceStatusSaveResource, InvoiceStatus>();
             CreateMap<InvoiceSaveResource, Invoice>();
             CreateMap<MaritalStatusSaveResource, MaritalStatus>();
+            CreateMap<MobileNumberSaveResource, MobileNumber>();
             CreateMap<MotorSaveResource, Motor>();
             CreateMap<MotorMakeSaveResource, MotorMake>();
             CreateMap<MotorModelSaveResource, MotorModel>();
@@ -50,6 +54,7 @@ namespace Tilbake.Application.Mapping
             CreateMap<PaymentTypeSaveResource, PaymentType>();
             CreateMap<PolicyStatusSaveResource, PolicyStatus>();
             CreateMap<PortfolioSaveResource, Portfolio>();
+            CreateMap<PortfolioClientSaveResource, PortfolioClient>();
             CreateMap<PortfolioAdministrationFeeSaveResource, PortfolioAdministrationFee>();
             CreateMap<PortfolioPolicyFeeSaveResource, PortfolioPolicyFee>();
             CreateMap<QuoteSaveResource, Quote>();

@@ -15,88 +15,88 @@
         <div class="row">
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="TitleId" class="control-label"></label>
-                    <select asp-for="TitleId" class="form-control" asp-items="@Model.TitleList"></select>
+                    <label asp-for="Client.TitleId" class="control-label"></label>
+                    <select asp-for="Client.TitleId" class="form-control" asp-items="@Model.Client.TitleList"></select>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="ClientTypeId" class="control-label"></label>
-                    <select asp-for="ClientTypeId" class="form-control" asp-items="@Model.ClientTypeList"></select>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label asp-for="FirstName" class="control-label"></label>
-                    <input asp-for="FirstName" class="form-control" />
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label asp-for="MiddleName" class="control-label"></label>
-                    <input asp-for="MiddleName" class="form-control" />
-                    <span asp-validation-for="MiddleName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label asp-for="LastName" class="control-label"></label>
-                    <input asp-for="LastName" class="form-control" />
-                    <span asp-validation-for="LastName" class="text-danger"></span>
+                    <label asp-for="Client.ClientTypeId" class="control-label"></label>
+                    <select asp-for="Client.ClientTypeId" class="form-control" asp-items="@Model.Client.ClientTypeList"></select>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="BirthDate" class="control-label"></label>
-                    <input asp-for="BirthDate" class="form-control" />
-                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    <label asp-for="Client.FirstName" class="control-label"></label>
+                    <input asp-for="Client.FirstName" class="form-control" />
+                    <span asp-validation-for="Client.FirstName" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="GenderId" class="control-label"></label>
-                    <select asp-for="GenderId" class="form-control" asp-items="@Model.GenderList"></select>
+                    <label asp-for="Client.MiddleName" class="control-label"></label>
+                    <input asp-for="Client.MiddleName" class="form-control" />
+                    <span asp-validation-for="Client.MiddleName" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="IdNumber" class="control-label"></label>
-                    <input asp-for="IdNumber" class="form-control" />
-                    <span asp-validation-for="IdNumber" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label asp-for="MaritalStatusId" class="control-label"></label>
-                    <select asp-for="MaritalStatusId" class="form-control" asp-items="@Model.MaritalStatusList"></select>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label asp-for="CountryId" class="control-label"></label>
-                    <select asp-for="CountryId" class="form-control" asp-items="@Model.CountryList"></select>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label asp-for="OccupationId" class="control-label"></label>
-                    <select asp-for="OccupationId" class="form-control" asp-items="@Model.OccupationList"></select>
+                    <label asp-for="Client.LastName" class="control-label"></label>
+                    <input asp-for="Client.LastName" class="form-control" />
+                    <span asp-validation-for="Client.LastName" class="text-danger"></span>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-4">
                 <div class="form-group">
-                    <label asp-for="Phone" class="control-label"></label>
-                    <input asp-for="Phone" class="form-control" />
-                    <span asp-validation-for="Phone" class="text-danger"></span>
+                    <label asp-for="Client.BirthDate" class="control-label"></label>
+                    <input asp-for="Client.BirthDate" class="form-control" />
+                    <span asp-validation-for="Client.BirthDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Client.GenderId" class="control-label"></label>
+                    <select asp-for="Client.GenderId" class="form-control" asp-items="@Model.Client.GenderList"></select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Client.IdNumber" class="control-label"></label>
+                    <input asp-for="Client.IdNumber" class="form-control" />
+                    <span asp-validation-for="Client.IdNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Client.MaritalStatusId" class="control-label"></label>
+                    <select asp-for="Client.MaritalStatusId" class="form-control" asp-items="@Model.Client.MaritalStatusList"></select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Client.CountryId" class="control-label"></label>
+                    <select asp-for="Client.CountryId" class="form-control" asp-items="@Model.Client.CountryList"></select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Client.OccupationId" class="control-label"></label>
+                    <select asp-for="Client.OccupationId" class="form-control" asp-items="@Model.Client.OccupationList"></select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="Client.Phone" class="control-label"></label>
+                    <input asp-for="Client.Phone" class="form-control" />
+                    <span asp-validation-for="Client.Phone" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -107,7 +107,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back</a>
 </div>
 
 @section Scripts {

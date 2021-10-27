@@ -16,6 +16,7 @@ namespace Tilbake.MVC.Controllers
         private readonly IPortfolioClientService _portfolioClientService;
         private readonly ICityService _cityService;
         private readonly IClientService _clientService;
+        private readonly IClientStatusService _clientStatusService;
         private readonly IClientTypeService _clientTypeService;
         private readonly ICountryService _countryService;
         private readonly IGenderService _genderService;
@@ -31,6 +32,7 @@ namespace Tilbake.MVC.Controllers
         public PortfolioClientsController(IPortfolioClientService portfolioClientService,
                                             ICityService cityService,
                                             IClientService clientService,
+                                            IClientStatusService clientStatusService,
                                             IClientTypeService clientTypeService,
                                             ICountryService countryService,
                                             IGenderService genderService,
@@ -46,6 +48,7 @@ namespace Tilbake.MVC.Controllers
             _portfolioClientService = portfolioClientService;
             _cityService = cityService;
             _clientService = clientService;
+            _clientStatusService = clientStatusService;
             _clientTypeService = clientTypeService;
             _countryService = countryService;
             _genderService = genderService;
@@ -62,7 +65,7 @@ namespace Tilbake.MVC.Controllers
         // GET: PortfolioClients
         public async Task<IActionResult> Index(Guid portfolioId)
         {
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);         
 
             ClientResource resource = new()
             {
@@ -223,6 +226,7 @@ namespace Tilbake.MVC.Controllers
         {
             var carriers = await _carrierService.GetAllAsync();
             var clientTypes = await _clientTypeService.GetAllAsync();
+            var clientStatuses = await _clientStatusService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
             var idDocumentTypes = await _idDocumentTypeService.GetAllAsync();
@@ -236,17 +240,30 @@ namespace Tilbake.MVC.Controllers
             {
                 PortfolioId = portfolioId,
                 PortfolioName = portfolio.Name,
-                BirthDate = DateTime.Now.Date,
-                AddressCountryList = SelectLists.Countries(countries, Guid.Empty),
+                ClientStatusList = SelectLists.ClientStatuses(clientStatuses, Guid.Empty)
+            };
+
+            AddressSaveResource addressResource = new()
+            {
+                CountryList = SelectLists.Countries(countries, Guid.Empty)
+            };
+
+            ClientSaveResource clientResource = new()
+            {
+                BirthDate = DateTime.Now.Date,               
                 ClientTypeList = SelectLists.ClientTypes(clientTypes, Guid.Empty),
                 CountryList = SelectLists.Countries(countries, Guid.Empty),
                 GenderList = SelectLists.Genders(genders, Guid.Empty),
                 IdDocumentTypeList = SelectLists.IdDocumentTypes(idDocumentTypes, Guid.Empty),
                 MaritalStatusList = SelectLists.MaritalStatuses(maritalStatuses, Guid.Empty),
                 OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
-                TitleList = SelectLists.Titles(titles, Guid.Empty)
+                TitleList = SelectLists.Titles(titles, Guid.Empty)                
             };
-            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
+
+            clientResource.CarrierList = SelectLists.Carriers(carriers, clientResource.CarrierIds);
+            clientResource.Address = addressResource;
+
+            resource.Client = clientResource;
             return View(resource);
         }
 
@@ -257,10 +274,11 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _portfolioClientService.AddAsync(resource);
-                return RedirectToAction(nameof(Search), new { portfolioId = resource.PortfolioId, searchString = resource.LastName});
+                return RedirectToAction(nameof(Search), new { portfolioId = resource.PortfolioId, searchString = resource.Client.LastName});
             }
 
-            var cities = await _cityService.GetByCountryId(resource.CountryId);
+            var cities = await _cityService.GetByCountryId(resource.Client.Address.CountryId);
+            var clientStatuses = await _clientStatusService.GetAllAsync();
             var clientTypes = await _clientTypeService.GetAllAsync();
             var countries = await _countryService.GetAllAsync();
             var genders = await _genderService.GetAllAsync();
@@ -270,16 +288,20 @@ namespace Tilbake.MVC.Controllers
             var titles = await _titleService.GetAllAsync();
             var carriers = await _carrierService.GetAllAsync();
 
-            resource.AddressCountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
-            resource.CityList = new SelectList(cities, "Id", "Name", resource.CityId);
-            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.IdDocumentTypeList = SelectLists.IdDocumentTypes(idDocumentTypes, resource.IdDocumentTypeId);
-            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.OccupationList = SelectLists.Occupations(occupations, resource.OccupationId);
-            resource.TitleList = SelectLists.Titles(titles, resource.TitleId);
+            resource.ClientStatusList = SelectLists.ClientStatuses(clientStatuses, resource.ClientStatusId);
+
+            resource.Client.Address.CountryList = SelectLists.Countries(countries, resource.Client.Address.CountryId);
+            resource.Client.Address.CityList = SelectLists.Cities(cities, resource.Client.Address.CityId);
+
+            resource.Client.CarrierList = SelectLists.Carriers(carriers, resource.Client.CarrierIds);
+            resource.Client.Address.CityList = SelectLists.Cities(cities, resource.Client.Address.CityId);
+            resource.Client.ClientTypeList = SelectLists.ClientTypes(clientTypes, resource.Client.ClientTypeId);
+            resource.Client.CountryList = SelectLists.Countries(countries, resource.Client.CountryId);
+            resource.Client.GenderList = SelectLists.Genders(genders, resource.Client.GenderId);
+            resource.Client.IdDocumentTypeList = SelectLists.IdDocumentTypes(idDocumentTypes, resource.Client.IdDocumentTypeId);
+            resource.Client.MaritalStatusList = SelectLists.MaritalStatuses(maritalStatuses, resource.Client.MaritalStatusId);
+            resource.Client.OccupationList = SelectLists.Occupations(occupations, resource.Client.OccupationId);
+            resource.Client.TitleList = SelectLists.Titles(titles, resource.Client.TitleId);
 
             return View(resource);
         }

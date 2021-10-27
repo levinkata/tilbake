@@ -29,8 +29,8 @@ namespace Tilbake.Infrastructure.Persistence.Repositories
 
             try
             {
-                await dbSet.AddAsync(entity);
-                return entity;
+                dbSet.Add(entity);
+                return await Task.FromResult(entity);
             }
             catch (Exception ex)
             {

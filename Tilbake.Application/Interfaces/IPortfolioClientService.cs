@@ -12,7 +12,7 @@ namespace Tilbake.Application.Interfaces
         Task<PortfolioClientResource> GetByIdNumberAsync(Guid portfolioId, string idNumber);
         Task<PortfolioClientResource> GetByPortfolioClientAsync(Guid portfolioId, Guid clientId);
         Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId);
-        Task<int> AddAsync(PortfolioClientSaveResource resource);
+        Task<ClientResource> AddAsync(PortfolioClientSaveResource resource);
         Task<int> AddExistingClientAsync(Guid portfolioId, Guid clientId);
         Task<int> DeleteAsync(Guid id);
         Task<bool> ExistsAsync(Guid portfolioId, Guid clientId);

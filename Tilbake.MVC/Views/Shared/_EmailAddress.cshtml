@@ -1,0 +1,25 @@
+<div id="AddEmail"></div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $('#btnAddMembers').click(function(e) {
+        e.preventDefault();
+
+        var index = $('#AddEmail').children('div').length;
+
+        var html = '';
+        html += '<div id="inputFormRow">';
+        html += '<div class="input-group">';
+        html += '<input type="text" id="tbr_' + index + '_Name" name="tbr[' + index + '].Name" class="form-control form-control-sm" placeholder="Email Address">';
+        
+        html += '<div class="input-group-append">';
+        html += '<button id="removeRow" type="button" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>';
+        html += '</div>';
+        html += '</div>';
+
+        $('#AddMembers').append(html).find('.input-group:last .select-title').html(itemsTitle);
+        $('#AddMembers').find('.input-group:last .select-country').html(itemsCountry);
+    });
+
+</script>

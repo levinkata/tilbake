@@ -13,6 +13,7 @@ namespace Tilbake.MVC.Controllers
     {
         private readonly IClientService _clientService;
         private readonly IClientTypeService _clientTypeService;
+        private readonly IClientStatusService _clientStatusService;
         private readonly ICountryService _countryService;
         private readonly IGenderService _genderService;
         private readonly IMaritalStatusService _maritalStatusService;
@@ -22,6 +23,7 @@ namespace Tilbake.MVC.Controllers
 
         public ClientsController(IClientService clientService,
                                 IClientTypeService clientTypeService,
+                                IClientStatusService clientStatusService,
                                 ICountryService countryService,
                                 IGenderService genderService,
                                 IMaritalStatusService maritalStatusService,
@@ -31,6 +33,7 @@ namespace Tilbake.MVC.Controllers
         {
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
             _clientTypeService = clientTypeService ?? throw new ArgumentNullException(nameof(clientTypeService));
+            _clientStatusService = clientStatusService ?? throw new ArgumentNullException(nameof(clientStatusService));
             _countryService = countryService ?? throw new ArgumentNullException(nameof(countryService));
             _genderService = genderService ?? throw new ArgumentNullException(nameof(genderService));
             _maritalStatusService = maritalStatusService ?? throw new ArgumentNullException(nameof(maritalStatusService));
@@ -99,60 +102,60 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: Clients/Create
-        public async Task<ActionResult> Create()
-        {
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
+        // public async Task<ActionResult> Create()
+        // {
+        //     var clientTypes = await _clientTypeService.GetAllAsync();
+        //     var countries = await _countryService.GetAllAsync();
+        //     var genders = await _genderService.GetAllAsync();
+        //     var maritalStatuses = await _maritalStatusService.GetAllAsync();
+        //     var occupations = await _occupationService.GetAllAsync();
+        //     var titles = await _titleService.GetAllAsync();
 
-            PortfolioClientSaveResource resource = new()
-            {
-                ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
-                CountryList = new SelectList(countries, "Id", "Name"),
-                GenderList = new SelectList(genders, "Id", "Name"),
-                MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
-                OccupationList = new SelectList(occupations, "Id", "Name"),
-                TitleList = new SelectList(titles, "Id", "Name")
-            };
+        //     PortfolioClientSaveResource resource = new()
+        //     {
+        //         ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
+        //         CountryList = new SelectList(countries, "Id", "Name"),
+        //         GenderList = new SelectList(genders, "Id", "Name"),
+        //         MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name"),
+        //         OccupationList = new SelectList(occupations, "Id", "Name"),
+        //         TitleList = new SelectList(titles, "Id", "Name")
+        //     };
 
-            return View(resource);
-        }
+        //     return View(resource);
+        // }
 
         // POST: Clients/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(PortfolioClientSaveResource resource)
-        {
-            if (resource == null)
-            {
-                throw new ArgumentNullException(nameof(resource));
-            }
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<ActionResult> Create(PortfolioClientSaveResource resource)
+        // {
+        //     if (resource == null)
+        //     {
+        //         throw new ArgumentNullException(nameof(resource));
+        //     }
 
-            if (ModelState.IsValid)
-            {
-                await _clientService.AddAsync(resource);
-                return RedirectToAction(nameof(Index));
-            }
+        //     if (ModelState.IsValid)
+        //     {
+        //         await _clientService.AddAsync(resource);
+        //         return RedirectToAction(nameof(Index));
+        //     }
 
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
+        //     var clientTypes = await _clientTypeService.GetAllAsync();
+        //     var countries = await _countryService.GetAllAsync();
+        //     var genders = await _genderService.GetAllAsync();
+        //     var maritalStatuses = await _maritalStatusService.GetAllAsync();
+        //     var occupations = await _occupationService.GetAllAsync();
+        //     var titles = await _titleService.GetAllAsync();
 
-            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-            resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
+        //     resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
+        //     resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
+        //     resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
+        //     resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
+        //     resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
+        //     resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
 
-            return View(resource);
-        }
+        //     return View(resource);
+        // }
 
         // GET: Clients/Edit/5
         public async Task<ActionResult> Edit(Guid id)

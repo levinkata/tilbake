@@ -13,7 +13,7 @@ namespace Tilbake.Application.Resources
         public Guid CarrierId { get; set; }
 
         [Display(Name = "Carriers")]
-        public Guid[] CarrierIds { get; set; }
+        public List<Guid> CarrierIds { get; set; }
 
         public Carrier Carrier { get; set; }
 

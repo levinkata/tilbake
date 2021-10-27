@@ -64,6 +64,7 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<ClientRisk, ClientRiskResource>().ReverseMap();
             CreateMap<ClientType, ClientTypeResource>().ReverseMap();
+            CreateMap<ClientStatus, ClientStatusResource>().ReverseMap();
             CreateMap<CommissionRate, CommissionRateResource>().ReverseMap();
 
             CreateMap<Content, ContentResource>()

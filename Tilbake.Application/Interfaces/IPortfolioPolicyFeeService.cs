@@ -10,9 +10,8 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<PortfolioPolicyFeeResource>> GetAllAsync();
         Task<IEnumerable<PortfolioPolicyFeeResource>> GetByPortfolioIdAsync(Guid portfolioId);
         Task<PortfolioPolicyFeeResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(PortfolioPolicyFeeSaveResource resource);
-        Task<int> UpdateAsync(PortfolioPolicyFeeResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(PortfolioPolicyFeeResource resource);
+        void Add(PortfolioPolicyFeeSaveResource resource);
+        void Update(PortfolioPolicyFeeResource resource);
+        void Delete(Guid id);
     }
 }

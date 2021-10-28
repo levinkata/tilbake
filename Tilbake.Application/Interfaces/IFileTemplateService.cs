@@ -10,9 +10,8 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<FileTemplateResource>> GetAllAsync();
         Task<IEnumerable<FileTemplateResource>> GetByPortfolioIdAsync(Guid portfolioId);
         Task<FileTemplateResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(FileTemplateSaveResource resource);
-        Task<int> UpdateAsync(FileTemplateResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(FileTemplateResource resource);
+        void Add(FileTemplateSaveResource resource);
+        void Update(FileTemplateResource resource);
+        void Delete(Guid id);
     }
 }

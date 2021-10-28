@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(MotorModelSaveResource resource)
+        public async void Add(MotorModelSaveResource resource)
         {
             var motorModel = _mapper.Map<MotorModelSaveResource, MotorModel>(resource);
             motorModel.Id = Guid.NewGuid();
 
-            await _unitOfWork.MotorModels.AddAsync(motorModel);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.MotorModels.Add(motorModel);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.MotorModels.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.MotorModels.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
-
-        public async Task<int> DeleteAsync(MotorModelResource resource)
-        {
-            var motorModel = _mapper.Map<MotorModelResource, MotorModel>(resource);
-            await _unitOfWork.MotorModels.DeleteAsync(motorModel);
-            return await _unitOfWork.SaveAsync();
-        }
-
         public async Task<IEnumerable<MotorModelResource>> GetAllAsync()
         {
             var result = await _unitOfWork.MotorModels.GetAllAsync(
@@ -50,16 +42,14 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<MotorModel>, IEnumerable<MotorModelResource>>(result);
-
             return resources;
         }
 
         public async Task<MotorModelResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.MotorModels.GetByIdAsync(id);
-            var resources = _mapper.Map<MotorModel, MotorModelResource>(result);
-
-            return resources;
+            var resource = _mapper.Map<MotorModel, MotorModelResource>(result);
+            return resource;
         }
 
         public async Task<IEnumerable<MotorModelResource>> GetByMotorMakeIdAsync(Guid motorMakeId)
@@ -70,16 +60,15 @@ namespace Tilbake.Application.Services
                                             r => r.MotorMake);
 
             var resources = _mapper.Map<IEnumerable<MotorModel>, IEnumerable<MotorModelResource>>(result);
-
             return resources;
         }
 
-        public async Task<int> UpdateAsync(MotorModelResource resource)
+        public async void Update(MotorModelResource resource)
         {
             var motorModel = _mapper.Map<MotorModelResource, MotorModel>(resource);
-            await _unitOfWork.MotorModels.UpdateAsync(resource.Id, motorModel);
+            _unitOfWork.MotorModels.Update(resource.Id, motorModel);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

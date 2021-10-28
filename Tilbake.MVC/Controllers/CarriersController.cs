@@ -50,11 +50,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Carriers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CarrierSaveResource resource)
+        public IActionResult Create(CarrierSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _carrierService.AddAsync(resource);
+                _carrierService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Carriers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, CarrierResource resource)
+        public IActionResult Edit(Guid? id, CarrierResource resource)
         {
             if (id != resource.Id)
             {
@@ -88,7 +88,7 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                await _carrierService.UpdateAsync(resource);
+                _carrierService.Update(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -114,9 +114,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Carriers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _carrierService.DeleteAsync(id);
+            _carrierService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -187,7 +187,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         RiskItem = riskResource
                     };
-                    await _policyRiskService.UpdatePolicyRiskRiskItemAsync(policyRiskRiskItemResource);
+                    _policyRiskService.UpdatePolicyRiskRiskItem(policyRiskRiskItemResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -221,7 +221,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         Content = resource
                     };
-                    await _policyRiskService.UpdatePolicyRiskContentAsync(policyRiskContentResource);
+                    _policyRiskService.UpdatePolicyRiskContent(policyRiskContentResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -255,7 +255,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         House = resource
                     };
-                    await _policyRiskService.UpdatePolicyRiskHouseAsync(policyRiskHouseResource);
+                    _policyRiskService.UpdatePolicyRiskHouse(policyRiskHouseResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -286,7 +286,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         Motor = resource
                     };
-                    await _policyRiskService.UpdatePolicyRiskMotorAsync(policyRiskMotorResource);
+                    _policyRiskService.UpdatePolicyRiskMotor(policyRiskMotorResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -331,7 +331,7 @@ namespace Tilbake.MVC.Controllers
         // POST: PolicyRisks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, PolicyRiskResource resource)
+        public IActionResult Edit(Guid? id, PolicyRiskResource resource)
         {
             if (id != resource.Id)
             {
@@ -342,7 +342,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _policyRiskService.UpdateAsync(resource);
+                    _policyRiskService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -391,9 +391,9 @@ namespace Tilbake.MVC.Controllers
         // POST: PolicyRisks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(PolicyRiskResource resource)
+        public IActionResult DeleteConfirmed(PolicyRiskResource resource)
         {
-            await _policyRiskService.DeleteAsync(resource.Id);
+            _policyRiskService.Delete(resource.Id);
             return RedirectToAction(nameof(Edit), "Policy", new { resource.PolicyId });
         }
     }

@@ -21,18 +21,18 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.FileTemplateRecords.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.FileTemplateRecords.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(FileTemplateRecordResource resource)
+        public async void Delete(FileTemplateRecordResource resource)
         {
             var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
-            await _unitOfWork.FileTemplateRecords.DeleteAsync(fileTemplateRecord);
+            _unitOfWork.FileTemplateRecords.Delete(fileTemplateRecord);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetAllAsync()
@@ -77,12 +77,12 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(FileTemplateRecordResource resource)
+        public async void Update(FileTemplateRecordResource resource)
         {
             var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
-            await _unitOfWork.FileTemplateRecords.UpdateAsync(resource.Id, fileTemplateRecord);
+            _unitOfWork.FileTemplateRecords.Update(resource.Id, fileTemplateRecord);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(RatingMotorExcessSaveResource resource)
+        public async void Add(RatingMotorExcessSaveResource resource)
         {
             var ratingMotorExcess = _mapper.Map<RatingMotorExcessSaveResource, RatingMotorExcess>(resource);
             ratingMotorExcess.Id = Guid.NewGuid();
             ratingMotorExcess.DateAdded = DateTime.Now;
 
-            await _unitOfWork.RatingMotorExcesses.AddAsync(ratingMotorExcess);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorExcesses.Add(ratingMotorExcess);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.RatingMotorExcesses.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(RatingMotorExcessResource resource)
-        {
-            var ratingMotorExcess = _mapper.Map<RatingMotorExcessResource, RatingMotorExcess>(resource);
-            await _unitOfWork.RatingMotorExcesses.DeleteAsync(ratingMotorExcess);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorExcesses.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<RatingMotorExcessResource> GetByIdAsync(Guid id)
@@ -66,13 +58,13 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(RatingMotorExcessResource resource)
+        public async void Update(RatingMotorExcessResource resource)
         {
             var ratingMotorExcess = _mapper.Map<RatingMotorExcessResource, RatingMotorExcess>(resource);
             ratingMotorExcess.DateModified = DateTime.Now;
 
-            await _unitOfWork.RatingMotorExcesses.UpdateAsync(resource.Id, ratingMotorExcess);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorExcesses.Update(resource.Id, ratingMotorExcess);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Tilbake.Application.Interfaces
     public interface IClientCarrierService
     {
         Task<IEnumerable<ClientCarrierResource>> GetByClientIdAsync(Guid clientId);
-        Task<int> AddAsync(ClientCarrierSaveResource resource);
-        Task<int> UpdateAsync(ClientCarrierResource resource);
+        void Add(ClientCarrierSaveResource resource);
+        void Update(ClientCarrierResource resource);
     }
 }

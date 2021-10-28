@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ClientRiskSaveResource resource)
+        public async void Add(ClientRiskSaveResource resource)
         {
             var clientRisk = _mapper.Map<ClientRiskSaveResource, ClientRisk>(resource);
             clientRisk.Id = Guid.NewGuid();
 
-            await _unitOfWork.ClientRisks.AddAsync(clientRisk);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ClientRisks.Add(clientRisk);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.ClientRisks.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ClientRiskResource resource)
-        {
-            var clientRisk = _mapper.Map<ClientRiskResource, ClientRisk>(resource);
-            await _unitOfWork.ClientRisks.DeleteAsync(clientRisk);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ClientRisks.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientRiskResource>> GetAllAsync()
@@ -54,17 +47,16 @@ namespace Tilbake.Application.Services
         public async Task<ClientRiskResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.ClientRisks.GetByIdAsync(id);
-            var resources = _mapper.Map<ClientRisk, ClientRiskResource>(result);
-
-            return resources;
+            var resource = _mapper.Map<ClientRisk, ClientRiskResource>(result);
+            return resource;
         }
 
-        public async Task<int> UpdateAsync(ClientRiskResource resource)
+        public async void Update(ClientRiskResource resource)
         {
             var clientRisk = _mapper.Map<ClientRiskResource, ClientRisk>(resource);
-            await _unitOfWork.ClientRisks.UpdateAsync(resource.Id, clientRisk);
+            _unitOfWork.ClientRisks.Update(resource.Id, clientRisk);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

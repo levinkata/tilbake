@@ -21,27 +21,27 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(BankBranchSaveResource resource)
+        public async void Add(BankBranchSaveResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchSaveResource, BankBranch>(resource);
             bankBranch.Id = Guid.NewGuid();
             bankBranch.DateAdded = DateTime.Now;
 
-            await _unitOfWork.BankBranches.AddAsync(bankBranch);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.BankBranches.Add(bankBranch);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.BankBranches.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.BankBranches.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(BankBranchResource resource)
+        public async void Delete(BankBranchResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
-            await _unitOfWork.BankBranches.DeleteAsync(bankBranch);
-            return await  _unitOfWork.SaveAsync();
+            _unitOfWork.BankBranches.Delete(bankBranch);
+            await  _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BankBranchResource>> GetAllAsync()
@@ -73,17 +73,16 @@ namespace Tilbake.Application.Services
                                             e => e.Bank);
                                             
             var resource = _mapper.Map<BankBranch, BankBranchResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(BankBranchResource resource)
+        public async void Update(BankBranchResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
             bankBranch.DateModified = DateTime.Now;
-            await _unitOfWork.BankBranches.UpdateAsync(resource.Id, bankBranch);
+            _unitOfWork.BankBranches.Update(resource.Id, bankBranch);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,27 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(CommissionRateSaveResource resource)
+        public async void Add(CommissionRateSaveResource resource)
         {
             var commissionRate = _mapper.Map<CommissionRateSaveResource, CommissionRate>(resource);
             commissionRate.Id = Guid.NewGuid();
             commissionRate.DateAdded = DateTime.Now;
 
-            await _unitOfWork.CommissionRates.AddAsync(commissionRate);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.CommissionRates.Add(commissionRate);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.CommissionRates.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(CommissionRateResource resource)
-        {
-            var commissionRate = _mapper.Map<CommissionRateResource, CommissionRate>(resource);
-            await _unitOfWork.CommissionRates.DeleteAsync(commissionRate);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.CommissionRates.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CommissionRateResource>> GetAllAsync()
@@ -71,13 +64,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(CommissionRateResource resource)
+        public async void Update(CommissionRateResource resource)
         {
             var commissionRate = _mapper.Map<CommissionRateResource, CommissionRate>(resource);
             commissionRate.DateModified = DateTime.Now;
 
-            await _unitOfWork.CommissionRates.UpdateAsync(resource.Id, commissionRate);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.CommissionRates.Update(resource.Id, commissionRate);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

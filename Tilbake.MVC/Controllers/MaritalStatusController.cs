@@ -48,11 +48,11 @@ namespace Tilbake.MVC.Controllers
         // POST: MaritalStatus/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MaritalStatusSaveResource resource)
+        public IActionResult Create(MaritalStatusSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _maritalStatusService.AddAsync(resource);
+                _maritalStatusService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -72,7 +72,7 @@ namespace Tilbake.MVC.Controllers
         // POST: MaritalStatus/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, MaritalStatusResource resource)
+        public IActionResult Edit(Guid id, MaritalStatusResource resource)
         {
             if (id != resource.Id)
             {
@@ -83,7 +83,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _maritalStatusService.UpdateAsync(resource);
+                    _maritalStatusService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -109,9 +109,9 @@ namespace Tilbake.MVC.Controllers
         // POST: MaritalStatus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _maritalStatusService.DeleteAsync(id);
+            _maritalStatusService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

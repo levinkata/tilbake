@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddRangeAsync(UserPortfolioResource resources)
+        public async void AddRange(UserPortfolioResource resources)
         {
             if (resources == null)
             {
@@ -55,11 +55,11 @@ namespace Tilbake.Application.Services
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
 
-            await _unitOfWork.UserPortfolios.AddRangeAsync(aspnetUserPortfolios);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.UserPortfolios.AddRange(aspnetUserPortfolios);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteRangeAsync(UserPortfolioResource resources)
+        public async void DeleteRange(UserPortfolioResource resources)
         {
             if (resources == null)
             {
@@ -92,8 +92,8 @@ namespace Tilbake.Application.Services
                 aspnetUserPortfolios.Add(aspnetUserPortfolio);
             }
 
-            await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.UserPortfolios.DeleteRange(aspnetUserPortfolios);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)

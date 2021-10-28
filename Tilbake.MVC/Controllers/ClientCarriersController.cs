@@ -43,11 +43,11 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ClientCarrierSaveResource resource)
+        public IActionResult Create(ClientCarrierSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _clientCarrierService.AddAsync(resource);
+                _clientCarrierService.Add(resource);
                 return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
             }
 
@@ -77,9 +77,9 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(ClientCarrierResource resource)
+        public IActionResult Update(ClientCarrierResource resource)
         {
-            await _clientCarrierService.UpdateAsync(resource);
+            _clientCarrierService.Update(resource);
             return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
         }
     }

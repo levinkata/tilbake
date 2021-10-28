@@ -242,7 +242,7 @@ namespace Tilbake.MVC.Controllers
                         QuoteItem = quoteItemResource,
                         RiskItem = riskResource
                     };
-                    await _quoteItemService.UpdateQuoteItemRiskItemAsync(quoteItemRiskItemResource);
+                    _quoteItemService.UpdateQuoteItemRiskItem(quoteItemRiskItemResource);
                     return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemResource.QuoteId });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -277,7 +277,7 @@ namespace Tilbake.MVC.Controllers
                         QuoteItem = quoteItemResource,
                         Building = resource
                     };
-                    await _quoteItemService.UpdateQuoteItemBuildingAsync(quoteItemBuildingResource);
+                    _quoteItemService.UpdateQuoteItemBuilding(quoteItemBuildingResource);
                     return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemResource.QuoteId });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -311,7 +311,7 @@ namespace Tilbake.MVC.Controllers
                         QuoteItem = quoteItemResource,
                         Content = resource
                     };
-                    await _quoteItemService.UpdateQuoteItemContentAsync(quoteItemContentResource);
+                    _quoteItemService.UpdateQuoteItemContent(quoteItemContentResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -345,7 +345,7 @@ namespace Tilbake.MVC.Controllers
                         QuoteItem = quoteItemResource,
                         House = resource
                     };
-                    await _quoteItemService.UpdateQuoteItemHouseAsync(quoteItemHouseResource);
+                    _quoteItemService.UpdateQuoteItemHouse(quoteItemHouseResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -376,7 +376,7 @@ namespace Tilbake.MVC.Controllers
                         QuoteItem = quoteItemResource,
                         Motor = resource
                     };
-                    await _quoteItemService.UpdateQuoteItemMotorAsync(quoteItemMotorResource);
+                    _quoteItemService.UpdateQuoteItemMotor(quoteItemMotorResource);
                     return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemResource.QuoteId });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -432,7 +432,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _quoteItemService.UpdateAsync(resource);
+                    _quoteItemService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -484,9 +484,9 @@ namespace Tilbake.MVC.Controllers
         // POST: QuoteItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(QuoteItemResource resource)
+        public IActionResult DeleteConfirmed(QuoteItemResource resource)
         {
-            await _quoteItemService.DeleteAsync(resource.Id);
+            _quoteItemService.Delete(resource.Id);
             return RedirectToAction(nameof(Edit), "Quotes", new { resource.QuoteId });
         }
     }

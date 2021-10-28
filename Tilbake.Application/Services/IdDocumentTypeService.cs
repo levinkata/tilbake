@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(IdDocumentTypeSaveResource resource)
+        public async void Add(IdDocumentTypeSaveResource resource)
         {
             var idDocumentType = _mapper.Map<IdDocumentTypeSaveResource, IdDocumentType>(resource);
             idDocumentType.Id = Guid.NewGuid();
             idDocumentType.DateAdded = DateTime.Now;
 
-            await _unitOfWork.IdDocumentTypes.AddAsync(idDocumentType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.IdDocumentTypes.Add(idDocumentType);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.IdDocumentTypes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(IdDocumentTypeResource resource)
-        {
-            var idDocumentType = _mapper.Map<IdDocumentTypeResource, IdDocumentType>(resource);
-            await _unitOfWork.IdDocumentTypes.DeleteAsync(idDocumentType);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.IdDocumentTypes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<IdDocumentTypeResource>> GetAllAsync()
@@ -62,13 +54,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(IdDocumentTypeResource resource)
+        public async void Update(IdDocumentTypeResource resource)
         {
             var idDocumentType = _mapper.Map<IdDocumentTypeResource, IdDocumentType>(resource);
             idDocumentType.DateModified = DateTime.Now;
 
-            await _unitOfWork.IdDocumentTypes.UpdateAsync(resource.Id, idDocumentType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.IdDocumentTypes.Update(resource.Id, idDocumentType);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -9,9 +9,8 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<DocumentTypeResource>> GetAllAsync();
         Task<DocumentTypeResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(DocumentTypeSaveResource resource);
-        Task<int> UpdateAsync(DocumentTypeResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(DocumentTypeResource resource);
+        void Add(DocumentTypeSaveResource resource);
+        void Update(DocumentTypeResource resource);
+        void Delete(Guid id);
     }
 }

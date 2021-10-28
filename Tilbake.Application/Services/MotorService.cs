@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(MotorSaveResource resource)
+        public async void Add(MotorSaveResource resource)
         {
             var motor = _mapper.Map<MotorSaveResource, Motor>(resource);
             motor.Id = Guid.NewGuid();
 
-            await _unitOfWork.Motors.AddAsync(motor);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Motors.Add(motor);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Motors.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(MotorResource resource)
-        {
-            var motor = _mapper.Map<MotorResource, Motor>(resource);
-            await _unitOfWork.Motors.DeleteAsync(motor);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Motors.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<MotorResource>> GetAllAsync()
@@ -50,7 +43,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.RegNumber));
 
             var resources = _mapper.Map<IEnumerable<Motor>, IEnumerable<MotorResource>>(result);
-
             return resources;
         }
 
@@ -58,16 +50,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Motors.GetByIdAsync(id);
             var resource = _mapper.Map<Motor, MotorResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(MotorResource resource)
+        public async void Update(MotorResource resource)
         {
             var motor = _mapper.Map<MotorResource, Motor>(resource);
-            await _unitOfWork.Motors.UpdateAsync(resource.Id, motor);
+            _unitOfWork.Motors.Update(resource.Id, motor);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

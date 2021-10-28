@@ -21,27 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ContentSaveResource resource)
+        public async void Add(ContentSaveResource resource)
         {
             var content = _mapper.Map<ContentSaveResource, Content>(resource);
             content.Id = Guid.NewGuid();
 
-            await _unitOfWork.Contents.AddAsync(content);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Contents.Add(content);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Contents.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ContentResource resource)
-        {
-            var content = _mapper.Map<ContentResource, Content>(resource);
-            await _unitOfWork.Contents.DeleteAsync(content);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Contents.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ContentResource>> GetAllAsync()
@@ -55,17 +47,17 @@ namespace Tilbake.Application.Services
         public async Task<ContentResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.Contents.GetByIdAsync(id);
-            var resources = _mapper.Map<Content, ContentResource>(result);
+            var resource = _mapper.Map<Content, ContentResource>(result);
 
-            return resources;
+            return resource;
         }
 
-        public async Task<int> UpdateAsync(ContentResource resource)
+        public async void Update(ContentResource resource)
         {
             var content = _mapper.Map<ContentResource, Content>(resource);
-            await _unitOfWork.Contents.UpdateAsync(resource.Id, content);
+            _unitOfWork.Contents.Update(resource.Id, content);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

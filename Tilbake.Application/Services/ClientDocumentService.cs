@@ -23,7 +23,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ClientDocumentSaveResource resource)
+        public async void Add(ClientDocumentSaveResource resource)
         {
             var file = resource.File;
 
@@ -51,12 +51,12 @@ namespace Tilbake.Application.Services
                 clientDocument.DocumentPath = filePath;
                 clientDocument.DateAdded = DateTime.Now;
 
-                await _unitOfWork.ClientDocuments.AddAsync(clientDocument);
+                _unitOfWork.ClientDocuments.Add(clientDocument);
             }
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
             var result = await _unitOfWork.ClientDocuments.GetByIdAsync(id);
 
@@ -64,11 +64,11 @@ namespace Tilbake.Application.Services
             {
                 File.Delete(result.DocumentPath);
             }
-            await _unitOfWork.ClientDocuments.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ClientDocuments.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(ClientDocumentResource resource)
+        public async void Delete(ClientDocumentResource resource)
         {
             if (File.Exists(resource.DocumentPath))
             {
@@ -76,8 +76,8 @@ namespace Tilbake.Application.Services
             }
 
             var clientDocument = _mapper.Map<ClientDocumentResource, ClientDocument>(resource);
-            await _unitOfWork.ClientDocuments.DeleteAsync(clientDocument);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ClientDocuments.Delete(clientDocument);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientDocumentResource>> GetAllAsync()
@@ -110,12 +110,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(ClientDocumentResource resource)
+        public async void Update(ClientDocumentResource resource)
         {
             var clientDocument = _mapper.Map<ClientDocumentResource, ClientDocument>(resource);
-            await _unitOfWork.ClientDocuments.UpdateAsync(resource.Id, clientDocument);
+            _unitOfWork.ClientDocuments.Update(resource.Id, clientDocument);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

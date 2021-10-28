@@ -32,11 +32,11 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CitySaveResource resource)
+        public IActionResult Create(CitySaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _cityService.AddAsync(resource);
+                _cityService.Add(resource);
                 return RedirectToAction(nameof(Index), new { countryId = resource.CountryId });
             }
 

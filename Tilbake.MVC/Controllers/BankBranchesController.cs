@@ -61,11 +61,11 @@ namespace Tilbake.MVC.Controllers
         // POST: BankBranches/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BankBranchSaveResource resource)
+        public IActionResult Create(BankBranchSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _bankBranchService.AddAsync(resource);
+                _bankBranchService.Add(resource);
                 return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
             }
             return View(resource);
@@ -89,7 +89,7 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, BankBranchResource resource)
+        public IActionResult Edit(Guid? id, BankBranchResource resource)
         {
             if (id != resource.Id)
             {
@@ -100,7 +100,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _bankBranchService.UpdateAsync(resource);
+                    _bankBranchService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,10 +131,10 @@ namespace Tilbake.MVC.Controllers
         // POST: BankBranches/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(BankBranchResource resource)
+        public IActionResult DeleteConfirmed(BankBranchResource resource)
         {
-            await _bankBranchService.DeleteAsync(resource.Id);
-                return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
+            _bankBranchService.Delete(resource.Id);
+            return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
         }
     }
 }

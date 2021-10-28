@@ -48,11 +48,11 @@ namespace Tilbake.MVC.Controllers
         // POST: PaymentTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PaymentTypeSaveResource resource)
+        public IActionResult Create(PaymentTypeSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _paymentTypeService.AddAsync(resource);
+                _paymentTypeService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -72,7 +72,7 @@ namespace Tilbake.MVC.Controllers
         // POST: PaymentTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, PaymentTypeResource resource)
+        public IActionResult Edit(Guid id, PaymentTypeResource resource)
         {
             if (id != resource.Id)
             {
@@ -83,7 +83,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _paymentTypeService.UpdateAsync(resource);
+                    _paymentTypeService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -109,9 +109,9 @@ namespace Tilbake.MVC.Controllers
         // POST: PaymentTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _paymentTypeService.DeleteAsync(id);
+            _paymentTypeService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(RatingMotorPremiumSaveResource resource)
+        public async void Add(RatingMotorPremiumSaveResource resource)
         {
             var ratingMotorPremium = _mapper.Map<RatingMotorPremiumSaveResource, RatingMotorPremium>(resource);
             ratingMotorPremium.Id = Guid.NewGuid();
             ratingMotorPremium.DateAdded = DateTime.Now;
 
-            await _unitOfWork.RatingMotorPremiums.AddAsync(ratingMotorPremium);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorPremiums.Add(ratingMotorPremium);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.RatingMotorPremiums.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(RatingMotorPremiumResource resource)
-        {
-            var ratingMotorPremium = _mapper.Map<RatingMotorPremiumResource, RatingMotorPremium>(resource);
-            await _unitOfWork.RatingMotorPremiums.DeleteAsync(ratingMotorPremium);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorPremiums.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<RatingMotorPremiumResource> GetByIdAsync(Guid id)
@@ -66,13 +58,13 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(RatingMotorPremiumResource resource)
+        public async void Update(RatingMotorPremiumResource resource)
         {
             var ratingMotorPremium = _mapper.Map<RatingMotorPremiumResource, RatingMotorPremium>(resource);
             ratingMotorPremium.DateModified = DateTime.Now;
 
-            await _unitOfWork.RatingMotorPremiums.UpdateAsync(resource.Id, ratingMotorPremium);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorPremiums.Update(resource.Id, ratingMotorPremium);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

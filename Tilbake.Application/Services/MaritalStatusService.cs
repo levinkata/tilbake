@@ -21,27 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(MaritalStatusSaveResource resource)
+        public async void Add(MaritalStatusSaveResource resource)
         {
             var maritalStatus = _mapper.Map<MaritalStatusSaveResource, MaritalStatus>(resource);
             maritalStatus.Id = Guid.NewGuid();
 
-            await _unitOfWork.MaritalStatuses.AddAsync(maritalStatus);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.MaritalStatuses.Add(maritalStatus);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.MaritalStatuses.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(MaritalStatusResource resource)
-        {
-            var maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(resource);
-            await _unitOfWork.MaritalStatuses.DeleteAsync(maritalStatus);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.MaritalStatuses.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<MaritalStatusResource>> GetAllAsync()
@@ -51,7 +43,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<MaritalStatus>, IEnumerable<MaritalStatusResource>>(result);
-
             return resources;
         }
 
@@ -63,12 +54,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(MaritalStatusResource resource)
+        public async void Update(MaritalStatusResource resource)
         {
             var maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(resource);
-            await _unitOfWork.MaritalStatuses.UpdateAsync(resource.Id, maritalStatus);
+            _unitOfWork.MaritalStatuses.Update(resource.Id, maritalStatus);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -9,9 +9,8 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<MotorMakeResource>> GetAllAsync();
         Task<MotorMakeResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(MotorMakeSaveResource resource);
-        Task<int> UpdateAsync(MotorMakeResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(MotorMakeResource resource);
+        void Add(MotorMakeSaveResource resource);
+        void Update(MotorMakeResource resource);
+        void Delete(Guid id);
     }
 }

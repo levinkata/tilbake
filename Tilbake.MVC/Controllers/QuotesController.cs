@@ -155,14 +155,14 @@ namespace Tilbake.MVC.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> PostQuote(QuoteObjectResource quoteObject)
+        public IActionResult PostQuote(QuoteObjectResource quoteObject)
         {
             if (quoteObject == null)
             {
                 throw new ArgumentNullException(nameof(quoteObject));
             };
 
-            await _quoteService.AddAsync(quoteObject);
+            _quoteService.Add(quoteObject);
 
             return Json(new { quoteObject.ClientId });
         }
@@ -227,11 +227,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Quotes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(QuoteObjectResource resource)
+        public IActionResult Create(QuoteObjectResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _quoteService.AddAsync(resource);
+                _quoteService.Add(resource);
                 return RedirectToAction("PortfolioClientQuotes", "Quotes", new { resource.Quote.PortfolioClientId });
             }
 
@@ -307,7 +307,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _quoteService.UpdateAsync(resource);
+                    _quoteService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -356,7 +356,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var resource = await _quoteService.GetByIdAsync(id);
-            await _quoteService.DeleteAsync(resource);
+            _quoteService.Delete(id);
 
             return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
         }

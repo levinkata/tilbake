@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(CoverTypeSaveResource resource)
+        public async void Add(CoverTypeSaveResource resource)
         {
             var coverType = _mapper.Map<CoverTypeSaveResource, CoverType>(resource);
             coverType.Id = Guid.NewGuid();
 
-            await _unitOfWork.CoverTypes.AddAsync(coverType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.CoverTypes.Add(coverType);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.CoverTypes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(CoverTypeResource resource)
-        {
-            var coverType = _mapper.Map<CoverTypeResource, CoverType>(resource);
-            await _unitOfWork.CoverTypes.DeleteAsync(coverType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.CoverTypes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CoverTypeResource>> GetAllAsync()
@@ -61,12 +54,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(CoverTypeResource resource)
+        public async void Update(CoverTypeResource resource)
         {
             var coverType = _mapper.Map<CoverTypeResource, CoverType>(resource);
-            await _unitOfWork.CoverTypes.UpdateAsync(resource.Id, coverType);
+            _unitOfWork.CoverTypes.Update(resource.Id, coverType);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

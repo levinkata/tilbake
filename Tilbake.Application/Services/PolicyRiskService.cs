@@ -21,34 +21,26 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
         
-        public async Task<int> AddAsync(PolicyRiskSaveResource resource)
+        public async void Add(PolicyRiskSaveResource resource)
         {
             var policyRisk = _mapper.Map<PolicyRiskSaveResource, PolicyRisk>(resource);
             policyRisk.Id = Guid.NewGuid();
             policyRisk.DateAdded = DateTime.Now;
 
-            await _unitOfWork.PolicyRisks.AddAsync(policyRisk);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PolicyRisks.Add(policyRisk);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.PolicyRisks.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(PolicyRiskResource resource)
-        {
-            var policyRisk = _mapper.Map<PolicyRiskResource, PolicyRisk>(resource);
-            await _unitOfWork.PolicyRisks.DeleteAsync(policyRisk);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PolicyRisks.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyRiskResource>> GetAllAsync()
         {
             var result = await _unitOfWork.PolicyRisks.GetAllAsync();
             var resources = _mapper.Map<IEnumerable<PolicyRisk>, IEnumerable<PolicyRiskResource>>(result);
-
             return resources;
         }
 
@@ -112,69 +104,69 @@ namespace Tilbake.Application.Services
             return result.Sum(r => r.SumInsured);
         }
 
-        public async Task<int> UpdateAsync(PolicyRiskResource resource)
+        public async void Update(PolicyRiskResource resource)
         {
             var policyRisk = _mapper.Map<PolicyRiskResource, PolicyRisk>(resource);
             policyRisk.DateModified = DateTime.Now;
 
-            await _unitOfWork.PolicyRisks.UpdateAsync(resource.Id, policyRisk);
+            _unitOfWork.PolicyRisks.Update(resource.Id, policyRisk);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdatePolicyRiskBuildingAsync(PolicyRiskBuildingResource resource)
+        public async void UpdatePolicyRiskBuilding(PolicyRiskBuildingResource resource)
         {
             var policyRisk = _mapper.Map<PolicyRiskResource, PolicyRisk>(resource.PolicyRisk);
-            await _unitOfWork.PolicyRisks.UpdateAsync(resource.PolicyRisk.Id, policyRisk);
+            _unitOfWork.PolicyRisks.Update(resource.PolicyRisk.Id, policyRisk);
 
             var building = _mapper.Map<BuildingResource, Building>(resource.Building);
-            await _unitOfWork.Buildings.UpdateAsync(resource.Building.Id, building);
+            _unitOfWork.Buildings.Update(resource.Building.Id, building);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdatePolicyRiskContentAsync(PolicyRiskContentResource resource)
+        public async void UpdatePolicyRiskContent(PolicyRiskContentResource resource)
         {
             var policyRisk = _mapper.Map<PolicyRiskResource, PolicyRisk>(resource.PolicyRisk);
-            await _unitOfWork.PolicyRisks.UpdateAsync(resource.PolicyRisk.Id, policyRisk);
+            _unitOfWork.PolicyRisks.Update(resource.PolicyRisk.Id, policyRisk);
 
             var content = _mapper.Map<ContentResource, Content>(resource.Content);
-            await _unitOfWork.Contents.UpdateAsync(resource.Content.Id, content);
+            _unitOfWork.Contents.Update(resource.Content.Id, content);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdatePolicyRiskHouseAsync(PolicyRiskHouseResource resource)
+        public async void UpdatePolicyRiskHouse(PolicyRiskHouseResource resource)
         {
             var policyRisk = _mapper.Map<PolicyRiskResource, PolicyRisk>(resource.PolicyRisk);
-            await _unitOfWork.PolicyRisks.UpdateAsync(resource.PolicyRisk.Id, policyRisk);
+            _unitOfWork.PolicyRisks.Update(resource.PolicyRisk.Id, policyRisk);
 
             var house = _mapper.Map<HouseResource, House>(resource.House);
-            await _unitOfWork.Houses.UpdateAsync(resource.House.Id, house);
+            _unitOfWork.Houses.Update(resource.House.Id, house);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdatePolicyRiskMotorAsync(PolicyRiskMotorResource resource)
+        public async void UpdatePolicyRiskMotor(PolicyRiskMotorResource resource)
         {
             var policyRisk = _mapper.Map<PolicyRiskResource, PolicyRisk>(resource.PolicyRisk);
-            await _unitOfWork.PolicyRisks.UpdateAsync(resource.PolicyRisk.Id, policyRisk);
+            _unitOfWork.PolicyRisks.Update(resource.PolicyRisk.Id, policyRisk);
 
             var motor = _mapper.Map<MotorResource, Motor>(resource.Motor);
-            await _unitOfWork.Motors.UpdateAsync(resource.Motor.Id, motor);
+            _unitOfWork.Motors.Update(resource.Motor.Id, motor);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdatePolicyRiskRiskItemAsync(PolicyRiskRiskItemResource resource)
+        public async void UpdatePolicyRiskRiskItem(PolicyRiskRiskItemResource resource)
         {
             var policyRisk = _mapper.Map<PolicyRiskResource, PolicyRisk>(resource.PolicyRisk);
-            await _unitOfWork.PolicyRisks.UpdateAsync(resource.PolicyRisk.Id, policyRisk);
+            _unitOfWork.PolicyRisks.Update(resource.PolicyRisk.Id, policyRisk);
 
             var riskItem = _mapper.Map<RiskItemResource, RiskItem>(resource.RiskItem);
-            await _unitOfWork.RiskItems.UpdateAsync(resource.RiskItem.Id, riskItem);
+            _unitOfWork.RiskItems.Update(resource.RiskItem.Id, riskItem);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

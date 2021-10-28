@@ -136,7 +136,7 @@ namespace Tilbake.MVC.Controllers
 
         //     if (ModelState.IsValid)
         //     {
-        //         await _clientService.AddAsync(resource);
+        //         await _clientService.Add(resource);
         //         return RedirectToAction(nameof(Index));
         //     }
 
@@ -197,7 +197,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _clientService.UpdateAsync(resource);
+                    _clientService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -244,9 +244,9 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(Guid id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
-            await _clientService.DeleteAsync(id);
+            _clientService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

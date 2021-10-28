@@ -62,11 +62,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Titles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TitleSaveResource resource)
+        public IActionResult Create(TitleSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _titleService.AddAsync(resource);
+                _titleService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -91,7 +91,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Titles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, TitleResource resource)
+        public IActionResult Edit(Guid? id, TitleResource resource)
         {
             if (id != resource.Id)
             {
@@ -102,7 +102,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _titleService.UpdateAsync(resource);
+                    _titleService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -133,9 +133,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Titles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _titleService.DeleteAsync(id);
+            _titleService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

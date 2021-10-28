@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<PolicyResource> AddAsync(PolicyObjectResource resource)
+        public async void Add(PolicyObjectResource resource)
         {
             var policyRisks = resource.PolicyRisks;
 
@@ -30,7 +30,7 @@ namespace Tilbake.Application.Services
             var policy = resource.Policy;
             policy.Id = Guid.NewGuid();
             policy.DateAdded = DateTime.Now;
-            await _unitOfWork.Policies.AddAsync(policy);
+            _unitOfWork.Policies.Add(policy);
             var policyId = policy.Id;
 
             if (resource.AllRisks != null)
@@ -39,12 +39,12 @@ namespace Tilbake.Application.Services
                 {
                     //  Create RiskItem Record
                     var riskItems = resource.RiskItems;
-                    await _unitOfWork.RiskItems.AddRangeAsync(riskItems);
+                    _unitOfWork.RiskItems.AddRange(riskItems);
 
                     //  Update QuoteItems with AllRiskId
                     int ao = resource.AllRisks.Length;
                     var allRisks = resource.AllRisks;
-                    await _unitOfWork.AllRisks.AddRangeAsync(allRisks);
+                    _unitOfWork.AllRisks.AddRange(allRisks);
 
                     for (int i = 0; i < ao; i++)
                     {
@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
                             AllRiskId = allRiskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.Risks.AddAsync(risk);
+                        _unitOfWork.Risks.Add(risk);
 
                         var riskId = risk.Id;
 
@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
                             RiskId = riskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+                        _unitOfWork.ClientRisks.Add(clientRisk);
 
                         var clientRiskId = clientRisk.Id;
 
@@ -86,7 +86,7 @@ namespace Tilbake.Application.Services
                 //  Update QuoteItems with ContentId
                 int co = resource.Contents.Length;
                 var contents = resource.Contents;
-                await _unitOfWork.Contents.AddRangeAsync(contents);
+                _unitOfWork.Contents.AddRange(contents);
 
                 for (int i = 0; i < co; i++)
                 {
@@ -98,7 +98,7 @@ namespace Tilbake.Application.Services
                         ContentId = contentId,
                         DateAdded = DateTime.Now
                     };
-                    await _unitOfWork.Risks.AddAsync(risk);
+                    _unitOfWork.Risks.Add(risk);
 
                     var riskId = risk.Id;
 
@@ -109,7 +109,7 @@ namespace Tilbake.Application.Services
                         RiskId = riskId,
                         DateAdded = DateTime.Now
                     };
-                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+                    _unitOfWork.ClientRisks.Add(clientRisk);
 
                     var clientRiskId = clientRisk.Id;
 
@@ -127,7 +127,7 @@ namespace Tilbake.Application.Services
                 //  Update QuoteItems with HouseId
                 int ho = resource.Houses.Length;
                 var houses = resource.Houses;
-                await _unitOfWork.Houses.AddRangeAsync(houses);
+                _unitOfWork.Houses.AddRange(houses);
 
                 for (int i = 0; i < ho; i++)
                 {
@@ -139,7 +139,7 @@ namespace Tilbake.Application.Services
                         HouseId = houseId,
                         DateAdded = DateTime.Now
                     };
-                    await _unitOfWork.Risks.AddAsync(risk);
+                    _unitOfWork.Risks.Add(risk);
 
                     var riskId = risk.Id;
 
@@ -150,7 +150,7 @@ namespace Tilbake.Application.Services
                         RiskId = riskId,
                         DateAdded = DateTime.Now
                     };
-                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+                    _unitOfWork.ClientRisks.Add(clientRisk);
 
                     var clientRiskId = clientRisk.Id;
 
@@ -168,7 +168,7 @@ namespace Tilbake.Application.Services
                 //  Update QuoteItems with MotorId
                 int mo = resource.Motors.Length;
                 var motors = resource.Motors;
-                await _unitOfWork.Motors.AddRangeAsync(motors);
+                _unitOfWork.Motors.AddRange(motors);
 
                 for (int i = 0; i < mo; i++)
                 {
@@ -180,7 +180,7 @@ namespace Tilbake.Application.Services
                         MotorId = motorId,
                         DateAdded = DateTime.Now
                     };
-                    await _unitOfWork.Risks.AddAsync(risk);
+                    _unitOfWork.Risks.Add(risk);
 
                     var riskId = risk.Id;
 
@@ -191,7 +191,7 @@ namespace Tilbake.Application.Services
                         RiskId = riskId,
                         DateAdded = DateTime.Now
                 };
-                    await _unitOfWork.ClientRisks.AddAsync(clientRisk);
+                    _unitOfWork.ClientRisks.Add(clientRisk);
 
                     var clientRiskId = clientRisk.Id;
 
@@ -204,24 +204,14 @@ namespace Tilbake.Application.Services
                 }
             }
 
-            await _unitOfWork.PolicyRisks.AddRangeAsync(policyRisks);
+            _unitOfWork.PolicyRisks.AddRange(policyRisks);
             await _unitOfWork.SaveAsync();
-            
-            var result = _mapper.Map<Policy, PolicyResource>(policy);
-            return result;
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Policies.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(PolicyResource resource)
-        {
-            var policy = _mapper.Map<PolicyResource, Policy>(resource);
-            await _unitOfWork.Policies.DeleteAsync(policy);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Policies.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyResource>> GetAllAsync(Guid portfolioClientId)
@@ -295,7 +285,7 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<PolicyResource> QuoteToPolicy(QuotePolicyObjectResource resource)
+        public async void QuoteToPolicy(QuotePolicyObjectResource resource)
         {
             var insurerBranchId = resource.Quote.InsurerBranchId;
 
@@ -308,7 +298,7 @@ namespace Tilbake.Application.Services
             policy.InsurerBranchId = insurerBranchId;
             policy.PortfolioClientId = portfolioClientId;
             policy.DateAdded = DateTime.Now;
-            await _unitOfWork.Policies.AddAsync(policy);
+            _unitOfWork.Policies.Add(policy);
 
             var policyId = policy.Id;
 
@@ -331,26 +321,20 @@ namespace Tilbake.Application.Services
             };
                 policyRisks.Add(policyRisk);
             }
-            await _unitOfWork.PolicyRisks.AddRangeAsync(policyRisks);
+            _unitOfWork.PolicyRisks.AddRange(policyRisks);
 
             quote.IsPolicySet = true;
-            await _unitOfWork.Quotes.UpdateAsync(quote.Id, quote);
+            _unitOfWork.Quotes.Update(quote.Id, quote);
 
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<Policy, PolicyResource>(policy);
-            return result;
         }
 
-        public async Task<PolicyResource> UpdateAsync(PolicyResource resource)
+        public async void Update(PolicyResource resource)
         {
             var policy = _mapper.Map<PolicyResource, Policy>(resource);
-            await _unitOfWork.Policies.UpdateAsync(resource.Id, policy);
+             _unitOfWork.Policies.Update(resource.Id, policy);
 
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<Policy, PolicyResource>(policy);
-            return result;
         }
     }
 }

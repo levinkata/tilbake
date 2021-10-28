@@ -21,31 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<AllRiskSpecifiedResource> AddAsync(AllRiskSpecifiedSaveResource resource)
+        public void Add(AllRiskSpecifiedSaveResource resource)
         {
             var allRiskSpecified = _mapper.Map<AllRiskSpecifiedSaveResource, AllRiskSpecified>(resource);
             allRiskSpecified.Id = Guid.NewGuid();
             allRiskSpecified.DateAdded = DateTime.Now;
 
-            await _unitOfWork.AllRiskSpecifieds.AddAsync(allRiskSpecified);
+            _unitOfWork.AllRiskSpecifieds.Add(allRiskSpecified);
+        }
+
+        public async void Delete(Guid id)
+        {
+            _unitOfWork.AllRiskSpecifieds.Delete(id);
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<AllRiskSpecified, AllRiskSpecifiedResource>(allRiskSpecified) ;
-            return result;
-        }
-
-        public async Task<int> DeleteAsync(Guid id)
-        {
-            await _unitOfWork.AllRiskSpecifieds.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(AllRiskSpecifiedResource resource)
-        {
-            var allRiskSpecified = _mapper.Map<AllRiskSpecifiedResource, AllRiskSpecified>(resource);
-            await _unitOfWork.AllRiskSpecifieds.DeleteAsync(allRiskSpecified);
-
-            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AllRiskSpecifiedResource>> GetAllAsync()
@@ -62,20 +50,16 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.AllRiskSpecifieds.GetByIdAsync(id);
             var resource = _mapper.Map<AllRiskSpecified, AllRiskSpecifiedResource>(result);
-
             return resource;
         }
 
-        public async Task<AllRiskSpecifiedResource> UpdateAsync(AllRiskSpecifiedResource resource)
+        public async void Update(AllRiskSpecifiedResource resource)
         {
             var allRiskSpecified = _mapper.Map<AllRiskSpecifiedResource, AllRiskSpecified>(resource);
             allRiskSpecified.DateModified = DateTime.Now;
 
-            await _unitOfWork.AllRiskSpecifieds.UpdateAsync(resource.Id, allRiskSpecified);
+            _unitOfWork.AllRiskSpecifieds.Update(resource.Id, allRiskSpecified);
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<AllRiskSpecified, AllRiskSpecifiedResource>(allRiskSpecified) ;
-            return result;
         }
     }
 }

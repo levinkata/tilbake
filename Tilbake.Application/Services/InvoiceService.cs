@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<InvoiceResource> AddAsync(InvoiceSaveResource resource)
+        public async void Add(InvoiceSaveResource resource)
         {
             var policyId = resource.PolicyId;
             var policyRisks = await _unitOfWork.PolicyRisks.GetAllAsync(r => r.PolicyId == policyId);
@@ -40,7 +40,7 @@ namespace Tilbake.Application.Services
             invoice.TaxAmount = invoice.Amount * taxRate / 100;
             invoice.ReducingBalance = invoice.Amount;
             invoice.DateAdded = DateTime.Now;
-            await _unitOfWork.Invoices.AddAsync(invoice);
+            _unitOfWork.Invoices.Add(invoice);
 
             var invoiceId = invoice.Id;
 
@@ -55,24 +55,14 @@ namespace Tilbake.Application.Services
                 };
                 invoiceItems.Add(invoiceItem);
             }
-            await _unitOfWork.InvoiceItems.AddRangeAsync(invoiceItems);
+            _unitOfWork.InvoiceItems.AddRange(invoiceItems);
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<Invoice, InvoiceResource>(invoice);
-            return result;
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Invoices.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(InvoiceResource resource)
-        {
-            var invoice = _mapper.Map<InvoiceResource, Invoice>(resource);
-            await _unitOfWork.Invoices.DeleteAsync(invoice);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Invoices.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceResource>> GetAllAsync()
@@ -105,7 +95,6 @@ namespace Tilbake.Application.Services
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
 
             var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource> >(result);
-
             return resources;
         }
 
@@ -117,11 +106,10 @@ namespace Tilbake.Application.Services
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
 
             var resources = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceResource>>(result);
-
             return resources;
         }
 
-        public async Task<InvoiceResource> UpdateAsync(InvoiceResource resource)
+        public async void Update(InvoiceResource resource)
         {
             var invoice = _mapper.Map<InvoiceResource, Invoice>(resource);
 
@@ -134,12 +122,9 @@ namespace Tilbake.Application.Services
             invoice.TaxAmount = invoice.Amount * taxRate / 100;
             invoice.DateModified = DateTime.Now;
 
-            await _unitOfWork.Invoices.UpdateAsync(resource.Id, invoice);
+            _unitOfWork.Invoices.Update(resource.Id, invoice);
 
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<Invoice, InvoiceResource>(invoice);
-            return result;
         }
     }
 }

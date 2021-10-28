@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(DriverTypeSaveResource resource)
+        public async void Add(DriverTypeSaveResource resource)
         {
             var driverType = _mapper.Map<DriverTypeSaveResource, DriverType>(resource);
             driverType.Id = Guid.NewGuid();
 
-            await _unitOfWork.DriverTypes.AddAsync(driverType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.DriverTypes.Add(driverType);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.DriverTypes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(DriverTypeResource resource)
-        {
-            var driverType = _mapper.Map<DriverTypeResource, DriverType>(resource);
-            await _unitOfWork.DriverTypes.DeleteAsync(driverType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.DriverTypes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<DriverTypeResource>> GetAllAsync()
@@ -50,7 +43,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<DriverType>, IEnumerable<DriverTypeResource>>(result);
-
             return resources;
         }
 
@@ -58,16 +50,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.DriverTypes.GetByIdAsync(id);
             var resource = _mapper.Map<DriverType, DriverTypeResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(DriverTypeResource resource)
+        public async void Update(DriverTypeResource resource)
         {
             var driverType = _mapper.Map<DriverTypeResource, DriverType>(resource);
-            await _unitOfWork.DriverTypes.UpdateAsync(resource.Id, driverType);
+            _unitOfWork.DriverTypes.Update(resource.Id, driverType);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

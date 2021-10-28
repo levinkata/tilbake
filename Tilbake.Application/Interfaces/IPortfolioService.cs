@@ -11,9 +11,8 @@ namespace Tilbake.Application.Interfaces
         //Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId);
         //Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId);
         Task<PortfolioResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(PortfolioSaveResource resource);
-        Task<int> UpdateAsync(PortfolioResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(PortfolioResource resource);
+        void Add(PortfolioSaveResource resource);
+        void Update(PortfolioResource resource);
+        void Delete(Guid id);
     }
 }

@@ -21,34 +21,34 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PortfolioSaveResource resource)
+        public async void Add(PortfolioSaveResource resource)
         {
             var portfolio = _mapper.Map<PortfolioSaveResource, Portfolio>(resource);
             portfolio.Id = Guid.NewGuid();
             portfolio.DateAdded = DateTime.Now;
-            await _unitOfWork.Portfolios.AddAsync(portfolio);
+            _unitOfWork.Portfolios.Add(portfolio);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
             var portfolio = await _unitOfWork.Portfolios.GetFirstOrDefaultAsync(
                                                         e => e.Id == id,
                                                         e => e.AspnetUserPortfolios);
             var aspnetUserPortfolios = portfolio.AspnetUserPortfolios;
 
-            await _unitOfWork.UserPortfolios.DeleteRangeAsync(aspnetUserPortfolios);
-            await _unitOfWork.Portfolios.DeleteAsync(portfolio);
+            _unitOfWork.UserPortfolios.DeleteRange(aspnetUserPortfolios);
+            _unitOfWork.Portfolios.Delete(portfolio);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(PortfolioResource resource)
+        public async void Delete(PortfolioResource resource)
         {
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
-            await _unitOfWork.Portfolios.DeleteAsync(portfolio);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Portfolios.Delete(portfolio);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
@@ -72,12 +72,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(PortfolioResource resource)
+        public async void Update(PortfolioResource resource)
         {
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
-            await _unitOfWork.Portfolios.UpdateAsync(resource.Id, portfolio);
+            _unitOfWork.Portfolios.Update(resource.Id, portfolio);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

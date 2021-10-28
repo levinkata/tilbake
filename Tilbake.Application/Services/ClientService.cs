@@ -32,28 +32,20 @@ namespace Tilbake.Application.Services
             _environment = environment;
         }
 
-        public async Task<int> AddAsync(PortfolioClientSaveResource resource)
+        public async void Add(PortfolioClientSaveResource resource)
         {
             var client = _mapper.Map<PortfolioClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
             client.DateAdded = DateTime.Now;
-            await _unitOfWork.Clients.AddAsync(client);
+            _unitOfWork.Clients.Add(client);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Clients.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ClientResource resource)
-        {
-            var client = _mapper.Map<ClientResource, Client>(resource);
-            await _unitOfWork.Clients.DeleteAsync(client);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Clients.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientResource>> GetAllAsync()
@@ -140,10 +132,10 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(ClientResource resource)
+        public async void Update(ClientResource resource)
         {
             var client = _mapper.Map<ClientResource, Client>(resource);
-            await _unitOfWork.Clients.UpdateAsync(resource.Id, client);
+            _unitOfWork.Clients.Update(resource.Id, client);
             
             var clientId = client.Id;
             var clientCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
@@ -151,10 +143,10 @@ namespace Tilbake.Application.Services
 
             if (clientCarriers != null)
             {
-                await _unitOfWork.ClientCarriers.DeleteRangeAsync(clientCarriers);
+                _unitOfWork.ClientCarriers.DeleteRange(clientCarriers);
             }
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<ClientResource> GetByPolicyIdAsync(Guid policyId)
@@ -166,7 +158,7 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> ImportBulkAsync(UpLoadFileResource resource)
+        public async void ImportBulk(UpLoadFileResource resource)
         {
             try
             {
@@ -189,7 +181,7 @@ namespace Tilbake.Application.Services
                 var clientBulks = await _unitOfWork.ClientBulks.GetAllAsync(r => r.PortfolioId == resource.PortfolioId);
                 if (clientBulks != null)
                 {
-                    await _unitOfWork.ClientBulks.DeleteRangeAsync(clientBulks);
+                    _unitOfWork.ClientBulks.DeleteRange(clientBulks);
                     await _unitOfWork.SaveAsync();
                 }
 
@@ -663,7 +655,8 @@ namespace Tilbake.Application.Services
                     }
                     catch (DbUpdateException ex)
                     {
-                        return ex.HResult;
+                        throw ex.InnerException;
+                        // return ex.HResult;
                     }
 
                     if (clientDTOs.Count > 0)
@@ -674,14 +667,14 @@ namespace Tilbake.Application.Services
                             ms.Flush();
 
                             //  Find a way to return custom error for duplicatte ID Numbers
-                            return 909;
+                            //return 909;
 
                             //ModelState.AddModelError(string.Empty, $"Input data contains duplicate ID Numbers.");
                             //return await Task.Run(() => View(model)).ConfigureAwait(true);
                         }
                         else
                         {
-                            await _unitOfWork.ClientBulks.AddRangeAsync(clientDTOs);
+                            _unitOfWork.ClientBulks.AddRange(clientDTOs);
                         }
                     }
                     else
@@ -691,22 +684,23 @@ namespace Tilbake.Application.Services
                     }
                     ms.Flush();
                 }
-                return await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
             }
             catch (DbUpdateException ex)
             {
-                return ex.HResult;
+                throw ex.InnerException;
+                // return ex.HResult;
             }
         }
 
-        public async Task<int> AddBulkAsync(Guid portfolioId)
+        public async void AddBulk(Guid portfolioId)
         {
             try
             {
                 var clientBulks = await _unitOfWork.ClientBulks.GetAllAsync(
                                     r => r.PortfolioId == portfolioId);
 
-                int recCount = clientBulks.Count();
+                int recCount = clientBulks.Count;
                 var NewRecords = 0;
                 var ExistingRecords = 0;
                 var FolderName = "client";
@@ -730,7 +724,7 @@ namespace Tilbake.Application.Services
                             OccupationId = c.OccupationId,
                             CountryId = c.CountryId
                         };
-                        await _unitOfWork.Clients.AddAsync(client);
+                        _unitOfWork.Clients.Add(client);
                         NewRecords++;
 
                         var FileName = "NewClient";
@@ -747,7 +741,7 @@ namespace Tilbake.Application.Services
                                 PortfolioId = portfolioId,
                                 ClientId = client.Id
                             };
-                            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+                            _unitOfWork.PortfolioClients.Add(portfolioClient);
                         }
                     }
                     else
@@ -764,22 +758,23 @@ namespace Tilbake.Application.Services
 
                 if (recCount > 0)
                 {
-                    await _unitOfWork.ClientBulks.DeleteRangeAsync(clientBulks);
+                    _unitOfWork.ClientBulks.DeleteRange(clientBulks);
                 }
 
-                return await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
             }
             catch (DbUpdateException ex)
             {
-                return ex.HResult;
+                throw ex.InnerException;
+                //return ex.HResult;
             }
         }
 
-        public async Task<int> DeleteBulkAsync(List<ClientBulkResource> resources)
+        public async void DeleteBulk(List<ClientBulkResource> resources)
         {
             var clientBulks = _mapper.Map<IEnumerable<ClientBulkResource>, IEnumerable<ClientBulk>>(resources);
-            await _unitOfWork.ClientBulks.DeleteRangeAsync(clientBulks);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ClientBulks.DeleteRange(clientBulks);
+            await _unitOfWork.SaveAsync();
         }
 
         private async Task<Guid> GetCountryId(string name)

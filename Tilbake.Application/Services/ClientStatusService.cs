@@ -21,27 +21,18 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ClientStatusSaveResource resource)
+        public async void Add(ClientStatusSaveResource resource)
         {
             var clientStatus = _mapper.Map<ClientStatusSaveResource, ClientStatus>(resource);
             clientStatus.Id = Guid.NewGuid();
 
-            await _unitOfWork.ClientStatuses.AddAsync(clientStatus);
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.ClientStatuses.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ClientStatusResource resource)
-        {
-            var clientStatus = _mapper.Map<ClientStatusResource, ClientStatus>(resource);
-            await _unitOfWork.ClientStatuses.DeleteAsync(clientStatus);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ClientStatuses.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientStatusResource>> GetAllAsync()
@@ -58,17 +49,17 @@ namespace Tilbake.Application.Services
         public async Task<ClientStatusResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.ClientStatuses.GetByIdAsync(id);
-            var resources = _mapper.Map<ClientStatus, ClientStatusResource>(result);
+            var resource = _mapper.Map<ClientStatus, ClientStatusResource>(result);
 
-            return resources;
+            return resource;
         }
 
-        public async Task<int> UpdateAsync(ClientStatusResource resource)
+        public async void Update(ClientStatusResource resource)
         {
             var clientStatus = _mapper.Map<ClientStatusResource, ClientStatus>(resource);
-            await _unitOfWork.ClientStatuses.UpdateAsync(resource.Id, clientStatus);
+            _unitOfWork.ClientStatuses.Update(resource.Id, clientStatus);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(BuildingSaveResource resource)
+        public async void Add(BuildingSaveResource resource)
         {
             var building = _mapper.Map<BuildingSaveResource, Building>(resource);
             building.Id = Guid.NewGuid();
             building.DateAdded = DateTime.Now;
 
-            await _unitOfWork.Buildings.AddAsync(building);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Buildings.Add(building);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Buildings.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(BuildingResource resource)
-        {
-            var building = _mapper.Map<BuildingResource, Building>(resource);
-            await _unitOfWork.Buildings.DeleteAsync(building);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Buildings.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BuildingResource>> GetAllAsync()
@@ -74,12 +66,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(BuildingResource resource)
+        public async void Update(BuildingResource resource)
         {
             var building = _mapper.Map<BuildingResource, Building>(resource);
-            await _unitOfWork.Buildings.UpdateAsync(resource.Id, building);
+            _unitOfWork.Buildings.Update(resource.Id, building);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

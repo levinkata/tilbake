@@ -21,30 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<PortfolioExcessBuyBackResource> AddAsync(PortfolioExcessBuyBackSaveResource resource)
+        public async void Add(PortfolioExcessBuyBackSaveResource resource)
         {
             var portfolioExcessBuyBack = _mapper.Map<PortfolioExcessBuyBackSaveResource, PortfolioExcessBuyBack>(resource);
             portfolioExcessBuyBack.Id = Guid.NewGuid();
             portfolioExcessBuyBack.DateAdded = DateTime.Now;
 
-            await _unitOfWork.PortfolioExcessBuyBacks.AddAsync(portfolioExcessBuyBack);
+            _unitOfWork.PortfolioExcessBuyBacks.Add(portfolioExcessBuyBack);
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<PortfolioExcessBuyBack, PortfolioExcessBuyBackResource>(portfolioExcessBuyBack);
-            return result;
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.PortfolioExcessBuyBacks.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(PortfolioExcessBuyBackResource resource)
-        {
-            var portfolioExcessBuyBack = _mapper.Map<PortfolioExcessBuyBackResource, PortfolioExcessBuyBack>(resource);
-            await _unitOfWork.PortfolioExcessBuyBacks.DeleteAsync(portfolioExcessBuyBack);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PortfolioExcessBuyBacks.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioExcessBuyBackResource>> GetAllAsync()
@@ -79,17 +69,14 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<PortfolioExcessBuyBackResource> UpdateAsync(PortfolioExcessBuyBackResource resource)
+        public async void Update(PortfolioExcessBuyBackResource resource)
         {
             var portfolioExcessBuyBack = _mapper.Map<PortfolioExcessBuyBackResource, PortfolioExcessBuyBack>(resource);
 
             portfolioExcessBuyBack.DateModified = DateTime.Now;
             
-            await _unitOfWork.PortfolioExcessBuyBacks.UpdateAsync(resource.Id, portfolioExcessBuyBack);
+            _unitOfWork.PortfolioExcessBuyBacks.Update(resource.Id, portfolioExcessBuyBack);
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<PortfolioExcessBuyBack, PortfolioExcessBuyBackResource>(portfolioExcessBuyBack);
-            return result;
         }
     }
 }

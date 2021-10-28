@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PolicyTypeSaveResource resource)
+        public async void Add(PolicyTypeSaveResource resource)
         {
             var policyType = _mapper.Map<PolicyTypeSaveResource, PolicyType>(resource);
             policyType.Id = Guid.NewGuid();
 
-            await _unitOfWork.PolicyTypes.AddAsync(policyType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PolicyTypes.Add(policyType);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.PolicyTypes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(PolicyTypeResource resource)
-        {
-            var policyType = _mapper.Map<PolicyTypeResource, PolicyType>(resource);
-            await _unitOfWork.PolicyTypes.DeleteAsync(policyType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PolicyTypes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyTypeResource>> GetAllAsync()
@@ -50,7 +43,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<PolicyType>, IEnumerable<PolicyTypeResource>>(result);
-
             return resources;
         }
 
@@ -58,16 +50,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.PolicyTypes.GetByIdAsync(id);
             var resource = _mapper.Map<PolicyType, PolicyTypeResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(PolicyTypeResource resource)
+        public async void Update(PolicyTypeResource resource)
         {
             var policyType = _mapper.Map<PolicyTypeResource, PolicyType>(resource);
-            await _unitOfWork.PolicyTypes.UpdateAsync(resource.Id, policyType);
+            _unitOfWork.PolicyTypes.Update(resource.Id, policyType);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

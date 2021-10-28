@@ -46,11 +46,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Genders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GenderSaveResource resource)
+        public IActionResult Create(GenderSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _genderService.AddAsync(resource);
+                _genderService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -75,7 +75,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Genders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, GenderResource resource)
+        public IActionResult Edit(Guid? id, GenderResource resource)
         {
             if (id != resource.Id)
             {
@@ -86,7 +86,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _genderService.UpdateAsync(resource);
+                    _genderService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,9 +117,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Genders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _genderService.DeleteAsync(id);
+            _genderService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

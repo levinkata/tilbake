@@ -37,11 +37,11 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CommissionRateSaveResource resource)
+        public IActionResult Create(CommissionRateSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _commissionRateService.AddAsync(resource);
+                _commissionRateService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -68,7 +68,7 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, CommissionRateResource resource)
+        public IActionResult Edit(Guid? id, CommissionRateResource resource)
         {
             if (id != resource.Id)
             {
@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _commissionRateService.UpdateAsync(resource);
+                    _commissionRateService.Update(resource);
                     return RedirectToAction(nameof(Details), new { id = resource.Id });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -110,9 +110,9 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(CommissionRateResource resource)
+        public IActionResult DeleteConfirmed(CommissionRateResource resource)
         {
-            await _commissionRateService.DeleteAsync(resource.Id);
+            _commissionRateService.Delete(resource.Id);
             return RedirectToAction(nameof(Index));
         }
     }

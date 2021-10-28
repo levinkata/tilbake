@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ClientCarrierSaveResource resource)
+        public async void Add(ClientCarrierSaveResource resource)
         {
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
@@ -31,7 +31,7 @@ namespace Tilbake.Application.Services
 
             if(existingCarriers.Any())
             {
-                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingCarriers);
+                _unitOfWork.ClientCarriers.DeleteRange(existingCarriers);
             }
 
             if(carrierIds.Any())
@@ -48,12 +48,12 @@ namespace Tilbake.Application.Services
                     };
                     clientCarriers.Add(clientCarrier);
                 }
-                await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
+                _unitOfWork.ClientCarriers.AddRange(clientCarriers);
             }
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdateAsync(ClientCarrierResource resource)
+        public async void Update(ClientCarrierResource resource)
         {
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
@@ -63,7 +63,7 @@ namespace Tilbake.Application.Services
 
             if(existingCarriers.Any())
             {
-                await _unitOfWork.ClientCarriers.DeleteRangeAsync(existingCarriers);
+                _unitOfWork.ClientCarriers.DeleteRange(existingCarriers);
             }
 
             if(carrierIds.Any())
@@ -80,9 +80,9 @@ namespace Tilbake.Application.Services
                     };
                     clientCarriers.Add(clientCarrier);
                 }
-                await _unitOfWork.ClientCarriers.AddRangeAsync(clientCarriers);
+                _unitOfWork.ClientCarriers.AddRange(clientCarriers);
             }
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientCarrierResource>> GetByClientIdAsync(Guid clientId)

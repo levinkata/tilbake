@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(BodyTypeSaveResource resource)
+        public async void Add(BodyTypeSaveResource resource)
         {
             var bodyType = _mapper.Map<BodyTypeSaveResource, BodyType>(resource);
             bodyType.Id = Guid.NewGuid();
 
-            await _unitOfWork.BodyTypes.AddAsync(bodyType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.BodyTypes.Add(bodyType);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.BodyTypes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(BodyTypeResource resource)
-        {
-            var bodyType = _mapper.Map<BodyTypeResource, BodyType>(resource);
-            await _unitOfWork.BodyTypes.DeleteAsync(bodyType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.BodyTypes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BodyTypeResource>> GetAllAsync()
@@ -50,24 +43,22 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<BodyType>, IEnumerable<BodyTypeResource>>(result);
-
             return resources;
         }
 
         public async Task<BodyTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.BodyTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<BodyType, BodyTypeResource>(result);
-
-            return resources;
+            var resource = _mapper.Map<BodyType, BodyTypeResource>(result);
+            return resource;
         }
 
-        public async Task<int> UpdateAsync(BodyTypeResource resource)
+        public async void Update(BodyTypeResource resource)
         {
             var bodyType = _mapper.Map<BodyTypeResource, BodyType>(resource);
-            await _unitOfWork.BodyTypes.UpdateAsync(resource.Id, bodyType);
+            _unitOfWork.BodyTypes.Update(resource.Id, bodyType);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

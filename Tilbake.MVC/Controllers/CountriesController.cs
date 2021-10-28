@@ -29,11 +29,11 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CountrySaveResource resource)
+        public IActionResult Create(CountrySaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _countryService.AddAsync(resource);
+                _countryService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -90,7 +90,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Countries/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, CountryResource resource)
+        public IActionResult Edit(Guid? id, CountryResource resource)
         {
             if (id != resource.Id)
             {
@@ -101,7 +101,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _countryService.UpdateAsync(resource);
+                    _countryService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -132,9 +132,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Countries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _countryService.DeleteAsync(id);
+            _countryService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -26,12 +26,12 @@ namespace Tilbake.MVC.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
 
-            UserPortfolioResource resource = new UserPortfolioResource()
+            UserPortfolioResource resource = new()
             {
                 Users = new SelectList(users, "Id", "Email"),
             };
 
-            return await Task.Run(() => View(resource));
+            return View(resource);
         }
 
         [HttpGet]
@@ -42,37 +42,37 @@ namespace Tilbake.MVC.Controllers
             var userPortfolios = await _userPortfolioService.GetByUserIdAsync(userId);
             var assignedPortfolios = userPortfolios.Select(r => new
                                                     {
-                                                        Id = r.Id,
-                                                        Name = r.Name
+                                                        r.Id,
+                                                        r.Name
                                                     });
 
             return Json(new { unAssignedPortfolios, assignedPortfolios });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUserPortfolios(string userId, string[] portfolios)
+        public IActionResult AddUserPortfolios(string userId, string[] portfolios)
         {
-            UserPortfolioResource resource = new UserPortfolioResource()
+            UserPortfolioResource resource = new()
             {
                 UserId = userId,
                 PortfolioIds = portfolios
             };
 
-            await _userPortfolioService.AddRangeAsync(resource);
+            _userPortfolioService.AddRange(resource);
 
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveUserPortfolios(string userId, string[] portfolios)
+        public IActionResult RemoveUserPortfolios(string userId, string[] portfolios)
         {
-            UserPortfolioResource resource = new UserPortfolioResource()
+            UserPortfolioResource resource = new()
             {
                 UserId = userId,
                 PortfolioIds = portfolios
             };
 
-            await _userPortfolioService.DeleteRangeAsync(resource);
+            _userPortfolioService.DeleteRange(resource);
 
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }

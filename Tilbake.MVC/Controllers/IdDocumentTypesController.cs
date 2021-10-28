@@ -30,11 +30,11 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(IdDocumentTypeSaveResource resource)
+        public IActionResult Create(IdDocumentTypeSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _idDocumentTypeService.AddAsync(resource);
+                _idDocumentTypeService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
 

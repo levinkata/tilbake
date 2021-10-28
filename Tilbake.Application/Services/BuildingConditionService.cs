@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(BuildingConditionSaveResource resource)
+        public async void Add(BuildingConditionSaveResource resource)
         {
             var buildingCondition = _mapper.Map<BuildingConditionSaveResource, BuildingCondition>(resource);
             buildingCondition.Id = Guid.NewGuid();
             buildingCondition.DateAdded = DateTime.Now;
 
-            await _unitOfWork.BuildingConditions.AddAsync(buildingCondition);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.BuildingConditions.Add(buildingCondition);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.BuildingConditions.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(BuildingConditionResource resource)
-        {
-            var buildingCondition = _mapper.Map<BuildingConditionResource, BuildingCondition>(resource);
-            await _unitOfWork.BuildingConditions.DeleteAsync(buildingCondition);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.BuildingConditions.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BuildingConditionResource>> GetAllAsync()
@@ -62,12 +54,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(BuildingConditionResource resource)
+        public async void Update(BuildingConditionResource resource)
         {
             var buildingCondition = _mapper.Map<BuildingConditionResource, BuildingCondition>(resource);
-            await _unitOfWork.BuildingConditions.UpdateAsync(resource.Id, buildingCondition);
+            _unitOfWork.BuildingConditions.Update(resource.Id, buildingCondition);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

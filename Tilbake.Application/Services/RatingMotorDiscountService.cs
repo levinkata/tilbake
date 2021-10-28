@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(RatingMotorDiscountSaveResource resource)
+        public async void Add(RatingMotorDiscountSaveResource resource)
         {
             var ratingMotorDiscount = _mapper.Map<RatingMotorDiscountSaveResource, RatingMotorDiscount>(resource);
             ratingMotorDiscount.Id = Guid.NewGuid();
             ratingMotorDiscount.DateAdded = DateTime.Now;
 
-            await _unitOfWork.RatingMotorDiscounts.AddAsync(ratingMotorDiscount);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorDiscounts.Add(ratingMotorDiscount);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.RatingMotorDiscounts.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(RatingMotorDiscountResource resource)
-        {
-            var ratingMotorDiscount = _mapper.Map<RatingMotorDiscountResource, RatingMotorDiscount>(resource);
-            await _unitOfWork.RatingMotorDiscounts.DeleteAsync(ratingMotorDiscount);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorDiscounts.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<RatingMotorDiscountResource> GetByIdAsync(Guid id)
@@ -66,13 +58,13 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(RatingMotorDiscountResource resource)
+        public async void Update(RatingMotorDiscountResource resource)
         {
             var ratingMotorDiscount = _mapper.Map<RatingMotorDiscountResource, RatingMotorDiscount>(resource);
             ratingMotorDiscount.DateModified = DateTime.Now;
 
-            await _unitOfWork.RatingMotorDiscounts.UpdateAsync(resource.Id, ratingMotorDiscount);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotorDiscounts.Update(resource.Id, ratingMotorDiscount);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

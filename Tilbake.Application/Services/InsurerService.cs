@@ -21,27 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(InsurerSaveResource resource)
+        public async void Add(InsurerSaveResource resource)
         {
             var insurer = _mapper.Map<InsurerSaveResource, Insurer>(resource);
             insurer.Id = Guid.NewGuid();
             insurer.DateAdded = DateTime.Now;
 
-            await _unitOfWork.Insurers.AddAsync(insurer);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Insurers.Add(insurer);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Insurers.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(InsurerResource resource)
-        {
-            var insurer = _mapper.Map<InsurerResource, Insurer>(resource);
-            await _unitOfWork.Insurers.DeleteAsync(insurer);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Insurers.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InsurerResource>> GetAllAsync()
@@ -67,13 +60,13 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(InsurerResource resource)
+        public async void Update(InsurerResource resource)
         {
             var insurer = _mapper.Map<InsurerResource, Insurer>(resource);
             insurer.DateModified = DateTime.Now;
-            await _unitOfWork.Insurers.UpdateAsync(resource.Id, insurer);
+            _unitOfWork.Insurers.Update(resource.Id, insurer);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,27 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(GenderSaveResource resource)
+        public async void Add(GenderSaveResource resource)
         {
             var gender = _mapper.Map<GenderSaveResource, Gender>(resource);
             gender.Id = Guid.NewGuid();
 
-            await _unitOfWork.Genders.AddAsync(gender);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Genders.Add(gender);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Genders.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(GenderResource resource)
-        {
-            var gender = _mapper.Map<GenderResource, Gender>(resource);
-            await _unitOfWork.Genders.DeleteAsync(gender);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Genders.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<GenderResource>> GetAllAsync()
@@ -51,7 +43,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<Gender>, IEnumerable<GenderResource>>(result);
-
             return resources;
         }
 
@@ -59,16 +50,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Genders.GetByIdAsync(id);
             var resource = _mapper.Map<Gender, GenderResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(GenderResource resource)
+        public async void Update(GenderResource resource)
         {
             var gender = _mapper.Map<GenderResource, Gender>(resource);
-            await _unitOfWork.Genders.UpdateAsync(resource.Id, gender);
+            _unitOfWork.Genders.Update(resource.Id, gender);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

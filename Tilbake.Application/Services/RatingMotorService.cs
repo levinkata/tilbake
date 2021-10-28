@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(RatingMotorSaveResource resource)
+        public async void Add(RatingMotorSaveResource resource)
         {
             var ratingMotor = _mapper.Map<RatingMotorSaveResource, RatingMotor>(resource);
             ratingMotor.Id = Guid.NewGuid();
             ratingMotor.DateAdded = DateTime.Now;
 
-            await _unitOfWork.RatingMotors.AddAsync(ratingMotor);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotors.Add(ratingMotor);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.RatingMotors.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(RatingMotorResource resource)
-        {
-            var ratingMotor = _mapper.Map<RatingMotorResource, RatingMotor>(resource);
-            await _unitOfWork.RatingMotors.DeleteAsync(ratingMotor);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotors.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<RatingMotorResource> GetByIdAsync(Guid id)
@@ -66,13 +58,13 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(RatingMotorResource resource)
+        public async void Update(RatingMotorResource resource)
         {
             var ratingMotor = _mapper.Map<RatingMotorResource, RatingMotor>(resource);
             ratingMotor.DateModified = DateTime.Now;
 
-            await _unitOfWork.RatingMotors.UpdateAsync(resource.Id, ratingMotor);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.RatingMotors.Update(resource.Id, ratingMotor);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

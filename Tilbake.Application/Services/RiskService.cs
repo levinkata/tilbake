@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -21,26 +20,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(RiskSaveResource resource)
+        public async void Add(RiskSaveResource resource)
         {
             var risk = _mapper.Map<RiskSaveResource, Risk>(resource);
             risk.Id = Guid.NewGuid();
 
-            await _unitOfWork.Risks.AddAsync(risk);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Risks.Add(risk);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Risks.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(RiskResource resource)
-        {
-            var risk = _mapper.Map<RiskResource, Risk>(resource);
-            await _unitOfWork.Risks.DeleteAsync(risk);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Risks.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<RiskResource>> GetAllAsync()
@@ -59,12 +51,12 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(RiskResource resource)
+        public async void Update(RiskResource resource)
         {
             var risk = _mapper.Map<RiskResource, Risk>(resource);
-            await _unitOfWork.Risks.UpdateAsync(resource.Id, risk);
+            _unitOfWork.Risks.Update(resource.Id, risk);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

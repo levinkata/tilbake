@@ -21,27 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PaymentMethodSaveResource resource)
+        public async void Add(PaymentMethodSaveResource resource)
         {
             var paymentMethod = _mapper.Map<PaymentMethodSaveResource, PaymentMethod>(resource);
             paymentMethod.Id = Guid.NewGuid();
 
-            await _unitOfWork.PaymentMethods.AddAsync(paymentMethod);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PaymentMethods.Add(paymentMethod);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.PaymentMethods.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(PaymentMethodResource resource)
-        {
-            var paymentMethod = _mapper.Map<PaymentMethodResource, PaymentMethod>(resource);
-            await _unitOfWork.PaymentMethods.DeleteAsync(paymentMethod);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PaymentMethods.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PaymentMethodResource>> GetAllAsync()
@@ -59,16 +51,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.PaymentMethods.GetByIdAsync(id);
             var resources = _mapper.Map<PaymentMethod, PaymentMethodResource>(result);
-
             return resources;
         }
 
-        public async Task<int> UpdateAsync(PaymentMethodResource resource)
+        public async void Update(PaymentMethodResource resource)
         {
             var paymentMethod = _mapper.Map<PaymentMethodResource, PaymentMethod>(resource);
-            await _unitOfWork.PaymentMethods.UpdateAsync(resource.Id, paymentMethod);
+            _unitOfWork.PaymentMethods.Update(resource.Id, paymentMethod);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

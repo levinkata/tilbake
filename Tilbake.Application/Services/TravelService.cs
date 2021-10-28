@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(TravelSaveResource resource)
+        public async void Add(TravelSaveResource resource)
         {
             var travel = _mapper.Map<TravelSaveResource, Travel>(resource);
             travel.Id = Guid.NewGuid();
             travel.DateAdded = DateTime.Now;
 
-            await _unitOfWork.Travels.AddAsync(travel);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Travels.Add(travel);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Travels.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(TravelResource resource)
-        {
-            var travel = _mapper.Map<TravelResource, Travel>(resource);
-            await _unitOfWork.Travels.DeleteAsync(travel);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Travels.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TravelResource>> GetAllAsync()
@@ -68,13 +60,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(TravelResource resource)
+        public async void Update(TravelResource resource)
         {
             var travel = _mapper.Map<TravelResource, Travel>(resource);
             travel.DateModified = DateTime.Now;
 
-            await _unitOfWork.Travels.UpdateAsync(resource.Id, travel);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Travels.Update(resource.Id, travel);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

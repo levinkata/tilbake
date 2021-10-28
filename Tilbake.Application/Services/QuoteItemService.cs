@@ -21,10 +21,10 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.QuoteItems.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.QuoteItems.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<QuoteItemResource> GetByIdAsync(Guid id)
@@ -79,7 +79,7 @@ namespace Tilbake.Application.Services
             return quoteItemObjectResource;
         }
 
-        public async Task<int> UpdateAsync(QuoteItemResource resource)
+        public async void Update(QuoteItemResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource);
 
@@ -93,12 +93,12 @@ namespace Tilbake.Application.Services
             quoteItem.TaxRate = taxRate;
             quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
-            await _unitOfWork.QuoteItems.UpdateAsync(resource.Id, quoteItem);
+            _unitOfWork.QuoteItems.Update(resource.Id, quoteItem);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdateQuoteItemRiskItemAsync(QuoteItemRiskItemResource resource)
+        public async void UpdateQuoteItemRiskItem(QuoteItemRiskItemResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
 
@@ -112,67 +112,67 @@ namespace Tilbake.Application.Services
             quoteItem.TaxRate = taxRate;
             quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
-            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+            _unitOfWork.QuoteItems.Update(resource.QuoteItem.Id, quoteItem);
 
             var riskItem = _mapper.Map<RiskItemResource, RiskItem>(resource.RiskItem);
-            await _unitOfWork.RiskItems.UpdateAsync(resource.RiskItem.Id, riskItem);
+            _unitOfWork.RiskItems.Update(resource.RiskItem.Id, riskItem);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdateQuoteItemBuildingAsync(QuoteItemBuildingResource resource)
+        public async void UpdateQuoteItemBuilding(QuoteItemBuildingResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
-            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+            _unitOfWork.QuoteItems.Update(resource.QuoteItem.Id, quoteItem);
 
             var building = _mapper.Map<BuildingResource, Building>(resource.Building);
-            await _unitOfWork.Buildings.UpdateAsync(resource.Building.Id, building);
+            _unitOfWork.Buildings.Update(resource.Building.Id, building);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdateQuoteItemContentAsync(QuoteItemContentResource resource)
+        public async void UpdateQuoteItemContent(QuoteItemContentResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
-            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+            _unitOfWork.QuoteItems.Update(resource.QuoteItem.Id, quoteItem);
 
             var content = _mapper.Map<ContentResource, Content>(resource.Content);
-            await _unitOfWork.Contents.UpdateAsync(resource.Content.Id, content);
+            _unitOfWork.Contents.Update(resource.Content.Id, content);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdateQuoteItemHouseAsync(QuoteItemHouseResource resource)
+        public async void UpdateQuoteItemHouse(QuoteItemHouseResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
-            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+            _unitOfWork.QuoteItems.Update(resource.QuoteItem.Id, quoteItem);
 
             var house = _mapper.Map<HouseResource, House>(resource.House);
-            await _unitOfWork.Houses.UpdateAsync(resource.House.Id, house);
+            _unitOfWork.Houses.Update(resource.House.Id, house);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdateQuoteItemMotorAsync(QuoteItemMotorResource resource)
+        public async void UpdateQuoteItemMotor(QuoteItemMotorResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
-            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+            _unitOfWork.QuoteItems.Update(resource.QuoteItem.Id, quoteItem);
 
             var motor = _mapper.Map<MotorResource, Motor>(resource.Motor);
-            await _unitOfWork.Motors.UpdateAsync(resource.Motor.Id, motor);
+            _unitOfWork.Motors.Update(resource.Motor.Id, motor);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> UpdateQuoteItemExcessBuyBackAsync(QuoteItemExcessBuyBackResource resource)
+        public async void UpdateQuoteItemExcessBuyBack(QuoteItemExcessBuyBackResource resource)
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
-            await _unitOfWork.QuoteItems.UpdateAsync(resource.QuoteItem.Id, quoteItem);
+            _unitOfWork.QuoteItems.Update(resource.QuoteItem.Id, quoteItem);
 
             var motor = _mapper.Map<ExcessBuyBackResource, ExcessBuyBack>(resource.ExcessBuyBack);
-            await _unitOfWork.ExcessBuyBacks.UpdateAsync(resource.ExcessBuyBack.Id, motor);
+            _unitOfWork.ExcessBuyBacks.Update(resource.ExcessBuyBack.Id, motor);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

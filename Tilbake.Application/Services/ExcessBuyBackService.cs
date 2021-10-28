@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ExcessBuyBackSaveResource resource)
+        public async void Add(ExcessBuyBackSaveResource resource)
         {
             var excessBuyBack = _mapper.Map<ExcessBuyBackSaveResource, ExcessBuyBack>(resource);
             excessBuyBack.Id = Guid.NewGuid();
             excessBuyBack.DateAdded = DateTime.Now;
 
-            await _unitOfWork.ExcessBuyBacks.AddAsync(excessBuyBack);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ExcessBuyBacks.Add(excessBuyBack);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.ExcessBuyBacks.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ExcessBuyBackResource resource)
-        {
-            var excessBuyBack = _mapper.Map<ExcessBuyBackResource, ExcessBuyBack>(resource);
-            await _unitOfWork.ExcessBuyBacks.DeleteAsync(excessBuyBack);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ExcessBuyBacks.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ExcessBuyBackResource>> GetAllAsync()
@@ -68,12 +60,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(ExcessBuyBackResource resource)
+        public async void Update(ExcessBuyBackResource resource)
         {
             var excessBuyBack = _mapper.Map<ExcessBuyBackResource, ExcessBuyBack>(resource);
-            await _unitOfWork.ExcessBuyBacks.UpdateAsync(resource.Id, excessBuyBack);
+            _unitOfWork.ExcessBuyBacks.Update(resource.Id, excessBuyBack);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -143,7 +143,7 @@ namespace Tilbake.MVC.Controllers
 
                 quotePolicyObjectResource.QuoteItems = quoteItemResources;
 
-                await _policyService.QuoteToPolicy(quotePolicyObjectResource);
+                _policyService.QuoteToPolicy(quotePolicyObjectResource);
 
                 return RedirectToAction("Details", "Quotes", new { Id = resource.QuoteId});
             }
@@ -214,25 +214,25 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PolicyObjectResource resource)
+        public IActionResult Create(PolicyObjectResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _policyService.AddAsync(resource);
+                _policyService.Add(resource);
                 return RedirectToAction(nameof(Index), new { portfolioClientId = resource.Policy.PortfolioClientId });
             }
             return View(resource);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostPolicy(PolicyObjectResource policyObject)
+        public IActionResult PostPolicy(PolicyObjectResource policyObject)
         {
             if (policyObject == null)
             {
                 throw new ArgumentNullException(nameof(policyObject));
             };
 
-            await _policyService.AddAsync(policyObject);
+            _policyService.Add(policyObject);
 
             return Ok(new
                     {

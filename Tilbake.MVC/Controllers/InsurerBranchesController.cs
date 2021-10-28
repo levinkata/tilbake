@@ -89,7 +89,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _insurerBranchService.AddAsync(resource);
+                _insurerBranchService.Add(resource);
                 return RedirectToAction(nameof(Details), "Insurers", new { id = resource.InsurerId });
             }
             var cityId = resource.CityId;
@@ -143,7 +143,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _insurerBranchService.UpdateAsync(resource);
+                    _insurerBranchService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -185,9 +185,9 @@ namespace Tilbake.MVC.Controllers
         // POST: InsurerBranches/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(InsurerBranchResource resource)
+        public IActionResult DeleteConfirmed(InsurerBranchResource resource)
         {
-            await _insurerBranchService.DeleteAsync(resource.Id);
+            _insurerBranchService.Delete(resource.Id);
             return RedirectToAction(nameof(Details), "Insurers", new { id = resource.InsurerId });
         }
     }

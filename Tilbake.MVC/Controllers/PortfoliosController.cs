@@ -65,11 +65,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Portfolios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PortfolioSaveResource portfolioSaveResource)
+        public IActionResult Create(PortfolioSaveResource portfolioSaveResource)
         {
             if (ModelState.IsValid)
             {
-                await _portfolioService.AddAsync(portfolioSaveResource);
+                _portfolioService.Add(portfolioSaveResource);
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolioSaveResource);
@@ -90,11 +90,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Portfolios/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(PortfolioResource portfolioResource)
+        public IActionResult Edit(PortfolioResource portfolioResource)
         {
             if (ModelState.IsValid)
             {
-                await _portfolioService.UpdateAsync(portfolioResource);
+                _portfolioService.Update(portfolioResource);
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolioResource);
@@ -115,9 +115,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Portfolios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _portfolioService.DeleteAsync(id);
+            _portfolioService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

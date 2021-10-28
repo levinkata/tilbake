@@ -51,7 +51,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _receivableService.AddAsync(resource);
+                _receivableService.Add(resource);
                 return RedirectToAction("Details", "Invoices", new { id = resource.InvoiceId });
             }
 
@@ -85,7 +85,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _receivableService.AddQuoteAsync(resource);
+                _receivableService.AddQuote(resource);
                 return RedirectToAction("Details", "Quotes", new { id = resource.QuoteId });
             }
 

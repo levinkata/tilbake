@@ -24,13 +24,10 @@ namespace Tilbake.MVC.Controllers
         // GET: Banks
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation($"Fetching all the Banks");
-
             var resources = await _bankService.GetAllAsync();
             
             ViewBag.datasource = resources;
             
-            _logger.LogInformation("Returning {Count} banks.", resources.Count());
             return View(resources);
         }
 
@@ -60,11 +57,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Banks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BankSaveResource resource)
+        public IActionResult Create(BankSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _bankService.AddAsync(resource);
+                _bankService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -89,7 +86,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Banks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, BankResource resource)
+        public IActionResult Edit(Guid? id, BankResource resource)
         {
             if (id != resource.Id)
             {
@@ -100,7 +97,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _bankService.UpdateAsync(resource);
+                    _bankService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,9 +128,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Banks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _bankService.DeleteAsync(id);
+            _bankService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -52,11 +52,11 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(OccupationSaveResource resource)
+        public IActionResult Create(OccupationSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _occupationService.AddAsync(resource);
+                _occupationService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -81,7 +81,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Occupations/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, OccupationResource resource)
+        public IActionResult Edit(Guid? id, OccupationResource resource)
         {
             if (id != resource.Id)
             {
@@ -92,7 +92,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _occupationService.UpdateAsync(resource);
+                    _occupationService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,9 +123,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Occupations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _occupationService.DeleteAsync(id);
+            _occupationService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -9,9 +9,8 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<RiskResource>> GetAllAsync();
         Task<RiskResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(RiskSaveResource resource);
-        Task<int> UpdateAsync(RiskResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(RiskResource resource);
+        void Add(RiskSaveResource resource);
+        void Update(RiskResource resource);
+        void Delete(Guid id);
     }
 }

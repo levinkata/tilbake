@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(SalesTypeSaveResource resource)
+        public async void Add(SalesTypeSaveResource resource)
         {
             var salesType = _mapper.Map<SalesTypeSaveResource, SalesType>(resource);
             salesType.Id = Guid.NewGuid();
 
-            await _unitOfWork.SalesTypes.AddAsync(salesType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.SalesTypes.Add(salesType);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.SalesTypes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(SalesTypeResource resource)
-        {
-            var salesType = _mapper.Map<SalesTypeResource, SalesType>(resource);
-            await _unitOfWork.SalesTypes.DeleteAsync(salesType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.SalesTypes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<SalesTypeResource>> GetAllAsync()
@@ -58,16 +51,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.SalesTypes.GetByIdAsync(id);
             var resource = _mapper.Map<SalesType, SalesTypeResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(SalesTypeResource resource)
+        public async void Update(SalesTypeResource resource)
         {
             var salesType = _mapper.Map<SalesTypeResource, SalesType>(resource);
-            await _unitOfWork.SalesTypes.UpdateAsync(resource.Id, salesType);
+            _unitOfWork.SalesTypes.Update(resource.Id, salesType);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

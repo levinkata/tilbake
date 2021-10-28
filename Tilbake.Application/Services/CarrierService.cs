@@ -22,31 +22,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<CarrierResource> AddAsync(CarrierSaveResource resource)
+        public async void Add(CarrierSaveResource resource)
         {
             var carrier = _mapper.Map<CarrierSaveResource, Carrier>(resource);
             carrier.Id = Guid.NewGuid();
             carrier.DateAdded = DateTime.Now;
 
-            await _unitOfWork.Carriers.AddAsync(carrier);
+            _unitOfWork.Carriers.Add(carrier);
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<Carrier, CarrierResource>(carrier);
-            return result;
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Carriers.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(CarrierResource resource)
-        {
-            var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
-            await _unitOfWork.Carriers.DeleteAsync(carrier);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Carriers.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CarrierResource>> GetAllAsync()
@@ -68,16 +57,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<CarrierResource> UpdateAsync(CarrierResource resource)
+        public async void Update(CarrierResource resource)
         {
             var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
             carrier.DateModified = DateTime.Now;
 
-            await _unitOfWork.Carriers.UpdateAsync(resource.Id, carrier);
+            _unitOfWork.Carriers.Update(resource.Id, carrier);
             await _unitOfWork.SaveAsync();
-
-            var result = _mapper.Map<Carrier, CarrierResource>(carrier);
-            return result;
         }
     }
 }

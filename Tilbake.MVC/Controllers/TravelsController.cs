@@ -50,11 +50,11 @@ namespace Tilbake.MVC.Controllers
         // POST: Travels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TravelSaveResource resource)
+        public IActionResult Create(TravelSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _travelService.AddAsync(resource);
+                _travelService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Travels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, TravelResource resource)
+        public IActionResult Edit(Guid? id, TravelResource resource)
         {
             if (id != resource.Id)
             {
@@ -90,7 +90,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _travelService.UpdateAsync(resource);
+                    _travelService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,9 +121,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Travels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _travelService.DeleteAsync(id);
+            _travelService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -21,27 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(TaxSaveResource resource)
+        public async void Add(TaxSaveResource resource)
         {
             var tax = _mapper.Map<TaxSaveResource, Tax>(resource);
             tax.Id = Guid.NewGuid();
             tax.DateAdded = DateTime.Now;
 
-            await _unitOfWork.Taxes.AddAsync(tax);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Taxes.Add(tax);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Taxes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(TaxResource resource)
-        {
-            var tax = _mapper.Map<TaxResource, Tax>(resource);
-            await _unitOfWork.Taxes.DeleteAsync(tax);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Taxes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TaxResource>> GetAllAsync()
@@ -57,17 +50,16 @@ namespace Tilbake.Application.Services
         public async Task<TaxResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.Taxes.GetByIdAsync(id);
-            var resources = _mapper.Map<Tax, TaxResource>(result);
-
-            return resources;
+            var resource = _mapper.Map<Tax, TaxResource>(result);
+            return resource;
         }
 
-        public async Task<int> UpdateAsync(TaxResource resource)
+        public async void Update(TaxResource resource)
         {
             var tax = _mapper.Map<TaxResource, Tax>(resource);
-            await _unitOfWork.Taxes.UpdateAsync(resource.Id, tax);
+            _unitOfWork.Taxes.Update(resource.Id, tax);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

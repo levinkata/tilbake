@@ -21,27 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PaymentTypeSaveResource resource)
+        public async void Add(PaymentTypeSaveResource resource)
         {
             var paymentType = _mapper.Map<PaymentTypeSaveResource, PaymentType>(resource);
             paymentType.Id = Guid.NewGuid();
 
-            await _unitOfWork.PaymentTypes.AddAsync(paymentType);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PaymentTypes.Add(paymentType);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.PaymentTypes.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(PaymentTypeResource resource)
-        {
-            var paymentType = _mapper.Map<PaymentTypeResource, PaymentType>(resource);
-            await _unitOfWork.PaymentTypes.DeleteAsync(paymentType);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PaymentTypes.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PaymentTypeResource>> GetAllAsync()
@@ -51,24 +43,23 @@ namespace Tilbake.Application.Services
                                                         r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<PaymentType>, IEnumerable<PaymentTypeResource>>(result);
-
             return resources;
         }
 
         public async Task<PaymentTypeResource> GetByIdAsync(Guid id)
         {
             var result = await _unitOfWork.PaymentTypes.GetByIdAsync(id);
-            var resources = _mapper.Map<PaymentType, PaymentTypeResource>(result);
+            var resource = _mapper.Map<PaymentType, PaymentTypeResource>(result);
 
-            return resources;
+            return resource;
         }
 
-        public async Task<int> UpdateAsync(PaymentTypeResource resource)
+        public async void Update(PaymentTypeResource resource)
         {
             var paymentType = _mapper.Map<PaymentTypeResource, PaymentType>(resource);
-            await _unitOfWork.PaymentTypes.UpdateAsync(resource.Id, paymentType);
+            _unitOfWork.PaymentTypes.Update(resource.Id, paymentType);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

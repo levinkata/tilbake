@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(PortfolioAdministrationFeeSaveResource resource)
+        public async void Add(PortfolioAdministrationFeeSaveResource resource)
         {
             var portfolioAdministrationFee = _mapper.Map<PortfolioAdministrationFeeSaveResource, PortfolioAdministrationFee>(resource);
             portfolioAdministrationFee.Id = Guid.NewGuid();
@@ -35,22 +35,22 @@ namespace Tilbake.Application.Services
                 portfolioAdministrationFee.Fee = 0;
             }
 
-            await _unitOfWork.PortfolioAdministrationFees.AddAsync(portfolioAdministrationFee);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PortfolioAdministrationFees.Add(portfolioAdministrationFee);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.PortfolioAdministrationFees.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PortfolioAdministrationFees.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(PortfolioAdministrationFeeResource resource)
+        public async void Delete(PortfolioAdministrationFeeResource resource)
         {
             var portfolioAdministrationFee = _mapper.Map<PortfolioAdministrationFeeResource, PortfolioAdministrationFee>(resource);
-            await _unitOfWork.PortfolioAdministrationFees.DeleteAsync(portfolioAdministrationFee);
+            _unitOfWork.PortfolioAdministrationFees.Delete(portfolioAdministrationFee);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioAdministrationFeeResource>> GetAllAsync()
@@ -84,7 +84,7 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(PortfolioAdministrationFeeResource resource)
+        public async void Update(PortfolioAdministrationFeeResource resource)
         {
             var portfolioAdministrationFee = _mapper.Map<PortfolioAdministrationFeeResource, PortfolioAdministrationFee>(resource);
             portfolioAdministrationFee.DateModified = DateTime.Now;
@@ -97,9 +97,9 @@ namespace Tilbake.Application.Services
                 portfolioAdministrationFee.Fee = 0;
             }
 
-            await _unitOfWork.PortfolioAdministrationFees.UpdateAsync(resource.Id, portfolioAdministrationFee);
+            _unitOfWork.PortfolioAdministrationFees.Update(resource.Id, portfolioAdministrationFee);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

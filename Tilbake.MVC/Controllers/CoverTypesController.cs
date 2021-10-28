@@ -28,11 +28,11 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CoverTypeSaveResource resource)
+        public IActionResult Create(CoverTypeSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _coverTypeService.AddAsync(resource);
+                _coverTypeService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
 

@@ -10,9 +10,8 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<PremiumResource>> GetAllAsync();
         Task<IEnumerable<PremiumResource>> GetByPolicyIdAsync(Guid policyId);
         Task<PremiumResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(PremiumSaveResource resource);
-        Task<int> UpdateAsync(PremiumResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(PremiumResource resource);
+        void Add(PremiumSaveResource resource);
+        void Update(PremiumResource resource);
+        void Delete(Guid id);
     }
 }

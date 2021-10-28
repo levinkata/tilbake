@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -22,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(AddressSaveResource resource)
+        public async void Add(AddressSaveResource resource)
         {
             var address = _mapper.Map<AddressSaveResource, Address>(resource);
             address.DateAdded = DateTime.Now;
 
-            await _unitOfWork.Addresses.AddAsync(address);
+            _unitOfWork.Addresses.Add(address);
 
-            return await _unitOfWork.SaveAsync();            
+            await _unitOfWork.SaveAsync();            
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Addresses.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(AddressResource resource)
-        {
-            var address = _mapper.Map<AddressResource, Address>(resource);
-            await _unitOfWork.Addresses.DeleteAsync(address);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Addresses.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AddressResource>> GetAllAsync()
@@ -77,14 +68,14 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(AddressResource resource)
+        public async void Update(AddressResource resource)
         {
             var address = _mapper.Map<AddressResource, Address>(resource);
             address.DateModified = DateTime.Now;
 
-            await _unitOfWork.Addresses.UpdateAsync(resource.Id, address);
+            _unitOfWork.Addresses.Update(resource.Id, address);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

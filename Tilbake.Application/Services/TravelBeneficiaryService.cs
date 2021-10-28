@@ -21,28 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(TravelBeneficiarySaveResource resource)
+        public async void Add(TravelBeneficiarySaveResource resource)
         {
             var travelBeneficiary = _mapper.Map<TravelBeneficiarySaveResource, TravelBeneficiary>(resource);
             travelBeneficiary.Id = Guid.NewGuid();
             travelBeneficiary.DateAdded = DateTime.Now;
 
-            await _unitOfWork.TravelBeneficiaries.AddAsync(travelBeneficiary);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.TravelBeneficiaries.Add(travelBeneficiary);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.TravelBeneficiaries.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(TravelBeneficiaryResource resource)
-        {
-            var travelBeneficiary = _mapper.Map<TravelBeneficiaryResource, TravelBeneficiary>(resource);
-            await _unitOfWork.TravelBeneficiaries.DeleteAsync(travelBeneficiary);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.TravelBeneficiaries.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TravelBeneficiaryResource>> GetAllAsync()
@@ -68,13 +60,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(TravelBeneficiaryResource resource)
+        public async void Update(TravelBeneficiaryResource resource)
         {
             var travelBeneficiary = _mapper.Map<TravelBeneficiaryResource, TravelBeneficiary>(resource);
             travelBeneficiary.DateModified = DateTime.Now;
 
-            await _unitOfWork.TravelBeneficiaries.UpdateAsync(resource.Id, travelBeneficiary);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.TravelBeneficiaries.Update(resource.Id, travelBeneficiary);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

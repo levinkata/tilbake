@@ -67,11 +67,11 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MotorModelSaveResource resource)
+        public IActionResult Create(MotorModelSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _motorModelService.AddAsync(resource);
+                _motorModelService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -98,7 +98,7 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, MotorModelResource resource)
+        public IActionResult Edit(Guid? id, MotorModelResource resource)
         {
             if (id != resource.Id)
             {
@@ -109,7 +109,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _motorModelService.UpdateAsync(resource);
+                    _motorModelService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -140,9 +140,9 @@ namespace Tilbake.MVC.Controllers
         // POST: MotorModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _motorModelService.DeleteAsync(id);
+            _motorModelService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

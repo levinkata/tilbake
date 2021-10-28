@@ -37,11 +37,11 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RatingMotorSaveResource resource)
+        public IActionResult Create(RatingMotorSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _ratingMotorExcessService.AddAsync(resource);
+                _ratingMotorExcessService.Add(resource);
                 return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
             }
             return View(resource);
@@ -80,7 +80,7 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, RatingMotorResource resource)
+        public IActionResult Edit(Guid id, RatingMotorResource resource)
         {
             if (id != resource.Id)
             {
@@ -91,7 +91,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _ratingMotorExcessService.UpdateAsync(resource);
+                    _ratingMotorExcessService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -120,9 +120,9 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(RatingMotorResource resource)
+        public IActionResult DeleteConfirmed(RatingMotorResource resource)
         {
-            await _ratingMotorExcessService.DeleteAsync(resource.Id);
+            _ratingMotorExcessService.Delete(resource.Id);
             return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
         }        
     }

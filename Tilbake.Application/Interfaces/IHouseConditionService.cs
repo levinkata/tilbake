@@ -9,9 +9,8 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<HouseConditionResource>> GetAllAsync();
         Task<HouseConditionResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(HouseConditionSaveResource resource);
-        Task<int> UpdateAsync(HouseConditionResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(HouseConditionResource resource);
+        void Add(HouseConditionSaveResource resource);
+        void Update(HouseConditionResource resource);
+        void Delete(Guid id);
     }
 }

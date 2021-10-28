@@ -50,11 +50,11 @@ namespace Tilbake.MVC.Controllers
         // POST: PortfolioExcessBuyBacks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PortfolioExcessBuyBackSaveResource resource)
+        public IActionResult Create(PortfolioExcessBuyBackSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _portfolioExcessBuyBackService.AddAsync(resource);
+                _portfolioExcessBuyBackService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
         // POST: PortfolioExcessBuyBacks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, PortfolioExcessBuyBackResource resource)
+        public IActionResult Edit(Guid? id, PortfolioExcessBuyBackResource resource)
         {
             if (id != resource.Id)
             {
@@ -88,7 +88,7 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                await _portfolioExcessBuyBackService.UpdateAsync(resource);
+                _portfolioExcessBuyBackService.Update(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -114,9 +114,9 @@ namespace Tilbake.MVC.Controllers
         // POST: PortfolioExcessBuyBacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
-            await _portfolioExcessBuyBackService.DeleteAsync(id);
+            _portfolioExcessBuyBackService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

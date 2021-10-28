@@ -10,9 +10,8 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<ReceivableDocumentResource>> GetAllAsync();
         Task<IEnumerable<ReceivableDocumentResource>> GetReceivableIdAsync(Guid receivableId);
         Task<ReceivableDocumentResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(ReceivableDocumentSaveResource resource);
-        Task<int> UpdateAsync(ReceivableDocumentResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(ReceivableDocumentResource resource);
+        void Add(ReceivableDocumentSaveResource resource);
+        void Update(ReceivableDocumentResource resource);
+        void Delete(Guid id);
     }
 }

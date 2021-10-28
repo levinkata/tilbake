@@ -51,12 +51,12 @@ namespace Tilbake.MVC.Controllers
         // POST: Taxes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaxSaveResource resource)
+        public IActionResult Create(TaxSaveResource resource)
         {
             if (ModelState.IsValid)
             {
                 
-                await _taxService.AddAsync(resource);
+                _taxService.Add(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -76,7 +76,7 @@ namespace Tilbake.MVC.Controllers
         // POST: Taxes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, TaxResource resource)
+        public IActionResult Edit(Guid id, TaxResource resource)
         {
             if (id != resource.Id)
             {
@@ -87,7 +87,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _taxService.UpdateAsync(resource);
+                    _taxService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,9 +113,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Taxes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(TaxResource resource)
+        public IActionResult DeleteConfirmed(TaxResource resource)
         {
-            await _taxService.DeleteAsync(resource.Id);
+            _taxService.Delete(resource.Id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ClientResource> AddAsync(PortfolioClientSaveResource resource)
+        public async void Add(PortfolioClientSaveResource resource)
         {
             var resourceClient = resource.Client;
 
@@ -29,7 +29,7 @@ namespace Tilbake.Application.Services
 
             client.Id = Guid.NewGuid();
             client.DateAdded = DateTime.Now;
-            await _unitOfWork.Clients.AddAsync(client);
+            _unitOfWork.Clients.Add(client);
             var clientId = client.Id;
 
             var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
@@ -45,7 +45,7 @@ namespace Tilbake.Application.Services
             //     ClientId = clientId,
             //     DateAdded = DateTime.Now
             // };
-            await _unitOfWork.PortfolioClients.AddAsync(portfolioClient);
+            _unitOfWork.PortfolioClients.Add(portfolioClient);
 
             var resourceAddress = resource.Client.Address;
             
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
                 //     CityId = resourceAddress.CityId,
                 //     DateAdded = DateTime.Now
                 // };
-                await _unitOfWork.Addresses.AddAsync(address);
+                _unitOfWork.Addresses.Add(address);
             }
             
             var resourceEmailAddresses = resource.Client.EmailAddresses;
@@ -87,7 +87,7 @@ namespace Tilbake.Application.Services
                     //     IsPrimary = emailAddress.IsPrimary,
                     //     DateAdded = DateTime.Now
                     // };
-                    await _unitOfWork.EmailAddresses.AddAsync(emailAddress);
+                    _unitOfWork.EmailAddresses.Add(emailAddress);
                 }
             }            
 
@@ -108,7 +108,7 @@ namespace Tilbake.Application.Services
                     //     IsPrimary = mobileNumber.IsPrimary,
                     //     DateAdded = DateTime.Now
                     // };
-                    await _unitOfWork.MobileNumbers.AddAsync(mobileNumber);
+                    _unitOfWork.MobileNumbers.Add(mobileNumber);
                 }
             }  
 
@@ -123,26 +123,13 @@ namespace Tilbake.Application.Services
                         CarrierId = carrierId,
                         DateAdded = DateTime.Now
                     };
-                    await _unitOfWork.ClientCarriers.AddAsync(newClientCarrier);
+                    _unitOfWork.ClientCarriers.Add(newClientCarrier);
                 }
             }
             await _unitOfWork.SaveAsync();
-
-            var newClient = _unitOfWork.Clients.GetFirstOrDefaultAsync(
-                                                r => r.Id == clientId,
-                                                r => r.ClientType,
-                                                r => r.Country,
-                                                r => r.IdDocumentType,
-                                                r => r.Gender,
-                                                r => r.MaritalStatus,
-                                                r => r.Occupation,
-                                                r => r.Title);
-
-            var result = _mapper.Map<Client, ClientResource>(client);
-            return result;
         }
 
-        public async Task<int> AddExistingClientAsync(Guid portfolioId, Guid clientId)
+        public async void AddExistingClient(Guid portfolioId, Guid clientId)
         {
             PortfolioClient newPortfolioClient = new()
             {
@@ -151,14 +138,14 @@ namespace Tilbake.Application.Services
                 ClientId = clientId,
                 DateAdded = DateTime.Now
             };
-            await _unitOfWork.PortfolioClients.AddAsync(newPortfolioClient);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PortfolioClients.Add(newPortfolioClient);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.PortfolioClients.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.PortfolioClients.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)

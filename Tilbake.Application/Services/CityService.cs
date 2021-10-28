@@ -21,27 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(CitySaveResource resource)
+        public async void Add(CitySaveResource resource)
         {
             var city = _mapper.Map<CitySaveResource, City>(resource);
             city.Id = Guid.NewGuid();
             city.DateAdded = DateTime.Now;
 
-            await _unitOfWork.Cities.AddAsync(city);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Cities.Add(city);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Cities.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(CityResource resource)
-        {
-            var city = _mapper.Map<CityResource, City>(resource);
-            await _unitOfWork.Cities.DeleteAsync(city);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Cities.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CityResource>> GetAllAsync()
@@ -70,17 +63,16 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Cities.GetByIdAsync(id);
             var resource = _mapper.Map<City, CityResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(CityResource resource)
+        public async void Update(CityResource resource)
         {
             var city = _mapper.Map<CityResource, City>(resource);
             city.DateModified = DateTime.Now;
 
-            await _unitOfWork.Cities.UpdateAsync(resource.Id, city);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Cities.Update(resource.Id, city);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

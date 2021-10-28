@@ -10,13 +10,13 @@ namespace Tilbake.Application.Interfaces
         Task<QuoteItemResource> GetByIdAsync(Guid id);
         Task<QuoteItemObjectResource> GetRisksAsync(Guid id);
         Task<IEnumerable<QuoteItemResource>> GetByQuoteIdAsync(Guid quoteId);
-        Task<int> UpdateAsync(QuoteItemResource resource);
-        Task<int> UpdateQuoteItemRiskItemAsync(QuoteItemRiskItemResource resource);
-        Task<int> UpdateQuoteItemBuildingAsync(QuoteItemBuildingResource resource);
-        Task<int> UpdateQuoteItemContentAsync(QuoteItemContentResource resource);
-        Task<int> UpdateQuoteItemExcessBuyBackAsync(QuoteItemExcessBuyBackResource resource);
-        Task<int> UpdateQuoteItemHouseAsync(QuoteItemHouseResource resource);
-        Task<int> UpdateQuoteItemMotorAsync(QuoteItemMotorResource resource);
-        Task<int> DeleteAsync(Guid id);
+        void Update(QuoteItemResource resource);
+        void UpdateQuoteItemRiskItem(QuoteItemRiskItemResource resource);
+        void UpdateQuoteItemBuilding(QuoteItemBuildingResource resource);
+        void UpdateQuoteItemContent(QuoteItemContentResource resource);
+        void UpdateQuoteItemExcessBuyBack(QuoteItemExcessBuyBackResource resource);
+        void UpdateQuoteItemHouse(QuoteItemHouseResource resource);
+        void UpdateQuoteItemMotor(QuoteItemMotorResource resource);
+        void Delete(Guid id);
     }
 }

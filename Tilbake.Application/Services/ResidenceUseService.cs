@@ -21,27 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ResidenceUseSaveResource resource)
+        public async void Add(ResidenceUseSaveResource resource)
         {
             var residenceUse = _mapper.Map<ResidenceUseSaveResource, ResidenceUse>(resource);
             residenceUse.Id = Guid.NewGuid();
 
-            await _unitOfWork.ResidenceUses.AddAsync(residenceUse);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ResidenceUses.Add(residenceUse);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.ResidenceUses.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ResidenceUseResource resource)
-        {
-            var residenceUse = _mapper.Map<ResidenceUseResource, ResidenceUse>(resource);
-            await _unitOfWork.ResidenceUses.DeleteAsync(residenceUse);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ResidenceUses.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ResidenceUseResource>> GetAllAsync()
@@ -63,12 +55,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(ResidenceUseResource resource)
+        public async void Update(ResidenceUseResource resource)
         {
             var residenceUse = _mapper.Map<ResidenceUseResource, ResidenceUse>(resource);
-            await _unitOfWork.ResidenceUses.UpdateAsync(resource.Id, residenceUse);
+            _unitOfWork.ResidenceUses.Update(resource.Id, residenceUse);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

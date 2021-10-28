@@ -21,27 +21,20 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(InsurerBranchSaveResource resource)
+        public async void Add(InsurerBranchSaveResource resource)
         {
             var insurerBranch = _mapper.Map<InsurerBranchSaveResource, InsurerBranch>(resource);
             insurerBranch.Id = Guid.NewGuid();
             insurerBranch.DateAdded = DateTime.Now;
 
-            await _unitOfWork.InsurerBranches.AddAsync(insurerBranch);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.InsurerBranches.Add(insurerBranch);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.InsurerBranches.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(InsurerBranchResource resource)
-        {
-            var insurerBranch = _mapper.Map<InsurerBranchResource, InsurerBranch>(resource);
-            await _unitOfWork.InsurerBranches.DeleteAsync(insurerBranch);
-            return await  _unitOfWork.SaveAsync();
+            _unitOfWork.InsurerBranches.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InsurerBranchResource>> GetAllAsync()
@@ -79,13 +72,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<int> UpdateAsync(InsurerBranchResource resource)
+        public async void Update(InsurerBranchResource resource)
         {
             var insurerBranch = _mapper.Map<InsurerBranchResource, InsurerBranch>(resource);
             insurerBranch.DateModified = DateTime.Now;
-            await _unitOfWork.InsurerBranches.UpdateAsync(resource.Id, insurerBranch);
+            _unitOfWork.InsurerBranches.Update(resource.Id, insurerBranch);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<InsurerBranchResource> GetByNameAsync(string name)

@@ -70,7 +70,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _clientDocumentService.AddAsync(resource);
+                _clientDocumentService.Add(resource);
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioId, resource.ClientId });
             }
             var documentTypes = await _documentTypeService.GetAllAsync();
@@ -114,7 +114,7 @@ namespace Tilbake.MVC.Controllers
         // POST: ClientDocuments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, ClientDocumentResource resource)
+        public IActionResult Edit(Guid? id, ClientDocumentResource resource)
         {
             if (id != resource.Id)
             {
@@ -125,7 +125,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _clientDocumentService.UpdateAsync(resource);
+                    _clientDocumentService.Update(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -156,9 +156,9 @@ namespace Tilbake.MVC.Controllers
         // POST: ClientDocuments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(ClientDocumentResource resource)
+        public IActionResult DeleteConfirmed(ClientDocumentResource resource)
         {
-            await _clientDocumentService.DeleteAsync(resource.Id);
+            _clientDocumentService.Delete(resource.Id);
             return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.ClientId });
         }
     }

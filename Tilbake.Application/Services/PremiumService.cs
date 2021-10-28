@@ -22,17 +22,12 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public Task<int> AddAsync(PremiumSaveResource resource)
+        public void Add(PremiumSaveResource resource)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> DeleteAsync(PremiumResource resource)
+        public void Delete(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -44,7 +39,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(p => p.PremiumDate));
 
             var resources = _mapper.Map<IEnumerable<Premium>, IEnumerable<PremiumResource>>(result);
-
             return resources;
         }
 
@@ -64,7 +58,7 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public Task<int> UpdateAsync(PremiumResource resource)
+        public void Update(PremiumResource resource)
         {
             throw new NotImplementedException();
         }

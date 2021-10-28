@@ -21,27 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ReceivableDocumentSaveResource resource)
+        public async void Add(ReceivableDocumentSaveResource resource)
         {
             var receivableDocument = _mapper.Map<ReceivableDocumentSaveResource, ReceivableDocument>(resource);
             receivableDocument.Id = Guid.NewGuid();
 
-            await _unitOfWork.ReceivableDocuments.AddAsync(receivableDocument);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ReceivableDocuments.Add(receivableDocument);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.ReceivableDocuments.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ReceivableDocumentResource resource)
-        {
-            var receivableDocument = _mapper.Map<ReceivableDocumentResource, ReceivableDocument>(resource);
-            await _unitOfWork.ReceivableDocuments.DeleteAsync(receivableDocument);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.ReceivableDocuments.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ReceivableDocumentResource>> GetAllAsync()
@@ -75,16 +67,15 @@ namespace Tilbake.Application.Services
                                                             r => r.DocumentType);
 
             var resources = _mapper.Map<IEnumerable<ReceivableDocument>, IEnumerable<ReceivableDocumentResource>>(result);
-
             return resources;
         }
 
-        public async Task<int> UpdateAsync(ReceivableDocumentResource resource)
+        public async void Update(ReceivableDocumentResource resource)
         {
             var receivableDocument = _mapper.Map<ReceivableDocumentResource, ReceivableDocument>(resource);
-            await _unitOfWork.ReceivableDocuments.UpdateAsync(resource.Id, receivableDocument);
+            _unitOfWork.ReceivableDocuments.Update(resource.Id, receivableDocument);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

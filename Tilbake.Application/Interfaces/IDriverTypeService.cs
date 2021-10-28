@@ -9,9 +9,8 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<DriverTypeResource>> GetAllAsync();
         Task<DriverTypeResource> GetByIdAsync(Guid id);
-        Task<int> AddAsync(DriverTypeSaveResource resource);
-        Task<int> UpdateAsync(DriverTypeResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(DriverTypeResource resource);
+        void Add(DriverTypeSaveResource resource);
+        void Update(DriverTypeResource resource);
+        void Delete(Guid id);
     }
 }

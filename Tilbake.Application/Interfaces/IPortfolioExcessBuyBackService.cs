@@ -10,9 +10,8 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<PortfolioExcessBuyBackResource>> GetAllAsync();
         Task<IEnumerable<PortfolioExcessBuyBackResource>> GetByPortfolioIdAsync(Guid portfolioId);
         Task<PortfolioExcessBuyBackResource> GetByIdAsync(Guid id);
-        Task<PortfolioExcessBuyBackResource> AddAsync(PortfolioExcessBuyBackSaveResource resource);
-        Task<PortfolioExcessBuyBackResource> UpdateAsync(PortfolioExcessBuyBackResource resource);
-        Task<int> DeleteAsync(Guid id);
-        Task<int> DeleteAsync(PortfolioExcessBuyBackResource resource);
+        void Add(PortfolioExcessBuyBackSaveResource resource);
+        void Update(PortfolioExcessBuyBackResource resource);
+        void Delete(Guid id);
     }
 }

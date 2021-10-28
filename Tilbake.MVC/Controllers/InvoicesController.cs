@@ -53,11 +53,11 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(InvoiceSaveResource resource)
+        public IActionResult Create(InvoiceSaveResource resource)
         {
             if (ModelState.IsValid)
             {
-                await _invoiceService.AddAsync(resource);
+                _invoiceService.Add(resource);
                 return RedirectToAction("Details", "Policies", new { id = resource.PolicyId });
             }
             return View(resource);

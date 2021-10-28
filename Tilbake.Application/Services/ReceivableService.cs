@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(ReceivableSaveResource resource)
+        public async void Add(ReceivableSaveResource resource)
         {
             var receivable = _mapper.Map<ReceivableSaveResource, Receivable>(resource);
             var invoiceId = resource.InvoiceId;
@@ -31,14 +31,14 @@ namespace Tilbake.Application.Services
 
             receivable.Id = Guid.NewGuid();
             receivable.DateAdded = DateTime.Now;
-            await _unitOfWork.Receivables.AddAsync(receivable);
+            _unitOfWork.Receivables.Add(receivable);
 
             ReceivableInvoice receivableInvoice = new()
             {
                 InvoiceId = resource.InvoiceId,
                 ReceivableId = receivable.Id
             };
-            await _unitOfWork.ReceivableInvoices.AddAsync(receivableInvoice);
+            _unitOfWork.ReceivableInvoices.Add(receivableInvoice);
 
             Premium newPremium = new()
             {
@@ -55,22 +55,14 @@ namespace Tilbake.Application.Services
                 AdministrationFee =0,
                 DateAdded = DateTime.Now
             };
-            await _unitOfWork.Premiums.AddAsync(newPremium);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Premiums.Add(newPremium);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Receivables.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(ReceivableResource resource)
-        {
-            var receivable = _mapper.Map<ReceivableResource, Receivable>(resource);
-            await _unitOfWork.Receivables.DeleteAsync(receivable);
-
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Receivables.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ReceivableResource>> GetAllAsync()
@@ -109,15 +101,15 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async Task<int> UpdateAsync(ReceivableResource resource)
+        public async void Update(ReceivableResource resource)
         {
             var receivable = _mapper.Map<ReceivableResource, Receivable>(resource);
-            await _unitOfWork.Receivables.UpdateAsync(resource.Id, receivable);
+            _unitOfWork.Receivables.Update(resource.Id, receivable);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> AddQuoteAsync(ReceivableSaveResource resource)
+        public async void AddQuote(ReceivableSaveResource resource)
         {
             var receivable = _mapper.Map<ReceivableSaveResource, Receivable>(resource);
             var quoteId = resource.QuoteId;
@@ -126,18 +118,18 @@ namespace Tilbake.Application.Services
 
             receivable.Id = Guid.NewGuid();
             receivable.DateAdded = DateTime.Now;
-            await _unitOfWork.Receivables.AddAsync(receivable);
+            _unitOfWork.Receivables.Add(receivable);
 
             ReceivableQuote receivableQuote = new()
             {
                 QuoteId = quoteId,
                 ReceivableId = receivable.Id
             };
-            await _unitOfWork.ReceivableQuotes.AddAsync(receivableQuote);
+            _unitOfWork.ReceivableQuotes.Add(receivableQuote);
 
             quote.IsPaid = true;
-            await _unitOfWork.Quotes.UpdateAsync(quoteId, quote);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Quotes.Update(quoteId, quote);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

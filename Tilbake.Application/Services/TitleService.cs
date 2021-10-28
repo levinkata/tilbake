@@ -21,26 +21,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddAsync(TitleSaveResource resource)
+        public async void Add(TitleSaveResource resource)
         {
             var title = _mapper.Map<TitleSaveResource, Title>(resource);
             title.Id = Guid.NewGuid();
 
-            await _unitOfWork.Titles.AddAsync(title);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Titles.Add(title);
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async void Delete(Guid id)
         {
-            await _unitOfWork.Titles.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync();
-        }
-
-        public async Task<int> DeleteAsync(TitleResource resource)
-        {
-            var title = _mapper.Map<TitleResource, Title>(resource);
-            await _unitOfWork.Titles.DeleteAsync(title);
-            return await _unitOfWork.SaveAsync();
+            _unitOfWork.Titles.Delete(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TitleResource>> GetAllAsync()
@@ -50,7 +43,6 @@ namespace Tilbake.Application.Services
                                             r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<Title>, IEnumerable<TitleResource>>(result);
-
             return resources;
         }
 
@@ -58,16 +50,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Titles.GetByIdAsync(id);
             var resource = _mapper.Map<Title, TitleResource>(result);
-
             return resource;
         }
 
-        public async Task<int> UpdateAsync(TitleResource resource)
+        public async void Update(TitleResource resource)
         {
             var title = _mapper.Map<TitleResource, Title>(resource);
-            await _unitOfWork.Titles.UpdateAsync(resource.Id, title);
+            _unitOfWork.Titles.Update(resource.Id, title);
 
-            return await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

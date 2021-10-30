@@ -6,8 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
+using Tilbake.Core;
+using Tilbake.Core.Constants;
+using Tilbake.Core.Models;
 
 namespace Tilbake.Application.Services
 {
@@ -40,9 +41,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CarrierResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Carriers.GetAllAsync(
+            var result = await _unitOfWork.Carriers.FindAllAsync(
                                                     null,
-                                                    r => r.OrderBy(p => p.Name));
+                                                    r => r.OrderBy(n => n.Name));
 
             var resources = _mapper.Map<IEnumerable<Carrier>, IEnumerable<CarrierResource>>(result);
             return resources;
@@ -50,8 +51,7 @@ namespace Tilbake.Application.Services
 
         public async Task<CarrierResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Carriers.GetFirstOrDefaultAsync(
-                                                    r => r.Id == id);
+            var result = await _unitOfWork.Carriers.GetByIdAsync(id);
 
             var resource = _mapper.Map<Carrier, CarrierResource>(result);
             return resource;

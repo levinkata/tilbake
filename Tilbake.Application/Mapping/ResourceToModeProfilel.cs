@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
+using Tilbake.Core.Models;
 
 namespace Tilbake.Application.Mapping
 {

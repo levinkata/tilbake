@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Enums;
 
 namespace Tilbake.Application.Interfaces
 {

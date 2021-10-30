@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Tilbake.Domain.Models;
+using Tilbake.Core.Models;
 
 namespace Tilbake.Application.Projections
 {

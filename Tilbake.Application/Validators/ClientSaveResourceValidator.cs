@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using FluentValidation;
 using Tilbake.Application.Resources;
-using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
+using Tilbake.Core;
 
 namespace Tilbake.Application.Validators
 {

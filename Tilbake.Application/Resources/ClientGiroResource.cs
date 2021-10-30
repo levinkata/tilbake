@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Tilbake.Domain.Enums;
+using Tilbake.Core.Enums;
 
 namespace Tilbake.Application.Resources
 {

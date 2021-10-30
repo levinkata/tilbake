@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30021.99
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Domain", "Tilbake.Domain\Tilbake.Domain.csproj", "{F0D30D9D-3C02-42B4-8A47-29E3D6117195}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Core", "Tilbake.Core\Tilbake.Core.csproj", "{F0D30D9D-3C02-42B4-8A47-29E3D6117195}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Application", "Tilbake.Application\Tilbake.Application.csproj", "{E250BF5E-392F-45E8-9CB0-091107693AF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Infrastructure.Persistence", "Tilbake.Infrastructure.Persistence\Tilbake.Infrastructure.Persistence.csproj", "{602D44D3-0DD2-40BF-B526-84E8A56DEA54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.EF.Persistence", "Tilbake.EF.Persistence\Tilbake.EF.Persistence.csproj", "{602D44D3-0DD2-40BF-B526-84E8A56DEA54}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.Infrastructure.IoC", "Tilbake.Infrastructure.IoC\Tilbake.Infrastructure.IoC.csproj", "{DFCF6E8E-3737-4A0B-8889-45CDFD5FA4C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tilbake.EF.IoC", "Tilbake.EF.IoC\Tilbake.EF.IoC.csproj", "{DFCF6E8E-3737-4A0B-8889-45CDFD5FA4C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{6AD42F7E-82E9-45C2-80DF-DD484EDD8708}"
 EndProject

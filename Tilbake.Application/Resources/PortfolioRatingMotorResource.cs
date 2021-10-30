@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tilbake.Domain.Models;
+using Tilbake.Core.Models;
 
 namespace Tilbake.Application.Resources
 {

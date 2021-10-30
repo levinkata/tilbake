@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using Tilbake.Domain.Enums;
+using Tilbake.Core.Enums;
 
 namespace Tilbake.Application.Resources
 {

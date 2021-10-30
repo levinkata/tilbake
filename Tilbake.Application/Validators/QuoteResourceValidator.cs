@@ -1,6 +1,5 @@
 using FluentValidation;
 using Tilbake.Application.Resources;
-using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
 
 namespace Tilbake.Application.Validators{
     public class QuoteResourceValidator : AbstractValidator<QuoteResource>

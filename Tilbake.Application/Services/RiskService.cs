@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
+using Tilbake.Core.Models;
+using Tilbake.Core;
 
 namespace Tilbake.Application.Services
 {

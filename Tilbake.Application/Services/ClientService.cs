@@ -12,9 +12,9 @@ using Tilbake.Application.Extensions;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Enums;
-using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
+using Tilbake.Core.Enums;
+using Tilbake.Core.Models;
+using Tilbake.Core;
 
 namespace Tilbake.Application.Services
 {

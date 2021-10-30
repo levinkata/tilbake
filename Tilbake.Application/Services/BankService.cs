@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Models;
-using Tilbake.Infrastructure.Persistence.Interfaces.UnitOfWork;
+using Tilbake.Core.Models;
+using Tilbake.Core;
 
 namespace Tilbake.Application.Services
 {
@@ -39,9 +39,9 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BankResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Banks.GetAllAsync(
+            var result = await _unitOfWork.Banks.FindAllAsync(
                                             null,
-                                            r => r.OrderBy(p => p.Name),
+                                            r => r.OrderBy(n => n.Name),
                                             r => r.BankBranches);
 
             var resources = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankResource>>(result);
@@ -50,7 +50,7 @@ namespace Tilbake.Application.Services
 
         public async Task<BankResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Banks.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Banks.GetByIdAsync(
                                             r => r.Id == id,
                                             r => r.BankBranches);
 

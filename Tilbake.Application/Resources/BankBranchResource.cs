@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Tilbake.Domain.Models;
+using Tilbake.Core.Models;
 
 namespace Tilbake.Application.Resources
 {

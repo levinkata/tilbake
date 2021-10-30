@@ -178,25 +178,24 @@ namespace Tilbake.Infrastructure.Persistence.Repositories.UnitOfWork
             return await _context.SaveChangesAsync();
         }
 
+        // private bool disposed = false;
+        // protected virtual void Dispose(bool disposing)
+        // {
+        //     if (!this.disposed)
+        //     {
+        //         if (disposing)
+        //         {
+        //             _context.Dispose();
+        //         }
+        //     }
+        //     this.disposed = true;
+        // }
+
         public void Dispose()
         {
-            // _context.Dispose();
-            Dispose(true);
-
-            GC.SuppressFinalize(this);
-        }
-
-        private bool disposed = false;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
+            // Dispose(true);
+            // GC.SuppressFinalize(this);
+            _context.Dispose();
         }
     }
 }

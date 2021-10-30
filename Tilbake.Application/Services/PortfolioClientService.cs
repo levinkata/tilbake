@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(PortfolioClientSaveResource resource)
+        public async Task Add(PortfolioClientSaveResource resource)
         {
             var resourceClient = resource.Client;
 

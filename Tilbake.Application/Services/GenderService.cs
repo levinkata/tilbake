@@ -57,7 +57,6 @@ namespace Tilbake.Application.Services
         {
             var gender = _mapper.Map<GenderResource, Gender>(resource);
             _unitOfWork.Genders.Update(resource.Id, gender);
-
             await _unitOfWork.SaveAsync();
         }
     }

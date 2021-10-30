@@ -41,7 +41,7 @@ namespace Tilbake.Application.Services
         {
             var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
             _unitOfWork.BankBranches.Delete(bankBranch);
-            await  _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BankBranchResource>> GetAllAsync()

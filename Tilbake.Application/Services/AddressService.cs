@@ -74,7 +74,6 @@ namespace Tilbake.Application.Services
             address.DateModified = DateTime.Now;
 
             _unitOfWork.Addresses.Update(resource.Id, address);
-
             await _unitOfWork.SaveAsync();
         }
     }

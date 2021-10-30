@@ -273,7 +273,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _portfolioClientService.Add(resource);
+                await _portfolioClientService.Add(resource);
                 return RedirectToAction(nameof(Search), new { portfolioId = resource.PortfolioId, searchString = resource.Client.LastName});
             }
 

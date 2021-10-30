@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BuildingConditionResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.BuildingConditions.GetAllAsync(
+            var result = await _unitOfWork.BuildingConditions.FindAllAsync(
                                                             null,
                                                             r => r.OrderBy(n => n.Name));
 

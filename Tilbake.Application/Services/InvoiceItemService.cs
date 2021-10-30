@@ -26,17 +26,9 @@ namespace Tilbake.Application.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<InvoiceItemResource> GetByIdAsync(Guid id)
-        {
-            var result = await _unitOfWork.InvoiceItems.GetByIdAsync(id);
-            var resource = _mapper.Map<InvoiceItem, InvoiceItemResource>(result);
-
-            return resource;
-        }
-
         public async Task<IEnumerable<InvoiceItemResource>> GetByInvoiceIdAsync(Guid invoiceId)
         {
-            var result = await _unitOfWork.InvoiceItems.GetAllAsync(
+            var result = await _unitOfWork.InvoiceItems.FindAllAsync(
                                             p => p.InvoiceId == invoiceId, null,
                                             p => p.PolicyRisk);
             var resource = _mapper.Map<IEnumerable<InvoiceItem>, IEnumerable<InvoiceItemResource>>(result);
@@ -44,9 +36,9 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async Task<InvoiceItemResource> GetFirstOrDefaultAsync(Guid id)
+        public async Task<InvoiceItemResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.InvoiceItems.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.InvoiceItems.GetByIdAsync(
                                                 p => p.Id == id, p => p.PolicyRisk);
             var resource = _mapper.Map<InvoiceItem, InvoiceItemResource>(result);
             return resource;

@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<MaritalStatusResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.MaritalStatuses.GetAllAsync(
+            var result = await _unitOfWork.MaritalStatuses.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

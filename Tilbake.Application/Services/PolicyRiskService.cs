@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyRiskResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PolicyRisks.GetAllAsync();
+            var result = await _unitOfWork.PolicyRisks.FindAllAsync(null);
             var resources = _mapper.Map<IEnumerable<PolicyRisk>, IEnumerable<PolicyRiskResource>>(result);
             return resources;
         }
@@ -53,7 +53,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyRiskResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.PolicyRisks.GetAllAsync(
+            var result = await _unitOfWork.PolicyRisks.FindAllAsync(
                                             e => e.PolicyId == policyId,
                                             e => e.OrderByDescending(r => r.RiskDate),
                                             p => p.CoverType);
@@ -64,7 +64,7 @@ namespace Tilbake.Application.Services
 
         public async Task<decimal> GetPremiumByPortfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.PolicyRisks.GetAllAsync(
+            var result = await _unitOfWork.PolicyRisks.FindAllAsync(
                                             e => e.Policy.PortfolioClientId == portfolioClientId);
                                             
             return result.Sum(r => r.Premium);
@@ -98,7 +98,7 @@ namespace Tilbake.Application.Services
 
         public async Task<decimal> GetSumInsuredByPortfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.PolicyRisks.GetAllAsync(
+            var result = await _unitOfWork.PolicyRisks.FindAllAsync(
                                             e => e.Policy.PortfolioClientId == portfolioClientId);
 
             return result.Sum(r => r.SumInsured);

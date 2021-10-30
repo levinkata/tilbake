@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ResidenceTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ResidenceTypes.GetAllAsync(
+            var result = await _unitOfWork.ResidenceTypes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ExcessBuyBackResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ExcessBuyBacks.GetAllAsync(
+            var result = await _unitOfWork.ExcessBuyBacks.FindAllAsync(
                                                         null,
                                                         r => r.OrderBy(n => n.Motor.RegNumber),
                                                         r => r.Motor,
@@ -51,7 +51,7 @@ namespace Tilbake.Application.Services
 
         public async Task<ExcessBuyBackResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.ExcessBuyBacks.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.ExcessBuyBacks.GetByIdAsync(
                                                         r => r.Id == id,
                                                         r => r.Motor,
                                                         r => r.ParentPolicy);

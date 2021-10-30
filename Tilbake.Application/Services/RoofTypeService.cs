@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<RoofTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.RoofTypes.GetAllAsync(
+            var result = await _unitOfWork.RoofTypes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

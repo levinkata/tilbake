@@ -46,7 +46,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BankBranchResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.BankBranches.GetAllAsync(
+            var result = await _unitOfWork.BankBranches.FindAllAsync(
                                             null,
                                             e => e.OrderBy(r => r.Name),
                                             e => e.Bank);
@@ -57,7 +57,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BankBranchResource>> GetByBankIdAsync(Guid bankId)
         {
-            var result = await _unitOfWork.BankBranches.GetAllAsync(
+            var result = await _unitOfWork.BankBranches.FindAllAsync(
                                             e => e.BankId == bankId,
                                             e => e.OrderBy(r => r.Name),
                                             e => e.Bank);
@@ -68,7 +68,7 @@ namespace Tilbake.Application.Services
 
         public async Task<BankBranchResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.BankBranches.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.BankBranches.GetByIdAsync(
                                             e => e.Id == id,
                                             e => e.Bank);
                                             

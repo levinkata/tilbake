@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<TravelBeneficiaryResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.TravelBeneficiaries.GetAllAsync(
+            var result = await _unitOfWork.TravelBeneficiaries.FindAllAsync(
                                                                 null,
                                                                 r => r.OrderBy(p => p.LastName),
                                                                 r => r.Country,
@@ -51,7 +51,7 @@ namespace Tilbake.Application.Services
 
         public async Task<TravelBeneficiaryResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.TravelBeneficiaries.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.TravelBeneficiaries.GetByIdAsync(
                                                                 r => r.Id == id,
                                                                 r => r.Country,
                                                                 r => r.Title);

@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ReceivableResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Receivables.GetAllAsync(
+            var result = await _unitOfWork.Receivables.FindAllAsync(
                                                         null,
                                                         r => r.OrderBy(n => n.ReceivableDate),
                                                         r => r.PaymentType,
@@ -81,7 +81,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ReceivableResource>> GetByInvoiceIdAsync(Guid invoiceId)
         {
-            var result = await _unitOfWork.Receivables.GetAllAsync(
+            var result = await _unitOfWork.Receivables.FindAllAsync(
                                                         r => r.ReceivableInvoices.Any(p => p.InvoiceId == invoiceId),
                                                         r => r.OrderBy(n => n.ReceivableDate),
                                                         r => r.PaymentType,

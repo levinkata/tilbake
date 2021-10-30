@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ContentResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Contents.GetAllAsync();
+            var result = await _unitOfWork.Contents.FindAllAsync(null);
 
             var resources = _mapper.Map<IEnumerable<Content>, IEnumerable<ContentResource>>(result);
             return resources;

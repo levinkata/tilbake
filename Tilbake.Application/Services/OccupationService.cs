@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<OccupationResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Occupations.GetAllAsync(
+            var result = await _unitOfWork.Occupations.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

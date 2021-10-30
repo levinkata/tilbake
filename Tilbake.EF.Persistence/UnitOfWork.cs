@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Tilbake.Core;
 using Tilbake.Core.Interfaces;
 using Tilbake.EF.Persistence.Context;
@@ -178,24 +179,24 @@ namespace Tilbake.EF.Persistence
             return await _context.SaveChangesAsync();
         }
 
-        // private bool disposed = false;
-        // protected virtual void Dispose(bool disposing)
-        // {
-        //     if (!this.disposed)
-        //     {
-        //         if (disposing)
-        //         {
-        //             _context.Dispose();
-        //         }
-        //     }
-        //     this.disposed = true;
-        // }
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
 
         public void Dispose()
         {
-            // Dispose(true);
-            // GC.SuppressFinalize(this);
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+            //_context.Dispose();
         }
     }
 }

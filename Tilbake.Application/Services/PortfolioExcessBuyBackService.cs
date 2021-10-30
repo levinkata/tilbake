@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioExcessBuyBackResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetAllAsync(
+            var result = await _unitOfWork.PortfolioExcessBuyBacks.FindAllAsync(
                                                 null,
                                                 r => r.OrderBy(n => n.Insurer.Name),
                                                 r => r.Insurer);
@@ -50,7 +50,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioExcessBuyBackResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetAllAsync(
+            var result = await _unitOfWork.PortfolioExcessBuyBacks.FindAllAsync(
                                                 e => e.PortfolioId == portfolioId,
                                                 e => e.OrderBy(r => r.Insurer.Name),
                                                 e => e.Insurer);
@@ -61,7 +61,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioExcessBuyBackResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetByIdAsync(
                                                 r => r.Id == id,
                                                 r => r.Insurer);
 

@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceStatusResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.InvoiceStatuses.GetAllAsync(
+            var result = await _unitOfWork.InvoiceStatuses.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

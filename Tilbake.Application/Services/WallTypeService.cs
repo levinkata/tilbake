@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<WallTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.WallTypes.GetAllAsync(
+            var result = await _unitOfWork.WallTypes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

@@ -24,11 +24,11 @@ namespace Tilbake.Application.Services
         public async void Add(InvoiceSaveResource resource)
         {
             var policyId = resource.PolicyId;
-            var policyRisks = await _unitOfWork.PolicyRisks.GetAllAsync(r => r.PolicyId == policyId);
+            var policyRisks = await _unitOfWork.PolicyRisks.FindAllAsync(r => r.PolicyId == policyId);
 
             var invoice = _mapper.Map<InvoiceSaveResource, Invoice>(resource);
 
-            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+            var taxes = await _unitOfWork.Taxes.FindAllAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.TaxDate));
 
@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Invoices.GetAllAsync(
+            var result = await _unitOfWork.Invoices.FindAllAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.InvoiceDate),
                                             r => r.InvoiceStatus,
@@ -79,7 +79,7 @@ namespace Tilbake.Application.Services
 
         public async Task<InvoiceResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Invoices.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Invoices.GetByIdAsync(
                                             e => e.Id == id,
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
 
@@ -89,7 +89,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Invoices.GetAllAsync(
+            var result = await _unitOfWork.Invoices.FindAllAsync(
                                             e => e.PolicyId == policyId,
                                             e => e.OrderBy(p => p.InvoiceDate),
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
@@ -100,7 +100,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceResource>> GetByPortfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Invoices.GetAllAsync(
+            var result = await _unitOfWork.Invoices.FindAllAsync(
                                             e => e.Policy.PortfolioClientId == portfolioClientId,
                                             e => e.OrderBy(p => p.InvoiceDate),
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
@@ -113,7 +113,7 @@ namespace Tilbake.Application.Services
         {
             var invoice = _mapper.Map<InvoiceResource, Invoice>(resource);
 
-            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+            var taxes = await _unitOfWork.Taxes.FindAllAsync(
                                 null,
                                 r => r.OrderByDescending(n => n.TaxDate));
 

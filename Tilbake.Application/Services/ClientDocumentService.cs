@@ -82,7 +82,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientDocumentResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ClientDocuments.GetAllAsync(
+            var result = await _unitOfWork.ClientDocuments.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -92,7 +92,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientDocumentResource>> GetByClientIdAsync(Guid clientId)
         {
-            var result = await _unitOfWork.ClientDocuments.GetAllAsync(
+            var result = await _unitOfWork.ClientDocuments.FindAllAsync(
                                                             e => e.ClientId == clientId,
                                                             e => e.OrderBy(p => p.Name),
                                                             e => e.DocumentType,

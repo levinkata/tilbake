@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InsurerBranchResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.InsurerBranches.GetAllAsync(
+            var result = await _unitOfWork.InsurerBranches.FindAllAsync(
                                             null,
                                             e => e.OrderBy(r => r.Name),
                                             e => e.City,
@@ -51,7 +51,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InsurerBranchResource>> GetByInsurerIdAsync(Guid insurerId)
         {
-            var result = await _unitOfWork.InsurerBranches.GetAllAsync(
+            var result = await _unitOfWork.InsurerBranches.FindAllAsync(
                                             e => e.InsurerId == insurerId,
                                             e => e.OrderBy(r => r.Name),
                                             e => e.City,
@@ -63,7 +63,7 @@ namespace Tilbake.Application.Services
 
         public async Task<InsurerBranchResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.InsurerBranches.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.InsurerBranches.GetByIdAsync(
                                             e => e.Id == id,
                                             e => e.City,
                                             e => e.Insurer);
@@ -83,7 +83,7 @@ namespace Tilbake.Application.Services
 
         public async Task<InsurerBranchResource> GetByNameAsync(string name)
         {
-            var result = await _unitOfWork.InsurerBranches.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.InsurerBranches.GetByIdAsync(
                                 e => e.Name == name,
                                 e => e.City,
                                 e => e.Insurer);

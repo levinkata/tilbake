@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
-using Tilbake.Domain.Enums;
+using Tilbake.Core.Enums;
 
 namespace Tilbake.MVC.Controllers
 {

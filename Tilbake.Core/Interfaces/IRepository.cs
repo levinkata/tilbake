@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Tilbake.Core.Constants;
 
 namespace Tilbake.Core.Interfaces
 {
@@ -16,16 +15,16 @@ namespace Tilbake.Core.Interfaces
         IEnumerable<TEntity> GetAll();
         Task<IEnumerable<TEntity>> GetAllAsync();
 
-        TEntity Find(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes);
-        Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes);
-        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes);
-        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria);
-        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria,
+        TEntity Find(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
+        Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
+        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
+        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null);
+        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
 
-        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes);
-        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria);
-        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria,
+        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
+        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null);
+        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes);
         TEntity Add(TEntity entity);
         Task<TEntity> AddAsync(TEntity entity);

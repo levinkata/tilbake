@@ -29,7 +29,7 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteItemResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.QuoteItems.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.QuoteItems.GetByIdAsync(
                                             p => p.Id == id,
                                             p => p.CoverType,
                                             p => p.Quote);
@@ -40,7 +40,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteItemResource>> GetByQuoteIdAsync(Guid quoteId)
         {
-            var result = await _unitOfWork.QuoteItems.GetAllAsync(
+            var result = await _unitOfWork.QuoteItems.FindAllAsync(
                                             p => p.QuoteId == quoteId,
                                             p => p.OrderBy(n => n.Description),
                                             p => p.CoverType,
@@ -83,7 +83,7 @@ namespace Tilbake.Application.Services
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource);
 
-            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+            var taxes = await _unitOfWork.Taxes.FindAllAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.TaxDate));
 
@@ -102,7 +102,7 @@ namespace Tilbake.Application.Services
         {
             var quoteItem = _mapper.Map<QuoteItemResource, QuoteItem>(resource.QuoteItem);
 
-            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+            var taxes = await _unitOfWork.Taxes.FindAllAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.TaxDate));
 

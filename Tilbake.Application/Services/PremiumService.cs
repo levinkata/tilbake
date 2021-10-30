@@ -34,7 +34,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PremiumResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Premiums.GetAllAsync(
+            var result = await _unitOfWork.Premiums.FindAllAsync(
                                             null,
                                             r => r.OrderBy(p => p.PremiumDate));
 
@@ -49,7 +49,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PremiumResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Premiums.GetAllAsync(
+            var result = await _unitOfWork.Premiums.FindAllAsync(
                                                 r => r.PolicyId == policyId,
                                                 r => r.OrderBy(p => p.PremiumDate));
 

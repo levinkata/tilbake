@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PaymentMethodResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PaymentMethods.GetAllAsync(
+            var result = await _unitOfWork.PaymentMethods.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

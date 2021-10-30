@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<TaxResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Taxes.GetAllAsync(
+            var result = await _unitOfWork.Taxes.FindAllAsync(
                                         null,
                                         r => r.OrderByDescending(n => n.TaxDate));
 

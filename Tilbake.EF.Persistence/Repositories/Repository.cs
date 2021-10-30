@@ -51,7 +51,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await query.FirstOrDefaultAsync(criteria); 
         }        
 
-        public TEntity Find(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes)
+        public TEntity Find(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -62,7 +62,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return query.AsNoTracking().SingleOrDefault(criteria);
         }
 
-        public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -73,7 +73,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await query.AsNoTracking().SingleOrDefaultAsync(criteria);
         }
 
-        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes)
+        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -84,12 +84,12 @@ namespace Tilbake.EF.Persistence.Repositories
             return query.AsNoTracking().Where(criteria).ToList();
         }
 
-        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria)
+        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null)
         {
             return dbSet.AsNoTracking().Where(criteria).ToList();
         }
 
-        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria,
+        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             IQueryable<TEntity> query = dbSet.Where(criteria);
@@ -104,7 +104,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return query.AsNoTracking().ToList();
         }
 
-        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -115,12 +115,12 @@ namespace Tilbake.EF.Persistence.Repositories
             return await query.AsNoTracking().Where(criteria).ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria)
+        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null)
         {
             return await dbSet.AsNoTracking().Where(criteria).ToListAsync();
         }
         
-        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria,
+        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet.Where(criteria);

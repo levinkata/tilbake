@@ -23,27 +23,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(CarrierSaveResource resource)
+        public async Task<int> AddAsync(CarrierSaveResource resource)
         {
             var carrier = _mapper.Map<CarrierSaveResource, Carrier>(resource);
             carrier.Id = Guid.NewGuid();
             carrier.DateAdded = DateTime.Now;
 
             _unitOfWork.Carriers.Add(carrier);
-            await _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> Delete(Guid id)
         {
             _unitOfWork.Carriers.Delete(id);
-            await _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CarrierResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Carriers.FindAllAsync(
-                                                    null,
-                                                    r => r.OrderBy(n => n.Name));
+            var result = await _unitOfWork.Carriers.GetAllAsync();
 
             var resources = _mapper.Map<IEnumerable<Carrier>, IEnumerable<CarrierResource>>(result);
             return resources;
@@ -57,13 +55,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(CarrierResource resource)
+        public async Task<int> Update(CarrierResource resource)
         {
             var carrier = _mapper.Map<CarrierResource, Carrier>(resource);
             carrier.DateModified = DateTime.Now;
 
             _unitOfWork.Carriers.Update(resource.Id, carrier);
-            await _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

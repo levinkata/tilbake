@@ -33,7 +33,7 @@ namespace Tilbake.Application.Services
 
         public async void Delete(Guid id)
         {
-            var portfolio = await _unitOfWork.Portfolios.GetFirstOrDefaultAsync(
+            var portfolio = await _unitOfWork.Portfolios.GetByIdAsync(
                                                         e => e.Id == id,
                                                         e => e.AspnetUserPortfolios);
             var aspnetUserPortfolios = portfolio.AspnetUserPortfolios;
@@ -53,7 +53,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Portfolios.GetAllAsync(
+            var result = await _unitOfWork.Portfolios.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -64,7 +64,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Portfolios.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Portfolios.GetByIdAsync(
                                             r => r.Id == id,
                                             r => r.PortfolioClients);
                                             

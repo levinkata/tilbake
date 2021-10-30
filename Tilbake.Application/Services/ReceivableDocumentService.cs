@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ReceivableDocumentResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ReceivableDocuments.GetAllAsync(
+            var result = await _unitOfWork.ReceivableDocuments.FindAllAsync(
                                                             null,
                                                             r => r.OrderBy(p => p.Name),
                                                             r => r.DocumentType);
@@ -50,7 +50,7 @@ namespace Tilbake.Application.Services
 
         public async Task<ReceivableDocumentResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.ReceivableDocuments.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.ReceivableDocuments.GetByIdAsync(
                                                         r => r.Id == id,
                                                         r => r.DocumentType);
 
@@ -61,7 +61,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ReceivableDocumentResource>> GetReceivableIdAsync(Guid receivableId)
         {
-            var result = await _unitOfWork.ReceivableDocuments.GetAllAsync(
+            var result = await _unitOfWork.ReceivableDocuments.FindAllAsync(
                                                             r => r.ReceivableId == receivableId,
                                                             r => r.OrderBy(p => p.Name),
                                                             r => r.DocumentType);

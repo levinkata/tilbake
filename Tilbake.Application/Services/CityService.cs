@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CityResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Cities.GetAllAsync(
+            var result = await _unitOfWork.Cities.FindAllAsync(
                                                 null,
                                                 r => r.OrderBy(n => n.Name),
                                                 r => r.Country);
@@ -50,7 +50,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CityResource>> GetByCountryId(Guid countryId)
         {
-            var result = await _unitOfWork.Cities.GetAllAsync(
+            var result = await _unitOfWork.Cities.FindAllAsync(
                                             e => e.CountryId == countryId,
                                             e => e.OrderBy(r => r.Name),
                                             e => e.Country);

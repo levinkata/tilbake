@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<MotorMakeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.MotorMakes.GetAllAsync(
+            var result = await _unitOfWork.MotorMakes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
             

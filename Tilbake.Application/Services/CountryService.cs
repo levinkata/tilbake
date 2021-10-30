@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CountryResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Countries.GetAllAsync(
+            var result = await _unitOfWork.Countries.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name),
                                             r => r.Cities);

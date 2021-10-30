@@ -216,7 +216,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyResource>> GetAllAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Policies.GetAllAsync(
+            var result = await _unitOfWork.Policies.FindAllAsync(
                                         e => e.PortfolioClientId == portfolioClientId,
                                         e => e.OrderByDescending(n => n.PolicyNumber),
                                         e => e.InsurerBranch,
@@ -238,7 +238,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PolicyResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Policies.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Policies.GetByIdAsync(
                                         e => e.Id == id,
                                         e => e.InsurerBranch,
                                         e => e.InsurerBranch.Insurer,
@@ -254,7 +254,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyResource>> GetByPorfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Policies.GetAllAsync(
+            var result = await _unitOfWork.Policies.FindAllAsync(
                                             e => e.PortfolioClientId == portfolioClientId,
                                             e => e.OrderByDescending(r => r.CoverStartDate),
                                             p => p.PaymentMethod,
@@ -271,7 +271,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PolicyResource> GetCurrentPolicyAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Policies.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Policies.GetByIdAsync(
                                              e => e.PortfolioClientId == portfolioClientId,
                                              p => p.PaymentMethod,
                                              p => p.PolicyStatus,

@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<RatingMotorExcessResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.RatingMotorExcesses.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.RatingMotorExcesses.GetByIdAsync(
                                                         r => r.Id == id,
                                                         r => r.Insurer);
 
@@ -49,7 +49,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<RatingMotorExcessResource>> GetByInsurerAsync(Guid insurerId)
         {
-            var result = await _unitOfWork.RatingMotorExcesses.GetAllAsync(
+            var result = await _unitOfWork.RatingMotorExcesses.FindAllAsync(
                                             r => r.InsurerId == insurerId,
                                             r => r.OrderBy(p => p.StartValue),
                                             r => r.Insurer);

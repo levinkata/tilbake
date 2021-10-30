@@ -37,7 +37,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.FileTemplateRecords.GetAllAsync(
+            var result = await _unitOfWork.FileTemplateRecords.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.FieldName));
 
@@ -47,7 +47,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetByFileTemplateIdAsync(Guid fileTemplateId)
         {
-            var result = await _unitOfWork.FileTemplateRecords.GetAllAsync(
+            var result = await _unitOfWork.FileTemplateRecords.FindAllAsync(
                                                             e => e.FileTemplateId == fileTemplateId,
                                                             e => e.OrderBy(n => n.TableName),
                                                             e => e.FileTemplate);
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
 
         public async Task<FileTemplateRecordResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.FileTemplateRecords.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.FileTemplateRecords.GetByIdAsync(
                                                             e => e.Id == id,
                                                             e => e.FileTemplate);
             var resource = _mapper.Map<FileTemplateRecord, FileTemplateRecordResource>(result);
@@ -67,7 +67,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetTableFileTemplate(Guid fileTemplateId, string tableName)
         {
-            var results = await _unitOfWork.FileTemplateRecords.GetAllAsync(
+            var results = await _unitOfWork.FileTemplateRecords.FindAllAsync(
                                                             r => r.FileTemplateId == fileTemplateId &&
                                                             r.TableName == tableName,
                                                             r => r.OrderBy(n => n.FieldName),

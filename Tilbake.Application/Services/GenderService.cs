@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<GenderResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Genders.GetAllAsync(
+            var result = await _unitOfWork.Genders.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

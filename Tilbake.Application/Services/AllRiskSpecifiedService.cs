@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<AllRiskSpecifiedResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.AllRiskSpecifieds.GetAllAsync(
+            var result = await _unitOfWork.AllRiskSpecifieds.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.RiskItem.Description));
 

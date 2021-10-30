@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<HouseResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Houses.GetAllAsync(
+            var result = await _unitOfWork.Houses.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.PhysicalAddress),
                                             r => r.HouseCondition,
@@ -53,7 +53,7 @@ namespace Tilbake.Application.Services
 
         public async Task<HouseResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Houses.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Houses.GetByIdAsync(
                                             r => r.Id == id,
                                             r => r.HouseCondition,
                                             r => r.ResidenceType,

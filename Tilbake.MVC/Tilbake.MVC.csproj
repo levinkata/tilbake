@@ -52,9 +52,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tilbake.Application\Tilbake.Application.csproj" />
-    <ProjectReference Include="..\Tilbake.Domain\Tilbake.Domain.csproj" />
-    <ProjectReference Include="..\Tilbake.Infrastructure.IoC\Tilbake.Infrastructure.IoC.csproj" />
-    <ProjectReference Include="..\Tilbake.Infrastructure.Persistence\Tilbake.Infrastructure.Persistence.csproj" />
+    <ProjectReference Include="..\Tilbake.Core\Tilbake.Core.csproj" />
+    <ProjectReference Include="..\Tilbake.EF.IoC\Tilbake.EF.IoC.csproj" />
+    <ProjectReference Include="..\Tilbake.EF.Persistence\Tilbake.EF.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

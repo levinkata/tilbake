@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<DriverTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.DriverTypes.GetAllAsync(
+            var result = await _unitOfWork.DriverTypes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

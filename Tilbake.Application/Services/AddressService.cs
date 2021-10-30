@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<AddressResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Addresses.GetAllAsync(
+            var result = await _unitOfWork.Addresses.FindAllAsync(
                                                     null,
                                                     r => r.OrderBy(n => n.PhysicalAddress),
                                                     r => r.City);
@@ -50,7 +50,7 @@ namespace Tilbake.Application.Services
 
         public async Task<AddressResource> GetByClientIdAsync(Guid clientId)
         {
-            var result = await _unitOfWork.Addresses.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Addresses.GetByIdAsync(
                                                     r => r.ClientId == clientId,
                                                     r => r.City);
 
@@ -60,7 +60,7 @@ namespace Tilbake.Application.Services
 
         public async Task<AddressResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Addresses.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Addresses.GetByIdAsync(
                                                     r => r.Id == id,
                                                     r => r.City);
 

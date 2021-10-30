@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BodyTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.BodyTypes.GetAllAsync(
+            var result = await _unitOfWork.BodyTypes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

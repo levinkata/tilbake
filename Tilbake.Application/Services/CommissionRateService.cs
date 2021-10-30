@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CommissionRateResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.CommissionRates.GetAllAsync(
+            var result = await _unitOfWork.CommissionRates.FindAllAsync(
                                                 null,
                                                 r => r.OrderBy(n => n.RiskName));
 
@@ -49,7 +49,7 @@ namespace Tilbake.Application.Services
 
         public async Task<CommissionRateResource> GetByRisk(string riskName)
         {
-            var result = await _unitOfWork.CommissionRates.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.CommissionRates.GetByIdAsync(
                                             e => e.RiskName == riskName);
 
             var resource = _mapper.Map<CommissionRate, CommissionRateResource>(result);

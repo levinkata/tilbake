@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<DocumentTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.DocumentTypes.GetAllAsync(
+            var result = await _unitOfWork.DocumentTypes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

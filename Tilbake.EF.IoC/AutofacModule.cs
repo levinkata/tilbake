@@ -1,5 +1,8 @@
 using Autofac;
 using Tilbake.Application.Services;
+using Tilbake.Core;
+using Tilbake.Core.Interfaces;
+using Tilbake.EF.Persistence;
 using Tilbake.EF.Persistence.Repositories;
 
 namespace Tilbake.EF.IoC

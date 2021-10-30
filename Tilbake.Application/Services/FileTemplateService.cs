@@ -42,7 +42,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<FileTemplateResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.FileTemplates.GetAllAsync(
+            var result = await _unitOfWork.FileTemplates.FindAllAsync(
                                                             null,
                                                             e => e.OrderBy(n => n.Name),
                                                             e => e.FileTemplateRecords);
@@ -53,7 +53,7 @@ namespace Tilbake.Application.Services
 
         public async Task<FileTemplateResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.FileTemplates.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.FileTemplates.GetByIdAsync(
                                                         e => e.Id == id,
                                                         e => e.Portfolio);
 
@@ -111,7 +111,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<FileTemplateResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.FileTemplates.GetAllAsync(
+            var result = await _unitOfWork.FileTemplates.FindAllAsync(
                                                             e => e.PortfolioId == portfolioId,
                                                             e => e.OrderBy(n => n.Name),
                                                             e => e.FileTemplateRecords);

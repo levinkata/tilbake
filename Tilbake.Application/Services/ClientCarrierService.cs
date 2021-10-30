@@ -26,7 +26,7 @@ namespace Tilbake.Application.Services
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
 
-            var existingCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
+            var existingCarriers = await _unitOfWork.ClientCarriers.FindAllAsync(
                                                 r => r.ClientId == clientId);
 
             if(existingCarriers.Any())
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
 
-            var existingCarriers = await _unitOfWork.ClientCarriers.GetAllAsync(
+            var existingCarriers = await _unitOfWork.ClientCarriers.FindAllAsync(
                                                 r => r.ClientId == clientId);
 
             if(existingCarriers.Any())
@@ -87,7 +87,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientCarrierResource>> GetByClientIdAsync(Guid clientId)
         {
-            var result = await _unitOfWork.ClientCarriers.GetAllAsync(
+            var result = await _unitOfWork.ClientCarriers.FindAllAsync(
                                                             r => r.ClientId == clientId,
                                                             r => r.OrderBy(p => p.Carrier.Name),
                                                             r => r.Carrier);

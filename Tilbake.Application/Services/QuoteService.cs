@@ -26,7 +26,7 @@ namespace Tilbake.Application.Services
             var resourceQuoteItems = resource.QuoteItems;
             var quoteItems = _mapper.Map<IEnumerable<QuoteItemResource>, IEnumerable<QuoteItem>>(resourceQuoteItems);
 
-            var taxes = await _unitOfWork.Taxes.GetAllAsync(
+            var taxes = await _unitOfWork.Taxes.FindAllAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.TaxDate));
 
@@ -431,7 +431,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Quotes.GetAllAsync(
+            var result = await _unitOfWork.Quotes.FindAllAsync(
                                                     null,
                                                     r => r.OrderBy(n => n.QuoteNumber),
                                                     r => r.QuoteItems,
@@ -450,7 +450,7 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Quotes.GetByIdAsync(
                                                     r => r.Id == id,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
@@ -491,7 +491,7 @@ namespace Tilbake.Application.Services
                         _unitOfWork.Quotes.Update(result.Id, result);
                         await _unitOfWork.SaveAsync();
 
-                        result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(
+                        result = await _unitOfWork.Quotes.GetByIdAsync(
                                                     r => r.Id == id,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
@@ -512,7 +512,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.Quotes.GetAllAsync(
+            var result = await _unitOfWork.Quotes.FindAllAsync(
                                                     r => r.PortfolioClient.PortfolioId == portfolioId,
                                                     r => r.OrderBy(p => p.QuoteNumber),
                                                     r => r.QuoteItems,
@@ -530,7 +530,7 @@ namespace Tilbake.Application.Services
         }
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioClientAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Quotes.GetAllAsync(
+            var result = await _unitOfWork.Quotes.FindAllAsync(
                                                     r => r.PortfolioClientId == portfolioClientId,
                                                     r => r.OrderBy(p => p.QuoteNumber),
                                                     r => r.QuoteItems,
@@ -549,7 +549,7 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetByQuoteNumberAsync(int quoteNumber)
         {
-            var result = await _unitOfWork.Quotes.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Quotes.GetByIdAsync(
                                                     r => r.QuoteNumber == quoteNumber,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,

@@ -54,7 +54,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _carrierService.Add(resource);
+                _carrierService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);

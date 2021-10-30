@@ -104,7 +104,7 @@ namespace Tilbake.Application.Services
                     .Include(c => c.PortfolioClients)
                     .OrderBy(n => n.Name).AsNoTracking().ToListAsync(); */
 
-            var result = await _unitOfWork.Portfolios.GetAllAsync(
+            var result = await _unitOfWork.Portfolios.FindAllAsync(
                                             r => !r.AspnetUserPortfolios
                                             .Any(r => r.AspNetUserId == aspNetUserId),
                                             r => r.OrderBy(n => n.Name),
@@ -124,7 +124,7 @@ namespace Tilbake.Application.Services
                                 .Include(c => c.PortfolioClients)
                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync(); */
 
-            var result = await _unitOfWork.Portfolios.GetAllAsync(
+            var result = await _unitOfWork.Portfolios.FindAllAsync(
                                             r => r.AspnetUserPortfolios
                                             .Any(r => r.AspNetUserId == aspNetUserId),
                                             r => r.OrderBy(n => n.Name),

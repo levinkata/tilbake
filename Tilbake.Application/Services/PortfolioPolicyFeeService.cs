@@ -46,7 +46,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioPolicyFeeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PortfolioPolicyFees.GetAllAsync(
+            var result = await _unitOfWork.PortfolioPolicyFees.FindAllAsync(
                                                 null,
                                                 r => r.OrderBy(n => n.Insurer.Name),
                                                 r => r.Insurer);
@@ -57,7 +57,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioPolicyFeeResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioPolicyFees.GetAllAsync(
+            var result = await _unitOfWork.PortfolioPolicyFees.FindAllAsync(
                                             e => e.PortfolioId == portfolioId,
                                             e => e.OrderBy(r => r.Insurer.Name),
                                             e => e.Insurer);
@@ -68,7 +68,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioPolicyFeeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioPolicyFees.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.PortfolioPolicyFees.GetByIdAsync(
                                             r => r.Id == id,
                                             r => r.Insurer);
 

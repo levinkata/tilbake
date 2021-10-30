@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PolicyTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PolicyTypes.GetAllAsync(
+            var result = await _unitOfWork.PolicyTypes.FindAllAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 

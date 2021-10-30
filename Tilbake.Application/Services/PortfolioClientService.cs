@@ -150,7 +150,7 @@ namespace Tilbake.Application.Services
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetAllAsync(
+            var result = await _unitOfWork.PortfolioClients.FindAllAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.ClientId == clientId,
                                                             null,
@@ -166,7 +166,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioClientResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
                                                             e => e.Id == id,
                                                             e => e.Client,
                                                             e => e.Client.Addresses,
@@ -181,7 +181,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioClientResource> GetByIdNumberAsync(Guid portfolioId, string idNumber)
         {
-            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.Client.IdNumber == idNumber,
                                                             e => e.Client,
@@ -197,7 +197,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioClientResource> GetByPortfolioClientAsync(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.ClientId == clientId,
                                                             e => e.Client,
@@ -213,7 +213,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetAllAsync(
+            var result = await _unitOfWork.PortfolioClients.FindAllAsync(
                                                             e => e.PortfolioId == portfolioId,
                                                             e => e.OrderBy(n => n.Client.LastName),
                                                             e => e.Client,
@@ -229,7 +229,7 @@ namespace Tilbake.Application.Services
 
         public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
                                             e => e.PortfolioId == portfolioId && e.ClientId == clientId);
 
             return result.Id;

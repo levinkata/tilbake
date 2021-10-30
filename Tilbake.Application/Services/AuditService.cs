@@ -28,7 +28,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<AuditResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Audits.GetAllAsync();
+            var result = await _unitOfWork.Audits.FindAllAsync(null);
 
             var resources = _mapper.Map<IEnumerable<Audit>, IEnumerable<AuditResource>>(result);
             return resources;

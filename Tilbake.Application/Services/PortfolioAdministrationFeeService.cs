@@ -55,7 +55,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioAdministrationFeeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PortfolioAdministrationFees.GetAllAsync(
+            var result = await _unitOfWork.PortfolioAdministrationFees.FindAllAsync(
                                             null,
                                             r => r.OrderBy(p => p.Insurer.Name),
                                             r => r.Insurer);
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioAdministrationFeeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioAdministrationFees.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.PortfolioAdministrationFees.GetByIdAsync(
                                                                 r => r.Id == id,
                                                                 r => r.Insurer);
             var resource = _mapper.Map<PortfolioAdministrationFee, PortfolioAdministrationFeeResource>(result);
@@ -75,7 +75,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioAdministrationFeeResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioAdministrationFees.GetAllAsync(
+            var result = await _unitOfWork.PortfolioAdministrationFees.FindAllAsync(
                                             e => e.PortfolioId == portfolioId,
                                             e => e.OrderBy(r => r.Insurer.Name),
                                             e => e.Insurer);

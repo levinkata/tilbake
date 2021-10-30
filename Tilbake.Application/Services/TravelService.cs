@@ -39,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<TravelResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Travels.GetAllAsync(
+            var result = await _unitOfWork.Travels.FindAllAsync(
                                             null,
                                             r => r.OrderBy(p => p.PortfolioClient.Client.LastName),
                                             r => r.PortfolioClient,
@@ -51,7 +51,7 @@ namespace Tilbake.Application.Services
 
         public async Task<TravelResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Travels.GetFirstOrDefaultAsync(
+            var result = await _unitOfWork.Travels.GetByIdAsync(
                                             r => r.Id == id,
                                             r => r.PortfolioClient,
                                             r => r.PortfolioClient.Client);

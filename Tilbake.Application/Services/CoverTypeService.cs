@@ -38,7 +38,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<CoverTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.CoverTypes.GetAllAsync(
+            var result = await _unitOfWork.CoverTypes.FindAllAsync(
                                         null,
                                         r => r.OrderBy(p => p.Name));
 

@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             ratingMotor.DateAdded = DateTime.Now;
 
             _unitOfWork.RatingMotors.Add(ratingMotor);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.RatingMotors.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<RatingMotorResource> GetByIdAsync(Guid id)
@@ -64,7 +64,7 @@ namespace Tilbake.Application.Services
             ratingMotor.DateModified = DateTime.Now;
 
             _unitOfWork.RatingMotors.Update(resource.Id, ratingMotor);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Tilbake.Application.Services
         public async void Delete(Guid id)
         {
             _unitOfWork.AllRiskSpecifieds.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AllRiskSpecifiedResource>> GetAllAsync()
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
             allRiskSpecified.DateModified = DateTime.Now;
 
             _unitOfWork.AllRiskSpecifieds.Update(resource.Id, allRiskSpecified);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

@@ -56,13 +56,13 @@ namespace Tilbake.Application.Services
                 invoiceItems.Add(invoiceItem);
             }
             _unitOfWork.InvoiceItems.AddRange(invoiceItems);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Invoices.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceResource>> GetAllAsync()
@@ -124,7 +124,7 @@ namespace Tilbake.Application.Services
 
             _unitOfWork.Invoices.Update(resource.Id, invoice);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

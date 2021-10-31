@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             invoiceStatus.Id = Guid.NewGuid();
 
             _unitOfWork.InvoiceStatuses.Add(invoiceStatus);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.InvoiceStatuses.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceStatusResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var invoiceStatus = _mapper.Map<InvoiceStatusResource, InvoiceStatus>(resource);
             _unitOfWork.InvoiceStatuses.Update(resource.Id, invoiceStatus);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

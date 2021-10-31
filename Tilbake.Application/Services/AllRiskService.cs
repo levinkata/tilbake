@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             allRisk.DateAdded = DateTime.Now;
 
             _unitOfWork.AllRisks.Add(allRisk);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.AllRisks.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AllRiskResource>> GetAllAsync()
@@ -61,7 +61,7 @@ namespace Tilbake.Application.Services
             allRisk.DateModified = DateTime.Now;
 
             _unitOfWork.AllRisks.Update(resource.Id, allRisk);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

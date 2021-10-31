@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tilbake.EF.Persistence.Context;
 using Tilbake.Core.Interfaces;
-using Tilbake.Core.Constants;
 
 namespace Tilbake.EF.Persistence.Repositories
 {
@@ -73,67 +72,98 @@ namespace Tilbake.EF.Persistence.Repositories
             return await query.AsNoTracking().SingleOrDefaultAsync(criteria);
         }
 
-        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
+        //public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
+        //{
+        //    IQueryable<TEntity> query = dbSet;
+
+        //    if (includes != null)
+        //        foreach (var include in includes)
+        //            query = query.Include(include);
+
+        //    return query.AsNoTracking().Where(criteria).ToList();
+        //}
+
+        //public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null)
+        //{
+        //    return dbSet.AsNoTracking().Where(criteria).ToList();
+        //}
+
+        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = dbSet;
 
-            if (includes != null)
-                foreach (var include in includes)
-                    query = query.Include(include);
-
-            return query.AsNoTracking().Where(criteria).ToList();
-        }
-
-        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null)
-        {
-            return dbSet.AsNoTracking().Where(criteria).ToList();
-        }
-
-        public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
-        {
-            IQueryable<TEntity> query = dbSet.Where(criteria);
+            foreach (Expression<Func<TEntity, object>> include in includes)
+                query = query.Include(include);
 
             if (criteria != null)
                 query = query.Where(criteria);
 
             if (orderBy != null)
                 query = orderBy(query);
-            
 
             return query.AsNoTracking().ToList();
+
+
+            //IQueryable<TEntity> query = dbSet.Where(criteria);
+
+            //if (includes != null)
+            //    foreach (var include in includes)
+            //        query = query.Include(include);
+
+            //if (criteria != null)
+            //    query = query.Where(criteria);
+
+            //if (orderBy != null)
+            //    query = orderBy(query);
+            
+
+            //return query.AsNoTracking().ToList();
         }
 
-        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
-        {
-            IQueryable<TEntity> query = dbSet;
+        //public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes)
+        //{
+        //    IQueryable<TEntity> query = dbSet;
 
-            if (includes != null)
-                foreach (var include in includes)
-                    query = query.Include(include);
+        //    if (includes != null)
+        //        foreach (var include in includes)
+        //            query = query.Include(include);
 
-            return await query.AsNoTracking().Where(criteria).ToListAsync();
-        }
+        //    return await query.AsNoTracking().Where(criteria).ToListAsync();
+        //}
 
-        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null)
-        {
-            return await dbSet.AsNoTracking().Where(criteria).ToListAsync();
-        }
+        //public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null)
+        //{
+        //    return await dbSet.AsNoTracking().Where(criteria).ToListAsync();
+        //}
         
         public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes)
         {
-            IQueryable<TEntity> query = dbSet.Where(criteria);
+            IQueryable<TEntity> query = dbSet;
 
             foreach (Expression<Func<TEntity, object>> include in includes)
                 query = query.Include(include);
 
+            if (criteria != null)
+                query = query.Where(criteria);
+
             if (orderBy != null)
-            {
                 query = orderBy(query);
-            }
 
             return await query.AsNoTracking().ToListAsync();
+
+            //IQueryable<TEntity> query = dbSet.Where(criteria);
+
+            //foreach (Expression<Func<TEntity, object>> include in includes)
+            //    query = query.Include(include);
+
+            //if (orderBy != null)
+            //{
+            //    query = orderBy(query);
+            //}
+
+            //return await query.AsNoTracking().ToListAsync();
         }
 
         public TEntity Add(TEntity entity)

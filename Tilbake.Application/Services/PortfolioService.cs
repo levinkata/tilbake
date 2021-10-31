@@ -28,7 +28,7 @@ namespace Tilbake.Application.Services
             portfolio.DateAdded = DateTime.Now;
             _unitOfWork.Portfolios.Add(portfolio);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
@@ -41,14 +41,14 @@ namespace Tilbake.Application.Services
             _unitOfWork.UserPortfolios.DeleteRange(aspnetUserPortfolios);
             _unitOfWork.Portfolios.Delete(portfolio);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(PortfolioResource resource)
         {
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
             _unitOfWork.Portfolios.Delete(portfolio);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
@@ -77,7 +77,7 @@ namespace Tilbake.Application.Services
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
             _unitOfWork.Portfolios.Update(resource.Id, portfolio);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

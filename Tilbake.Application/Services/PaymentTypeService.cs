@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             paymentType.Id = Guid.NewGuid();
 
             _unitOfWork.PaymentTypes.Add(paymentType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.PaymentTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PaymentTypeResource>> GetAllAsync()
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
             var paymentType = _mapper.Map<PaymentTypeResource, PaymentType>(resource);
             _unitOfWork.PaymentTypes.Update(resource.Id, paymentType);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

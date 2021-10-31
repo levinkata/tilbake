@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             bank.DateAdded = DateTime.Now;
 
             _unitOfWork.Banks.Add(bank);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Banks.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BankResource>> GetAllAsync()
@@ -64,7 +64,7 @@ namespace Tilbake.Application.Services
             bank.DateModified = DateTime.Now;
             _unitOfWork.Banks.Update(resource.Id, bank);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

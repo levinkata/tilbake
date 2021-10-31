@@ -26,13 +26,13 @@ namespace Tilbake.Application.Services
             var clientStatus = _mapper.Map<ClientStatusSaveResource, ClientStatus>(resource);
             clientStatus.Id = Guid.NewGuid();
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.ClientStatuses.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientStatusResource>> GetAllAsync()
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
             var clientStatus = _mapper.Map<ClientStatusResource, ClientStatus>(resource);
             _unitOfWork.ClientStatuses.Update(resource.Id, clientStatus);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

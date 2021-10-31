@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             excessBuyBack.DateAdded = DateTime.Now;
 
             _unitOfWork.ExcessBuyBacks.Add(excessBuyBack);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.ExcessBuyBacks.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ExcessBuyBackResource>> GetAllAsync()
@@ -65,7 +65,7 @@ namespace Tilbake.Application.Services
             var excessBuyBack = _mapper.Map<ExcessBuyBackResource, ExcessBuyBack>(resource);
             _unitOfWork.ExcessBuyBacks.Update(resource.Id, excessBuyBack);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

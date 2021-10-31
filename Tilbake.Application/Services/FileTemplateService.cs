@@ -31,13 +31,13 @@ namespace Tilbake.Application.Services
             var fileTemplateId = fileTemplate.Id;
 
             PopulateFileTemplateRecords(fileTemplateId);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.FileTemplates.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<FileTemplateResource>> GetAllAsync()
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             var fileTemplate = _mapper.Map<FileTemplateResource, FileTemplate>(resource);
             _unitOfWork.FileTemplates.Update(resource.Id, fileTemplate);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public void PopulateFileTemplateRecords(Guid fileTemplateId)

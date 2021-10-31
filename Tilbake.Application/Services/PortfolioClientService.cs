@@ -126,7 +126,7 @@ namespace Tilbake.Application.Services
                     _unitOfWork.ClientCarriers.Add(newClientCarrier);
                 }
             }
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void AddExistingClient(Guid portfolioId, Guid clientId)
@@ -139,13 +139,13 @@ namespace Tilbake.Application.Services
                 DateAdded = DateTime.Now
             };
             _unitOfWork.PortfolioClients.Add(newPortfolioClient);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.PortfolioClients.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)

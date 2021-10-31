@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             riskItem.Id = Guid.NewGuid();
 
             _unitOfWork.RiskItems.Add(riskItem);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.RiskItems.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<RiskItemResource>> GetAllAsync()
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
             var riskItem = _mapper.Map<RiskItemResource, RiskItem>(resource);
             _unitOfWork.RiskItems.Update(resource.Id, riskItem);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

@@ -420,13 +420,13 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.QuoteItems.AddRange(quoteItems);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Quotes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<QuoteResource>> GetAllAsync()
@@ -489,7 +489,7 @@ namespace Tilbake.Application.Services
                     {
                         result.IsFulfilled = true;
                         _unitOfWork.Quotes.Update(result.Id, result);
-                        await _unitOfWork.SaveAsync();
+                        _unitOfWork.SaveAsync();
 
                         result = await _unitOfWork.Quotes.GetByIdAsync(
                                                     r => r.Id == id,
@@ -571,7 +571,7 @@ namespace Tilbake.Application.Services
             quote.DateModified = DateTime.Now;
 
             _unitOfWork.Quotes.Update(resource.Id, quote);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Tilbake.Application.Services
         public async void Delete(Guid id)
         {
             _unitOfWork.Audits.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AuditResource>> GetAllAsync()

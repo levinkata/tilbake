@@ -24,7 +24,7 @@ namespace Tilbake.Application.Services
         public async void Delete(Guid id)
         {
             _unitOfWork.FileTemplateRecords.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(FileTemplateRecordResource resource)
@@ -32,7 +32,7 @@ namespace Tilbake.Application.Services
             var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
             _unitOfWork.FileTemplateRecords.Delete(fileTemplateRecord);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetAllAsync()
@@ -82,7 +82,7 @@ namespace Tilbake.Application.Services
             var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
             _unitOfWork.FileTemplateRecords.Update(resource.Id, fileTemplateRecord);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

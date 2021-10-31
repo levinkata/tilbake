@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             commissionRate.DateAdded = DateTime.Now;
 
             _unitOfWork.CommissionRates.Add(commissionRate);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.CommissionRates.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CommissionRateResource>> GetAllAsync()
@@ -70,7 +70,7 @@ namespace Tilbake.Application.Services
             commissionRate.DateModified = DateTime.Now;
 
             _unitOfWork.CommissionRates.Update(resource.Id, commissionRate);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

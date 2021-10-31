@@ -56,7 +56,7 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.UserPortfolios.AddRange(aspnetUserPortfolios);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void DeleteRange(UserPortfolioResource resources)
@@ -93,7 +93,7 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.UserPortfolios.DeleteRange(aspnetUserPortfolios);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)

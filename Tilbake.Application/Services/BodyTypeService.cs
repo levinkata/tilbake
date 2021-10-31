@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             bodyType.Id = Guid.NewGuid();
 
             _unitOfWork.BodyTypes.Add(bodyType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.BodyTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BodyTypeResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var bodyType = _mapper.Map<BodyTypeResource, BodyType>(resource);
             _unitOfWork.BodyTypes.Update(resource.Id, bodyType);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

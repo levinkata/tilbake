@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             insurer.DateAdded = DateTime.Now;
 
             _unitOfWork.Insurers.Add(insurer);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Insurers.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InsurerResource>> GetAllAsync()
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             insurer.DateModified = DateTime.Now;
             _unitOfWork.Insurers.Update(resource.Id, insurer);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

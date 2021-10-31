@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             clientType.Id = Guid.NewGuid();
 
             _unitOfWork.ClientTypes.Add(clientType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.ClientTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientTypeResource>> GetAllAsync()
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
             var clientType = _mapper.Map<ClientTypeResource, ClientType>(resource);
             _unitOfWork.ClientTypes.Update(resource.Id, clientType);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

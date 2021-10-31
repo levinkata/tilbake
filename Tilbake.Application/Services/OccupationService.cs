@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             occupation.Id = Guid.NewGuid();
 
             _unitOfWork.Occupations.Add(occupation);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Occupations.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<OccupationResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var occupation = _mapper.Map<OccupationResource, Occupation>(resource);
             _unitOfWork.Occupations.Update(resource.Id, occupation);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

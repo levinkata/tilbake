@@ -30,13 +30,13 @@ namespace Tilbake.Application.Services
             carrier.DateAdded = DateTime.Now;
 
             _unitOfWork.Carriers.Add(carrier);
-            return await _unitOfWork.SaveAsync();
+            return _unitOfWork.SaveAsync();
         }
 
         public async Task<int> Delete(Guid id)
         {
             _unitOfWork.Carriers.Delete(id);
-            return await _unitOfWork.SaveAsync();
+            return _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CarrierResource>> GetAllAsync()
@@ -61,7 +61,7 @@ namespace Tilbake.Application.Services
             carrier.DateModified = DateTime.Now;
 
             _unitOfWork.Carriers.Update(resource.Id, carrier);
-            return await _unitOfWork.SaveAsync();
+            return _unitOfWork.SaveAsync();
         }
     }
 }

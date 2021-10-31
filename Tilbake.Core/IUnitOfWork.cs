@@ -85,6 +85,7 @@ namespace Tilbake.Core
         ITravelBeneficiaryRepository TravelBeneficiaries { get; }
         IWallTypeRepository WallTypes { get; }
 
-        Task<int> SaveAsync();
+        //Task<int> SaveAsync();
+        int SaveAsync();
     }
 }

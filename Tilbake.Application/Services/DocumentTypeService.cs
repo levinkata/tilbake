@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             documentType.Id = Guid.NewGuid();
 
             _unitOfWork.DocumentTypes.Add(documentType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.DocumentTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<DocumentTypeResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var documentType = _mapper.Map<DocumentTypeResource, DocumentType>(resource);
             _unitOfWork.DocumentTypes.Update(resource.Id, documentType);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

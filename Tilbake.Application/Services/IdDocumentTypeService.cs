@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             idDocumentType.DateAdded = DateTime.Now;
 
             _unitOfWork.IdDocumentTypes.Add(idDocumentType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.IdDocumentTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<IdDocumentTypeResource>> GetAllAsync()
@@ -60,7 +60,7 @@ namespace Tilbake.Application.Services
             idDocumentType.DateModified = DateTime.Now;
 
             _unitOfWork.IdDocumentTypes.Update(resource.Id, idDocumentType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

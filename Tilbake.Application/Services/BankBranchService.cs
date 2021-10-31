@@ -28,20 +28,20 @@ namespace Tilbake.Application.Services
             bankBranch.DateAdded = DateTime.Now;
 
             _unitOfWork.BankBranches.Add(bankBranch);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.BankBranches.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(BankBranchResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
             _unitOfWork.BankBranches.Delete(bankBranch);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BankBranchResource>> GetAllAsync()
@@ -82,7 +82,7 @@ namespace Tilbake.Application.Services
             bankBranch.DateModified = DateTime.Now;
             _unitOfWork.BankBranches.Update(resource.Id, bankBranch);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

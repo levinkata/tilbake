@@ -50,7 +50,7 @@ namespace Tilbake.Application.Services
                 }
                 _unitOfWork.ClientCarriers.AddRange(clientCarriers);
             }
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Update(ClientCarrierResource resource)
@@ -82,7 +82,7 @@ namespace Tilbake.Application.Services
                 }
                 _unitOfWork.ClientCarriers.AddRange(clientCarriers);
             }
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientCarrierResource>> GetByClientIdAsync(Guid clientId)

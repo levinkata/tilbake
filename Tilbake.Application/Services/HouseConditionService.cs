@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             houseCondition.Id = Guid.NewGuid();
 
             _unitOfWork.HouseConditions.Add(houseCondition);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.HouseConditions.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<HouseConditionResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var houseCondition = _mapper.Map<HouseConditionResource, HouseCondition>(resource);
             _unitOfWork.HouseConditions.Update(resource.Id, houseCondition);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

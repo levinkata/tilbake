@@ -35,13 +35,13 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.PortfolioPolicyFees.Add(portfolioPolicyFee);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.PortfolioPolicyFees.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioPolicyFeeResource>> GetAllAsync()
@@ -91,7 +91,7 @@ namespace Tilbake.Application.Services
             }
             _unitOfWork.PortfolioPolicyFees.Update(resource.Id, portfolioPolicyFee);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

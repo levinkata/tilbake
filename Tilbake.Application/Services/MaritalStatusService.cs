@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             maritalStatus.Id = Guid.NewGuid();
 
             _unitOfWork.MaritalStatuses.Add(maritalStatus);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.MaritalStatuses.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<MaritalStatusResource>> GetAllAsync()
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
             var maritalStatus = _mapper.Map<MaritalStatusResource, MaritalStatus>(resource);
             _unitOfWork.MaritalStatuses.Update(resource.Id, maritalStatus);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

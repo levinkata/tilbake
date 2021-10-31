@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             quoteStatus.Id = Guid.NewGuid();
 
             _unitOfWork.QuoteStatuses.Add(quoteStatus);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.QuoteStatuses.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<QuoteStatusResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var quoteStatus = _mapper.Map<QuoteStatusResource, QuoteStatus>(resource);
             _unitOfWork.QuoteStatuses.Update(resource.Id, quoteStatus);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

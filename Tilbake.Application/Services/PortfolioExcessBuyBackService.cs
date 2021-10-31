@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             portfolioExcessBuyBack.DateAdded = DateTime.Now;
 
             _unitOfWork.PortfolioExcessBuyBacks.Add(portfolioExcessBuyBack);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.PortfolioExcessBuyBacks.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioExcessBuyBackResource>> GetAllAsync()
@@ -76,7 +76,7 @@ namespace Tilbake.Application.Services
             portfolioExcessBuyBack.DateModified = DateTime.Now;
             
             _unitOfWork.PortfolioExcessBuyBacks.Update(resource.Id, portfolioExcessBuyBack);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

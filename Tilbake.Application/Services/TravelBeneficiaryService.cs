@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             travelBeneficiary.DateAdded = DateTime.Now;
 
             _unitOfWork.TravelBeneficiaries.Add(travelBeneficiary);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.TravelBeneficiaries.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TravelBeneficiaryResource>> GetAllAsync()
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             travelBeneficiary.DateModified = DateTime.Now;
 
             _unitOfWork.TravelBeneficiaries.Update(resource.Id, travelBeneficiary);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

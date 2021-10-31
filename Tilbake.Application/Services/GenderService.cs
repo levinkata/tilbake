@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             gender.Id = Guid.NewGuid();
 
             _unitOfWork.Genders.Add(gender);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Genders.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<GenderResource>> GetAllAsync()
@@ -57,7 +57,7 @@ namespace Tilbake.Application.Services
         {
             var gender = _mapper.Map<GenderResource, Gender>(resource);
             _unitOfWork.Genders.Update(resource.Id, gender);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

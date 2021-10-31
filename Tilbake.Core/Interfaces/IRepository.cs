@@ -17,13 +17,13 @@ namespace Tilbake.Core.Interfaces
 
         TEntity Find(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
         Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
-        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
-        IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null);
+        //IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
+        //IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null);
         IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> criteria = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes);
 
-        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
-        Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null);
+        //Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null, params Expression<Func<TEntity, object>>[] includes);
+        //Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null);
         Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> criteria = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes);
         TEntity Add(TEntity entity);

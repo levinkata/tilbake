@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             building.DateAdded = DateTime.Now;
 
             _unitOfWork.Buildings.Add(building);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Buildings.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BuildingResource>> GetAllAsync()
@@ -71,7 +71,7 @@ namespace Tilbake.Application.Services
             var building = _mapper.Map<BuildingResource, Building>(resource);
             _unitOfWork.Buildings.Update(resource.Id, building);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

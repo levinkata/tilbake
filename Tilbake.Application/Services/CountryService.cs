@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             country.Id = Guid.NewGuid();
 
             _unitOfWork.Countries.Add(country);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Countries.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CountryResource>> GetAllAsync()
@@ -60,7 +60,7 @@ namespace Tilbake.Application.Services
             var country = _mapper.Map<CountryResource, Country>(resource);
             _unitOfWork.Countries.Update(resource.Id, country);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

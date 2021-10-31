@@ -205,13 +205,13 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.PolicyRisks.AddRange(policyRisks);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Policies.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyResource>> GetAllAsync(Guid portfolioClientId)
@@ -326,7 +326,7 @@ namespace Tilbake.Application.Services
             quote.IsPolicySet = true;
             _unitOfWork.Quotes.Update(quote.Id, quote);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Update(PolicyResource resource)
@@ -334,7 +334,7 @@ namespace Tilbake.Application.Services
             var policy = _mapper.Map<PolicyResource, Policy>(resource);
              _unitOfWork.Policies.Update(resource.Id, policy);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

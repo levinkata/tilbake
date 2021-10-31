@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             wallType.Id = Guid.NewGuid();
 
             _unitOfWork.WallTypes.Add(wallType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.WallTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<WallTypeResource>> GetAllAsync()
@@ -60,7 +60,7 @@ namespace Tilbake.Application.Services
             var wallType = _mapper.Map<WallTypeResource, WallType>(resource);
             _unitOfWork.WallTypes.Update(resource.Id, wallType);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

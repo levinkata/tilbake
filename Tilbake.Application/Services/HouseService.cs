@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             house.DateAdded = DateTime.Now;
 
             _unitOfWork.Houses.Add(house);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Houses.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<HouseResource>> GetAllAsync()
@@ -69,7 +69,7 @@ namespace Tilbake.Application.Services
             var house = _mapper.Map<HouseResource, House>(resource);
             _unitOfWork.Houses.Update(resource.Id, house);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

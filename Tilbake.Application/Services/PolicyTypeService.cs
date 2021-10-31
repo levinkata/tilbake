@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             policyType.Id = Guid.NewGuid();
 
             _unitOfWork.PolicyTypes.Add(policyType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.PolicyTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyTypeResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var policyType = _mapper.Map<PolicyTypeResource, PolicyType>(resource);
             _unitOfWork.PolicyTypes.Update(resource.Id, policyType);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

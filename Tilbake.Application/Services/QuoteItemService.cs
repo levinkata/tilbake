@@ -24,7 +24,7 @@ namespace Tilbake.Application.Services
         public async void Delete(Guid id)
         {
             _unitOfWork.QuoteItems.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<QuoteItemResource> GetByIdAsync(Guid id)
@@ -95,7 +95,7 @@ namespace Tilbake.Application.Services
 
             _unitOfWork.QuoteItems.Update(resource.Id, quoteItem);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdateQuoteItemRiskItem(QuoteItemRiskItemResource resource)
@@ -117,7 +117,7 @@ namespace Tilbake.Application.Services
             var riskItem = _mapper.Map<RiskItemResource, RiskItem>(resource.RiskItem);
             _unitOfWork.RiskItems.Update(resource.RiskItem.Id, riskItem);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdateQuoteItemBuilding(QuoteItemBuildingResource resource)
@@ -128,7 +128,7 @@ namespace Tilbake.Application.Services
             var building = _mapper.Map<BuildingResource, Building>(resource.Building);
             _unitOfWork.Buildings.Update(resource.Building.Id, building);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdateQuoteItemContent(QuoteItemContentResource resource)
@@ -139,7 +139,7 @@ namespace Tilbake.Application.Services
             var content = _mapper.Map<ContentResource, Content>(resource.Content);
             _unitOfWork.Contents.Update(resource.Content.Id, content);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdateQuoteItemHouse(QuoteItemHouseResource resource)
@@ -150,7 +150,7 @@ namespace Tilbake.Application.Services
             var house = _mapper.Map<HouseResource, House>(resource.House);
             _unitOfWork.Houses.Update(resource.House.Id, house);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdateQuoteItemMotor(QuoteItemMotorResource resource)
@@ -161,7 +161,7 @@ namespace Tilbake.Application.Services
             var motor = _mapper.Map<MotorResource, Motor>(resource.Motor);
             _unitOfWork.Motors.Update(resource.Motor.Id, motor);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdateQuoteItemExcessBuyBack(QuoteItemExcessBuyBackResource resource)
@@ -172,7 +172,7 @@ namespace Tilbake.Application.Services
             var motor = _mapper.Map<ExcessBuyBackResource, ExcessBuyBack>(resource.ExcessBuyBack);
             _unitOfWork.ExcessBuyBacks.Update(resource.ExcessBuyBack.Id, motor);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

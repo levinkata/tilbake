@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
 
             _unitOfWork.Addresses.Add(address);
 
-            await _unitOfWork.SaveAsync();            
+            _unitOfWork.SaveAsync();            
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Addresses.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AddressResource>> GetAllAsync()
@@ -74,7 +74,7 @@ namespace Tilbake.Application.Services
             address.DateModified = DateTime.Now;
 
             _unitOfWork.Addresses.Update(resource.Id, address);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

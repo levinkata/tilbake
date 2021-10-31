@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             tax.DateAdded = DateTime.Now;
 
             _unitOfWork.Taxes.Add(tax);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Taxes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TaxResource>> GetAllAsync()
@@ -59,7 +59,7 @@ namespace Tilbake.Application.Services
             var tax = _mapper.Map<TaxResource, Tax>(resource);
             _unitOfWork.Taxes.Update(resource.Id, tax);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

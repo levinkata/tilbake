@@ -56,13 +56,13 @@ namespace Tilbake.Application.Services
                 DateAdded = DateTime.Now
             };
             _unitOfWork.Premiums.Add(newPremium);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Receivables.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ReceivableResource>> GetAllAsync()
@@ -106,7 +106,7 @@ namespace Tilbake.Application.Services
             var receivable = _mapper.Map<ReceivableResource, Receivable>(resource);
             _unitOfWork.Receivables.Update(resource.Id, receivable);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void AddQuote(ReceivableSaveResource resource)
@@ -129,7 +129,7 @@ namespace Tilbake.Application.Services
 
             quote.IsPaid = true;
             _unitOfWork.Quotes.Update(quoteId, quote);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

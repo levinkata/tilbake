@@ -53,7 +53,7 @@ namespace Tilbake.Application.Services
 
                 _unitOfWork.ClientDocuments.Add(clientDocument);
             }
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
@@ -65,7 +65,7 @@ namespace Tilbake.Application.Services
                 File.Delete(result.DocumentPath);
             }
             _unitOfWork.ClientDocuments.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(ClientDocumentResource resource)
@@ -77,7 +77,7 @@ namespace Tilbake.Application.Services
 
             var clientDocument = _mapper.Map<ClientDocumentResource, ClientDocument>(resource);
             _unitOfWork.ClientDocuments.Delete(clientDocument);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientDocumentResource>> GetAllAsync()
@@ -115,7 +115,7 @@ namespace Tilbake.Application.Services
             var clientDocument = _mapper.Map<ClientDocumentResource, ClientDocument>(resource);
             _unitOfWork.ClientDocuments.Update(resource.Id, clientDocument);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             policyRisk.DateAdded = DateTime.Now;
 
             _unitOfWork.PolicyRisks.Add(policyRisk);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.PolicyRisks.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyRiskResource>> GetAllAsync()
@@ -111,7 +111,7 @@ namespace Tilbake.Application.Services
 
             _unitOfWork.PolicyRisks.Update(resource.Id, policyRisk);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdatePolicyRiskBuilding(PolicyRiskBuildingResource resource)
@@ -122,7 +122,7 @@ namespace Tilbake.Application.Services
             var building = _mapper.Map<BuildingResource, Building>(resource.Building);
             _unitOfWork.Buildings.Update(resource.Building.Id, building);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdatePolicyRiskContent(PolicyRiskContentResource resource)
@@ -133,7 +133,7 @@ namespace Tilbake.Application.Services
             var content = _mapper.Map<ContentResource, Content>(resource.Content);
             _unitOfWork.Contents.Update(resource.Content.Id, content);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdatePolicyRiskHouse(PolicyRiskHouseResource resource)
@@ -144,7 +144,7 @@ namespace Tilbake.Application.Services
             var house = _mapper.Map<HouseResource, House>(resource.House);
             _unitOfWork.Houses.Update(resource.House.Id, house);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdatePolicyRiskMotor(PolicyRiskMotorResource resource)
@@ -155,7 +155,7 @@ namespace Tilbake.Application.Services
             var motor = _mapper.Map<MotorResource, Motor>(resource.Motor);
             _unitOfWork.Motors.Update(resource.Motor.Id, motor);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void UpdatePolicyRiskRiskItem(PolicyRiskRiskItemResource resource)
@@ -166,7 +166,7 @@ namespace Tilbake.Application.Services
             var riskItem = _mapper.Map<RiskItemResource, RiskItem>(resource.RiskItem);
             _unitOfWork.RiskItems.Update(resource.RiskItem.Id, riskItem);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

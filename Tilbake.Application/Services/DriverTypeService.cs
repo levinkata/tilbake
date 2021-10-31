@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             driverType.Id = Guid.NewGuid();
 
             _unitOfWork.DriverTypes.Add(driverType);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.DriverTypes.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<DriverTypeResource>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             var driverType = _mapper.Map<DriverTypeResource, DriverType>(resource);
             _unitOfWork.DriverTypes.Update(resource.Id, driverType);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

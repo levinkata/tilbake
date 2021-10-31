@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             travel.DateAdded = DateTime.Now;
 
             _unitOfWork.Travels.Add(travel);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Travels.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TravelResource>> GetAllAsync()
@@ -66,7 +66,7 @@ namespace Tilbake.Application.Services
             travel.DateModified = DateTime.Now;
 
             _unitOfWork.Travels.Update(resource.Id, travel);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

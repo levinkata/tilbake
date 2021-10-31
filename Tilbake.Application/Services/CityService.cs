@@ -28,13 +28,13 @@ namespace Tilbake.Application.Services
             city.DateAdded = DateTime.Now;
 
             _unitOfWork.Cities.Add(city);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Cities.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CityResource>> GetAllAsync()
@@ -72,7 +72,7 @@ namespace Tilbake.Application.Services
             city.DateModified = DateTime.Now;
 
             _unitOfWork.Cities.Update(resource.Id, city);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

@@ -27,13 +27,13 @@ namespace Tilbake.Application.Services
             content.Id = Guid.NewGuid();
 
             _unitOfWork.Contents.Add(content);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Contents.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ContentResource>> GetAllAsync()
@@ -57,7 +57,7 @@ namespace Tilbake.Application.Services
             var content = _mapper.Map<ContentResource, Content>(resource);
             _unitOfWork.Contents.Update(resource.Id, content);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
     }
 }

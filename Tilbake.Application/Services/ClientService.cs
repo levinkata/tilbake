@@ -39,13 +39,13 @@ namespace Tilbake.Application.Services
             client.DateAdded = DateTime.Now;
             _unitOfWork.Clients.Add(client);
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async void Delete(Guid id)
         {
             _unitOfWork.Clients.Delete(id);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientResource>> GetAllAsync()
@@ -146,7 +146,7 @@ namespace Tilbake.Application.Services
                 _unitOfWork.ClientCarriers.DeleteRange(clientCarriers);
             }
 
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         public async Task<ClientResource> GetByPolicyIdAsync(Guid policyId)
@@ -182,7 +182,7 @@ namespace Tilbake.Application.Services
                 if (clientBulks != null)
                 {
                     _unitOfWork.ClientBulks.DeleteRange(clientBulks);
-                    await _unitOfWork.SaveAsync();
+                    _unitOfWork.SaveAsync();
                 }
 
                 var fileTemplateRecords = await _unitOfWork.FileTemplateRecords.FindAllAsync(
@@ -684,7 +684,7 @@ namespace Tilbake.Application.Services
                     }
                     ms.Flush();
                 }
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.SaveAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -754,14 +754,14 @@ namespace Tilbake.Application.Services
                         LogFiles.WriteLogFile(_environment, csvString, FolderName, FileName);
                     }
                 }
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.SaveAsync();
 
                 if (recCount > 0)
                 {
                     _unitOfWork.ClientBulks.DeleteRange(clientBulks);
                 }
 
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.SaveAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -774,7 +774,7 @@ namespace Tilbake.Application.Services
         {
             var clientBulks = _mapper.Map<IEnumerable<ClientBulkResource>, IEnumerable<ClientBulk>>(resources);
             _unitOfWork.ClientBulks.DeleteRange(clientBulks);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
         }
 
         private async Task<Guid> GetCountryId(string name)

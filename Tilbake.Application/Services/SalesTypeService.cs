@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(SalesTypeSaveResource resource)
+        public async Task<int> AddAsync(SalesTypeSaveResource resource)
         {
             var salesType = _mapper.Map<SalesTypeSaveResource, SalesType>(resource);
             salesType.Id = Guid.NewGuid();
 
             _unitOfWork.SalesTypes.Add(salesType);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.SalesTypes.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<SalesTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.SalesTypes.FindAllAsync(
+            var result = await _unitOfWork.SalesTypes.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -54,12 +54,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(SalesTypeResource resource)
+        public async Task<int> UpdateAsync(SalesTypeResource resource)
         {
             var salesType = _mapper.Map<SalesTypeResource, SalesType>(resource);
             _unitOfWork.SalesTypes.Update(resource.Id, salesType);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
@@ -21,24 +20,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(ContentSaveResource resource)
+        public async Task<int> AddAsync(ContentSaveResource resource)
         {
             var content = _mapper.Map<ContentSaveResource, Content>(resource);
             content.Id = Guid.NewGuid();
 
             _unitOfWork.Contents.Add(content);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Contents.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ContentResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Contents.FindAllAsync(null);
+            var result = await _unitOfWork.Contents.GetAsync(null);
 
             var resources = _mapper.Map<IEnumerable<Content>, IEnumerable<ContentResource>>(result);
             return resources;
@@ -48,16 +47,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.Contents.GetByIdAsync(id);
             var resource = _mapper.Map<Content, ContentResource>(result);
-
             return resource;
         }
 
-        public async void Update(ContentResource resource)
+        public async Task<int> UpdateAsync(ContentResource resource)
         {
             var content = _mapper.Map<ContentResource, Content>(resource);
             _unitOfWork.Contents.Update(resource.Id, content);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

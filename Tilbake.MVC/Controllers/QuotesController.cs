@@ -162,7 +162,7 @@ namespace Tilbake.MVC.Controllers
                 throw new ArgumentNullException(nameof(quoteObject));
             };
 
-            _quoteService.Add(quoteObject);
+            _quoteService.AddAsync(quoteObject);
 
             return Json(new { quoteObject.ClientId });
         }
@@ -231,7 +231,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _quoteService.Add(resource);
+                _quoteService.AddAsync(resource);
                 return RedirectToAction("PortfolioClientQuotes", "Quotes", new { resource.Quote.PortfolioClientId });
             }
 
@@ -307,7 +307,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _quoteService.Update(resource);
+                    await _quoteService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -356,7 +356,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var resource = await _quoteService.GetByIdAsync(id);
-            _quoteService.Delete(id);
+            await _quoteService.DeleteAsync(id);
 
             return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
         }

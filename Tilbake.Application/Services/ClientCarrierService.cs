@@ -21,12 +21,12 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(ClientCarrierSaveResource resource)
+        public async Task<int> AddAsync(ClientCarrierSaveResource resource)
         {
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
 
-            var existingCarriers = await _unitOfWork.ClientCarriers.FindAllAsync(
+            var existingCarriers = await _unitOfWork.ClientCarriers.GetAsync(
                                                 r => r.ClientId == clientId);
 
             if(existingCarriers.Any())
@@ -50,15 +50,15 @@ namespace Tilbake.Application.Services
                 }
                 _unitOfWork.ClientCarriers.AddRange(clientCarriers);
             }
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Update(ClientCarrierResource resource)
+        public async Task<int> UpdateAsync(ClientCarrierResource resource)
         {
             var carrierIds = resource.CarrierIds;
             var clientId = resource.ClientId;
 
-            var existingCarriers = await _unitOfWork.ClientCarriers.FindAllAsync(
+            var existingCarriers = await _unitOfWork.ClientCarriers.GetAsync(
                                                 r => r.ClientId == clientId);
 
             if(existingCarriers.Any())
@@ -82,12 +82,12 @@ namespace Tilbake.Application.Services
                 }
                 _unitOfWork.ClientCarriers.AddRange(clientCarriers);
             }
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientCarrierResource>> GetByClientIdAsync(Guid clientId)
         {
-            var result = await _unitOfWork.ClientCarriers.FindAllAsync(
+            var result = await _unitOfWork.ClientCarriers.GetAsync(
                                                             r => r.ClientId == clientId,
                                                             r => r.OrderBy(p => p.Carrier.Name),
                                                             r => r.Carrier);

@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(BankSaveResource resource)
+        public async Task<int> AddAsync(BankSaveResource resource)
         {
             var bank = _mapper.Map<BankSaveResource, Bank>(resource);
             bank.Id = Guid.NewGuid();
             bank.DateAdded = DateTime.Now;
 
             _unitOfWork.Banks.Add(bank);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Banks.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BankResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Banks.FindAllAsync(
+            var result = await _unitOfWork.Banks.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name),
                                             r => r.BankBranches);
@@ -50,21 +50,22 @@ namespace Tilbake.Application.Services
 
         public async Task<BankResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Banks.GetByIdAsync(
+            var result = await _unitOfWork.Banks.GetAsync(
                                             r => r.Id == id,
+                                            null,
                                             r => r.BankBranches);
 
-            var resource = _mapper.Map<Bank, BankResource>(result);
+            var resource = _mapper.Map<Bank, BankResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(BankResource resource)
+        public async Task<int> UpdateAsync(BankResource resource)
         {
             var bank = _mapper.Map<BankResource, Bank>(resource);
             bank.DateModified = DateTime.Now;
             _unitOfWork.Banks.Update(resource.Id, bank);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

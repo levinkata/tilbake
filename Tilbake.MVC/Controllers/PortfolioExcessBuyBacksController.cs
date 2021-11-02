@@ -54,7 +54,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _portfolioExcessBuyBackService.Add(resource);
+                _portfolioExcessBuyBackService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -88,7 +88,7 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                _portfolioExcessBuyBackService.Update(resource);
+                _portfolioExcessBuyBackService.UpdateAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -116,7 +116,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _portfolioExcessBuyBackService.Delete(id);
+            _portfolioExcessBuyBackService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

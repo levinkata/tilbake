@@ -56,7 +56,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 
-                _taxService.Add(resource);
+                _taxService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -87,7 +87,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _taxService.Update(resource);
+                    _taxService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -115,7 +115,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(TaxResource resource)
         {
-            _taxService.Delete(resource.Id);
+            _taxService.DeleteAsync(resource.Id);
             return RedirectToAction(nameof(Index));
         }
     }

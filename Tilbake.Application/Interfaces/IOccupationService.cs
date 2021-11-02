@@ -9,8 +9,8 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<OccupationResource>> GetAllAsync();
         Task<OccupationResource> GetByIdAsync(Guid id);
-        void Add(OccupationSaveResource resource);
-        void Update(OccupationResource resource);
-        void Delete(Guid id);
+        Task<int> AddAsync(OccupationSaveResource resource);
+        Task<int> UpdateAsync(OccupationResource resource);
+        Task<int> DeleteAsync(Guid id);
     }
 }

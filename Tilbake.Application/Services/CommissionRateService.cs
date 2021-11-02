@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(CommissionRateSaveResource resource)
+        public async Task<int> AddAsync(CommissionRateSaveResource resource)
         {
             var commissionRate = _mapper.Map<CommissionRateSaveResource, CommissionRate>(resource);
             commissionRate.Id = Guid.NewGuid();
             commissionRate.DateAdded = DateTime.Now;
 
             _unitOfWork.CommissionRates.Add(commissionRate);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.CommissionRates.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CommissionRateResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.CommissionRates.FindAllAsync(
+            var result = await _unitOfWork.CommissionRates.GetAsync(
                                                 null,
                                                 r => r.OrderBy(n => n.RiskName));
 
@@ -49,10 +49,10 @@ namespace Tilbake.Application.Services
 
         public async Task<CommissionRateResource> GetByRisk(string riskName)
         {
-            var result = await _unitOfWork.CommissionRates.GetByIdAsync(
+            var result = await _unitOfWork.CommissionRates.GetAsync(
                                             e => e.RiskName == riskName);
 
-            var resource = _mapper.Map<CommissionRate, CommissionRateResource>(result);
+            var resource = _mapper.Map<CommissionRate, CommissionRateResource>(result.FirstOrDefault());
             return resource;
         }
 
@@ -60,17 +60,16 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.CommissionRates.GetByIdAsync(id);
             var resource = _mapper.Map<CommissionRate, CommissionRateResource>(result);
-
             return resource;
         }
 
-        public async void Update(CommissionRateResource resource)
+        public async Task<int> UpdateAsync(CommissionRateResource resource)
         {
             var commissionRate = _mapper.Map<CommissionRateResource, CommissionRate>(resource);
             commissionRate.DateModified = DateTime.Now;
 
             _unitOfWork.CommissionRates.Update(resource.Id, commissionRate);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

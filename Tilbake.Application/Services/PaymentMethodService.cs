@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(PaymentMethodSaveResource resource)
+        public async Task<int> AddAsync(PaymentMethodSaveResource resource)
         {
             var paymentMethod = _mapper.Map<PaymentMethodSaveResource, PaymentMethod>(resource);
             paymentMethod.Id = Guid.NewGuid();
 
             _unitOfWork.PaymentMethods.Add(paymentMethod);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.PaymentMethods.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PaymentMethodResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PaymentMethods.FindAllAsync(
+            var result = await _unitOfWork.PaymentMethods.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -54,12 +54,12 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async void Update(PaymentMethodResource resource)
+        public async Task<int> UpdateAsync(PaymentMethodResource resource)
         {
             var paymentMethod = _mapper.Map<PaymentMethodResource, PaymentMethod>(resource);
             _unitOfWork.PaymentMethods.Update(resource.Id, paymentMethod);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

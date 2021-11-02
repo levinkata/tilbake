@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(ExcessBuyBackSaveResource resource)
+        public async Task<int> AddAsync(ExcessBuyBackSaveResource resource)
         {
             var excessBuyBack = _mapper.Map<ExcessBuyBackSaveResource, ExcessBuyBack>(resource);
             excessBuyBack.Id = Guid.NewGuid();
             excessBuyBack.DateAdded = DateTime.Now;
 
             _unitOfWork.ExcessBuyBacks.Add(excessBuyBack);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.ExcessBuyBacks.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ExcessBuyBackResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ExcessBuyBacks.FindAllAsync(
+            var result = await _unitOfWork.ExcessBuyBacks.GetAsync(
                                                         null,
                                                         r => r.OrderBy(n => n.Motor.RegNumber),
                                                         r => r.Motor,
@@ -51,21 +51,22 @@ namespace Tilbake.Application.Services
 
         public async Task<ExcessBuyBackResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.ExcessBuyBacks.GetByIdAsync(
+            var result = await _unitOfWork.ExcessBuyBacks.GetAsync(
                                                         r => r.Id == id,
+                                                        null,
                                                         r => r.Motor,
                                                         r => r.ParentPolicy);
 
-            var resource = _mapper.Map<ExcessBuyBack, ExcessBuyBackResource>(result);
+            var resource = _mapper.Map<ExcessBuyBack, ExcessBuyBackResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(ExcessBuyBackResource resource)
+        public async Task<int> UpdateAsync(ExcessBuyBackResource resource)
         {
             var excessBuyBack = _mapper.Map<ExcessBuyBackResource, ExcessBuyBack>(resource);
             _unitOfWork.ExcessBuyBacks.Update(resource.Id, excessBuyBack);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

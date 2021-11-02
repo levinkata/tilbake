@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentValidation;
 using Tilbake.Application.Resources;
 using Tilbake.Core;
@@ -27,22 +28,12 @@ namespace Tilbake.Application.Validators
                 
             RuleFor(p => p.BirthDate)
                 .LessThan(DateTime.Now);
-                
-            //RuleFor(p => p.Email)
-            //    .Cascade(CascadeMode.Stop)
-            //    .EmailAddress()
-            //    .MaximumLength(50);
-
-            //RuleFor(p => p.Mobile)
-            //    .Cascade(CascadeMode.Stop)
-            //    .NotEmpty().WithMessage("Please enter Mobile Number")
-            //    .MaximumLength(50);
         }
 
         private bool IsIdNumberUnique(ClientResource editedClient, string newIdNumber)
         {
-            var result =_unitOfWork.Clients.GetAllAsync();
-            return result.Result.All(e => e.Equals(editedClient) || e.IdNumber != newIdNumber);
+            var result = _unitOfWork.Clients.GetAsync(e => e.Equals(editedClient) || e.IdNumber != newIdNumber);
+            return result.Result.Any();
         }
     }
 }

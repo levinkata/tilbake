@@ -69,7 +69,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _portfolioService.Add(portfolioSaveResource);
+                _portfolioService.AddAsync(portfolioSaveResource);
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolioSaveResource);
@@ -94,7 +94,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _portfolioService.Update(portfolioResource);
+                _portfolioService.UpdateAsync(portfolioResource);
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolioResource);
@@ -117,7 +117,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _portfolioService.Delete(id);
+            _portfolioService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

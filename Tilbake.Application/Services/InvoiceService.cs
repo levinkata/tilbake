@@ -21,14 +21,14 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(InvoiceSaveResource resource)
+        public async Task<int> AddAsync(InvoiceSaveResource resource)
         {
             var policyId = resource.PolicyId;
-            var policyRisks = await _unitOfWork.PolicyRisks.FindAllAsync(r => r.PolicyId == policyId);
+            var policyRisks = await _unitOfWork.PolicyRisks.GetAsync(r => r.PolicyId == policyId);
 
             var invoice = _mapper.Map<InvoiceSaveResource, Invoice>(resource);
 
-            var taxes = await _unitOfWork.Taxes.FindAllAsync(
+            var taxes = await _unitOfWork.Taxes.GetAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.TaxDate));
 
@@ -56,18 +56,18 @@ namespace Tilbake.Application.Services
                 invoiceItems.Add(invoiceItem);
             }
             _unitOfWork.InvoiceItems.AddRange(invoiceItems);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Invoices.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Invoices.FindAllAsync(
+            var result = await _unitOfWork.Invoices.GetAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.InvoiceDate),
                                             r => r.InvoiceStatus,
@@ -79,17 +79,17 @@ namespace Tilbake.Application.Services
 
         public async Task<InvoiceResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Invoices.GetByIdAsync(
-                                            e => e.Id == id,
+            var result = await _unitOfWork.Invoices.GetAsync(
+                                            e => e.Id == id, null,
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
 
-            var resource = _mapper.Map<Invoice, InvoiceResource>(result);
+            var resource = _mapper.Map<Invoice, InvoiceResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<IEnumerable<InvoiceResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Invoices.FindAllAsync(
+            var result = await _unitOfWork.Invoices.GetAsync(
                                             e => e.PolicyId == policyId,
                                             e => e.OrderBy(p => p.InvoiceDate),
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
@@ -100,7 +100,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<InvoiceResource>> GetByPortfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Invoices.FindAllAsync(
+            var result = await _unitOfWork.Invoices.GetAsync(
                                             e => e.Policy.PortfolioClientId == portfolioClientId,
                                             e => e.OrderBy(p => p.InvoiceDate),
                                             e => e.InvoiceStatus, e => e.InvoiceItems);
@@ -109,11 +109,11 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async void Update(InvoiceResource resource)
+        public async Task<int> UpdateAsync(InvoiceResource resource)
         {
             var invoice = _mapper.Map<InvoiceResource, Invoice>(resource);
 
-            var taxes = await _unitOfWork.Taxes.FindAllAsync(
+            var taxes = await _unitOfWork.Taxes.GetAsync(
                                 null,
                                 r => r.OrderByDescending(n => n.TaxDate));
 
@@ -124,7 +124,7 @@ namespace Tilbake.Application.Services
 
             _unitOfWork.Invoices.Update(resource.Id, invoice);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

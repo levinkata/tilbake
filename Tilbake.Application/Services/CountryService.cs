@@ -21,30 +21,29 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(CountrySaveResource resource)
+        public async Task<int> AddAsync(CountrySaveResource resource)
         {
             var country = _mapper.Map<CountrySaveResource, Country>(resource);
             country.Id = Guid.NewGuid();
 
             _unitOfWork.Countries.Add(country);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Countries.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CountryResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Countries.FindAllAsync(
+            var result = await _unitOfWork.Countries.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name),
                                             r => r.Cities);
 
             var resources = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryResource>>(result);
-
             return resources;
         }
 
@@ -55,12 +54,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(CountryResource resource)
+        public async Task<int> UpdateAsync(CountryResource resource)
         {
             var country = _mapper.Map<CountryResource, Country>(resource);
             _unitOfWork.Countries.Update(resource.Id, country);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

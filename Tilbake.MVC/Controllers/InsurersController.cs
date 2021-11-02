@@ -57,7 +57,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _insurerService.Add(resource);
+                _insurerService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -93,7 +93,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _insurerService.Update(resource);
+                    _insurerService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,7 +126,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _insurerService.Delete(id);
+            _insurerService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

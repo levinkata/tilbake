@@ -36,7 +36,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _cityService.Add(resource);
+                _cityService.AddAsync(resource);
                 return RedirectToAction(nameof(Index), new { countryId = resource.CountryId });
             }
 

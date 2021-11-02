@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(TaxSaveResource resource)
+        public async Task<int> AddAsync(TaxSaveResource resource)
         {
             var tax = _mapper.Map<TaxSaveResource, Tax>(resource);
             tax.Id = Guid.NewGuid();
             tax.DateAdded = DateTime.Now;
 
             _unitOfWork.Taxes.Add(tax);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Taxes.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TaxResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Taxes.FindAllAsync(
+            var result = await _unitOfWork.Taxes.GetAsync(
                                         null,
                                         r => r.OrderByDescending(n => n.TaxDate));
 
@@ -54,12 +54,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(TaxResource resource)
+        public async Task<int> UpdateAsync(TaxResource resource)
         {
             var tax = _mapper.Map<TaxResource, Tax>(resource);
             _unitOfWork.Taxes.Update(resource.Id, tax);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

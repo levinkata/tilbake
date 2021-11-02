@@ -31,8 +31,8 @@ namespace Tilbake.Application.Validators
 
         private bool IsIdNumberUnique(ClientSaveResource editedClient, string newIdNumber)
         {
-            var result = _unitOfWork.Clients.GetAllAsync();
-            return result.Result.All(e => e.Equals(editedClient) || e.IdNumber != newIdNumber);
+            var result = _unitOfWork.Clients.GetAsync(e => e.Equals(editedClient) || e.IdNumber != newIdNumber);
+            return result.Result.Any();
         }
     }
 }

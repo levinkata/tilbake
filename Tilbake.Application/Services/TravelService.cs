@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(TravelSaveResource resource)
+        public async Task<int> AddAsync(TravelSaveResource resource)
         {
             var travel = _mapper.Map<TravelSaveResource, Travel>(resource);
             travel.Id = Guid.NewGuid();
             travel.DateAdded = DateTime.Now;
 
             _unitOfWork.Travels.Add(travel);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Travels.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TravelResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Travels.FindAllAsync(
+            var result = await _unitOfWork.Travels.GetAsync(
                                             null,
                                             r => r.OrderBy(p => p.PortfolioClient.Client.LastName),
                                             r => r.PortfolioClient,
@@ -51,22 +51,22 @@ namespace Tilbake.Application.Services
 
         public async Task<TravelResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Travels.GetByIdAsync(
-                                            r => r.Id == id,
+            var result = await _unitOfWork.Travels.GetAsync(
+                                            r => r.Id == id, null,
                                             r => r.PortfolioClient,
                                             r => r.PortfolioClient.Client);
 
-            var resource = _mapper.Map<Travel, TravelResource>(result);
+            var resource = _mapper.Map<Travel, TravelResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(TravelResource resource)
+        public async Task<int> UpdateAsync(TravelResource resource)
         {
             var travel = _mapper.Map<TravelResource, Travel>(resource);
             travel.DateModified = DateTime.Now;
 
             _unitOfWork.Travels.Update(resource.Id, travel);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,32 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(BankBranchSaveResource resource)
+        public async Task<int> AddAsync(BankBranchSaveResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchSaveResource, BankBranch>(resource);
             bankBranch.Id = Guid.NewGuid();
             bankBranch.DateAdded = DateTime.Now;
 
             _unitOfWork.BankBranches.Add(bankBranch);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.BankBranches.Delete(id);
-            _unitOfWork.SaveAsync();
-        }
-
-        public async void Delete(BankBranchResource resource)
-        {
-            var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
-            _unitOfWork.BankBranches.Delete(bankBranch);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BankBranchResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.BankBranches.FindAllAsync(
+            var result = await _unitOfWork.BankBranches.GetAsync(
                                             null,
                                             e => e.OrderBy(r => r.Name),
                                             e => e.Bank);
@@ -57,7 +50,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<BankBranchResource>> GetByBankIdAsync(Guid bankId)
         {
-            var result = await _unitOfWork.BankBranches.FindAllAsync(
+            var result = await _unitOfWork.BankBranches.GetAsync(
                                             e => e.BankId == bankId,
                                             e => e.OrderBy(r => r.Name),
                                             e => e.Bank);
@@ -68,21 +61,22 @@ namespace Tilbake.Application.Services
 
         public async Task<BankBranchResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.BankBranches.GetByIdAsync(
+            var result = await _unitOfWork.BankBranches.GetAsync(
                                             e => e.Id == id,
+                                            null,
                                             e => e.Bank);
                                             
-            var resource = _mapper.Map<BankBranch, BankBranchResource>(result);
+            var resource = _mapper.Map<BankBranch, BankBranchResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(BankBranchResource resource)
+        public async Task<int> UpdateAsync(BankBranchResource resource)
         {
             var bankBranch = _mapper.Map<BankBranchResource, BankBranch>(resource);
             bankBranch.DateModified = DateTime.Now;
             _unitOfWork.BankBranches.Update(resource.Id, bankBranch);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

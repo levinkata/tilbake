@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(ReceivableDocumentSaveResource resource)
+        public async Task<int> AddAsync(ReceivableDocumentSaveResource resource)
         {
             var receivableDocument = _mapper.Map<ReceivableDocumentSaveResource, ReceivableDocument>(resource);
             receivableDocument.Id = Guid.NewGuid();
 
             _unitOfWork.ReceivableDocuments.Add(receivableDocument);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.ReceivableDocuments.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ReceivableDocumentResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ReceivableDocuments.FindAllAsync(
+            var result = await _unitOfWork.ReceivableDocuments.GetAsync(
                                                             null,
                                                             r => r.OrderBy(p => p.Name),
                                                             r => r.DocumentType);
@@ -50,18 +50,18 @@ namespace Tilbake.Application.Services
 
         public async Task<ReceivableDocumentResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.ReceivableDocuments.GetByIdAsync(
-                                                        r => r.Id == id,
+            var result = await _unitOfWork.ReceivableDocuments.GetAsync(
+                                                        r => r.Id == id, null,
                                                         r => r.DocumentType);
 
-            var resources = _mapper.Map<ReceivableDocument, ReceivableDocumentResource>(result);
+            var resources = _mapper.Map<ReceivableDocument, ReceivableDocumentResource>(result.FirstOrDefault());
 
             return resources;
         }
 
         public async Task<IEnumerable<ReceivableDocumentResource>> GetReceivableIdAsync(Guid receivableId)
         {
-            var result = await _unitOfWork.ReceivableDocuments.FindAllAsync(
+            var result = await _unitOfWork.ReceivableDocuments.GetAsync(
                                                             r => r.ReceivableId == receivableId,
                                                             r => r.OrderBy(p => p.Name),
                                                             r => r.DocumentType);
@@ -70,12 +70,12 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async void Update(ReceivableDocumentResource resource)
+        public async Task<int> UpdateAsync(ReceivableDocumentResource resource)
         {
             var receivableDocument = _mapper.Map<ReceivableDocumentResource, ReceivableDocument>(resource);
             _unitOfWork.ReceivableDocuments.Update(resource.Id, receivableDocument);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(DriverTypeSaveResource resource)
+        public async Task<int> AddAsync(DriverTypeSaveResource resource)
         {
             var driverType = _mapper.Map<DriverTypeSaveResource, DriverType>(resource);
             driverType.Id = Guid.NewGuid();
 
             _unitOfWork.DriverTypes.Add(driverType);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.DriverTypes.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<DriverTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.DriverTypes.FindAllAsync(
+            var result = await _unitOfWork.DriverTypes.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -53,12 +53,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(DriverTypeResource resource)
+        public async Task<int> UpdateAsync(DriverTypeResource resource)
         {
             var driverType = _mapper.Map<DriverTypeResource, DriverType>(resource);
             _unitOfWork.DriverTypes.Update(resource.Id, driverType);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void AddRange(UserPortfolioResource resources)
+        public async Task<int> AddRange(UserPortfolioResource resources)
         {
             if (resources == null)
             {
@@ -56,10 +56,10 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.UserPortfolios.AddRange(aspnetUserPortfolios);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void DeleteRange(UserPortfolioResource resources)
+        public async Task<int> DeleteRange(UserPortfolioResource resources)
         {
             if (resources == null)
             {
@@ -93,7 +93,7 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.UserPortfolios.DeleteRange(aspnetUserPortfolios);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId)
@@ -104,7 +104,7 @@ namespace Tilbake.Application.Services
                     .Include(c => c.PortfolioClients)
                     .OrderBy(n => n.Name).AsNoTracking().ToListAsync(); */
 
-            var result = await _unitOfWork.Portfolios.FindAllAsync(
+            var result = await _unitOfWork.Portfolios.GetAsync(
                                             r => !r.AspnetUserPortfolios
                                             .Any(r => r.AspNetUserId == aspNetUserId),
                                             r => r.OrderBy(n => n.Name),
@@ -124,7 +124,7 @@ namespace Tilbake.Application.Services
                                 .Include(c => c.PortfolioClients)
                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync(); */
 
-            var result = await _unitOfWork.Portfolios.FindAllAsync(
+            var result = await _unitOfWork.Portfolios.GetAsync(
                                             r => r.AspnetUserPortfolios
                                             .Any(r => r.AspNetUserId == aspNetUserId),
                                             r => r.OrderBy(n => n.Name),

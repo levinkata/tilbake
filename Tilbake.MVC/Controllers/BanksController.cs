@@ -61,7 +61,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _bankService.Add(resource);
+                _bankService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -97,7 +97,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _bankService.Update(resource);
+                    _bankService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +130,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _bankService.Delete(id);
+            _bankService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

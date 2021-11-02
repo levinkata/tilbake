@@ -21,23 +21,23 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(MotorModelSaveResource resource)
+        public async Task<int> AddAsync(MotorModelSaveResource resource)
         {
             var motorModel = _mapper.Map<MotorModelSaveResource, MotorModel>(resource);
             motorModel.Id = Guid.NewGuid();
 
             _unitOfWork.MotorModels.Add(motorModel);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.MotorModels.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
         public async Task<IEnumerable<MotorModelResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.MotorModels.FindAllAsync(
+            var result = await _unitOfWork.MotorModels.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -54,7 +54,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<MotorModelResource>> GetByMotorMakeIdAsync(Guid motorMakeId)
         {
-            var result = await  _unitOfWork.MotorModels.FindAllAsync(
+            var result = await  _unitOfWork.MotorModels.GetAsync(
                                             r => r.MotorMakeId == motorMakeId,
                                             r => r.OrderBy(p => p.Name),
                                             r => r.MotorMake);
@@ -63,12 +63,12 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async void Update(MotorModelResource resource)
+        public async Task<int> UpdateAsync(MotorModelResource resource)
         {
             var motorModel = _mapper.Map<MotorModelResource, MotorModel>(resource);
             _unitOfWork.MotorModels.Update(resource.Id, motorModel);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

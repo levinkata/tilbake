@@ -4,7 +4,7 @@ using Tilbake.Core.Interfaces;
 
 namespace Tilbake.Core
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         IAddressRepository Addresses { get; }
         IAllRiskRepository AllRisks { get; }
@@ -86,6 +86,7 @@ namespace Tilbake.Core
         IWallTypeRepository WallTypes { get; }
 
         //Task<int> SaveAsync();
-        int SaveAsync();
+        Task<int> SaveAsync();
+        //int SaveAsync();
     }
 }

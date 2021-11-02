@@ -34,7 +34,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _idDocumentTypeService.Add(resource);
+                _idDocumentTypeService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
 

@@ -50,7 +50,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _maritalStatusService.Add(resource);
+                _maritalStatusService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -81,7 +81,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _maritalStatusService.Update(resource);
+                    _maritalStatusService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -109,7 +109,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _maritalStatusService.Delete(id);
+            _maritalStatusService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

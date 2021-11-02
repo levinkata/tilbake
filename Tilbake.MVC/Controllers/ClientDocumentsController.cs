@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
@@ -70,7 +69,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _clientDocumentService.Add(resource);
+                await _clientDocumentService.AddAsync(resource);
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioId, resource.ClientId });
             }
             var documentTypes = await _documentTypeService.GetAllAsync();
@@ -125,7 +124,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _clientDocumentService.Update(resource);
+                    _clientDocumentService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -158,7 +157,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(ClientDocumentResource resource)
         {
-            _clientDocumentService.Delete(resource.Id);
+            _clientDocumentService.DeleteAsync(resource.Id);
             return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.ClientId });
         }
     }

@@ -21,30 +21,26 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async Task Add(PortfolioClientSaveResource resource)
+        public async Task<int> AddAsync(PortfolioClientSaveResource resource)
         {
             var resourceClient = resource.Client;
+            var clientId = resource.ClientId;
 
             var client = _mapper.Map<ClientSaveResource, Client>(resourceClient);
 
-            client.Id = Guid.NewGuid();
-            client.DateAdded = DateTime.Now;
-            _unitOfWork.Clients.Add(client);
-            var clientId = client.Id;
+            if(client != null)
+            {
+                client.Id = Guid.NewGuid();
+                client.DateAdded = DateTime.Now;
+                _unitOfWork.Clients.Add(client);
+                clientId = client.Id;
+            }
 
             var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
 
             portfolioClient.Id = Guid.NewGuid();
-            portfolioClient. ClientId = clientId;
+            portfolioClient.ClientId = clientId;
             portfolioClient.DateAdded = DateTime.Now;
-
-            // PortfolioClient newPortfolioClient = new()
-            // {
-            //     Id = Guid.NewGuid(),
-            //     PortfolioId = resource.PortfolioId,
-            //     ClientId = clientId,
-            //     DateAdded = DateTime.Now
-            // };
             _unitOfWork.PortfolioClients.Add(portfolioClient);
 
             var resourceAddress = resource.Client.Address;
@@ -56,16 +52,6 @@ namespace Tilbake.Application.Services
                 address. Id = Guid.NewGuid();
                 address.ClientId = clientId;
                 address.DateAdded = DateTime.Now;
-
-                // Address newAddress = new()
-                // {
-                //     Id = Guid.NewGuid(),
-                //     ClientId = clientId,
-                //     PhysicalAddress = resourceAddress.PhysicalAddress,
-                //     PostalAddress = resourceAddress.PostalAddress,
-                //     CityId = resourceAddress.CityId,
-                //     DateAdded = DateTime.Now
-                // };
                 _unitOfWork.Addresses.Add(address);
             }
             
@@ -79,14 +65,6 @@ namespace Tilbake.Application.Services
                     emailAddress.Id = Guid.NewGuid();
                     emailAddress.ClientId = clientId;
                     emailAddress.DateAdded = DateTime.Now;
-
-                    // EmailAddress newEmailAddress = new()
-                    // {
-                    //     ClientId = clientId,
-                    //     Name = emailAddress.Name,
-                    //     IsPrimary = emailAddress.IsPrimary,
-                    //     DateAdded = DateTime.Now
-                    // };
                     _unitOfWork.EmailAddresses.Add(emailAddress);
                 }
             }            
@@ -100,14 +78,6 @@ namespace Tilbake.Application.Services
                     mobileNumber.Id = Guid.NewGuid();
                     mobileNumber.ClientId = clientId;
                     mobileNumber.DateAdded = DateTime.Now;
-
-                    // MobileNumber newMobileNumber = new()
-                    // {
-                    //     ClientId = clientId,
-                    //     Name = mobileNumber.Name,
-                    //     IsPrimary = mobileNumber.IsPrimary,
-                    //     DateAdded = DateTime.Now
-                    // };
                     _unitOfWork.MobileNumbers.Add(mobileNumber);
                 }
             }  
@@ -126,31 +96,18 @@ namespace Tilbake.Application.Services
                     _unitOfWork.ClientCarriers.Add(newClientCarrier);
                 }
             }
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void AddExistingClient(Guid portfolioId, Guid clientId)
-        {
-            PortfolioClient newPortfolioClient = new()
-            {
-                Id = Guid.NewGuid(),
-                PortfolioId = portfolioId,
-                ClientId = clientId,
-                DateAdded = DateTime.Now
-            };
-            _unitOfWork.PortfolioClients.Add(newPortfolioClient);
-            _unitOfWork.SaveAsync();
-        }
-
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.PortfolioClients.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<bool> ExistsAsync(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.PortfolioClients.FindAllAsync(
+            var result = await _unitOfWork.PortfolioClients.GetAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.ClientId == clientId,
                                                             null,
@@ -166,8 +123,9 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioClientResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
+            var result = await _unitOfWork.PortfolioClients.GetAsync(
                                                             e => e.Id == id,
+                                                            e => e.OrderBy(n => n.Client.LastName),
                                                             e => e.Client,
                                                             e => e.Client.Addresses,
                                                             e => e.Client.ClientCarriers,
@@ -175,15 +133,16 @@ namespace Tilbake.Application.Services
                                                             e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
 
-            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
+            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<PortfolioClientResource> GetByIdNumberAsync(Guid portfolioId, string idNumber)
         {
-            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
+            var result = await _unitOfWork.PortfolioClients.GetAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.Client.IdNumber == idNumber,
+                                                            e => e.OrderBy(n => n.Client.LastName),
                                                             e => e.Client,
                                                             e => e.Client.Addresses,
                                                             e => e.Client.ClientCarriers,
@@ -191,15 +150,16 @@ namespace Tilbake.Application.Services
                                                             e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
 
-            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
+            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<PortfolioClientResource> GetByPortfolioClientAsync(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
+            var result = await _unitOfWork.PortfolioClients.GetAsync(
                                                             e => e.PortfolioId == portfolioId &&
                                                             e.ClientId == clientId,
+                                                            e => e.OrderBy(n => n.Client.LastName),
                                                             e => e.Client,
                                                             e => e.Client.Addresses,
                                                             e => e.Client.ClientCarriers,
@@ -207,13 +167,13 @@ namespace Tilbake.Application.Services
                                                             e => e.Client.MobileNumbers,
                                                             e => e.Portfolio);
 
-            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result);
+            var resource = _mapper.Map<PortfolioClient, PortfolioClientResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<IEnumerable<PortfolioClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioClients.FindAllAsync(
+            var result = await _unitOfWork.PortfolioClients.GetAsync(
                                                             e => e.PortfolioId == portfolioId,
                                                             e => e.OrderBy(n => n.Client.LastName),
                                                             e => e.Client,
@@ -229,10 +189,19 @@ namespace Tilbake.Application.Services
 
         public async Task<Guid> GetPortfolioClientId(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.PortfolioClients.GetByIdAsync(
+            var result = await _unitOfWork.PortfolioClients.GetAsync(
                                             e => e.PortfolioId == portfolioId && e.ClientId == clientId);
 
-            return result.Id;
+            return result.FirstOrDefault().Id;
+        }
+
+        public async Task<int> UpdateAsync(PortfolioClientResource resource)
+        {
+            var portfolioClient = _mapper.Map<PortfolioClientResource, PortfolioClient>(resource);
+            portfolioClient.DateModified = DateTime.Now;
+
+            _unitOfWork.PortfolioClients.Update(resource.Id, portfolioClient);
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

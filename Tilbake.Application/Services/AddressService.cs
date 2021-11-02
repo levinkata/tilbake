@@ -21,60 +21,61 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(AddressSaveResource resource)
+        public async Task<int> AddAsync(AddressSaveResource resource)
         {
             var address = _mapper.Map<AddressSaveResource, Address>(resource);
             address.DateAdded = DateTime.Now;
 
             _unitOfWork.Addresses.Add(address);
 
-            _unitOfWork.SaveAsync();            
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Addresses.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AddressResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Addresses.FindAllAsync(
+            var result = await _unitOfWork.Addresses.GetAsync(
                                                     null,
                                                     r => r.OrderBy(n => n.PhysicalAddress),
                                                     r => r.City);
             var resources = _mapper.Map<IEnumerable<Address>, IEnumerable<AddressResource>>(result);
-
             return resources;
         }
 
         public async Task<AddressResource> GetByClientIdAsync(Guid clientId)
         {
-            var result = await _unitOfWork.Addresses.GetByIdAsync(
+            var result = await _unitOfWork.Addresses.GetAsync(
                                                     r => r.ClientId == clientId,
+                                                    r => r.OrderBy(n => n.City.Name),
                                                     r => r.City);
 
-            var resource = _mapper.Map<Address, AddressResource>(result);
+            var resource = _mapper.Map<Address, AddressResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<AddressResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Addresses.GetByIdAsync(
+            var result = await _unitOfWork.Addresses.GetAsync(
                                                     r => r.Id == id,
+                                                    r => r.OrderBy(n => n.City.Name),
                                                     r => r.City);
 
-            var resource = _mapper.Map<Address, AddressResource>(result);
+            var resource = _mapper.Map<Address, AddressResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(AddressResource resource)
+        public async Task<int> UpdateAsync(AddressResource resource)
         {
             var address = _mapper.Map<AddressResource, Address>(resource);
             address.DateModified = DateTime.Now;
 
             _unitOfWork.Addresses.Update(resource.Id, address);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(WallTypeSaveResource resource)
+        public async Task<int> AddAsync(WallTypeSaveResource resource)
         {
             var wallType = _mapper.Map<WallTypeSaveResource, WallType>(resource);
             wallType.Id = Guid.NewGuid();
 
             _unitOfWork.WallTypes.Add(wallType);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.WallTypes.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<WallTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.WallTypes.FindAllAsync(
+            var result = await _unitOfWork.WallTypes.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -51,16 +51,15 @@ namespace Tilbake.Application.Services
         {
             var result = await _unitOfWork.WallTypes.GetByIdAsync(id);
             var resource = _mapper.Map<WallType, WallTypeResource>(result);
-
             return resource;
         }
 
-        public async void Update(WallTypeResource resource)
+        public async Task<int> UpdateAsync(WallTypeResource resource)
         {
             var wallType = _mapper.Map<WallTypeResource, WallType>(resource);
             _unitOfWork.WallTypes.Update(resource.Id, wallType);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

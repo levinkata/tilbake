@@ -21,35 +21,35 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(RatingMotorPremiumSaveResource resource)
+        public async Task<int> AddAsync(RatingMotorPremiumSaveResource resource)
         {
             var ratingMotorPremium = _mapper.Map<RatingMotorPremiumSaveResource, RatingMotorPremium>(resource);
             ratingMotorPremium.Id = Guid.NewGuid();
             ratingMotorPremium.DateAdded = DateTime.Now;
 
             _unitOfWork.RatingMotorPremiums.Add(ratingMotorPremium);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.RatingMotorPremiums.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<RatingMotorPremiumResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.RatingMotorPremiums.GetByIdAsync(
-                                                        r => r.Id == id,
+            var result = await _unitOfWork.RatingMotorPremiums.GetAsync(
+                                                        r => r.Id == id, null,
                                                         r => r.Insurer);
 
-            var resource = _mapper.Map<RatingMotorPremium, RatingMotorPremiumResource>(result);
+            var resource = _mapper.Map<RatingMotorPremium, RatingMotorPremiumResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<IEnumerable<RatingMotorPremiumResource>> GetByInsurerAsync(Guid insurerId)
         {
-            var result = await _unitOfWork.RatingMotorPremiums.FindAllAsync(
+            var result = await _unitOfWork.RatingMotorPremiums.GetAsync(
                                             r => r.InsurerId == insurerId,
                                             r => r.OrderBy(p => p.MinimumMonthly),
                                             r => r.Insurer);
@@ -58,13 +58,13 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async void Update(RatingMotorPremiumResource resource)
+        public async Task<int> UpdateAsync(RatingMotorPremiumResource resource)
         {
             var ratingMotorPremium = _mapper.Map<RatingMotorPremiumResource, RatingMotorPremium>(resource);
             ratingMotorPremium.DateModified = DateTime.Now;
 
             _unitOfWork.RatingMotorPremiums.Update(resource.Id, ratingMotorPremium);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

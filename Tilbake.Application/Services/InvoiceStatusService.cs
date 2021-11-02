@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(InvoiceStatusSaveResource resource)
+        public async Task<int> AddAsync(InvoiceStatusSaveResource resource)
         {
             var invoiceStatus = _mapper.Map<InvoiceStatusSaveResource, InvoiceStatus>(resource);
             invoiceStatus.Id = Guid.NewGuid();
 
             _unitOfWork.InvoiceStatuses.Add(invoiceStatus);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.InvoiceStatuses.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceStatusResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.InvoiceStatuses.FindAllAsync(
+            var result = await _unitOfWork.InvoiceStatuses.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -53,12 +53,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(InvoiceStatusResource resource)
+        public async Task<int> UpdateAsync(InvoiceStatusResource resource)
         {
             var invoiceStatus = _mapper.Map<InvoiceStatusResource, InvoiceStatus>(resource);
             _unitOfWork.InvoiceStatuses.Update(resource.Id, invoiceStatus);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

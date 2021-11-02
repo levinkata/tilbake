@@ -32,7 +32,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _coverTypeService.Add(resource);
+                _coverTypeService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
 

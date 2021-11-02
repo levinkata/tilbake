@@ -41,7 +41,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _ratingMotorPremiumService.Add(resource);
+                _ratingMotorPremiumService.AddAsync(resource);
                 return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
             }
             return View(resource);
@@ -91,7 +91,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _ratingMotorPremiumService.Update(resource);
+                    _ratingMotorPremiumService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -122,7 +122,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(RatingMotorPremiumResource resource)
         {
-            _ratingMotorPremiumService.Delete(resource.Id);
+            _ratingMotorPremiumService.DeleteAsync(resource.Id);
             return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
         }        
     }

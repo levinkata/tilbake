@@ -7,6 +7,7 @@ namespace Tilbake.Application.Resources
     public class PortfolioClientSaveResource
     {
         public Guid PortfolioId { get; set; }
+        public Guid ClientId { get; set; }        
         public string PortfolioName { get; set; }
 
         [Display(Name = "Client Status")]

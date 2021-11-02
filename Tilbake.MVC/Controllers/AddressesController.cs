@@ -51,7 +51,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _addressService.Add(resource);
+                await _addressService.AddAsync(resource);
                 if (resource.PortfolioId != Guid.Empty && resource.ClientId != Guid.Empty)
                 {
                     return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
@@ -125,7 +125,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _addressService.Update(resource);
+                    await _addressService.UpdateAsync(resource);
                     if (resource.PortfolioId != Guid.Empty && resource.ClientId != Guid.Empty)
                     {
                         return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
@@ -167,7 +167,7 @@ namespace Tilbake.MVC.Controllers
                 throw new ArgumentNullException(nameof(resource));
             };
 
-            _addressService.Update(resource);
+            _addressService.UpdateAsync(resource);
 
             return Ok();
         }

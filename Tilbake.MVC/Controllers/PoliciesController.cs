@@ -143,7 +143,7 @@ namespace Tilbake.MVC.Controllers
 
                 quotePolicyObjectResource.QuoteItems = quoteItemResources;
 
-                _policyService.QuoteToPolicy(quotePolicyObjectResource);
+                await _policyService.QuoteToPolicy(quotePolicyObjectResource);
 
                 return RedirectToAction("Details", "Quotes", new { Id = resource.QuoteId});
             }
@@ -218,7 +218,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _policyService.Add(resource);
+                _policyService.AddAsync(resource);
                 return RedirectToAction(nameof(Index), new { portfolioClientId = resource.Policy.PortfolioClientId });
             }
             return View(resource);
@@ -232,7 +232,7 @@ namespace Tilbake.MVC.Controllers
                 throw new ArgumentNullException(nameof(policyObject));
             };
 
-            _policyService.Add(policyObject);
+            _policyService.AddAsync(policyObject);
 
             return Ok(new
                     {

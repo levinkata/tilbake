@@ -56,7 +56,7 @@ namespace Tilbake.MVC.Controllers
         {
             if(ModelState.IsValid)
             {
-                _fileTemplateService.Add(resource);
+                _fileTemplateService.AddAsync(resource);
 
                 return RedirectToAction(nameof(Index), new { portfolioId = resource.PortfolioId });
             }
@@ -435,57 +435,57 @@ namespace Tilbake.MVC.Controllers
                     var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.TitleId);
                     fileTemplateRecord.Position = resource.TitlePosition;
                     fileTemplateRecord.ColumnLength = resource.TitleColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ClientTypeId);
                     fileTemplateRecord.Position = resource.ClientTypePosition;
                     fileTemplateRecord.ColumnLength = resource.ClientTypeColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.FirstNameId);
                     fileTemplateRecord.Position = resource.FirstNamePosition;
                     fileTemplateRecord.ColumnLength = resource.FirstNameColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.LastNameId);
                     fileTemplateRecord.Position = resource.LastNamePosition;
                     fileTemplateRecord.ColumnLength = resource.LastNameColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.BirthDateId);
                     fileTemplateRecord.Position = resource.BirthDatePosition;
                     fileTemplateRecord.ColumnLength = resource.BirthDateColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.GenderId);
                     fileTemplateRecord.Position = resource.GenderPosition;
                     fileTemplateRecord.ColumnLength = resource.GenderColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.IdNumberId);
                     fileTemplateRecord.Position = resource.IdNumberPosition;
                     fileTemplateRecord.ColumnLength = resource.IdNumberColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.PhoneId);
                     fileTemplateRecord.Position = resource.PhonePosition;
                     fileTemplateRecord.ColumnLength = resource.PhoneColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.MaritalStatusId);
                     fileTemplateRecord.Position = resource.MaritalStatusPosition;
                     fileTemplateRecord.ColumnLength = resource.MaritalStatusColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.CountryId);
                     fileTemplateRecord.Position = resource.CountryPosition;
                     fileTemplateRecord.ColumnLength = resource.CountryColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.OccupationId);
                     fileTemplateRecord.Position = resource.OccupationPosition;
                     fileTemplateRecord.ColumnLength = resource.OccupationColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                 }
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });
@@ -509,22 +509,22 @@ namespace Tilbake.MVC.Controllers
                     var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.FirstNameId);
                     fileTemplateRecord.Position = resource.FirstNamePosition;
                     fileTemplateRecord.ColumnLength = resource.FirstNameColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.LastNameId);
                     fileTemplateRecord.Position = resource.LastNamePosition;
                     fileTemplateRecord.ColumnLength = resource.LastNameColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.IdNumberId);
                     fileTemplateRecord.Position = resource.IdNumberPosition;
                     fileTemplateRecord.ColumnLength = resource.IdNumberColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.PolicyNumberId);
                     fileTemplateRecord.Position = resource.PolicyNumberPosition;
                     fileTemplateRecord.ColumnLength = resource.PolicyNumberColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
                 }
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });
 
@@ -548,27 +548,27 @@ namespace Tilbake.MVC.Controllers
                     var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.FirstNameId);
                     fileTemplateRecord.Position = resource.FirstNamePosition;
                     fileTemplateRecord.ColumnLength = resource.FirstNameColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.LastNameId);
                     fileTemplateRecord.Position = resource.LastNamePosition;
                     fileTemplateRecord.ColumnLength = resource.LastNameColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.IdNumberId);
                     fileTemplateRecord.Position = resource.IdNumberPosition;
                     fileTemplateRecord.ColumnLength = resource.IdNumberColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.PolicyNumberId);
                     fileTemplateRecord.Position = resource.PolicyNumberPosition;
                     fileTemplateRecord.ColumnLength = resource.PolicyNumberColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.PremiumId);
                     fileTemplateRecord.Position = resource.PremiumPosition;
                     fileTemplateRecord.ColumnLength = resource.PremiumColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
                 }
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });
 
@@ -592,42 +592,42 @@ namespace Tilbake.MVC.Controllers
                     var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ClaimNumberId);
                     fileTemplateRecord.Position = resource.ClaimNumberPosition;
                     fileTemplateRecord.ColumnLength = resource.ClaimNumberColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ReportDateId);
                     fileTemplateRecord.Position = resource.ReportDatePosition;
                     fileTemplateRecord.ColumnLength = resource.ReportDateColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.IncidentDateId);
                     fileTemplateRecord.Position = resource.IncidentDatePosition;
                     fileTemplateRecord.ColumnLength = resource.IncidentDateColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.RegisterDateId);
                     fileTemplateRecord.Position = resource.RegisterDatePosition;
                     fileTemplateRecord.ColumnLength = resource.RegisterDateColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ReserveInsuredId);
                     fileTemplateRecord.Position = resource.ReserveInsuredPosition;
                     fileTemplateRecord.ColumnLength = resource.ReserveInsuredColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ReserveThirdPartyId);
                     fileTemplateRecord.Position = resource.ReserveThirdPartyPosition;
                     fileTemplateRecord.ColumnLength = resource.ReserveThirdPartyColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.ExcessId);
                     fileTemplateRecord.Position = resource.ExcessPosition;
                     fileTemplateRecord.ColumnLength = resource.ExcessColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
 
                     fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(resource.RecoverFromThirdPartyId);
                     fileTemplateRecord.Position = resource.RecoverFromThirdPartyPosition;
                     fileTemplateRecord.ColumnLength = resource.RecoverFromThirdPartyColumnLength;
-                    _fileTemplateRecordService.Update(fileTemplateRecord);
+                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
                 }
                 return RedirectToAction(nameof(Index), new { resource.PortfolioId });
 
@@ -656,7 +656,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _fileTemplateService.Update(resource);
+                _fileTemplateService.UpdateAsync(resource);
                 return RedirectToAction(nameof(Index), new { portfolioId = resource.PortfolioId });
             }
             return View(resource);

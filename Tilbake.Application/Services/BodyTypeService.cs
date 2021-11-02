@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(BodyTypeSaveResource resource)
+        public async Task<int> AddAsync(BodyTypeSaveResource resource)
         {
             var bodyType = _mapper.Map<BodyTypeSaveResource, BodyType>(resource);
             bodyType.Id = Guid.NewGuid();
 
             _unitOfWork.BodyTypes.Add(bodyType);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.BodyTypes.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BodyTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.BodyTypes.FindAllAsync(
+            var result = await _unitOfWork.BodyTypes.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -48,17 +48,19 @@ namespace Tilbake.Application.Services
 
         public async Task<BodyTypeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.BodyTypes.GetByIdAsync(id);
-            var resource = _mapper.Map<BodyType, BodyTypeResource>(result);
+            var result = await _unitOfWork.BodyTypes.GetAsync(
+                                            r =>r.Id == id,
+                                            r => r.OrderBy(n => n.Name));
+            var resource = _mapper.Map<BodyType, BodyTypeResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(BodyTypeResource resource)
+        public async Task<int> UpdateAsync(BodyTypeResource resource)
         {
             var bodyType = _mapper.Map<BodyTypeResource, BodyType>(resource);
             _unitOfWork.BodyTypes.Update(resource.Id, bodyType);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

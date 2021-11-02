@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(PolicyObjectResource resource)
+        public async Task<int> AddAsync(PolicyObjectResource resource)
         {
             var policyRisks = resource.PolicyRisks;
 
@@ -205,18 +205,18 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.PolicyRisks.AddRange(policyRisks);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Policies.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PolicyResource>> GetAllAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Policies.FindAllAsync(
+            var result = await _unitOfWork.Policies.GetAsync(
                                         e => e.PortfolioClientId == portfolioClientId,
                                         e => e.OrderByDescending(n => n.PolicyNumber),
                                         e => e.InsurerBranch,
@@ -238,8 +238,9 @@ namespace Tilbake.Application.Services
 
         public async Task<PolicyResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Policies.GetByIdAsync(
+            var result = await _unitOfWork.Policies.GetAsync(
                                         e => e.Id == id,
+                                        null,
                                         e => e.InsurerBranch,
                                         e => e.InsurerBranch.Insurer,
                                         e => e.PortfolioClient,
@@ -248,13 +249,13 @@ namespace Tilbake.Application.Services
                                         e => e.PolicyType,
                                         e => e.SalesType);
 
-            var resource = _mapper.Map<Policy, PolicyResource>(result);
+            var resource = _mapper.Map<Policy, PolicyResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<IEnumerable<PolicyResource>> GetByPorfolioClientIdAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Policies.FindAllAsync(
+            var result = await _unitOfWork.Policies.GetAsync(
                                             e => e.PortfolioClientId == portfolioClientId,
                                             e => e.OrderByDescending(r => r.CoverStartDate),
                                             p => p.PaymentMethod,
@@ -271,8 +272,9 @@ namespace Tilbake.Application.Services
 
         public async Task<PolicyResource> GetCurrentPolicyAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Policies.GetByIdAsync(
+            var result = await _unitOfWork.Policies.GetAsync(
                                              e => e.PortfolioClientId == portfolioClientId,
+                                             null,
                                              p => p.PaymentMethod,
                                              p => p.PolicyStatus,
                                              p => p.PolicyType,
@@ -281,11 +283,11 @@ namespace Tilbake.Application.Services
                                              p => p.InsurerBranch.Insurer,
                                              p => p.PortfolioClient);
 
-            var resource = _mapper.Map<Policy, PolicyResource>(result);
+            var resource = _mapper.Map<Policy, PolicyResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void QuoteToPolicy(QuotePolicyObjectResource resource)
+        public async Task<int> QuoteToPolicy(QuotePolicyObjectResource resource)
         {
             var insurerBranchId = resource.Quote.InsurerBranchId;
 
@@ -326,15 +328,15 @@ namespace Tilbake.Application.Services
             quote.IsPolicySet = true;
             _unitOfWork.Quotes.Update(quote.Id, quote);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Update(PolicyResource resource)
+        public async Task<int> UpdateAsync(PolicyResource resource)
         {
             var policy = _mapper.Map<PolicyResource, Policy>(resource);
              _unitOfWork.Policies.Update(resource.Id, policy);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

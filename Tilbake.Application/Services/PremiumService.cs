@@ -22,19 +22,19 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public void Add(PremiumSaveResource resource)
+        public Task<int> AddAsync(PremiumSaveResource resource)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid id)
+        public Task<int> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<PremiumResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Premiums.FindAllAsync(
+            var result = await _unitOfWork.Premiums.GetAsync(
                                             null,
                                             r => r.OrderBy(p => p.PremiumDate));
 
@@ -49,7 +49,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PremiumResource>> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Premiums.FindAllAsync(
+            var result = await _unitOfWork.Premiums.GetAsync(
                                                 r => r.PolicyId == policyId,
                                                 r => r.OrderBy(p => p.PremiumDate));
 
@@ -58,7 +58,7 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public void Update(PremiumResource resource)
+        public Task<int> UpdateAsync(PremiumResource resource)
         {
             throw new NotImplementedException();
         }

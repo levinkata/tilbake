@@ -21,7 +21,7 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(PortfolioPolicyFeeSaveResource resource)
+        public async Task<int> AddAsync(PortfolioPolicyFeeSaveResource resource)
         {
             var portfolioPolicyFee = _mapper.Map<PortfolioPolicyFeeSaveResource, PortfolioPolicyFee>(resource);
             portfolioPolicyFee.Id = Guid.NewGuid();
@@ -35,18 +35,18 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.PortfolioPolicyFees.Add(portfolioPolicyFee);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.PortfolioPolicyFees.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioPolicyFeeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PortfolioPolicyFees.FindAllAsync(
+            var result = await _unitOfWork.PortfolioPolicyFees.GetAsync(
                                                 null,
                                                 r => r.OrderBy(n => n.Insurer.Name),
                                                 r => r.Insurer);
@@ -57,7 +57,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioPolicyFeeResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioPolicyFees.FindAllAsync(
+            var result = await _unitOfWork.PortfolioPolicyFees.GetAsync(
                                             e => e.PortfolioId == portfolioId,
                                             e => e.OrderBy(r => r.Insurer.Name),
                                             e => e.Insurer);
@@ -68,15 +68,15 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioPolicyFeeResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioPolicyFees.GetByIdAsync(
-                                            r => r.Id == id,
+            var result = await _unitOfWork.PortfolioPolicyFees.GetAsync(
+                                            r => r.Id == id, null,
                                             r => r.Insurer);
 
-            var resource = _mapper.Map<PortfolioPolicyFee, PortfolioPolicyFeeResource>(result);
+            var resource = _mapper.Map<PortfolioPolicyFee, PortfolioPolicyFeeResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(PortfolioPolicyFeeResource resource)
+        public async Task<int> UpdateAsync(PortfolioPolicyFeeResource resource)
         {
             var portfolioPolicyFee = _mapper.Map<PortfolioPolicyFeeResource, PortfolioPolicyFee>(resource);
 
@@ -91,7 +91,7 @@ namespace Tilbake.Application.Services
             }
             _unitOfWork.PortfolioPolicyFees.Update(resource.Id, portfolioPolicyFee);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

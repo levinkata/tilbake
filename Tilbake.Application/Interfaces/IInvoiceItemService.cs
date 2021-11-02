@@ -9,7 +9,7 @@ namespace Tilbake.Application.Interfaces
     {
         Task<InvoiceItemResource> GetByIdAsync(Guid id);
         Task<IEnumerable<InvoiceItemResource>> GetByInvoiceIdAsync(Guid invoiceId);
-        void Update(InvoiceItemResource resource);
-        void Delete(Guid id);
+        Task<int> UpdateAsync(InvoiceItemResource resource);
+        Task<int> DeleteAsync(Guid id);
     }
 }

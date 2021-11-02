@@ -21,12 +21,12 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(QuoteObjectResource resource)
+        public async Task<int> AddAsync(QuoteObjectResource resource)
         {
             var resourceQuoteItems = resource.QuoteItems;
             var quoteItems = _mapper.Map<IEnumerable<QuoteItemResource>, IEnumerable<QuoteItem>>(resourceQuoteItems);
 
-            var taxes = await _unitOfWork.Taxes.FindAllAsync(
+            var taxes = await _unitOfWork.Taxes.GetAsync(
                                             null,
                                             r => r.OrderByDescending(n => n.TaxDate));
 
@@ -420,18 +420,18 @@ namespace Tilbake.Application.Services
             }
 
             _unitOfWork.QuoteItems.AddRange(quoteItems);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Quotes.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<QuoteResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Quotes.FindAllAsync(
+            var result = await _unitOfWork.Quotes.GetAsync(
                                                     null,
                                                     r => r.OrderBy(n => n.QuoteNumber),
                                                     r => r.QuoteItems,
@@ -450,8 +450,8 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Quotes.GetByIdAsync(
-                                                    r => r.Id == id,
+            var result = await _unitOfWork.Quotes.GetAsync(
+                                                    r => r.Id == id, null,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
@@ -462,14 +462,19 @@ namespace Tilbake.Application.Services
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
-            var insurerBranchId = result.InsurerBranchId;
-            var quoteitems = result.QuoteItems;
-            var isFulfilled = result.IsFulfilled;
+            var insurerBranchId = result.FirstOrDefault().InsurerBranchId;
+            var quoteitems = result.FirstOrDefault().QuoteItems;
+            var isFulfilled = result.FirstOrDefault().IsFulfilled;
 
             if (!isFulfilled)
             {
-                if (insurerBranchId != Guid.Empty && result.PolicyTypeId != Guid.Empty && result.SalesTypeId != Guid.Empty && result.PaymentMethodId != Guid.Empty &&
-                    !string.IsNullOrEmpty(result.PolicyTypeId.ToString()) && !string.IsNullOrEmpty(result.SalesTypeId.ToString()) && !string.IsNullOrEmpty(result.PaymentMethodId.ToString()))
+                if (insurerBranchId != Guid.Empty &&
+                    result.FirstOrDefault().PolicyTypeId != Guid.Empty &&
+                    result.FirstOrDefault().SalesTypeId != Guid.Empty &&
+                    result.FirstOrDefault().PaymentMethodId != Guid.Empty &&
+                    !string.IsNullOrEmpty(result.FirstOrDefault().PolicyTypeId.ToString()) &&
+                    !string.IsNullOrEmpty(result.FirstOrDefault().SalesTypeId.ToString()) &&
+                    !string.IsNullOrEmpty(result.FirstOrDefault().PaymentMethodId.ToString()))
                 {
                     var isRated = false;
                     foreach (var item in quoteitems)
@@ -487,12 +492,12 @@ namespace Tilbake.Application.Services
 
                     if (isRated)
                     {
-                        result.IsFulfilled = true;
-                        _unitOfWork.Quotes.Update(result.Id, result);
-                        _unitOfWork.SaveAsync();
+                        result.FirstOrDefault().IsFulfilled = true;
+                        _unitOfWork.Quotes.Update(result.FirstOrDefault().Id, result.FirstOrDefault());
+                        await _unitOfWork.SaveAsync();
 
-                        result = await _unitOfWork.Quotes.GetByIdAsync(
-                                                    r => r.Id == id,
+                        result = await _unitOfWork.Quotes.GetAsync(
+                                                    r => r.Id == id, null,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
@@ -506,13 +511,13 @@ namespace Tilbake.Application.Services
                 }
             }
 
-            var resource = _mapper.Map<Quote, QuoteResource>(result);
+            var resource = _mapper.Map<Quote, QuoteResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.Quotes.FindAllAsync(
+            var result = await _unitOfWork.Quotes.GetAsync(
                                                     r => r.PortfolioClient.PortfolioId == portfolioId,
                                                     r => r.OrderBy(p => p.QuoteNumber),
                                                     r => r.QuoteItems,
@@ -530,7 +535,7 @@ namespace Tilbake.Application.Services
         }
         public async Task<IEnumerable<QuoteResource>> GetByPortfolioClientAsync(Guid portfolioClientId)
         {
-            var result = await _unitOfWork.Quotes.FindAllAsync(
+            var result = await _unitOfWork.Quotes.GetAsync(
                                                     r => r.PortfolioClientId == portfolioClientId,
                                                     r => r.OrderBy(p => p.QuoteNumber),
                                                     r => r.QuoteItems,
@@ -549,8 +554,8 @@ namespace Tilbake.Application.Services
 
         public async Task<QuoteResource> GetByQuoteNumberAsync(int quoteNumber)
         {
-            var result = await _unitOfWork.Quotes.GetByIdAsync(
-                                                    r => r.QuoteNumber == quoteNumber,
+            var result = await _unitOfWork.Quotes.GetAsync(
+                                                    r => r.QuoteNumber == quoteNumber, null,
                                                     r => r.QuoteItems,
                                                     r => r.QuoteStatus,
                                                     r => r.InsurerBranch,
@@ -561,17 +566,17 @@ namespace Tilbake.Application.Services
                                                     r => r.PortfolioClient,
                                                     r => r.PortfolioClient.Client);
 
-            var resource = _mapper.Map<Quote, QuoteResource>(result);
+            var resource = _mapper.Map<Quote, QuoteResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(QuoteResource resource)
+        public async Task<int> UpdateAsync(QuoteResource resource)
         {
             var quote = _mapper.Map<QuoteResource, Quote>(resource);
             quote.DateModified = DateTime.Now;
 
             _unitOfWork.Quotes.Update(resource.Id, quote);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

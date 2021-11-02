@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(TravelBeneficiarySaveResource resource)
+        public async Task<int> AddAsync(TravelBeneficiarySaveResource resource)
         {
             var travelBeneficiary = _mapper.Map<TravelBeneficiarySaveResource, TravelBeneficiary>(resource);
             travelBeneficiary.Id = Guid.NewGuid();
             travelBeneficiary.DateAdded = DateTime.Now;
 
             _unitOfWork.TravelBeneficiaries.Add(travelBeneficiary);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.TravelBeneficiaries.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TravelBeneficiaryResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.TravelBeneficiaries.FindAllAsync(
+            var result = await _unitOfWork.TravelBeneficiaries.GetAsync(
                                                                 null,
                                                                 r => r.OrderBy(p => p.LastName),
                                                                 r => r.Country,
@@ -51,22 +51,22 @@ namespace Tilbake.Application.Services
 
         public async Task<TravelBeneficiaryResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.TravelBeneficiaries.GetByIdAsync(
-                                                                r => r.Id == id,
+            var result = await _unitOfWork.TravelBeneficiaries.GetAsync(
+                                                                r => r.Id == id, null,
                                                                 r => r.Country,
                                                                 r => r.Title);
 
-            var resource = _mapper.Map<TravelBeneficiary, TravelBeneficiaryResource>(result);
+            var resource = _mapper.Map<TravelBeneficiary, TravelBeneficiaryResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(TravelBeneficiaryResource resource)
+        public async Task<int> UpdateAsync(TravelBeneficiaryResource resource)
         {
             var travelBeneficiary = _mapper.Map<TravelBeneficiaryResource, TravelBeneficiary>(resource);
             travelBeneficiary.DateModified = DateTime.Now;
 
             _unitOfWork.TravelBeneficiaries.Update(resource.Id, travelBeneficiary);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

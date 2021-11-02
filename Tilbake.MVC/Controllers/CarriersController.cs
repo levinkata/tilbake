@@ -88,7 +88,7 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                _carrierService.Update(resource);
+                _carrierService.UpdateAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -116,7 +116,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _carrierService.Delete(id);
+            _carrierService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

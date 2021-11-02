@@ -11,9 +11,9 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<PolicyResource>> GetByPorfolioClientIdAsync(Guid portfolioClientId);
         Task<PolicyResource> GetByIdAsync(Guid id);
         Task<PolicyResource> GetCurrentPolicyAsync(Guid portfolioClientId);
-        void Add(PolicyObjectResource resource);
-        void QuoteToPolicy(QuotePolicyObjectResource resource);
-        void Update(PolicyResource resource);
-        void Delete(Guid id);
+        Task<int> AddAsync(PolicyObjectResource resource);
+        Task<int> QuoteToPolicy(QuotePolicyObjectResource resource);
+        Task<int> UpdateAsync(PolicyResource resource);
+        Task<int> DeleteAsync(Guid id);
     }
 }

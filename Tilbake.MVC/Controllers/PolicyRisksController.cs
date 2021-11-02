@@ -187,7 +187,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         RiskItem = riskResource
                     };
-                    _policyRiskService.UpdatePolicyRiskRiskItem(policyRiskRiskItemResource);
+                    await _policyRiskService.UpdatePolicyRiskRiskItem(policyRiskRiskItemResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -221,7 +221,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         Content = resource
                     };
-                    _policyRiskService.UpdatePolicyRiskContent(policyRiskContentResource);
+                    await _policyRiskService.UpdatePolicyRiskContent(policyRiskContentResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -255,7 +255,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         House = resource
                     };
-                    _policyRiskService.UpdatePolicyRiskHouse(policyRiskHouseResource);
+                    await _policyRiskService.UpdatePolicyRiskHouse(policyRiskHouseResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -286,7 +286,7 @@ namespace Tilbake.MVC.Controllers
                         PolicyRisk = policyRiskResource,
                         Motor = resource
                     };
-                    _policyRiskService.UpdatePolicyRiskMotor(policyRiskMotorResource);
+                    await _policyRiskService.UpdatePolicyRiskMotor(policyRiskMotorResource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -342,7 +342,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _policyRiskService.Update(resource);
+                    _policyRiskService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -393,7 +393,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(PolicyRiskResource resource)
         {
-            _policyRiskService.Delete(resource.Id);
+            _policyRiskService.DeleteAsync(resource.Id);
             return RedirectToAction(nameof(Edit), "Policy", new { resource.PolicyId });
         }
     }

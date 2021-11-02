@@ -13,13 +13,13 @@ namespace Tilbake.Application.Interfaces
         Task<PolicyRiskResource> GetByIdAsync(Guid id);
         Task<decimal> GetSumInsuredByPortfolioClientIdAsync(Guid portfolioClientId);
         Task<decimal> GetPremiumByPortfolioClientIdAsync(Guid portfolioClientId);
-        void Add(PolicyRiskSaveResource resource);
-        void Update(PolicyRiskResource resource);
-        void UpdatePolicyRiskBuilding(PolicyRiskBuildingResource resource);
-        void UpdatePolicyRiskRiskItem(PolicyRiskRiskItemResource resource);
-        void UpdatePolicyRiskContent(PolicyRiskContentResource resource);
-        void UpdatePolicyRiskHouse(PolicyRiskHouseResource resource);
-        void UpdatePolicyRiskMotor(PolicyRiskMotorResource resource);
-        void Delete(Guid id);
+        Task<int> AddAsync(PolicyRiskSaveResource resource);
+        Task<int> UpdateAsync(PolicyRiskResource resource);
+        Task<int> UpdatePolicyRiskBuilding(PolicyRiskBuildingResource resource);
+        Task<int> UpdatePolicyRiskRiskItem(PolicyRiskRiskItemResource resource);
+        Task<int> UpdatePolicyRiskContent(PolicyRiskContentResource resource);
+        Task<int> UpdatePolicyRiskHouse(PolicyRiskHouseResource resource);
+        Task<int> UpdatePolicyRiskMotor(PolicyRiskMotorResource resource);
+        Task<int> DeleteAsync(Guid id);
     }
 }

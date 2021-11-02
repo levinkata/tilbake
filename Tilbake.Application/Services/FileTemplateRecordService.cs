@@ -21,23 +21,15 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.FileTemplateRecords.Delete(id);
-            _unitOfWork.SaveAsync();
-        }
-
-        public async void Delete(FileTemplateRecordResource resource)
-        {
-            var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
-            _unitOfWork.FileTemplateRecords.Delete(fileTemplateRecord);
-
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.FileTemplateRecords.FindAllAsync(
+            var result = await _unitOfWork.FileTemplateRecords.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.FieldName));
 
@@ -47,7 +39,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetByFileTemplateIdAsync(Guid fileTemplateId)
         {
-            var result = await _unitOfWork.FileTemplateRecords.FindAllAsync(
+            var result = await _unitOfWork.FileTemplateRecords.GetAsync(
                                                             e => e.FileTemplateId == fileTemplateId,
                                                             e => e.OrderBy(n => n.TableName),
                                                             e => e.FileTemplate);
@@ -58,16 +50,17 @@ namespace Tilbake.Application.Services
 
         public async Task<FileTemplateRecordResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.FileTemplateRecords.GetByIdAsync(
+            var result = await _unitOfWork.FileTemplateRecords.GetAsync(
                                                             e => e.Id == id,
+                                                            null,
                                                             e => e.FileTemplate);
-            var resource = _mapper.Map<FileTemplateRecord, FileTemplateRecordResource>(result);
+            var resource = _mapper.Map<FileTemplateRecord, FileTemplateRecordResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<IEnumerable<FileTemplateRecordResource>> GetTableFileTemplate(Guid fileTemplateId, string tableName)
         {
-            var results = await _unitOfWork.FileTemplateRecords.FindAllAsync(
+            var results = await _unitOfWork.FileTemplateRecords.GetAsync(
                                                             r => r.FileTemplateId == fileTemplateId &&
                                                             r.TableName == tableName,
                                                             r => r.OrderBy(n => n.FieldName),
@@ -77,12 +70,12 @@ namespace Tilbake.Application.Services
             return resources;
         }
 
-        public async void Update(FileTemplateRecordResource resource)
+        public async Task<int> UpdateAsync(FileTemplateRecordResource resource)
         {
             var fileTemplateRecord = _mapper.Map<FileTemplateRecordResource, FileTemplateRecord>(resource);
             _unitOfWork.FileTemplateRecords.Update(resource.Id, fileTemplateRecord);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

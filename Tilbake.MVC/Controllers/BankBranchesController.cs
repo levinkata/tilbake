@@ -65,7 +65,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _bankBranchService.Add(resource);
+                _bankBranchService.AddAsync(resource);
                 return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
             }
             return View(resource);
@@ -100,7 +100,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _bankBranchService.Update(resource);
+                    _bankBranchService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -133,7 +133,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(BankBranchResource resource)
         {
-            _bankBranchService.Delete(resource.Id);
+            _bankBranchService.DeleteAsync(resource.Id);
             return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
         }
     }

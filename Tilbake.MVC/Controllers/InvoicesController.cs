@@ -57,7 +57,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _invoiceService.Add(resource);
+                _invoiceService.AddAsync(resource);
                 return RedirectToAction("Details", "Policies", new { id = resource.PolicyId });
             }
             return View(resource);

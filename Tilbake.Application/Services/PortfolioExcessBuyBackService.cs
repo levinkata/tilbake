@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(PortfolioExcessBuyBackSaveResource resource)
+        public async Task<int> AddAsync(PortfolioExcessBuyBackSaveResource resource)
         {
             var portfolioExcessBuyBack = _mapper.Map<PortfolioExcessBuyBackSaveResource, PortfolioExcessBuyBack>(resource);
             portfolioExcessBuyBack.Id = Guid.NewGuid();
             portfolioExcessBuyBack.DateAdded = DateTime.Now;
 
             _unitOfWork.PortfolioExcessBuyBacks.Add(portfolioExcessBuyBack);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.PortfolioExcessBuyBacks.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioExcessBuyBackResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.PortfolioExcessBuyBacks.FindAllAsync(
+            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetAsync(
                                                 null,
                                                 r => r.OrderBy(n => n.Insurer.Name),
                                                 r => r.Insurer);
@@ -50,7 +50,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<PortfolioExcessBuyBackResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.PortfolioExcessBuyBacks.FindAllAsync(
+            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetAsync(
                                                 e => e.PortfolioId == portfolioId,
                                                 e => e.OrderBy(r => r.Insurer.Name),
                                                 e => e.Insurer);
@@ -61,22 +61,22 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioExcessBuyBackResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetByIdAsync(
-                                                r => r.Id == id,
+            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetAsync(
+                                                r => r.Id == id, null,
                                                 r => r.Insurer);
 
-            var resource = _mapper.Map<PortfolioExcessBuyBack, PortfolioExcessBuyBackResource>(result);
+            var resource = _mapper.Map<PortfolioExcessBuyBack, PortfolioExcessBuyBackResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(PortfolioExcessBuyBackResource resource)
+        public async Task<int> UpdateAsync(PortfolioExcessBuyBackResource resource)
         {
             var portfolioExcessBuyBack = _mapper.Map<PortfolioExcessBuyBackResource, PortfolioExcessBuyBack>(resource);
 
             portfolioExcessBuyBack.DateModified = DateTime.Now;
             
             _unitOfWork.PortfolioExcessBuyBacks.Update(resource.Id, portfolioExcessBuyBack);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -174,33 +174,28 @@ namespace Tilbake.EF.Persistence
         public IUserPortfolioRepository UserPortfolios { get; private set; }
         public IWallTypeRepository WallTypes { get; private set; }
 
-        //public async Task<int> SaveAsync()
-        //{
-        //    return await _context.SaveChangesAsync();
-        //}
-
-        public int SaveAsync()
+        public async Task<int> SaveAsync()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
-        private bool disposed = false;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
+        // private bool disposed = false;
+        // protected virtual void Dispose(bool disposing)
+        // {
+        //     if (!this.disposed)
+        //     {
+        //         if (disposing)
+        //         {
+        //             _context.Dispose();
+        //         }
+        //     }
+        //     this.disposed = true;
+        // }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        // public void Dispose()
+        // {
+        //     Dispose(true);
+        //     GC.SuppressFinalize(this);
+        // }
     }
 }

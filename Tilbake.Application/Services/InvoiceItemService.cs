@@ -6,6 +6,7 @@ using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
 using Tilbake.Core.Models;
 using Tilbake.Core;
+using System.Linq;
 
 namespace Tilbake.Application.Services
 {
@@ -20,15 +21,15 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.InvoiceItems.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<InvoiceItemResource>> GetByInvoiceIdAsync(Guid invoiceId)
         {
-            var result = await _unitOfWork.InvoiceItems.FindAllAsync(
+            var result = await _unitOfWork.InvoiceItems.GetAsync(
                                             p => p.InvoiceId == invoiceId, null,
                                             p => p.PolicyRisk);
             var resource = _mapper.Map<IEnumerable<InvoiceItem>, IEnumerable<InvoiceItemResource>>(result);
@@ -38,18 +39,18 @@ namespace Tilbake.Application.Services
 
         public async Task<InvoiceItemResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.InvoiceItems.GetByIdAsync(
-                                                p => p.Id == id, p => p.PolicyRisk);
-            var resource = _mapper.Map<InvoiceItem, InvoiceItemResource>(result);
+            var result = await _unitOfWork.InvoiceItems.GetAsync(
+                                                p => p.Id == id, null, p => p.PolicyRisk);
+            var resource = _mapper.Map<InvoiceItem, InvoiceItemResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(InvoiceItemResource resource)
+        public async Task<int> UpdateAsync(InvoiceItemResource resource)
         {
             var invoiceItem = _mapper.Map<InvoiceItemResource, InvoiceItem>(resource);
             _unitOfWork.InvoiceItems.Update(resource.Id, invoiceItem);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

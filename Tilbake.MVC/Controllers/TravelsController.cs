@@ -54,7 +54,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _travelService.Add(resource);
+                _travelService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);
@@ -90,7 +90,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _travelService.Update(resource);
+                    _travelService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,7 +123,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _travelService.Delete(id);
+            _travelService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

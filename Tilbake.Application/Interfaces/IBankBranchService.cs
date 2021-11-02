@@ -10,8 +10,8 @@ namespace Tilbake.Application.Interfaces
         Task<IEnumerable<BankBranchResource>> GetAllAsync();
         Task<IEnumerable<BankBranchResource>> GetByBankIdAsync(Guid bankId);
         Task<BankBranchResource> GetByIdAsync(Guid id);
-        void Add(BankBranchSaveResource resource);
-        void Update(BankBranchResource resource);
-        void Delete(Guid id);
+        Task<int> AddAsync(BankBranchSaveResource resource);
+        Task<int> UpdateAsync(BankBranchResource resource);
+        Task<int> DeleteAsync(Guid id);
     }
 }

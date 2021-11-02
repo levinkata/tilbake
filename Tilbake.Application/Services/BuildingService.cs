@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(BuildingSaveResource resource)
+        public async Task<int> AddAsync(BuildingSaveResource resource)
         {
             var building = _mapper.Map<BuildingSaveResource, Building>(resource);
             building.Id = Guid.NewGuid();
             building.DateAdded = DateTime.Now;
 
             _unitOfWork.Buildings.Add(building);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Buildings.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BuildingResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Buildings.FindAllAsync(
+            var result = await _unitOfWork.Buildings.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.PhysicalAddress),
                                             r => r.BuildingCondition,
@@ -54,24 +54,25 @@ namespace Tilbake.Application.Services
 
         public async Task<BuildingResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Buildings.GetByIdAsync(
+            var result = await _unitOfWork.Buildings.GetAsync(
                                             r => r.Id == id,
+                                            r => r.OrderBy(n => n.PhysicalAddress),
                                             r => r.BuildingCondition,
                                             r => r.ResidenceType,
                                             r => r.ResidenceUse,
                                             r => r.RoofType,
                                             r => r.WallType);
 
-            var resource = _mapper.Map<Building, BuildingResource>(result);
+            var resource = _mapper.Map<Building, BuildingResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(BuildingResource resource)
+        public async Task<int> UpdateAsync(BuildingResource resource)
         {
             var building = _mapper.Map<BuildingResource, Building>(resource);
             _unitOfWork.Buildings.Update(resource.Id, building);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

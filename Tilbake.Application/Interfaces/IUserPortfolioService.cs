@@ -8,7 +8,7 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<PortfolioResource>> GetByUserIdAsync(string aspNetUserId);
         Task<IEnumerable<PortfolioResource>> GetByNotUserIdAsync(string aspNetUserId);
-        void AddRange(UserPortfolioResource resources);
-        void DeleteRange(UserPortfolioResource resources);
+        Task<int> AddRange(UserPortfolioResource resources);
+        Task<int> DeleteRange(UserPortfolioResource resources);
     }
 }

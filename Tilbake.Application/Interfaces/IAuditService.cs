@@ -9,6 +9,6 @@ namespace Tilbake.Application.Interfaces
     {
         Task<IEnumerable<AuditResource>> GetAllAsync();
         Task<AuditResource> GetByIdAsync(Guid id);
-        void Delete(Guid id);
+        Task<int> DeleteAsync(Guid id);
     }
 }

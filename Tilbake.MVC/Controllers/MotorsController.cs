@@ -83,7 +83,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _motorService.Add(resource);
+                _motorService.AddAsync(resource);
                 return RedirectToAction(nameof(Index), "PortfolioClient", new { resource.PortfolioClientId });
             }
             return View(resource);
@@ -119,7 +119,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _motorService.Update(resource);
+                    _motorService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,7 +152,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _motorService.Delete(id);
+            _motorService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

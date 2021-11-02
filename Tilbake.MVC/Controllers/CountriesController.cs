@@ -33,7 +33,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _countryService.Add(resource);
+                _countryService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -101,7 +101,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _countryService.Update(resource);
+                    _countryService.UpdateAsync(resource);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -134,7 +134,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _countryService.Delete(id);
+            _countryService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

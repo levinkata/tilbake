@@ -21,24 +21,24 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(ResidenceUseSaveResource resource)
+        public async Task<int> AddAsync(ResidenceUseSaveResource resource)
         {
             var residenceUse = _mapper.Map<ResidenceUseSaveResource, ResidenceUse>(resource);
             residenceUse.Id = Guid.NewGuid();
 
             _unitOfWork.ResidenceUses.Add(residenceUse);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.ResidenceUses.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ResidenceUseResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.ResidenceUses.FindAllAsync(
+            var result = await _unitOfWork.ResidenceUses.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -55,12 +55,12 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(ResidenceUseResource resource)
+        public async Task<int> UpdateAsync(ResidenceUseResource resource)
         {
             var residenceUse = _mapper.Map<ResidenceUseResource, ResidenceUse>(resource);
             _unitOfWork.ResidenceUses.Update(resource.Id, residenceUse);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

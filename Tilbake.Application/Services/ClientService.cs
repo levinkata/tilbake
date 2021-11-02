@@ -32,25 +32,25 @@ namespace Tilbake.Application.Services
             _environment = environment;
         }
 
-        public async void Add(PortfolioClientSaveResource resource)
+        public async Task<int> AddAsync(PortfolioClientSaveResource resource)
         {
             var client = _mapper.Map<PortfolioClientSaveResource, Client>(resource);
             client.Id = Guid.NewGuid();
             client.DateAdded = DateTime.Now;
             _unitOfWork.Clients.Add(client);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.Clients.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<ClientResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Clients.FindAllAsync(
+            var result = await _unitOfWork.Clients.GetAsync(
                                                     null,
                                                     r => r.OrderBy(n => n.LastName),
                                                     r => r.ClientType,
@@ -67,8 +67,9 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Clients.GetByIdAsync(
+            var result = await _unitOfWork.Clients.GetAsync(
                                                     r => r.Id == id,
+                                                    r => r.OrderBy(n => n.LastName),
                                                     r => r.ClientType,
                                                     r => r.Country,
                                                     r => r.IdDocumentType,
@@ -77,14 +78,15 @@ namespace Tilbake.Application.Services
                                                     r => r.Occupation,
                                                     r => r.Title);
 
-            var resource = _mapper.Map<Client, ClientResource>(result);
+            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<ClientResource> GetByIdNumberAsync(string idNumber)
         {
-            var result = await _unitOfWork.Clients.GetByIdAsync(
+            var result = await _unitOfWork.Clients.GetAsync(
                                                     c => c.IdNumber == idNumber,
+                                                    c => c.OrderBy(n => n.LastName),
                                                     c => c.ClientType,
                                                     c => c.Country,
                                                     c => c.IdDocumentType,
@@ -93,13 +95,13 @@ namespace Tilbake.Application.Services
                                                     c => c.Occupation,
                                                     c => c.Title);
 
-            var resource = _mapper.Map<Client, ClientResource>(result);
+            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
             return resource;
         }
 
         public async Task<IEnumerable<ClientResource>> GetByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.Clients.FindAllAsync(
+            var result = await _unitOfWork.Clients.GetAsync(
                                                     e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId),
                                                     e => e.OrderBy(r => r.LastName),
                                                     e => e.PortfolioClients,
@@ -117,8 +119,9 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByClientIdAsync(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.Clients.GetByIdAsync(
+            var result = await _unitOfWork.Clients.GetAsync(
                                                     c => c.PortfolioClients.Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId),
+                                                    c => c.OrderBy(n => n.LastName),
                                                     c => c.PortfolioClients,
                                                     c => c.ClientType,
                                                     c => c.Country,
@@ -128,17 +131,17 @@ namespace Tilbake.Application.Services
                                                     c => c.Occupation,
                                                     c => c.Title);
 
-            var resource = _mapper.Map<Client, ClientResource>(result);
+            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(ClientResource resource)
+        public async Task<int> UpdateAsync(ClientResource resource)
         {
             var client = _mapper.Map<ClientResource, Client>(resource);
             _unitOfWork.Clients.Update(resource.Id, client);
             
             var clientId = client.Id;
-            var clientCarriers = await _unitOfWork.ClientCarriers.FindAllAsync(
+            var clientCarriers = await _unitOfWork.ClientCarriers.GetAsync(
                                                     r => r.ClientId == clientId);
 
             if (clientCarriers != null)
@@ -146,19 +149,19 @@ namespace Tilbake.Application.Services
                 _unitOfWork.ClientCarriers.DeleteRange(clientCarriers);
             }
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<ClientResource> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Clients.GetByIdAsync(
+            var result = await _unitOfWork.Clients.GetAsync(
                                         c => c.PortfolioClients.Any(p => p.Policies.Any(r => r.Id == policyId)));
 
-            var resource = _mapper.Map<Client, ClientResource>(result);
+            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void ImportBulk(UpLoadFileResource resource)
+        public async Task<int> ImportBulkAsync(UpLoadFileResource resource)
         {
             try
             {
@@ -178,14 +181,14 @@ namespace Tilbake.Application.Services
                 string nullDate = "01/01/1900";
                 string tableName = "Client";
 
-                var clientBulks = await _unitOfWork.ClientBulks.FindAllAsync(r => r.PortfolioId == resource.PortfolioId);
+                var clientBulks = await _unitOfWork.ClientBulks.GetAsync(r => r.PortfolioId == resource.PortfolioId);
                 if (clientBulks != null)
                 {
                     _unitOfWork.ClientBulks.DeleteRange(clientBulks);
-                    _unitOfWork.SaveAsync();
+                    await _unitOfWork.SaveAsync();
                 }
 
-                var fileTemplateRecords = await _unitOfWork.FileTemplateRecords.FindAllAsync(
+                var fileTemplateRecords = await _unitOfWork.FileTemplateRecords.GetAsync(
                                                         e => e.FileTemplateId == resource.FileTemplateId && e.TableName == tableName,
                                                         e => e.OrderBy(n => n.FieldName),
                                                         e => e.FileTemplate);
@@ -655,8 +658,7 @@ namespace Tilbake.Application.Services
                     }
                     catch (DbUpdateException ex)
                     {
-                        throw ex.InnerException;
-                        // return ex.HResult;
+                        return ex.HResult;
                     }
 
                     if (clientDTOs.Count > 0)
@@ -684,20 +686,19 @@ namespace Tilbake.Application.Services
                     }
                     ms.Flush();
                 }
-                _unitOfWork.SaveAsync();
+                return await _unitOfWork.SaveAsync();
             }
             catch (DbUpdateException ex)
             {
-                throw ex.InnerException;
-                // return ex.HResult;
+                return ex.HResult;
             }
         }
 
-        public async void AddBulk(Guid portfolioId)
+        public async Task<int> AddBulkAsync(Guid portfolioId)
         {
             try
             {
-                var clientBulks = await _unitOfWork.ClientBulks.FindAllAsync(
+                var clientBulks = await _unitOfWork.ClientBulks.GetAsync(
                                     r => r.PortfolioId == portfolioId);
 
                 int recCount = clientBulks.Count();
@@ -754,66 +755,65 @@ namespace Tilbake.Application.Services
                         LogFiles.WriteLogFile(_environment, csvString, FolderName, FileName);
                     }
                 }
-                _unitOfWork.SaveAsync();
+                // await _unitOfWork.SaveAsync();
 
                 if (recCount > 0)
                 {
                     _unitOfWork.ClientBulks.DeleteRange(clientBulks);
                 }
 
-                _unitOfWork.SaveAsync();
+                return await _unitOfWork.SaveAsync();
             }
             catch (DbUpdateException ex)
             {
-                throw ex.InnerException;
-                //return ex.HResult;
+                return ex.HResult;
             }
         }
 
-        public async void DeleteBulk(List<ClientBulkResource> resources)
+        public async Task<int> DeleteBulk(List<ClientBulkResource> resources)
         {
             var clientBulks = _mapper.Map<IEnumerable<ClientBulkResource>, IEnumerable<ClientBulk>>(resources);
             _unitOfWork.ClientBulks.DeleteRange(clientBulks);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         private async Task<Guid> GetCountryId(string name)
         {
-            var title = await _unitOfWork.Titles.GetByIdAsync(
+            var title = await _unitOfWork.Titles.GetAsync(
                                                 r => r.Name == name);
-            return title.Id;
+            return title.FirstOrDefault().Id;
         }
 
         private async Task<Guid> GetMaritalStatusId(string name)
         {
-            var maritalStatus = await _unitOfWork.MaritalStatuses.GetByIdAsync(
+            var maritalStatus = await _unitOfWork.MaritalStatuses.GetAsync(
                                                 r => r.Name == name);
-            return maritalStatus.Id;
+            return maritalStatus.FirstOrDefault().Id;
         }
 
         private async Task<Guid> GetOccupationId(string name)
         {
-            var occupation = await _unitOfWork.Occupations.GetByIdAsync(
+            var occupation = await _unitOfWork.Occupations.GetAsync(
                                                 r => r.Name == name);
-            return occupation.Id;
+            return occupation.FirstOrDefault().Id;
         }
 
         private async Task<Guid> GetTitleId(string name)
         {
-            var country = await _unitOfWork.Countries.GetByIdAsync(
+            var country = await _unitOfWork.Countries.GetAsync(
                                                 r => r.Name == name);
-            return country.Id;
+            return country.FirstOrDefault().Id;
         }
 
         public async Task<bool> ClientExists(string IdNumber)
         {
-            var client = await _unitOfWork.Clients.FindAllAsync(e => e.IdNumber == IdNumber);
+            var client = await _unitOfWork.Clients.GetAsync(e => e.IdNumber == IdNumber);
             return client.Any();
         }
 
         private async Task<bool> PortfolioClientExists(Guid portfolioId, Guid clientId)
         {
-            var portfolioClient = await _unitOfWork.PortfolioClients.FindAllAsync(
+            var portfolioClient = await _unitOfWork.PortfolioClients.GetAsync(
                                             e => e.PortfolioId == portfolioId &&
                                             e.ClientId == clientId);
             return portfolioClient.Any();
@@ -821,7 +821,7 @@ namespace Tilbake.Application.Services
 
         public async Task<IEnumerable<ClientBulkResource>> GetBulkByPortfolioIdAsync(Guid portfolioId)
         {
-            var result = await _unitOfWork.ClientBulks.FindAllAsync(
+            var result = await _unitOfWork.ClientBulks.GetAsync(
                                                         e => e.PortfolioId == portfolioId,
                                                         e => e.OrderBy(r => r.LastName));
 

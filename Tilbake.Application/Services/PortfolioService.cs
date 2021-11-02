@@ -21,39 +21,32 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(PortfolioSaveResource resource)
+        public async Task<int> AddAsync(PortfolioSaveResource resource)
         {
             var portfolio = _mapper.Map<PortfolioSaveResource, Portfolio>(resource);
             portfolio.Id = Guid.NewGuid();
             portfolio.DateAdded = DateTime.Now;
             _unitOfWork.Portfolios.Add(portfolio);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            var portfolio = await _unitOfWork.Portfolios.GetByIdAsync(
-                                                        e => e.Id == id,
+            var portfolio = await _unitOfWork.Portfolios.GetAsync(
+                                                        e => e.Id == id, null,
                                                         e => e.AspnetUserPortfolios);
-            var aspnetUserPortfolios = portfolio.AspnetUserPortfolios;
+            var aspnetUserPortfolios = portfolio.FirstOrDefault().AspnetUserPortfolios;
 
             _unitOfWork.UserPortfolios.DeleteRange(aspnetUserPortfolios);
-            _unitOfWork.Portfolios.Delete(portfolio);
+            _unitOfWork.Portfolios.Delete(portfolio.FirstOrDefault().Id);
 
-            _unitOfWork.SaveAsync();
-        }
-
-        public async void Delete(PortfolioResource resource)
-        {
-            var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
-            _unitOfWork.Portfolios.Delete(portfolio);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PortfolioResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.Portfolios.FindAllAsync(
+            var result = await _unitOfWork.Portfolios.GetAsync(
                                             null,
                                             r => r.OrderBy(n => n.Name));
 
@@ -64,20 +57,20 @@ namespace Tilbake.Application.Services
 
         public async Task<PortfolioResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Portfolios.GetByIdAsync(
-                                            r => r.Id == id,
+            var result = await _unitOfWork.Portfolios.GetAsync(
+                                            r => r.Id == id, null,
                                             r => r.PortfolioClients);
                                             
-            var resource = _mapper.Map<Portfolio, PortfolioResource>(result);
+            var resource = _mapper.Map<Portfolio, PortfolioResource>(result.FirstOrDefault());
             return resource;
         }
 
-        public async void Update(PortfolioResource resource)
+        public async Task<int> UpdateAsync(PortfolioResource resource)
         {
             var portfolio = _mapper.Map<PortfolioResource, Portfolio>(resource);
             _unitOfWork.Portfolios.Update(resource.Id, portfolio);
 
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

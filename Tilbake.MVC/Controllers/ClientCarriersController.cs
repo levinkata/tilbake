@@ -47,7 +47,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _clientCarrierService.Add(resource);
+                _clientCarrierService.AddAsync(resource);
                 return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
             }
 
@@ -79,7 +79,7 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         public IActionResult Update(ClientCarrierResource resource)
         {
-            _clientCarrierService.Update(resource);
+            _clientCarrierService.UpdateAsync(resource);
             return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
         }
     }

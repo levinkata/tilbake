@@ -21,25 +21,25 @@ namespace Tilbake.Application.Services
             _mapper = mapper;
         }
 
-        public async void Add(IdDocumentTypeSaveResource resource)
+        public async Task<int> AddAsync(IdDocumentTypeSaveResource resource)
         {
             var idDocumentType = _mapper.Map<IdDocumentTypeSaveResource, IdDocumentType>(resource);
             idDocumentType.Id = Guid.NewGuid();
             idDocumentType.DateAdded = DateTime.Now;
 
             _unitOfWork.IdDocumentTypes.Add(idDocumentType);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
-        public async void Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             _unitOfWork.IdDocumentTypes.Delete(id);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<IdDocumentTypeResource>> GetAllAsync()
         {
-            var result = await _unitOfWork.IdDocumentTypes.FindAllAsync(
+            var result = await _unitOfWork.IdDocumentTypes.GetAsync(
                                             null,
                                             r => r.OrderBy(p => p.Name));
 
@@ -54,13 +54,13 @@ namespace Tilbake.Application.Services
             return resource;
         }
 
-        public async void Update(IdDocumentTypeResource resource)
+        public async Task<int> UpdateAsync(IdDocumentTypeResource resource)
         {
             var idDocumentType = _mapper.Map<IdDocumentTypeResource, IdDocumentType>(resource);
             idDocumentType.DateModified = DateTime.Now;
 
             _unitOfWork.IdDocumentTypes.Update(resource.Id, idDocumentType);
-            _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
     }
 }

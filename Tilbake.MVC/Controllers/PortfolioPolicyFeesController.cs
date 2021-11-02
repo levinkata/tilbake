@@ -44,7 +44,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _portfolioPolicyFeeService.Add(resource);
+                await _portfolioPolicyFeeService.AddAsync(resource);
                 return RedirectToAction(nameof(Details), new { portfolioId = resource.PortfolioId });
             }
 
@@ -90,7 +90,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _portfolioPolicyFeeService.Update(resource);
+                    await _portfolioPolicyFeeService.UpdateAsync(resource);
                     return RedirectToAction(nameof(Details), new { portfolioId = resource.PortfolioId });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -124,7 +124,7 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(PortfolioPolicyFeeResource resource)
         {
-            _portfolioPolicyFeeService.Delete(resource.Id);
+            _portfolioPolicyFeeService.DeleteAsync(resource.Id);
             return RedirectToAction("Carousel", "Portfolios", new { portfolioId = resource.PortfolioId });
         }
     }

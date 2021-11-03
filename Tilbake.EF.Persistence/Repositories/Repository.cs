@@ -40,14 +40,43 @@ namespace Tilbake.EF.Persistence.Repositories
 
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
-            return await dbSet.FindAsync(id); 
+            return await dbSet.FindAsync(id);
+        }
+
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+                query = query.Include(include).AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(filter);
         }
 
         public virtual void Add(TEntity entity)
         {
             dbSet.Add(entity);
         }
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
 
+            try
+            {
+                await dbSet.AddAsync(entity);
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(entity)} could not be saved: {ex.Message}");
+            }           
+        }
+        
         public virtual void AddRange(IEnumerable<TEntity> entities)
         {
             dbSet.AddRange(entities);

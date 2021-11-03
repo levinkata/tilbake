@@ -26,7 +26,7 @@ namespace Tilbake.Application.Services
             carrier.Id = Guid.NewGuid();
             carrier.DateAdded = DateTime.Now;
 
-            _unitOfWork.Carriers.Add(carrier);
+            await _unitOfWork.Carriers.AddAsync(carrier);
             return await _unitOfWork.SaveAsync();
         }
 

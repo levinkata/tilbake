@@ -67,9 +67,8 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByIdAsync(Guid id)
         {
-            var result = await _unitOfWork.Clients.GetAsync(
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
                                                     r => r.Id == id,
-                                                    r => r.OrderBy(n => n.LastName),
                                                     r => r.ClientType,
                                                     r => r.Country,
                                                     r => r.IdDocumentType,
@@ -78,15 +77,14 @@ namespace Tilbake.Application.Services
                                                     r => r.Occupation,
                                                     r => r.Title);
 
-            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
+            var resource = _mapper.Map<Client, ClientResource>(result);
             return resource;
         }
 
         public async Task<ClientResource> GetByIdNumberAsync(string idNumber)
         {
-            var result = await _unitOfWork.Clients.GetAsync(
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
                                                     c => c.IdNumber == idNumber,
-                                                    c => c.OrderBy(n => n.LastName),
                                                     c => c.ClientType,
                                                     c => c.Country,
                                                     c => c.IdDocumentType,
@@ -95,7 +93,7 @@ namespace Tilbake.Application.Services
                                                     c => c.Occupation,
                                                     c => c.Title);
 
-            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
+            var resource = _mapper.Map<Client, ClientResource>(result);
             return resource;
         }
 
@@ -119,9 +117,8 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByClientIdAsync(Guid portfolioId, Guid clientId)
         {
-            var result = await _unitOfWork.Clients.GetAsync(
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
                                                     c => c.PortfolioClients.Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId),
-                                                    c => c.OrderBy(n => n.LastName),
                                                     c => c.PortfolioClients,
                                                     c => c.ClientType,
                                                     c => c.Country,
@@ -131,7 +128,7 @@ namespace Tilbake.Application.Services
                                                     c => c.Occupation,
                                                     c => c.Title);
 
-            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
+            var resource = _mapper.Map<Client, ClientResource>(result);
             return resource;
         }
 
@@ -154,10 +151,10 @@ namespace Tilbake.Application.Services
 
         public async Task<ClientResource> GetByPolicyIdAsync(Guid policyId)
         {
-            var result = await _unitOfWork.Clients.GetAsync(
+            var result = await _unitOfWork.Clients.GetFirstOrDefaultAsync(
                                         c => c.PortfolioClients.Any(p => p.Policies.Any(r => r.Id == policyId)));
 
-            var resource = _mapper.Map<Client, ClientResource>(result.FirstOrDefault());
+            var resource = _mapper.Map<Client, ClientResource>(result);
             return resource;
         }
 
@@ -701,7 +698,7 @@ namespace Tilbake.Application.Services
                 var clientBulks = await _unitOfWork.ClientBulks.GetAsync(
                                     r => r.PortfolioId == portfolioId);
 
-                int recCount = clientBulks.Count();
+                int recCount = clientBulks.Count;
                 var NewRecords = 0;
                 var ExistingRecords = 0;
                 var FolderName = "client";
@@ -779,30 +776,30 @@ namespace Tilbake.Application.Services
 
         private async Task<Guid> GetCountryId(string name)
         {
-            var title = await _unitOfWork.Titles.GetAsync(
+            var title = await _unitOfWork.Titles.GetFirstOrDefaultAsync(
                                                 r => r.Name == name);
-            return title.FirstOrDefault().Id;
+            return title.Id;
         }
 
         private async Task<Guid> GetMaritalStatusId(string name)
         {
-            var maritalStatus = await _unitOfWork.MaritalStatuses.GetAsync(
+            var maritalStatus = await _unitOfWork.MaritalStatuses.GetFirstOrDefaultAsync(
                                                 r => r.Name == name);
-            return maritalStatus.FirstOrDefault().Id;
+            return maritalStatus.Id;
         }
 
         private async Task<Guid> GetOccupationId(string name)
         {
-            var occupation = await _unitOfWork.Occupations.GetAsync(
+            var occupation = await _unitOfWork.Occupations.GetFirstOrDefaultAsync(
                                                 r => r.Name == name);
-            return occupation.FirstOrDefault().Id;
+            return occupation.Id;
         }
 
         private async Task<Guid> GetTitleId(string name)
         {
-            var country = await _unitOfWork.Countries.GetAsync(
+            var country = await _unitOfWork.Countries.GetFirstOrDefaultAsync(
                                                 r => r.Name == name);
-            return country.FirstOrDefault().Id;
+            return country.Id;
         }
 
         public async Task<bool> ClientExists(string IdNumber)

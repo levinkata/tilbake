@@ -1,48 +1,44 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
 using Tilbake.Core;
 using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class OccupationsController : Controller
+    public class OccupationsController : BaseController
     {
-        private readonly IOccupationService _occupationService;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public OccupationsController(IOccupationService occupationService, IUnitOfWork unitOfWork)
+        public OccupationsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _occupationService = occupationService;
-            _unitOfWork = unitOfWork;
+
         }
 
         // GET: Occupations
         public async Task<IActionResult> Index()
         {
-            return View(await _occupationService.GetAllAsync());
+            var result = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Occupation>, IEnumerable<OccupationViewModel>>(result);
+            return View(model);
         }
 
         // GET: Occupations/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Occupations.GetById(id);
 
-            var resource = await _occupationService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            var model = _mapper.Map<Occupation, OccupationViewModel>(result);
+            return View(model);
         }
 
         // GET: Occupations/Create
@@ -52,92 +48,70 @@ namespace Tilbake.MVC.Controllers
         }
 
         // POST: Occupations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(OccupationSaveResource resource)
+        public async Task<IActionResult> Create(OccupationViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Occupation newOccupation = new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = resource.Name,
-                    DateAdded = DateTime.Now
-                };
-                _unitOfWork.Occupations.AddAsync(newOccupation);
-                _unitOfWork.CompleteAsync();
-                //_occupationService.AddAsync(resource);
+                var occupation = _mapper.Map<OccupationViewModel, Occupation>(model);
+                occupation.Id = Guid.NewGuid();
+                occupation.DateAdded = DateTime.Now;
+
+                await _unitOfWork.Occupations.Add(occupation);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
         // GET: Occupations/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Occupations.GetById(id);
 
-            var resource = await _occupationService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-            return View(resource);
+            var model = _mapper.Map<Occupation, OccupationViewModel>(result);
+            return View(model);
         }
 
         // POST: Occupations/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, OccupationResource resource)
+        public async Task<IActionResult> Edit(Guid id, OccupationViewModel model)
         {
-            if (id != resource.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _occupationService.UpdateAsync(resource);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var occupation = _mapper.Map<OccupationViewModel, Occupation>(model);
+                occupation.DateModified = DateTime.Now;
+
+                await _unitOfWork.Occupations.Update(occupation);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
         // GET: Occupations/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Occupations.GetById(id);
 
-            var resource = await _occupationService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            var model = _mapper.Map<Occupation, OccupationViewModel>(result);
+            return View(model);
         }
 
         // POST: Occupations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _occupationService.DeleteAsync(id);
+            await _unitOfWork.Occupations.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

@@ -20,6 +20,95 @@ namespace Tilbake.EF.Persistence.Repositories
             dbSet = _context.Set<TEntity>();
         }
 
+        public virtual async Task<bool> Add(TEntity entity)
+        {
+            await dbSet.AddAsync(entity);
+            return true;
+        }
+
+        public virtual async Task<bool> Delete(Guid id)
+        {
+            var entityToDelete = await dbSet.FindAsync(id);
+            if (entityToDelete != null)
+            {
+                Delete(entityToDelete);
+                return true;
+            }
+            return false;
+        }
+
+        public virtual void Delete(TEntity entityToDelete)
+        {
+            if (_context.Entry(entityToDelete).State == EntityState.Detached)
+            {
+                dbSet.Attach(entityToDelete);
+            }
+            dbSet.Remove(entityToDelete);
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAll(
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "")
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                return await orderBy(query).AsNoTracking().ToListAsync();
+            }
+            else
+            {
+                return await query.AsNoTracking().ToListAsync();
+            }
+        }
+
+        public virtual async Task<TEntity> GetById(Guid id)
+        {
+            return await dbSet.FindAsync(id);
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> Get(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "")
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                return await orderBy(query).AsNoTracking().ToListAsync();
+            }
+            else
+            {
+                return await query.AsNoTracking().ToListAsync();
+            }
+        }
+
+        public virtual async Task<bool> Update(TEntity entity)
+        {
+            dbSet.Update(entity);
+            return await Task.FromResult(true);
+        }
+
+        //  To replace below
+        //  ====================================================================
         public async Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes)
@@ -55,10 +144,10 @@ namespace Tilbake.EF.Persistence.Repositories
             return await query.FirstOrDefaultAsync(filter);
         }
 
-        public virtual void Add(TEntity entity)
-        {
-            dbSet.Add(entity);
-        }
+        //public virtual void Add(TEntity entity)
+        //{
+        //    dbSet.Add(entity);
+        //}
 
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
@@ -83,20 +172,20 @@ namespace Tilbake.EF.Persistence.Repositories
             dbSet.AddRange(entities);
         }
 
-        public virtual void Delete(Guid id)
-        {
-            TEntity entityToDelete = dbSet.Find(id);
-            dbSet.Remove(entityToDelete);
-        }
+        //public virtual void Delete(Guid id)
+        //{
+        //    TEntity entityToDelete = dbSet.Find(id);
+        //    dbSet.Remove(entityToDelete);
+        //}
 
-        public virtual void Delete(TEntity entityToDelete)
-        {
-            if (_context.Entry(entityToDelete).State == EntityState.Detached)
-            {
-                dbSet.Attach(entityToDelete);
-            }
-            dbSet.Remove(entityToDelete);
-        }
+        //public virtual void Delete(TEntity entityToDelete)
+        //{
+        //    if (_context.Entry(entityToDelete).State == EntityState.Detached)
+        //    {
+        //        dbSet.Attach(entityToDelete);
+        //    }
+        //    dbSet.Remove(entityToDelete);
+        //}
 
         public virtual void DeleteRange(IEnumerable<TEntity> entities)
         {

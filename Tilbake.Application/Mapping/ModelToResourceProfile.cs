@@ -131,7 +131,7 @@ namespace Tilbake.Application.Mapping
 
             CreateMap<MotorMake, MotorMakeResource>().ReverseMap();
             CreateMap<MotorModel, MotorModelResource>().ReverseMap();
-            CreateMap<Occupation, OccupationResource>().ReverseMap();
+            //CreateMap<Occupation, OccupationResource>().ReverseMap();
             CreateMap<PaymentMethod, PaymentMethodResource>().ReverseMap();
             CreateMap<PaymentType, PaymentTypeResource>().ReverseMap();
 

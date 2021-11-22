@@ -41,7 +41,7 @@ namespace Tilbake.Application.Services
                 portfolioClient.DateAdded = DateTime.Now;
 
                 client.PortfolioClients.Add(portfolioClient);
-                _unitOfWork.Clients.Add(client);
+                await _unitOfWork.Clients.Add(client);
 
                 var resourceAddress = resource.Client.Address;
 
@@ -52,7 +52,7 @@ namespace Tilbake.Application.Services
                     address.Id = Guid.NewGuid();
                     address.ClientId = clientId;
                     address.DateAdded = DateTime.Now;
-                    _unitOfWork.Addresses.Add(address);
+                    await _unitOfWork.Addresses.Add(address);
                 }
 
                 var resourceEmailAddresses = resource.Client.EmailAddresses;
@@ -65,7 +65,7 @@ namespace Tilbake.Application.Services
                         emailAddress.Id = Guid.NewGuid();
                         emailAddress.ClientId = clientId;
                         emailAddress.DateAdded = DateTime.Now;
-                        _unitOfWork.EmailAddresses.Add(emailAddress);
+                        await _unitOfWork.EmailAddresses.Add(emailAddress);
                     }
                 }
 
@@ -78,7 +78,7 @@ namespace Tilbake.Application.Services
                         mobileNumber.Id = Guid.NewGuid();
                         mobileNumber.ClientId = clientId;
                         mobileNumber.DateAdded = DateTime.Now;
-                        _unitOfWork.MobileNumbers.Add(mobileNumber);
+                        await _unitOfWork.MobileNumbers.Add(mobileNumber);
                     }
                 }
 
@@ -93,7 +93,7 @@ namespace Tilbake.Application.Services
                             CarrierId = carrierId,
                             DateAdded = DateTime.Now
                         };
-                        _unitOfWork.ClientCarriers.Add(newClientCarrier);
+                        await _unitOfWork.ClientCarriers.Add(newClientCarrier);
                     }
                 }
                 return await _unitOfWork.SaveAsync();
@@ -103,7 +103,7 @@ namespace Tilbake.Application.Services
 
         public async Task<int> DeleteAsync(Guid id)
         {
-            _unitOfWork.PortfolioClients.Delete(id);
+            await _unitOfWork.PortfolioClients.Delete(id);
             return await _unitOfWork.SaveAsync();
         }
 

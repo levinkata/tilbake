@@ -18,6 +18,7 @@ using Tilbake.EF.IoC;
 using Tilbake.EF.Persistence.Context;
 using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Extensions;
+using Tilbake.MVC.Mapping;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -88,6 +89,7 @@ try
             });
 
     builder.Services.AddAutoMapper(typeof(ModelToResourceProfile));
+    builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
     var app = builder.Build();
 
@@ -125,8 +127,6 @@ try
     app.MapRazorPages();
 
     app.Run();
-
-
 }
 catch (Exception ex)
 {
@@ -137,23 +137,3 @@ finally
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
 }
-
-//namespace Tilbake.MVC
-//{
-//    public class Program
-//    {
-//        public static void Main(string[] args)
-//        {
-//            CreateHostBuilder(args).Build().Run();
-//        }
-
-//        public static IHostBuilder CreateHostBuilder(string[] args) =>
-//            Host.CreateDefaultBuilder(args)
-//                .UseSerilog()   //  Added for Serilog by Levi Nkata
-//                .UseServiceProviderFactory(new AutofacServiceProviderFactory())  //  Added for Autofac by Levi Nkata
-//                .ConfigureWebHostDefaults(webBuilder =>
-//                {
-//                    webBuilder.UseStartup<Startup>();
-//                });
-//    }
-//}

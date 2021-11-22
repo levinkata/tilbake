@@ -5,6 +5,8 @@ using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
 using Tilbake.Application.Resources;
+using Tilbake.Core;
+using Tilbake.Core.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -12,10 +14,12 @@ namespace Tilbake.MVC.Controllers
     public class OccupationsController : Controller
     {
         private readonly IOccupationService _occupationService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public OccupationsController(IOccupationService occupationService)
+        public OccupationsController(IOccupationService occupationService, IUnitOfWork unitOfWork)
         {
             _occupationService = occupationService;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Occupations
@@ -56,7 +60,15 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _occupationService.AddAsync(resource);
+                Occupation newOccupation = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = resource.Name,
+                    DateAdded = DateTime.Now
+                };
+                _unitOfWork.Occupations.AddAsync(newOccupation);
+                _unitOfWork.CompleteAsync();
+                //_occupationService.AddAsync(resource);
                 return RedirectToAction(nameof(Index));
             }
             return View(resource);

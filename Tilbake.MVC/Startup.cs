@@ -50,11 +50,11 @@ namespace Tilbake.MVC
             );
 
             services.AddControllersWithViews()
-                    .AddFluentValidation(s =>
+                    .AddFluentValidation(options =>
                     {
-                        s.RegisterValidatorsFromAssemblyContaining<BankResourceValidator>();
+                        options.RegisterValidatorsFromAssemblyContaining<BankResourceValidator>();
                         // s.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());                        
-                        s.DisableDataAnnotationsValidation = true;
+                        options.DisableDataAnnotationsValidation = true;
                     })
                     .AddRazorRuntimeCompilation();
             
@@ -69,7 +69,7 @@ namespace Tilbake.MVC
                 options.AddPolicy("CreateRole", policy =>
                     policy.RequireRole("Admin"));
             });
-
+            
             services.AddAutoMapper(typeof(ModelToResourceProfile));
         }
 

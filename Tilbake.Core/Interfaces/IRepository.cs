@@ -21,14 +21,5 @@ namespace Tilbake.Core.Interfaces
         void Delete(Guid id);
         void DeleteRange(IEnumerable<TEntity> entities);
         void Update(Guid id, TEntity entity);
-
-
-        // Task<IReadOnlyList<TEntity>> GetAllAsync(
-        //     Expression<Func<TEntity, bool>> filter = null,
-        //     Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        //     params Expression<Func<TEntity, object>>[] includes);
-        // Task<TEntity> GetFirstOrDefaultAsync(
-        //     Expression<Func<TEntity, bool>> filter = null,
-        //     params Expression<Func<TEntity, object>>[] includes);
     }
 }

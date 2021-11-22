@@ -24,79 +24,81 @@ namespace Tilbake.Application.Services
         public async Task<int> AddAsync(PortfolioClientSaveResource resource)
         {
             var resourceClient = resource.Client;
-            var clientId = resource.ClientId;
+            var clientId = Guid.NewGuid();
 
             var client = _mapper.Map<ClientSaveResource, Client>(resourceClient);
 
             if(client != null)
             {
-                client.Id = Guid.NewGuid();
+                client.Id = clientId;
                 client.DateAdded = DateTime.Now;
+
+
+                var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
+
+                portfolioClient.Id = Guid.NewGuid();
+                portfolioClient.ClientId = clientId;
+                portfolioClient.DateAdded = DateTime.Now;
+
+                client.PortfolioClients.Add(portfolioClient);
                 _unitOfWork.Clients.Add(client);
-                clientId = client.Id;
-            }
 
-            var portfolioClient = _mapper.Map<PortfolioClientSaveResource, PortfolioClient>(resource);
+                var resourceAddress = resource.Client.Address;
 
-            portfolioClient.Id = Guid.NewGuid();
-            portfolioClient.ClientId = clientId;
-            portfolioClient.DateAdded = DateTime.Now;
-            _unitOfWork.PortfolioClients.Add(portfolioClient);
-
-            var resourceAddress = resource.Client.Address;
-            
-            if (resourceAddress != null)
-            {
-                var address = _mapper.Map<AddressSaveResource, Address>(resourceAddress);
-
-                address. Id = Guid.NewGuid();
-                address.ClientId = clientId;
-                address.DateAdded = DateTime.Now;
-                _unitOfWork.Addresses.Add(address);
-            }
-            
-            var resourceEmailAddresses = resource.Client.EmailAddresses;
-            if (resourceEmailAddresses != null)
-            {
-                var emailAddresses = _mapper.Map<IEnumerable<EmailAddressSaveResource>, IEnumerable<EmailAddress>>(resourceEmailAddresses);
-
-                foreach (var emailAddress in emailAddresses)
+                if (resourceAddress != null)
                 {
-                    emailAddress.Id = Guid.NewGuid();
-                    emailAddress.ClientId = clientId;
-                    emailAddress.DateAdded = DateTime.Now;
-                    _unitOfWork.EmailAddresses.Add(emailAddress);
+                    var address = _mapper.Map<AddressSaveResource, Address>(resourceAddress);
+
+                    address.Id = Guid.NewGuid();
+                    address.ClientId = clientId;
+                    address.DateAdded = DateTime.Now;
+                    _unitOfWork.Addresses.Add(address);
                 }
-            }            
 
-            var resourceMobileNumbers = resource.Client.MobileNumbers;
-            if (resourceMobileNumbers != null)
-            {
-                var mobileNumbers = _mapper.Map<IEnumerable<MobileNumberSaveResource>, IEnumerable<MobileNumber>>(resourceMobileNumbers);
-                foreach (var mobileNumber in mobileNumbers)
+                var resourceEmailAddresses = resource.Client.EmailAddresses;
+                if (resourceEmailAddresses != null)
                 {
-                    mobileNumber.Id = Guid.NewGuid();
-                    mobileNumber.ClientId = clientId;
-                    mobileNumber.DateAdded = DateTime.Now;
-                    _unitOfWork.MobileNumbers.Add(mobileNumber);
-                }
-            }  
+                    var emailAddresses = _mapper.Map<IEnumerable<EmailAddressSaveResource>, IEnumerable<EmailAddress>>(resourceEmailAddresses);
 
-            var carrierIds = resource.Client.CarrierIds;
-            if (carrierIds != null)
-            {
-                foreach (var carrierId in carrierIds)
-                {
-                    ClientCarrier newClientCarrier = new()
+                    foreach (var emailAddress in emailAddresses)
                     {
-                        ClientId = clientId,
-                        CarrierId = carrierId,
-                        DateAdded = DateTime.Now
-                    };
-                    _unitOfWork.ClientCarriers.Add(newClientCarrier);
+                        emailAddress.Id = Guid.NewGuid();
+                        emailAddress.ClientId = clientId;
+                        emailAddress.DateAdded = DateTime.Now;
+                        _unitOfWork.EmailAddresses.Add(emailAddress);
+                    }
                 }
+
+                var resourceMobileNumbers = resource.Client.MobileNumbers;
+                if (resourceMobileNumbers != null)
+                {
+                    var mobileNumbers = _mapper.Map<IEnumerable<MobileNumberSaveResource>, IEnumerable<MobileNumber>>(resourceMobileNumbers);
+                    foreach (var mobileNumber in mobileNumbers)
+                    {
+                        mobileNumber.Id = Guid.NewGuid();
+                        mobileNumber.ClientId = clientId;
+                        mobileNumber.DateAdded = DateTime.Now;
+                        _unitOfWork.MobileNumbers.Add(mobileNumber);
+                    }
+                }
+
+                var carrierIds = resource.Client.CarrierIds;
+                if (carrierIds != null)
+                {
+                    foreach (var carrierId in carrierIds)
+                    {
+                        ClientCarrier newClientCarrier = new()
+                        {
+                            ClientId = clientId,
+                            CarrierId = carrierId,
+                            DateAdded = DateTime.Now
+                        };
+                        _unitOfWork.ClientCarriers.Add(newClientCarrier);
+                    }
+                }
+                return await _unitOfWork.SaveAsync();
             }
-            return await _unitOfWork.SaveAsync();
+            return -1;
         }
 
         public async Task<int> DeleteAsync(Guid id)

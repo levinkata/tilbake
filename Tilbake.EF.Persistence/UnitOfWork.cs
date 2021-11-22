@@ -7,9 +7,10 @@ using Tilbake.EF.Persistence.Repositories;
 
 namespace Tilbake.EF.Persistence
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly TilbakeDbContext _context;
+        private bool disposed = false;
 
         public UnitOfWork(TilbakeDbContext context)
         {
@@ -179,23 +180,27 @@ namespace Tilbake.EF.Persistence
             return await _context.SaveChangesAsync();
         }
 
-        // private bool disposed = false;
-        // protected virtual void Dispose(bool disposing)
-        // {
-        //     if (!this.disposed)
-        //     {
-        //         if (disposing)
-        //         {
-        //             _context.Dispose();
-        //         }
-        //     }
-        //     this.disposed = true;
-        // }
+        public async Task CompleteAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+        
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
 
-        // public virtual void Dispose()
-        // {
-        //     Dispose(true);
-        //     GC.SuppressFinalize(this);
-        // }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

@@ -11,11 +11,6 @@ namespace Tilbake.EF.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(BankRepository).Assembly)
-                    .Where(t => t.Name.EndsWith("Repository"))
-                    .AsImplementedInterfaces()
-                    .InstancePerLifetimeScope();
-
             builder.RegisterAssemblyTypes(typeof(BankService).Assembly)
                     .Where(t => t.Name.EndsWith("Service"))
                     .AsImplementedInterfaces()

@@ -1,140 +1,129 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    [Authorize]
-    public class BankBranchesController : Controller
+    public class BankBranchesController : BaseController
     {
-        private readonly IBankBranchService _bankBranchService;
-        private readonly IBankService _bankService;
-
-        public BankBranchesController(IBankBranchService bankBranchService,
-                                        IBankService bankService)
+        public BankBranchesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _bankBranchService = bankBranchService;
-            _bankService = bankService;
+
         }
 
-        // GET: BankBranches
-        public async Task<IActionResult> Index(Guid bankId)
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            ViewBag.BankId = bankId;
-            return View(await _bankBranchService.GetByBankIdAsync(bankId));
+            var result = await _unitOfWork.BankBranches.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchViewModel>>(result);
+            return View(model);
         }
 
-        // GET: BankBranches/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> GetBankBranches(Guid bankId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.BankBranches.GetByBankId(bankId);
+            var model = _mapper.Map<IEnumerable<BankBranch>, IEnumerable<BankBranchViewModel>>(result);
 
-            var resource = await _bankBranchService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
+            var bankBranches = from m in model
+                         select new
+                         {
+                             m.Id,
+                             m.Name
+                         };
 
-            return View(resource);
+            return Json(bankBranches);
         }
 
-        // GET: BankBranches/Create
-        public async Task<IActionResult> Create(Guid bankId)
+        [HttpGet]
+        public IActionResult Create()
         {
-            var bank = await _bankService.GetByIdAsync(bankId);
-
-            BankBranchSaveResource resource = new()
-            {
-                BankId = bankId,
-                Bank = bank.Name
-            };
-            return View(resource);
-        }
-
-        // POST: BankBranches/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(BankBranchSaveResource resource)
-        {
-            if (ModelState.IsValid)
-            {
-                _bankBranchService.AddAsync(resource);
-                return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
-            }
-            return View(resource);
-        }
-
-        // GET: BankBranches/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _bankBranchService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-            return View(resource);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, BankBranchResource resource)
+        public async Task<IActionResult> Create(BankBranchViewModel model)
         {
-            if (id != resource.Id)
+            if(ModelState.IsValid)
             {
-                return NotFound();
-            }
+                var bankBranches = _mapper.Map<BankBranchViewModel, BankBranch>(model);
+                bankBranches.Id = Guid.NewGuid();
+                bankBranches.DateAdded = DateTime.Now;
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _bankBranchService.UpdateAsync(resource);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(Details), new { id = resource.Id });
+                await _unitOfWork.BankBranches.Add(bankBranches);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
-        // GET: BankBranches/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.BankBranches.GetById(id);
 
-            var resource = await _bankBranchService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            var model = _mapper.Map<BankBranch, BankBranchViewModel>(result);
+            return View(model);
         }
 
-        // POST: BankBranches/Delete/5
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var result = await _unitOfWork.BankBranches.GetById(id);
+
+            var model = _mapper.Map<BankBranch, BankBranchViewModel>(result);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid? id, BankBranchViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if(ModelState.IsValid)
+            {
+                var bankBranches = _mapper.Map<BankBranchViewModel, BankBranch>(model);
+                bankBranches.DateModified = DateTime.Now;
+
+                await _unitOfWork.BankBranches.Update(bankBranches);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _unitOfWork.BankBranches.GetById(id);
+
+            var model = _mapper.Map<BankBranch, BankBranchViewModel>(result);            
+            return View(model);
+        }
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(BankBranchResource resource)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _bankBranchService.DeleteAsync(resource.Id);
-            return RedirectToAction(nameof(Details), "Banks", new { id = resource.BankId });
+            await _unitOfWork.BankBranches.Delete(id);
+            await _unitOfWork.CompleteAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

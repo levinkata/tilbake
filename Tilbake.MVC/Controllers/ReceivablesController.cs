@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -26,9 +26,9 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index(Guid invoiceId)
         {
-            var resources = await _receivableService.GetByInvoiceIdAsync(invoiceId);
+            var ViewModels = await _receivableService.GetByInvoiceIdAsync(invoiceId);
             ViewBag.InvoiceId = invoiceId;
-            return View(resources);
+            return View(ViewModels);
         }
 
         [HttpGet]
@@ -36,29 +36,29 @@ namespace Tilbake.MVC.Controllers
         {
             var paymentTypes = await _paymentTypeService.GetAllAsync();
 
-            ReceivableSaveResource resource = new()
+            ReceivableViewModel ViewModel = new()
             {
                 InvoiceId = invoiceId,
                 ReceivableDate = DateTime.Now,
                 PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
             };
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ReceivableSaveResource resource)
+        public async Task<IActionResult> Create(ReceivableViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _receivableService.AddAsync(resource);
-                return RedirectToAction("Details", "Invoices", new { id = resource.InvoiceId });
+                await _receivableService.AddAsync(ViewModel);
+                return RedirectToAction("Details", "Invoices", new { id = ViewModel.InvoiceId });
             }
 
             var paymentTypes = await _paymentTypeService.GetAllAsync();
-            resource.PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, resource.PaymentTypeId);
+            ViewModel.PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, ViewModel.PaymentTypeId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@ namespace Tilbake.MVC.Controllers
             var quote = await _quoteService.GetByIdAsync(quoteId);
             var quoteAmount = quote.QuoteItems.Sum(r => r.Premium);
 
-            ReceivableSaveResource resource = new()
+            ReceivableViewModel ViewModel = new()
             {
                 QuoteId = quoteId,
                 QuoteNumber = quote.QuoteNumber,
@@ -77,22 +77,22 @@ namespace Tilbake.MVC.Controllers
                 PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
             };
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> QuotePayment(ReceivableSaveResource resource)
+        public async Task<IActionResult> QuotePayment(ReceivableViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _receivableService.AddQuote(resource);
-                return RedirectToAction("Details", "Quotes", new { id = resource.QuoteId });
+                await _receivableService.AddQuote(ViewModel);
+                return RedirectToAction("Details", "Quotes", new { id = ViewModel.QuoteId });
             }
 
             var paymentTypes = await _paymentTypeService.GetAllAsync();
-            resource.PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, resource.PaymentTypeId);
+            ViewModel.PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, ViewModel.PaymentTypeId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
     }

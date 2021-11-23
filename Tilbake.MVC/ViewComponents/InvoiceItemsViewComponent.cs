@@ -18,8 +18,8 @@ namespace Tilbake.MVC.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(Guid invoiceId)
         {
-            var resources = await _invoiceItemService.GetByInvoiceIdAsync(invoiceId);
-            return await Task.Run(() => View(resources));
+            var ViewModels = await _invoiceItemService.GetByInvoiceIdAsync(invoiceId);
+            return await Task.Run(() => View(ViewModels));
         }
     }
 }

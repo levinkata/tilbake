@@ -1,6 +1,11 @@
 using Tilbake.Core.Models;
 using Tilbake.EF.Persistence.Context;
 using Tilbake.Core.Interfaces;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tilbake.EF.Persistence.Repositories
 {
@@ -9,6 +14,14 @@ namespace Tilbake.EF.Persistence.Repositories
         public InsurerBranchRepository(TilbakeDbContext context) : base(context)
         {
 
+        }
+
+        public async Task<IEnumerable<InsurerBranch>> GetByInsurerId(Guid insurerId)
+        {
+            return await _context.InsurerBranches
+                                .Where(c => c.InsurerId == insurerId)
+                                .Include(c => c.Insurer)
+                                .OrderBy(n => n.Name).AsNoTracking().ToListAsync();
         }
     }
 }

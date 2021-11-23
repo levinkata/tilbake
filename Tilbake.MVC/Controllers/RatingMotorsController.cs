@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -22,58 +22,58 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index(Guid insurerId)
         {
-            var resources = await _ratingMotorService.GetByInsurerAsync(insurerId);
-            return View(resources);
+            var ViewModels = await _ratingMotorService.GetByInsurerAsync(insurerId);
+            return View(ViewModels);
         }
 
         public async Task<IActionResult> Select(Guid? insurerId)
         {
             var insurers = await _insurerService.GetAllAsync();
 
-            RatingMotorSelectResource resource = new();
+            RatingMotorSelectViewModel ViewModel = new();
             
             if (insurerId == null || insurerId == Guid.Empty)
             {
-                resource.InsurerList = SelectLists.Insurers(insurers, Guid.Empty);
+                ViewModel.InsurerList = SelectLists.Insurers(insurers, Guid.Empty);
             } else
             {
-                resource.InsurerList = SelectLists.Insurers(insurers, insurerId);
-                resource.InsurerId = (Guid)insurerId;
+                ViewModel.InsurerList = SelectLists.Insurers(insurers, insurerId);
+                ViewModel.InsurerId = (Guid)insurerId;
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Create(Guid insurerId)
         {
             var insurer = await _insurerService.GetByIdAsync(insurerId);
 
-            RatingMotorSaveResource resource = new()
+            RatingMotorViewModel ViewModel = new()
             {
                 InsurerId = insurerId,
                 InsurerName = insurer.Name
             };
             
-            return await Task.Run(() => View(resource));
+            return await Task.Run(() => View(ViewModel));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(RatingMotorSaveResource resource)
+        public IActionResult Create(RatingMotorViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _ratingMotorService.AddAsync(resource);
-                return RedirectToAction(nameof(Index), new { insurerId = resource.InsurerId });
+                _ratingMotorService.AddAsync(ViewModel);
+                return RedirectToAction(nameof(Index), new { insurerId = ViewModel.InsurerId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
 
         [HttpPost]
         public IActionResult PostRatingMotor(Guid insurerId, decimal startValue, decimal endValue, decimal rateLocal, decimal rateImport)
         {
-            RatingMotorSaveResource resource = new()
+            RatingMotorViewModel ViewModel = new()
             {
                 InsurerId = insurerId,
                 StartValue = startValue,
@@ -81,7 +81,7 @@ namespace Tilbake.MVC.Controllers
                 RateLocal = rateLocal,
                 RateImport = rateImport
             };
-            _ratingMotorService.AddAsync(resource);
+            _ratingMotorService.AddAsync(ViewModel);
             return RedirectToAction(nameof(Index), new { insurerId });
         }
 
@@ -92,13 +92,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _ratingMotorService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -108,19 +108,19 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _ratingMotorService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, RatingMotorResource resource)
+        public IActionResult Edit(Guid id, RatingMotorViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -129,15 +129,15 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _ratingMotorService.UpdateAsync(resource);
+                    _ratingMotorService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index), new { insurerId = resource.InsurerId });
+                return RedirectToAction(nameof(Index), new { insurerId = ViewModel.InsurerId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Delete(Guid? id)
@@ -147,21 +147,21 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _ratingMotorService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(RatingMotorResource resource)
+        public IActionResult DeleteConfirmed(RatingMotorViewModel ViewModel)
         {
-             _ratingMotorService.DeleteAsync(resource.Id);
-            return RedirectToAction(nameof(Index), new { insurerId = resource.InsurerId });
+             _ratingMotorService.DeleteAsync(ViewModel.Id);
+            return RedirectToAction(nameof(Index), new { insurerId = ViewModel.InsurerId });
         }        
     }
 }

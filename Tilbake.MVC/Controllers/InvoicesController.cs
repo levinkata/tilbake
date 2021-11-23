@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -29,9 +29,9 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var resources = await _invoiceService.GetAllAsync();
+            var ViewModels = await _invoiceService.GetAllAsync();
 
-            return View(resources);
+            return View(ViewModels);
         }
 
         [HttpGet]
@@ -42,37 +42,37 @@ namespace Tilbake.MVC.Controllers
             var invoiceStatuses = await _invoiceStatusService.GetAllAsync();
             var taxes = await _taxService.GetAllAsync();
 
-            InvoiceSaveResource resource = new()
+            InvoiceViewModel ViewModel = new()
             {
                 PolicyId = policyId,
                 Amount = policyRisks.Sum(r => r.Premium),
                 InvoiceStatusList = SelectLists.InvoiceStatuses(invoiceStatuses, Guid.Empty),
                 TaxList = SelectLists.Taxes(taxes, Guid.Empty)
             };
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(InvoiceSaveResource resource)
+        public IActionResult Create(InvoiceViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _invoiceService.AddAsync(resource);
-                return RedirectToAction("Details", "Policies", new { id = resource.PolicyId });
+                _invoiceService.AddAsync(ViewModel);
+                return RedirectToAction("Details", "Policies", new { id = ViewModel.PolicyId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Invoices/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _invoiceService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _invoiceService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         public IActionResult Invoice()

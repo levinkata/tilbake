@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -25,13 +25,13 @@ namespace Tilbake.MVC.Controllers
         // GET: PaymentTypes/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _paymentTypeService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _paymentTypeService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PaymentTypes/Create
@@ -43,33 +43,33 @@ namespace Tilbake.MVC.Controllers
         // POST: PaymentTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PaymentTypeSaveResource resource)
+        public IActionResult Create(PaymentTypeViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _paymentTypeService.AddAsync(resource);
+                _paymentTypeService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PaymentTypes/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var resource = await _paymentTypeService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _paymentTypeService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PaymentTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, PaymentTypeResource resource)
+        public IActionResult Edit(Guid id, PaymentTypeViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -78,7 +78,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _paymentTypeService.UpdateAsync(resource);
+                    _paymentTypeService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -86,19 +86,19 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PaymentTypes/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var resource = await _paymentTypeService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _paymentTypeService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PaymentTypes/Delete/5

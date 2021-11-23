@@ -26,6 +26,11 @@ namespace Tilbake.EF.Persistence.Repositories
             return true;
         }
 
+        public virtual void AddRange(IEnumerable<TEntity> entities)
+        {
+            dbSet.AddRange(entities);
+        }
+
         public virtual async Task<bool> Delete(Guid id)
         {
             var entityToDelete = await dbSet.FindAsync(id);
@@ -44,6 +49,11 @@ namespace Tilbake.EF.Persistence.Repositories
                 dbSet.Attach(entityToDelete);
             }
             dbSet.Remove(entityToDelete);
+        }
+
+        public virtual void DeleteRange(IEnumerable<TEntity> entities)
+        {
+            dbSet.RemoveRange(entities);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll(
@@ -167,10 +177,10 @@ namespace Tilbake.EF.Persistence.Repositories
             }           
         }
         
-        public virtual void AddRange(IEnumerable<TEntity> entities)
-        {
-            dbSet.AddRange(entities);
-        }
+        //public virtual void AddRange(IEnumerable<TEntity> entities)
+        //{
+        //    dbSet.AddRange(entities);
+        //}
 
         //public virtual void Delete(Guid id)
         //{
@@ -187,10 +197,10 @@ namespace Tilbake.EF.Persistence.Repositories
         //    dbSet.Remove(entityToDelete);
         //}
 
-        public virtual void DeleteRange(IEnumerable<TEntity> entities)
-        {
-            dbSet.RemoveRange(entities);
-        }
+        //public virtual void DeleteRange(IEnumerable<TEntity> entities)
+        //{
+        //    dbSet.RemoveRange(entities);
+        //}
 
         public virtual void Update(Guid id, TEntity entity)
         {

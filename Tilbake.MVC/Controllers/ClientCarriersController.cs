@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -22,8 +22,8 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index(Guid clientId)
         {
-            var resources = await _clientCarrierService.GetByClientIdAsync(clientId);
-            return View(resources);
+            var ViewModels = await _clientCarrierService.GetByClientIdAsync(clientId);
+            return View(ViewModels);
         }
 
         [HttpGet]
@@ -31,26 +31,26 @@ namespace Tilbake.MVC.Controllers
         {
             var carriers = await _carrierService.GetAllAsync();
 
-            ClientCarrierSaveResource resource = new()
+            ClientCarrierViewModel ViewModel = new()
             {
                 PortfolioId = portfolioId,
                 ClientId = clientId
             };
-            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
+            ViewModel.CarrierList = SelectLists.Carriers(carriers, ViewModel.CarrierIds);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(ClientCarrierSaveResource resource)
+        public IActionResult Create(ClientCarrierViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _clientCarrierService.AddAsync(resource);
-                return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
+                _clientCarrierService.AddAsync(ViewModel);
+                return RedirectToAction("Details", "PortfolioClients", new { portfolioId = ViewModel.PortfolioId, clientId = ViewModel.ClientId });
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpGet]
@@ -60,26 +60,26 @@ namespace Tilbake.MVC.Controllers
             var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
             var selectedCarrierIds = clientCarriers.Select(r => r.CarrierId).ToList();
 
-            ClientCarrierResource resource = new()
+            ClientCarrierViewModel ViewModel = new()
             {
                 PortfolioId = portfolioId,
                 ClientId = clientId
             };
             if(selectedCarrierIds != null)
             {
-                resource.CarrierIds = selectedCarrierIds;
+                ViewModel.CarrierIds = selectedCarrierIds;
             }
 
-            resource.CarrierList = SelectLists.Carriers(carriers, resource.CarrierIds);
+            ViewModel.CarrierList = SelectLists.Carriers(carriers, ViewModel.CarrierIds);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
-        public IActionResult Update(ClientCarrierResource resource)
+        public IActionResult Update(ClientCarrierViewModel ViewModel)
         {
-            _clientCarrierService.UpdateAsync(resource);
-            return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
+            _clientCarrierService.UpdateAsync(ViewModel);
+            return RedirectToAction("Details", "PortfolioClients", new { portfolioId = ViewModel.PortfolioId, clientId = ViewModel.ClientId });
         }
     }
 }

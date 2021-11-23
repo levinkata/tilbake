@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -21,56 +21,56 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var resources = await _commissionRateService.GetAllAsync();
-            return View(resources);
+            var ViewModels = await _commissionRateService.GetAllAsync();
+            return View(ViewModels);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            CommissionRateSaveResource resource = new()
+            CommissionRateViewModel ViewModel = new()
             {
                 RiskList = SelectLists.RegisteredRisks(null)
             };
-            return await Task.Run(() => View(resource));
+            return await Task.Run(() => View(ViewModel));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CommissionRateSaveResource resource)
+        public IActionResult Create(CommissionRateViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _commissionRateService.AddAsync(resource);
+                _commissionRateService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
 
-            resource.RiskList = SelectLists.RegisteredRisks(resource.RiskName);
-            return View(resource);
+            ViewModel.RiskList = SelectLists.RegisteredRisks(ViewModel.RiskName);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _commissionRateService.GetByIdAsync(id);
-            return View(resource);
+            var ViewModel = await _commissionRateService.GetByIdAsync(id);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var resource = await _commissionRateService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _commissionRateService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            resource.RiskList = SelectLists.RegisteredRisks(resource.RiskName);
-            return View(resource);
+            ViewModel.RiskList = SelectLists.RegisteredRisks(ViewModel.RiskName);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, CommissionRateResource resource)
+        public IActionResult Edit(Guid? id, CommissionRateViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -79,8 +79,8 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _commissionRateService.UpdateAsync(resource);
-                    return RedirectToAction(nameof(Details), new { id = resource.Id });
+                    _commissionRateService.UpdateAsync(ViewModel);
+                    return RedirectToAction(nameof(Details), new { id = ViewModel.Id });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -88,8 +88,8 @@ namespace Tilbake.MVC.Controllers
                 }
             }
 
-            resource.RiskList = SelectLists.RegisteredRisks(resource.RiskName);
-            return View(resource);
+            ViewModel.RiskList = SelectLists.RegisteredRisks(ViewModel.RiskName);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Delete(Guid? id)
@@ -99,20 +99,20 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _commissionRateService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _commissionRateService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(CommissionRateResource resource)
+        public IActionResult DeleteConfirmed(CommissionRateViewModel ViewModel)
         {
-            _commissionRateService.DeleteAsync(resource.Id);
+            _commissionRateService.DeleteAsync(ViewModel.Id);
             return RedirectToAction(nameof(Index));
         }
     }

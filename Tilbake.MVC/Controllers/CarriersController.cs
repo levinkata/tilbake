@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -32,13 +32,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _carrierService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _carrierService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Carriers/Create
@@ -50,14 +50,14 @@ namespace Tilbake.MVC.Controllers
         // POST: Carriers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CarrierSaveResource resource)
+        public IActionResult Create(CarrierViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _carrierService.AddAsync(resource);
+                _carrierService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Carriers/Edit/5
@@ -68,30 +68,30 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _carrierService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _carrierService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Carriers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, CarrierResource resource)
+        public IActionResult Edit(Guid? id, CarrierViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _carrierService.UpdateAsync(resource);
+                _carrierService.UpdateAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Carriers/Delete/5
@@ -102,13 +102,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _carrierService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _carrierService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Carriers/Delete/5

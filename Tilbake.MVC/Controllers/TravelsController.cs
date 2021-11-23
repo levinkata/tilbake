@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -32,13 +32,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _travelService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _travelService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Travels/Create
@@ -50,14 +50,14 @@ namespace Tilbake.MVC.Controllers
         // POST: Travels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(TravelSaveResource resource)
+        public IActionResult Create(TravelViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _travelService.AddAsync(resource);
+                _travelService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Travels/Edit/5
@@ -68,20 +68,20 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _travelService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _travelService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Travels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, TravelResource resource)
+        public IActionResult Edit(Guid? id, TravelViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -90,7 +90,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _travelService.UpdateAsync(resource);
+                    _travelService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -98,7 +98,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Travels/Delete/5
@@ -109,13 +109,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _travelService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _travelService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Travels/Delete/5

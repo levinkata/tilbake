@@ -316,20 +316,20 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", motorModelId);
         }
 
-        public static SelectList Occupations(IEnumerable<OccupationResource> occupations, Guid? occupationId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Occupation", Value = "" });
+        //public static SelectList Occupations(IEnumerable<OccupationViewModel> occupations, Guid? occupationId)
+        //{
+        //    List<SelectListItem> items = new();
+        //    items.Add(new SelectListItem() { Text = "Select Occupation", Value = "" });
 
-            foreach (var item in occupations)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
+        //    foreach (var item in occupations)
+        //    {
+        //        items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+        //    }
 
-            return (occupationId == Guid.Empty || String.IsNullOrEmpty(occupationId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", occupationId);
-        }
+        //    return (occupationId == Guid.Empty || String.IsNullOrEmpty(occupationId.ToString())) ?
+        //                            new SelectList(items, "Value", "Text") :
+        //                            new SelectList(items, "Value", "Text", occupationId);
+        //}
 
         public static SelectList PaymentMethods(IEnumerable<PaymentMethodResource> paymentMethods, Guid? paymentMethodId)
         {

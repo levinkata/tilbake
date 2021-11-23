@@ -1,163 +1,115 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.Core;
 using Tilbake.Core.Enums;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Helpers;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class PortfolioClientsController : Controller
+    public class PortfolioClientsController : BaseController
     {
-        private readonly IPortfolioClientService _portfolioClientService;
-        private readonly ICityService _cityService;
-        private readonly IClientService _clientService;
-        private readonly IClientStatusService _clientStatusService;
-        private readonly IClientTypeService _clientTypeService;
-        private readonly ICountryService _countryService;
-        private readonly IGenderService _genderService;
-        private readonly IIdDocumentTypeService _idDocumentTypeService;
-        private readonly IMaritalStatusService _maritalStatusService;
-        private readonly IOccupationService _occupationService;
-        private readonly ITitleService _titleService;
-        private readonly ICarrierService _carrierService;
-        private readonly IPortfolioService _portfolioService;
-        private readonly IClientCarrierService _clientCarrierService;
-        private readonly IAddressService _addressService;
-
-        public PortfolioClientsController(IPortfolioClientService portfolioClientService,
-                                            ICityService cityService,
-                                            IClientService clientService,
-                                            IClientStatusService clientStatusService,
-                                            IClientTypeService clientTypeService,
-                                            ICountryService countryService,
-                                            IGenderService genderService,
-                                            IIdDocumentTypeService idDocumentTypeService,
-                                            IMaritalStatusService maritalStatusService,
-                                            IOccupationService occupationService,
-                                            ITitleService titleService,
-                                            ICarrierService carrierService,
-                                            IPortfolioService portfolioService,
-                                            IClientCarrierService clientCarrierService,
-                                            IAddressService addressService)
+        public PortfolioClientsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _portfolioClientService = portfolioClientService;
-            _cityService = cityService;
-            _clientService = clientService;
-            _clientStatusService = clientStatusService;
-            _clientTypeService = clientTypeService;
-            _countryService = countryService;
-            _genderService = genderService;
-            _idDocumentTypeService = idDocumentTypeService;
-            _maritalStatusService = maritalStatusService;
-            _occupationService = occupationService;
-            _titleService = titleService;
-            _carrierService = carrierService;
-            _portfolioService = portfolioService;
-            _clientCarrierService = clientCarrierService;
-            _addressService = addressService;
+
         }
 
-        // GET: PortfolioClients
-        public async Task<IActionResult> Index(Guid portfolioId)
-        {
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);         
-
-            ClientResource resource = new()
-            {
-                PortfolioId = portfolioId,
-                PortfolioName = portfolio.Name
-            };
-
-            return View(resource);
-        }
-
+        [HttpGet]
         public async Task<IActionResult> Search(Guid portfolioId, string searchString = "~#")
         {
-            var resource = await _portfolioService.GetByIdAsync(portfolioId);
-            var resources = await _clientService.GetByPortfolioIdAsync(portfolioId);
+            var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
+            var clients = await _unitOfWork.PortfolioClients.GetByPortfolioId(portfolioId);
+
+            var clientModel = _mapper.Map<IEnumerable<Client>, IEnumerable<ClientViewModel>>(clients);
 
             if (!String.IsNullOrEmpty(searchString) && portfolioId != Guid.Empty)
             {
-                resources = resources.Where(r => r.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                clientModel = clientModel.Where(r => r.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
                                         || r.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
                                         || r.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
             }
 
-            PortfolioClientSearchResource searchResource = new()
+            PortfolioClientSearchViewModel model = new()
             {
                 PortfolioId = portfolioId,
-                PortfolioName = resource.Name,
+                PortfolioName = portfolio.Name,
                 SearchString = "",
-                ClientResources = resources.ToList()
+                Clients = clientModel
             };
-            return View(searchResource);
+            return View(model);
         }
 
         public async Task<IActionResult> ImportBulk(Guid portfolioId, Guid fileTemplateId, FileType fileType, string delimiter)
         {
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var result = await _unitOfWork.Portfolios.GetById(portfolioId);
 
-            UpLoadFileResource resource = new()
+            UpLoadFileViewModel ViewModel = new()
             {
                 PortfolioId = portfolioId,
-                PortfolioName = portfolio.Name,
+                PortfolioName = result.Name,
                 FileTemplateId = fileTemplateId,
                 FileType = fileType,
                 Delimiter = delimiter,
                 TableName = "Client"
             };
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ImportBulk(UpLoadFileResource resource)
+        public async Task<IActionResult> ImportBulk(UpLoadFileViewModel model)
         {
-            if (resource == null)
+            if (model == null)
             {
-                throw new ArgumentNullException(nameof(resource));
+                throw new ArgumentNullException(nameof(model));
             };
 
             if (ModelState.IsValid)
             {
-                await _clientService.ImportBulkAsync(resource);
-                return RedirectToAction(nameof(LoadBulks), new { resource.PortfolioId });
+                //await _clientService.ImportBulkAsync(ViewModel);
+                return RedirectToAction(nameof(LoadBulks), new { model.PortfolioId });
             }
 
-            return View(resource);
+            return View(model);
         }
 
         public async Task<IActionResult> LoadBulks(Guid portfolioId)
         {
-            var resources = await _clientService.GetBulkByPortfolioIdAsync(portfolioId);
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            //var ViewModels = await _clientService.GetBulkByPortfolioIdAsync(portfolioId);
+            var portfolio = await _unitOfWork.Portfolios.GetByIdAsync(portfolioId);
 
             ViewBag.PortfolioId = portfolioId;
             ViewBag.PortfolioName = portfolio.Name;
 
-            return View(resources);
+            return View();
         }
 
         [HttpPost, ActionName("LoadBulks")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoadConfirmed(List<ClientBulkResource> resources)
+        public async Task<IActionResult> LoadConfirmed(List<ClientBulkViewModel> ViewModels)
         {
-            if (resources == null)
+            if (ViewModels == null)
             {
-                throw new ArgumentNullException(nameof(resources));
+                throw new ArgumentNullException(nameof(ViewModels));
             };
 
-            var portfolioId = resources.GroupBy(r => r.PortfolioId).FirstOrDefault().Key;
-            var portfolio = await _portfolioService.GetByIdAsync((Guid)portfolioId);
+            var portfolioId = ViewModels.GroupBy(r => r.PortfolioId).FirstOrDefault().Key;
+            var portfolio = await _unitOfWork.Portfolios.GetByIdAsync((Guid)portfolioId);
 
             if (ModelState.IsValid)
             {
-                await _clientService.AddBulkAsync((Guid)portfolioId);
+                //await _clientService.AddBulkAsync((Guid)portfolioId);
                 return RedirectToAction(nameof(Index), new { portfolioId });
             }
             else
@@ -165,229 +117,409 @@ namespace Tilbake.MVC.Controllers
                 ModelState.AddModelError("", "Encountered possible error - Model is invalid");
                 ViewBag.PortfolioId = portfolioId;
                 ViewBag.PortfolioName = portfolio.Name;
-                return View(resources);
+                return View(ViewModels);
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPortfolioClients(Guid portfolioId, string category, string searchString)
-        {
-            var resources = await _clientService.GetByPortfolioIdAsync(portfolioId);
+        //[HttpGet]
+        //public async Task<IActionResult> GetPortfolioClients(Guid portfolioId, string category, string searchString)
+        //{
+            //var result = await _clientService.GetByPortfolioIdAsync(portfolioId);
 
-            switch (category)
-            {
-                case "Client Number":
-                    bool isNumber = int.TryParse(searchString, out int n);
-                    if (isNumber)
-                    {
-                        resources = resources.Where(r => r.ClientNumber == n);
-                    }
-                    break;
-                case "Id Number":
-                    resources = resources.Where(r => r.IdNumber == searchString);
-                    break;
-                case "Name":
-                    if (!String.IsNullOrEmpty(searchString))
-                    {
-                        resources = resources.Where(r => r.LastName.Contains(searchString)
-                                                || r.FirstName.Contains(searchString));
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return Json(resources);
-        }
+            //switch (category)
+            //{
+            //    case "Client Number":
+            //        bool isNumber = int.TryParse(searchString, out int n);
+            //        if (isNumber)
+            //        {
+            //            result = result.Where(r => r.ClientNumber == n);
+            //        }
+            //        break;
+            //    case "Id Number":
+            //        result = result.Where(r => r.IdNumber == searchString);
+            //        break;
+            //    case "Name":
+            //        if (!String.IsNullOrEmpty(searchString))
+            //        {
+            //            result = result.Where(r => r.LastName.Contains(searchString)
+            //                                    || r.FirstName.Contains(searchString));
+            //        }
+            //        break;
+            //    default:
+            //        break;
+            //}
+        //    return Json(Ok);
+        //}
 
         public async Task<IActionResult> Details(Guid portfolioId, Guid clientId)
         {
-            var portfolioClientId = await _portfolioClientService.GetPortfolioClientId(portfolioId, clientId);
-            var resource = await _clientService.GetByClientIdAsync(portfolioId, clientId);
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
-            var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
-            var address = await _addressService.GetByClientIdAsync(clientId);
+            var result = await _unitOfWork.PortfolioClients.GetByPortfolioIdAndClientId(portfolioId, clientId);
+            var model = _mapper.Map<Client, ClientViewModel>(result);
 
-            resource.Address = address;
-            resource.ClientCarriers.AddRange(clientCarriers);
+            var cityId = model.Address.CityId;
+            var city = await _unitOfWork.Cities.GetById(cityId);
+            var countryId = city.CountryId;
 
-            if (resource == null)
-            {
-                return NotFound();
-            }
-            resource.PortfolioId = portfolioId;
-            resource.PortfolioClientId = portfolioClientId;
-            resource.PortfolioName = portfolio.Name;
+            var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
+            var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var genders = await _unitOfWork.Genders.GetAll(r => r.OrderBy(n => n.Name));
+            var idDocumentTypes = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var maritalStatuses = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var occupations = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
 
-            return View(resource);
+            model.PortfolioId = portfolioId;
+            model.PortfolioName = model.PortfolioName;
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.ClientTypeList = MVCHelperExtensions.ToSelectList(clientTypes, model.ClientTypeId);
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.GenderList = MVCHelperExtensions.ToSelectList(genders, model.GenderId);
+            model.IdDocumentTypeList = MVCHelperExtensions.ToSelectList(idDocumentTypes, model.IdDocumentTypeId);
+            model.MaritalStatusList = MVCHelperExtensions.ToSelectList(maritalStatuses, model.MaritalStatusId);
+            model.OccupationList = MVCHelperExtensions.ToSelectList(occupations, model.OccupationId);
+            model.TitleList = MVCHelperExtensions.ToSelectList(titles, model.TitleId);
+
+            model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
+
+            model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
+
+            return View(model);
         }
 
         // GET: PortfolioClients/Create
         public async Task<IActionResult> Create(Guid portfolioId)
         {
-            var carriers = await _carrierService.GetAllAsync();
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var clientStatuses = await _clientStatusService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var idDocumentTypes = await _idDocumentTypeService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
+            var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var genders = await _unitOfWork.Genders.GetAll(r => r.OrderBy(n => n.Name));
+            var idDocumentTypes = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var maritalStatuses = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var occupations = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
 
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
 
-            PortfolioClientSaveResource resource = new()
+            PortfolioClientViewModel model = new()
             {
                 PortfolioId = portfolioId,
+                ClientStatusList = MVCHelperExtensions.ToSelectList(clientStatuses, Guid.Empty)
+            };
+
+            AddressViewModel addressViewModel = new()
+            {
+                CountryList = MVCHelperExtensions.ToSelectList(countries, Guid.Empty)
+            };
+
+            ClientViewModel clientViewModel = new()
+            {
                 PortfolioName = portfolio.Name,
-                ClientStatusList = SelectLists.ClientStatuses(clientStatuses, Guid.Empty)
+                BirthDate = DateTime.Now.Date,
+
+                ClientTypeList = MVCHelperExtensions.ToSelectList(clientTypes, Guid.Empty),
+                CountryList = MVCHelperExtensions.ToSelectList(countries, Guid.Empty),
+                GenderList = MVCHelperExtensions.ToSelectList(genders, Guid.Empty),
+                IdDocumentTypeList = MVCHelperExtensions.ToSelectList(idDocumentTypes, Guid.Empty),
+                MaritalStatusList = MVCHelperExtensions.ToSelectList(maritalStatuses, Guid.Empty),
+                OccupationList = MVCHelperExtensions.ToSelectList(occupations, Guid.Empty),
+                TitleList = MVCHelperExtensions.ToSelectList(titles, Guid.Empty)
             };
 
-            AddressSaveResource addressResource = new()
-            {
-                CountryList = SelectLists.Countries(countries, Guid.Empty)
-            };
+            clientViewModel.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, clientViewModel.CarrierIds);
+            clientViewModel.Address = addressViewModel;
+            model.Client = clientViewModel;
 
-            ClientSaveResource clientResource = new()
-            {
-                BirthDate = DateTime.Now.Date,               
-                ClientTypeList = SelectLists.ClientTypes(clientTypes, Guid.Empty),
-                CountryList = SelectLists.Countries(countries, Guid.Empty),
-                GenderList = SelectLists.Genders(genders, Guid.Empty),
-                IdDocumentTypeList = SelectLists.IdDocumentTypes(idDocumentTypes, Guid.Empty),
-                MaritalStatusList = SelectLists.MaritalStatuses(maritalStatuses, Guid.Empty),
-                OccupationList = SelectLists.Occupations(occupations, Guid.Empty),
-                TitleList = SelectLists.Titles(titles, Guid.Empty)                
-            };
-
-            clientResource.CarrierList = SelectLists.Carriers(carriers, clientResource.CarrierIds);
-            clientResource.Address = addressResource;
-
-            resource.Client = clientResource;
-            return View(resource);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PortfolioClientSaveResource resource)
+        public async Task<IActionResult> Create(PortfolioClientViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await _portfolioClientService.AddAsync(resource);
-                return RedirectToAction(nameof(Search), new { portfolioId = resource.PortfolioId, searchString = resource.Client.LastName});
+                var clientViewModel = model.Client;
+                Guid clientId = Guid.NewGuid();
+
+                var client = _mapper.Map<ClientViewModel, Client>(clientViewModel);
+
+                if (client != null)
+                {
+                    client.Id = clientId;
+                    client.DateAdded = DateTime.Now;
+
+                    clientId = client.Id;
+
+                    var portfolioClient = _mapper.Map<PortfolioClientViewModel, PortfolioClient>(model);
+
+                    portfolioClient.Id = Guid.NewGuid();
+                    portfolioClient.ClientId = clientId;
+                    portfolioClient.DateAdded = DateTime.Now;
+
+                    client.PortfolioClients.Add(portfolioClient);
+                    await _unitOfWork.Clients.Add(client);
+
+                    var addressViewModel = model.Client.Address;
+
+                    if (addressViewModel != null)
+                    {
+                        var address = _mapper.Map<AddressViewModel, Address>(addressViewModel);
+
+                        address.Id = Guid.NewGuid();
+                        address.ClientId = clientId;
+                        address.DateAdded = DateTime.Now;
+                        await _unitOfWork.Addresses.Add(address);
+                    }
+
+                    var emailAddressesViewModels = model.Client.EmailAddresses;
+                    if (emailAddressesViewModels.Count > 0)
+                    {
+                        var emailAddresses = _mapper.Map<IEnumerable<EmailAddressViewModel>, IEnumerable<EmailAddress>>(emailAddressesViewModels);
+
+                        foreach (var emailAddress in emailAddresses)
+                        {
+                            emailAddress.Id = Guid.NewGuid();
+                            emailAddress.ClientId = clientId;
+                            emailAddress.DateAdded = DateTime.Now;
+                            await _unitOfWork.EmailAddresses.Add(emailAddress);
+                        }
+                    }
+
+                    var mobileNumbersViewModels = model.Client.MobileNumbers;
+                    if (mobileNumbersViewModels.Count > 0)
+                    {
+                        var mobileNumbers = _mapper.Map<IEnumerable<MobileNumberViewModel>, IEnumerable<MobileNumber>>(mobileNumbersViewModels);
+                        foreach (var mobileNumber in mobileNumbers)
+                        {
+                            mobileNumber.Id = Guid.NewGuid();
+                            mobileNumber.ClientId = clientId;
+                            mobileNumber.DateAdded = DateTime.Now;
+                            await _unitOfWork.MobileNumbers.Add(mobileNumber);
+                        }
+                    }
+
+                    var carrierIds = model.Client.CarrierIds;
+                    if (carrierIds != null)
+                    {
+                        foreach (var carrierId in carrierIds)
+                        {
+                            ClientCarrier newClientCarrier = new()
+                            {
+                                ClientId = clientId,
+                                CarrierId = carrierId,
+                                DateAdded = DateTime.Now
+                            };
+                            await _unitOfWork.ClientCarriers.Add(newClientCarrier);
+                        }
+                    }
+                    await _unitOfWork.CompleteAsync();
+
+                }
+                return RedirectToAction(nameof(Search), new { portfolioId = model.PortfolioId, searchString = model.Client.LastName });
             }
 
-            var cities = await _cityService.GetByCountryId(resource.Client.Address.CountryId);
-            var clientStatuses = await _clientStatusService.GetAllAsync();
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var idDocumentTypes = await _idDocumentTypeService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
-            var carriers = await _carrierService.GetAllAsync();
+            var countryId = model.Client.CountryId;
+            var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
+            var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var genders = await _unitOfWork.Genders.GetAll(r => r.OrderBy(n => n.Name));
+            var idDocumentTypes = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var maritalStatuses = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var occupations = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
 
-            resource.ClientStatusList = SelectLists.ClientStatuses(clientStatuses, resource.ClientStatusId);
+            var portfolio = await _unitOfWork.Portfolios.GetById(model.PortfolioId);
 
-            resource.Client.Address.CountryList = SelectLists.Countries(countries, resource.Client.Address.CountryId);
-            resource.Client.Address.CityList = SelectLists.Cities(cities, resource.Client.Address.CityId);
+            model.ClientStatusList = MVCHelperExtensions.ToSelectList(clientStatuses, model.ClientStatusId);
+            model.Client.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Client.CountryId);
+            model.Client.ClientTypeList = MVCHelperExtensions.ToSelectList(clientTypes, model.Client.ClientTypeId);
+            model.Client.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Client.CountryId);
+            model.Client.GenderList = MVCHelperExtensions.ToSelectList(genders, model.Client.GenderId);
+            model.Client.IdDocumentTypeList = MVCHelperExtensions.ToSelectList(idDocumentTypes, model.Client.IdDocumentTypeId);
+            model.Client.MaritalStatusList = MVCHelperExtensions.ToSelectList(maritalStatuses, model.Client.MaritalStatusId);
+            model.Client.OccupationList = MVCHelperExtensions.ToSelectList(occupations, model.Client.OccupationId);
+            model.Client.TitleList = MVCHelperExtensions.ToSelectList(titles, model.Client.TitleId);
+            model.Client.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.Client.CarrierIds);
 
-            resource.Client.CarrierList = SelectLists.Carriers(carriers, resource.Client.CarrierIds);
-            resource.Client.Address.CityList = SelectLists.Cities(cities, resource.Client.Address.CityId);
-            resource.Client.ClientTypeList = SelectLists.ClientTypes(clientTypes, resource.Client.ClientTypeId);
-            resource.Client.CountryList = SelectLists.Countries(countries, resource.Client.CountryId);
-            resource.Client.GenderList = SelectLists.Genders(genders, resource.Client.GenderId);
-            resource.Client.IdDocumentTypeList = SelectLists.IdDocumentTypes(idDocumentTypes, resource.Client.IdDocumentTypeId);
-            resource.Client.MaritalStatusList = SelectLists.MaritalStatuses(maritalStatuses, resource.Client.MaritalStatusId);
-            resource.Client.OccupationList = SelectLists.Occupations(occupations, resource.Client.OccupationId);
-            resource.Client.TitleList = SelectLists.Titles(titles, resource.Client.TitleId);
+            model.Client.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            model.Client.CityList = MVCHelperExtensions.ToSelectList(cities, model.Client.Address.CityId);
 
-            return View(resource);
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddExistingClient(Guid portfolioId, Guid clientId)
         {
-            PortfolioClientSaveResource resource = new()
+            PortfolioClientViewModel model = new()
             {
                 PortfolioId = portfolioId,
                 ClientId = clientId
             };
-
-            await _portfolioClientService.AddAsync(resource);
+            var portfolioClient = _mapper.Map<PortfolioClientViewModel, PortfolioClient>(model);
+            await _unitOfWork.PortfolioClients.Add(portfolioClient);
+            await _unitOfWork.CompleteAsync();
             return Ok();
         }
 
-        public async Task<IActionResult> GetByIdNumber(Guid portfolioId, string idNumber)
+        [HttpGet]
+        public async Task<IActionResult> GetByPortfolioIdAndIdNumber(Guid portfolioId, string idNumber)
         {
-            var resource = await _portfolioClientService.GetByIdNumberAsync(portfolioId, idNumber);
-            return Json(resource);
+            var result = await _unitOfWork.PortfolioClients.GetByPortfolioIdAndIdNumber(portfolioId, idNumber);
+            var model = _mapper.Map<Client, ClientViewModel>(result);
+            return Json(model);
         }
 
-        [HttpGet]
+        [HttpGet] 
         public async Task<IActionResult> Edit(Guid portfolioId, Guid clientId)
         {
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
+            var result = await _unitOfWork.PortfolioClients.GetByPortfolioIdAndClientId(portfolioId, clientId);
+            var model = _mapper.Map<Client, ClientViewModel>(result);
 
-            // var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
-            // var clientCarriers = await _clientCarrierService.GetByClientIdAsync(clientId);
-            // var address = await _addressService.GetByClientIdAsync(clientId);
-            var resource = await _portfolioClientService.GetByPortfolioClientAsync(portfolioId, clientId);
+            var cityId = model.Address.CityId;
+            var city = await _unitOfWork.Cities.GetById(cityId);
+            var countryId = city.CountryId;
 
-            resource.PortfolioId = portfolioId;
-            resource.ClientTypeList = SelectLists.ClientTypes(clientTypes, resource.Client.ClientTypeId);
-            resource.CountryList = SelectLists.Countries(countries, resource.Client.CountryId);
-            resource.GenderList = SelectLists.Genders(genders, resource.Client.GenderId);
-            resource.MaritalStatusList = SelectLists.MaritalStatuses(maritalStatuses, resource.Client.MaritalStatusId);
-            resource.OccupationList = SelectLists.Occupations(occupations, resource.Client.OccupationId);
-            resource.TitleList = SelectLists.Titles(titles, resource.Client.TitleId);
-            //resource.Addresses = address;
-            //resource.ClientCarriers.AddRange(clientCarriers);
+            var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
+            var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var genders = await _unitOfWork.Genders.GetAll(r => r.OrderBy(n => n.Name));
+            var idDocumentTypes = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var maritalStatuses = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var occupations = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
 
-            return View("EditClient", resource);
+            model.PortfolioId = portfolioId;
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.ClientTypeList = MVCHelperExtensions.ToSelectList(clientTypes, model.ClientTypeId);
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.GenderList = MVCHelperExtensions.ToSelectList(genders, model.GenderId);
+            model.IdDocumentTypeList = MVCHelperExtensions.ToSelectList(idDocumentTypes, model.IdDocumentTypeId);
+            model.MaritalStatusList = MVCHelperExtensions.ToSelectList(maritalStatuses, model.MaritalStatusId);
+            model.OccupationList = MVCHelperExtensions.ToSelectList(occupations, model.OccupationId);
+            model.TitleList = MVCHelperExtensions.ToSelectList(titles, model.TitleId);
+
+            model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
+
+            model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
+
+            return View("EditClient", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        IActionResult Edit(ClientResource resource)
+        public async Task<IActionResult> Edit(ClientViewModel model)
         {
             if(ModelState.IsValid)
             {
-                _clientService.UpdateAsync(resource);
-                return RedirectToAction(nameof(Edit), new { portfolioId = resource.PortfolioId, clientId = resource.Id });
+                var client = _mapper.Map<ClientViewModel, Client>(model);
+                
+                client.DateModified = DateTime.Now;
+                await _unitOfWork.Clients.Update(client);
+
+                var clientId = client.Id;
+                var addressViewModel = model.Address;
+                var address = _mapper.Map<AddressViewModel, Address>(addressViewModel);
+
+                address.ClientId = clientId;
+                address.DateAdded = DateTime.Now;
+                await _unitOfWork.Addresses.Update(address);
+
+                var emailAddressesViewModels = model.EmailAddresses;
+                var emailAddresses = _mapper.Map<IEnumerable<EmailAddressViewModel>, IEnumerable<EmailAddress>>(emailAddressesViewModels);
+
+                foreach (var emailAddress in emailAddresses)
+                {
+                    emailAddress.ClientId = clientId;
+                    emailAddress.DateModified = DateTime.Now;
+                    await _unitOfWork.EmailAddresses.Update(emailAddress);
+                }
+
+                var mobileNumbersViewModels = model.MobileNumbers;
+                var mobileNumbers = _mapper.Map<IEnumerable<MobileNumberViewModel>, IEnumerable<MobileNumber>>(mobileNumbersViewModels);
+                foreach (var mobileNumber in mobileNumbers)
+                {
+                    mobileNumber.ClientId = clientId;
+                    mobileNumber.DateModified = DateTime.Now;
+                    await _unitOfWork.MobileNumbers.Update(mobileNumber);
+                }
+                
+                var carrierIds = model.CarrierIds;
+                var clientCarriers = await _unitOfWork.ClientCarriers.GetByClientId(clientId);
+
+                _unitOfWork.ClientCarriers.DeleteRange(clientCarriers);
+
+                if (carrierIds != null)
+                {
+                    List<ClientCarrier> newClientCarriers = new();
+
+                    foreach (var carrierId in carrierIds)
+                    {
+                        ClientCarrier newClientCarrier = new()
+                        {
+                            ClientId = clientId,
+                            CarrierId = carrierId,
+                            DateAdded = DateTime.Now
+                        };
+                        newClientCarriers.Add(newClientCarrier);
+                    }
+                    _unitOfWork.ClientCarriers.AddRange(newClientCarriers);
+                }
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Edit), new { portfolioId = model.PortfolioId, clientId = model.Id });
             }
-            return View(resource);
+
+            var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var cities = await _unitOfWork.Cities.GetByCountryId(model.CountryId);
+            var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var genders = await _unitOfWork.Genders.GetAll(r => r.OrderBy(n => n.Name));
+            var idDocumentTypes = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var maritalStatuses = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var occupations = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
+
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.ClientTypeList = MVCHelperExtensions.ToSelectList(clientTypes, model.ClientTypeId);
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.GenderList = MVCHelperExtensions.ToSelectList(genders, model.GenderId);
+            model.IdDocumentTypeList = MVCHelperExtensions.ToSelectList(idDocumentTypes, model.IdDocumentTypeId);
+            model.MaritalStatusList = MVCHelperExtensions.ToSelectList(maritalStatuses, model.MaritalStatusId);
+            model.OccupationList = MVCHelperExtensions.ToSelectList(occupations, model.OccupationId);
+            model.TitleList = MVCHelperExtensions.ToSelectList(titles, model.TitleId);
+
+            model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
+
+            model.Address.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Address.CountryId);
+            model.Address.CityList = MVCHelperExtensions.ToSelectList(cities, model.Address.CityId);
+
+            return View("EditClient", model);
         }
 
         // GET: PortfolioClients/Delete/5
-        public async Task<IActionResult> Delete(Guid? portfolioId, Guid? clientId)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (portfolioId == null || clientId == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _clientService.GetByClientIdAsync((Guid)portfolioId, (Guid)clientId);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View("EditClient", resource);
+            var result = await _unitOfWork.PortfolioClients.GetById(id);
+            var model = _mapper.Map<PortfolioClient, PortfolioClientViewModel>(result);
+            return View(model);
         }
 
         // POST: PortfolioClients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _portfolioClientService.DeleteAsync(id);
+            await _unitOfWork.PortfolioClients.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

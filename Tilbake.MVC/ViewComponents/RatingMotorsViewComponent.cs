@@ -22,8 +22,8 @@ namespace Tilbake.MVC.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid insurerId)
         {
             ViewBag.InsurerId = insurerId;
-            var resources = await _ratingMotorService.GetByInsurerAsync(insurerId);
-            return View(resources);
+            var ViewModels = await _ratingMotorService.GetByInsurerAsync(insurerId);
+            return View(ViewModels);
         }
     }
 }

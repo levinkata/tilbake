@@ -71,7 +71,7 @@ try
     builder.Services.AddControllersWithViews()
             .AddFluentValidation(options =>
             {
-                options.RegisterValidatorsFromAssemblyContaining<BankResourceValidator>();
+                options.RegisterValidatorsFromAssemblyContaining<BankViewModelValidator>();
                 options.DisableDataAnnotationsValidation = true;
             })
             .AddRazorRuntimeCompilation();
@@ -88,7 +88,7 @@ try
                     policy.RequireRole("Admin"));
             });
 
-    builder.Services.AddAutoMapper(typeof(ModelToResourceProfile));
+    builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile));
     builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
     var app = builder.Build();

@@ -1,26 +1,42 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    [Authorize]
-    public class IdDocumentTypesController : Controller
+    public class IdDocumentTypesController : BaseController
     {
-        private readonly IIdDocumentTypeService _idDocumentTypeService;
-
-        public IdDocumentTypesController(IIdDocumentTypeService idDocumentTypeService)
+        public IdDocumentTypesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _idDocumentTypeService = idDocumentTypeService;
+
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var result = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<IdDocumentType>, IEnumerable<IdDocumentTypeViewModel>>(result);
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetIdDocumentType(Guid id)
+        {
+            var result = await _unitOfWork.IdDocumentTypes.GetById(id);
+            var model = _mapper.Map<IdDocumentType, IdDocumentTypeViewModel>(result);
+
+            return Json(new { model.Id, model.Name });
         }
 
         [HttpGet]
@@ -30,37 +46,76 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(IdDocumentTypeSaveResource resource)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(IdDocumentTypeViewModel model)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                _idDocumentTypeService.AddAsync(resource);
+                var idDocumentType = _mapper.Map<IdDocumentTypeViewModel, IdDocumentType>(model);
+                idDocumentType.Id = Guid.NewGuid();
+                idDocumentType.DateAdded = DateTime.Now;
+
+                await _unitOfWork.IdDocumentTypes.Add(idDocumentType);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(resource);
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetIdDocumentTypes()
+        public async Task<IActionResult> Details(Guid id)
         {
-            var resources = await _idDocumentTypeService.GetAllAsync();
-            var idDocumentTypes = from m in resources
-                              select new
-                              {
-                                  m.Id,
-                                  m.Name
-                              };
-
-            return Json(idDocumentTypes);
+            var result = await _unitOfWork.IdDocumentTypes.GetById(id);
+            var model = _mapper.Map<IdDocumentType, IdDocumentTypeViewModel>(result);
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetIdDocumentType(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            var resource = await _idDocumentTypeService.GetByIdAsync(id);
+            var result = await _unitOfWork.IdDocumentTypes.GetById(id);
 
-            return Json(new { resource.Id, resource.Name});
+            var model = _mapper.Map<IdDocumentType, IdDocumentTypeViewModel>(result);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid? id, IdDocumentTypeViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if(ModelState.IsValid)
+            {
+                var idDocumentType = _mapper.Map<IdDocumentTypeViewModel, IdDocumentType>(model);
+                idDocumentType.DateModified = DateTime.Now;
+
+                await _unitOfWork.IdDocumentTypes.Update(idDocumentType);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _unitOfWork.IdDocumentTypes.GetById(id);
+
+            var model = _mapper.Map<IdDocumentType, IdDocumentTypeViewModel>(result);            
+            return View(model);
+        }
+        
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            await _unitOfWork.IdDocumentTypes.Delete(id);
+            await _unitOfWork.CompleteAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

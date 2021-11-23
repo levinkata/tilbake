@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -25,8 +25,8 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTitles()
         {
-            var resources = await _titleService.GetAllAsync();
-            var titles = from m in resources
+            var ViewModels = await _titleService.GetAllAsync();
+            var titles = from m in ViewModels
                               select new
                               {
                                   m.Id,
@@ -44,13 +44,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _titleService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _titleService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Titles/Create
@@ -62,14 +62,14 @@ namespace Tilbake.MVC.Controllers
         // POST: Titles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(TitleSaveResource resource)
+        public IActionResult Create(TitleViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _titleService.AddAsync(resource);
+                _titleService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Titles/Edit/5
@@ -80,20 +80,20 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _titleService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _titleService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Titles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, TitleResource resource)
+        public IActionResult Edit(Guid? id, TitleViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _titleService.UpdateAsync(resource);
+                    _titleService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -110,7 +110,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Titles/Delete/5
@@ -121,13 +121,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _titleService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _titleService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Titles/Delete/5

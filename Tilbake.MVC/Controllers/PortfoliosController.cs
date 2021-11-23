@@ -1,59 +1,58 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class PortfoliosController : Controller
+    public class PortfoliosController : BaseController
     {
-        private readonly IPortfolioService _portfolioService;
-        private readonly IFileTemplateService _fileTemplateService;
-
-        public PortfoliosController(IPortfolioService portfolioService, IFileTemplateService fileTemplateService)
+        public PortfoliosController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _portfolioService = portfolioService;
-            _fileTemplateService = fileTemplateService;
-        }
 
-        // GET: Portfolios
+        }
         public async Task<IActionResult> Index()
         {
-            var resources = await _portfolioService.GetAllAsync();
-            ViewBag.datasource = resources;
-
-            return View(resources);
+            var result = await _unitOfWork.Portfolios.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Portfolio>, IEnumerable<PortfolioViewModel>>(result);
+            return View(model);
         }
 
-        public async Task<IActionResult> Carousel(Guid portfolioId)
+        public async Task<IActionResult> Carousel(Guid id)
         {
-            var resource = await _portfolioService.GetByIdAsync(portfolioId);
-
-            return View(resource);
+            var result = await _unitOfWork.Portfolios.GetById(id);
+            var model = _mapper.Map<Portfolio, PortfolioViewModel>(result);
+            return View(model);
         }
 
         public async Task<ActionResult> SelectFileTemplate(Guid portfolioId)
         {
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
-            var resources = await _fileTemplateService.GetByPortfolioIdAsync(portfolioId);
+            var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
+            //var models = await _fileTemplateService.GetByPortfolioIdAsync(portfolioId);
 
             ViewBag.PortfolioId = portfolioId;
             ViewBag.PortfolioName = portfolio.Name;
   
-            return View(resources);
+            return View();
         }
 
         // GET: Portfolios/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _portfolioService.GetByIdAsync(id);
-            if (resource == null)
+            var model = await _unitOfWork.Portfolios.GetById(id);
+            if (model == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(model);
         }
 
         // GET: Portfolios/Create
@@ -65,59 +64,64 @@ namespace Tilbake.MVC.Controllers
         // POST: Portfolios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PortfolioSaveResource portfolioSaveResource)
+        public async Task<IActionResult> Create(PortfolioViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _portfolioService.AddAsync(portfolioSaveResource);
+                var portfolio = _mapper.Map<PortfolioViewModel, Portfolio>(model);
+                await _unitOfWork.Portfolios.Add(portfolio);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(portfolioSaveResource);
+            return View(model);
         }
 
         // GET: Portfolios/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var resource = await _portfolioService.GetByIdAsync(id);
-            if (resource == null)
+            var result = await _unitOfWork.Portfolios.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            return View(resource);
+            var model = _mapper.Map<Portfolio, PortfolioViewModel>(result);
+            return View(model);
         }
 
         // POST: Portfolios/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(PortfolioResource portfolioResource)
+        public async Task<IActionResult> Edit(PortfolioViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _portfolioService.UpdateAsync(portfolioResource);
+                var portfolio = _mapper.Map<PortfolioViewModel, Portfolio>(model);
+                await _unitOfWork.Portfolios.Update(portfolio);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(portfolioResource);
+            return View(model);
         }
 
         // GET: Portfolios/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var resource = await _portfolioService.GetByIdAsync(id);
-            if (resource == null)
+            var result = await _unitOfWork.Portfolios.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            return View(resource);
+            var model = _mapper.Map<Portfolio, PortfolioViewModel>(result);
+            return View(model);
         }
 
         // POST: Portfolios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _portfolioService.DeleteAsync(id);
+            await _unitOfWork.Portfolios.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

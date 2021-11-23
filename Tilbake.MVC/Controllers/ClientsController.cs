@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -50,38 +50,38 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Search(string searchString = "~#")
         {
-            var resources = await _clientService.GetAllAsync();
+            var ViewModels = await _clientService.GetAllAsync();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                resources = resources.Where(r => r.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                ViewModels = ViewModels.Where(r => r.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
                                         || r.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
                                         || r.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
             }
 
-            ClientSearchResource searchResource = new()
+            ClientSearchViewModel searchViewModel = new()
             {
                 SearchString = "",
-                ClientResources = resources.ToList()
+                ClientViewModels = ViewModels.ToList()
             };
-            return View(searchResource);
+            return View(searchViewModel);
         }
 
         // GET: Clients/GetByPortfolio/5
         public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
         {
-            PortfolioResource resource = new()
+            PortfolioViewModel ViewModel = new()
             {
                 Id = portfolioId
             };
             
-            return await Task.Run(() => View(resource));
+            return await Task.Run(() => View(ViewModel));
         }
 
         public async Task<IActionResult> GetByIdNumber(string idNumber)
         {
-            var resource = await _clientService.GetByIdNumberAsync(idNumber);
-            return Json(resource);
+            var ViewModel = await _clientService.GetByIdNumberAsync(idNumber);
+            return Json(ViewModel);
         }
 
         // GET: Clients/Details/5
@@ -92,13 +92,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _clientService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _clientService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Clients/Create
@@ -111,7 +111,7 @@ namespace Tilbake.MVC.Controllers
         //     var occupations = await _occupationService.GetAllAsync();
         //     var titles = await _titleService.GetAllAsync();
 
-        //     PortfolioClientSaveResource resource = new()
+        //     PortfolioClientViewModel ViewModel = new()
         //     {
         //         ClientTypeList = new SelectList(clientTypes, "Id", "Name"),
         //         CountryList = new SelectList(countries, "Id", "Name"),
@@ -121,22 +121,22 @@ namespace Tilbake.MVC.Controllers
         //         TitleList = new SelectList(titles, "Id", "Name")
         //     };
 
-        //     return View(resource);
+        //     return View(ViewModel);
         // }
 
         // POST: Clients/Create
         // [HttpPost]
         // [ValidateAntiForgeryToken]
-        // public async Task<ActionResult> Create(PortfolioClientSaveResource resource)
+        // public async Task<ActionResult> Create(PortfolioClientViewModel ViewModel)
         // {
-        //     if (resource == null)
+        //     if (ViewModel == null)
         //     {
-        //         throw new ArgumentNullException(nameof(resource));
+        //         throw new ArgumentNullException(nameof(ViewModel));
         //     }
 
         //     if (ModelState.IsValid)
         //     {
-        //         await _clientService.AddAsync(resource);
+        //         await _clientService.AddAsync(ViewModel);
         //         return RedirectToAction(nameof(Index));
         //     }
 
@@ -147,21 +147,21 @@ namespace Tilbake.MVC.Controllers
         //     var occupations = await _occupationService.GetAllAsync();
         //     var titles = await _titleService.GetAllAsync();
 
-        //     resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-        //     resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
-        //     resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
-        //     resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-        //     resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-        //     resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
+        //     ViewModel.ClientTypeList = new SelectList(clientTypes, "Id", "Name", ViewModel.ClientTypeId);
+        //     ViewModel.CountryList = new SelectList(countries, "Id", "Name", ViewModel.CountryId);
+        //     ViewModel.GenderList = new SelectList(genders, "Id", "Name", ViewModel.GenderId);
+        //     ViewModel.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", ViewModel.MaritalStatusId);
+        //     ViewModel.OccupationList = new SelectList(occupations, "Id", "Name", ViewModel.OccupationId);
+        //     ViewModel.TitleList = new SelectList(titles, "Id", "Name", ViewModel.TitleId);
 
-        //     return View(resource);
+        //     return View(ViewModel);
         // }
 
         // GET: Clients/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
-            var resource = await _clientService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _clientService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
@@ -173,31 +173,31 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-            resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
+            ViewModel.ClientTypeList = new SelectList(clientTypes, "Id", "Name", ViewModel.ClientTypeId);
+            ViewModel.CountryList = new SelectList(countries, "Id", "Name", ViewModel.CountryId);
+            ViewModel.GenderList = new SelectList(genders, "Id", "Name", ViewModel.GenderId);
+            ViewModel.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", ViewModel.MaritalStatusId);
+            ViewModel.OccupationList = new SelectList(occupations, "Id", "Name", ViewModel.OccupationId);
+            ViewModel.TitleList = new SelectList(titles, "Id", "Name", ViewModel.TitleId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Clients/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, ClientResource resource)
+        public async Task<ActionResult> Edit(Guid id, ClientViewModel ViewModel)
         {
-            if (resource == null)
+            if (ViewModel == null)
             {
-                throw new ArgumentNullException(nameof(resource));
+                throw new ArgumentNullException(nameof(ViewModel));
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _clientService.UpdateAsync(resource);
+                    await _clientService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -213,14 +213,14 @@ namespace Tilbake.MVC.Controllers
             var occupations = await _occupationService.GetAllAsync();
             var titles = await _titleService.GetAllAsync();
 
-            resource.ClientTypeList = new SelectList(clientTypes, "Id", "Name", resource.ClientTypeId);
-            resource.CountryList = new SelectList(countries, "Id", "Name", resource.CountryId);
-            resource.GenderList = new SelectList(genders, "Id", "Name", resource.GenderId);
-            resource.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", resource.MaritalStatusId);
-            resource.OccupationList = new SelectList(occupations, "Id", "Name", resource.OccupationId);
-            resource.TitleList = new SelectList(titles, "Id", "Name", resource.TitleId);
+            ViewModel.ClientTypeList = new SelectList(clientTypes, "Id", "Name", ViewModel.ClientTypeId);
+            ViewModel.CountryList = new SelectList(countries, "Id", "Name", ViewModel.CountryId);
+            ViewModel.GenderList = new SelectList(genders, "Id", "Name", ViewModel.GenderId);
+            ViewModel.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", ViewModel.MaritalStatusId);
+            ViewModel.OccupationList = new SelectList(occupations, "Id", "Name", ViewModel.OccupationId);
+            ViewModel.TitleList = new SelectList(titles, "Id", "Name", ViewModel.TitleId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Clients/Delete/5
@@ -231,13 +231,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _clientService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _clientService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Clients/Delete/5

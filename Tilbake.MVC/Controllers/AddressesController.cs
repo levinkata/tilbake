@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -34,7 +34,7 @@ namespace Tilbake.MVC.Controllers
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(Guid.Empty);
 
-            AddressSaveResource resource = new()
+            AddressViewModel ViewModel = new()
             {
                 PortfolioId = portfolioId,
                 ClientId = clientId,
@@ -42,46 +42,46 @@ namespace Tilbake.MVC.Controllers
                 CityList = SelectLists.Cities(cities, Guid.Empty)
             };
             
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AddressSaveResource resource)
+        public async Task<IActionResult> Create(AddressViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _addressService.AddAsync(resource);
-                if (resource.PortfolioId != Guid.Empty && resource.ClientId != Guid.Empty)
+                await _addressService.AddAsync(ViewModel);
+                if (ViewModel.PortfolioId != Guid.Empty && ViewModel.ClientId != Guid.Empty)
                 {
-                    return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
+                    return RedirectToAction("Details", "PortfolioClients", new { portfolioId = ViewModel.PortfolioId, clientId = ViewModel.ClientId });
                 }
                 return RedirectToAction(nameof(Index));
             }
 
-            var cityId = resource.CityId;
+            var cityId = ViewModel.CityId;
             var city = await _cityService.GetByIdAsync(cityId);
             var countryId = city.CountryId;
 
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
-            resource.CountryId = countryId;
-            resource.CountryList = SelectLists.Countries(countries, countryId);
-            resource.CityList = SelectLists.Cities(cities, cityId);            
-            return View(resource);
+            ViewModel.CountryId = countryId;
+            ViewModel.CountryList = SelectLists.Countries(countries, countryId);
+            ViewModel.CityList = SelectLists.Cities(cities, cityId);            
+            return View(ViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _addressService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _addressService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpGet]
@@ -92,31 +92,31 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _addressService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _addressService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            var cityId = resource.CityId;
+            var cityId = ViewModel.CityId;
             var city = await _cityService.GetByIdAsync(cityId);
             var countryId = city.CountryId;
 
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
-            resource.PortfolioId = portfolioId;
-            resource.CountryId = countryId;
-            resource.CountryList = SelectLists.Countries(countries, countryId);
-            resource.CityList = SelectLists.Cities(cities, cityId);
-            return View(resource);
+            ViewModel.PortfolioId = portfolioId;
+            ViewModel.CountryId = countryId;
+            ViewModel.CountryList = SelectLists.Countries(countries, countryId);
+            ViewModel.CityList = SelectLists.Cities(cities, cityId);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, AddressResource resource)
+        public async Task<IActionResult> Edit(Guid? id, AddressViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -125,49 +125,49 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _addressService.UpdateAsync(resource);
-                    if (resource.PortfolioId != Guid.Empty && resource.ClientId != Guid.Empty)
+                    await _addressService.UpdateAsync(ViewModel);
+                    if (ViewModel.PortfolioId != Guid.Empty && ViewModel.ClientId != Guid.Empty)
                     {
-                        return RedirectToAction("Details", "PortfolioClients", new { portfolioId = resource.PortfolioId, clientId = resource.ClientId });
+                        return RedirectToAction("Details", "PortfolioClients", new { portfolioId = ViewModel.PortfolioId, clientId = ViewModel.ClientId });
                     }                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { portfolioId = Guid.Empty, clientId = resource.ClientId });
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { portfolioId = Guid.Empty, clientId = ViewModel.ClientId });
             }
 
-            var cityId = resource.CityId;
+            var cityId = ViewModel.CityId;
             var city = await _cityService.GetByIdAsync(cityId);
             var countryId = city.CountryId;
 
             var countries = await _countryService.GetAllAsync();
             var cities = await _cityService.GetByCountryId(countryId);
 
-            resource.CityList = SelectLists.Cities(cities, cityId);
-            resource.CountryList = SelectLists.Countries(countries, countryId);
+            ViewModel.CityList = SelectLists.Cities(cities, cityId);
+            ViewModel.CountryList = SelectLists.Countries(countries, countryId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetByClientId(Guid clientId)
         {
-            var resource = await _addressService.GetByClientIdAsync(clientId);
+            var ViewModel = await _addressService.GetByClientIdAsync(clientId);
 
-            return Ok(new { resource });
+            return Ok(new { ViewModel });
         }
 
         [HttpPut]
-        public IActionResult PutAddress(AddressResource resource)
+        public IActionResult PutAddress(AddressViewModel ViewModel)
         {
-            if (resource == null)
+            if (ViewModel == null)
             {
-                throw new ArgumentNullException(nameof(resource));
+                throw new ArgumentNullException(nameof(ViewModel));
             };
 
-            _addressService.UpdateAsync(resource);
+            _addressService.UpdateAsync(ViewModel);
 
             return Ok();
         }

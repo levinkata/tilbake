@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -38,13 +38,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _clientDocumentService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _clientDocumentService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: ClientDocuments/Create
@@ -52,30 +52,30 @@ namespace Tilbake.MVC.Controllers
         {
             var documentTypes = await _documentTypeService.GetAllAsync();
 
-            ClientDocumentSaveResource resource = new()
+            ClientDocumentViewModel ViewModel = new()
             {
                 ClientId = clientId,
                 PortfolioId = portfolioId,
                 DocumentTypeList = SelectLists.DocumentTypes(documentTypes, Guid.Empty),
             };
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: ClientDocuments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClientDocumentSaveResource resource)
+        public async Task<IActionResult> Create(ClientDocumentViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _clientDocumentService.AddAsync(resource);
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioId, resource.ClientId });
+                await _clientDocumentService.AddAsync(ViewModel);
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { ViewModel.PortfolioId, ViewModel.ClientId });
             }
             var documentTypes = await _documentTypeService.GetAllAsync();
 
-            resource.DocumentTypeList = SelectLists.DocumentTypes(documentTypes, resource.DocumentTypeId);
-            return View(resource);
+            ViewModel.DocumentTypeList = SelectLists.DocumentTypes(documentTypes, ViewModel.DocumentTypeId);
+            return View(ViewModel);
         }
 
         // GET: ClientDocuments/DownloadFile/5
@@ -102,20 +102,20 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _clientDocumentService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _clientDocumentService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: ClientDocuments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, ClientDocumentResource resource)
+        public IActionResult Edit(Guid? id, ClientDocumentViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -124,7 +124,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _clientDocumentService.UpdateAsync(resource);
+                    _clientDocumentService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -132,7 +132,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: ClientDocuments/Delete/5
@@ -143,22 +143,22 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _clientDocumentService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _clientDocumentService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: ClientDocuments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(ClientDocumentResource resource)
+        public IActionResult DeleteConfirmed(ClientDocumentViewModel ViewModel)
         {
-            _clientDocumentService.DeleteAsync(resource.Id);
-            return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.ClientId });
+            _clientDocumentService.DeleteAsync(ViewModel.Id);
+            return RedirectToAction(nameof(Details), "PortfolioClients", new { ViewModel.ClientId });
         }
     }
 }

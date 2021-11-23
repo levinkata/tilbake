@@ -17,7 +17,9 @@ namespace Tilbake.Core.Interfaces
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");
         Task<bool> Add(TEntity entity);
+        void AddRange(IEnumerable<TEntity> entities);
         Task<bool> Delete(Guid id);
+        void DeleteRange(IEnumerable<TEntity> entities);
         Task<bool> Update(TEntity entity);
 
         //  ===============================================================================
@@ -33,9 +35,9 @@ namespace Tilbake.Core.Interfaces
             params Expression<Func<TEntity, object>>[] includes);
         //void Add(TEntity entity);
         Task<TEntity> AddAsync(TEntity entity); 
-        void AddRange(IEnumerable<TEntity> entities);
+        //void AddRange(IEnumerable<TEntity> entities);
         //void Delete(Guid id);
-        void DeleteRange(IEnumerable<TEntity> entities);
+        //void DeleteRange(IEnumerable<TEntity> entities);
         void Update(Guid id, TEntity entity);
     }
 }

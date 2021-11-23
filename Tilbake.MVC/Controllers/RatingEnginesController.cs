@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -8,9 +8,9 @@ namespace Tilbake.MVC.Controllers
     {
         public IActionResult Index(Guid portfolioId)
         {
-            RatingEngineResource resource = new();
-            resource.PortfolioId = portfolioId;
-            return View(resource);
+            RatingEngineViewModel ViewModel = new();
+            ViewModel.PortfolioId = portfolioId;
+            return View(ViewModel);
         }
     }
 }

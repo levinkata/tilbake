@@ -19,8 +19,8 @@ namespace Tilbake.MVC.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid bankId)
         {
             ViewBag.BankId = bankId;
-            var resources = await _bankBranchService.GetByBankIdAsync(bankId);
-            return View(resources);
+            var ViewModels = await _bankBranchService.GetByBankIdAsync(bankId);
+            return View(ViewModels);
         }
     }
 }

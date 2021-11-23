@@ -1,10 +1,12 @@
-﻿@model ClientSaveResource
+﻿@model ClientViewModel
 
 <div class="card">
     <div class="card-body">
-        <div class="form-group">
-            <label asp-for="CarrierIds" class="control-label"></label>
-            <select asp-for="CarrierIds" multiple aria-label="multiple select" size="8" class="form-control" asp-items="@Model.CarrierList"></select>
+        <div class="col-12">
+            <div class="form-floating">
+                <select asp-for="CarrierIds" multiple aria-label="multiple select" size="8" class="form-select" asp-items="@Model.CarrierList"></select>
+                <label asp-for="CarrierIds" class="control-label"></label>
+            </div>
         </div>
     </div>
 </div>

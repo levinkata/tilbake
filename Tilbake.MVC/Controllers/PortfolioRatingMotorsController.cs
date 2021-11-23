@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -26,14 +26,14 @@ namespace Tilbake.MVC.Controllers
         {
             var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
 
-            PortfolioRatingMotorResource resource = new()
+            PortfolioRatingMotorViewModel ViewModel = new()
             {
                 PortfolioId = portfolioId,
                 InsurerId = insurerId,
                 PortfolioName = portfolio.Name
             };
 
-            return View(resource);
+            return View(ViewModel);
         }
     }
 }

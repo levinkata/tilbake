@@ -1,4 +1,4 @@
-﻿@model ClientSearchResource
+﻿@model ClientSearchViewModel
 @{
     ViewData["Title"] = ViewData["PortfolioName"];
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -36,7 +36,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.ClientResources) {
+@foreach (var item in Model.ClientViewModels) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ClientNumber)

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -90,13 +90,13 @@ namespace Tilbake.MVC.Controllers
         // GET: Quotes
         public async Task<IActionResult> Index(Guid portfolioId)
         {
-            var resources = await _quoteService.GetByPortfolioAsync(portfolioId);
-            return View(resources);
+            var ViewModels = await _quoteService.GetByPortfolioAsync(portfolioId);
+            return View(ViewModels);
         }
 
         public async Task<IActionResult> PortfolioClientQuotes(Guid portfolioClientId)
         {
-            var resources = await _quoteService.GetByPortfolioClientAsync(portfolioClientId);
+            var ViewModels = await _quoteService.GetByPortfolioClientAsync(portfolioClientId);
             var portfolioClient = await _portfolioClientService.GetByIdAsync(portfolioClientId);
             
             ViewBag.PortfolioClientId = portfolioClientId;
@@ -104,36 +104,36 @@ namespace Tilbake.MVC.Controllers
             ViewBag.PortfolioId = portfolioClient.PortfolioId;
             ViewBag.Client = portfolioClient.Client;
             ViewBag.PortfolioName = portfolioClient.Portfolio.Name;
-            return View(resources);
+            return View(ViewModels);
         }
 
         public async Task<IActionResult> Search(Guid portfolioId, string searchString = "~#")
         {
-            var resource = await _portfolioService.GetByIdAsync(portfolioId);
-            var resources = await _quoteService.GetByPortfolioAsync(portfolioId);
+            var ViewModel = await _portfolioService.GetByIdAsync(portfolioId);
+            var ViewModels = await _quoteService.GetByPortfolioAsync(portfolioId);
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 var isNumeric = int.TryParse(searchString, out int quoteNumber);
                 if (isNumeric)
                 {
-                    resources = resources.Where(r => r.QuoteNumber.Equals(quoteNumber));
+                    ViewModels = ViewModels.Where(r => r.QuoteNumber.Equals(quoteNumber));
                 } else
                 {
-                    resources = resources.Where(r => r.Client.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                    ViewModels = ViewModels.Where(r => r.Client.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
                                             //|| r.Client.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
                                             || r.Client.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
                 }
             }
             
-            QuoteSearchResource searchResource = new()
+            QuoteSearchViewModel searchViewModel = new()
             {
                 PortfolioId = portfolioId,
-                PortfolioName = resource.Name,
+                PortfolioName = ViewModel.Name,
                 SearchString = "",
-                QuoteResources = resources.ToList()
+                QuoteViewModels = ViewModels.ToList()
             };
-            return View(searchResource);
+            return View(searchViewModel);
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -141,21 +141,21 @@ namespace Tilbake.MVC.Controllers
             var taxes = await _taxService.GetAllAsync();
             var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
-            var resource = await _quoteService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _quoteService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            var portfolioClient = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
+            var portfolioClient = await _portfolioClientService.GetByIdAsync(ViewModel.PortfolioClientId);
             
-            resource.PortfolioId = portfolioClient.PortfolioId;
-            resource.PortfolioName = portfolioClient.Portfolio.Name;            
-            resource.TaxRate = taxRate;
-            return View(resource);
+            ViewModel.PortfolioId = portfolioClient.PortfolioId;
+            ViewModel.PortfolioName = portfolioClient.Portfolio.Name;            
+            ViewModel.TaxRate = taxRate;
+            return View(ViewModel);
         }
         
         [HttpPost]
-        public IActionResult PostQuote(QuoteObjectResource quoteObject)
+        public IActionResult PostQuote(QuoteObjectViewModel quoteObject)
         {
             if (quoteObject == null)
             {
@@ -195,7 +195,7 @@ namespace Tilbake.MVC.Controllers
             var coverTypes = await _coverTypeService.GetAllAsync();
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
 
-            QuoteSaveResource resource = new()
+            QuoteViewModel ViewModel = new()
             {
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
@@ -221,21 +221,21 @@ namespace Tilbake.MVC.Controllers
                 TitleList = SelectLists.Titles(titles, Guid.Empty),
                 DateRangeList = SelectLists.RegisteredYears(0)
             };
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Quotes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(QuoteObjectResource resource)
+        public IActionResult Create(QuoteObjectViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _quoteService.AddAsync(resource);
-                return RedirectToAction("PortfolioClientQuotes", "Quotes", new { resource.Quote.PortfolioClientId });
+                _quoteService.AddAsync(ViewModel);
+                return RedirectToAction("PortfolioClientQuotes", "Quotes", new { ViewModel.Quote.PortfolioClientId });
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Quotation(Guid id)
@@ -244,8 +244,8 @@ namespace Tilbake.MVC.Controllers
             var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
             ViewBag.TaxRate = taxRate;
-            var resource = await _quoteService.GetByIdAsync(id);
-            return View(resource);
+            var ViewModel = await _quoteService.GetByIdAsync(id);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Edit(Guid id)
@@ -253,13 +253,13 @@ namespace Tilbake.MVC.Controllers
             var taxes = await _taxService.GetAllAsync();
             var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
-            var resource = await _quoteService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _quoteService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            var insurerBranchId = resource.InsurerBranchId;
+            var insurerBranchId = ViewModel.InsurerBranchId;
 
             var insurerBranch = await _insurerBranchService.GetByIdAsync(insurerBranchId);
             var insurerId = Guid.Empty;
@@ -269,7 +269,7 @@ namespace Tilbake.MVC.Controllers
                 insurerId = insurerBranch.InsurerId;
             }
 
-            var portfolioClient = await _portfolioClientService.GetByIdAsync(resource.PortfolioClientId);
+            var portfolioClient = await _portfolioClientService.GetByIdAsync(ViewModel.PortfolioClientId);
             
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
@@ -278,27 +278,27 @@ namespace Tilbake.MVC.Controllers
             var paymentMethods = await _paymentMethodService.GetAllAsync();
             var insurerBranches = await _insurerBranchService.GetByInsurerIdAsync(insurerId);
 
-            resource.ClientId = portfolioClient.ClientId;
-            resource.PortfolioId = portfolioClient.PortfolioId;
-            resource.PortfolioName = portfolioClient.Portfolio.Name;
-            resource.InsurerId = insurerId;
-            resource.TaxRate = taxRate;
-            resource.DayList = SelectLists.RegisteredDays(resource.RunDay);
-            resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
-            resource.SalesTypeList = SelectLists.SalesTypes(salesTypes, resource.SalesTypeId);
-            resource.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, resource.PolicyTypeId);
-            resource.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, resource.PaymentMethodId);
-            resource.InsurerList = SelectLists.Insurers(insurers, insurerId);
-            resource.InsurerBranchList = SelectLists.InsurerBranches(insurerBranches, insurerBranchId);
+            ViewModel.ClientId = portfolioClient.ClientId;
+            ViewModel.PortfolioId = portfolioClient.PortfolioId;
+            ViewModel.PortfolioName = portfolioClient.Portfolio.Name;
+            ViewModel.InsurerId = insurerId;
+            ViewModel.TaxRate = taxRate;
+            ViewModel.DayList = SelectLists.RegisteredDays(ViewModel.RunDay);
+            ViewModel.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, ViewModel.QuoteStatusId);
+            ViewModel.SalesTypeList = SelectLists.SalesTypes(salesTypes, ViewModel.SalesTypeId);
+            ViewModel.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, ViewModel.PolicyTypeId);
+            ViewModel.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, ViewModel.PaymentMethodId);
+            ViewModel.InsurerList = SelectLists.Insurers(insurers, insurerId);
+            ViewModel.InsurerBranchList = SelectLists.InsurerBranches(insurerBranches, insurerBranchId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, QuoteResource resource)
+        public async Task<IActionResult> Edit(Guid? id, QuoteViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -307,30 +307,30 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _quoteService.UpdateAsync(resource);
+                    await _quoteService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
 
-                return RedirectToAction(nameof(Details), new { id = resource.Id });
+                return RedirectToAction(nameof(Details), new { id = ViewModel.Id });
             }
 
             var quoteStatuses = await _quoteStatusService.GetAllAsync();
             var insurers = await _insurerService.GetAllAsync();
-            var insurerBranches = await _insurerBranchService.GetByInsurerIdAsync(resource.InsurerId);
+            var insurerBranches = await _insurerBranchService.GetByInsurerIdAsync(ViewModel.InsurerId);
             var salesTypes = await _salesTypeService.GetAllAsync();
             var policyTypes = await _policyTypeService.GetAllAsync();
             var paymentMethods = await _paymentMethodService.GetAllAsync();
 
-            resource.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, resource.QuoteStatusId);
-            resource.SalesTypeList = SelectLists.SalesTypes(salesTypes, resource.SalesTypeId);
-            resource.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, resource.PolicyTypeId);
-            resource.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, resource.PaymentMethodId);
-            resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
-            resource.InsurerBranchList = SelectLists.InsurerBranches(insurerBranches, resource.InsurerBranchId);
-            return View(resource);
+            ViewModel.QuoteStatusList = SelectLists.QuoteStatuses(quoteStatuses, ViewModel.QuoteStatusId);
+            ViewModel.SalesTypeList = SelectLists.SalesTypes(salesTypes, ViewModel.SalesTypeId);
+            ViewModel.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, ViewModel.PolicyTypeId);
+            ViewModel.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, ViewModel.PaymentMethodId);
+            ViewModel.InsurerList = SelectLists.Insurers(insurers, ViewModel.InsurerId);
+            ViewModel.InsurerBranchList = SelectLists.InsurerBranches(insurerBranches, ViewModel.InsurerBranchId);
+            return View(ViewModel);
         }
 
         // GET: Quotes/Delete/5
@@ -341,13 +341,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _quoteService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _quoteService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Quotes/Delete/5
@@ -355,10 +355,10 @@ namespace Tilbake.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var resource = await _quoteService.GetByIdAsync(id);
+            var ViewModel = await _quoteService.GetByIdAsync(id);
             await _quoteService.DeleteAsync(id);
 
-            return RedirectToAction(nameof(Details), "PortfolioClients", new { resource.PortfolioClientId });
+            return RedirectToAction(nameof(Details), "PortfolioClients", new { ViewModel.PortfolioClientId });
         }
     }
 }

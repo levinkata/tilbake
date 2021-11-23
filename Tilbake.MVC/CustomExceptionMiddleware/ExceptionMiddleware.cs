@@ -3,7 +3,7 @@ using Serilog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.CustomExceptionMiddleware
 {
@@ -34,7 +34,7 @@ namespace Tilbake.MVC.CustomExceptionMiddleware
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            return context.Response.WriteAsync(new ErrorResource()
+            return context.Response.WriteAsync(new ErrorViewModel()
             {
                 StatusCode = context.Response.StatusCode,
                 Message = "Internal Server Error from the custom middleware."

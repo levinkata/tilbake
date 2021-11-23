@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 using Tilbake.MVC.Areas.Identity;
 
 namespace Tilbake.MVC.Controllers
@@ -26,12 +26,12 @@ namespace Tilbake.MVC.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
 
-            UserPortfolioResource resource = new()
+            UserPortfolioViewModel ViewModel = new()
             {
                 Users = new SelectList(users, "Id", "Email"),
             };
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpGet]
@@ -52,13 +52,13 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         public IActionResult AddUserPortfolios(string userId, string[] portfolios)
         {
-            UserPortfolioResource resource = new()
+            UserPortfolioViewModel ViewModel = new()
             {
                 UserId = userId,
                 PortfolioIds = portfolios
             };
 
-            _userPortfolioService.AddRange(resource);
+            _userPortfolioService.AddRange(ViewModel);
 
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }
@@ -66,13 +66,13 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         public IActionResult RemoveUserPortfolios(string userId, string[] portfolios)
         {
-            UserPortfolioResource resource = new()
+            UserPortfolioViewModel ViewModel = new()
             {
                 UserId = userId,
                 PortfolioIds = portfolios
             };
 
-            _userPortfolioService.DeleteRange(resource);
+            _userPortfolioService.DeleteRange(ViewModel);
 
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -28,13 +28,13 @@ namespace Tilbake.MVC.Controllers
         // GET: MaritalStatus/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _maritalStatusService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _maritalStatusService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: MaritalStatus/Create
@@ -46,33 +46,33 @@ namespace Tilbake.MVC.Controllers
         // POST: MaritalStatus/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(MaritalStatusSaveResource resource)
+        public IActionResult Create(MaritalStatusViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _maritalStatusService.AddAsync(resource);
+                _maritalStatusService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: MaritalStatus/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var resource = await _maritalStatusService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _maritalStatusService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: MaritalStatus/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, MaritalStatusResource resource)
+        public IActionResult Edit(Guid id, MaritalStatusViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -81,7 +81,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _maritalStatusService.UpdateAsync(resource);
+                    _maritalStatusService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -89,19 +89,19 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: MaritalStatus/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var resource = await _maritalStatusService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _maritalStatusService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: MaritalStatus/Delete/5

@@ -1,4 +1,4 @@
-﻿@model PortfolioResource
+﻿@model PortfolioViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -35,6 +35,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Back</a>
     </form>
 </div>

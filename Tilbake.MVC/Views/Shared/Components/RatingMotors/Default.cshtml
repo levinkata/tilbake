@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RatingMotorResource>
+﻿@model IEnumerable<RatingMotorViewModel>
 @{
 }
 
@@ -115,4 +115,4 @@
     </script>
 }
 
-@* return RedirectToAction(nameof(Select), new { insurerId = resource.InsurerId }); *@
+@* return RedirectToAction(nameof(Select), new { insurerId = ViewModel.InsurerId }); *@

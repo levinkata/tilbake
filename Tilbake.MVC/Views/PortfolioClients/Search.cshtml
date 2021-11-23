@@ -1,4 +1,4 @@
-﻿@model PortfolioClientSearchResource
+﻿@model PortfolioClientSearchViewModel
 @{
     ViewData["Title"] = Model.PortfolioName;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,19 +15,6 @@
                 <input type="search" asp-for="SearchString" class="form-control" placeholder="Enter Keywords?">
                 <button class="btn btn-secondary" type="submit" id="SearchButton"><i class="fas fa-search"></i></button>
             </div>            
-@*             <div class="hstack gap-0">
-                <input asp-for="SearchString" class="form-control me-auto" type="search" placeholder="Enter search string.." aria-label="Enter search string..">
-                <button type="submit" id="SearchButton" class="btn btn-secondary">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div> *@
-@*             <div class="form-inline justify-content-end text-right">
-                <label asp-for="SearchString" class="pe-3 text-right">Enter search string: </label>  
-                <input type="search" asp-for="SearchString" placeholder="Enter Keywords?" class="form-control" />        
-                <button type="submit" id="SearchButton" class="btn btn-secondary">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div> *@
         </form>
     </div>
 </div>
@@ -50,22 +37,22 @@
             <thead>
                 <tr>
                     <th class="px-3 align-middle">
-                        <strong>Client Number</strong>
+                        Client Number
                     </th>
                     <th class="px-3 align-middle">
                         <strong>First Name</strong>
                     </th>
                     <th class="px-3 align-middle">
-                        <strong>Last Name</strong>
+                        Last Name
                     </th>
                     <th class="px-3 align-middle">
-                        <strong>Id Number</strong>
+                        Id Number
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-        @foreach (var item in Model.ClientResources) {
+        @foreach (var item in Model.Clients) {
                 <tr>
                     <td class="px-3 align-middle">
                         @Html.DisplayFor(modelItem => item.ClientNumber)

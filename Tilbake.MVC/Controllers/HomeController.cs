@@ -28,10 +28,10 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var resources = await _userPortfolioService.GetByUserIdAsync(user.Id);
+            var ViewModels = await _userPortfolioService.GetByUserIdAsync(user.Id);
 
             _logger.LogInformation("User logged in: {LastName}", user.LastName);
-            return View(resources);
+            return View(ViewModels);
         }
 
         public IActionResult Dashboard()

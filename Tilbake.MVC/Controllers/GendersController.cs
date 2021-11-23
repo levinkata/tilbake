@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -28,13 +28,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _genderService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _genderService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Genders/Create
@@ -46,14 +46,14 @@ namespace Tilbake.MVC.Controllers
         // POST: Genders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(GenderSaveResource resource)
+        public IActionResult Create(GenderViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _genderService.AddAsync(resource);
+                _genderService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Genders/Edit/5
@@ -64,20 +64,20 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _genderService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _genderService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Genders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, GenderResource resource)
+        public IActionResult Edit(Guid? id, GenderViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -86,7 +86,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _genderService.UpdateAsync(resource);
+                    _genderService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -94,7 +94,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Genders/Delete/5
@@ -105,13 +105,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _genderService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _genderService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Genders/Delete/5

@@ -1,4 +1,4 @@
-﻿@model QuoteSearchResource
+﻿@model QuoteSearchViewModel
 @{
     ViewData["Title"] = Model.PortfolioName;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-        @foreach (var item in Model.QuoteResources) {
+        @foreach (var item in Model.QuoteViewModels) {
                 <tr>
                     <td class="px-3 align-middle">
                         @Html.DisplayFor(modelItem => item.QuoteNumber)

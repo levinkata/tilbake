@@ -26,9 +26,9 @@ namespace Tilbake.MVC.ViewComponents
             var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
             ViewBag.TaxRate = taxRate;
-            var resources = await _quoteItemService.GetByQuoteIdAsync(quoteId);
+            var ViewModels = await _quoteItemService.GetByQuoteIdAsync(quoteId);
             
-            return View(resources);
+            return View(ViewModels);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿@model PortfolioClientSaveResource
+﻿@model PortfolioClientViewModel
 
 @{
-    ViewData["Title"] = Model.PortfolioName;
+    ViewData["Title"] = Model.Client.PortfolioName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,82 +16,82 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.TitleId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="Client.TitleId" class="form-select" asp-items="@Model.Client.TitleList">
+                            <label asp-for="Client.TitleId" class="form-label"></label>
                             </select>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.ClientTypeId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="Client.ClientTypeId" class="form-select" asp-items="@Model.Client.ClientTypeList"></select>
+                            <label asp-for="Client.ClientTypeId" class="form-label"></label>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.FirstName" class="control-label"></label>
+                        <div class="form-floating">
                             <input asp-for="Client.FirstName" class="form-control" />
+                            <label asp-for="Client.FirstName"></label>
                             <span asp-validation-for="Client.FirstName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.MiddleName" class="control-label"></label>
+                        <div class="form-floating">
                             <input asp-for="Client.MiddleName" class="form-control" />
+                            <label asp-for="Client.MiddleName" class="form-label"></label>
                             <span asp-validation-for="Client.MiddleName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.LastName" class="control-label"></label>
+                        <div class="form-floating">
                             <input asp-for="Client.LastName" class="form-control" />
+                            <label asp-for="Client.LastName" class="form-label"></label>
                             <span asp-validation-for="Client.LastName" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.BirthDate" class="control-label"></label>
+                        <div class="form-floating">
                             <input asp-for="Client.BirthDate" type="date" class="form-control" />
+                            <label asp-for="Client.BirthDate" class="form-label"></label>
                             <span asp-validation-for="Client.BirthDate" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.GenderId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="Client.GenderId" class="form-select" asp-items="@Model.Client.GenderList"></select>
+                            <label asp-for="Client.GenderId" class="form-label"></label>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.CountryId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="Client.CountryId" class="form-select" asp-items="@Model.Client.CountryList"></select>
+                            <label asp-for="Client.CountryId" class="form-label"></label>
                         </div>
                     </div>                
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.IdDocumentTypeId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="Client.IdDocumentTypeId" id="IdDocumentTypeId" class="form-select" asp-items="@Model.Client.IdDocumentTypeList">
+                            <label asp-for="Client.IdDocumentTypeId" class="form-label"></label>
                             </select>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.IdNumber" id="lblIdNumber" class="control-label"></label>
+                        <div class="form-floating">
                             <input asp-for="Client.IdNumber" id="IdNumber" class="form-control text-uppercase"/>
+                            <label asp-for="Client.IdNumber" id="lblIdNumber" class="form-label"></label>
                             <span asp-validation-for="Client.IdNumber" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.MaritalStatusId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="Client.MaritalStatusId" class="form-select" asp-items="@Model.Client.MaritalStatusList"></select>
+                            <label asp-for="Client.MaritalStatusId" class="form-label"></label>
                         </div>
                     </div>                
                 </div>
@@ -101,67 +101,105 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-4">
-                            <div class="form-group">
-                                <label for="modalFirstName" class="control-label">First Name</label>
+                            <div class="form-floating">
                                 <input for="modalFirstName" id="modalFirstName" class="form-control" readonly />
+                                <label for="modalFirstName" class="form-label">First Name</label>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="form-group">
-                                <label for="modalLastName" class="control-label">Last Name</label>
+                            <div class="form-floating">
                                 <input for="modalLastName" id="modalLastName" class="form-control" readonly />
+                                <label for="modalLastName" class="form-label">Last Name</label>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="form-group">
-                                <label for="modalIdNumber" id="modallblIdNumber" class="control-label">ID Number</label>
+                            <div class="form-floating">
                                 <input for="modalIdNumber" id="modalIdNumber" class="form-control" readonly />
+                                <label for="modalIdNumber" id="modallblIdNumber" class="form-label">ID Number</label>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <div class="form-group">
-                                <label for="modalClientNumber" class="control-label">Client Number</label>
+                            <div class="form-floating">
                                 <input for="modalClientNumber" id="modalClientNumber" class="form-control" readonly />
+                                <label for="modalClientNumber" class="form-label">Client Number</label>
                             </div>
                         </div>
                     </div>                
-                    <div class="form-group mb-3">
+                    <div class="form-floating mb-3">
                         <button type="button" id="btnAddClient" class="btn btn-primary" onclick="PostPortfolioClient()">Use this Record</button>
                         <button type="button" class="btn btn-secondary" onclick="ResetIdNumber()">Change ID Number</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.OccupationId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="Client.OccupationId" class="form-select" asp-items="@Model.Client.OccupationList"></select>
+                            <label asp-for="Client.OccupationId" class="form-label"></label>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="Client.Phone" class="control-label"></label>
+                        <div class="form-floating">
                             <input asp-for="Client.Phone" class="form-control" />
+                            <label asp-for="Client.Phone" class="form-label"></label>
                             <span asp-validation-for="Client.Phone" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="ClientStatusId" class="control-label"></label>
+                        <div class="form-floating">
                             <select asp-for="ClientStatusId" class="form-select" asp-items="@Model.ClientStatusList"></select>
+                            <label asp-for="ClientStatusId" class="form-label"></label>
                         </div>
                     </div> 
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input asp-for="Client.Address.PhysicalAddress" id="PhysicalAddress" class="form-control" />
+                            <label asp-for="Client.Address.PhysicalAddress" class="control-label"></label>
+                            <span asp-validation-for="Client.Address.PhysicalAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Client.Address.PostalAddress" class="form-control" />
+                            <label asp-for="Client.Address.PostalAddress" class="control-label"></label>
+                            <span asp-validation-for="Client.Address.PostalAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Client.Address.CountryId" id="CountryId" class ="form-select" asp-items="@Model.Client.Address.CountryList"></select>
+                            <label asp-for="Client.Address.CountryId" class="control-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Client.Address.CityId" id="CityId" class="form-select" asp-items="@Model.Client.Address.CityList"></select>
+                            <label asp-for="Client.Address.CityId" class="control-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <select asp-for="Client.CarrierIds" multiple aria-label="multiple select" size="8" class="form-select" asp-items="@Model.Client.CarrierList"></select>
+                            <label asp-for="Client.CarrierIds" class="control-label"></label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
+@*        <div class="col-12 mb-3">
             <partial name="_CreateAddress" model="Model.Client.Address"/>
-        </div>
-        <div class="form-group">
+        </div>*@
+@*        <div class="col-12 mb-3">
             <partial name="_CreateCarrier" model="Model.Client"/>
-        </div>
-        <div class="form-group">
+        </div>*@
+        <div class="col-12">
             <input type="submit" id="submit" value="Create" class="btn btn-outline-secondary" />
         </div>
     </form>
@@ -183,6 +221,37 @@
 
         $(document).ready(function () {
             //  Do someting here.
+        });
+
+        //$("#CreateForm").submit(function(e) {
+        //  alert( "Handler for .submit() called." );
+        //  console.log($('#PhysicalAddress').val());
+        //  e.preventDefault();
+        //  //return false;
+        //});
+
+        $('#CountryId').change(function () {
+            var selectedCountryId = $('#CountryId option:selected').val();
+
+            if (selectedCountryId != null && selectedCountryId != '') {
+                $.ajax({
+                    url: '@(Url.Action("GetCities", "Cities"))',
+                    traditional: true,
+                    dataType: 'json',
+                    type: 'GET',
+                    data: { countryId: selectedCountryId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (cities) {
+
+                        $('#CityId').empty();   // clear before appending new list
+                        $.each(cities, function (index, city) {
+                            $('#CityId').append($('<option></option>').val(city.id).html(city.name));
+                        });
+                    }
+                });
+            }
         });
 
         $('#IdDocumentTypeId').change(function() {
@@ -229,8 +298,9 @@
                         alert("An error occurred.");
                     },
                     success: function (client) {
+                        alert('Success');
                         if(client) {
-                            
+                            console.log(client);
                             existingClientId = client.id;
                             if (existingClientId != null && existingClientId != '') {
                                 $('#ClientId').val(existingClientId);

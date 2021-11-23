@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -79,8 +79,8 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> PolicyRisk(Guid policyRiskId)
         {
-            var resource = await _policyRiskService.GetRisksAsync(policyRiskId);
-            if (resource == null)
+            var ViewModel = await _policyRiskService.GetRisksAsync(policyRiskId);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
@@ -88,19 +88,19 @@ namespace Tilbake.MVC.Controllers
             var returnView = "";
             object model = null;
 
-            if (resource.AllRisk != null)
+            if (ViewModel.AllRisk != null)
             {
                 returnView = "PolicyRiskAllRisk";
-                AllRiskResource allRiskResource = resource.AllRisk;
-                var riskItem = allRiskResource.RiskItemId;
+                AllRiskViewModel allRiskViewModel = ViewModel.AllRisk;
+                var riskItem = allRiskViewModel.RiskItemId;
                 var result = await _riskItemService.GetByIdAsync(riskItem);
 
-                allRiskResource.PolicyRiskId = policyRiskId;
-                allRiskResource.RiskItem = result.Description;
-                model = allRiskResource;
+                allRiskViewModel.PolicyRiskId = policyRiskId;
+                allRiskViewModel.RiskItem = result.Description;
+                model = allRiskViewModel;
             }
 
-            if (resource.Content != null)
+            if (ViewModel.Content != null)
             {
                 var residenceTypes = await _residenceTypeService.GetAllAsync();
                 var residenceUses = await _residenceUseService.GetAllAsync();
@@ -108,16 +108,16 @@ namespace Tilbake.MVC.Controllers
                 var wallTypes = await _wallTypeService.GetAllAsync();
 
                 returnView = "PolicyRiskContent";
-                ContentResource contentResource = resource.Content;
-                contentResource.PolicyRiskId = policyRiskId;
-                contentResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", contentResource.ResidenceTypeId);
-                contentResource.ResidenceUseList = new SelectList(residenceUses, "Id", "Name", contentResource.ResidenceUseId);
-                contentResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", contentResource.RoofTypeId);
-                contentResource.WallTypeList = new SelectList(wallTypes, "Id", "Name", contentResource.WallTypeId);
-                model = contentResource;
+                ContentViewModel contentViewModel = ViewModel.Content;
+                contentViewModel.PolicyRiskId = policyRiskId;
+                contentViewModel.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", contentViewModel.ResidenceTypeId);
+                contentViewModel.ResidenceUseList = new SelectList(residenceUses, "Id", "Name", contentViewModel.ResidenceUseId);
+                contentViewModel.RoofTypeList = new SelectList(roofTypes, "Id", "Name", contentViewModel.RoofTypeId);
+                contentViewModel.WallTypeList = new SelectList(wallTypes, "Id", "Name", contentViewModel.WallTypeId);
+                model = contentViewModel;
             }
 
-            if (resource.House != null)
+            if (ViewModel.House != null)
             {
                 var residenceTypes = await _residenceTypeService.GetAllAsync();
                 var houseConditions = await _houseConditionService.GetAllAsync();
@@ -125,34 +125,34 @@ namespace Tilbake.MVC.Controllers
                 var wallTypes = await _wallTypeService.GetAllAsync();
 
                 returnView = "PolicyRiskHouse";
-                HouseResource houseResource = resource.House;
-                houseResource.PolicyRiskId = policyRiskId;
-                houseResource.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", houseResource.ResidenceTypeId);
-                houseResource.HouseConditionList = new SelectList(houseConditions, "Id", "Name", houseResource.HouseConditionId);
-                houseResource.RoofTypeList = new SelectList(roofTypes, "Id", "Name", houseResource.RoofTypeId);
-                houseResource.WallTypeList = new SelectList(wallTypes, "Id", "Name", houseResource.WallTypeId);
-                model = houseResource;
+                HouseViewModel houseViewModel = ViewModel.House;
+                houseViewModel.PolicyRiskId = policyRiskId;
+                houseViewModel.ResidenceTypeList = new SelectList(residenceTypes, "Id", "Name", houseViewModel.ResidenceTypeId);
+                houseViewModel.HouseConditionList = new SelectList(houseConditions, "Id", "Name", houseViewModel.HouseConditionId);
+                houseViewModel.RoofTypeList = new SelectList(roofTypes, "Id", "Name", houseViewModel.RoofTypeId);
+                houseViewModel.WallTypeList = new SelectList(wallTypes, "Id", "Name", houseViewModel.WallTypeId);
+                model = houseViewModel;
             }
 
-            if (resource.Motor != null)
+            if (ViewModel.Motor != null)
             {
                 var bodyTypes = await _bodyTypeService.GetAllAsync();
                 var driverTypes = await _driverTypeService.GetAllAsync();
                 var motorMakes = await _motorMakeService.GetAllAsync();
 
                 returnView = "PolicyRiskMotor";
-                MotorResource motorResource = resource.Motor;
+                MotorViewModel motorViewModel = ViewModel.Motor;
 
-                var selectedMotorModel = await _motorModelService.GetByIdAsync(motorResource.MotorModelId);
+                var selectedMotorModel = await _motorModelService.GetByIdAsync(motorViewModel.MotorModelId);
                 var selectedMotorMakeId = selectedMotorModel.MotorMakeId;
                 var motorModels = await _motorModelService.GetByMotorMakeIdAsync(selectedMotorMakeId);
 
-                motorResource.PolicyRiskId = policyRiskId;
-                motorResource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", motorResource.BodyTypeId);
-                motorResource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", motorResource.DriverTypeId);
-                motorResource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", selectedMotorMakeId);
-                motorResource.MotorModelList = new SelectList(motorModels, "Id", "Name", motorResource.MotorModelId);
-                model = motorResource;
+                motorViewModel.PolicyRiskId = policyRiskId;
+                motorViewModel.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", motorViewModel.BodyTypeId);
+                motorViewModel.DriverTypeList = new SelectList(driverTypes, "Id", "Name", motorViewModel.DriverTypeId);
+                motorViewModel.MotorMakeList = new SelectList(motorMakes, "Id", "Name", selectedMotorMakeId);
+                motorViewModel.MotorModelList = new SelectList(motorModels, "Id", "Name", motorViewModel.MotorModelId);
+                model = motorViewModel;
             }
 
             return View(returnView, model);
@@ -162,9 +162,9 @@ namespace Tilbake.MVC.Controllers
         // POST: PolicyRisks/EditAllRisk/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAllRisk(Guid? id, AllRiskResource resource)
+        public async Task<IActionResult> EditAllRisk(Guid? id, AllRiskViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -173,38 +173,38 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.Id);
-                    policyRiskResource.Description = resource.RiskItem;
+                    var policyRiskViewModel = await _policyRiskService.GetByIdAsync(ViewModel.Id);
+                    policyRiskViewModel.Description = ViewModel.RiskItem;
 
-                    RiskItemResource riskResource = new()
+                    RiskItemViewModel riskViewModel = new()
                     {
-                        Id = resource.RiskItemId,
-                        Description = resource.RiskItem
+                        Id = ViewModel.RiskItemId,
+                        Description = ViewModel.RiskItem
                     };
 
-                    PolicyRiskRiskItemResource policyRiskRiskItemResource = new()
+                    PolicyRiskRiskItemViewModel policyRiskRiskItemViewModel = new()
                     {
-                        PolicyRisk = policyRiskResource,
-                        RiskItem = riskResource
+                        PolicyRisk = policyRiskViewModel,
+                        RiskItem = riskViewModel
                     };
-                    await _policyRiskService.UpdatePolicyRiskRiskItem(policyRiskRiskItemResource);
+                    await _policyRiskService.UpdatePolicyRiskRiskItem(policyRiskRiskItemViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = ViewModel.PolicyRiskId });
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PolicyRisks/EditContent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditContent(Guid? id, ContentResource resource)
+        public async Task<IActionResult> EditContent(Guid? id, ContentViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -213,32 +213,32 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.PolicyRiskId);
-                    policyRiskResource.Description = resource.PhysicalAddress;
+                    var policyRiskViewModel = await _policyRiskService.GetByIdAsync(ViewModel.PolicyRiskId);
+                    policyRiskViewModel.Description = ViewModel.PhysicalAddress;
 
-                    PolicyRiskContentResource policyRiskContentResource = new()
+                    PolicyRiskContentViewModel policyRiskContentViewModel = new()
                     {
-                        PolicyRisk = policyRiskResource,
-                        Content = resource
+                        PolicyRisk = policyRiskViewModel,
+                        Content = ViewModel
                     };
-                    await _policyRiskService.UpdatePolicyRiskContent(policyRiskContentResource);
+                    await _policyRiskService.UpdatePolicyRiskContent(policyRiskContentViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = ViewModel.PolicyRiskId });
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PolicyRisks/EditHouse/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditHouse(Guid? id, HouseResource resource)
+        public async Task<IActionResult> EditHouse(Guid? id, HouseViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -247,65 +247,65 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.PolicyRiskId);
-                    policyRiskResource.Description = resource.PhysicalAddress;
+                    var policyRiskViewModel = await _policyRiskService.GetByIdAsync(ViewModel.PolicyRiskId);
+                    policyRiskViewModel.Description = ViewModel.PhysicalAddress;
 
-                    PolicyRiskHouseResource policyRiskHouseResource = new()
+                    PolicyRiskHouseViewModel policyRiskHouseViewModel = new()
                     {
-                        PolicyRisk = policyRiskResource,
-                        House = resource
+                        PolicyRisk = policyRiskViewModel,
+                        House = ViewModel
                     };
-                    await _policyRiskService.UpdatePolicyRiskHouse(policyRiskHouseResource);
+                    await _policyRiskService.UpdatePolicyRiskHouse(policyRiskHouseViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = ViewModel.PolicyRiskId });
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PolicyRisks/EditMotor/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMotor(MotorResource resource)
+        public async Task<IActionResult> EditMotor(MotorViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var policyRiskResource = await _policyRiskService.GetByIdAsync(resource.PolicyRiskId);
+                    var policyRiskViewModel = await _policyRiskService.GetByIdAsync(ViewModel.PolicyRiskId);
 
-                    var motorMake = await _motorMakeService.GetByIdAsync(resource.MotorMakeId);
-                    policyRiskResource.Description = resource.RegYear + " " + motorMake.Name + " " + resource.RegNumber;
+                    var motorMake = await _motorMakeService.GetByIdAsync(ViewModel.MotorMakeId);
+                    policyRiskViewModel.Description = ViewModel.RegYear + " " + motorMake.Name + " " + ViewModel.RegNumber;
 
-                    PolicyRiskMotorResource policyRiskMotorResource = new()
+                    PolicyRiskMotorViewModel policyRiskMotorViewModel = new()
                     {
-                        PolicyRisk = policyRiskResource,
-                        Motor = resource
+                        PolicyRisk = policyRiskViewModel,
+                        Motor = ViewModel
                     };
-                    await _policyRiskService.UpdatePolicyRiskMotor(policyRiskMotorResource);
+                    await _policyRiskService.UpdatePolicyRiskMotor(policyRiskMotorViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = resource.PolicyRiskId });
+                return RedirectToAction(nameof(PolicyRisk), new { policyRiskId = ViewModel.PolicyRiskId });
             }
 
             var bodyTypes = await _bodyTypeService.GetAllAsync();
             var driverTypes = await _driverTypeService.GetAllAsync();
             var motorMakes = await _motorMakeService.GetAllAsync();
-            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(resource.MotorMakeId);
+            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(ViewModel.MotorMakeId);
 
-            resource.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", resource.BodyTypeId);
-            resource.DriverTypeList = new SelectList(driverTypes, "Id", "Name", resource.DriverTypeId);
-            resource.MotorMakeList = new SelectList(motorMakes, "Id", "Name", resource.MotorMakeId);
-            resource.MotorModelList = new SelectList(motorModels, "Id", "Name", resource.MotorModelId);
+            ViewModel.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", ViewModel.BodyTypeId);
+            ViewModel.DriverTypeList = new SelectList(driverTypes, "Id", "Name", ViewModel.DriverTypeId);
+            ViewModel.MotorMakeList = new SelectList(motorMakes, "Id", "Name", ViewModel.MotorMakeId);
+            ViewModel.MotorModelList = new SelectList(motorModels, "Id", "Name", ViewModel.MotorModelId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PolicyRisks/Edit/5
@@ -316,24 +316,24 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _policyRiskService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _policyRiskService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
             var coverTypes = await _coverTypeService.GetAllAsync();
-            resource.CoverTypeList = new SelectList(coverTypes, "Id", "Name");
+            ViewModel.CoverTypeList = new SelectList(coverTypes, "Id", "Name");
 
-            return await Task.Run(() => View(resource));
+            return await Task.Run(() => View(ViewModel));
         }
 
         // POST: PolicyRisks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, PolicyRiskResource resource)
+        public IActionResult Edit(Guid? id, PolicyRiskViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -342,16 +342,16 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _policyRiskService.UpdateAsync(resource);
+                    _policyRiskService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
 
-                return RedirectToAction(nameof(Edit), "Policy", new { Id = resource.PolicyId });
+                return RedirectToAction(nameof(Edit), "Policy", new { Id = ViewModel.PolicyId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PolicyRisks/Detail/5
@@ -362,13 +362,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _policyRiskService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _policyRiskService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PolicyRisks/Delete/5
@@ -379,22 +379,22 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _policyRiskService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _policyRiskService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PolicyRisks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(PolicyRiskResource resource)
+        public IActionResult DeleteConfirmed(PolicyRiskViewModel ViewModel)
         {
-            _policyRiskService.DeleteAsync(resource.Id);
-            return RedirectToAction(nameof(Edit), "Policy", new { resource.PolicyId });
+            _policyRiskService.DeleteAsync(ViewModel.Id);
+            return RedirectToAction(nameof(Edit), "Policy", new { ViewModel.PolicyId });
         }
     }
 }

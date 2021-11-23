@@ -1,136 +1,128 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    [Authorize]
-    public class BanksController : Controller
+    public class BanksController : BaseController
     {
-        private readonly IBankService _bankService;
-        private readonly ILogger<BanksController> _logger;
-        public BanksController(IBankService bankService, ILogger<BanksController> logger)
+        public BanksController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _bankService = bankService;
-            _logger = logger;
+
         }
 
-        // GET: Banks
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var resources = await _bankService.GetAllAsync();
-            
-            ViewBag.datasource = resources;
-            
-            return View(resources);
+            var result = await _unitOfWork.Banks.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankViewModel>>(result);
+            return View(model);
         }
 
-        // GET: Banks/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> GetBanks()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Banks.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Bank>, IEnumerable<BankViewModel>>(result);
 
-            var resource = await _bankService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
+            var banks = from m in model
+                           select new
+                           {
+                               m.Id,
+                               m.Name
+                           };
 
-            return View(resource);
+            return Json(banks);
         }
 
-        // GET: Banks/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Banks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(BankSaveResource resource)
+        public async Task<IActionResult> Create(BankViewModel model)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                _bankService.AddAsync(resource);
+                var bank = _mapper.Map<BankViewModel, Bank>(model);
+                bank.Id = Guid.NewGuid();
+                bank.DateAdded = DateTime.Now;
+
+                await _unitOfWork.Banks.Add(bank);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
-        // GET: Banks/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Banks.GetById(id);
 
-            var resource = await _bankService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-            return View(resource);
+            var model = _mapper.Map<Bank, BankViewModel>(result);
+            return View(model);
         }
 
-        // POST: Banks/Edit/5
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var result = await _unitOfWork.Banks.GetById(id);
+
+            var model = _mapper.Map<Bank, BankViewModel>(result);
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, BankResource resource)
+        public async Task<IActionResult> Edit(Guid? id, BankViewModel model)
         {
-            if (id != resource.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                try
-                {
-                    _bankService.UpdateAsync(resource);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var bank = _mapper.Map<BankViewModel, Bank>(model);
+                bank.DateModified = DateTime.Now;
+
+                await _unitOfWork.Banks.Update(bank);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
-        // GET: Banks/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Banks.GetById(id);
 
-            var resource = await _bankService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            var model = _mapper.Map<Bank, BankViewModel>(result);            
+            return View(model);
         }
-
-        // POST: Banks/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _bankService.DeleteAsync(id);
+            await _unitOfWork.Banks.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

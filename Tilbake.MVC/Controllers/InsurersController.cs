@@ -1,132 +1,128 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    [Authorize]
-    public class InsurersController : Controller
+    public class InsurersController : BaseController
     {
-        private readonly IInsurerService _insurerService;
-
-        public InsurersController(IInsurerService insurerService)
+        public InsurersController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _insurerService = insurerService;
+
         }
 
-        // GET: Insurers
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var resources = await _insurerService.GetAllAsync();
-            
-            ViewBag.datasource = resources;
-            return await Task.Run(() => View(resources));
+            var result = await _unitOfWork.Insurers.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Insurer>, IEnumerable<InsurerViewModel>>(result);
+            return View(model);
         }
 
-        // GET: Insurers/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> GetInsurers()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Insurers.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Insurer>, IEnumerable<InsurerViewModel>>(result);
 
-            var resource = await _insurerService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
+            var insurers = from m in model
+                            select new
+                            {
+                                m.Id,
+                                m.Name
+                            };
 
-            return View(resource);
+            return Json(insurers);
         }
 
-        // GET: Insurers/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Insurers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(InsurerSaveResource resource)
+        public async Task<IActionResult> Create(InsurerViewModel model)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                _insurerService.AddAsync(resource);
+                var insurer = _mapper.Map<InsurerViewModel, Insurer>(model);
+                insurer.Id = Guid.NewGuid();
+                insurer.DateAdded = DateTime.Now;
+
+                await _unitOfWork.Insurers.Add(insurer);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
-        // GET: Insurers/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Insurers.GetById(id);
 
-            var resource = await _insurerService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-            return View(resource);
+            var model = _mapper.Map<Insurer, InsurerViewModel>(result);
+            return View(model);
         }
 
-        // POST: Insurers/Edit/5
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var result = await _unitOfWork.Insurers.GetById(id);
+
+            var model = _mapper.Map<Insurer, InsurerViewModel>(result);
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, InsurerResource resource)
+        public async Task<IActionResult> Edit(Guid? id, InsurerViewModel model)
         {
-            if (id != resource.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                try
-                {
-                    _insurerService.UpdateAsync(resource);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var insurer = _mapper.Map<InsurerViewModel, Insurer>(model);
+                insurer.DateModified = DateTime.Now;
+
+                await _unitOfWork.Insurers.Update(insurer);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
-        // GET: Insurers/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Insurers.GetById(id);
 
-            var resource = await _insurerService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            var model = _mapper.Map<Insurer, InsurerViewModel>(result);            
+            return View(model);
         }
-
-        // POST: Insurers/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _insurerService.DeleteAsync(id);
+            await _unitOfWork.Insurers.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

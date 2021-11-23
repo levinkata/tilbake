@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -47,13 +47,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _motorService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _motorService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Motors/Create
@@ -65,7 +65,7 @@ namespace Tilbake.MVC.Controllers
             var motorMakeId = motorMakes.FirstOrDefault().Id;
             var motorModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
             
-            MotorSaveResource resource = new MotorSaveResource()
+            MotorViewModel ViewModel = new MotorViewModel()
             {
                 PortfolioClientId = portfolioClientId,
                 BodyTypeList = new SelectList(bodyTypes, "Id", "Name"),
@@ -73,20 +73,20 @@ namespace Tilbake.MVC.Controllers
                 MotorMakeList = new SelectList(motorMakes, "Id", "Name"),
                 MotorModelList = new SelectList(motorModels, "Id", "Name"),
             };
-            return await Task.Run(() => View(resource));
+            return await Task.Run(() => View(ViewModel));
         }
 
         // POST: Motors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(MotorSaveResource resource)
+        public IActionResult Create(MotorViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _motorService.AddAsync(resource);
-                return RedirectToAction(nameof(Index), "PortfolioClient", new { resource.PortfolioClientId });
+                _motorService.AddAsync(ViewModel);
+                return RedirectToAction(nameof(Index), "PortfolioClient", new { ViewModel.PortfolioClientId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Motors/Edit/5
@@ -97,20 +97,20 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _motorService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _motorService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Motors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, MotorResource resource)
+        public IActionResult Edit(Guid? id, MotorViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -119,7 +119,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _motorService.UpdateAsync(resource);
+                    _motorService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,7 +127,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Motors/Delete/5
@@ -138,13 +138,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _motorService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _motorService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: Motors/Delete/5

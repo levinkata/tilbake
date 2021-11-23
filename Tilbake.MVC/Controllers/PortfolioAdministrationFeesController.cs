@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -31,26 +31,26 @@ namespace Tilbake.MVC.Controllers
         {
             var insurers = await _insurerService.GetAllAsync();
 
-            PortfolioAdministrationFeeSaveResource resource = new()
+            PortfolioAdministrationFeeViewModel ViewModel = new()
             {
                 InsurerList = SelectLists.Insurers(insurers, Guid.Empty),
                 PortfolioId = portfolioId
             };
-            return View(resource);
+            return View(ViewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PortfolioAdministrationFeeSaveResource resource)
+        public async Task<IActionResult> Create(PortfolioAdministrationFeeViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _portfolioAdministrationFeeService.AddAsync(resource);
-                return RedirectToAction(nameof(Details), new { portfolioId = resource.PortfolioId });
+                await _portfolioAdministrationFeeService.AddAsync(ViewModel);
+                return RedirectToAction(nameof(Details), new { portfolioId = ViewModel.PortfolioId });
             }
 
             var insurers = await _insurerService.GetAllAsync();
-            resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
-            return View(resource);
+            ViewModel.InsurerList = SelectLists.Insurers(insurers, ViewModel.InsurerId);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Details(Guid portfolioId)
@@ -61,27 +61,27 @@ namespace Tilbake.MVC.Controllers
             {
                 return RedirectToAction(nameof(Create), new { portfolioId });
             }
-            var resource = policyFees.FirstOrDefault();
-            return View(resource);
+            var ViewModel = policyFees.FirstOrDefault();
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var resource = await _portfolioAdministrationFeeService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _portfolioAdministrationFeeService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
             var insurers = await _insurerService.GetAllAsync();
-            resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
-            return View(resource);
+            ViewModel.InsurerList = SelectLists.Insurers(insurers, ViewModel.InsurerId);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, PortfolioAdministrationFeeResource resource)
+        public async Task<IActionResult> Edit(Guid? id, PortfolioAdministrationFeeViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -90,8 +90,8 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    await _portfolioAdministrationFeeService.UpdateAsync(resource);
-                    return RedirectToAction(nameof(Details), new { portfolioId = resource.PortfolioId });
+                    await _portfolioAdministrationFeeService.UpdateAsync(ViewModel);
+                    return RedirectToAction(nameof(Details), new { portfolioId = ViewModel.PortfolioId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -100,8 +100,8 @@ namespace Tilbake.MVC.Controllers
             }
 
             var insurers = await _insurerService.GetAllAsync();
-            resource.InsurerList = SelectLists.Insurers(insurers, resource.InsurerId);
-            return View(resource);
+            ViewModel.InsurerList = SelectLists.Insurers(insurers, ViewModel.InsurerId);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Delete(Guid? id)
@@ -111,21 +111,21 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _portfolioAdministrationFeeService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _portfolioAdministrationFeeService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(PortfolioAdministrationFeeResource resource)
+        public IActionResult DeleteConfirmed(PortfolioAdministrationFeeViewModel ViewModel)
         {
-            _portfolioAdministrationFeeService.DeleteAsync(resource.Id);
-            return RedirectToAction("Carousel", "Portfolios", new { portfolioId = resource.PortfolioId });
+            _portfolioAdministrationFeeService.DeleteAsync(ViewModel.Id);
+            return RedirectToAction("Carousel", "Portfolios", new { portfolioId = ViewModel.PortfolioId });
         }
     }
 }

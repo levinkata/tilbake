@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -21,30 +21,30 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index(Guid insurerId)
         {
-            var resources = await _ratingMotorPremiumService.GetByInsurerAsync(insurerId);
-            return View(resources);
+            var ViewModels = await _ratingMotorPremiumService.GetByInsurerAsync(insurerId);
+            return View(ViewModels);
         }
 
         public async Task<IActionResult> Create(Guid insurerId)
         {
-            RatingMotorPremiumSaveResource resource = new()
+            RatingMotorPremiumViewModel ViewModel = new()
             {
                 InsurerId = insurerId
             };
             
-            return await Task.Run(() => View(resource));
+            return await Task.Run(() => View(ViewModel));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(RatingMotorPremiumSaveResource resource)
+        public IActionResult Create(RatingMotorPremiumViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _ratingMotorPremiumService.AddAsync(resource);
-                return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
+                _ratingMotorPremiumService.AddAsync(ViewModel);
+                return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Details(Guid? id)
@@ -54,13 +54,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -70,19 +70,19 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, RatingMotorPremiumResource resource)
+        public IActionResult Edit(Guid id, RatingMotorPremiumViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -91,15 +91,15 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _ratingMotorPremiumService.UpdateAsync(resource);
+                    _ratingMotorPremiumService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
+                return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         public async Task<IActionResult> Delete(Guid? id)
@@ -109,21 +109,21 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _ratingMotorPremiumService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(RatingMotorPremiumResource resource)
+        public IActionResult DeleteConfirmed(RatingMotorPremiumViewModel ViewModel)
         {
-            _ratingMotorPremiumService.DeleteAsync(resource.Id);
-            return RedirectToAction(nameof(Index), new { insurerid = resource.InsurerId });
+            _ratingMotorPremiumService.DeleteAsync(ViewModel.Id);
+            return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
         }        
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -74,8 +74,8 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index(Guid portfolioClientId)
         {
-            var resources = await _policyService.GetByPorfolioClientIdAsync(portfolioClientId);
-            return View(resources);
+            var ViewModels = await _policyService.GetByPorfolioClientIdAsync(portfolioClientId);
+            return View(ViewModels);
         }
 
         [HttpGet]
@@ -91,7 +91,7 @@ namespace Tilbake.MVC.Controllers
             //                quote.Client.FirstName + " " + 
             //                quote.Client.LastName;
 
-            PolicySaveResource resource = new()
+            PolicyViewModel ViewModel = new()
             {
                 QuoteId = quoteId,
                 InsurerPolicyNumber = "TBA",
@@ -105,20 +105,20 @@ namespace Tilbake.MVC.Controllers
                 PolicyTypeList = SelectLists.PolicyTypes(policyTypes, Guid.Empty),
                 SalesTypeList = SelectLists.SalesTypes(salesTypes, Guid.Empty)
             };
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> QuoteToPolicy(PolicySaveResource resource)
+        public async Task<IActionResult> QuoteToPolicy(PolicyViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                QuoteResource quoteResource = await _quoteService.GetByIdAsync(resource.QuoteId);
+                QuoteViewModel quoteViewModel = await _quoteService.GetByIdAsync(ViewModel.QuoteId);
 
-                List<QuoteItemResource> quoteItemResources = new();
-                foreach (var item in quoteResource.QuoteItems)
+                List<QuoteItemViewModel> quoteItemViewModels = new();
+                foreach (var item in quoteViewModel.QuoteItems)
                 {
-                    QuoteItemResource quoteItemResource = new()
+                    QuoteItemViewModel quoteItemViewModel = new()
                     {
                         Id = item.Id,
                         QuoteId = item.QuoteId,
@@ -129,23 +129,23 @@ namespace Tilbake.MVC.Controllers
                         Premium = item.Premium,
                         Excess = item.Excess
                     };
-                    quoteItemResources.Add(quoteItemResource);
+                    quoteItemViewModels.Add(quoteItemViewModel);
                 }
 
-                resource.InceptionDate = resource.CoverStartDate;
-                resource.RunDay = quoteResource.RunDay;
+                ViewModel.InceptionDate = ViewModel.CoverStartDate;
+                ViewModel.RunDay = quoteViewModel.RunDay;
 
-                QuotePolicyObjectResource quotePolicyObjectResource = new()
+                QuotePolicyObjectViewModel quotePolicyObjectViewModel = new()
                 {
-                    Quote = quoteResource,
-                    Policy = resource,
+                    Quote = quoteViewModel,
+                    Policy = ViewModel,
                 };
 
-                quotePolicyObjectResource.QuoteItems = quoteItemResources;
+                quotePolicyObjectViewModel.QuoteItems = quoteItemViewModels;
 
-                await _policyService.QuoteToPolicy(quotePolicyObjectResource);
+                await _policyService.QuoteToPolicy(quotePolicyObjectViewModel);
 
-                return RedirectToAction("Details", "Quotes", new { Id = resource.QuoteId});
+                return RedirectToAction("Details", "Quotes", new { Id = ViewModel.QuoteId});
             }
 
             var paymentMethods = await _paymentMethodService.GetAllAsync();
@@ -153,12 +153,12 @@ namespace Tilbake.MVC.Controllers
             var policyTypes = await _policyTypeService.GetAllAsync();
             var salesTypes = await _salesTypeService.GetAllAsync();
 
-            resource.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, resource.PaymentMethodId);
-            resource.PolicyStatusList = SelectLists.PolicyStatuses(policyStatuses, resource.PolicyStatusId);
-            resource.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, resource.PolicyTypeId);
-            resource.SalesTypeList = SelectLists.SalesTypes(salesTypes, resource.SalesTypeId);
+            ViewModel.PaymentMethodList = SelectLists.PaymentMethods(paymentMethods, ViewModel.PaymentMethodId);
+            ViewModel.PolicyStatusList = SelectLists.PolicyStatuses(policyStatuses, ViewModel.PolicyStatusId);
+            ViewModel.PolicyTypeList = SelectLists.PolicyTypes(policyTypes, ViewModel.PolicyTypeId);
+            ViewModel.SalesTypeList = SelectLists.SalesTypes(salesTypes, ViewModel.SalesTypeId);
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpGet]
@@ -184,7 +184,7 @@ namespace Tilbake.MVC.Controllers
             var policyTypes = await _policyTypeService.GetAllAsync();
             var salesTypes = await _salesTypeService.GetAllAsync();
 
-            PolicySaveResource resource = new()
+            PolicyViewModel ViewModel = new()
             {
                 PortfolioClientId = portfolioClientId,
                 ClientId = clientId,
@@ -209,23 +209,23 @@ namespace Tilbake.MVC.Controllers
                 WallTypeList = SelectLists.WallTypes(wallTypes, Guid.Empty)
             };
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PolicyObjectResource resource)
+        public IActionResult Create(PolicyObjectViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _policyService.AddAsync(resource);
-                return RedirectToAction(nameof(Index), new { portfolioClientId = resource.Policy.PortfolioClientId });
+                _policyService.AddAsync(ViewModel);
+                return RedirectToAction(nameof(Index), new { portfolioClientId = ViewModel.Policy.PortfolioClientId });
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpPost]
-        public IActionResult PostPolicy(PolicyObjectResource policyObject)
+        public IActionResult PostPolicy(PolicyObjectViewModel policyObject)
         {
             if (policyObject == null)
             {
@@ -244,12 +244,12 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var resource = await _policyService.GetByIdAsync(id);
-            if (resource == null)
+            var ViewModel = await _policyService.GetByIdAsync(id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
     }
 }

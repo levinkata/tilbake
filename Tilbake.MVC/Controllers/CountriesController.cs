@@ -1,25 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Tilbake.Core;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class CountriesController : Controller
+    public class CountriesController : BaseController
     {
-        private readonly ICountryService _countryService;
-
-        public CountriesController(ICountryService countryService)
+        public CountriesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _countryService = countryService;
+
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _countryService.GetAllAsync());
+            var result = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+
+            var model = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryViewModel>>(result);
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCountries()
+        {
+            var result = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryViewModel>>(result);
+
+            var countries = from m in model
+                         select new
+                         {
+                             m.Id,
+                             m.Name
+                         };
+
+            return Json(countries);
         }
 
         [HttpGet]
@@ -29,112 +47,76 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CountrySaveResource resource)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CountryViewModel model)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                _countryService.AddAsync(resource);
+                var country = _mapper.Map<CountryViewModel, Country>(model);
+                country.Id = Guid.NewGuid();
+                country.DateAdded = DateTime.Now;
+
+                await _unitOfWork.Countries.Add(country);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(resource);
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCountries()
+        public async Task<IActionResult> Details(Guid id)
         {
-            var resources = await _countryService.GetAllAsync();
-            var countries = from m in resources
-                              select new
-                              {
-                                  m.Id,
-                                  m.Name
-                              };
+            var result = await _unitOfWork.Countries.GetById(id);
 
-            return Json(countries);
+            var model = _mapper.Map<Country, CountryViewModel>(result);
+            return View(model);
         }
 
-        // GET: Countries/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Countries.GetById(id);
 
-            var resource = await _countryService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            var model = _mapper.Map<Country, CountryViewModel>(result);
+            return View(model);
         }
 
-        // GET: Countries/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _countryService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-            return View(resource);
-        }
-
-        // POST: Countries/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, CountryResource resource)
+        public async Task<IActionResult> Edit(Guid? id, CountryViewModel model)
         {
-            if (id != resource.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                try
-                {
-                    _countryService.UpdateAsync(resource);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var country = _mapper.Map<CountryViewModel, Country>(model);
+                country.DateModified = DateTime.Now;
+
+                await _unitOfWork.Countries.Update(country);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(model);
         }
 
-        // GET: Countries/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var result = await _unitOfWork.Countries.GetById(id);
 
-            var resource = await _countryService.GetByIdAsync((Guid)id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            var model = _mapper.Map<Country, CountryViewModel>(result);            
+            return View(model);
         }
-
-        // POST: Countries/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _countryService.DeleteAsync(id);
+            await _unitOfWork.Countries.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

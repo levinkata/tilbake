@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuoteItemResource>
+﻿@model IEnumerable<QuoteItemViewModel>
 @{
     var taxRate = ViewBag.TaxRate;
     var totalPremium = Model.Sum(r => r.Premium);

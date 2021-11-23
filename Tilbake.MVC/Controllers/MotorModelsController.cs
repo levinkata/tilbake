@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -28,8 +28,8 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMotorModels(Guid motorMakeId)
         {
-            var resources = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
-            var motormodels = from m in resources
+            var ViewModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
+            var motormodels = from m in ViewModels
                               select new
                               {
                                   m.Id,
@@ -47,13 +47,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _motorModelService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _motorModelService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: MotorModels/Create
@@ -67,14 +67,14 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(MotorModelSaveResource resource)
+        public IActionResult Create(MotorModelViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _motorModelService.AddAsync(resource);
+                _motorModelService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: MotorModels/Edit/5
@@ -85,12 +85,12 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _motorModelService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _motorModelService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: MotorModels/Edit/5
@@ -98,9 +98,9 @@ namespace Tilbake.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, MotorModelResource resource)
+        public IActionResult Edit(Guid? id, MotorModelViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -109,7 +109,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _motorModelService.UpdateAsync(resource);
+                    _motorModelService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,7 +117,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: MotorModels/Delete/5
@@ -128,13 +128,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _motorModelService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _motorModelService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: MotorModels/Delete/5

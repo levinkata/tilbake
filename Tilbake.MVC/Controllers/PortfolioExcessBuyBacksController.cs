@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -32,13 +32,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PortfolioExcessBuyBacks/Create
@@ -50,14 +50,14 @@ namespace Tilbake.MVC.Controllers
         // POST: PortfolioExcessBuyBacks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PortfolioExcessBuyBackSaveResource resource)
+        public IActionResult Create(PortfolioExcessBuyBackViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _portfolioExcessBuyBackService.AddAsync(resource);
+                _portfolioExcessBuyBackService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PortfolioExcessBuyBacks/Edit/5
@@ -68,30 +68,30 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PortfolioExcessBuyBacks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, PortfolioExcessBuyBackResource resource)
+        public IActionResult Edit(Guid? id, PortfolioExcessBuyBackViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _portfolioExcessBuyBackService.UpdateAsync(resource);
+                _portfolioExcessBuyBackService.UpdateAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: PortfolioExcessBuyBacks/Delete/5
@@ -102,13 +102,13 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
 
-            var resource = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
-            if (resource == null)
+            var ViewModel = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
+            if (ViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         // POST: PortfolioExcessBuyBacks/Delete/5

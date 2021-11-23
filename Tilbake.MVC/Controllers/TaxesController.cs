@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -26,8 +26,8 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTaxRate(Guid id)
         {
-            var resource = await _taxService.GetByIdAsync(id);
-            return Json(resource);
+            var ViewModel = await _taxService.GetByIdAsync(id);
+            return Json(ViewModel);
         }
 
         // GET: Taxes/Details/5
@@ -51,15 +51,15 @@ namespace Tilbake.MVC.Controllers
         // POST: Taxes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(TaxSaveResource resource)
+        public IActionResult Create(TaxViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
                 
-                _taxService.AddAsync(resource);
+                _taxService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Taxes/Edit/5
@@ -76,9 +76,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Taxes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, TaxResource resource)
+        public IActionResult Edit(Guid id, TaxViewModel ViewModel)
         {
-            if (id != resource.Id)
+            if (id != ViewModel.Id)
             {
                 return NotFound();
             }
@@ -87,7 +87,7 @@ namespace Tilbake.MVC.Controllers
             {
                 try
                 {
-                    _taxService.UpdateAsync(resource);
+                    _taxService.UpdateAsync(ViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -95,7 +95,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(ViewModel);
         }
 
         // GET: Taxes/Delete/5
@@ -113,9 +113,9 @@ namespace Tilbake.MVC.Controllers
         // POST: Taxes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(TaxResource resource)
+        public IActionResult DeleteConfirmed(TaxViewModel ViewModel)
         {
-            _taxService.DeleteAsync(resource.Id);
+            _taxService.DeleteAsync(ViewModel.Id);
             return RedirectToAction(nameof(Index));
         }
     }

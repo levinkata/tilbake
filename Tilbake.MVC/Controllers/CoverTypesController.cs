@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Interfaces;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -28,22 +28,22 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CoverTypeSaveResource resource)
+        public IActionResult Create(CoverTypeViewModel ViewModel)
         {
             if (ModelState.IsValid)
             {
-                _coverTypeService.AddAsync(resource);
+                _coverTypeService.AddAsync(ViewModel);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(resource);
+            return View(ViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCoverTypes()
         {
-            var resources = await _coverTypeService.GetAllAsync();
-            var coverTypes = from m in resources
+            var ViewModels = await _coverTypeService.GetAllAsync();
+            var coverTypes = from m in ViewModels
                               select new
                               {
                                   m.Id,

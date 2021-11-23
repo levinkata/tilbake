@@ -16,10 +16,10 @@ namespace Tilbake.MVC.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(Guid portfolioClientId)
         {
-            var resources = await _policyService.GetAllAsync(portfolioClientId);
+            var ViewModels = await _policyService.GetAllAsync(portfolioClientId);
 
             ViewBag.PortfolioClientId = portfolioClientId;
-            return View(resources);
+            return View(ViewModels);
         }
     }
 }

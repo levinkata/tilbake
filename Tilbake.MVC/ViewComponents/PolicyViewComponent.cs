@@ -16,8 +16,8 @@ namespace Tilbake.MVC.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(Guid portfolioClientId)
         {
-            var resource = await _policyService.GetCurrentPolicyAsync(portfolioClientId);
-            return View(resource);
+            var ViewModel = await _policyService.GetCurrentPolicyAsync(portfolioClientId);
+            return View(ViewModel);
         }
     }
 }

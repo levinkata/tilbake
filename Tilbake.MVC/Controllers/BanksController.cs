@@ -73,7 +73,6 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var result = await _unitOfWork.Banks.GetById(id);
-
             var model = _mapper.Map<Bank, BankViewModel>(result);
             return View(model);
         }
@@ -82,7 +81,6 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var result = await _unitOfWork.Banks.GetById(id);
-
             var model = _mapper.Map<Bank, BankViewModel>(result);
             return View(model);
         }
@@ -112,7 +110,6 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _unitOfWork.Banks.GetById(id);
-
             var model = _mapper.Map<Bank, BankViewModel>(result);            
             return View(model);
         }

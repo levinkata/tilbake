@@ -1,44 +1,43 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class CarriersController : Controller
+    public class CarriersController : BaseController
     {
-        private readonly ICarrierService _carrierService;
-
-        public CarriersController(ICarrierService carrierService)
+        public CarriersController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _carrierService = carrierService;
+
         }
 
         // GET: Carriers
         public async Task<IActionResult> Index()
         {
-            return View(await _carrierService.GetAllAsync());
+            var result = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Carrier>, IEnumerable<CarrierViewModel>>(result);
+            return View(model);
         }
 
         // GET: Carriers/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _carrierService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.Carriers.GetById(id);
+            var model = _mapper.Map<Carrier, CarrierViewModel>(result);
+            return View(model);
         }
 
         // GET: Carriers/Create
@@ -50,73 +49,66 @@ namespace Tilbake.MVC.Controllers
         // POST: Carriers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CarrierViewModel ViewModel)
+        public async Task<IActionResult> Create(CarrierViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _carrierService.AddAsync(ViewModel);
+                var carrier = _mapper.Map<CarrierViewModel, Carrier>(model);
+                carrier.Id = Guid.NewGuid();
+                carrier.DateAdded = DateTime.Now;
+
+                await _unitOfWork.Carriers.Add(carrier);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: Carriers/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _carrierService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var result = await _unitOfWork.Carriers.GetById(id);
+            var model = _mapper.Map<Carrier, CarrierViewModel>(result);
+            return View(model);
         }
 
         // POST: Carriers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, CarrierViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, CarrierViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _carrierService.UpdateAsync(ViewModel);
+                var carrier = _mapper.Map<CarrierViewModel, Carrier>(model);
+                carrier.DateModified = DateTime.Now;
+
+                await _unitOfWork.Carriers.Update(carrier);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: Carriers/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _carrierService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.Carriers.GetById(id);
+            var model = _mapper.Map<Carrier, CarrierViewModel>(result);
+            return View(model);
         }
 
         // POST: Carriers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _carrierService.DeleteAsync(id);
+            await _unitOfWork.Carriers.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

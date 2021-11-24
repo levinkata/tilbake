@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Tilbake.Core.Models;
 
 namespace Tilbake.MVC.Models
 {
@@ -17,5 +17,8 @@ namespace Tilbake.MVC.Models
         public decimal BuyBackRate { get; set; }
 
         public InsurerViewModel Insurer { get; set; }
+
+        //  SelectList
+        public SelectList InsurerList { get; set; }
     }
 }

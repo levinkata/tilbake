@@ -1,25 +1,27 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
-using Tilbake.MVC.Models;
+using Tilbake.Core;
+using Tilbake.Core.Models;
 using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class UserPortfoliosController : Controller
+    public class UserPortfoliosController : BaseController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserPortfolioService _userPortfolioService;
-
-        public UserPortfoliosController(UserManager<ApplicationUser> userManager,
-                    IUserPortfolioService userPortfolioService)
+        public UserPortfoliosController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _userManager = userManager;
-            _userPortfolioService = userPortfolioService;
+
         }
 
         public async Task<IActionResult> Index()
@@ -37,9 +39,8 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> FillMultiSelectLists(string userId)
         {
-            var unAssignedPortfolios = await _userPortfolioService.GetByNotUserIdAsync(userId);
-
-            var userPortfolios = await _userPortfolioService.GetByUserIdAsync(userId);
+            var unAssignedPortfolios = await _unitOfWork.UserPortfolios.GetByNotUserIdAsync(userId);
+            var userPortfolios = await _unitOfWork.UserPortfolios.GetByUserIdAsync(userId);
             var assignedPortfolios = userPortfolios.Select(r => new
                                                     {
                                                         r.Id,
@@ -50,30 +51,46 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUserPortfolios(string userId, string[] portfolios)
+        public IActionResult AddUserPortfolios(string userId, Guid[] portfolioIds)
         {
-            UserPortfolioViewModel ViewModel = new()
+            List<AspnetUserPortfolio> aspnetUserPortfolios = new();
+
+            var aspNetUserId = userId;
+
+            foreach (var portfolioId in portfolioIds)
             {
-                UserId = userId,
-                PortfolioIds = portfolios
-            };
+                AspnetUserPortfolio aspnetUserPortfolio = new()
+                {
+                    AspNetUserId = aspNetUserId,
+                    PortfolioId = Guid.Parse(portfolioId.ToString())
+                };
+                aspnetUserPortfolios.Add(aspnetUserPortfolio);
+            }
 
-            _userPortfolioService.AddRange(ViewModel);
-
+            _unitOfWork.UserPortfolios.AddRange(aspnetUserPortfolios);
+            _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }
 
         [HttpPost]
-        public IActionResult RemoveUserPortfolios(string userId, string[] portfolios)
+        public IActionResult RemoveUserPortfolios(string userId, Guid[] portfolioIds)
         {
-            UserPortfolioViewModel ViewModel = new()
+            List<AspnetUserPortfolio> aspnetUserPortfolios = new();
+
+            var aspNetUserId = userId;
+
+            foreach (var portfolioId in portfolioIds)
             {
-                UserId = userId,
-                PortfolioIds = portfolios
-            };
+                AspnetUserPortfolio aspnetUserPortfolio = new()
+                {
+                    AspNetUserId = aspNetUserId,
+                    PortfolioId = Guid.Parse(portfolioId.ToString())
+                };
+                aspnetUserPortfolios.Add(aspnetUserPortfolio);
+            }
 
-            _userPortfolioService.DeleteRange(ViewModel);
-
+            _unitOfWork.UserPortfolios.DeleteRange(aspnetUserPortfolios);
+            _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(FillMultiSelectLists), new { userId });
         }
     }

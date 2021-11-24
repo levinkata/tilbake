@@ -56,6 +56,7 @@ namespace Tilbake.EF.Persistence
             MaritalStatuses = new MaritalStatusRepository(_context);
             MobileNumbers = new MobileNumberRepository(_context);
             Motors = new MotorRepository(_context);
+            MotorCycleTypes = new MotorCycleTypeRepository(_context);
             MotorMakes = new MotorMakeRepository(_context);
             MotorModels = new MotorModelRepository(_context);
             Occupations = new OccupationRepository(_context);
@@ -136,6 +137,7 @@ namespace Tilbake.EF.Persistence
         public IMaritalStatusRepository MaritalStatuses { get; private set; }
         public IMobileNumberRepository MobileNumbers { get; private set; }
         public IMotorRepository Motors { get; private set; }
+        public IMotorCycleTypeRepository MotorCycleTypes { get; private set; }
         public IMotorMakeRepository MotorMakes { get; private set; }
         public IMotorModelRepository MotorModels { get; private set; }
         public IOccupationRepository Occupations { get; private set; }

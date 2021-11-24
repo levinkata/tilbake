@@ -14,9 +14,9 @@ using Tilbake.MVC.Models;
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class CoverTypesController : BaseController
+    public class SalesTypesController : BaseController
     {
-        public CoverTypesController(
+        public SalesTypesController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -24,58 +24,58 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: CoverTypes
+        // GET: SalesTypes
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.CoverTypes.GetAll(r => r.OrderBy(n => n.Name));
-            var model = _mapper.Map<IEnumerable<CoverType>, IEnumerable<CoverTypeViewModel>>(result);
+            var result = await _unitOfWork.SalesTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<SalesType>, IEnumerable<SalesTypeViewModel>>(result);
             return View(model);
         }
 
-        // GET: CoverTypes/Details/5
+        // GET: SalesTypes/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.CoverTypes.GetById(id);
-            var model = _mapper.Map<CoverType, CoverTypeViewModel>(result);
+            var result = await _unitOfWork.SalesTypes.GetById(id);
+            var model = _mapper.Map<SalesType, SalesTypeViewModel>(result);
             return View(model);
         }
 
-        // GET: CoverTypes/Create
+        // GET: SalesTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: CoverTypes/Create
+        // POST: SalesTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CoverTypeViewModel model)
+        public async Task<IActionResult> Create(SalesTypeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var coverType = _mapper.Map<CoverTypeViewModel, CoverType>(model);
-                coverType.Id = Guid.NewGuid();
-                coverType.DateAdded = DateTime.Now;
+                var salesType = _mapper.Map<SalesTypeViewModel, SalesType>(model);
+                salesType.Id = Guid.NewGuid();
+                salesType.DateAdded = DateTime.Now;
 
-                await _unitOfWork.CoverTypes.Add(coverType);
+                await _unitOfWork.SalesTypes.Add(salesType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: CoverTypes/Edit/5
+        // GET: SalesTypes/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.CoverTypes.GetById(id);
-            var model = _mapper.Map<CoverType, CoverTypeViewModel>(result);
+            var result = await _unitOfWork.SalesTypes.GetById(id);
+            var model = _mapper.Map<SalesType, SalesTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: CoverTypes/Edit/5
+        // POST: SalesTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, CoverTypeViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, SalesTypeViewModel model)
         {
             if (id != model.Id)
             {
@@ -84,30 +84,30 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var coverType = _mapper.Map<CoverTypeViewModel, CoverType>(model);
-                coverType.DateModified = DateTime.Now;
+                var salesType = _mapper.Map<SalesTypeViewModel, SalesType>(model);
+                salesType.DateModified = DateTime.Now;
 
-                await _unitOfWork.CoverTypes.Update(coverType);
+                await _unitOfWork.SalesTypes.Update(salesType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: CoverTypes/Delete/5
+        // GET: SalesTypes/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.CoverTypes.GetById(id);
-            var model = _mapper.Map<CoverType, CoverTypeViewModel>(result);
+            var result = await _unitOfWork.SalesTypes.GetById(id);
+            var model = _mapper.Map<SalesType, SalesTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: CoverTypes/Delete/5
+        // POST: SalesTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _unitOfWork.CoverTypes.Delete(id);
+            await _unitOfWork.SalesTypes.Delete(id);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }

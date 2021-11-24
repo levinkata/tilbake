@@ -23,5 +23,11 @@ namespace Tilbake.EF.Persistence.Repositories
                                 .Include(c => c.Insurer)
                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync();
         }
+
+        public async Task<InsurerBranch> GetByName(string name)
+        {
+            return await _context.InsurerBranches
+                                .Where(c => c.Name == name).FirstOrDefaultAsync();
+        }
     }
 }

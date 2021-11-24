@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Tilbake.Core.Models;
 using Tilbake.EF.Persistence.Context;
 using Tilbake.Core.Interfaces;
+using System.Collections.Generic;
 
 namespace Tilbake.EF.Persistence.Repositories
 {
@@ -13,6 +14,54 @@ namespace Tilbake.EF.Persistence.Repositories
         public QuoteRepository(TilbakeDbContext context) : base(context)
         {
 
+        }
+
+        public async Task<IEnumerable<Quote>> GetByPortfolioClientId(Guid portfolioClientId)
+        {
+            return await _context.Quotes
+                                .Where(r => r.PortfolioClientId == portfolioClientId)
+                                .Include(r => r.QuoteItems)
+                                .Include(r => r.QuoteStatus)
+                                .Include(r => r.InsurerBranch)
+                                .Include(r => r.PaymentMethod)
+                                .Include(r => r.PolicyType)
+                                .Include(r => r.SalesType)
+                                .Include(r => r.InsurerBranch.Insurer)
+                                .Include(r => r.PortfolioClient)
+                                .Include(r => r.PortfolioClient.Client)
+                                .OrderBy(r => r.QuoteNumber).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IEnumerable<Quote>> GetByPortfolioId(Guid portfolioId)
+        {
+            return await _context.Quotes
+                                .Where(r => r.PortfolioClient.PortfolioId == portfolioId)
+                                .Include(r => r.QuoteItems)
+                                .Include(r => r.QuoteStatus)
+                                .Include(r => r.InsurerBranch)
+                                .Include(r => r.PaymentMethod)
+                                .Include(r => r.PolicyType)
+                                .Include(r => r.SalesType)
+                                .Include(r => r.InsurerBranch.Insurer)
+                                .Include(r => r.PortfolioClient)
+                                .Include(r => r.PortfolioClient.Client)
+                                .OrderBy(r => r.QuoteNumber).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<Quote> GetByQuoteNumberAsync(int quoteNumber)
+        {
+            return await _context.Quotes
+                                .Where(r => r.QuoteNumber == quoteNumber)
+                                .Include(r => r.QuoteItems)
+                                .Include(r => r.QuoteStatus)
+                                .Include(r => r.InsurerBranch)
+                                .Include(r => r.PaymentMethod)
+                                .Include(r => r.PolicyType)
+                                .Include(r => r.SalesType)
+                                .Include(r => r.InsurerBranch.Insurer)
+                                .Include(r => r.PortfolioClient)
+                                .Include(r => r.PortfolioClient.Client)
+                                .OrderBy(r => r.QuoteNumber).FirstOrDefaultAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.MVC.Models
@@ -8,16 +9,16 @@ namespace Tilbake.MVC.Models
         public string UserId { get; set; }
 
         [Display(Name = "Portfolios")]
-        public string[] PortfolioIds { get; set; }
+        public Guid[] PortfolioIds { get; set; }
 
         [Display(Name = "Assigned Portfolios")]
-        public string[] AssignedPortfolios { get; set; }
+        public Guid[] AssignedPortfolios { get; set; }
 
         [Display(Name = "Available Portfolios")]
-        public string[] UnAssignedPortfolios { get; set; }
+        public Guid[] UnAssignedPortfolios { get; set; }
 
-        public SelectList Users { get; set; }
-        public MultiSelectList PortfolioList { get; set; }
-        public MultiSelectList UserPortfolioList { get; set; }
+        public SelectList? Users { get; set; }
+        public MultiSelectList? PortfolioList { get; set; }
+        public MultiSelectList? UserPortfolioList { get; set; }
     }
 }

@@ -14,9 +14,9 @@ using Tilbake.MVC.Models;
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class CoverTypesController : BaseController
+    public class BodyTypesController : BaseController
     {
-        public CoverTypesController(
+        public BodyTypesController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -24,58 +24,58 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: CoverTypes
+        // GET: BodyTypes
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.CoverTypes.GetAll(r => r.OrderBy(n => n.Name));
-            var model = _mapper.Map<IEnumerable<CoverType>, IEnumerable<CoverTypeViewModel>>(result);
+            var result = await _unitOfWork.BodyTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<BodyType>, IEnumerable<BodyTypeViewModel>>(result);
             return View(model);
         }
 
-        // GET: CoverTypes/Details/5
+        // GET: BodyTypes/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.CoverTypes.GetById(id);
-            var model = _mapper.Map<CoverType, CoverTypeViewModel>(result);
+            var result = await _unitOfWork.BodyTypes.GetById(id);
+            var model = _mapper.Map<BodyType, BodyTypeViewModel>(result);
             return View(model);
         }
 
-        // GET: CoverTypes/Create
+        // GET: BodyTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: CoverTypes/Create
+        // POST: BodyTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CoverTypeViewModel model)
+        public async Task<IActionResult> Create(BodyTypeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var coverType = _mapper.Map<CoverTypeViewModel, CoverType>(model);
-                coverType.Id = Guid.NewGuid();
-                coverType.DateAdded = DateTime.Now;
+                var bodyType = _mapper.Map<BodyTypeViewModel, BodyType>(model);
+                bodyType.Id = Guid.NewGuid();
+                bodyType.DateAdded = DateTime.Now;
 
-                await _unitOfWork.CoverTypes.Add(coverType);
+                await _unitOfWork.BodyTypes.Add(bodyType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: CoverTypes/Edit/5
+        // GET: BodyTypes/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.CoverTypes.GetById(id);
-            var model = _mapper.Map<CoverType, CoverTypeViewModel>(result);
+            var result = await _unitOfWork.BodyTypes.GetById(id);
+            var model = _mapper.Map<BodyType, BodyTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: CoverTypes/Edit/5
+        // POST: BodyTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, CoverTypeViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, BodyTypeViewModel model)
         {
             if (id != model.Id)
             {
@@ -84,30 +84,30 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var coverType = _mapper.Map<CoverTypeViewModel, CoverType>(model);
-                coverType.DateModified = DateTime.Now;
+                var bodyType = _mapper.Map<BodyTypeViewModel, BodyType>(model);
+                bodyType.DateModified = DateTime.Now;
 
-                await _unitOfWork.CoverTypes.Update(coverType);
+                await _unitOfWork.BodyTypes.Update(bodyType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: CoverTypes/Delete/5
+        // GET: BodyTypes/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.CoverTypes.GetById(id);
-            var model = _mapper.Map<CoverType, CoverTypeViewModel>(result);
+            var result = await _unitOfWork.BodyTypes.GetById(id);
+            var model = _mapper.Map<BodyType, BodyTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: CoverTypes/Delete/5
+        // POST: BodyTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _unitOfWork.CoverTypes.Delete(id);
+            await _unitOfWork.BodyTypes.Delete(id);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -1,123 +1,126 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Helpers;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    [Authorize]
-    public class PortfolioExcessBuyBacksController : Controller
+    public class PortfolioExcessBuyBackController : BaseController
     {
-        private readonly IPortfolioExcessBuyBackService _portfolioExcessBuyBackService;
-
-        public PortfolioExcessBuyBacksController(IPortfolioExcessBuyBackService portfolioExcessBuyBackService)
+        public PortfolioExcessBuyBackController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _portfolioExcessBuyBackService = portfolioExcessBuyBackService;
+
         }
 
-        // GET: PortfolioExcessBuyBacks
         public async Task<IActionResult> Index(Guid portfolioId)
         {
-            return View(await _portfolioExcessBuyBackService.GetByPortfolioIdAsync(portfolioId));
-        }
-
-        // GET: PortfolioExcessBuyBacks/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
+            var portfolioExcessBuyBack = await _unitOfWork.PortfolioExcessBuyBack.GetByPortfolioId(portfolioId);
+            if (portfolioExcessBuyBack == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Create), new { portfolioId });
             }
-
-            var ViewModel = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<IEnumerable<PortfolioExcessBuyBack>, IEnumerable<PortfolioExcessBuyBackViewModel>>(portfolioExcessBuyBack);
+            return View(model);
         }
 
-        // GET: PortfolioExcessBuyBacks/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create(Guid portfolioId)
         {
-            return View();
+            var insurers = await _unitOfWork.Insurers.GetAll(r => r.OrderBy(n => n.Name));
+
+            PortfolioExcessBuyBackViewModel model = new()
+            {
+                InsurerList = MVCHelperExtensions.ToSelectList(insurers, Guid.Empty),
+                PortfolioId = portfolioId
+            };
+            return View(model);
         }
 
-        // POST: PortfolioExcessBuyBacks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PortfolioExcessBuyBackViewModel ViewModel)
+        public async Task<IActionResult> Create(PortfolioExcessBuyBackViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _portfolioExcessBuyBackService.AddAsync(ViewModel);
-                return RedirectToAction(nameof(Index));
+                var portfolioExcessBuyBack = _mapper.Map<PortfolioExcessBuyBackViewModel, PortfolioExcessBuyBack>(model);
+                portfolioExcessBuyBack.Id = Guid.NewGuid();
+                portfolioExcessBuyBack.DateAdded = DateTime.Now;
+                await _unitOfWork.PortfolioExcessBuyBacks.Add(portfolioExcessBuyBack);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), new { portfolioId = model.PortfolioId });
             }
-            return View(ViewModel);
+
+            var insurers = await _unitOfWork.Insurers.GetAll(r => r.OrderBy(n => n.Name));
+            model.InsurerList = MVCHelperExtensions.ToSelectList(insurers, model.InsurerId);
+            return View(model);
         }
 
-        // GET: PortfolioExcessBuyBacks/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var portfolioExcessBuyBack = await _unitOfWork.PortfolioExcessBuyBacks.GetById(id);
+            var model = _mapper.Map<PortfolioExcessBuyBack, PortfolioExcessBuyBackViewModel>(portfolioExcessBuyBack);
+            return View(model);
         }
 
-        // POST: PortfolioExcessBuyBacks/Edit/5
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var portfolioExcessBuyBack = await _unitOfWork.PortfolioExcessBuyBacks.GetById(id);
+            var model = _mapper.Map<PortfolioExcessBuyBack, PortfolioExcessBuyBackViewModel>(portfolioExcessBuyBack);
+
+            var insurers = await _unitOfWork.Insurers.GetAll(r => r.OrderBy(n => n.Name));
+            model.InsurerList = MVCHelperExtensions.ToSelectList(insurers, model.InsurerId);
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, PortfolioExcessBuyBackViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, PortfolioExcessBuyBackViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _portfolioExcessBuyBackService.UpdateAsync(ViewModel);
-                return RedirectToAction(nameof(Index));
+                var portfolioExcessBuyBack = _mapper.Map<PortfolioExcessBuyBackViewModel, PortfolioExcessBuyBack>(model);
+                portfolioExcessBuyBack.DateModified = DateTime.Now;
+
+                await _unitOfWork.PortfolioExcessBuyBacks.Update(portfolioExcessBuyBack);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index), new { portfolioId = model.PortfolioId });
             }
-            return View(ViewModel);
+
+            var insurers = await _unitOfWork.Insurers.GetAll(r => r.OrderBy(n => n.Name));
+            model.InsurerList = MVCHelperExtensions.ToSelectList(insurers, model.InsurerId);
+            return View(model);
         }
 
-        // GET: PortfolioExcessBuyBacks/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _portfolioExcessBuyBackService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.PortfolioExcessBuyBacks.GetById(id);
+            var model = _mapper.Map<PortfolioExcessBuyBack, PortfolioExcessBuyBackViewModel>(result);
+            return View(model);
         }
 
-        // POST: PortfolioExcessBuyBacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(PortfolioExcessBuyBackViewModel model)
         {
-            _portfolioExcessBuyBackService.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            await _unitOfWork.PortfolioExcessBuyBacks.Delete(model.Id);
+            await _unitOfWork.CompleteAsync();
+            return RedirectToAction("Carousel", "Portfolios", new { portfolioId = model.PortfolioId });
         }
     }
 }

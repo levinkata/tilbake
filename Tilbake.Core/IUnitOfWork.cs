@@ -46,6 +46,7 @@ namespace Tilbake.Core
         IMaritalStatusRepository MaritalStatuses { get; }
         IMobileNumberRepository MobileNumbers { get; }
         IMotorRepository Motors { get; }
+        IMotorCycleTypeRepository MotorCycleTypes { get; }
         IMotorMakeRepository MotorMakes { get; }
         IMotorModelRepository MotorModels { get; }
         IOccupationRepository Occupations { get; }

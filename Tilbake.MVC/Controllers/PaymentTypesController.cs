@@ -1,37 +1,43 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Tilbake.Application.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class PaymentTypesController : Controller
+    [Authorize]
+    public class PaymentTypesController : BaseController
     {
-        private readonly IPaymentTypeService _paymentTypeService;
-
-        public PaymentTypesController(IPaymentTypeService paymentTypeService)
+        public PaymentTypesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _paymentTypeService = paymentTypeService;
+
         }
 
         // GET: PaymentTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _paymentTypeService.GetAllAsync());
+            var result = await _unitOfWork.PaymentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<PaymentType>, IEnumerable<PaymentTypeViewModel>>(result);
+            return View(model);
         }
 
         // GET: PaymentTypes/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var ViewModel = await _paymentTypeService.GetByIdAsync(id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.PaymentTypes.GetById(id);
+            var model = _mapper.Map<PaymentType, PaymentTypeViewModel>(result);
+            return View(model);
         }
 
         // GET: PaymentTypes/Create
@@ -43,70 +49,66 @@ namespace Tilbake.MVC.Controllers
         // POST: PaymentTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PaymentTypeViewModel ViewModel)
+        public async Task<IActionResult> Create(PaymentTypeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _paymentTypeService.AddAsync(ViewModel);
+                var paymentType = _mapper.Map<PaymentTypeViewModel, PaymentType>(model);
+                paymentType.Id = Guid.NewGuid();
+                paymentType.DateAdded = DateTime.Now;
+
+                await _unitOfWork.PaymentTypes.Add(paymentType);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: PaymentTypes/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var ViewModel = await _paymentTypeService.GetByIdAsync(id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var result = await _unitOfWork.PaymentTypes.GetById(id);
+            var model = _mapper.Map<PaymentType, PaymentTypeViewModel>(result);
+            return View(model);
         }
 
         // POST: PaymentTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, PaymentTypeViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, PaymentTypeViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _paymentTypeService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var paymentType = _mapper.Map<PaymentTypeViewModel, PaymentType>(model);
+                paymentType.DateModified = DateTime.Now;
+
+                await _unitOfWork.PaymentTypes.Update(paymentType);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: PaymentTypes/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var ViewModel = await _paymentTypeService.GetByIdAsync(id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.PaymentTypes.GetById(id);
+            var model = _mapper.Map<PaymentType, PaymentTypeViewModel>(result);
+            return View(model);
         }
 
         // POST: PaymentTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _paymentTypeService.DeleteAsync(id);
+            await _unitOfWork.PaymentTypes.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

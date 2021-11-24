@@ -4,9 +4,9 @@ using Tilbake.EF.Persistence.Context;
 
 namespace Tilbake.EF.Persistence.Repositories
 {
-    public class BankRepository : Repository<Bank>, IBankRepository
+    public class ClaimStatusRepository : Repository<ClaimStatus>, IClaimStatusRepository
     {
-        public BankRepository(TilbakeDbContext context) : base(context)
+        public ClaimStatusRepository(TilbakeDbContext context) : base(context)
         {
 
         }

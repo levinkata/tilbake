@@ -25,6 +25,10 @@ namespace Tilbake.EF.Persistence
             BodyTypes = new BodyTypeRepository(_context);
             Buildings = new BuildingRepository(_context);
             BuildingConditions = new BuildingConditionRepository(_context);
+            Carriers = new CarrierRepository(_context);
+            Cities = new CityRepository(_context);
+            Claimants = new ClaimantRepository(_context);
+            ClaimStatuses = new ClaimStatusRepository(_context);
             Clients = new ClientRepository(_context);
             ClientBulks = new ClientBulkRepository(_context);
             ClientCarriers = new ClientCarrierRepository(_context);
@@ -32,8 +36,6 @@ namespace Tilbake.EF.Persistence
             ClientRisks = new ClientRiskRepository(_context);
             ClientStatuses = new ClientStatusRepository(_context);
             ClientTypes = new ClientTypeRepository(_context);
-            Carriers = new CarrierRepository(_context);
-            Cities = new CityRepository(_context);
             CommissionRates = new CommissionRateRepository(_context);
             Contents = new ContentRepository(_context);
             Countries = new CountryRepository(_context);
@@ -48,6 +50,7 @@ namespace Tilbake.EF.Persistence
             Houses = new HouseRepository(_context);
             HouseConditions = new HouseConditionRepository(_context);
             IdDocumentTypes = new IdDocumentTypeRepository(_context);
+            Incidents = new IncidentRepository(_context);
             Insurers = new InsurerRepository(_context);
             InsurerBranches = new InsurerBranchRepository(_context);
             Invoices = new InvoiceRepository(_context);
@@ -60,6 +63,7 @@ namespace Tilbake.EF.Persistence
             MotorMakes = new MotorMakeRepository(_context);
             MotorModels = new MotorModelRepository(_context);
             Occupations = new OccupationRepository(_context);
+            PayeeTypes = new PayeeTypeRepository(_context);
             PaymentMethods = new PaymentMethodRepository(_context);
             PaymentTypes = new PaymentTypeRepository(_context);
             Policies = new PolicyRepository(_context);
@@ -83,6 +87,7 @@ namespace Tilbake.EF.Persistence
             ReceivableDocuments = new ReceivableDocumentRepository(_context);
             ReceivableInvoices = new ReceivableInvoiceRepository(_context);
             ReceivableQuotes = new ReceivableQuoteRepository(_context);
+            RelationTypes = new RelationTypeRepository(_context);
             ResidenceTypes = new ResidenceTypeRepository(_context);
             ResidenceUses = new ResidenceUseRepository(_context);
             Risks = new RiskRepository(_context);
@@ -108,6 +113,8 @@ namespace Tilbake.EF.Persistence
         public IBuildingConditionRepository BuildingConditions { get; private set; }
         public ICarrierRepository Carriers { get; private set; }
         public ICityRepository Cities { get; private set; }
+        public IClaimantRepository Claimants { get; private set; }
+        public IClaimStatusRepository ClaimStatuses { get; private set; }
         public IClientRepository Clients { get; private set; }
         public IClientBulkRepository ClientBulks { get; private set; }
         public IClientCarrierRepository ClientCarriers { get; private set; }
@@ -129,6 +136,7 @@ namespace Tilbake.EF.Persistence
         public IHouseRepository Houses { get; private set; }
         public IHouseConditionRepository HouseConditions { get; private set; }
         public IIdDocumentTypeRepository IdDocumentTypes { get; private set; }
+        public IIncidentRepository Incidents { get; private set; }
         public IInsurerRepository Insurers { get; private set; }
         public IInsurerBranchRepository InsurerBranches { get; private set; }        
         public IInvoiceRepository Invoices { get; private set; }
@@ -141,6 +149,7 @@ namespace Tilbake.EF.Persistence
         public IMotorMakeRepository MotorMakes { get; private set; }
         public IMotorModelRepository MotorModels { get; private set; }
         public IOccupationRepository Occupations { get; private set; }
+        public IPayeeTypeRepository PayeeTypes { get; private set; }
         public IPaymentMethodRepository PaymentMethods { get; private set; }
         public IPaymentTypeRepository PaymentTypes { get; private set; }
         public IPolicyRepository Policies { get; private set; }
@@ -166,6 +175,7 @@ namespace Tilbake.EF.Persistence
         public IReceivableDocumentRepository ReceivableDocuments { get; private set; }
         public IReceivableInvoiceRepository ReceivableInvoices { get; private set; }
         public IReceivableQuoteRepository ReceivableQuotes { get; private set; }
+        public IRelationTypeRepository RelationTypes { get; private set; }
         public IResidenceTypeRepository ResidenceTypes { get; private set; }
         public IResidenceUseRepository ResidenceUses { get; private set; }
         public IRoofTypeRepository RoofTypes { get; private set; }

@@ -10,66 +10,6 @@ namespace Tilbake.Application.Helpers
 {
     public class SelectLists
     {
-        public static SelectList BodyTypes(IEnumerable<BodyTypeResource> bodyTypes, Guid? bodyTypeId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Body Type", Value = "" });
-
-            foreach (var item in bodyTypes)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (bodyTypeId == Guid.Empty || String.IsNullOrEmpty(bodyTypeId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", bodyTypeId);
-        }
-
-        public static SelectList BuildingConditions(IEnumerable<BuildingConditionResource> buildingConditions, Guid? buildingConditionId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Building Condition", Value = "" });
-
-            foreach (var item in buildingConditions)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (buildingConditionId == Guid.Empty || String.IsNullOrEmpty(buildingConditionId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", buildingConditionId);
-        }
-
-
-        public static SelectList DocumentTypes(IEnumerable<DocumentTypeResource> documentTypes, Guid? documentTypeId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Document Type", Value = "" });
-
-            foreach (var item in documentTypes)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (documentTypeId == Guid.Empty || String.IsNullOrEmpty(documentTypeId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", documentTypeId);
-        }
-
-        public static SelectList DriverTypes(IEnumerable<DriverTypeResource> driverTypes, Guid? driverTypeId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Driver Type", Value = "" });
-
-            foreach (var item in driverTypes)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (driverTypeId == Guid.Empty || String.IsNullOrEmpty(driverTypeId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", driverTypeId);
-        }
 
         public static SelectList FileFormats(Guid? fileFormatId)
         {
@@ -92,65 +32,6 @@ namespace Tilbake.Application.Helpers
                                         new SelectList(items, "Value", "Text", fileFormatId);
         }
 
-        public static SelectList HouseConditions(IEnumerable<HouseConditionResource> houseConditions, Guid? houseConditionId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select House Condition", Value = "" });
-
-            foreach (var item in houseConditions)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (houseConditionId == Guid.Empty || String.IsNullOrEmpty(houseConditionId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", houseConditionId);
-        }
-
-        public static SelectList InvoiceStatuses(IEnumerable<InvoiceStatusResource> invoiceStatuses, Guid? invoiceStatusId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Invoice Status", Value = "" });
-
-            foreach (var item in invoiceStatuses)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (invoiceStatusId == Guid.Empty || String.IsNullOrEmpty(invoiceStatusId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", invoiceStatusId);
-        }
-
-        public static SelectList MotorMakes(IEnumerable<MotorMakeResource> motorMakes, Guid? motorMakeId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Motor Make", Value = "" });
-
-            foreach (var item in motorMakes)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (motorMakeId == Guid.Empty || String.IsNullOrEmpty(motorMakeId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", motorMakeId);
-        }
-
-        public static SelectList MotorModels(IEnumerable<MotorModelResource> motorModels, Guid? motorModelId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Motor Model", Value = "" });
-
-            foreach (var item in motorModels)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (motorModelId == Guid.Empty || String.IsNullOrEmpty(motorModelId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", motorModelId);
-        }
 
         public static SelectList RegisteredDays(int day)
         {
@@ -282,34 +163,6 @@ namespace Tilbake.Application.Helpers
                                     new SelectList(items, "Value", "Text", roofTypeId);
         }
 
-        public static SelectList Taxes(IEnumerable<TaxResource> taxes, Guid? taxId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Tax", Value = "" });
 
-            foreach (var item in taxes)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (taxId == Guid.Empty || String.IsNullOrEmpty(taxId.ToString())) ?
-                                new SelectList(items, "Value", "Text") :
-                                new SelectList(items, "Value", "Text", taxId);
-        }
-
-        public static SelectList WallTypes(IEnumerable<WallTypeResource> wallTypes, Guid? wallTypeId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Wall Type", Value = "" });
-
-            foreach (var item in wallTypes)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (wallTypeId == Guid.Empty || String.IsNullOrEmpty(wallTypeId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", wallTypeId);
-        }
     }
 }

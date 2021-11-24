@@ -14,9 +14,9 @@ using Tilbake.MVC.Models;
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class TaxesController : BaseController
+    public class RelationTypesController : BaseController
     {
-        public TaxesController(
+        public RelationTypesController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -24,66 +24,58 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: Taxes
+        // GET: RelationTypes
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.Taxes.GetAll(r => r.OrderBy(n => n.Name));
-            var model = _mapper.Map<IEnumerable<Tax>, IEnumerable<TaxViewModel>>(result);
+            var result = await _unitOfWork.RelationTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<RelationType>, IEnumerable<RelationTypeViewModel>>(result);
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTaxRate(Guid id)
-        {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
-            return Json(new { model.Id, model.Name });
-        }
-
-        // GET: Taxes/Details/5
+        // GET: RelationTypes/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.RelationTypes.GetById(id);
+            var model = _mapper.Map<RelationType, RelationTypeViewModel>(result);
             return View(model);
         }
 
-        // GET: Taxes/Create
+        // GET: RelationTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Taxes/Create
+        // POST: RelationTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaxViewModel model)
+        public async Task<IActionResult> Create(RelationTypeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var tax = _mapper.Map<TaxViewModel, Tax>(model);
-                tax.Id = Guid.NewGuid();
-                tax.DateAdded = DateTime.Now;
+                var relationType = _mapper.Map<RelationTypeViewModel, RelationType>(model);
+                relationType.Id = Guid.NewGuid();
+                relationType.DateAdded = DateTime.Now;
 
-                await _unitOfWork.Taxes.Add(tax);
+                await _unitOfWork.RelationTypes.Add(relationType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: Taxes/Edit/5
+        // GET: RelationTypes/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.RelationTypes.GetById(id);
+            var model = _mapper.Map<RelationType, RelationTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: Taxes/Edit/5
+        // POST: RelationTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, TaxViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, RelationTypeViewModel model)
         {
             if (id != model.Id)
             {
@@ -92,30 +84,30 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var tax = _mapper.Map<TaxViewModel, Tax>(model);
-                tax.DateModified = DateTime.Now;
+                var relationType = _mapper.Map<RelationTypeViewModel, RelationType>(model);
+                relationType.DateModified = DateTime.Now;
 
-                await _unitOfWork.Taxes.Update(tax);
+                await _unitOfWork.RelationTypes.Update(relationType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: Taxes/Delete/5
+        // GET: RelationTypes/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.RelationTypes.GetById(id);
+            var model = _mapper.Map<RelationType, RelationTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: Taxes/Delete/5
+        // POST: RelationTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _unitOfWork.Taxes.Delete(id);
+            await _unitOfWork.RelationTypes.Delete(id);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }

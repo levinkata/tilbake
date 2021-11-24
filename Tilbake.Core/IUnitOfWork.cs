@@ -17,6 +17,8 @@ namespace Tilbake.Core
         IBuildingConditionRepository BuildingConditions { get; }
         ICarrierRepository Carriers { get; }
         ICityRepository Cities { get; }
+        IClaimantRepository Claimants { get; }
+        IClaimStatusRepository ClaimStatuses { get; }
         IClientRepository Clients { get; }
         IClientBulkRepository ClientBulks { get; }
         IClientDocumentRepository ClientDocuments { get; }
@@ -38,6 +40,7 @@ namespace Tilbake.Core
         IHouseRepository Houses { get; }
         IHouseConditionRepository HouseConditions { get; }
         IIdDocumentTypeRepository IdDocumentTypes { get; }
+        IIncidentRepository Incidents { get; }
         IInsurerRepository Insurers { get; }
         IInsurerBranchRepository InsurerBranches { get; }        
         IInvoiceRepository Invoices { get; }
@@ -50,6 +53,7 @@ namespace Tilbake.Core
         IMotorMakeRepository MotorMakes { get; }
         IMotorModelRepository MotorModels { get; }
         IOccupationRepository Occupations { get; }
+        IPayeeTypeRepository PayeeTypes { get; }
         IPaymentMethodRepository PaymentMethods { get; }
         IPaymentTypeRepository PaymentTypes { get; }
         IPolicyRepository Policies { get; }
@@ -73,6 +77,7 @@ namespace Tilbake.Core
         IReceivableDocumentRepository ReceivableDocuments { get; }
         IReceivableInvoiceRepository ReceivableInvoices { get; }
         IReceivableQuoteRepository ReceivableQuotes { get; }
+        IRelationTypeRepository RelationTypes { get; }
         IResidenceTypeRepository ResidenceTypes { get; }
         IResidenceUseRepository ResidenceUses { get; }
         IRiskRepository Risks { get; }

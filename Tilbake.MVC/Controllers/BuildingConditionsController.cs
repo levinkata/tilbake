@@ -14,9 +14,9 @@ using Tilbake.MVC.Models;
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class TaxesController : BaseController
+    public class BuildingConditionsController : BaseController
     {
-        public TaxesController(
+        public BuildingConditionsController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -24,66 +24,58 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: Taxes
+        // GET: BuildingConditions
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.Taxes.GetAll(r => r.OrderBy(n => n.Name));
-            var model = _mapper.Map<IEnumerable<Tax>, IEnumerable<TaxViewModel>>(result);
+            var result = await _unitOfWork.BuildingConditions.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<BuildingCondition>, IEnumerable<BuildingConditionViewModel>>(result);
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTaxRate(Guid id)
-        {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
-            return Json(new { model.Id, model.Name });
-        }
-
-        // GET: Taxes/Details/5
+        // GET: BuildingConditions/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.BuildingConditions.GetById(id);
+            var model = _mapper.Map<BuildingCondition, BuildingConditionViewModel>(result);
             return View(model);
         }
 
-        // GET: Taxes/Create
+        // GET: BuildingConditions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Taxes/Create
+        // POST: BuildingConditions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaxViewModel model)
+        public async Task<IActionResult> Create(BuildingConditionViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var tax = _mapper.Map<TaxViewModel, Tax>(model);
-                tax.Id = Guid.NewGuid();
-                tax.DateAdded = DateTime.Now;
+                var buildingCondition = _mapper.Map<BuildingConditionViewModel, BuildingCondition>(model);
+                buildingCondition.Id = Guid.NewGuid();
+                buildingCondition.DateAdded = DateTime.Now;
 
-                await _unitOfWork.Taxes.Add(tax);
+                await _unitOfWork.BuildingConditions.Add(buildingCondition);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: Taxes/Edit/5
+        // GET: BuildingConditions/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.BuildingConditions.GetById(id);
+            var model = _mapper.Map<BuildingCondition, BuildingConditionViewModel>(result);
             return View(model);
         }
 
-        // POST: Taxes/Edit/5
+        // POST: BuildingConditions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, TaxViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, BuildingConditionViewModel model)
         {
             if (id != model.Id)
             {
@@ -92,30 +84,30 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var tax = _mapper.Map<TaxViewModel, Tax>(model);
-                tax.DateModified = DateTime.Now;
+                var buildingCondition = _mapper.Map<BuildingConditionViewModel, BuildingCondition>(model);
+                buildingCondition.DateModified = DateTime.Now;
 
-                await _unitOfWork.Taxes.Update(tax);
+                await _unitOfWork.BuildingConditions.Update(buildingCondition);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: Taxes/Delete/5
+        // GET: BuildingConditions/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.BuildingConditions.GetById(id);
+            var model = _mapper.Map<BuildingCondition, BuildingConditionViewModel>(result);
             return View(model);
         }
 
-        // POST: Taxes/Delete/5
+        // POST: BuildingConditions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _unitOfWork.Taxes.Delete(id);
+            await _unitOfWork.BuildingConditions.Delete(id);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }

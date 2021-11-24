@@ -14,9 +14,9 @@ using Tilbake.MVC.Models;
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class TaxesController : BaseController
+    public class InvoiceStatusesController : BaseController
     {
-        public TaxesController(
+        public InvoiceStatusesController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -24,66 +24,58 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: Taxes
+        // GET: InvoiceStatuses
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.Taxes.GetAll(r => r.OrderBy(n => n.Name));
-            var model = _mapper.Map<IEnumerable<Tax>, IEnumerable<TaxViewModel>>(result);
+            var result = await _unitOfWork.InvoiceStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<InvoiceStatus>, IEnumerable<InvoiceStatusViewModel>>(result);
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTaxRate(Guid id)
-        {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
-            return Json(new { model.Id, model.Name });
-        }
-
-        // GET: Taxes/Details/5
+        // GET: InvoiceStatuses/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.InvoiceStatuses.GetById(id);
+            var model = _mapper.Map<InvoiceStatus, InvoiceStatusViewModel>(result);
             return View(model);
         }
 
-        // GET: Taxes/Create
+        // GET: InvoiceStatuses/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Taxes/Create
+        // POST: InvoiceStatuses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaxViewModel model)
+        public async Task<IActionResult> Create(InvoiceStatusViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var tax = _mapper.Map<TaxViewModel, Tax>(model);
-                tax.Id = Guid.NewGuid();
-                tax.DateAdded = DateTime.Now;
+                var invoiceStatus = _mapper.Map<InvoiceStatusViewModel, InvoiceStatus>(model);
+                invoiceStatus.Id = Guid.NewGuid();
+                invoiceStatus.DateAdded = DateTime.Now;
 
-                await _unitOfWork.Taxes.Add(tax);
+                await _unitOfWork.InvoiceStatuses.Add(invoiceStatus);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: Taxes/Edit/5
+        // GET: InvoiceStatuses/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.InvoiceStatuses.GetById(id);
+            var model = _mapper.Map<InvoiceStatus, InvoiceStatusViewModel>(result);
             return View(model);
         }
 
-        // POST: Taxes/Edit/5
+        // POST: InvoiceStatuses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, TaxViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, InvoiceStatusViewModel model)
         {
             if (id != model.Id)
             {
@@ -92,30 +84,30 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var tax = _mapper.Map<TaxViewModel, Tax>(model);
-                tax.DateModified = DateTime.Now;
+                var invoiceStatus = _mapper.Map<InvoiceStatusViewModel, InvoiceStatus>(model);
+                invoiceStatus.DateModified = DateTime.Now;
 
-                await _unitOfWork.Taxes.Update(tax);
+                await _unitOfWork.InvoiceStatuses.Update(invoiceStatus);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: Taxes/Delete/5
+        // GET: InvoiceStatuses/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.Taxes.GetById(id);
-            var model = _mapper.Map<Tax, TaxViewModel>(result);
+            var result = await _unitOfWork.InvoiceStatuses.GetById(id);
+            var model = _mapper.Map<InvoiceStatus, InvoiceStatusViewModel>(result);
             return View(model);
         }
 
-        // POST: Taxes/Delete/5
+        // POST: InvoiceStatuses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _unitOfWork.Taxes.Delete(id);
+            await _unitOfWork.InvoiceStatuses.Delete(id);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }

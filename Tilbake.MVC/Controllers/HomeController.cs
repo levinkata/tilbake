@@ -1,37 +1,34 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
 using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IUserPortfolioService _userPortfolioService;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public HomeController(IUserPortfolioService userPortfolioService, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
+        public HomeController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _userPortfolioService = userPortfolioService;
-            _userManager = userManager;
+
         }
 
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var ViewModels = await _userPortfolioService.GetByUserIdAsync(user.Id);
-
-            _logger.LogInformation("User logged in: {LastName}", user.LastName);
-            return View(ViewModels);
+            var result = await _unitOfWork.UserPortfolios.GetByUserId(user.Id);
+            var model = _mapper.Map<IEnumerable<Portfolio>, IEnumerable< PortfolioViewModel>>(result);
+            return View(model);
         }
 
         public IActionResult Dashboard()

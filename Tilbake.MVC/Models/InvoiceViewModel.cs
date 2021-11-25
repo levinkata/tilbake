@@ -38,10 +38,8 @@ namespace Tilbake.MVC.Models
         public Guid InvoiceStatusId { get; set; }
 
         public List<InvoiceItem> InvoiceItems { get; } = new List<InvoiceItem>();
-
-        //  Descriptions
-        [Display(Name = "Status")]        
-        public string InvoiceStatus {get; set; }
+       
+        public virtual InvoiceStatusViewModel InvoiceStatus {get; set; }
 
         //  SelectLists
         public SelectList InvoiceStatusList { get; set; }

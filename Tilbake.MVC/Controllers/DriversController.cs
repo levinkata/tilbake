@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,9 +13,10 @@ using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class MaritalStatusController : BaseController
+    [Authorize]
+    public class DriversController : BaseController
     {
-        public MaritalStatusController(
+        public DriversController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -22,58 +24,58 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: MaritalStatus
+        // GET: Drivers
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
-            var model = _mapper.Map<IEnumerable<MaritalStatus>, IEnumerable<MaritalStatusViewModel>>(result);
+            var result = await _unitOfWork.Drivers.GetAll(r => r.OrderBy(n => n.LastName));
+            var model = _mapper.Map<IEnumerable<Driver>, IEnumerable<DriverViewModel>>(result);
             return View(model);
         }
 
-        // GET: MaritalStatus/Details/5
+        // GET: Drivers/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.MaritalStatuses.GetById(id);
-            var model = _mapper.Map<MaritalStatus, MaritalStatusViewModel>(result);
+            var result = await _unitOfWork.Drivers.GetById(id);
+            var model = _mapper.Map<Driver, DriverViewModel>(result);
             return View(model);
         }
 
-        // GET: MaritalStatus/Create
+        // GET: Drivers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: MaritalStatus/Create
+        // POST: Drivers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MaritalStatusViewModel model)
+        public async Task<IActionResult> Create(DriverViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var maritalStatus = _mapper.Map<MaritalStatusViewModel, MaritalStatus>(model);
-                maritalStatus.Id = Guid.NewGuid();
-                maritalStatus.DateAdded = DateTime.Now;
+                var driver = _mapper.Map<DriverViewModel, Driver>(model);
+                driver.Id = Guid.NewGuid();
+                driver.DateAdded = DateTime.Now;
 
-                await _unitOfWork.MaritalStatuses.Add(maritalStatus);
+                await _unitOfWork.Drivers.Add(driver);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: MaritalStatus/Edit/5
+        // GET: Drivers/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.MaritalStatuses.GetById(id);
-            var model = _mapper.Map<MaritalStatus, MaritalStatusViewModel>(result);
+            var result = await _unitOfWork.Drivers.GetById(id);
+            var model = _mapper.Map<Driver, DriverViewModel>(result);
             return View(model);
         }
 
-        // POST: MaritalStatuses/Edit/5
+        // POST: Drivers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, MaritalStatusViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, DriverViewModel model)
         {
             if (id != model.Id)
             {
@@ -82,30 +84,30 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var maritalStatus = _mapper.Map<MaritalStatusViewModel, MaritalStatus>(model);
-                maritalStatus.DateModified = DateTime.Now;
+                var driver = _mapper.Map<DriverViewModel, Driver>(model);
+                driver.DateModified = DateTime.Now;
 
-                await _unitOfWork.MaritalStatuses.Update(maritalStatus);
+                await _unitOfWork.Drivers.Update(driver);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: MaritalStatuses/Delete/5
+        // GET: Drivers/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.MaritalStatuses.GetById(id);
-            var model = _mapper.Map<MaritalStatus, MaritalStatusViewModel>(result);
+            var result = await _unitOfWork.Drivers.GetById(id);
+            var model = _mapper.Map<Driver, DriverViewModel>(result);
             return View(model);
         }
 
-        // POST: MaritalStatuses/Delete/5
+        // POST: Drivers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _unitOfWork.MaritalStatuses.Delete(id);
+            await _unitOfWork.Drivers.Delete(id);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }

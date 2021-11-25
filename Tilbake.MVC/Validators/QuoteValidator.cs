@@ -1,11 +1,12 @@
 using FluentValidation;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
-namespace Tilbake.Application.Validators{
-    public class QuoteResourceValidator : AbstractValidator<QuoteResource>
+namespace Tilbake.MVC.Validators
+{
+    public class QuoteValidator : AbstractValidator<QuoteViewModel>
     {
 
-        public QuoteResourceValidator()
+        public QuoteValidator()
         {
             RuleFor(p => p.ClientInfo)
                 .Cascade(CascadeMode.Stop)

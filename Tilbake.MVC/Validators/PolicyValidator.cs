@@ -1,12 +1,12 @@
-using System;
 using FluentValidation;
-using Tilbake.Application.Resources;
+using System;
+using Tilbake.MVC.Models;
 
-namespace Tilbake.Application.Validators
+namespace Tilbake.MVC.Validators
 {
-    public class PolicySaveResourceValidator : AbstractValidator<PolicySaveResource>
+    public class PolicyValidator : AbstractValidator<PolicyViewModel>
     {
-        public PolicySaveResourceValidator()
+        public PolicyValidator()
         {
             RuleFor(p => p.CoverEndDate)
                 .GreaterThan(DateTime.Now);

@@ -11,14 +11,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using Tilbake.Application.Mapping;
 using Tilbake.Application.Services;
-using Tilbake.Application.Validators;
 using Tilbake.EF.IoC;
 using Tilbake.EF.Persistence.Context;
 using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Areas.Identity.Data;
 using Tilbake.MVC.Extensions;
 using Tilbake.MVC.Mapping;
+using Tilbake.MVC.Validators;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -57,6 +57,8 @@ try
             .AddEntityFrameworkStores<IdentityDbContext>()
             .AddDefaultTokenProviders();
 
+    builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     builder.Services.AddTransient<IEmailSender, EmailSender>(i =>
@@ -71,7 +73,7 @@ try
     builder.Services.AddControllersWithViews()
             .AddFluentValidation(options =>
             {
-                options.RegisterValidatorsFromAssemblyContaining<BankViewModelValidator>();
+                options.RegisterValidatorsFromAssemblyContaining<BankValidator>();
                 options.DisableDataAnnotationsValidation = true;
             })
             .AddRazorRuntimeCompilation();
@@ -83,12 +85,11 @@ try
             {
                 options.AddPolicy("EmailId", policy =>
                     policy.RequireClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "levi.nkata@outlook.com"));
-
+                
                 options.AddPolicy("CreateRole", policy =>
                     policy.RequireRole("Admin"));
             });
 
-    builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile));
     builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
     var app = builder.Build();

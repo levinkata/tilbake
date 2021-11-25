@@ -78,6 +78,90 @@ namespace Tilbake.MVC.Controllers
             return View(searchViewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ConvertToPolicy(Guid quoteId)
+        {
+            var quote = await _unitOfWork.Quotes.GetById(quoteId);
+            var paymentMethods = await _unitOfWork.PaymentMethods.GetAll(r => r.OrderBy(n => n.Name));
+            var policyStatuses = await _unitOfWork.PolicyStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var policyTypes = await _unitOfWork.PolicyTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var salesTypes = await _unitOfWork.SalesTypes.GetAll(r => r.OrderBy(n => n.Name));
+
+            PolicyViewModel model = new()
+            {
+                QuoteId = quoteId,
+                InsurerPolicyNumber = "TBA",
+                CoverStartDate = DateTime.Now,
+                QuoteNumber = quote.QuoteNumber,
+
+                RunDay = quote.RunDay,
+                PaymentMethodList = MVCHelperExtensions.ToSelectList(paymentMethods, Guid.Empty),
+                PolicyStatusList = MVCHelperExtensions.ToSelectList(policyStatuses, Guid.Empty),
+                PolicyTypeList = MVCHelperExtensions.ToSelectList(policyTypes, Guid.Empty),
+                SalesTypeList = MVCHelperExtensions.ToSelectList(salesTypes, Guid.Empty)
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConvertToPolicy(PolicyViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var quote = await _unitOfWork.Quotes.GetById(model.QuoteId);
+                var insurerBranchId = quote.InsurerBranchId;
+                var portfolioClientId = quote.PortfolioClientId;
+
+                var policy = _mapper.Map<PolicyViewModel, Policy>(model);
+
+                policy.Id = Guid.NewGuid();
+                policy.InsurerBranchId = insurerBranchId;
+                policy.PortfolioClientId = portfolioClientId;
+                policy.DateAdded = DateTime.Now;
+                await _unitOfWork.Policies.Add(policy);
+
+                var policyId = policy.Id;
+
+                List<PolicyRisk> policyRisks = new();
+
+                foreach (var item in quote.QuoteItems)
+                {
+                    PolicyRisk policyRisk = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        PolicyId = policyId,
+                        ClientRiskId = item.ClientRiskId,
+                        CoverTypeId = item.CoverTypeId,
+                        RiskDate = DateTime.Now,
+                        SumInsured = item.SumInsured,
+                        Premium = item.Premium,
+                        Excess = item.Excess,
+                        Description = item.Description,
+                        DateAdded = DateTime.Now
+                    };
+                    policyRisks.Add(policyRisk);
+                }
+                _unitOfWork.PolicyRisks.AddRange(policyRisks);
+
+                quote.IsPolicySet = true;
+                _unitOfWork.Quotes.Update(quote.Id, quote);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction("Details", "Quotes", new { Id = model.QuoteId });
+            }
+
+            var paymentMethods = await _unitOfWork.PaymentMethods.GetAll(r => r.OrderBy(n => n.Name));
+            var policyStatuses = await _unitOfWork.PolicyStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var policyTypes = await _unitOfWork.PolicyTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var salesTypes = await _unitOfWork.SalesTypes.GetAll(r => r.OrderBy(n => n.Name));
+
+            model.PaymentMethodList = MVCHelperExtensions.ToSelectList(paymentMethods, model.PaymentMethodId);
+            model.PolicyStatusList = MVCHelperExtensions.ToSelectList(policyStatuses, model.PolicyStatusId);
+            model.PolicyTypeList = MVCHelperExtensions.ToSelectList(policyTypes, model.PolicyTypeId);
+            model.SalesTypeList = MVCHelperExtensions.ToSelectList(salesTypes, model.SalesTypeId);
+
+            return View(model);
+        }
+
         public async Task<IActionResult> Details(Guid id)
         {
             var taxes = await _unitOfWork.Taxes.GetAll(r => r.OrderByDescending(n => n.TaxDate));

@@ -1,12 +1,12 @@
-using System;
 using FluentValidation;
-using Tilbake.Application.Resources;
+using System;
+using Tilbake.MVC.Models;
 
-namespace Tilbake.Application.Validators
+namespace Tilbake.MVC.Validators
 {
-    public class InvoiceSaveResourceValidator : AbstractValidator<InvoiceSaveResource>
+    public class InvoiceValidator : AbstractValidator<InvoiceViewModel>
     {
-        public InvoiceSaveResourceValidator()
+        public InvoiceValidator()
         {
             RuleFor(p => p.Amount)
                 .Cascade(CascadeMode.Stop)

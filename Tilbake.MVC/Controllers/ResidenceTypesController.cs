@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,9 +13,10 @@ using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class MaritalStatusController : BaseController
+    [Authorize]
+    public class ResidenceTypesController : BaseController
     {
-        public MaritalStatusController(
+        public ResidenceTypesController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -22,58 +24,58 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: MaritalStatus
+        // GET: ResidenceTypes
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
-            var model = _mapper.Map<IEnumerable<MaritalStatus>, IEnumerable<MaritalStatusViewModel>>(result);
+            var result = await _unitOfWork.ResidenceTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<ResidenceType>, IEnumerable<ResidenceTypeViewModel>>(result);
             return View(model);
         }
 
-        // GET: MaritalStatus/Details/5
+        // GET: ResidenceTypes/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.MaritalStatuses.GetById(id);
-            var model = _mapper.Map<MaritalStatus, MaritalStatusViewModel>(result);
+            var result = await _unitOfWork.ResidenceTypes.GetById(id);
+            var model = _mapper.Map<ResidenceType, ResidenceTypeViewModel>(result);
             return View(model);
         }
 
-        // GET: MaritalStatus/Create
+        // GET: ResidenceTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: MaritalStatus/Create
+        // POST: ResidenceTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MaritalStatusViewModel model)
+        public async Task<IActionResult> Create(ResidenceTypeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var maritalStatus = _mapper.Map<MaritalStatusViewModel, MaritalStatus>(model);
-                maritalStatus.Id = Guid.NewGuid();
-                maritalStatus.DateAdded = DateTime.Now;
+                var residenceType = _mapper.Map<ResidenceTypeViewModel, ResidenceType>(model);
+                residenceType.Id = Guid.NewGuid();
+                residenceType.DateAdded = DateTime.Now;
 
-                await _unitOfWork.MaritalStatuses.Add(maritalStatus);
+                await _unitOfWork.ResidenceTypes.Add(residenceType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: MaritalStatus/Edit/5
+        // GET: ResidenceTypes/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.MaritalStatuses.GetById(id);
-            var model = _mapper.Map<MaritalStatus, MaritalStatusViewModel>(result);
+            var result = await _unitOfWork.ResidenceTypes.GetById(id);
+            var model = _mapper.Map<ResidenceType, ResidenceTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: MaritalStatuses/Edit/5
+        // POST: ResidenceTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, MaritalStatusViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, ResidenceTypeViewModel model)
         {
             if (id != model.Id)
             {
@@ -82,30 +84,30 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var maritalStatus = _mapper.Map<MaritalStatusViewModel, MaritalStatus>(model);
-                maritalStatus.DateModified = DateTime.Now;
+                var residenceType = _mapper.Map<ResidenceTypeViewModel, ResidenceType>(model);
+                residenceType.DateModified = DateTime.Now;
 
-                await _unitOfWork.MaritalStatuses.Update(maritalStatus);
+                await _unitOfWork.ResidenceTypes.Update(residenceType);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: MaritalStatuses/Delete/5
+        // GET: ResidenceTypes/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.MaritalStatuses.GetById(id);
-            var model = _mapper.Map<MaritalStatus, MaritalStatusViewModel>(result);
+            var result = await _unitOfWork.ResidenceTypes.GetById(id);
+            var model = _mapper.Map<ResidenceType, ResidenceTypeViewModel>(result);
             return View(model);
         }
 
-        // POST: MaritalStatuses/Delete/5
+        // POST: ResidenceTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _unitOfWork.MaritalStatuses.Delete(id);
+            await _unitOfWork.ResidenceTypes.Delete(id);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -81,7 +81,7 @@
                 {
                     @if(!Model.IsPolicySet)
                     {
-                        <a asp-controller="Policies" asp-action="QuoteToPolicy" asp-route-quoteId="@Model.Id" class="btn btn-outline-secondary btn-sm">
+                        <a asp-action="ConvertToPolicy" asp-route-quoteId="@Model.Id" class="btn btn-outline-secondary btn-sm">
                             <span class="far fa-file-alt text-muted"></span> Create Policy
                         </a>
                     }

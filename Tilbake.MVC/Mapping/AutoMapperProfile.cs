@@ -60,23 +60,31 @@ namespace Tilbake.MVC.Mapping
 
             CreateMap<ClientDocument, ClientDocumentViewModel>()
                     .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
-                    .ForMember(dest => dest.DocumentTypeName, opt => opt.MapFrom(src => src.DocumentType.Name)).ReverseMap();
+                    .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType)).ReverseMap();
 
             CreateMap<ClientRisk, ClientRiskViewModel>().ReverseMap();
             CreateMap<ClientType, ClientTypeViewModel>().ReverseMap();
             CreateMap<ClientStatus, ClientStatusViewModel>().ReverseMap();
             CreateMap<CommissionRate, CommissionRateViewModel>().ReverseMap();
 
+            CreateMap<Company, CompanyViewModel>()
+                    .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City)).ReverseMap();
+
             CreateMap<Content, ContentViewModel>()
-                    .ForMember(dest => dest.BuildingCondition, opt => opt.MapFrom(src => src.BuildingCondition.Name))
-                    .ForMember(dest => dest.ResidenceUse, opt => opt.MapFrom(src => src.ResidenceUse.Name))
-                    .ForMember(dest => dest.ResidenceType, opt => opt.MapFrom(src => src.ResidenceType.Name))
-                    .ForMember(dest => dest.RoofType, opt => opt.MapFrom(src => src.RoofType.Name))
-                    .ForMember(dest => dest.WallType, opt => opt.MapFrom(src => src.WallType.Name)).ReverseMap();
+                    .ForMember(dest => dest.BuildingCondition, opt => opt.MapFrom(src => src.BuildingCondition))
+                    .ForMember(dest => dest.ResidenceUse, opt => opt.MapFrom(src => src.ResidenceUse))
+                    .ForMember(dest => dest.ResidenceType, opt => opt.MapFrom(src => src.ResidenceType))
+                    .ForMember(dest => dest.RoofType, opt => opt.MapFrom(src => src.RoofType))
+                    .ForMember(dest => dest.WallType, opt => opt.MapFrom(src => src.WallType)).ReverseMap();
 
             CreateMap<Country, CountryViewModel>().ReverseMap();
             CreateMap<CoverType, CoverTypeViewModel>().ReverseMap();
             CreateMap<DocumentType, DocumentTypeViewModel>().ReverseMap();
+            CreateMap<Driver, DriverViewModel>()
+                    .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
+                    .ForMember(dest => dest.MaritalStatus, opt => opt.MapFrom(src => src.MaritalStatus))
+                    .ForMember(dest => dest.Occupation, opt => opt.MapFrom(src => src.Occupation)).ReverseMap();
+
             CreateMap<DriverType, DriverTypeViewModel>().ReverseMap();
             CreateMap<EmailAddress, EmailAddressViewModel>().ReverseMap();
 
@@ -112,7 +120,7 @@ namespace Tilbake.MVC.Mapping
             CreateMap<Invoice, InvoiceViewModel>()
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Policy.PortfolioClient.Client.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Policy.PortfolioClient.Client.LastName))
-                .ForMember(dest => dest.InvoiceStatus, opt => opt.MapFrom(src => src.InvoiceStatus.Name))
+                .ForMember(dest => dest.InvoiceStatus, opt => opt.MapFrom(src => src.InvoiceStatus))
                 .ForMember(dest => dest.InvoiceItems, opt => opt.MapFrom(src => src.InvoiceItems)).ReverseMap();
 
             CreateMap<InvoiceItem, InvoiceItemViewModel>()

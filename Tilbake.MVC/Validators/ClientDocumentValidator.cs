@@ -1,11 +1,11 @@
 using FluentValidation;
-using Tilbake.Application.Resources;
+using Tilbake.MVC.Models;
 
-namespace Tilbake.Application.Validators
+namespace Tilbake.MVC.Validators
 {
-    public class ClientDocumentResourceValidator : AbstractValidator<ClientDocumentResource>
+    public class ClientDocumentValidator : AbstractValidator<ClientDocumentViewModel>
     {
-        public ClientDocumentResourceValidator()
+        public ClientDocumentValidator()
         {
             RuleFor(p => p.Name)
                 .Cascade(CascadeMode.Stop)

@@ -1,62 +1,66 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Helpers;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class ClientDocumentsController : Controller
+    public class ClientDocumentsController : BaseController
     {
-        private readonly IClientDocumentService _clientDocumentService;
-        private readonly IDocumentTypeService _documentTypeService;
-
-        public ClientDocumentsController(IClientDocumentService clientDocumentService,
-            IDocumentTypeService documentTypeService)
+        public ClientDocumentsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _clientDocumentService = clientDocumentService;
-            _documentTypeService = documentTypeService;
+
         }
 
         // GET: ClientDocuments
-        public async Task<IActionResult> Index(Guid clientId)
+        public IActionResult Index(Guid clientId)
         {
             ViewBag.ClientId = clientId;
-            return await Task.Run(() => View());
+            return View();
         }
 
         // GET: ClientDocuments/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ViewModel = await _clientDocumentService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
+            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return View(ViewModel);
+            var model = _mapper.Map<ClientDocument, ClientDocumentViewModel>(result);
+            return View(model);
         }
 
         // GET: ClientDocuments/Create
         public async Task<IActionResult> Create(Guid portfolioId, Guid clientId)
         {
-            var documentTypes = await _documentTypeService.GetAllAsync();
+            var documentTypes = await _unitOfWork.DocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
 
             ClientDocumentViewModel ViewModel = new()
             {
                 ClientId = clientId,
                 PortfolioId = portfolioId,
-                DocumentTypeList = SelectLists.DocumentTypes(documentTypes, Guid.Empty),
+                DocumentTypeList = MVCHelperExtensions.ToSelectList(documentTypes, Guid.Empty),
             };
 
             return View(ViewModel);
@@ -65,25 +69,55 @@ namespace Tilbake.MVC.Controllers
         // POST: ClientDocuments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClientDocumentViewModel ViewModel)
+        public async Task<IActionResult> Create(ClientDocumentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await _clientDocumentService.AddAsync(ViewModel);
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { ViewModel.PortfolioId, ViewModel.ClientId });
-            }
-            var documentTypes = await _documentTypeService.GetAllAsync();
+                var file = model.File;
 
-            ViewModel.DocumentTypeList = SelectLists.DocumentTypes(documentTypes, ViewModel.DocumentTypeId);
-            return View(ViewModel);
+                var basePath = Path.Combine(Directory.GetCurrentDirectory() + Constants.ClientFolder);
+                bool basePathExists = Directory.Exists(basePath);
+                if (!basePathExists) Directory.CreateDirectory(basePath);
+
+                var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                var filePath = Path.Combine(basePath, file.FileName);
+                var extension = Path.GetExtension(file.FileName);
+
+                if (!File.Exists(filePath))
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    var clientDocument = _mapper.Map<ClientDocumentViewModel, ClientDocument>(model);
+                    clientDocument.Id = Guid.NewGuid();
+                    clientDocument.FileType = file.ContentType;
+                    clientDocument.Extension = extension;
+                    clientDocument.Name = fileName;
+                    clientDocument.DocumentDate = DateTime.Now;
+                    clientDocument.DocumentPath = filePath;
+                    clientDocument.DateAdded = DateTime.Now;
+
+                    await _unitOfWork.ClientDocuments.AddAsync(clientDocument);
+                }
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), "PortfolioClients", new { model.PortfolioId, model.ClientId });
+            }
+            var documentTypes = await _unitOfWork.DocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+
+            model.DocumentTypeList = MVCHelperExtensions.ToSelectList(documentTypes, model.DocumentTypeId);
+            return View(model);
         }
 
         // GET: ClientDocuments/DownloadFile/5
         public async Task<IActionResult> DownloadFile(Guid id)
         {
-
-            var result = await _clientDocumentService.GetByIdAsync(id);
-            if (result == null) return null;
+            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
 
             var memory = new MemoryStream();
             using (var stream = new FileStream(result.DocumentPath, FileMode.Open))
@@ -95,70 +129,60 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: ClientDocuments/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
 
-            var ViewModel = await _clientDocumentService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var model = _mapper.Map<ClientDocument, ClientDocumentViewModel>(result);
+            return View(model);
         }
 
         // POST: ClientDocuments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, ClientDocumentViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, ClientDocumentViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _clientDocumentService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var clientDocument = _mapper.Map<ClientDocumentViewModel, ClientDocument>(model);
+                clientDocument.DateModified = DateTime.Now;
+
+                await _unitOfWork.ClientDocuments.Update(clientDocument);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: ClientDocuments/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
 
-            var ViewModel = await _clientDocumentService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<ClientDocument, ClientDocumentViewModel>(result);
+            return View(model);
         }
 
         // POST: ClientDocuments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(ClientDocumentViewModel ViewModel)
+        public IActionResult DeleteConfirmed(ClientDocumentViewModel model)
         {
-            _clientDocumentService.DeleteAsync(ViewModel.Id);
-            return RedirectToAction(nameof(Details), "PortfolioClients", new { ViewModel.ClientId });
+            _unitOfWork.ClientDocuments.Delete(model.Id);
+            return RedirectToAction(nameof(Details), "PortfolioClients", new { model.ClientId });
         }
     }
 }

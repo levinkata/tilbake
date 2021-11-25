@@ -1,5 +1,4 @@
 using Autofac;
-using Tilbake.Application.Services;
 using Tilbake.Core;
 using Tilbake.Core.Interfaces;
 using Tilbake.EF.Persistence;
@@ -11,11 +10,6 @@ namespace Tilbake.EF.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(BankService).Assembly)
-                    .Where(t => t.Name.EndsWith("Service"))
-                    .AsImplementedInterfaces()
-                    .InstancePerLifetimeScope();
-
             builder.RegisterType(typeof(UnitOfWork))
                     .As(typeof(IUnitOfWork))
                     .InstancePerLifetimeScope();

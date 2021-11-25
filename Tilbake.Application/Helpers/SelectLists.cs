@@ -118,35 +118,6 @@ namespace Tilbake.Application.Helpers
                                 new SelectList(items, "Value", "Text", year);
         }
 
-        public static SelectList ResidenceTypes(IEnumerable<ResidenceTypeResource> residenceTypes, Guid? residenceTypeId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Residence Type", Value = "" });
-
-            foreach (var item in residenceTypes)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (residenceTypeId == Guid.Empty || String.IsNullOrEmpty(residenceTypeId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", residenceTypeId);
-        }
-
-        public static SelectList ResidenceUses(IEnumerable<ResidenceUseResource> residenceUses, Guid? residenceUseId)
-        {
-            List<SelectListItem> items = new();
-            items.Add(new SelectListItem() { Text = "Select Residence Use", Value = "" });
-
-            foreach (var item in residenceUses)
-            {
-                items.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
-
-            return (residenceUseId == Guid.Empty || String.IsNullOrEmpty(residenceUseId.ToString())) ?
-                                    new SelectList(items, "Value", "Text") :
-                                    new SelectList(items, "Value", "Text", residenceUseId);
-        }
 
         public static SelectList RoofTypes(IEnumerable<RoofTypeResource> roofTypes, Guid? roofTypeId)
         {

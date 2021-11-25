@@ -9,7 +9,7 @@
 <hr />
 
 <div class="d-flex justify-content-center">
-    <form asp-action="QuoteToPolicy" class="col-md-9">
+    <form asp-action="ConvertToPolicy" class="col-md-9">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="QuoteId" />
         <div class="card mb-3">
@@ -40,7 +40,8 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label asp-for="RunDay" class="control-label"></label>
-                            <select asp-for="RunDay" class="form-control" asp-items="Model.DayList"></select>
+                            <input asp-for="RunDay" class="form-control" />
+                            <span asp-validation-for="RunDay" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

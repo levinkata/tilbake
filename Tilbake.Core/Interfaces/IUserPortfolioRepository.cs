@@ -7,7 +7,7 @@ namespace Tilbake.Core.Interfaces
 {
     public interface IUserPortfolioRepository : IRepository<AspnetUserPortfolio>
     {
-        Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId);
-        Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId);
+        Task<IEnumerable<Portfolio>> GetByNotUserId(string aspNetUserId);
+        Task<IEnumerable<Portfolio>> GetByUserId(string aspNetUserId);
     }
 }

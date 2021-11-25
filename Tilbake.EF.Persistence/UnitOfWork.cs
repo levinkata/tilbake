@@ -37,11 +37,13 @@ namespace Tilbake.EF.Persistence
             ClientStatuses = new ClientStatusRepository(_context);
             ClientTypes = new ClientTypeRepository(_context);
             CommissionRates = new CommissionRateRepository(_context);
+            Companies = new CompanyRepository(_context);
             Contents = new ContentRepository(_context);
             Countries = new CountryRepository(_context);
             CoverTypes = new CoverTypeRepository(_context);
             DocumentTypes = new DocumentTypeRepository(_context);
             DriverTypes = new DriverTypeRepository(_context);
+            Drivers = new DriverRepository(_context);
             EmailAddresses = new EmailAddressRepository(_context);
             ExcessBuyBacks = new ExcessBuyBackRepository(_context);
             FileTemplates = new FileTemplateRepository(_context);
@@ -123,10 +125,12 @@ namespace Tilbake.EF.Persistence
         public IClientStatusRepository ClientStatuses { get; private set; }
         public IClientTypeRepository ClientTypes { get; private set; }
         public ICommissionRateRepository CommissionRates { get; private set; }
+        public ICompanyRepository Companies { get; private set; }
         public IContentRepository Contents { get; private set; }
         public ICountryRepository Countries { get; private set; }
         public ICoverTypeRepository CoverTypes { get; private set; }
         public IDocumentTypeRepository DocumentTypes { get; private set; }
+        public IDriverRepository Drivers { get; private set; }
         public IDriverTypeRepository DriverTypes { get; private set; }
         public IEmailAddressRepository EmailAddresses { get; private set; }
         public IExcessBuyBackRepository ExcessBuyBacks { get; private set; }

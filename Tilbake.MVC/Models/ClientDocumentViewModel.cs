@@ -10,6 +10,7 @@ namespace Tilbake.MVC.Models
     {
         public Guid Id { get; set; }
         public Guid ClientId { get; set; }
+        public Guid PortfolioId { get; set; }
 
         [Display(Name = "Name")]
         public string Name { get; set; }
@@ -34,13 +35,8 @@ namespace Tilbake.MVC.Models
 
         public IFormFile File { get; set; }
 
-        public Client Client { get; set; }
-        public DocumentType DocumentType { get; set; }
-
-        //  Descriptions
-
-        [Display(Name = "Type")]
-        public string DocumentTypeName { get; set; }
+        public virtual ClientViewModel Client { get; set; }
+        public virtual DocumentTypeViewModel DocumentType { get; set; }
 
         //  SelectLists
 

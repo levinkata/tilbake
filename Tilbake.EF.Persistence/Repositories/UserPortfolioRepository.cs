@@ -15,7 +15,7 @@ namespace Tilbake.EF.Persistence.Repositories
 
         }
 
-        public async Task<IEnumerable<Portfolio>> GetByNotUserIdAsync(string aspNetUserId)
+        public async Task<IEnumerable<Portfolio>> GetByNotUserId(string aspNetUserId)
         {
             return await _context.Portfolios
                                 .Where(c => !c.AspnetUserPortfolios
@@ -24,7 +24,7 @@ namespace Tilbake.EF.Persistence.Repositories
                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync();
         }
 
-        public async Task<IEnumerable<Portfolio>> GetByUserIdAsync(string aspNetUserId)
+        public async Task<IEnumerable<Portfolio>> GetByUserId(string aspNetUserId)
         {
             return await _context.Portfolios
                                 .Where(c => c.AspnetUserPortfolios

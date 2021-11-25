@@ -27,10 +27,12 @@ namespace Tilbake.Core
         IClientTypeRepository ClientTypes{ get; }
         IClientStatusRepository ClientStatuses { get; }
         ICommissionRateRepository CommissionRates { get; }
+        ICompanyRepository Companies { get; }
         IContentRepository Contents { get; }
         ICountryRepository Countries { get; }
         ICoverTypeRepository CoverTypes { get; }
         IDocumentTypeRepository DocumentTypes { get; }
+        IDriverRepository Drivers { get; }
         IDriverTypeRepository DriverTypes { get; }
         IEmailAddressRepository EmailAddresses { get; }
         IExcessBuyBackRepository ExcessBuyBacks { get; }

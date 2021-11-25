@@ -16,7 +16,7 @@ namespace Tilbake.EF.Persistence.Repositories
 
         }
 
-        public async Task<AllRisk> GetAllRiskAsync(Guid id)
+        public async Task<AllRisk> GetAllRisk(Guid id)
         {
             var result = (from q in _context.PolicyRisks
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -28,7 +28,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<Building> GetBuildingAsync(Guid id)
+        public async Task<Building> GetBuilding(Guid id)
         {
             var result = (from q in _context.PolicyRisks
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -40,14 +40,14 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<IEnumerable<PolicyRisk>> GetByPolicyIdAsync(Guid policyId)
+        public async Task<IEnumerable<PolicyRisk>> GetByPolicyId(Guid policyId)
         {
             return await _context.PolicyRisks
                                     .Include(q => q.CoverType)
                                     .Where(e => e.PolicyId == policyId).ToListAsync();
         }
 
-        public async Task<Content> GetContentAsync(Guid id)
+        public async Task<Content> GetContent(Guid id)
         {
             var result = (from q in _context.PolicyRisks
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -59,7 +59,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<House> GetHouseAsync(Guid id)
+        public async Task<House> GetHouse(Guid id)
         {
             var result = (from q in _context.PolicyRisks
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -71,7 +71,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<Motor> GetMotorAsync(Guid id)
+        public async Task<Motor> GetMotor(Guid id)
         {
             var result = (from q in _context.PolicyRisks
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -79,6 +79,24 @@ namespace Tilbake.EF.Persistence.Repositories
                           join a in _context.Motors on r.MotorId equals a.Id
                           where q.Id == id && r.MotorId != null
                           select a).FirstOrDefault();
+
+            return await Task.FromResult(result);
+        }
+
+        public async Task<decimal> GetPremiumByPortfolioClientId(Guid portfolioClientId)
+        {
+            var result = _context.PolicyRisks
+                                        .Where(e => e.Policy.PortfolioClientId == portfolioClientId)
+                                        .Sum(r => r.Premium);
+
+            return await Task.FromResult(result);
+        }
+
+        public async Task<decimal> GetSumInsuredByPortfolioClientId(Guid portfolioClientId)
+        {
+            var result = _context.PolicyRisks
+                                        .Where(e => e.Policy.PortfolioClientId == portfolioClientId)
+                                        .Sum(r => r.SumInsured);
 
             return await Task.FromResult(result);
         }

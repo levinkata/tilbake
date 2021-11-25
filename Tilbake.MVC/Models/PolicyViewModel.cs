@@ -52,6 +52,7 @@ namespace Tilbake.MVC.Models
 
         //  Other
         public Guid InsurerId { get; set; }
+        public int QuoteNumber { get; set; }
 
         //  Descriptions
         public string BankAccount { get; set; }
@@ -60,11 +61,11 @@ namespace Tilbake.MVC.Models
         public string InsurerName { get; set; }        
 
         //  Tables
-        public InsurerBranch InsurerBranch { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
-        public PolicyStatus PolicyStatus { get; set; }
-        public PolicyType PolicyType { get; set; }
-        public SalesType SalesType { get; set; }
+        public virtual InsurerBranchViewModel InsurerBranch { get; set; }
+        public virtual PaymentMethodViewModel PaymentMethod { get; set; }
+        public virtual PolicyStatusViewModel PolicyStatus { get; set; }
+        public virtual PolicyTypeViewModel PolicyType { get; set; }
+        public virtual SalesTypeViewModel SalesType { get; set; }
 
         //  SelectLists
         public SelectList BankAccountList { get; set; }

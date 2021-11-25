@@ -57,7 +57,7 @@ namespace Tilbake.MVC.Models
         //  Tables
         public virtual ClientViewModel Client { get; set; }
         public virtual InsurerViewModel Insurer { get; set; }
-        public virtual InsurerBranch InsurerBranch { get; set; }
+        public virtual InsurerBranchViewModel InsurerBranch { get; set; }
         public virtual PaymentMethodViewModel PaymentMethod { get; set; }
         public virtual PolicyTypeViewModel PolicyType { get; set; }
         public virtual PortfolioClientViewModel PortfolioClient { get; set; }

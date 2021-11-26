@@ -1,85 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Helpers;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class QuoteItemsController : Controller
+    public class QuoteItemsController : BaseController
     {
-        private readonly IQuoteItemService _quoteItemService;
-        private readonly ICoverTypeService _coverTypeService;
-
-        private readonly IBuildingService _buildingService;
-        private readonly IBuildingConditionService _buildingConditionService;
-
-        private readonly IHouseService _houseService;
-        private readonly IHouseConditionService _houseConditionService;
-
-        private readonly IExcessBuyBackService _excessBuyBackService;
-
-        private readonly IContentService _contentService;
-        private readonly IResidenceTypeService _residenceTypeService;
-        private readonly IResidenceUseService _residenceUseService;
-        private readonly IRoofTypeService _roofTypeService;
-        private readonly IWallTypeService _wallTypeService;
-
-        private readonly IAllRiskService _allRiskService;
-        private readonly IRiskItemService _riskItemService;
-        private readonly IMotorService _motorService;
-        private readonly IBodyTypeService _bodyTypeService;
-        private readonly IDriverTypeService _driverTypeService;
-        private readonly IMotorMakeService _motorMakeService;
-        private readonly IMotorModelService _motorModelService;
-
-        public QuoteItemsController(IQuoteItemService quoteItemService,
-                                    ICoverTypeService coverTypeService,
-                                    IBuildingService buildingService,
-                                    IBuildingConditionService buildingConditionService,
-                                    IHouseService houseService,
-                                    IHouseConditionService houseConditionService,
-                                    IExcessBuyBackService excessBuyBackService,
-                                    IContentService contentService,
-                                    IResidenceTypeService residenceTypeService,
-                                    IResidenceUseService residenceUseService,
-                                    IRoofTypeService roofTypeService,
-                                    IWallTypeService wallTypeService,
-                                    IAllRiskService allRiskService,
-                                    IRiskItemService riskItemService,
-                                    IMotorService motorService,
-                                    IBodyTypeService bodyTypeService,
-                                    IDriverTypeService driverTypeService,
-                                    IMotorMakeService motorMakeService,
-                                    IMotorModelService motorModelService)
+        public QuoteItemsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _quoteItemService = quoteItemService;
-            _coverTypeService = coverTypeService;
 
-            _buildingService = buildingService;
-            _buildingConditionService = buildingConditionService;
-
-            _houseService = houseService;
-            _houseConditionService = houseConditionService;
-
-            _contentService = contentService;
-            _excessBuyBackService = excessBuyBackService;
-            _residenceTypeService = residenceTypeService;
-            _residenceUseService = residenceUseService;
-            _roofTypeService = roofTypeService;
-            _wallTypeService = wallTypeService;
-
-            _allRiskService = allRiskService;
-            _riskItemService = riskItemService;
-
-            _motorService = motorService;
-            _bodyTypeService = bodyTypeService;
-            _driverTypeService = driverTypeService;
-            _motorMakeService = motorMakeService;
-            _motorModelService = motorModelService;
         }
 
         public IActionResult Index()
@@ -87,12 +30,36 @@ namespace Tilbake.MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> QuoteItemRisk(Guid quoteItemId)
+        [HttpGet]
+        public async Task<IActionResult> QuoteItemRisk(Guid id)
         {
-            var ViewModel = await _quoteItemService.GetRisksAsync(quoteItemId);
-            var quote = await _quoteItemService.GetByIdAsync(quoteItemId);
+            var resultAllRisk = await _unitOfWork.QuoteItems.GetAllRisk(id);
+            var resultBuilding = await _unitOfWork.QuoteItems.GetBuilding(id);
+            var resultContent = await _unitOfWork.QuoteItems.GetContent(id);
+            var resultExcessBuyBack = await _unitOfWork.QuoteItems.GetExcessBuyBack(id);
+            var resultHouse = await _unitOfWork.QuoteItems.GetHouse(id);
+            var resultMotor = await _unitOfWork.QuoteItems.GetMotor(id);
 
-            if (ViewModel == null)
+            var modelAllRisk = _mapper.Map<AllRisk, AllRiskViewModel>(resultAllRisk);
+            var modelBuilding = _mapper.Map<Building, BuildingViewModel>(resultBuilding);
+            var modelContent = _mapper.Map<Content, ContentViewModel>(resultContent);
+            var modelExcessBuyBack = _mapper.Map<ExcessBuyBack, ExcessBuyBackViewModel>(resultExcessBuyBack);
+            var modelHouse = _mapper.Map<House, HouseViewModel>(resultHouse);
+            var modelMotor = _mapper.Map<Motor, MotorViewModel>(resultMotor);
+
+            QuoteItemObjectViewModel quoteItemObjectModel = new()
+            {
+                AllRisk = modelAllRisk,
+                Building = modelBuilding,
+                Content = modelContent,
+                ExcessBuyBack = modelExcessBuyBack,
+                House = modelHouse,
+                Motor = modelMotor
+            };
+
+            var quote = await _unitOfWork.QuoteItems.GetById(id);
+
+            if (quoteItemObjectModel == null)
             {
                 return NotFound();
             }
@@ -101,115 +68,112 @@ namespace Tilbake.MVC.Controllers
             object model = null;
 
             //  AllRisk
-            if (ViewModel.AllRisk != null)
+            if (quoteItemObjectModel.AllRisk != null)
             {
                 returnView = "QuoteAllRisk";
-                AllRiskViewModel allRiskViewModel = ViewModel.AllRisk;
+                AllRiskViewModel allRiskViewModel = quoteItemObjectModel.AllRisk;
                 var riskItem = allRiskViewModel.RiskItemId;
-                var result = await _riskItemService.GetByIdAsync(riskItem);
+                var result = await _unitOfWork.RiskItems.GetById(riskItem);
 
-                allRiskViewModel.QuoteItemId = quoteItemId;
+                allRiskViewModel.QuoteItemId = id;
                 allRiskViewModel.QuoteId = quote.QuoteId;
                 allRiskViewModel.RiskItem = result.Description;
                 model = allRiskViewModel;
             }
 
             //  Building
-            if (ViewModel.Building != null)
+            if (quoteItemObjectModel.Building != null)
             {
-                var residenceTypes = await _residenceTypeService.GetAllAsync();
-                var residenceUses = await _residenceUseService.GetAllAsync();
-                var buildingConditions = await _buildingConditionService.GetAllAsync();
-                var roofTypes = await _roofTypeService.GetAllAsync();
-                var wallTypes = await _wallTypeService.GetAllAsync();
+                var residenceTypes = await _unitOfWork.ResidenceTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var residenceUses = await _unitOfWork.ResidenceUses.GetAll(r => r.OrderBy(n => n.Name));
+                var buildingConditions = await _unitOfWork.BuildingConditions.GetAll(r => r.OrderBy(n => n.Name));
+                var roofTypes = await _unitOfWork.RoofTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var wallTypes = await _unitOfWork.WallTypes.GetAll(r => r.OrderBy(n => n.Name));
 
                 returnView = "QuoteBuilding";
-                BuildingViewModel buildingViewModel = ViewModel.Building;
-                buildingViewModel.QuoteItemId = quoteItemId;
+                BuildingViewModel buildingViewModel = quoteItemObjectModel.Building;
+                buildingViewModel.QuoteItemId = id;
                 buildingViewModel.QuoteId = quote.QuoteId;
-                buildingViewModel.ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, buildingViewModel.ResidenceTypeId);
-                buildingViewModel.ResidenceUseList = SelectLists.ResidenceUses(residenceUses, buildingViewModel.ResidenceUseId);
-                buildingViewModel.BuildingConditionList = SelectLists.BuildingConditions(buildingConditions, buildingViewModel.BuildingConditionId);
-                buildingViewModel.RoofTypeList = SelectLists.RoofTypes(roofTypes, buildingViewModel.RoofTypeId);
-                buildingViewModel.WallTypeList = SelectLists.WallTypes(wallTypes, buildingViewModel.WallTypeId);
+                buildingViewModel.ResidenceTypeList = MVCHelperExtensions.ToSelectList(residenceTypes, buildingViewModel.ResidenceTypeId);
+                buildingViewModel.ResidenceUseList = MVCHelperExtensions.ToSelectList(residenceUses, buildingViewModel.ResidenceUseId);
+                buildingViewModel.BuildingConditionList = MVCHelperExtensions.ToSelectList(buildingConditions, buildingViewModel.BuildingConditionId);
+                buildingViewModel.RoofTypeList = MVCHelperExtensions.ToSelectList(roofTypes, buildingViewModel.RoofTypeId);
+                buildingViewModel.WallTypeList = MVCHelperExtensions.ToSelectList(wallTypes, buildingViewModel.WallTypeId);
                 model = buildingViewModel;
             }
 
             //  Content
-            if (ViewModel.Content != null)
+            if (quoteItemObjectModel.Content != null)
             {
-                var residenceTypes = await _residenceTypeService.GetAllAsync();
-                var residenceUses = await _residenceUseService.GetAllAsync();
-                var roofTypes = await _roofTypeService.GetAllAsync();
-                var wallTypes = await _wallTypeService.GetAllAsync();
+                var residenceTypes = await _unitOfWork.ResidenceTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var residenceUses = await _unitOfWork.ResidenceUses.GetAll(r => r.OrderBy(n => n.Name));
+                var roofTypes = await _unitOfWork.RoofTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var wallTypes = await _unitOfWork.WallTypes.GetAll(r => r.OrderBy(n => n.Name));
 
                 returnView = "QuoteContent";
-                ContentViewModel contentViewModel = ViewModel.Content;
-                contentViewModel.QuoteItemId = quoteItemId;
+                ContentViewModel contentViewModel = quoteItemObjectModel.Content;
+                contentViewModel.QuoteItemId = id;
                 contentViewModel.QuoteId = quote.QuoteId;
-                contentViewModel.ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, contentViewModel.ResidenceTypeId);
-                contentViewModel.ResidenceUseList = SelectLists.ResidenceUses(residenceUses, contentViewModel.ResidenceUseId);
-                contentViewModel.RoofTypeList = SelectLists.RoofTypes(roofTypes, contentViewModel.RoofTypeId);
-                contentViewModel.WallTypeList = SelectLists.WallTypes(wallTypes, contentViewModel.WallTypeId);
+                contentViewModel.ResidenceTypeList = MVCHelperExtensions.ToSelectList(residenceTypes, contentViewModel.ResidenceTypeId);
+                contentViewModel.ResidenceUseList = MVCHelperExtensions.ToSelectList(residenceUses, contentViewModel.ResidenceUseId);
+                contentViewModel.RoofTypeList = MVCHelperExtensions.ToSelectList(roofTypes, contentViewModel.RoofTypeId);
+                contentViewModel.WallTypeList = MVCHelperExtensions.ToSelectList(wallTypes, contentViewModel.WallTypeId);
                 model = contentViewModel;
             }
 
             //  ExcessBuyBack
-            if (ViewModel.ExcessBuyBack != null)
+            if (quoteItemObjectModel.ExcessBuyBack != null)
             {
-
                 returnView = "QuoteExcessBuyBack";
-                ExcessBuyBackViewModel excessBuyBackViewModel = ViewModel.ExcessBuyBack;
-                excessBuyBackViewModel.QuoteItemId = quoteItemId;
+                ExcessBuyBackViewModel excessBuyBackViewModel = quoteItemObjectModel.ExcessBuyBack;
+                excessBuyBackViewModel.QuoteItemId = id;
                 excessBuyBackViewModel.QuoteId = quote.QuoteId;
                 model = excessBuyBackViewModel;
             }
 
             //  House
-            if (ViewModel.House != null)
+            if (quoteItemObjectModel.House != null)
             {
-                var residenceTypes = await _residenceTypeService.GetAllAsync();
-                var houseConditions = await _houseConditionService.GetAllAsync();
-                var roofTypes = await _roofTypeService.GetAllAsync();
-                var wallTypes = await _wallTypeService.GetAllAsync();
+                var residenceTypes = await _unitOfWork.ResidenceTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var houseConditions = await _unitOfWork.HouseConditions.GetAll(r => r.OrderBy(n => n.Name));
+                var roofTypes = await _unitOfWork.RoofTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var wallTypes = await _unitOfWork.WallTypes.GetAll(r => r.OrderBy(n => n.Name));
 
                 returnView = "QuoteHouse";
-                HouseViewModel houseViewModel = ViewModel.House;
-                houseViewModel.QuoteItemId = quoteItemId;
+                HouseViewModel houseViewModel = quoteItemObjectModel.House;
+                houseViewModel.QuoteItemId = id;
                 houseViewModel.QuoteId = quote.QuoteId;
-                houseViewModel.ResidenceTypeList = SelectLists.ResidenceTypes(residenceTypes, houseViewModel.ResidenceTypeId);
-                houseViewModel.HouseConditionList = SelectLists.HouseConditions(houseConditions, houseViewModel.HouseConditionId);
-                houseViewModel.RoofTypeList = SelectLists.RoofTypes(roofTypes, houseViewModel.RoofTypeId);
-                houseViewModel.WallTypeList = SelectLists.WallTypes(wallTypes, houseViewModel.WallTypeId);
+                houseViewModel.ResidenceTypeList = MVCHelperExtensions.ToSelectList(residenceTypes, houseViewModel.ResidenceTypeId);
+                houseViewModel.HouseConditionList = MVCHelperExtensions.ToSelectList(houseConditions, houseViewModel.HouseConditionId);
+                houseViewModel.RoofTypeList = MVCHelperExtensions.ToSelectList(roofTypes, houseViewModel.RoofTypeId);
+                houseViewModel.WallTypeList = MVCHelperExtensions.ToSelectList(wallTypes, houseViewModel.WallTypeId);
                 model = houseViewModel;
             }
 
             //  Motor
-            if (ViewModel.Motor != null)
+            if (quoteItemObjectModel.Motor != null)
             {
-                var bodyTypes = await _bodyTypeService.GetAllAsync();
-                var driverTypes = await _driverTypeService.GetAllAsync();
-                var motorMakes = await _motorMakeService.GetAllAsync();
+                var bodyTypes = await _unitOfWork.BodyTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var driverTypes = await _unitOfWork.DriverTypes.GetAll(r => r.OrderBy(n => n.Name));
+                var motorMakes = await _unitOfWork.MotorMakes.GetAll(r => r.OrderBy(n => n.Name));
 
                 returnView = "QuoteMotor";
-                MotorViewModel motorViewModel = ViewModel.Motor;
+                MotorViewModel motorViewModel = quoteItemObjectModel.Motor;
 
-                var selectedMotorModel = await _motorModelService.GetByIdAsync(motorViewModel.MotorModelId);
+                var selectedMotorModel = await _unitOfWork.MotorModels.GetById(motorViewModel.MotorModelId);
                 var selectedMotorMakeId = selectedMotorModel.MotorMakeId;
-                var motorModels = await _motorModelService.GetByMotorMakeIdAsync(selectedMotorMakeId);
+                var motorModels = await _unitOfWork.MotorModels.GetByMotorMakeId(selectedMotorMakeId);
 
-                motorViewModel.QuoteItemId = quoteItemId;
+                motorViewModel.QuoteItemId = id;
                 motorViewModel.QuoteId = quote.QuoteId;
                 motorViewModel.MotorMakeId = selectedMotorMakeId;
-                motorViewModel.BodyTypeList = SelectLists.BodyTypes(bodyTypes, motorViewModel.BodyTypeId);
-                motorViewModel.DriverTypeList = SelectLists.DriverTypes(driverTypes, motorViewModel.DriverTypeId);
-                motorViewModel.MotorMakeList = SelectLists.MotorMakes(motorMakes, selectedMotorMakeId);
-                motorViewModel.MotorModelList = SelectLists.MotorModels(motorModels, motorViewModel.MotorModelId);
-                motorViewModel.DateRangeList = SelectLists.RegisteredYears(motorViewModel.RegYear);
+                motorViewModel.BodyTypeList = MVCHelperExtensions.ToSelectList(bodyTypes, motorViewModel.BodyTypeId);
+                motorViewModel.DriverTypeList = MVCHelperExtensions.ToSelectList(driverTypes, motorViewModel.DriverTypeId);
+                motorViewModel.MotorMakeList = MVCHelperExtensions.ToSelectList(motorMakes, selectedMotorMakeId);
+                motorViewModel.MotorModelList = MVCHelperExtensions.ToSelectList(motorModels, motorViewModel.MotorModelId);
 
                 model = motorViewModel;
             }
-
             return View(returnView, model);
         }
 
@@ -217,277 +181,224 @@ namespace Tilbake.MVC.Controllers
         // POST: QuoteItems/EditAllRisk/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAllRisk(Guid? id, AllRiskViewModel ViewModel)
+        public async Task<IActionResult> EditAllRisk(Guid? id, AllRiskViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var quoteItem = await _unitOfWork.QuoteItems.GetById(model.QuoteItemId);
+                quoteItem.Description = "AllRisks - " + model.RiskItem;
+
+                RiskItem riskItem = new()
                 {
-                    var quoteItemViewModel = await _quoteItemService.GetByIdAsync(ViewModel.QuoteItemId);
-                    quoteItemViewModel.Description = "AllRisks - " + ViewModel.RiskItem;
+                    Id = model.RiskItemId,
+                    Description = model.RiskItem
+                };
 
-                    RiskItemViewModel riskViewModel = new()
-                    {
-                        Id = ViewModel.RiskItemId,
-                        Description = ViewModel.RiskItem
-                    };
+                var taxes = await _unitOfWork.Taxes.GetAll(r => r.OrderByDescending(n => n.TaxDate));
+                var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
-                    QuoteItemRiskItemViewModel quoteItemRiskItemViewModel = new()
-                    {
-                        QuoteItem = quoteItemViewModel,
-                        RiskItem = riskViewModel
-                    };
-                    await _quoteItemService.UpdateQuoteItemRiskItem(quoteItemRiskItemViewModel);
-                    return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemViewModel.QuoteId });
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                quoteItem.DateModified = DateTime.Now;
+                quoteItem.TaxRate = taxRate;
+                quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
+                _unitOfWork.QuoteItems.Update(model.QuoteItemId, quoteItem);
+                _unitOfWork.RiskItems.Update(model.RiskItemId, riskItem);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItem.QuoteId });
             }
 
-            return View(ViewModel);
+            return View(model);
         }
 
         // POST: QuoteItems/EditBuilding/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditBuilding(Guid? id, BuildingViewModel ViewModel)
+        public async Task<IActionResult> EditBuilding(Guid? id, BuildingViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var quoteItemViewModel = await _quoteItemService.GetByIdAsync(ViewModel.QuoteItemId);
-                    quoteItemViewModel.Description = "Building - " + ViewModel.PhysicalAddress;
+                var quoteItem = await _unitOfWork.QuoteItems.GetById(model.QuoteItemId);
+                quoteItem.Description = "Building - " + model.PhysicalAddress;
+                var building = _mapper.Map<BuildingViewModel, Building>(model);
 
-                    QuoteItemBuildingViewModel quoteItemBuildingViewModel = new()
-                    {
-                        QuoteItem = quoteItemViewModel,
-                        Building = ViewModel
-                    };
-                    await _quoteItemService.UpdateQuoteItemBuilding(quoteItemBuildingViewModel);
-                    return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemViewModel.QuoteId });
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                _unitOfWork.QuoteItems.Update(model.QuoteItemId, quoteItem);
+                _unitOfWork.Buildings.Update(model.Id, building);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), "Quotes", new { id = model.QuoteId });
             }
 
-            return View(ViewModel);
+            return View(model);
         }
 
         // POST: QuoteItems/EditContent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditContent(Guid? id, ContentViewModel ViewModel)
+        public async Task<IActionResult> EditContent(Guid? id, ContentViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var quoteItemViewModel = await _quoteItemService.GetByIdAsync(ViewModel.QuoteItemId);
-                    quoteItemViewModel.Description = "Contents - " + ViewModel.PhysicalAddress;
+                var quoteItem = await _unitOfWork.QuoteItems.GetById(model.QuoteItemId);
+                quoteItem.Description = "Contents - " + model.PhysicalAddress;
+                var content = _mapper.Map<ContentViewModel, Content>(model);
 
-                    QuoteItemContentViewModel quoteItemContentViewModel = new()
-                    {
-                        QuoteItem = quoteItemViewModel,
-                        Content = ViewModel
-                    };
-                    await _quoteItemService.UpdateQuoteItemContent(quoteItemContentViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = ViewModel.QuoteItemId });
+                _unitOfWork.QuoteItems.Update(model.QuoteItemId, quoteItem);
+                _unitOfWork.Contents.Update(model.Id, content);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = model.QuoteItemId });
             }
 
-            return View(ViewModel);
+            return View(model);
         }
 
         // POST: QuoteItems/EditHouse/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditHouse(Guid? id, HouseViewModel ViewModel)
+        public async Task<IActionResult> EditHouse(Guid? id, HouseViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var quoteItemViewModel = await _quoteItemService.GetByIdAsync(ViewModel.QuoteItemId);
-                    quoteItemViewModel.Description = "House - " + ViewModel.PhysicalAddress;
-
-                    QuoteItemHouseViewModel quoteItemHouseViewModel = new()
-                    {
-                        QuoteItem = quoteItemViewModel,
-                        House = ViewModel
-                    };
-                    await _quoteItemService.UpdateQuoteItemHouse(quoteItemHouseViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = ViewModel.QuoteItemId });
+                var quoteItem = await _unitOfWork.QuoteItems.GetById(model.QuoteItemId);
+                quoteItem.Description = "House - " + model.PhysicalAddress;
+                var house = _mapper.Map<HouseViewModel, House>(model);
+                _unitOfWork.QuoteItems.Update(model.QuoteItemId, quoteItem);
+                _unitOfWork.Houses.Update(model.Id, house);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(QuoteItemRisk), new { quoteItemId = model.QuoteItemId });
             }
 
-            return View(ViewModel);
+            return View(model);
         }
 
         // POST: QuoteItems/EditMotor/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMotor(MotorViewModel ViewModel)
+        public async Task<IActionResult> EditMotor(MotorViewModel model)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var quoteItemViewModel = await _quoteItemService.GetByIdAsync(ViewModel.QuoteItemId);
-
-                    var motorMake = await _motorMakeService.GetByIdAsync(ViewModel.MotorMakeId);
-                    quoteItemViewModel.Description = "Motor - " + ViewModel.RegYear + " " + motorMake.Name + " " + ViewModel.RegNumber;
-
-                    QuoteItemMotorViewModel quoteItemMotorViewModel = new()
-                    {
-                        QuoteItem = quoteItemViewModel,
-                        Motor = ViewModel
-                    };
-                    await _quoteItemService.UpdateQuoteItemMotor(quoteItemMotorViewModel);
-                    return RedirectToAction(nameof(Details), "Quotes", new { id = quoteItemViewModel.QuoteId });
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var quoteItem = await _unitOfWork.QuoteItems.GetById(model.QuoteItemId);
+                var motorMake = await _unitOfWork.MotorMakes.GetById(model.MotorMakeId);
+                quoteItem.Description = "Motor - " + model.RegYear + " " + motorMake.Name + " " + model.RegNumber;
+                var motor = _mapper.Map<MotorViewModel, Motor>(model);
+                _unitOfWork.QuoteItems.Update(model.QuoteItemId, quoteItem);
+                _unitOfWork.Motors.Update(model.Id, motor);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), "Quotes", new { id = model.QuoteId });
             }
 
-            var bodyTypes = await _bodyTypeService.GetAllAsync();
-            var driverTypes = await _driverTypeService.GetAllAsync();
-            var motorMakes = await _motorMakeService.GetAllAsync();
-            var motorModels = await _motorModelService.GetByMotorMakeIdAsync(ViewModel.MotorMakeId);
+            var bodyTypes = await _unitOfWork.BodyTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var driverTypes = await _unitOfWork.DriverTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var motorMakes = await _unitOfWork.MotorMakes.GetAll(r => r.OrderBy(n => n.Name));
+            var motorModels = await _unitOfWork.MotorModels.GetByMotorMakeId(model.MotorMakeId);
 
-            ViewModel.BodyTypeList = new SelectList(bodyTypes, "Id", "Name", ViewModel.BodyTypeId);
-            ViewModel.DriverTypeList = new SelectList(driverTypes, "Id", "Name", ViewModel.DriverTypeId);
-            ViewModel.MotorMakeList = new SelectList(motorMakes, "Id", "Name", ViewModel.MotorMakeId);
-            ViewModel.MotorModelList = new SelectList(motorModels, "Id", "Name", ViewModel.MotorModelId);
+            model.BodyTypeList = MVCHelperExtensions.ToSelectList(bodyTypes, model.BodyTypeId);
+            model.DriverTypeList = MVCHelperExtensions.ToSelectList(driverTypes, model.DriverTypeId);
+            model.MotorMakeList = MVCHelperExtensions.ToSelectList(motorMakes, model.MotorMakeId);
+            model.MotorModelList = MVCHelperExtensions.ToSelectList(motorModels, model.MotorModelId);
 
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: QuoteItems/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
+            var quoteItem = await _unitOfWork.QuoteItems.GetById(id);
+            if (quoteItem == null)
             {
                 return NotFound();
             }
 
-            var ViewModel = await _quoteItemService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            var coverTypes = await _coverTypeService.GetAllAsync();
-            ViewModel.CoverTypeList = SelectLists.CoverTypes(coverTypes, Guid.Empty);
-
-            return View(ViewModel);
+            var model = _mapper.Map<QuoteItem, QuoteItemViewModel>(quoteItem);
+            var coverTypes = await _unitOfWork.CoverTypes.GetAll(r => r.OrderBy(n => n.Name));
+            model.CoverTypeList = MVCHelperExtensions.ToSelectList(coverTypes, model.CoverTypeId);
+            return View(model);
         }
 
         // POST: QuoteItems/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, QuoteItemViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, QuoteItemViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _quoteItemService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-
-                return RedirectToAction(nameof(Details), "Quotes", new { Id = ViewModel.QuoteId });
+                var quoteItem = _mapper.Map<QuoteItemViewModel, QuoteItem>(model);
+                quoteItem.DateModified = DateTime.Now;
+                _unitOfWork.QuoteItems.Update(model.Id, quoteItem);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), "Quotes", new { Id = model.QuoteId });
             }
 
-            var coverTypes = await _coverTypeService.GetAllAsync();
-            ViewModel.CoverTypeList = SelectLists.CoverTypes(coverTypes, ViewModel.CoverTypeId);
-            return View(ViewModel);
+            var coverTypes = await _unitOfWork.CoverTypes.GetAll(r => r.OrderBy(n => n.Name));
+            model.CoverTypeList = MVCHelperExtensions.ToSelectList(coverTypes, model.CoverTypeId);
+            return View(model);
         }
 
         // GET: QuoteItems/Detail/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ViewModel = await _quoteItemService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
+            var quoteItem = await _unitOfWork.QuoteItems.GetById(id);
+            if (quoteItem == null)
             {
                 return NotFound();
             }
-
-            return View(ViewModel);
+            var model = _mapper.Map<QuoteItem, QuoteItemViewModel>(quoteItem);
+            return View(model);
         }
 
         // GET: QuoteItems/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var ViewModel = await _quoteItemService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
+            var quoteItem = await _unitOfWork.QuoteItems.GetById(id);
+            var model = _mapper.Map<QuoteItem, QuoteItemViewModel>(quoteItem);
+            if (model == null)
             {
                 return NotFound();
             }
 
-            return View(ViewModel);
+            return View(model);
         }
 
         // POST: QuoteItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(QuoteItemViewModel ViewModel)
+        public IActionResult DeleteConfirmed(QuoteItemViewModel model)
         {
-            _quoteItemService.DeleteAsync(ViewModel.Id);
-            return RedirectToAction(nameof(Edit), "Quotes", new { ViewModel.QuoteId });
+            _unitOfWork.QuoteItems.Delete(model.Id);
+            return RedirectToAction(nameof(Edit), "Quotes", new { model.QuoteId });
         }
     }
 }

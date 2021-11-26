@@ -1,34 +1,42 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class MotorModelsController : Controller
+    public class MotorModelsController : BaseController
     {
-        private readonly IMotorModelService _motorModelService;
-
-        public MotorModelsController(IMotorModelService motorModelService)
+        public MotorModelsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _motorModelService = motorModelService;
+
         }
 
         // GET: MotorModels
         public async Task<IActionResult> Index()
         {
-            return View(await _motorModelService.GetAllAsync());
+            var result = await _unitOfWork.MotorModels.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<MotorModel>, IEnumerable<MotorModelViewModel>>(result);
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMotorModels(Guid motorMakeId)
         {
-            var ViewModels = await _motorModelService.GetByMotorMakeIdAsync(motorMakeId);
+            var ViewModels = await _unitOfWork.MotorModels.GetByMotorMakeId(motorMakeId);
             var motormodels = from m in ViewModels
                               select new
                               {
@@ -40,20 +48,11 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: MotorModels/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _motorModelService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.MotorModels.GetById(id);
+            var model = _mapper.Map<MotorModel, MotorModelViewModel>(result);
+            return View(model);
         }
 
         // GET: MotorModels/Create
@@ -63,86 +62,67 @@ namespace Tilbake.MVC.Controllers
         }
 
         // POST: MotorModels/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(MotorModelViewModel ViewModel)
+        public async Task<IActionResult> Create(MotorModelViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _motorModelService.AddAsync(ViewModel);
+                var motorModel = _mapper.Map<MotorModelViewModel, MotorModel>(model);
+                motorModel.Id = Guid.NewGuid();
+                motorModel.DateAdded = DateTime.Now;
+
+                await _unitOfWork.MotorModels.Add(motorModel);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: MotorModels/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _motorModelService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var result = await _unitOfWork.MotorModels.GetById(id);
+            var model = _mapper.Map<MotorModel, MotorModelViewModel>(result);
+            return View(model);
         }
 
         // POST: MotorModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, MotorModelViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, MotorModelViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _motorModelService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var motorModel = _mapper.Map<MotorModelViewModel, MotorModel>(model);
+                motorModel.DateModified = DateTime.Now;
+
+                await _unitOfWork.MotorModels.Update(motorModel);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
-        // GET: MotorModels/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _motorModelService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.MotorModels.GetById(id);
+            var model = _mapper.Map<MotorModel, MotorModelViewModel>(result);
+            return View(model);
         }
 
-        // POST: MotorModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _motorModelService.DeleteAsync(id);
+            await _unitOfWork.MotorModels.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

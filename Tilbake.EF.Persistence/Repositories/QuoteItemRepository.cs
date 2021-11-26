@@ -16,7 +16,7 @@ namespace Tilbake.EF.Persistence.Repositories
 
         }
 
-        public async Task<AllRisk> GetAllRiskAsync(Guid id)
+        public async Task<AllRisk> GetAllRisk(Guid id)
         {
             var result = (from q in _context.QuoteItems
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -28,14 +28,14 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<IEnumerable<QuoteItem>> GetByQuoteIdAsync(Guid quoteId)
+        public async Task<IEnumerable<QuoteItem>> GetByQuoteId(Guid quoteId)
         {
             return await Task.Run(() => _context.QuoteItems
                                                 .Include(q => q.CoverType)
                                                 .Where(e => e.QuoteId == quoteId));
         }
 
-        public async Task<Building> GetBuildingAsync(Guid id)
+        public async Task<Building> GetBuilding(Guid id)
         {
             var result = (from q in _context.QuoteItems
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -47,7 +47,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<Content> GetContentAsync(Guid id)
+        public async Task<Content> GetContent(Guid id)
         {
             var result = (from q in _context.QuoteItems
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -59,7 +59,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<House> GetHouseAsync(Guid id)
+        public async Task<House> GetHouse(Guid id)
         {
             var result = (from q in _context.QuoteItems
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -71,7 +71,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<Motor> GetMotorAsync(Guid id)
+        public async Task<Motor> GetMotor(Guid id)
         {
             var result = (from q in _context.QuoteItems
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id
@@ -83,7 +83,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<ExcessBuyBack> GetExcessBuyBackAsync(Guid id)
+        public async Task<ExcessBuyBack> GetExcessBuyBack(Guid id)
         {
             var result = (from q in _context.QuoteItems
                           join c in _context.ClientRisks on q.ClientRiskId equals c.Id

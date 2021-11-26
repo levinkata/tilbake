@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Tilbake.Core.Enums;
+using Tilbake.MVC.Extensions;
 
 namespace Tilbake.MVC.Helpers
 {
@@ -123,6 +126,27 @@ namespace Tilbake.MVC.Helpers
             return (ids == null) ?
                             new MultiSelectList(items, "Value", "Text") :
                             new MultiSelectList(items, "Value", "Text", ids);
+        }
+
+        public static SelectList EnumToSelectList<T>(FileType? id = null) where T : Enum
+        {
+            var enumerable = Enum.GetValues(typeof(T))
+                                    .Cast<T>().Select(c => new
+                                    {
+                                        Id = c.ToString(),
+                                        Name = c.GetDisplayName()
+                                    }).ToList();
+
+            List<SelectListItem> items = new();
+
+            foreach (var item in enumerable)
+            {
+                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
+            }
+
+            return (String.IsNullOrEmpty(id.ToString())) ?
+                            new SelectList(items, "Value", "Text") :
+                            new SelectList(items, "Value", "Text", id);
         }
     }
 

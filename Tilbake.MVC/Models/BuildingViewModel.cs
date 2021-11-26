@@ -83,20 +83,11 @@ namespace Tilbake.MVC.Models
 
         //  Descriptions
 
-        [Display(Name = "Building Condition")]
-        public string BuildingCondition { get; set; }
-
-        [Display(Name = "Residence Use")]
-        public string ResidenceUse { get; set; }
-
-        [Display(Name = "Residence Type")]
-        public string ResidenceType { get; set; }
-
-        [Display(Name = "Roof Type")]
-        public string RoofType { get; set; }
-
-        [Display(Name = "Wall Type")]
-        public string WallType { get; set; }
+        public virtual BuildingConditionViewModel BuildingCondition { get; set; }
+        public virtual ResidenceUseViewModel ResidenceUse { get; set; }
+        public virtual ResidenceTypeViewModel ResidenceType { get; set; }
+        public virtual RoofTypeViewModel RoofType { get; set; }
+        public virtual WallTypeViewModel WallType { get; set; }
 
         //  SelectLists
         public SelectList BuildingConditionList { get; set; }

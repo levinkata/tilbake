@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Threading;
 
-namespace Tilbake.Application.Extensions
+namespace Tilbake.MVC.Extensions
 {
     public class SentenceCase
     {

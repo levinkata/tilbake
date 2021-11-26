@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Tilbake.Application.Extensions
+namespace Tilbake.MVC.Extensions
 {
     public static class EnumExtensions
     {

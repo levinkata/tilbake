@@ -7,134 +7,131 @@ using Tilbake.Application.Helpers;
 using Tilbake.Application.Interfaces;
 using Tilbake.MVC.Models;
 using Tilbake.Core.Enums;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using System.Collections.Generic;
+using Tilbake.MVC.Helpers;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class FileTemplatesController : Controller
+    public class FileTemplatesController : BaseController
     {
-        private readonly IFileTemplateService _fileTemplateService;
-        private readonly IFileTemplateRecordService _fileTemplateRecordService;
-        private readonly IPortfolioService _portfolioService;
-
-        public FileTemplatesController(IFileTemplateService fileTemplateService,
-                                        IFileTemplateRecordService fileTemplateRecordService,
-                                        IPortfolioService portfolioService)
+        public FileTemplatesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _fileTemplateService = fileTemplateService;
-            _fileTemplateRecordService = fileTemplateRecordService;
-            _portfolioService = portfolioService;
+
         }
 
         public async Task<IActionResult> Index(Guid portfolioId)
         {
-            var ViewModels = await _fileTemplateService.GetByPortfolioIdAsync(portfolioId);
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
-
+            var result = await _unitOfWork.FileTemplates.GetByPortfolioId(portfolioId);
+            var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
+            var model = _mapper.Map<IEnumerable<FileTemplate>, IEnumerable<FileTemplateViewModel>>(result);
             ViewBag.PortfolioId = portfolioId;
             ViewBag.Portfolio = portfolio.Name;
-            return View(ViewModels);
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create(Guid portfolioId)
         {
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
 
-            FileTemplateViewModel ViewModel = new()
+            FileTemplateViewModel model = new()
             {
                 PortfolioId = portfolioId,
-                Portfolio = portfolio.Name,
-                FileTypeList = SelectLists.FileFormats(Guid.Empty)
+                PortfolioName = portfolio.Name,
+                FileTypeList = MVCHelperExtensions.EnumToSelectList<FileType>(null)
             };
 
-            return View(ViewModel);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(FileTemplateViewModel ViewModel)
+        public async Task<IActionResult> Create(FileTemplateViewModel model)
         {
             if(ModelState.IsValid)
             {
-                _fileTemplateService.AddAsync(ViewModel);
+                var fileTemplate = _mapper.Map<FileTemplateViewModel, FileTemplate>(model);
+                fileTemplate.Id = Guid.NewGuid();
+                fileTemplate.DateAdded = DateTime.Now;
+                await _unitOfWork.FileTemplates.AddAsync(fileTemplate);
 
-                return RedirectToAction(nameof(Index), new { portfolioId = ViewModel.PortfolioId });
+                var fileTemplateId = fileTemplate.Id;
+
+                await PopulateFileTemplateRecords(fileTemplateId);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index), new { portfolioId = model.PortfolioId });
             }
-            ViewModel.FileTypeList = SelectLists.FileFormats(Guid.Empty);
-            return View(ViewModel);
+            model.FileTypeList = MVCHelperExtensions.EnumToSelectList<FileType>(model.FileType);
+            return View(model);
         }
 
         public async Task<IActionResult> SelectTable(Guid portfolioId, Guid fileTemplateId, FileType fileType)
         {
-            var fileTemplateRecord = await _fileTemplateRecordService.GetAllAsync();
-            var tables = fileTemplateRecord.Select(t => new { t.TableName, t.TableLabel })
+            var fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetAll();
+            var tables = fileTemplateRecord.Select(t => new { Id = t.TableName, Name = t.TableLabel })
                                     .Distinct().ToList();
 
-            SelectedTableViewModel ViewModel = new()
+            SelectedTableViewModel model = new()
             {
                 PortfolioId = portfolioId,
                 FileTemplateId = fileTemplateId,
                 FileType = fileType,
-                TableList = new SelectList(tables.Select(t => new
-                                {
-                                    Id = t.TableName,
-                                    Name = t.TableLabel
-                                }).ToList(), "Id", "Name", tables.FirstOrDefault())
+                TableList = new SelectList(tables, "Id", "Name", tables.FirstOrDefault())
             };
-            return  View(ViewModel);
+            return  View(model);
         }
 
         [HttpPost, ActionName("SelectTable")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SelectTableConfirmed(SelectedTableViewModel ViewModel)
+        public async Task<IActionResult> SelectTableConfirmed(SelectedTableViewModel model)
         {
-            if (ViewModel == null)
-            {
-                throw new ArgumentNullException(nameof(ViewModel));
-            };
-
             if (ModelState.IsValid)
             {
                 return RedirectToAction("TableFileTemplate", new
                 {
-                    portfolioId = ViewModel.PortfolioId,
-                    fileTemplateId = ViewModel.FileTemplateId,
-                    tableName = ViewModel.TableName,
-                    fileType = ViewModel.FileType
+                    portfolioId = model.PortfolioId,
+                    fileTemplateId = model.FileTemplateId,
+                    tableName = model.TableName,
+                    fileType = model.FileType
                 });
             }
 
-            var filterTables = await _fileTemplateRecordService.GetAllAsync();
-            var tables = filterTables.Select(t => new { t.TableName, t.TableLabel })
+            var fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetAll();
+            var tables = fileTemplateRecord.Select(t => new { Id = t.TableName, Name = t.TableLabel })
                                     .Distinct().ToList();
 
-            ViewModel.TableList = new SelectList(tables.Select(t => new
-                                        {
-                                            Id = t.TableName,
-                                            Name = t.TableLabel
-                                        }).ToList(), "Id", "Name", tables.FirstOrDefault());
-
-            return View(ViewModel);
+            model.TableList = new SelectList(tables, "Id", "Name", tables.FirstOrDefault());
+            return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> TableFileTemplate(Guid fileTemplateId,
                                             string tableName, FileType fileType)
         {
-            var fileTemplate = await _fileTemplateService.GetByIdAsync(fileTemplateId);
+            var fileTemplate = await _unitOfWork.FileTemplates.GetById(fileTemplateId);
+
             var portfolioId = fileTemplate.PortfolioId;
-            var portfolioName = fileTemplate.PortfolioName;
-            var fileTemplateRecords = await _fileTemplateRecordService.GetTableFileTemplate(fileTemplateId, tableName);
+            var portfolioName = fileTemplate.Portfolio.Name;
+            var fileTemplateRecords = await _unitOfWork.FileTemplateRecords.GetTableFileTemplate(fileTemplateId, tableName);
 
             if (tableName == "Client")
             {
-                ClientGiroViewModel ViewModel = new()
+                ClientGiroViewModel model = new()
                 {
                     PortfolioId = portfolioId,
                     PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
-                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplate.Name
                 };
 
                 foreach (var item in fileTemplateRecords)
@@ -144,98 +141,98 @@ namespace Tilbake.MVC.Controllers
                     switch (fieldName)
                     {
                         case "Title":
-                            ViewModel.TitleId = item.Id;
-                            ViewModel.TitleFieldLabel = item.FieldLabel;
-                            ViewModel.TitlePosition = item.Position;
-                            ViewModel.TitleColumnLength = item.ColumnLength;
+                            model.TitleId = item.Id;
+                            model.TitleFieldLabel = item.FieldLabel;
+                            model.TitlePosition = item.Position;
+                            model.TitleColumnLength = item.ColumnLength;
                             break;
 
                         case "ClientType":
-                            ViewModel.ClientTypeId = item.Id;
-                            ViewModel.ClientTypeFieldLabel = item.FieldLabel;
-                            ViewModel.ClientTypePosition = item.Position;
-                            ViewModel.ClientTypeColumnLength = item.ColumnLength;
+                            model.ClientTypeId = item.Id;
+                            model.ClientTypeFieldLabel = item.FieldLabel;
+                            model.ClientTypePosition = item.Position;
+                            model.ClientTypeColumnLength = item.ColumnLength;
                             break;
 
                         case "FirstName":
-                            ViewModel.FirstNameId = item.Id;
-                            ViewModel.FirstNameFieldLabel = item.FieldLabel;
-                            ViewModel.FirstNamePosition = item.Position;
-                            ViewModel.FirstNameColumnLength = item.ColumnLength;
+                            model.FirstNameId = item.Id;
+                            model.FirstNameFieldLabel = item.FieldLabel;
+                            model.FirstNamePosition = item.Position;
+                            model.FirstNameColumnLength = item.ColumnLength;
                             break;
 
                         case "LastName":
-                            ViewModel.LastNameId = item.Id;
-                            ViewModel.LastNameFieldLabel = item.FieldLabel;
-                            ViewModel.LastNamePosition = item.Position;
-                            ViewModel.LastNameColumnLength = item.ColumnLength;
+                            model.LastNameId = item.Id;
+                            model.LastNameFieldLabel = item.FieldLabel;
+                            model.LastNamePosition = item.Position;
+                            model.LastNameColumnLength = item.ColumnLength;
                             break;
 
                         case "BirthDate":
-                            ViewModel.BirthDateId = item.Id;
-                            ViewModel.BirthDateFieldLabel = item.FieldLabel;
-                            ViewModel.BirthDatePosition = item.Position;
-                            ViewModel.BirthDateColumnLength = item.ColumnLength;
+                            model.BirthDateId = item.Id;
+                            model.BirthDateFieldLabel = item.FieldLabel;
+                            model.BirthDatePosition = item.Position;
+                            model.BirthDateColumnLength = item.ColumnLength;
                             break;
 
                         case "Gender":
-                            ViewModel.GenderId = item.Id;
-                            ViewModel.GenderFieldLabel = item.FieldLabel;
-                            ViewModel.GenderPosition = item.Position;
-                            ViewModel.GenderColumnLength = item.ColumnLength;
+                            model.GenderId = item.Id;
+                            model.GenderFieldLabel = item.FieldLabel;
+                            model.GenderPosition = item.Position;
+                            model.GenderColumnLength = item.ColumnLength;
                             break;
 
                         case "IdNumber":
-                            ViewModel.IdNumberId = item.Id;
-                            ViewModel.IdNumberFieldLabel = item.FieldLabel;
-                            ViewModel.IdNumberPosition = item.Position;
-                            ViewModel.IdNumberColumnLength = item.ColumnLength;
+                            model.IdNumberId = item.Id;
+                            model.IdNumberFieldLabel = item.FieldLabel;
+                            model.IdNumberPosition = item.Position;
+                            model.IdNumberColumnLength = item.ColumnLength;
                             break;
 
                         case "MaritalStatus":
-                            ViewModel.MaritalStatusId = item.Id;
-                            ViewModel.MaritalStatusFieldLabel = item.FieldLabel;
-                            ViewModel.MaritalStatusPosition = item.Position;
-                            ViewModel.MaritalStatusColumnLength = item.ColumnLength;
+                            model.MaritalStatusId = item.Id;
+                            model.MaritalStatusFieldLabel = item.FieldLabel;
+                            model.MaritalStatusPosition = item.Position;
+                            model.MaritalStatusColumnLength = item.ColumnLength;
                             break;
 
                         case "Phone":
-                            ViewModel.PhoneId = item.Id;
-                            ViewModel.PhoneFieldLabel = item.FieldLabel;
-                            ViewModel.PhonePosition = item.Position;
-                            ViewModel.PhoneColumnLength = item.ColumnLength;
+                            model.PhoneId = item.Id;
+                            model.PhoneFieldLabel = item.FieldLabel;
+                            model.PhonePosition = item.Position;
+                            model.PhoneColumnLength = item.ColumnLength;
                             break;
 
                         case "Country":
-                            ViewModel.CountryId = item.Id;
-                            ViewModel.CountryFieldLabel = item.FieldLabel;
-                            ViewModel.CountryPosition = item.Position;
-                            ViewModel.CountryColumnLength = item.ColumnLength;
+                            model.CountryId = item.Id;
+                            model.CountryFieldLabel = item.FieldLabel;
+                            model.CountryPosition = item.Position;
+                            model.CountryColumnLength = item.ColumnLength;
                             break;
 
                         case "Occupation":
-                            ViewModel.OccupationId = item.Id;
-                            ViewModel.OccupationFieldLabel = item.FieldLabel;
-                            ViewModel.OccupationPosition = item.Position;
-                            ViewModel.OccupationColumnLength = item.ColumnLength;
+                            model.OccupationId = item.Id;
+                            model.OccupationFieldLabel = item.FieldLabel;
+                            model.OccupationPosition = item.Position;
+                            model.OccupationColumnLength = item.ColumnLength;
                             break;
 
                         default:
                             break;
                     }
                 }
-                return View("ClientFileTemplate", ViewModel);
+                return View("ClientFileTemplate", model);
             }
             else if (tableName == "Premium")
             {
-                PremiumGiroViewModel ViewModel = new()
+                PremiumGiroViewModel model = new()
                 {
                     PortfolioId = portfolioId,
                     PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
-                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplate.Name
                 };
 
                 foreach (var item in fileTemplateRecords)
@@ -245,55 +242,55 @@ namespace Tilbake.MVC.Controllers
                     switch (fieldName)
                     {
                         case "FirstName":
-                            ViewModel.FirstNameId = item.Id;
-                            ViewModel.FirstNameFieldLabel = item.FieldLabel;
-                            ViewModel.FirstNamePosition = item.Position;
-                            ViewModel.FirstNameColumnLength = item.ColumnLength;
+                            model.FirstNameId = item.Id;
+                            model.FirstNameFieldLabel = item.FieldLabel;
+                            model.FirstNamePosition = item.Position;
+                            model.FirstNameColumnLength = item.ColumnLength;
                             break;
 
                         case "LastName":
-                            ViewModel.LastNameId = item.Id;
-                            ViewModel.LastNameFieldLabel = item.FieldLabel;
-                            ViewModel.LastNamePosition = item.Position;
-                            ViewModel.LastNameColumnLength = item.ColumnLength;
+                            model.LastNameId = item.Id;
+                            model.LastNameFieldLabel = item.FieldLabel;
+                            model.LastNamePosition = item.Position;
+                            model.LastNameColumnLength = item.ColumnLength;
                             break;
 
                         case "IdNumber":
-                            ViewModel.IdNumberId = item.Id;
-                            ViewModel.IdNumberFieldLabel = item.FieldLabel;
-                            ViewModel.IdNumberPosition = item.Position;
-                            ViewModel.IdNumberColumnLength = item.ColumnLength;
+                            model.IdNumberId = item.Id;
+                            model.IdNumberFieldLabel = item.FieldLabel;
+                            model.IdNumberPosition = item.Position;
+                            model.IdNumberColumnLength = item.ColumnLength;
                             break;
 
                         case "PolicyNumber":
-                            ViewModel.PolicyNumberId = item.Id;
-                            ViewModel.PolicyNumberFieldLabel = item.FieldLabel;
-                            ViewModel.PolicyNumberPosition = item.Position;
-                            ViewModel.PolicyNumberColumnLength = item.ColumnLength;
+                            model.PolicyNumberId = item.Id;
+                            model.PolicyNumberFieldLabel = item.FieldLabel;
+                            model.PolicyNumberPosition = item.Position;
+                            model.PolicyNumberColumnLength = item.ColumnLength;
                             break;
 
                         case "Amount":
-                            ViewModel.PremiumId = item.Id;
-                            ViewModel.PremiumFieldLabel = item.FieldLabel;
-                            ViewModel.PremiumPosition = item.Position;
-                            ViewModel.PremiumColumnLength = item.ColumnLength;
+                            model.PremiumId = item.Id;
+                            model.PremiumFieldLabel = item.FieldLabel;
+                            model.PremiumPosition = item.Position;
+                            model.PremiumColumnLength = item.ColumnLength;
                             break;
                         default:
                             break;
                     }
                 }
-                return View("PremiumFileTemplate", ViewModel);
+                return View("PremiumFileTemplate", model);
             }
             else if (tableName == "Policy")
             {
-                PolicyGiroViewModel ViewModel = new()
+                PolicyGiroViewModel model = new()
                 {
                     PortfolioId = portfolioId,
                     PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
-                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplate.Name
                 };
 
                 foreach (var item in fileTemplateRecords)
@@ -303,49 +300,49 @@ namespace Tilbake.MVC.Controllers
                     switch (fieldname)
                     {
                         case "FirstName":
-                            ViewModel.FirstNameId = item.Id;
-                            ViewModel.FirstNameFieldLabel = item.FieldLabel;
-                            ViewModel.FirstNamePosition = item.Position;
-                            ViewModel.FirstNameColumnLength = item.ColumnLength;
+                            model.FirstNameId = item.Id;
+                            model.FirstNameFieldLabel = item.FieldLabel;
+                            model.FirstNamePosition = item.Position;
+                            model.FirstNameColumnLength = item.ColumnLength;
                             break;
 
                         case "LastName":
-                            ViewModel.LastNameId = item.Id;
-                            ViewModel.LastNameFieldLabel = item.FieldLabel;
-                            ViewModel.LastNamePosition = item.Position;
-                            ViewModel.LastNameColumnLength = item.ColumnLength;
+                            model.LastNameId = item.Id;
+                            model.LastNameFieldLabel = item.FieldLabel;
+                            model.LastNamePosition = item.Position;
+                            model.LastNameColumnLength = item.ColumnLength;
                             break;
 
                         case "IdNumber":
-                            ViewModel.IdNumberId = item.Id;
-                            ViewModel.IdNumberFieldLabel = item.FieldLabel;
-                            ViewModel.IdNumberPosition = item.Position;
-                            ViewModel.IdNumberColumnLength = item.ColumnLength;
+                            model.IdNumberId = item.Id;
+                            model.IdNumberFieldLabel = item.FieldLabel;
+                            model.IdNumberPosition = item.Position;
+                            model.IdNumberColumnLength = item.ColumnLength;
                             break;
 
                         case "PolicyNumber":
-                            ViewModel.PolicyNumberId = item.Id;
-                            ViewModel.PolicyNumberFieldLabel = item.FieldLabel;
-                            ViewModel.PolicyNumberPosition = item.Position;
-                            ViewModel.PolicyNumberColumnLength = item.ColumnLength;
+                            model.PolicyNumberId = item.Id;
+                            model.PolicyNumberFieldLabel = item.FieldLabel;
+                            model.PolicyNumberPosition = item.Position;
+                            model.PolicyNumberColumnLength = item.ColumnLength;
                             break;
 
                         default:
                             break;
                     }
                 }
-                return View("PolicyFileTemplate", ViewModel);
+                return View("PolicyFileTemplate", model);
             }
             else if (tableName == "Claim")
             {
-                ClaimGiroViewModel ViewModel = new()
+                ClaimGiroViewModel model = new()
                 {
                     PortfolioId = portfolioId,
                     PortfolioName = portfolioName,
                     FileTemplateId = fileTemplateId,
                     FileType = fileType,
                     TableName = tableName,
-                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplateName
+                    FileTemplate = fileTemplateRecords.FirstOrDefault().FileTemplate.Name
                 };
 
                 foreach (var item in fileTemplateRecords)
@@ -355,299 +352,280 @@ namespace Tilbake.MVC.Controllers
                     switch (fieldname)
                     {
                         case "ClaimNumber":
-                            ViewModel.ClaimNumberId = item.Id;
-                            ViewModel.ClaimNumberFieldLabel = item.FieldLabel;
-                            ViewModel.ClaimNumberPosition = item.Position;
-                            ViewModel.ClaimNumberColumnLength = item.ColumnLength;
+                            model.ClaimNumberId = item.Id;
+                            model.ClaimNumberFieldLabel = item.FieldLabel;
+                            model.ClaimNumberPosition = item.Position;
+                            model.ClaimNumberColumnLength = item.ColumnLength;
                             break;
 
                         case "ReportDate":
-                            ViewModel.ReportDateId = item.Id;
-                            ViewModel.ReportDateFieldLabel = item.FieldLabel;
-                            ViewModel.ReportDatePosition = item.Position;
-                            ViewModel.ReportDateColumnLength = item.ColumnLength;
+                            model.ReportDateId = item.Id;
+                            model.ReportDateFieldLabel = item.FieldLabel;
+                            model.ReportDatePosition = item.Position;
+                            model.ReportDateColumnLength = item.ColumnLength;
                             break;
 
                         case "IncidentDate":
-                            ViewModel.IncidentDateId = item.Id;
-                            ViewModel.IncidentDateFieldLabel = item.FieldLabel;
-                            ViewModel.IncidentDatePosition = item.Position;
-                            ViewModel.IncidentDateColumnLength = item.ColumnLength;
+                            model.IncidentDateId = item.Id;
+                            model.IncidentDateFieldLabel = item.FieldLabel;
+                            model.IncidentDatePosition = item.Position;
+                            model.IncidentDateColumnLength = item.ColumnLength;
                             break;
 
                         case "RegisterDate":
-                            ViewModel.RegisterDateId = item.Id;
-                            ViewModel.RegisterDateFieldLabel = item.FieldLabel;
-                            ViewModel.RegisterDatePosition = item.Position;
-                            ViewModel.RegisterDateColumnLength = item.ColumnLength;
+                            model.RegisterDateId = item.Id;
+                            model.RegisterDateFieldLabel = item.FieldLabel;
+                            model.RegisterDatePosition = item.Position;
+                            model.RegisterDateColumnLength = item.ColumnLength;
                             break;
 
                         case "ReserveInsured":
-                            ViewModel.ReserveInsuredId = item.Id;
-                            ViewModel.ReserveInsuredFieldLabel = item.FieldLabel;
-                            ViewModel.ReserveInsuredPosition = item.Position;
-                            ViewModel.ReserveInsuredColumnLength = item.ColumnLength;
+                            model.ReserveInsuredId = item.Id;
+                            model.ReserveInsuredFieldLabel = item.FieldLabel;
+                            model.ReserveInsuredPosition = item.Position;
+                            model.ReserveInsuredColumnLength = item.ColumnLength;
                             break;
 
                         case "ReserveThirdParty":
-                            ViewModel.ReserveThirdPartyId = item.Id;
-                            ViewModel.ReserveThirdPartyFieldLabel = item.FieldLabel;
-                            ViewModel.ReserveThirdPartyPosition = item.Position;
-                            ViewModel.ReserveThirdPartyColumnLength = item.ColumnLength;
+                            model.ReserveThirdPartyId = item.Id;
+                            model.ReserveThirdPartyFieldLabel = item.FieldLabel;
+                            model.ReserveThirdPartyPosition = item.Position;
+                            model.ReserveThirdPartyColumnLength = item.ColumnLength;
                             break;
 
                         case "Excess":
-                            ViewModel.ExcessId = item.Id;
-                            ViewModel.ExcessFieldLabel = item.FieldLabel;
-                            ViewModel.ExcessPosition = item.Position;
-                            ViewModel.ExcessColumnLength = item.ColumnLength;
+                            model.ExcessId = item.Id;
+                            model.ExcessFieldLabel = item.FieldLabel;
+                            model.ExcessPosition = item.Position;
+                            model.ExcessColumnLength = item.ColumnLength;
                             break;
 
                         case "RecoverFromThirdParty":
-                            ViewModel.RecoverFromThirdPartyId = item.Id;
-                            ViewModel.RecoverFromThirdPartyFieldLabel = item.FieldLabel;
-                            ViewModel.RecoverFromThirdPartyPosition = item.Position;
-                            ViewModel.RecoverFromThirdPartyColumnLength = item.ColumnLength;
+                            model.RecoverFromThirdPartyId = item.Id;
+                            model.RecoverFromThirdPartyFieldLabel = item.FieldLabel;
+                            model.RecoverFromThirdPartyPosition = item.Position;
+                            model.RecoverFromThirdPartyColumnLength = item.ColumnLength;
                             break;
 
                         default:
                             break;
                     }
                 }
-                return View("ClaimFileTemplate", ViewModel);
+                return View("ClaimFileTemplate", model);
             }
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> ClientFileTemplate(ClientGiroViewModel ViewModel)
+        public async Task<IActionResult> ClientFileTemplate(ClientGiroViewModel model)
         {
-            if (ViewModel == null)
-            {
-                throw new ArgumentNullException(nameof(ViewModel));
-            };
 
             if (ModelState.IsValid)
             {
-                var tablename = ViewModel.TableName;
+                var tablename = model.TableName;
                 if (tablename == "Client")
                 {
-                    var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.TitleId);
-                    fileTemplateRecord.Position = ViewModel.TitlePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.TitleColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    var fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.TitleId);
+                    fileTemplateRecord.Position = model.TitlePosition;
+                    fileTemplateRecord.ColumnLength = model.TitleColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.ClientTypeId);
-                    fileTemplateRecord.Position = ViewModel.ClientTypePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.ClientTypeColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.ClientTypeId);
+                    fileTemplateRecord.Position = model.ClientTypePosition;
+                    fileTemplateRecord.ColumnLength = model.ClientTypeColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.FirstNameId);
-                    fileTemplateRecord.Position = ViewModel.FirstNamePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.FirstNameColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.FirstNameId);
+                    fileTemplateRecord.Position = model.FirstNamePosition;
+                    fileTemplateRecord.ColumnLength = model.FirstNameColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.LastNameId);
-                    fileTemplateRecord.Position = ViewModel.LastNamePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.LastNameColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.LastNameId);
+                    fileTemplateRecord.Position = model.LastNamePosition;
+                    fileTemplateRecord.ColumnLength = model.LastNameColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.BirthDateId);
-                    fileTemplateRecord.Position = ViewModel.BirthDatePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.BirthDateColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.BirthDateId);
+                    fileTemplateRecord.Position = model.BirthDatePosition;
+                    fileTemplateRecord.ColumnLength = model.BirthDateColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.GenderId);
-                    fileTemplateRecord.Position = ViewModel.GenderPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.GenderColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.GenderId);
+                    fileTemplateRecord.Position = model.GenderPosition;
+                    fileTemplateRecord.ColumnLength = model.GenderColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.IdNumberId);
-                    fileTemplateRecord.Position = ViewModel.IdNumberPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.IdNumberColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.IdNumberId);
+                    fileTemplateRecord.Position = model.IdNumberPosition;
+                    fileTemplateRecord.ColumnLength = model.IdNumberColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.PhoneId);
-                    fileTemplateRecord.Position = ViewModel.PhonePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.PhoneColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.PhoneId);
+                    fileTemplateRecord.Position = model.PhonePosition;
+                    fileTemplateRecord.ColumnLength = model.PhoneColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.MaritalStatusId);
-                    fileTemplateRecord.Position = ViewModel.MaritalStatusPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.MaritalStatusColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.MaritalStatusId);
+                    fileTemplateRecord.Position = model.MaritalStatusPosition;
+                    fileTemplateRecord.ColumnLength = model.MaritalStatusColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.CountryId);
-                    fileTemplateRecord.Position = ViewModel.CountryPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.CountryColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.CountryId);
+                    fileTemplateRecord.Position = model.CountryPosition;
+                    fileTemplateRecord.ColumnLength = model.CountryColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.OccupationId);
-                    fileTemplateRecord.Position = ViewModel.OccupationPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.OccupationColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.OccupationId);
+                    fileTemplateRecord.Position = model.OccupationPosition;
+                    fileTemplateRecord.ColumnLength = model.OccupationColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
                 }
-                return RedirectToAction(nameof(Index), new { ViewModel.PortfolioId });
+                return RedirectToAction(nameof(Index), new { model.PortfolioId });
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PolicyFileTemplate(PolicyGiroViewModel ViewModel)
+        public async Task<IActionResult> PolicyFileTemplate(PolicyGiroViewModel model)
         {
-            if (ViewModel == null)
-            {
-                throw new ArgumentNullException(nameof(ViewModel));
-            };
-
             if (ModelState.IsValid)
             {
-                var tablename = ViewModel.TableName;
+                var tablename = model.TableName;
                 if (tablename == "Policy")
                 {
-                    var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.FirstNameId);
-                    fileTemplateRecord.Position = ViewModel.FirstNamePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.FirstNameColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    var fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.FirstNameId);
+                    fileTemplateRecord.Position = model.FirstNamePosition;
+                    fileTemplateRecord.ColumnLength = model.FirstNameColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.LastNameId);
-                    fileTemplateRecord.Position = ViewModel.LastNamePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.LastNameColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.LastNameId);
+                    fileTemplateRecord.Position = model.LastNamePosition;
+                    fileTemplateRecord.ColumnLength = model.LastNameColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.IdNumberId);
-                    fileTemplateRecord.Position = ViewModel.IdNumberPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.IdNumberColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.IdNumberId);
+                    fileTemplateRecord.Position = model.IdNumberPosition;
+                    fileTemplateRecord.ColumnLength = model.IdNumberColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.PolicyNumberId);
-                    fileTemplateRecord.Position = ViewModel.PolicyNumberPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.PolicyNumberColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.PolicyNumberId);
+                    fileTemplateRecord.Position = model.PolicyNumberPosition;
+                    fileTemplateRecord.ColumnLength = model.PolicyNumberColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
                 }
-                return RedirectToAction(nameof(Index), new { ViewModel.PortfolioId });
+                return RedirectToAction(nameof(Index), new { model.PortfolioId });
 
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PremiumFileTemplate(PremiumGiroViewModel ViewModel)
+        public async Task<IActionResult> PremiumFileTemplate(PremiumGiroViewModel model)
         {
-            if (ViewModel == null)
-            {
-                throw new ArgumentNullException(nameof(ViewModel));
-            };
-
             if (ModelState.IsValid)
             {
-                var tablename = ViewModel.TableName;
+                var tablename = model.TableName;
                 if (tablename == "Premium")
                 {
-                    var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.FirstNameId);
-                    fileTemplateRecord.Position = ViewModel.FirstNamePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.FirstNameColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    var fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.FirstNameId);
+                    fileTemplateRecord.Position = model.FirstNamePosition;
+                    fileTemplateRecord.ColumnLength = model.FirstNameColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.LastNameId);
-                    fileTemplateRecord.Position = ViewModel.LastNamePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.LastNameColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.LastNameId);
+                    fileTemplateRecord.Position = model.LastNamePosition;
+                    fileTemplateRecord.ColumnLength = model.LastNameColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.IdNumberId);
-                    fileTemplateRecord.Position = ViewModel.IdNumberPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.IdNumberColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.IdNumberId);
+                    fileTemplateRecord.Position = model.IdNumberPosition;
+                    fileTemplateRecord.ColumnLength = model.IdNumberColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.PolicyNumberId);
-                    fileTemplateRecord.Position = ViewModel.PolicyNumberPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.PolicyNumberColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.PolicyNumberId);
+                    fileTemplateRecord.Position = model.PolicyNumberPosition;
+                    fileTemplateRecord.ColumnLength = model.PolicyNumberColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.PremiumId);
-                    fileTemplateRecord.Position = ViewModel.PremiumPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.PremiumColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.PremiumId);
+                    fileTemplateRecord.Position = model.PremiumPosition;
+                    fileTemplateRecord.ColumnLength = model.PremiumColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
                 }
-                return RedirectToAction(nameof(Index), new { ViewModel.PortfolioId });
+                return RedirectToAction(nameof(Index), new { model.PortfolioId });
 
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ClaimFileTemplate(ClaimGiroViewModel ViewModel)
+        public async Task<IActionResult> ClaimFileTemplate(ClaimGiroViewModel model)
         {
-            if (ViewModel == null)
-            {
-                throw new ArgumentNullException(nameof(ViewModel));
-            };
-
             if (ModelState.IsValid)
             {
-                var tablename = ViewModel.TableName;
+                var tablename = model.TableName;
                 if (tablename == "Claim")
                 {
-                    var fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.ClaimNumberId);
-                    fileTemplateRecord.Position = ViewModel.ClaimNumberPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.ClaimNumberColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    var fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.ClaimNumberId);
+                    fileTemplateRecord.Position = model.ClaimNumberPosition;
+                    fileTemplateRecord.ColumnLength = model.ClaimNumberColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.ReportDateId);
-                    fileTemplateRecord.Position = ViewModel.ReportDatePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.ReportDateColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.ReportDateId);
+                    fileTemplateRecord.Position = model.ReportDatePosition;
+                    fileTemplateRecord.ColumnLength = model.ReportDateColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.IncidentDateId);
-                    fileTemplateRecord.Position = ViewModel.IncidentDatePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.IncidentDateColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.IncidentDateId);
+                    fileTemplateRecord.Position = model.IncidentDatePosition;
+                    fileTemplateRecord.ColumnLength = model.IncidentDateColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.RegisterDateId);
-                    fileTemplateRecord.Position = ViewModel.RegisterDatePosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.RegisterDateColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.RegisterDateId);
+                    fileTemplateRecord.Position = model.RegisterDatePosition;
+                    fileTemplateRecord.ColumnLength = model.RegisterDateColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.ReserveInsuredId);
-                    fileTemplateRecord.Position = ViewModel.ReserveInsuredPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.ReserveInsuredColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.ReserveInsuredId);
+                    fileTemplateRecord.Position = model.ReserveInsuredPosition;
+                    fileTemplateRecord.ColumnLength = model.ReserveInsuredColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.ReserveThirdPartyId);
-                    fileTemplateRecord.Position = ViewModel.ReserveThirdPartyPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.ReserveThirdPartyColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.ReserveThirdPartyId);
+                    fileTemplateRecord.Position = model.ReserveThirdPartyPosition;
+                    fileTemplateRecord.ColumnLength = model.ReserveThirdPartyColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.ExcessId);
-                    fileTemplateRecord.Position = ViewModel.ExcessPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.ExcessColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.ExcessId);
+                    fileTemplateRecord.Position = model.ExcessPosition;
+                    fileTemplateRecord.ColumnLength = model.ExcessColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _fileTemplateRecordService.GetByIdAsync(ViewModel.RecoverFromThirdPartyId);
-                    fileTemplateRecord.Position = ViewModel.RecoverFromThirdPartyPosition;
-                    fileTemplateRecord.ColumnLength = ViewModel.RecoverFromThirdPartyColumnLength;
-                    await _fileTemplateRecordService.UpdateAsync(fileTemplateRecord);
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.RecoverFromThirdPartyId);
+                    fileTemplateRecord.Position = model.RecoverFromThirdPartyPosition;
+                    fileTemplateRecord.ColumnLength = model.RecoverFromThirdPartyColumnLength;
+                    await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
                 }
-                return RedirectToAction(nameof(Index), new { ViewModel.PortfolioId });
+                return RedirectToAction(nameof(Index), new { model.PortfolioId });
 
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var ViewModel = await _fileTemplateService.GetByIdAsync(id);
+            var result = await _unitOfWork.FileTemplates.GetById(id);
 
-            var portfolioId = ViewModel.PortfolioId;
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var portfolioId = result.Portfolio.Id;
+            var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
+            var model = _mapper.Map<FileTemplate, FileTemplateViewModel>(result);
 
-            ViewModel.PortfolioId = portfolioId;
-            ViewModel.PortfolioName = portfolio.Name;
-            ViewModel.FileTypeList = SelectLists.FileFormats(Guid.Empty);
-
-            return View(ViewModel);
+            model.PortfolioId = portfolioId;
+            model.PortfolioName = portfolio.Name;
+            model.FileTypeList = MVCHelperExtensions.EnumToSelectList<FileType>(null);
+            return View(model);
         }
 
         [HttpPost]
@@ -657,9 +635,49 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 _fileTemplateService.UpdateAsync(ViewModel);
-                return RedirectToAction(nameof(Index), new { portfolioId = ViewModel.PortfolioId });
+                return RedirectToAction(nameof(Index), new { portfolioId = model.PortfolioId });
             }
             return View(ViewModel);
+        }
+
+        public async Task PopulateFileTemplateRecords(Guid fileTemplateId)
+        {
+            var fileTemplateRecords = new List<FileTemplateRecord>
+            {
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Title",FieldLabel="Title",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="ClientType",FieldLabel="Client Type",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="BirthDate",FieldLabel="Birth Date",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Gender",FieldLabel="Gender",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Phone",FieldLabel="Phone",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Country",FieldLabel="Country",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="MaritalStatus",FieldLabel="Marital Status",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Occupation",FieldLabel="Occupation",Position=null,ColumnLength=0,IsKey=false},
+
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="PolicyNumber",FieldLabel="Policy Number",Position=null,ColumnLength=0,IsKey=false},
+
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="PolicyNumber",FieldLabel="Policy Number",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="Amount",FieldLabel="Premium",Position=null,ColumnLength=0,IsKey=false},
+
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ClaimNumber",FieldLabel="Claim Number",Position=null,ColumnLength=0,IsKey=true},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReportDate",FieldLabel="Report Date",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="IncidentDate",FieldLabel="Incident Date",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="RegisterDate",FieldLabel="Register Date",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReserveInsured",FieldLabel="Reserve Insured",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReserveThirdParty",FieldLabel="Reserve Third Party",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="Excess",FieldLabel="Excess",Position=null,ColumnLength=0,IsKey=false},
+               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim", FieldName="RecoverFromThirdParty",FieldLabel="Recover From Third Party",Position=null,ColumnLength=0,IsKey=false}
+            };
+
+            _unitOfWork.FileTemplateRecords.AddRange(fileTemplateRecords);
         }
     }
 }

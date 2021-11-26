@@ -7,12 +7,12 @@ namespace Tilbake.Core.Interfaces
 {
     public interface IQuoteItemRepository : IRepository<QuoteItem>
     {
-        Task<IEnumerable<QuoteItem>> GetByQuoteIdAsync(Guid quoteId);
-        Task<AllRisk> GetAllRiskAsync(Guid id);
-        Task<Building> GetBuildingAsync(Guid id);
-        Task<Content> GetContentAsync(Guid id);
-        Task<ExcessBuyBack> GetExcessBuyBackAsync(Guid id);
-        Task<House> GetHouseAsync(Guid id);
-        Task<Motor> GetMotorAsync(Guid id);
+        Task<IEnumerable<QuoteItem>> GetByQuoteId(Guid quoteId);
+        Task<AllRisk> GetAllRisk(Guid id);
+        Task<Building> GetBuilding(Guid id);
+        Task<Content> GetContent(Guid id);
+        Task<ExcessBuyBack> GetExcessBuyBack(Guid id);
+        Task<House> GetHouse(Guid id);
+        Task<Motor> GetMotor(Guid id);
     }
 }

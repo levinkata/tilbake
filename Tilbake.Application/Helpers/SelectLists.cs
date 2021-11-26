@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tilbake.Application.Extensions;
 using Tilbake.Application.Resources;
 using Tilbake.Core.Enums;
 
@@ -10,29 +9,6 @@ namespace Tilbake.Application.Helpers
 {
     public class SelectLists
     {
-
-        public static SelectList FileFormats(Guid? fileFormatId)
-        {
-            var formatTypes = Enum.GetValues(typeof(FileType))
-                                    .Cast<FileType>().Select(c => new
-                                    {
-                                        Id = c.ToString(),
-                                        Name = c.GetDisplayName()
-                                    }).ToList();
-
-            List<SelectListItem> items = new();
-
-            foreach (var item in formatTypes)
-            {
-                items.Add(new SelectListItem() { Text = item.Id, Value = item.Id.ToString() });
-            }
-
-            return (fileFormatId == Guid.Empty || String.IsNullOrEmpty(fileFormatId.ToString())) ?
-                                        new SelectList(items, "Value", "Text") :
-                                        new SelectList(items, "Value", "Text", fileFormatId);
-        }
-
-
         public static SelectList RegisteredDays(int day)
         {
             List<int> days = new();

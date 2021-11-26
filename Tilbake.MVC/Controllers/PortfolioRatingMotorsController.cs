@@ -1,39 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class PortfolioRatingMotorsController : Controller
+    public class PortfolioRatingMotorsController : BaseController
     {
-        // private readonly IRatingMotorService _ratingMotor;
-        // private readonly IInsurerService _insurerService;
-        private readonly IPortfolioService _portfolioService;
-
-        public PortfolioRatingMotorsController(// IRatingMotorService ratingMotor,
-                                    // IInsurerService insurerService,
-                                    IPortfolioService portfolioService)
+        public PortfolioRatingMotorsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            // _ratingMotor = ratingMotor;
-            // _insurerService = insurerService;
-            _portfolioService = portfolioService;
+
         }
 
         public async Task<IActionResult> Index(Guid portfolioId, Guid insurerId)
         {
-            var portfolio = await _portfolioService.GetByIdAsync(portfolioId);
+            var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
 
-            PortfolioRatingMotorViewModel ViewModel = new()
+            PortfolioRatingMotorViewModel model = new()
             {
                 PortfolioId = portfolioId,
                 InsurerId = insurerId,
                 PortfolioName = portfolio.Name
             };
 
-            return View(ViewModel);
+            return View(model);
         }
     }
 }

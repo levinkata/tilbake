@@ -25,7 +25,7 @@ namespace Tilbake.MVC.Models
         [Display(Name = "Rate (Import)")]
         public decimal RateImport { get; set; }
 
-        //  Tables
-        public Insurer Insurer { get; set; }
+        public string InsurerName { get; set; }
+        public InsurerViewModel Insurer { get; set; }
     }
 }

@@ -1,129 +1,120 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class RatingMotorExcessesController : Controller
+    public class RatingMotorExcessesController : BaseController
     {
-        private readonly IRatingMotorService _ratingMotorExcessService;
-        private readonly IInsurerService _insurerService;
-
-        public RatingMotorExcessesController(IRatingMotorService ratingMotorExcessService,
-                                    IInsurerService insurerService)
+        public RatingMotorExcessesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _ratingMotorExcessService = ratingMotorExcessService;
-            _insurerService = insurerService;
+
         }
 
         public async Task<IActionResult> Index(Guid insurerId)
         {
-            var ViewModels = await _ratingMotorExcessService.GetByInsurerAsync(insurerId);
-            return View(ViewModels);
+            var result = await _unitOfWork.RatingMotorExcesses.GetByInsurerId(insurerId);
+            var model = _mapper.Map<IEnumerable<RatingMotorExcess>, IEnumerable< RatingMotorExcessViewModel>>(result);
+            return View(model);
         }
 
-        public async Task<IActionResult> Create(Guid insurerId)
+        public IActionResult Create(Guid insurerId)
         {
-            RatingMotorViewModel ViewModel = new()
+            RatingMotorExcessViewModel model = new()
             {
                 InsurerId = insurerId
             };
             
-            return await Task.Run(() => View(ViewModel));
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(RatingMotorViewModel ViewModel)
+        public async Task<IActionResult> Create(RatingMotorExcessViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _ratingMotorExcessService.AddAsync(ViewModel);
-                return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
+                var ratingMotorExcess = _mapper.Map<RatingMotorExcessViewModel, RatingMotorExcess>(model);
+                ratingMotorExcess.Id = Guid.NewGuid();
+                ratingMotorExcess.DateAdded = DateTime.Now;
+
+                await _unitOfWork.RatingMotorExcesses.AddAsync(ratingMotorExcess);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index), new { insurerid = model.InsurerId });
             }
-            return View(ViewModel);
+            return View(model);
         }
 
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.RatingMotorExcesses.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            var ViewModel = await _ratingMotorExcessService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<RatingMotorExcess, RatingMotorExcessViewModel>(result);
+            return View(model);
         }
 
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.RatingMotorExcesses.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            var ViewModel = await _ratingMotorExcessService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var model = _mapper.Map<RatingMotorExcess, RatingMotorExcessViewModel>(result);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, RatingMotorViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid id, RatingMotorExcessViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _ratingMotorExcessService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
+                var ratingMotorExcess = _mapper.Map<RatingMotorExcessViewModel, RatingMotorExcess>(model);
+                ratingMotorExcess.DateModified = DateTime.Now;
+
+                _unitOfWork.RatingMotorExcesses.Update(model.Id, ratingMotorExcess);
+                await _unitOfWork.SaveAsync();
+                return RedirectToAction(nameof(Index), new { insurerid = model.InsurerId });
             }
-            return View(ViewModel);
+            return View(model);
         }
 
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.RatingMotorExcesses.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            var ViewModel = await _ratingMotorExcessService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<RatingMotorExcess, RatingMotorExcessViewModel>(result);
+            return View(model);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(RatingMotorViewModel ViewModel)
+        public IActionResult DeleteConfirmed(RatingMotorViewModel model)
         {
-            _ratingMotorExcessService.DeleteAsync(ViewModel.Id);
-            return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
+            _unitOfWork.RatingMotorExcesses.Delete(model.Id);
+            return RedirectToAction(nameof(Index), new { insurerid = model.InsurerId });
         }        
     }
 }

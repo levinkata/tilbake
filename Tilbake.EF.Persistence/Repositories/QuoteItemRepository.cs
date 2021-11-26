@@ -94,5 +94,29 @@ namespace Tilbake.EF.Persistence.Repositories
 
             return await Task.FromResult(result);
         }
+
+        public async Task<AllRiskSpecified> GetAllRiskSpecified(Guid id)
+        {
+            var result = (from q in _context.QuoteItems
+                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join r in _context.Risks on c.RiskId equals r.Id
+                          join a in _context.AllRiskSpecifieds on r.AllRiskSpecifiedId equals a.Id
+                          where q.Id == id && r.AllRiskSpecifiedId != null
+                          select a).FirstOrDefault();
+
+            return await Task.FromResult(result);
+        }
+
+        public async Task<Travel> GetTravel(Guid id)
+        {
+            var result = (from q in _context.QuoteItems
+                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join r in _context.Risks on c.RiskId equals r.Id
+                          join a in _context.Travels on r.TravelId equals a.Id
+                          where q.Id == id && r.TravelId != null
+                          select a).FirstOrDefault();
+
+            return await Task.FromResult(result);
+        }
     }
 }

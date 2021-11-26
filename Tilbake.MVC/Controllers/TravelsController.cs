@@ -1,44 +1,42 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class TravelsController : Controller
+    public class TravelsController : BaseController
     {
-        private readonly ITravelService _travelService;
-
-        public TravelsController(ITravelService travelService)
+        public TravelsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _travelService = travelService;
+
         }
 
         // GET: Travels
         public async Task<IActionResult> Index()
         {
-            return View(await _travelService.GetAllAsync());
+            var result = await _unitOfWork.Travels.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Travel>, IEnumerable<TravelViewModel>>(result);
+            return View(model);
         }
 
         // GET: Travels/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _travelService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.Travels.GetById(id);
+            var model = _mapper.Map<Travel, TravelViewModel>(result);
+            return View(model);
         }
 
         // GET: Travels/Create
@@ -50,80 +48,65 @@ namespace Tilbake.MVC.Controllers
         // POST: Travels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(TravelViewModel ViewModel)
+        public async Task<IActionResult> Create(TravelViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _travelService.AddAsync(ViewModel);
+                var travel = _mapper.Map<TravelViewModel, Travel>(model);
+                travel.Id = Guid.NewGuid();
+                travel.DateAdded = DateTime.Now;
+
+                await _unitOfWork.Travels.Add(travel);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: Travels/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _travelService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var result = await _unitOfWork.Travels.GetById(id);
+            var model = _mapper.Map<Travel, TravelViewModel>(result);
+            return View(model);
         }
 
         // POST: Travels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, TravelViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, TravelViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _travelService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var travel = _mapper.Map<TravelViewModel, Travel>(model);
+                travel.DateModified = DateTime.Now;
+
+                await _unitOfWork.Travels.Update(travel);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
-        // GET: Travels/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _travelService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.Travels.GetById(id);
+            var model = _mapper.Map<Travel, TravelViewModel>(result);
+            return View(model);
         }
 
-        // POST: Travels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _travelService.DeleteAsync(id);
+            await _unitOfWork.Travels.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

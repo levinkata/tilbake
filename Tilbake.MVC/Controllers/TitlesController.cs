@@ -1,32 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class TitlesController : Controller
+    public class TitlesController : BaseController
     {
-        private readonly ITitleService _titleService;
-
-        public TitlesController(ITitleService titleService)
+        public TitlesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _titleService = titleService;
+
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _titleService.GetAllAsync());
+            var result = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
+            var model = _mapper.Map<IEnumerable<Title>, IEnumerable<TitleViewModel>>(result);
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetTitles()
         {
-            var ViewModels = await _titleService.GetAllAsync();
-            var titles = from m in ViewModels
+            var result = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = from m in result
                               select new
                               {
                                   m.Id,
@@ -37,20 +45,11 @@ namespace Tilbake.MVC.Controllers
         }        
 
         // GET: Titles/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _titleService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.Titles.GetById(id);
+            var model = _mapper.Map<Title, TitleViewModel>(result);
+            return View(model);
         }
 
         // GET: Titles/Create
@@ -62,80 +61,66 @@ namespace Tilbake.MVC.Controllers
         // POST: Titles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(TitleViewModel ViewModel)
+        public async Task<IActionResult> Create(TitleViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _titleService.AddAsync(ViewModel);
+                var title = _mapper.Map<TitleViewModel, Title>(model);
+                title.Id = Guid.NewGuid();
+                title.DateAdded = DateTime.Now;
+
+                await _unitOfWork.Titles.Add(title);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: Titles/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _titleService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-            return View(ViewModel);
+            var result = await _unitOfWork.Titles.GetById(id);
+            var model = _mapper.Map<Title, TitleViewModel>(result);
+            return View(model);
         }
 
         // POST: Titles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, TitleViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, TitleViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _titleService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var title = _mapper.Map<TitleViewModel, Title>(model);
+                title.DateModified = DateTime.Now;
+
+                await _unitOfWork.Titles.Update(title);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         // GET: Titles/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _titleService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var result = await _unitOfWork.Titles.GetById(id);
+            var model = _mapper.Map<Title, TitleViewModel>(result);
+            return View(model);
         }
 
         // POST: Titles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _titleService.DeleteAsync(id);
+            await _unitOfWork.Titles.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

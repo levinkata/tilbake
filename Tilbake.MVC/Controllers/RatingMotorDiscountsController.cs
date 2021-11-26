@@ -1,129 +1,124 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class RatingMotorDiscountsController : Controller
+    public class RatingMotorDiscountsController : BaseController
     {
-        private readonly IRatingMotorDiscountService _ratingMotorDiscountService;
-        private readonly IInsurerService _insurerService;
-
-        public RatingMotorDiscountsController(IRatingMotorDiscountService ratingMotorDiscountService,
-                                    IInsurerService insurerService)
+        public RatingMotorDiscountsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _ratingMotorDiscountService = ratingMotorDiscountService;
-            _insurerService = insurerService;
+
         }
 
         public async Task<IActionResult> Index(Guid insurerId)
         {
-            var ViewModels = await _ratingMotorDiscountService.GetByInsurerAsync(insurerId);
-            return View(ViewModels);
+            var result = await _unitOfWork.RatingMotorDiscounts.GetByInsurer(insurerId);
+            var model = _mapper.Map<IEnumerable<RatingMotorDiscount>, IEnumerable< RatingMotorDiscountViewModel>>(result);
+            return View(model);
         }
 
-        public async Task<IActionResult> Create(Guid insurerId)
+        public IActionResult Create(Guid insurerId)
         {
             RatingMotorDiscountViewModel ViewModel = new()
             {
                 InsurerId = insurerId
             };
             
-            return await Task.Run(() => View(ViewModel));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(RatingMotorDiscountViewModel ViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                _ratingMotorDiscountService.AddAsync(ViewModel);
-                return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
-            }
-            return View(ViewModel);
-        }
-
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _ratingMotorDiscountService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
-        }
-
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ViewModel = await _ratingMotorDiscountService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
             return View(ViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, RatingMotorDiscountViewModel ViewModel)
+        public async Task<IActionResult> Create(RatingMotorDiscountViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (ModelState.IsValid)
+            {
+                var ratingMotorDiscount = _mapper.Map<RatingMotorDiscountViewModel, RatingMotorDiscount>(model);
+                ratingMotorDiscount.Id = Guid.NewGuid();
+                ratingMotorDiscount.DateAdded = DateTime.Now;
+
+                await _unitOfWork.RatingMotorDiscounts.AddAsync(ratingMotorDiscount);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index), new { insurerid = model.InsurerId });
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var result = await _unitOfWork.RatingMotorDiscounts.GetById(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            var model = _mapper.Map<RatingMotorDiscount, RatingMotorDiscountViewModel>(result);
+            return View(model);
+        }
+
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var result = await _unitOfWork.RatingMotorDiscounts.GetById(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            var model = _mapper.Map<RatingMotorDiscount, RatingMotorDiscountViewModel>(result);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, RatingMotorDiscountViewModel model)
+        {
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _ratingMotorDiscountService.UpdateAsync(ViewModel);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
+                var ratingMotorDiscount = _mapper.Map<RatingMotorDiscountViewModel, RatingMotorDiscount>(model);
+                ratingMotorDiscount.DateModified = DateTime.Now;
+                _unitOfWork.RatingMotorDiscounts.Update(model.Id, ratingMotorDiscount);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Index), new { insurerid = model.InsurerId });
             }
-            return View(ViewModel);
+            return View(model);
         }
 
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.RatingMotorDiscounts.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
 
-            var ViewModel = await _ratingMotorDiscountService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<RatingMotorDiscount, RatingMotorDiscountViewModel>(result);
+            return View(model);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(RatingMotorDiscountViewModel ViewModel)
+        public async Task<IActionResult> DeleteConfirmed(RatingMotorDiscountViewModel model)
         {
-            _ratingMotorDiscountService.DeleteAsync(ViewModel.Id);
-            return RedirectToAction(nameof(Index), new { insurerid = ViewModel.InsurerId });
+            _unitOfWork.RatingMotorDiscounts.Delete(model.Id);
+            await _unitOfWork.CompleteAsync();
+            return RedirectToAction(nameof(Index), new { insurerid = model.InsurerId });
         }        
     }
 }

@@ -172,13 +172,13 @@
                     </div>
                     <div class="col-4">
                         <div class="form-floating">
-                            <select asp-for="Client.Address.CountryId" id="CountryId" class ="form-select" asp-items="@Model.Client.Address.CountryList"></select>
+                            <select asp-for="Client.Address.CountryId" id="AddressCountryId" class ="form-select" asp-items="@Model.Client.Address.CountryList"></select>
                             <label asp-for="Client.Address.CountryId" class="control-label"></label>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-floating">
-                            <select asp-for="Client.Address.CityId" id="CityId" class="form-select" asp-items="@Model.Client.Address.CityList"></select>
+                            <select asp-for="Client.Address.CityId" id="AddressCityId" class="form-select" asp-items="@Model.Client.Address.CityList"></select>
                             <label asp-for="Client.Address.CityId" class="control-label"></label>
                         </div>
                     </div>
@@ -230,8 +230,8 @@
         //  //return false;
         //});
 
-        $('#CountryId').change(function () {
-            var selectedCountryId = $('#CountryId option:selected').val();
+        $('#AddressCountryId').change(function () {
+            var selectedCountryId = $('#AddressCountryId option:selected').val();
 
             if (selectedCountryId != null && selectedCountryId != '') {
                 $.ajax({
@@ -245,9 +245,9 @@
                     },
                     success: function (cities) {
 
-                        $('#CityId').empty();   // clear before appending new list
+                        $('#AddressCityId').empty();   // clear before appending new list
                         $.each(cities, function (index, city) {
-                            $('#CityId').append($('<option></option>').val(city.id).html(city.name));
+                            $('#AddressCityId').append($('<option></option>').val(city.id).html(city.name));
                         });
                     }
                 });

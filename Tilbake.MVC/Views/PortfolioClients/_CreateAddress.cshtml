@@ -21,13 +21,13 @@
             </div>
             <div class="col-4">
                 <div class="form-floating">
-                    <select asp-for="CountryId" id="CountryId" class ="form-select" asp-items="Model.CountryList"></select>
+                    <select asp-for="CountryId" id="AddressCountryId" class ="form-select" asp-items="Model.CountryList"></select>
                     <label asp-for="CountryId" class="control-label"></label>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-floating">
-                    <select asp-for="CityId" class="form-select" asp-items="Model.CityList"></select>
+                    <select asp-for="CityId" id="AddressCityId" class="form-select" asp-items="Model.CityList"></select>
                     <label asp-for="CityId" class="control-label"></label>
                 </div>
             </div>
@@ -40,8 +40,8 @@
 <script type="text/javascript">
     
     $(document).ready(function () {
-        $('#CountryId').change(function () {
-            var selectedCountryId = $('#CountryId option:selected').val();
+        $('#AddressCountryId').change(function () {
+            var selectedCountryId = $('#AddressCountryId option:selected').val();
 
             if (selectedCountryId != null && selectedCountryId != '') {
                 $.ajax({
@@ -55,9 +55,9 @@
                     },
                     success: function (cities) {
 
-                        $('#CityId').empty();   // clear before appending new list
+                        $('#AddressCityId').empty();   // clear before appending new list
                         $.each(cities, function (index, city) {
-                            $('#CityId').append($('<option></option>').val(city.id).html(city.name));
+                            $('#AddressCityId').append($('<option></option>').val(city.id).html(city.name));
                         });
                     }
                 });

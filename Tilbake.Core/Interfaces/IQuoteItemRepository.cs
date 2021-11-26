@@ -9,10 +9,12 @@ namespace Tilbake.Core.Interfaces
     {
         Task<IEnumerable<QuoteItem>> GetByQuoteId(Guid quoteId);
         Task<AllRisk> GetAllRisk(Guid id);
+        Task<AllRiskSpecified> GetAllRiskSpecified(Guid id);
         Task<Building> GetBuilding(Guid id);
         Task<Content> GetContent(Guid id);
         Task<ExcessBuyBack> GetExcessBuyBack(Guid id);
         Task<House> GetHouse(Guid id);
         Task<Motor> GetMotor(Guid id);
+        Task<Travel> GetTravel(Guid id);
     }
 }

@@ -2,8 +2,6 @@
 {
     public class Constants
     {
-        public static readonly string[] registeredRisks = { "AllRisks", "Building", "Content", "House", "Motor", "Travel" };
-
         public const string ClaimFolder = "\\wwwroot\\documents\\claim\\";
         public const string ClientFolder = "\\wwwroot\\documents\\client\\";
         public const string ClientRiskFolder = "\\wwwroot\\documents\\clientrisk\\";

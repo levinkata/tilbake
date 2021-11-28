@@ -1,98 +1,149 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Application.Helpers;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Helpers;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class ReceivablesController : Controller
+    public class ReceivablesController : BaseController
     {
-        private readonly IReceivableService _receivableService;
-        private readonly IPaymentTypeService _paymentTypeService;
-        private readonly IQuoteService _quoteService;
-
-        public ReceivablesController(IReceivableService receivableService,
-                                    IPaymentTypeService paymentTypeService,
-                                    IQuoteService quoteService)
+        public ReceivablesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _receivableService = receivableService;
-            _paymentTypeService = paymentTypeService;
-            _quoteService = quoteService;
+
         }
 
         public async Task<IActionResult> Index(Guid invoiceId)
         {
-            var ViewModels = await _receivableService.GetByInvoiceIdAsync(invoiceId);
+            var result = await _unitOfWork.Receivables.GetByInvoiceId(invoiceId);
             ViewBag.InvoiceId = invoiceId;
-            return View(ViewModels);
+            var model = _mapper.Map<IEnumerable<Receivable>, IEnumerable<ReceivableViewModel>>(result);
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create(Guid invoiceId)
         {
-            var paymentTypes = await _paymentTypeService.GetAllAsync();
+            var paymentTypes = await _unitOfWork.PaymentTypes.GetAll(r => r.OrderBy(n => n.Name));
 
-            ReceivableViewModel ViewModel = new()
+            ReceivableViewModel model = new()
             {
                 InvoiceId = invoiceId,
                 ReceivableDate = DateTime.Now,
-                PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
+                PaymentTypeList = MVCHelperExtensions.ToSelectList(paymentTypes, Guid.Empty)
             };
 
-            return View(ViewModel);
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ReceivableViewModel ViewModel)
+        public async Task<IActionResult> Create(ReceivableViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await _receivableService.AddAsync(ViewModel);
-                return RedirectToAction("Details", "Invoices", new { id = ViewModel.InvoiceId });
+                var receivable = _mapper.Map<ReceivableViewModel, Receivable>(model);
+                var invoiceId = model.InvoiceId;
+
+                var invoice = await _unitOfWork.Invoices.GetById(invoiceId);
+                var policyId = invoice.PolicyId;
+
+                receivable.Id = Guid.NewGuid();
+                receivable.DateAdded = DateTime.Now;
+                await _unitOfWork.Receivables.Add(receivable);
+
+                ReceivableInvoice receivableInvoice = new()
+                {
+                    InvoiceId = model.InvoiceId,
+                    ReceivableId = receivable.Id
+                };
+                await _unitOfWork.ReceivableInvoices.Add(receivableInvoice);
+
+                Premium newPremium = new()
+                {
+                    Id = Guid.NewGuid(),
+                    PolicyId = policyId,
+                    PremiumDate = DateTime.Now,
+                    PremiumMonth = 0,
+                    PremiumYear = 0,
+                    Amount = 0,
+                    IsRefunded = false,
+                    Commission = 0,
+                    TaxAmount = 0,
+                    PolicyFee = 0,
+                    AdministrationFee = 0,
+                    DateAdded = DateTime.Now
+                };
+                await _unitOfWork.Premiums.Add(newPremium);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction("Details", "Invoices", new { id = invoiceId });
             }
 
-            var paymentTypes = await _paymentTypeService.GetAllAsync();
-            ViewModel.PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, ViewModel.PaymentTypeId);
-
-            return View(ViewModel);
+            var paymentTypes = await _unitOfWork.PaymentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            model.PaymentTypeList = MVCHelperExtensions.ToSelectList(paymentTypes, model.PaymentTypeId);
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> QuotePayment(Guid quoteId)
         {
-            var paymentTypes = await _paymentTypeService.GetAllAsync();
-            var quote = await _quoteService.GetByIdAsync(quoteId);
+            var paymentTypes = await _unitOfWork.PaymentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var quote = await _unitOfWork.Quotes.GetById(quoteId);
             var quoteAmount = quote.QuoteItems.Sum(r => r.Premium);
 
-            ReceivableViewModel ViewModel = new()
+            ReceivableViewModel model = new()
             {
                 QuoteId = quoteId,
                 QuoteNumber = quote.QuoteNumber,
                 QuoteAmount = quoteAmount,
                 ReceivableDate = DateTime.Now,
-                PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, Guid.Empty)
+                PaymentTypeList = MVCHelperExtensions.ToSelectList(paymentTypes, Guid.Empty)
             };
 
-            return View(ViewModel);
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> QuotePayment(ReceivableViewModel ViewModel)
+        public async Task<IActionResult> QuotePayment(ReceivableViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await _receivableService.AddQuote(ViewModel);
-                return RedirectToAction("Details", "Quotes", new { id = ViewModel.QuoteId });
+                var receivable = _mapper.Map<ReceivableViewModel, Receivable>(model);
+                var quoteId = model.QuoteId;
+
+                var quote = await _unitOfWork.Quotes.GetById(quoteId);
+
+                receivable.Id = Guid.NewGuid();
+                receivable.DateAdded = DateTime.Now;
+                await _unitOfWork.Receivables.Add(receivable);
+
+                ReceivableQuote receivableQuote = new()
+                {
+                    QuoteId = quoteId,
+                    ReceivableId = receivable.Id
+                };
+                await _unitOfWork.ReceivableQuotes.AddAsync(receivableQuote);
+
+                quote.IsPaid = true;
+                _unitOfWork.Quotes.Update(quoteId, quote);
+                await _unitOfWork.CompleteAsync();
+
+                return RedirectToAction("Details", "Quotes", new { id = model.QuoteId });
             }
 
-            var paymentTypes = await _paymentTypeService.GetAllAsync();
-            ViewModel.PaymentTypeList = SelectLists.PaymentTypes(paymentTypes, ViewModel.PaymentTypeId);
-
-            return View(ViewModel);
+            var paymentTypes = await _unitOfWork.PaymentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            model.PaymentTypeList = MVCHelperExtensions.ToSelectList(paymentTypes, model.PaymentTypeId);
+            return View(model);
         }
 
     }

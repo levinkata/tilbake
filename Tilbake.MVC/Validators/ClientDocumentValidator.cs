@@ -12,7 +12,7 @@ namespace Tilbake.MVC.Validators
                 .NotEmpty()
                 .Length(2, 50);
 
-            RuleFor(p => p.File).SetValidator(new FormFileValidator());
+            RuleFor(p => p.Document).SetValidator(new FormFileValidator());
         }
     }
 }

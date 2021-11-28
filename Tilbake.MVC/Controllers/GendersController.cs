@@ -89,7 +89,7 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: Genders/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _unitOfWork.Genders.GetById(id);
             var model = _mapper.Map<Gender, GenderViewModel>(result);

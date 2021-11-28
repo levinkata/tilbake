@@ -39,8 +39,8 @@ namespace Tilbake.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> FillMultiSelectLists(string userId)
         {
-            var unAssignedPortfolios = await _unitOfWork.UserPortfolios.GetByNotUserIdAsync(userId);
-            var userPortfolios = await _unitOfWork.UserPortfolios.GetByUserIdAsync(userId);
+            var unAssignedPortfolios = await _unitOfWork.UserPortfolios.GetByNotUserId(userId);
+            var userPortfolios = await _unitOfWork.UserPortfolios.GetByUserId(userId);
             var assignedPortfolios = userPortfolios.Select(r => new
                                                     {
                                                         r.Id,

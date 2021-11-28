@@ -32,7 +32,7 @@ namespace Tilbake.MVC.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var result = await _unitOfWork.Motors.GetAll(r => r.OrderBy(n => n.Name));
+            var result = await _unitOfWork.Motors.GetAll(r => r.OrderBy(n => n.RegNumber));
             var model = _mapper.Map<IEnumerable<Motor>, IEnumerable<MotorViewModel>>(result);
             return View(model);
         }

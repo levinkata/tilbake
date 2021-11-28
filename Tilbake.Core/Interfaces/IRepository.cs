@@ -12,6 +12,9 @@ namespace Tilbake.Core.Interfaces
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");
         Task<TEntity> GetById(Guid id);
+        Task<TEntity> GetFirstOrDefault(
+            Expression<Func<TEntity, bool>> filter = null,
+            string includeProperties = "");
         Task<IEnumerable<TEntity>> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -30,9 +33,9 @@ namespace Tilbake.Core.Interfaces
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includes);
         Task<TEntity> GetByIdAsync(Guid id);
-        Task<TEntity> GetFirstOrDefaultAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            params Expression<Func<TEntity, object>>[] includes);
+        //Task<TEntity> GetFirstOrDefaultAsync(
+        //    Expression<Func<TEntity, bool>> filter = null,
+        //    params Expression<Func<TEntity, object>>[] includes);
         //void Add(TEntity entity);
         Task<TEntity> AddAsync(TEntity entity); 
         //void AddRange(IEnumerable<TEntity> entities);

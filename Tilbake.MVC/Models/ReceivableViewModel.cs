@@ -10,6 +10,7 @@ namespace Tilbake.MVC.Models
     {
         public Guid Id { get; set; }
         public Guid InvoiceId { get; set; }
+        public Guid QuoteId { get; set; }
 
         [Display(Name = "Reference")]
         public string Reference { get; set; }
@@ -26,12 +27,16 @@ namespace Tilbake.MVC.Models
         [Display(Name = "Batch Number")]
         public string BatchNumber { get; set; }
 
+        //  Other
+        public int QuoteNumber { get; set; }
+        public decimal QuoteAmount { get; set; }
+
         public List<ReceivableDocument> ReceivableDocuments { get; } = new List<ReceivableDocument>();
         public List<ReceivableInvoice> ReceivableInvoices { get; } = new List<ReceivableInvoice>();
 
         //  Descriptions
         [Display(Name = "Payment Type")]
-        public string PaymentType { get; set; }
+        public virtual PaymentTypeViewModel PaymentType { get; set; }
 
         //  SelectLists
         public SelectList PaymentTypeList { get; set; }

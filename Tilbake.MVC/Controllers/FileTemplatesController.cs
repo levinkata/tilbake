@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
-using Tilbake.Application.Interfaces;
-using Tilbake.MVC.Models;
-using Tilbake.Core.Enums;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Tilbake.MVC.Areas.Identity;
 using Tilbake.Core;
+using Tilbake.Core.Enums;
 using Tilbake.Core.Models;
-using System.Collections.Generic;
+using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Helpers;
+using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
@@ -69,7 +67,7 @@ namespace Tilbake.MVC.Controllers
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index), new { portfolioId = model.PortfolioId });
             }
-            model.FileTypeList = MVCHelperExtensions.EnumToSelectList<FileType>(model.FileType);
+            model.FileTypeList = MVCHelperExtensions.EnumToSelectList<FileType>(model.FileType.ToString());
             return View(model);
         }
 
@@ -630,14 +628,16 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(FileTemplateViewModel ViewModel)
+        public async Task<IActionResult> Edit(FileTemplateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _fileTemplateService.UpdateAsync(ViewModel);
+                var fileTemplate = _mapper.Map<FileTemplateViewModel, FileTemplate>(model);
+                _unitOfWork.FileTemplates.Update(model.Id, fileTemplate);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index), new { portfolioId = model.PortfolioId });
             }
-            return View(ViewModel);
+            return View(model);
         }
 
         public async Task PopulateFileTemplateRecords(Guid fileTemplateId)

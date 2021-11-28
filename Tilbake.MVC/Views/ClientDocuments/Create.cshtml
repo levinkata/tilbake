@@ -25,9 +25,9 @@
                 <select asp-for="DocumentTypeId" class="form-control" asp-items="@Model.DocumentTypeList"></select>
             </div>
             <div class="form-group">
-                <label asp-for="File" class="control-label"></label>
-                <input type="file" asp-for="File" class="form-control" required />
-                <span asp-validation-for="File" class="text-danger"></span>
+                <label asp-for="Document" class="control-label"></label>
+                <input type="file" asp-for="Document" class="form-control" required />
+                <span asp-validation-for="Document" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

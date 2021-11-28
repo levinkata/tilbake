@@ -11,6 +11,7 @@ using Tilbake.Application.Interfaces;
 using Tilbake.Core;
 using Tilbake.Core.Models;
 using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Helpers;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
@@ -77,61 +78,97 @@ namespace Tilbake.MVC.Controllers
 
             var model = _mapper.Map<Client, ClientViewModel>(result);
 
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
+            var cityId = model.Address.CityId;
+            var city = await _unitOfWork.Cities.GetById(cityId);
+            var countryId = city.CountryId;
 
-            ViewModel.ClientTypeList = new SelectList(clientTypes, "Id", "Name", ViewModel.ClientTypeId);
-            ViewModel.CountryList = new SelectList(countries, "Id", "Name", ViewModel.CountryId);
-            ViewModel.GenderList = new SelectList(genders, "Id", "Name", ViewModel.GenderId);
-            ViewModel.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", ViewModel.MaritalStatusId);
-            ViewModel.OccupationList = new SelectList(occupations, "Id", "Name", ViewModel.OccupationId);
-            ViewModel.TitleList = new SelectList(titles, "Id", "Name", ViewModel.TitleId);
+            var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
+            var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var genders = await _unitOfWork.Genders.GetAll(r => r.OrderBy(n => n.Name));
+            var idDocumentTypes = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var maritalStatuses = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var occupations = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
 
-            return View(ViewModel);
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.ClientTypeList = MVCHelperExtensions.ToSelectList(clientTypes, model.ClientTypeId);
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.GenderList = MVCHelperExtensions.ToSelectList(genders, model.GenderId);
+            model.IdDocumentTypeList = MVCHelperExtensions.ToSelectList(idDocumentTypes, model.IdDocumentTypeId);
+            model.MaritalStatusList = MVCHelperExtensions.ToSelectList(maritalStatuses, model.MaritalStatusId);
+            model.OccupationList = MVCHelperExtensions.ToSelectList(occupations, model.OccupationId);
+            model.TitleList = MVCHelperExtensions.ToSelectList(titles, model.TitleId);
+
+            model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
+
+            model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
+            return View(model);
         }
 
         // POST: Clients/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, ClientViewModel ViewModel)
+        public async Task<ActionResult> Edit(Guid id, ClientViewModel model)
         {
-            if (ViewModel == null)
-            {
-                throw new ArgumentNullException(nameof(ViewModel));
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var client = _mapper.Map<ClientViewModel, Client>(model);
+                _unitOfWork.Clients.Update(model.Id, client);
+
+                var clientId = client.Id;
+                var clientCarriers = await _unitOfWork.ClientCarriers.Get(r => r.ClientId == clientId);
+
+                if (clientCarriers != null)
                 {
-                    await _clientService.UpdateAsync(ViewModel);
+                    _unitOfWork.ClientCarriers.DeleteRange(clientCarriers);
                 }
-                catch (DbUpdateConcurrencyException)
+
+                var newClientCarriers = new List<ClientCarrier>();
+
+                foreach (var item in model.CarrierIds)
                 {
-                    throw;
+                    ClientCarrier clientCarrier = new()
+                    {
+                        ClientId = clientId,
+                        CarrierId = item
+                    };
+                    newClientCarriers.Add(clientCarrier);
                 }
+                _unitOfWork.ClientCarriers.AddRange(newClientCarriers);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            var clientTypes = await _clientTypeService.GetAllAsync();
-            var countries = await _countryService.GetAllAsync();
-            var genders = await _genderService.GetAllAsync();
-            var maritalStatuses = await _maritalStatusService.GetAllAsync();
-            var occupations = await _occupationService.GetAllAsync();
-            var titles = await _titleService.GetAllAsync();
+            var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
+            var cities = await _unitOfWork.Cities.GetByCountryId(model.CountryId);
+            var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
+            var genders = await _unitOfWork.Genders.GetAll(r => r.OrderBy(n => n.Name));
+            var idDocumentTypes = await _unitOfWork.IdDocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
+            var maritalStatuses = await _unitOfWork.MaritalStatuses.GetAll(r => r.OrderBy(n => n.Name));
+            var occupations = await _unitOfWork.Occupations.GetAll(r => r.OrderBy(n => n.Name));
+            var titles = await _unitOfWork.Titles.GetAll(r => r.OrderBy(n => n.Name));
 
-            ViewModel.ClientTypeList = new SelectList(clientTypes, "Id", "Name", ViewModel.ClientTypeId);
-            ViewModel.CountryList = new SelectList(countries, "Id", "Name", ViewModel.CountryId);
-            ViewModel.GenderList = new SelectList(genders, "Id", "Name", ViewModel.GenderId);
-            ViewModel.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name", ViewModel.MaritalStatusId);
-            ViewModel.OccupationList = new SelectList(occupations, "Id", "Name", ViewModel.OccupationId);
-            ViewModel.TitleList = new SelectList(titles, "Id", "Name", ViewModel.TitleId);
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.ClientTypeList = MVCHelperExtensions.ToSelectList(clientTypes, model.ClientTypeId);
+            model.CountryList = MVCHelperExtensions.ToSelectList(countries, model.CountryId);
+            model.GenderList = MVCHelperExtensions.ToSelectList(genders, model.GenderId);
+            model.IdDocumentTypeList = MVCHelperExtensions.ToSelectList(idDocumentTypes, model.IdDocumentTypeId);
+            model.MaritalStatusList = MVCHelperExtensions.ToSelectList(maritalStatuses, model.MaritalStatusId);
+            model.OccupationList = MVCHelperExtensions.ToSelectList(occupations, model.OccupationId);
+            model.TitleList = MVCHelperExtensions.ToSelectList(titles, model.TitleId);
 
-            return View(ViewModel);
+            model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
+
+            model.Address.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Address.CountryId);
+            model.Address.CityList = MVCHelperExtensions.ToSelectList(cities, model.Address.CityId);
+
+            return View(model);
         }
     }
 }

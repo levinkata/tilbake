@@ -25,7 +25,7 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Index(Guid portfolioId)
         {
-            var portfolioExcessBuyBack = await _unitOfWork.PortfolioExcessBuyBack.GetByPortfolioId(portfolioId);
+            var portfolioExcessBuyBack = await _unitOfWork.PortfolioExcessBuyBacks.GetByPortfolioId(portfolioId);
             if (portfolioExcessBuyBack == null)
             {
                 return RedirectToAction(nameof(Create), new { portfolioId });

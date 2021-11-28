@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tilbake.Core;
 using Tilbake.Core.Models;
@@ -26,13 +27,13 @@ namespace Tilbake.MVC.Controllers
         // GET: Travels
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.Travels.GetAll(r => r.OrderBy(n => n.Name));
+            var result = await _unitOfWork.Travels.GetAll(r => r.OrderBy(n => n.PortfolioClient.Client.LastName));
             var model = _mapper.Map<IEnumerable<Travel>, IEnumerable<TravelViewModel>>(result);
             return View(model);
         }
 
         // GET: Travels/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
             var result = await _unitOfWork.Travels.GetById(id);
             var model = _mapper.Map<Travel, TravelViewModel>(result);

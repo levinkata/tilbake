@@ -1,118 +1,125 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
-using Tilbake.Application.Interfaces;
+using Tilbake.Core;
+using Tilbake.Core.Enums;
+using Tilbake.Core.Models;
+using Tilbake.MVC.Areas.Identity;
+using Tilbake.MVC.Helpers;
 using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class CommissionRatesController : Controller
+    public class CommissionRatesController : BaseController
     {
-        private readonly ICommissionRateService _commissionRateService;
-
-        public CommissionRatesController(ICommissionRateService commissionRateService)
+        public CommissionRatesController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _commissionRateService = commissionRateService;
+
         }
 
         public async Task<IActionResult> Index()
         {
-            var ViewModels = await _commissionRateService.GetAllAsync();
-            return View(ViewModels);
+            var result = await _unitOfWork.CommissionRates.GetAll(r => r.OrderBy(n => n.RiskName));
+            var model = _mapper.Map<IEnumerable<CommissionRate>, IEnumerable< CommissionRateViewModel>>(result);
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            CommissionRateViewModel ViewModel = new()
+            CommissionRateViewModel model = new()
             {
-                RiskList = SelectLists.RegisteredRisks(null)
+                RiskList = MVCHelperExtensions.EnumToSelectList<RegisteredRisk>(null)
             };
-            return await Task.Run(() => View(ViewModel));
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CommissionRateViewModel ViewModel)
+        public async Task<IActionResult> Create(CommissionRateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _commissionRateService.AddAsync(ViewModel);
+
+                var commissionRate = _mapper.Map<CommissionRateViewModel, CommissionRate>(model);
+                commissionRate.Id = Guid.NewGuid();
+                commissionRate.DateAdded = DateTime.Now;
+
+                await _unitOfWork.CommissionRates.Add(commissionRate);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewModel.RiskList = SelectLists.RegisteredRisks(ViewModel.RiskName);
-            return View(ViewModel);
+            model.RiskList = MVCHelperExtensions.EnumToSelectList<RegisteredRisk>(model.RiskName);
+            return View(model);
         }
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var ViewModel = await _commissionRateService.GetByIdAsync(id);
-            return View(ViewModel);
+            var result = await _unitOfWork.CommissionRates.GetById(id);
+            var model = _mapper.Map<CommissionRate, CommissionRateViewModel>(result);
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var ViewModel = await _commissionRateService.GetByIdAsync(id);
-            if (ViewModel == null)
+            var result = await _unitOfWork.CommissionRates.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-            ViewModel.RiskList = SelectLists.RegisteredRisks(ViewModel.RiskName);
-            return View(ViewModel);
+            var model = _mapper.Map<CommissionRate, CommissionRateViewModel>(result);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid? id, CommissionRateViewModel ViewModel)
+        public async Task<IActionResult> Edit(Guid? id, CommissionRateViewModel model)
         {
-            if (id != ViewModel.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _commissionRateService.UpdateAsync(ViewModel);
-                    return RedirectToAction(nameof(Details), new { id = ViewModel.Id });
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                var commissionRate = _mapper.Map<CommissionRateViewModel, CommissionRate>(model);
+                commissionRate.DateModified = DateTime.Now;
+
+                _unitOfWork.CommissionRates.Update(model.Id, commissionRate);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), new { id = model.Id });
+
             }
 
-            ViewModel.RiskList = SelectLists.RegisteredRisks(ViewModel.RiskName);
-            return View(ViewModel);
+            model.RiskList = MVCHelperExtensions.EnumToSelectList<RegisteredRisk>(model.RiskName);
+            return View(model);
         }
 
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.CommissionRates.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            var ViewModel = await _commissionRateService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<CommissionRate, CommissionRateViewModel>(result);
+            return View(model);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(CommissionRateViewModel ViewModel)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _commissionRateService.DeleteAsync(ViewModel.Id);
+            await _unitOfWork.CommissionRates.Delete(id);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
     }

@@ -83,6 +83,21 @@ namespace Tilbake.EF.Persistence.Repositories
             return await dbSet.FindAsync(id);
         }
 
+        public virtual async Task<TEntity> GetFirstOrDefault(
+            Expression<Func<TEntity, bool>> filter = null,
+            string includeProperties = "")
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.FirstOrDefaultAsync(filter);
+        }
+
         public virtual async Task<IEnumerable<TEntity>> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -142,17 +157,17 @@ namespace Tilbake.EF.Persistence.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            params Expression<Func<TEntity, object>>[] includes)
-        {
-            IQueryable<TEntity> query = dbSet;
+        //public virtual async Task<TEntity> GetFirstOrDefaultAsync(
+        //    Expression<Func<TEntity, bool>> filter = null,
+        //    params Expression<Func<TEntity, object>>[] includes)
+        //{
+        //    IQueryable<TEntity> query = dbSet;
 
-            foreach (Expression<Func<TEntity, object>> include in includes)
-                query = query.Include(include).AsNoTracking();
+        //    foreach (Expression<Func<TEntity, object>> include in includes)
+        //        query = query.Include(include).AsNoTracking();
 
-            return await query.FirstOrDefaultAsync(filter);
-        }
+        //    return await query.FirstOrDefaultAsync(filter);
+        //}
 
         //public virtual void Add(TEntity entity)
         //{

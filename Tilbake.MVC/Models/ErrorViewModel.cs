@@ -1,6 +1,4 @@
-using System;
-
-namespace Tilbake.MVC.Models
+﻿namespace Tilbake.MVC.Models
 {
     public class ErrorViewModel
     {

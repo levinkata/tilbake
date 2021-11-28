@@ -128,7 +128,7 @@ namespace Tilbake.MVC.Helpers
                             new MultiSelectList(items, "Value", "Text", ids);
         }
 
-        public static SelectList EnumToSelectList<T>(FileType? id = null) where T : Enum
+        public static SelectList EnumToSelectList<T>(string? id = null) where T : Enum
         {
             var enumerable = Enum.GetValues(typeof(T))
                                     .Cast<T>().Select(c => new

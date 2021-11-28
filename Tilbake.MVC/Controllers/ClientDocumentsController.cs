@@ -56,14 +56,14 @@ namespace Tilbake.MVC.Controllers
         {
             var documentTypes = await _unitOfWork.DocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
 
-            ClientDocumentViewModel ViewModel = new()
+            ClientDocumentViewModel model = new()
             {
                 ClientId = clientId,
                 PortfolioId = portfolioId,
                 DocumentTypeList = MVCHelperExtensions.ToSelectList(documentTypes, Guid.Empty),
             };
 
-            return View(ViewModel);
+            return View(model);
         }
 
         // POST: ClientDocuments/Create
@@ -73,7 +73,7 @@ namespace Tilbake.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var file = model.File;
+                var file = model.Document;
 
                 var basePath = Path.Combine(Directory.GetCurrentDirectory() + Constants.ClientFolder);
                 bool basePathExists = Directory.Exists(basePath);
@@ -83,7 +83,7 @@ namespace Tilbake.MVC.Controllers
                 var filePath = Path.Combine(basePath, file.FileName);
                 var extension = Path.GetExtension(file.FileName);
 
-                if (!File.Exists(filePath))
+                if (!System.IO.File.Exists(filePath))
                 {
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {

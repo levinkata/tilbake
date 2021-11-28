@@ -34,7 +34,7 @@ namespace Tilbake.MVC.CustomExceptionMiddleware
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            return context.Response.WriteAsync(new ErrorViewModel()
+            return context.Response.WriteAsync(new ErrorCustomViewModel()
             {
                 StatusCode = context.Response.StatusCode,
                 Message = "Internal Server Error from the custom middleware."

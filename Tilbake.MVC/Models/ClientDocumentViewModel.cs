@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Tilbake.Core.Models;
 
 namespace Tilbake.MVC.Models
 {
@@ -33,7 +32,7 @@ namespace Tilbake.MVC.Models
         [Display(Name = "Location")]
         public string DocumentPath { get; set; }
 
-        public IFormFile File { get; set; }
+        public IFormFile Document { get; set; }
 
         public virtual ClientViewModel Client { get; set; }
         public virtual DocumentTypeViewModel DocumentType { get; set; }

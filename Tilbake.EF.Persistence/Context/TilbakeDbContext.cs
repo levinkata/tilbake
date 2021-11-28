@@ -148,7 +148,7 @@ namespace Tilbake.EF.Persistence.Context
         public virtual DbSet<RatingMotor> RatingMotors { get; set; }
         public virtual DbSet<RatingMotorDiscount> RatingMotorDiscounts { get; set; }
         public virtual DbSet<RatingMotorExcess> RatingMotorExcesses { get; set; }
-        public virtual DbSet<RatingMotorPremium> RatingMotorPremia { get; set; }
+        public virtual DbSet<RatingMotorPremium> RatingMotorPremiums { get; set; }
         public virtual DbSet<Receivable> Receivables { get; set; }
         public virtual DbSet<ReceivableDocument> ReceivableDocuments { get; set; }
         public virtual DbSet<ReceivableInvoice> ReceivableInvoices { get; set; }

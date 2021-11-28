@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
 using Tilbake.Core;
 using Tilbake.Core.Models;
 using Tilbake.MVC.Areas.Identity;
@@ -339,11 +335,6 @@ namespace Tilbake.MVC.Controllers
         // GET: PolicyRisks/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var result = await _unitOfWork.PolicyRisks.GetByIdAsync(id);
             if (result == null)
             {
@@ -368,7 +359,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var policyRisk = _mapper.Map<PolicyRiskViewModel, PolicyRisk>(model);
-                _unitOfWork.PolicyRisks.Update(policyRisk);
+                await _unitOfWork.PolicyRisks.Update(policyRisk);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Edit), "Policy", new { Id = model.PolicyId });
             }
@@ -379,46 +370,37 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: PolicyRisks/Detail/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.PolicyRisks.GetByIdAsync(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            var ViewModel = await _policyRiskService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<PolicyRisk, PolicyRiskViewModel>(result);
+            return View(model);
         }
 
         // GET: PolicyRisks/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
+            var result = await _unitOfWork.PolicyRisks.GetByIdAsync(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            var ViewModel = await _policyRiskService.GetByIdAsync((Guid)id);
-            if (ViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(ViewModel);
+            var model = _mapper.Map<PolicyRisk, PolicyRiskViewModel>(result);
+            return View(model);
         }
 
         // POST: PolicyRisks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(PolicyRiskViewModel ViewModel)
+        public async Task<IActionResult> DeleteConfirmed(PolicyRiskViewModel model)
         {
-            _policyRiskService.DeleteAsync(ViewModel.Id);
-            return RedirectToAction(nameof(Edit), "Policy", new { ViewModel.PolicyId });
+            await _unitOfWork.PolicyRisks.Delete(model.Id);
+            await _unitOfWork.CompleteAsync();
+            return RedirectToAction(nameof(Edit), "Policy", new { model.PolicyId });
         }
     }
 }

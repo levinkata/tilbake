@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tilbake.Core.Models;
-using Tilbake.EF.Persistence.Context;
-using Tilbake.Core.Interfaces;
-using System.Linq;
-using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tilbake.Core.Context;
+using Tilbake.Core.Interfaces;
+using Tilbake.Core.Models;
 
 namespace Tilbake.EF.Persistence.Repositories
 {
@@ -19,7 +19,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<IEnumerable<Client>> GetByPortfolioId(Guid portfolioId)
         {
             return await _context.Clients
-                                .Where(e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId))
+                                .Where(e => e.PortfolioClients.All(p => p.PortfolioId == portfolioId))
                                 .Include(c => c.EmailAddresses)
                                 .Include(c => c.MobileNumbers)
                                 .Include(c => c.ClientCarriers)

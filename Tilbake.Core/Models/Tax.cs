@@ -11,7 +11,7 @@ namespace Tilbake.Core.Models
         }
 
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public decimal TaxRate { get; set; }
         public DateTime TaxDate { get; set; }
         public Guid? AddedBy { get; set; }

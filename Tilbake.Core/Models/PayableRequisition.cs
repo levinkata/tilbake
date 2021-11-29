@@ -12,7 +12,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Payable Payable { get; set; }
-        public virtual Requisition Requisition { get; set; }
+        public virtual Payable Payable { get; set; } = null!;
+        public virtual Requisition Requisition { get; set; } = null!;
     }
 }

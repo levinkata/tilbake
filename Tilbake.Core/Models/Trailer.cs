@@ -11,9 +11,9 @@ namespace Tilbake.Core.Models
         }
 
         public Guid Id { get; set; }
-        public string RegNumber { get; set; }
-        public string Make { get; set; }
-        public string Model { get; set; }
+        public string RegNumber { get; set; } = null!;
+        public string Make { get; set; } = null!;
+        public string Model { get; set; } = null!;
         public int RegYear { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }

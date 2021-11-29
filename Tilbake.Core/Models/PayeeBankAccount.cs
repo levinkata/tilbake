@@ -12,7 +12,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual BankAccount BankAccount { get; set; }
-        public virtual Payee Payee { get; set; }
+        public virtual BankAccount BankAccount { get; set; } = null!;
+        public virtual Payee Payee { get; set; } = null!;
     }
 }

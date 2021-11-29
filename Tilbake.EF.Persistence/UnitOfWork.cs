@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Tilbake.Core;
+using Tilbake.Core.Context;
 using Tilbake.Core.Interfaces;
-using Tilbake.EF.Persistence.Context;
 using Tilbake.EF.Persistence.Repositories;
 
 namespace Tilbake.EF.Persistence

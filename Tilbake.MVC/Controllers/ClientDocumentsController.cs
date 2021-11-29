@@ -36,11 +36,6 @@ namespace Tilbake.MVC.Controllers
         // GET: ClientDocuments/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var result = await _unitOfWork.ClientDocuments.GetById(id);
             if (result == null)
             {

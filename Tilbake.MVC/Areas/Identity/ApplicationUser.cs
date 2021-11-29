@@ -9,26 +9,26 @@ namespace Tilbake.MVC.Areas.Identity
     {
         [PersonalData]
         [Column(TypeName = "nvarchar(50)")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [PersonalData]
         [Column(TypeName = "nvarchar(50)")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [PersonalData]
         [Column(TypeName = "nvarchar(50)")]
-        public string MiddleName { get; set; }
+        public string? MiddleName { get; set; }
 
         [PersonalData]
         [Column(TypeName = "nvarchar(50)")]
-        public string IdNumber { get; set; }
+        public string? IdNumber { get; set; }
 
         [PersonalData]
         [Column(TypeName = "uniqueidentifier")]
-        public Guid JobTitleId { get; set; }
+        public Guid? JobTitleId { get; set; }
 
         [PersonalData]
         [Column(TypeName = "nvarchar(50)")]
-        public string ManNumber { get; set; }
+        public string? ManNumber { get; set; }
     }
 }

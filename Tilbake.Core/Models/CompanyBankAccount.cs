@@ -13,7 +13,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual BankAccount BankAccount { get; set; }
-        public virtual Company Company { get; set; }
+        public virtual BankAccount BankAccount { get; set; } = null!;
+        public virtual Company Company { get; set; } = null!;
     }
 }

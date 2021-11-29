@@ -12,7 +12,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Portfolio Portfolio { get; set; }
-        public virtual RatingMotorDiscount RatingMotorDiscount { get; set; }
+        public virtual Portfolio Portfolio { get; set; } = null!;
+        public virtual RatingMotorDiscount RatingMotorDiscount { get; set; } = null!;
     }
 }

@@ -12,13 +12,13 @@ namespace Tilbake.Core.Models
 
         public Guid Id { get; set; }
         public Guid PolicyId { get; set; }
-        public string Reference { get; set; }
+        public string Reference { get; set; } = null!;
         public DateTime ReferenceDate { get; set; }
         public Guid RequestedById { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
         public decimal? Amount { get; set; }
-        public string Reason { get; set; }
+        public string Reason { get; set; } = null!;
         public bool IsWithdrawal { get; set; }
         public Guid RefundStatusId { get; set; }
         public Guid? AddedBy { get; set; }
@@ -26,7 +26,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Policy Policy { get; set; }
+        public virtual Policy Policy { get; set; } = null!;
         public virtual ICollection<PremiumRefundClaim> PremiumRefundClaims { get; set; }
     }
 }

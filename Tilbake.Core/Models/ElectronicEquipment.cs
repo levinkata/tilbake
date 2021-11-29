@@ -17,7 +17,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual RiskItem RiskItem { get; set; }
+        public virtual RiskItem RiskItem { get; set; } = null!;
         public virtual ICollection<Risk> Risks { get; set; }
     }
 }

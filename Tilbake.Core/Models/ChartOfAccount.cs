@@ -11,8 +11,8 @@ namespace Tilbake.Core.Models
         }
 
         public Guid Id { get; set; }
-        public string Glcode { get; set; }
-        public string Description { get; set; }
+        public string Glcode { get; set; } = null!;
+        public string Description { get; set; } = null!;
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }

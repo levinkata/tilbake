@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Tilbake.Core.Enums;
 using Tilbake.Core.Interfaces;
 using Tilbake.Core.Models;
 using Tilbake.Core.Models.Common;
 
-namespace Tilbake.EF.Persistence.Context
+namespace Tilbake.Core.Context
 {
     public partial class TilbakeDbContext : DbContext
     {
@@ -20,167 +21,171 @@ namespace Tilbake.EF.Persistence.Context
             _userId = userData.UserId;
         }
 
-        public virtual DbSet<Address> Addresses { get; set; }
-        public virtual DbSet<AllRisk> AllRisks { get; set; }
-        public virtual DbSet<AllRiskSpecified> AllRiskSpecifieds { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
-        public virtual DbSet<AspnetUserPortfolio> AspnetUserPortfolios { get; set; }
-        public virtual DbSet<Attorney> Attorneys { get; set; }
-        public virtual DbSet<Audit> Audits { get; set; }
-        public virtual DbSet<Bank> Banks { get; set; }
-        public virtual DbSet<BankAccount> BankAccounts { get; set; }
-        public virtual DbSet<BankAuditLog> BankAuditLogs { get; set; }
-        public virtual DbSet<BankBranch> BankBranches { get; set; }
-        public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
-        public virtual DbSet<BodyType> BodyTypes { get; set; }
-        public virtual DbSet<Building> Buildings { get; set; }
-        public virtual DbSet<BuildingCondition> BuildingConditions { get; set; }
-        public virtual DbSet<Carrier> Carriers { get; set; }
-        public virtual DbSet<ChartOfAccount> ChartOfAccounts { get; set; }
-        public virtual DbSet<City> Cities { get; set; }
-        public virtual DbSet<Claim> Claims { get; set; }
-        public virtual DbSet<ClaimAttorney> ClaimAttorneys { get; set; }
-        public virtual DbSet<ClaimDocument> ClaimDocuments { get; set; }
-        public virtual DbSet<ClaimLossAdjuster> ClaimLossAdjusters { get; set; }
-        public virtual DbSet<ClaimNumberGenerator> ClaimNumberGenerators { get; set; }
-        public virtual DbSet<ClaimRepairer> ClaimRepairers { get; set; }
-        public virtual DbSet<ClaimRoadsideAssist> ClaimRoadsideAssists { get; set; }
-        public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; }
-        public virtual DbSet<ClaimThirdParty> ClaimThirdParties { get; set; }
-        public virtual DbSet<ClaimTowTruck> ClaimTowTrucks { get; set; }
-        public virtual DbSet<ClaimTracingAgent> ClaimTracingAgents { get; set; }
-        public virtual DbSet<Claimant> Claimants { get; set; }
-        public virtual DbSet<Client> Clients { get; set; }
-        public virtual DbSet<ClientBankAccount> ClientBankAccounts { get; set; }
-        public virtual DbSet<ClientBulk> ClientBulks { get; set; }
-        public virtual DbSet<ClientCarrier> ClientCarriers { get; set; }
-        public virtual DbSet<ClientDocument> ClientDocuments { get; set; }
-        public virtual DbSet<ClientNumberGenerator> ClientNumberGenerators { get; set; }
-        public virtual DbSet<ClientRisk> ClientRisks { get; set; }
-        public virtual DbSet<ClientRiskDocument> ClientRiskDocuments { get; set; }
-        public virtual DbSet<ClientStatus> ClientStatuses { get; set; }
-        public virtual DbSet<ClientType> ClientTypes { get; set; }
-        public virtual DbSet<CommissionRate> CommissionRates { get; set; }
-        public virtual DbSet<Company> Companies { get; set; }
-        public virtual DbSet<CompanyBankAccount> CompanyBankAccounts { get; set; }
-        public virtual DbSet<Content> Contents { get; set; }
-        public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<CoverType> CoverTypes { get; set; }
-        public virtual DbSet<DocumentType> DocumentTypes { get; set; }
-        public virtual DbSet<Driver> Drivers { get; set; }
-        public virtual DbSet<DriverType> DriverTypes { get; set; }
-        public virtual DbSet<Eftfile> Eftfiles { get; set; }
-        public virtual DbSet<ElectronicEquipment> ElectronicEquipments { get; set; }
-        public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
-        public virtual DbSet<ExcessBuyBack> ExcessBuyBacks { get; set; }
-        public virtual DbSet<Extension> Extensions { get; set; }
-        public virtual DbSet<FileTemplate> FileTemplates { get; set; }
-        public virtual DbSet<FileTemplateRecord> FileTemplateRecords { get; set; }
-        public virtual DbSet<Gender> Genders { get; set; }
-        public virtual DbSet<Glass> Glasses { get; set; }
-        public virtual DbSet<House> Houses { get; set; }
-        public virtual DbSet<HouseCondition> HouseConditions { get; set; }
-        public virtual DbSet<IdDocumentType> IdDocumentTypes { get; set; }
-        public virtual DbSet<Incident> Incidents { get; set; }
-        public virtual DbSet<IncidentAuditLog> IncidentAuditLogs { get; set; }
-        public virtual DbSet<Insurer> Insurers { get; set; }
-        public virtual DbSet<InsurerAuditLog> InsurerAuditLogs { get; set; }
-        public virtual DbSet<InsurerBranch> InsurerBranches { get; set; }
-        public virtual DbSet<Invoice> Invoices { get; set; }
-        public virtual DbSet<InvoiceItem> InvoiceItems { get; set; }
-        public virtual DbSet<InvoiceNumberGenerator> InvoiceNumberGenerators { get; set; }
-        public virtual DbSet<InvoiceStatus> InvoiceStatuses { get; set; }
-        public virtual DbSet<JobTitle> JobTitles { get; set; }
-        public virtual DbSet<Life> Lives { get; set; }
-        public virtual DbSet<LossAdjuster> LossAdjusters { get; set; }
-        public virtual DbSet<LossAdjusterAuthority> LossAdjusterAuthorities { get; set; }
-        public virtual DbSet<LossAdjusterInstruction> LossAdjusterInstructions { get; set; }
-        public virtual DbSet<MaritalStatus> MaritalStatuses { get; set; }
-        public virtual DbSet<MobileNumber> MobileNumbers { get; set; }
-        public virtual DbSet<Motor> Motors { get; set; }
-        public virtual DbSet<MotorAccessory> MotorAccessories { get; set; }
-        public virtual DbSet<MotorCycle> MotorCycles { get; set; }
-        public virtual DbSet<MotorCycleType> MotorCycleTypes { get; set; }
-        public virtual DbSet<MotorImprovement> MotorImprovements { get; set; }
-        public virtual DbSet<MotorMake> MotorMakes { get; set; }
-        public virtual DbSet<MotorModel> MotorModels { get; set; }
-        public virtual DbSet<MotorRadio> MotorRadios { get; set; }
-        public virtual DbSet<Occupation> Occupations { get; set; }
-        public virtual DbSet<Payable> Payables { get; set; }
-        public virtual DbSet<PayableRequisition> PayableRequisitions { get; set; }
-        public virtual DbSet<Payee> Payees { get; set; }
-        public virtual DbSet<PayeeBankAccount> PayeeBankAccounts { get; set; }
-        public virtual DbSet<PayeeType> PayeeTypes { get; set; }
-        public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
-        public virtual DbSet<PaymentType> PaymentTypes { get; set; }
-        public virtual DbSet<Policy> Policies { get; set; }
-        public virtual DbSet<PolicyBulk> PolicyBulks { get; set; }
-        public virtual DbSet<PolicyNumberGenerator> PolicyNumberGenerators { get; set; }
-        public virtual DbSet<PolicyRenewal> PolicyRenewals { get; set; }
-        public virtual DbSet<PolicyRisk> PolicyRisks { get; set; }
-        public virtual DbSet<PolicyRiskClaim> PolicyRiskClaims { get; set; }
-        public virtual DbSet<PolicyRiskExtension> PolicyRiskExtensions { get; set; }
-        public virtual DbSet<PolicyStatus> PolicyStatuses { get; set; }
-        public virtual DbSet<PolicyType> PolicyTypes { get; set; }
-        public virtual DbSet<Portfolio> Portfolios { get; set; }
-        public virtual DbSet<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
-        public virtual DbSet<PortfolioClient> PortfolioClients { get; set; }
-        public virtual DbSet<PortfolioExcessBuyBack> PortfolioExcessBuyBacks { get; set; }
-        public virtual DbSet<PortfolioPolicyFee> PortfolioPolicyFees { get; set; }
-        public virtual DbSet<PortfolioRatingMotor> PortfolioRatingMotors { get; set; }
-        public virtual DbSet<PortfolioRatingMotorDiscount> PortfolioRatingMotorDiscounts { get; set; }
-        public virtual DbSet<PortfolioRatingMotorExcess> PortfolioRatingMotorExcesses { get; set; }
-        public virtual DbSet<PortfolioRatingMotorPremium> PortfolioRatingMotorPremia { get; set; }
-        public virtual DbSet<Premium> Premia { get; set; }
-        public virtual DbSet<PremiumBulk> PremiumBulks { get; set; }
-        public virtual DbSet<PremiumRefund> PremiumRefunds { get; set; }
-        public virtual DbSet<PremiumRefundClaim> PremiumRefundClaims { get; set; }
-        public virtual DbSet<PublicLiability> PublicLiabilities { get; set; }
-        public virtual DbSet<Quote> Quotes { get; set; }
-        public virtual DbSet<QuoteItem> QuoteItems { get; set; }
-        public virtual DbSet<QuoteNumberGenerator> QuoteNumberGenerators { get; set; }
-        public virtual DbSet<QuoteStatus> QuoteStatuses { get; set; }
-        public virtual DbSet<RatingMotor> RatingMotors { get; set; }
-        public virtual DbSet<RatingMotorDiscount> RatingMotorDiscounts { get; set; }
-        public virtual DbSet<RatingMotorExcess> RatingMotorExcesses { get; set; }
-        public virtual DbSet<RatingMotorPremium> RatingMotorPremiums { get; set; }
-        public virtual DbSet<Receivable> Receivables { get; set; }
-        public virtual DbSet<ReceivableDocument> ReceivableDocuments { get; set; }
-        public virtual DbSet<ReceivableInvoice> ReceivableInvoices { get; set; }
-        public virtual DbSet<ReceivableQuote> ReceivableQuotes { get; set; }
-        public virtual DbSet<Reconcilliation> Reconcilliations { get; set; }
-        public virtual DbSet<RefundStatus> RefundStatuses { get; set; }
-        public virtual DbSet<Region> Regions { get; set; }
-        public virtual DbSet<RelationType> RelationTypes { get; set; }
-        public virtual DbSet<Repairer> Repairers { get; set; }
-        public virtual DbSet<Requisition> Requisitions { get; set; }
-        public virtual DbSet<RequisitionNumberGenerator> RequisitionNumberGenerators { get; set; }
-        public virtual DbSet<ResidenceType> ResidenceTypes { get; set; }
-        public virtual DbSet<ResidenceUse> ResidenceUses { get; set; }
-        public virtual DbSet<Risk> Risks { get; set; }
-        public virtual DbSet<RiskItem> RiskItems { get; set; }
-        public virtual DbSet<RoadsideAssist> RoadsideAssists { get; set; }
-        public virtual DbSet<RoofType> RoofTypes { get; set; }
-        public virtual DbSet<SalesType> SalesTypes { get; set; }
-        public virtual DbSet<StatedBenefit> StatedBenefits { get; set; }
-        public virtual DbSet<Tax> Taxes { get; set; }
-        public virtual DbSet<ThirdParty> ThirdParties { get; set; }
-        public virtual DbSet<Title> Titles { get; set; }
-        public virtual DbSet<TowTruck> TowTrucks { get; set; }
-        public virtual DbSet<TracingAgent> TracingAgents { get; set; }
-        public virtual DbSet<Trailer> Trailers { get; set; }
-        public virtual DbSet<Travel> Travels { get; set; }
-        public virtual DbSet<TravelBeneficiary> TravelBeneficiaries { get; set; }
-        public virtual DbSet<ValuationFeeRefund> ValuationFeeRefunds { get; set; }
-        public virtual DbSet<ValuationFeeRefundClaim> ValuationFeeRefundClaims { get; set; }
-        public virtual DbSet<WallType> WallTypes { get; set; }
-        public virtual DbSet<Withdrawal> Withdrawals { get; set; }
-        public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; } = null!;
+        public virtual DbSet<AllRisk> AllRisks { get; set; } = null!;
+        public virtual DbSet<AllRiskSpecified> AllRiskSpecifieds { get; set; } = null!;
+        public virtual DbSet<ApplicationSession> ApplicationSessions { get; set; } = null!;
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
+        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
+        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
+        public virtual DbSet<AspnetUserPortfolio> AspnetUserPortfolios { get; set; } = null!;
+        public virtual DbSet<Attorney> Attorneys { get; set; } = null!;
+        public virtual DbSet<Audit> Audits { get; set; } = null!;
+        public virtual DbSet<Bank> Banks { get; set; } = null!;
+        public virtual DbSet<BankAccount> BankAccounts { get; set; } = null!;
+        public virtual DbSet<BankAuditLog> BankAuditLogs { get; set; } = null!;
+        public virtual DbSet<BankBranch> BankBranches { get; set; } = null!;
+        public virtual DbSet<Beneficiary> Beneficiaries { get; set; } = null!;
+        public virtual DbSet<BodyType> BodyTypes { get; set; } = null!;
+        public virtual DbSet<Building> Buildings { get; set; } = null!;
+        public virtual DbSet<BuildingCondition> BuildingConditions { get; set; } = null!;
+        public virtual DbSet<Carrier> Carriers { get; set; } = null!;
+        public virtual DbSet<ChartOfAccount> ChartOfAccounts { get; set; } = null!;
+        public virtual DbSet<City> Cities { get; set; } = null!;
+        public virtual DbSet<Claim> Claims { get; set; } = null!;
+        public virtual DbSet<ClaimAttorney> ClaimAttorneys { get; set; } = null!;
+        public virtual DbSet<ClaimDocument> ClaimDocuments { get; set; } = null!;
+        public virtual DbSet<ClaimLossAdjuster> ClaimLossAdjusters { get; set; } = null!;
+        public virtual DbSet<ClaimNumberGenerator> ClaimNumberGenerators { get; set; } = null!;
+        public virtual DbSet<ClaimRepairer> ClaimRepairers { get; set; } = null!;
+        public virtual DbSet<ClaimRoadsideAssist> ClaimRoadsideAssists { get; set; } = null!;
+        public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; } = null!;
+        public virtual DbSet<ClaimThirdParty> ClaimThirdParties { get; set; } = null!;
+        public virtual DbSet<ClaimTowTruck> ClaimTowTrucks { get; set; } = null!;
+        public virtual DbSet<ClaimTracingAgent> ClaimTracingAgents { get; set; } = null!;
+        public virtual DbSet<Claimant> Claimants { get; set; } = null!;
+        public virtual DbSet<Client> Clients { get; set; } = null!;
+        public virtual DbSet<ClientBankAccount> ClientBankAccounts { get; set; } = null!;
+        public virtual DbSet<ClientBulk> ClientBulks { get; set; } = null!;
+        public virtual DbSet<ClientCarrier> ClientCarriers { get; set; } = null!;
+        public virtual DbSet<ClientDocument> ClientDocuments { get; set; } = null!;
+        public virtual DbSet<ClientNumberGenerator> ClientNumberGenerators { get; set; } = null!;
+        public virtual DbSet<ClientRisk> ClientRisks { get; set; } = null!;
+        public virtual DbSet<ClientRiskDocument> ClientRiskDocuments { get; set; } = null!;
+        public virtual DbSet<ClientStatus> ClientStatuses { get; set; } = null!;
+        public virtual DbSet<ClientType> ClientTypes { get; set; } = null!;
+        public virtual DbSet<CommissionRate> CommissionRates { get; set; } = null!;
+        public virtual DbSet<Company> Companies { get; set; } = null!;
+        public virtual DbSet<CompanyBankAccount> CompanyBankAccounts { get; set; } = null!;
+        public virtual DbSet<Content> Contents { get; set; } = null!;
+        public virtual DbSet<ContentContentItem> ContentContentItems { get; set; } = null!;
+        public virtual DbSet<ContentGroupItem> ContentGroupItems { get; set; } = null!;
+        public virtual DbSet<ContentItem> ContentItems { get; set; } = null!;
+        public virtual DbSet<Country> Countries { get; set; } = null!;
+        public virtual DbSet<CoverType> CoverTypes { get; set; } = null!;
+        public virtual DbSet<DocumentType> DocumentTypes { get; set; } = null!;
+        public virtual DbSet<Driver> Drivers { get; set; } = null!;
+        public virtual DbSet<DriverType> DriverTypes { get; set; } = null!;
+        public virtual DbSet<Eftfile> Eftfiles { get; set; } = null!;
+        public virtual DbSet<ElectronicEquipment> ElectronicEquipments { get; set; } = null!;
+        public virtual DbSet<EmailAddress> EmailAddresses { get; set; } = null!;
+        public virtual DbSet<ExcessBuyBack> ExcessBuyBacks { get; set; } = null!;
+        public virtual DbSet<Extension> Extensions { get; set; } = null!;
+        public virtual DbSet<FileTemplate> FileTemplates { get; set; } = null!;
+        public virtual DbSet<FileTemplateRecord> FileTemplateRecords { get; set; } = null!;
+        public virtual DbSet<Gender> Genders { get; set; } = null!;
+        public virtual DbSet<Glass> Glasses { get; set; } = null!;
+        public virtual DbSet<House> Houses { get; set; } = null!;
+        public virtual DbSet<HouseCondition> HouseConditions { get; set; } = null!;
+        public virtual DbSet<IdDocumentType> IdDocumentTypes { get; set; } = null!;
+        public virtual DbSet<Incident> Incidents { get; set; } = null!;
+        public virtual DbSet<IncidentAuditLog> IncidentAuditLogs { get; set; } = null!;
+        public virtual DbSet<Insurer> Insurers { get; set; } = null!;
+        public virtual DbSet<InsurerAuditLog> InsurerAuditLogs { get; set; } = null!;
+        public virtual DbSet<InsurerBranch> InsurerBranches { get; set; } = null!;
+        public virtual DbSet<Invoice> Invoices { get; set; } = null!;
+        public virtual DbSet<InvoiceItem> InvoiceItems { get; set; } = null!;
+        public virtual DbSet<InvoiceNumberGenerator> InvoiceNumberGenerators { get; set; } = null!;
+        public virtual DbSet<InvoiceStatus> InvoiceStatuses { get; set; } = null!;
+        public virtual DbSet<JobTitle> JobTitles { get; set; } = null!;
+        public virtual DbSet<Life> Lives { get; set; } = null!;
+        public virtual DbSet<LossAdjuster> LossAdjusters { get; set; } = null!;
+        public virtual DbSet<LossAdjusterAuthority> LossAdjusterAuthorities { get; set; } = null!;
+        public virtual DbSet<LossAdjusterInstruction> LossAdjusterInstructions { get; set; } = null!;
+        public virtual DbSet<MaritalStatus> MaritalStatuses { get; set; } = null!;
+        public virtual DbSet<MobileNumber> MobileNumbers { get; set; } = null!;
+        public virtual DbSet<Motor> Motors { get; set; } = null!;
+        public virtual DbSet<MotorAccessory> MotorAccessories { get; set; } = null!;
+        public virtual DbSet<MotorCycle> MotorCycles { get; set; } = null!;
+        public virtual DbSet<MotorCycleType> MotorCycleTypes { get; set; } = null!;
+        public virtual DbSet<MotorImprovement> MotorImprovements { get; set; } = null!;
+        public virtual DbSet<MotorMake> MotorMakes { get; set; } = null!;
+        public virtual DbSet<MotorModel> MotorModels { get; set; } = null!;
+        public virtual DbSet<MotorRadio> MotorRadios { get; set; } = null!;
+        public virtual DbSet<Occupation> Occupations { get; set; } = null!;
+        public virtual DbSet<Payable> Payables { get; set; } = null!;
+        public virtual DbSet<PayableRequisition> PayableRequisitions { get; set; } = null!;
+        public virtual DbSet<Payee> Payees { get; set; } = null!;
+        public virtual DbSet<PayeeBankAccount> PayeeBankAccounts { get; set; } = null!;
+        public virtual DbSet<PayeeType> PayeeTypes { get; set; } = null!;
+        public virtual DbSet<PaymentMethod> PaymentMethods { get; set; } = null!;
+        public virtual DbSet<PaymentType> PaymentTypes { get; set; } = null!;
+        public virtual DbSet<Policy> Policies { get; set; } = null!;
+        public virtual DbSet<PolicyBulk> PolicyBulks { get; set; } = null!;
+        public virtual DbSet<PolicyNumberGenerator> PolicyNumberGenerators { get; set; } = null!;
+        public virtual DbSet<PolicyRenewal> PolicyRenewals { get; set; } = null!;
+        public virtual DbSet<PolicyRisk> PolicyRisks { get; set; } = null!;
+        public virtual DbSet<PolicyRiskClaim> PolicyRiskClaims { get; set; } = null!;
+        public virtual DbSet<PolicyRiskExtension> PolicyRiskExtensions { get; set; } = null!;
+        public virtual DbSet<PolicyStatus> PolicyStatuses { get; set; } = null!;
+        public virtual DbSet<PolicyType> PolicyTypes { get; set; } = null!;
+        public virtual DbSet<Portfolio> Portfolios { get; set; } = null!;
+        public virtual DbSet<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; } = null!;
+        public virtual DbSet<PortfolioClient> PortfolioClients { get; set; } = null!;
+        public virtual DbSet<PortfolioExcessBuyBack> PortfolioExcessBuyBacks { get; set; } = null!;
+        public virtual DbSet<PortfolioPolicyFee> PortfolioPolicyFees { get; set; } = null!;
+        public virtual DbSet<PortfolioRatingMotor> PortfolioRatingMotors { get; set; } = null!;
+        public virtual DbSet<PortfolioRatingMotorDiscount> PortfolioRatingMotorDiscounts { get; set; } = null!;
+        public virtual DbSet<PortfolioRatingMotorExcess> PortfolioRatingMotorExcesses { get; set; } = null!;
+        public virtual DbSet<PortfolioRatingMotorPremium> PortfolioRatingMotorPremia { get; set; } = null!;
+        public virtual DbSet<Premium> Premia { get; set; } = null!;
+        public virtual DbSet<PremiumBulk> PremiumBulks { get; set; } = null!;
+        public virtual DbSet<PremiumRefund> PremiumRefunds { get; set; } = null!;
+        public virtual DbSet<PremiumRefundClaim> PremiumRefundClaims { get; set; } = null!;
+        public virtual DbSet<PublicLiability> PublicLiabilities { get; set; } = null!;
+        public virtual DbSet<Quote> Quotes { get; set; } = null!;
+        public virtual DbSet<QuoteItem> QuoteItems { get; set; } = null!;
+        public virtual DbSet<QuoteNumberGenerator> QuoteNumberGenerators { get; set; } = null!;
+        public virtual DbSet<QuoteStatus> QuoteStatuses { get; set; } = null!;
+        public virtual DbSet<RatingMotor> RatingMotors { get; set; } = null!;
+        public virtual DbSet<RatingMotorDiscount> RatingMotorDiscounts { get; set; } = null!;
+        public virtual DbSet<RatingMotorExcess> RatingMotorExcesses { get; set; } = null!;
+        public virtual DbSet<RatingMotorPremium> RatingMotorPremia { get; set; } = null!;
+        public virtual DbSet<Receivable> Receivables { get; set; } = null!;
+        public virtual DbSet<ReceivableDocument> ReceivableDocuments { get; set; } = null!;
+        public virtual DbSet<ReceivableInvoice> ReceivableInvoices { get; set; } = null!;
+        public virtual DbSet<ReceivableQuote> ReceivableQuotes { get; set; } = null!;
+        public virtual DbSet<Reconcilliation> Reconcilliations { get; set; } = null!;
+        public virtual DbSet<RefundStatus> RefundStatuses { get; set; } = null!;
+        public virtual DbSet<Region> Regions { get; set; } = null!;
+        public virtual DbSet<RelationType> RelationTypes { get; set; } = null!;
+        public virtual DbSet<Repairer> Repairers { get; set; } = null!;
+        public virtual DbSet<Requisition> Requisitions { get; set; } = null!;
+        public virtual DbSet<RequisitionNumberGenerator> RequisitionNumberGenerators { get; set; } = null!;
+        public virtual DbSet<ResidenceType> ResidenceTypes { get; set; } = null!;
+        public virtual DbSet<ResidenceUse> ResidenceUses { get; set; } = null!;
+        public virtual DbSet<Risk> Risks { get; set; } = null!;
+        public virtual DbSet<RiskItem> RiskItems { get; set; } = null!;
+        public virtual DbSet<RoadsideAssist> RoadsideAssists { get; set; } = null!;
+        public virtual DbSet<RoofType> RoofTypes { get; set; } = null!;
+        public virtual DbSet<SalesType> SalesTypes { get; set; } = null!;
+        public virtual DbSet<StatedBenefit> StatedBenefits { get; set; } = null!;
+        public virtual DbSet<Tax> Taxes { get; set; } = null!;
+        public virtual DbSet<ThirdParty> ThirdParties { get; set; } = null!;
+        public virtual DbSet<Title> Titles { get; set; } = null!;
+        public virtual DbSet<TowTruck> TowTrucks { get; set; } = null!;
+        public virtual DbSet<TracingAgent> TracingAgents { get; set; } = null!;
+        public virtual DbSet<Trailer> Trailers { get; set; } = null!;
+        public virtual DbSet<Travel> Travels { get; set; } = null!;
+        public virtual DbSet<TravelBeneficiary> TravelBeneficiaries { get; set; } = null!;
+        public virtual DbSet<ValuationFeeRefund> ValuationFeeRefunds { get; set; } = null!;
+        public virtual DbSet<ValuationFeeRefundClaim> ValuationFeeRefundClaims { get; set; } = null!;
+        public virtual DbSet<WallType> WallTypes { get; set; } = null!;
+        public virtual DbSet<Withdrawal> Withdrawals { get; set; } = null!;
+        public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; } = null!;
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -263,9 +268,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.PhysicalAddress)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.PhysicalAddress).HasMaxLength(100);
 
                 entity.Property(e => e.PostalAddress).HasMaxLength(50);
 
@@ -342,15 +345,28 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.SerialNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.SerialNumber).HasMaxLength(50);
 
                 entity.HasOne(d => d.RiskItem)
                     .WithMany(p => p.AllRiskSpecifieds)
                     .HasForeignKey(d => d.RiskItemId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AllRiskSpecified_RiskItem");
+            });
+
+            modelBuilder.Entity<ApplicationSession>(entity =>
+            {
+                entity.ToTable("ApplicationSession");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Value).HasMaxLength(100);
             });
 
             modelBuilder.Entity<AspNetRole>(entity =>
@@ -366,9 +382,7 @@ namespace Tilbake.EF.Persistence.Context
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.RoleId)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.RoleId).HasMaxLength(250);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetRoleClaims)
@@ -399,16 +413,14 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
-                entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasMaxLength(256);
+                entity.Property(e => e.UserName).HasMaxLength(256);
 
                 entity.HasMany(d => d.Roles)
                     .WithMany(p => p.Users)
                     .UsingEntity<Dictionary<string, object>>(
                         "AspNetUserRole",
-                        l => l.HasOne<AspNetRole>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_AspNetUserRoles_AspNetUsers"),
-                        r => r.HasOne<AspNetUser>().WithMany().HasForeignKey("RoleId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_AspNetUserRoles_AspNetRoles"),
+                        l => l.HasOne<AspNetRole>().WithMany().HasForeignKey("RoleId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_AspNetUserRoles_AspNetRoles"),
+                        r => r.HasOne<AspNetUser>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_AspNetUserRoles_AspNetUsers"),
                         j =>
                         {
                             j.HasKey("UserId", "RoleId").HasName("PK__AspNetUs__AF2760ADEB228D7E");
@@ -423,9 +435,7 @@ namespace Tilbake.EF.Persistence.Context
 
             modelBuilder.Entity<AspNetUserClaim>(entity =>
             {
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.UserId).HasMaxLength(250);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserClaims)
@@ -438,17 +448,11 @@ namespace Tilbake.EF.Persistence.Context
             {
                 entity.HasNoKey();
 
-                entity.Property(e => e.LoginProvider)
-                    .IsRequired()
-                    .HasMaxLength(128);
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
-                entity.Property(e => e.ProviderKey)
-                    .IsRequired()
-                    .HasMaxLength(128);
+                entity.Property(e => e.ProviderKey).HasMaxLength(128);
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.UserId).HasMaxLength(250);
             });
 
             modelBuilder.Entity<AspNetUserToken>(entity =>
@@ -458,13 +462,9 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.UserId).HasMaxLength(250);
 
-                entity.Property(e => e.LoginProvider)
-                    .IsRequired()
-                    .HasMaxLength(128);
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(128);
+                entity.Property(e => e.Name).HasMaxLength(128);
             });
 
             modelBuilder.Entity<AspnetUserPortfolio>(entity =>
@@ -509,15 +509,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
@@ -532,17 +528,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.PrimaryKey).HasMaxLength(250);
 
-                entity.Property(e => e.TableName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.TableName).HasMaxLength(50);
 
-                entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Type).HasMaxLength(50);
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(250);
+                entity.Property(e => e.UserId).HasMaxLength(250);
             });
 
             modelBuilder.Entity<Bank>(entity =>
@@ -555,9 +545,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<BankAccount>(entity =>
@@ -569,9 +557,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.AccountNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.AccountNumber).HasMaxLength(50);
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -597,7 +583,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DmlTimestamp).HasColumnType("datetime");
 
                 entity.Property(e => e.DmlType)
-                    .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
@@ -618,17 +603,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.SortCode)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.SortCode).HasMaxLength(50);
 
-                entity.Property(e => e.SwiftCode)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.SwiftCode).HasMaxLength(50);
 
                 entity.HasOne(d => d.Bank)
                     .WithMany(p => p.BankBranches)
@@ -649,13 +628,9 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.LastName).HasMaxLength(50);
 
                 entity.HasOne(d => d.PortfolioClient)
                     .WithMany(p => p.Beneficiaries)
@@ -680,9 +655,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Building>(entity =>
@@ -699,9 +672,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.PhysicalAddress)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.PhysicalAddress).HasMaxLength(150);
 
                 entity.Property(e => e.UnoccupancyPeriod).HasMaxLength(50);
 
@@ -746,9 +717,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Carrier>(entity =>
@@ -761,9 +730,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ChartOfAccount>(entity =>
@@ -777,10 +744,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).IsRequired();
-
                 entity.Property(e => e.Glcode)
-                    .IsRequired()
                     .HasMaxLength(5)
                     .HasColumnName("GLCode");
             });
@@ -795,9 +759,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.Cities)
@@ -808,11 +770,9 @@ namespace Tilbake.EF.Persistence.Context
 
             modelBuilder.Entity<Claim>(entity =>
             {
-                entity.HasKey(e => e.ClaimNumber);
-
                 entity.ToTable("Claim");
 
-                entity.Property(e => e.ClaimNumber).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Comment).HasMaxLength(100);
 
@@ -886,12 +846,6 @@ namespace Tilbake.EF.Persistence.Context
                     .HasForeignKey(d => d.AttorneyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ClaimAttorney_Attorney");
-
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimAttorneys)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimAttorney_Claim");
             });
 
             modelBuilder.Entity<ClaimDocument>(entity =>
@@ -914,12 +868,6 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimDocuments)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimDocument_Claim");
-
                 entity.HasOne(d => d.DocumentType)
                     .WithMany(p => p.ClaimDocuments)
                     .HasForeignKey(d => d.DocumentTypeId)
@@ -936,12 +884,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimLossAdjusters)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimLossAdjuster_Claim");
 
                 entity.HasOne(d => d.LossAdjuster)
                     .WithMany(p => p.ClaimLossAdjusters)
@@ -971,12 +913,6 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimRepairers)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimRepairer_Claim");
-
                 entity.HasOne(d => d.Repairer)
                     .WithMany(p => p.ClaimRepairers)
                     .HasForeignKey(d => d.RepairerId)
@@ -993,12 +929,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimRoadsideAssists)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimRoadsideAssist_Claim");
 
                 entity.HasOne(d => d.RoadsideAssist)
                     .WithMany(p => p.ClaimRoadsideAssists)
@@ -1017,9 +947,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ClaimThirdParty>(entity =>
@@ -1031,12 +959,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimThirdParties)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimThirdParty_Claim");
 
                 entity.HasOne(d => d.ThirdParty)
                     .WithMany(p => p.ClaimThirdParties)
@@ -1055,12 +977,6 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimTowTrucks)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimTowTruck_Claim");
-
                 entity.HasOne(d => d.TowTruck)
                     .WithMany(p => p.ClaimTowTrucks)
                     .HasForeignKey(d => d.TowTruckId)
@@ -1077,12 +993,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ClaimTracingAgents)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClaimTracingAgent_Claim");
 
                 entity.HasOne(d => d.TracingAgent)
                     .WithMany(p => p.ClaimTracingAgents)
@@ -1101,9 +1011,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Client>(entity =>
@@ -1126,13 +1034,9 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
 
                 entity.Property(e => e.MiddleName).HasMaxLength(50);
 
@@ -1218,15 +1122,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.IsExists).HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
 
                 entity.Property(e => e.MiddleName).HasMaxLength(50);
 
@@ -1372,9 +1272,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ClientType>(entity =>
@@ -1387,9 +1285,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<CommissionRate>(entity =>
@@ -1406,9 +1302,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.RiskName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.RiskName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Company>(entity =>
@@ -1421,29 +1315,17 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Email).HasMaxLength(50);
 
-                entity.Property(e => e.Fax)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.Phone)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Phone).HasMaxLength(50);
 
-                entity.Property(e => e.PhysicalAddress)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.PhysicalAddress).HasMaxLength(100);
 
-                entity.Property(e => e.PostalAddress)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.PostalAddress).HasMaxLength(50);
 
                 entity.Property(e => e.TaxNumber).HasMaxLength(50);
 
@@ -1493,9 +1375,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.PhysicalAddress)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.PhysicalAddress).HasMaxLength(50);
 
                 entity.Property(e => e.UnoccupancyPeriod).HasMaxLength(50);
 
@@ -1530,6 +1410,51 @@ namespace Tilbake.EF.Persistence.Context
                     .HasConstraintName("FK_Content_WallType");
             });
 
+            modelBuilder.Entity<ContentContentItem>(entity =>
+            {
+                entity.ToTable("ContentContentItem");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.SumInsured).HasColumnType("decimal(18, 2)");
+            });
+
+            modelBuilder.Entity<ContentGroupItem>(entity =>
+            {
+                entity.ToTable("ContentGroupItem");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ContentItem>(entity =>
+            {
+                entity.ToTable("ContentItem");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.HasOne(d => d.ContentGroupItem)
+                    .WithMany(p => p.ContentItems)
+                    .HasForeignKey(d => d.ContentGroupItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ContentItem_ContentGroupItem");
+            });
+
             modelBuilder.Entity<Country>(entity =>
             {
                 entity.ToTable("Country");
@@ -1544,9 +1469,7 @@ namespace Tilbake.EF.Persistence.Context
                     .HasMaxLength(50)
                     .HasDefaultValueSql("((267))");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.Name).HasMaxLength(100);
             });
 
             modelBuilder.Entity<CoverType>(entity =>
@@ -1559,9 +1482,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<DocumentType>(entity =>
@@ -1589,23 +1510,15 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.LastName).HasMaxLength(50);
 
                 entity.Property(e => e.LicenceDate).HasColumnType("date");
 
-                entity.Property(e => e.LicenceIssuePlace)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.LicenceIssuePlace).HasMaxLength(50);
 
-                entity.Property(e => e.LicenceNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.LicenceNumber).HasMaxLength(50);
 
                 entity.HasOne(d => d.Gender)
                     .WithMany(p => p.Drivers)
@@ -1632,9 +1545,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Eftfile>(entity =>
@@ -1647,13 +1558,9 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.DocumentPath)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.DocumentPath).HasMaxLength(100);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.RunDate).HasColumnType("date");
 
@@ -1693,9 +1600,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.EmailAddresses)
@@ -1738,9 +1643,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<FileTemplate>(entity =>
@@ -1756,13 +1659,10 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.Delimiter).HasMaxLength(1);
 
                 entity.Property(e => e.FileType)
-                    .IsRequired()
                     .HasMaxLength(10)
                     .IsFixedLength();
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.Portfolio)
                     .WithMany(p => p.FileTemplates)
@@ -1781,23 +1681,15 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.FieldLabel)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FieldLabel).HasMaxLength(50);
 
-                entity.Property(e => e.FieldName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FieldName).HasMaxLength(50);
 
                 entity.Property(e => e.Position).HasMaxLength(5);
 
-                entity.Property(e => e.TableLabel)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.TableLabel).HasMaxLength(50);
 
-                entity.Property(e => e.TableName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.TableName).HasMaxLength(50);
 
                 entity.HasOne(d => d.FileTemplate)
                     .WithMany(p => p.FileTemplateRecords)
@@ -1816,9 +1708,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Glass>(entity =>
@@ -1848,9 +1738,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.PhysicalAddress)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.PhysicalAddress).HasMaxLength(150);
 
                 entity.HasOne(d => d.HouseCondition)
                     .WithMany(p => p.Houses)
@@ -1887,9 +1775,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<IdDocumentType>(entity =>
@@ -1902,9 +1788,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Incident>(entity =>
@@ -1917,9 +1801,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<IncidentAuditLog>(entity =>
@@ -1931,7 +1813,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DmlTimestamp).HasColumnType("datetime");
 
                 entity.Property(e => e.DmlType)
-                    .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
@@ -1948,9 +1829,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<InsurerAuditLog>(entity =>
@@ -1966,7 +1845,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DmlTimestamp).HasColumnType("datetime");
 
                 entity.Property(e => e.DmlType)
-                    .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
@@ -1987,25 +1865,15 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Fax)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.Phone)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Phone).HasMaxLength(50);
 
-                entity.Property(e => e.PhysicalAddress)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.PhysicalAddress).HasMaxLength(100);
 
-                entity.Property(e => e.PostalAddress)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.PostalAddress).HasMaxLength(50);
 
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.InsurerBranches)
@@ -2104,9 +1972,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<JobTitle>(entity =>
@@ -2119,9 +1985,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Life>(entity =>
@@ -2158,15 +2022,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
@@ -2189,9 +2049,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.IssuedDate).HasColumnType("date");
 
-                entity.Property(e => e.Reference)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Reference).HasMaxLength(50);
             });
 
             modelBuilder.Entity<LossAdjusterInstruction>(entity =>
@@ -2221,9 +2079,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<MobileNumber>(entity =>
@@ -2236,9 +2092,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.MobileNumbers)
@@ -2262,31 +2116,21 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.ChassisNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.ChassisNumber).HasMaxLength(50);
 
-                entity.Property(e => e.Colour)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Colour).HasMaxLength(50);
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.EngineCapacity)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.EngineCapacity).HasMaxLength(50);
 
-                entity.Property(e => e.EngineNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.EngineNumber).HasMaxLength(50);
 
                 entity.Property(e => e.FinancialInterest).HasMaxLength(50);
 
-                entity.Property(e => e.RegNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.RegNumber).HasMaxLength(50);
 
                 entity.HasOne(d => d.BodyType)
                     .WithMany(p => p.Motors)
@@ -2317,9 +2161,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.Description).HasMaxLength(100);
 
                 entity.Property(e => e.PurchaseValue).HasColumnType("decimal(18, 2)");
 
@@ -2342,17 +2184,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.FinancialInterest).HasMaxLength(50);
 
-                entity.Property(e => e.Make)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Make).HasMaxLength(50);
 
-                entity.Property(e => e.Model)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Model).HasMaxLength(50);
 
-                entity.Property(e => e.RegistrationNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.RegistrationNumber).HasMaxLength(50);
             });
 
             modelBuilder.Entity<MotorCycleType>(entity =>
@@ -2365,9 +2201,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<MotorImprovement>(entity =>
@@ -2380,25 +2214,17 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Description).HasMaxLength(50);
 
-                entity.Property(e => e.MakeModel)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.MakeModel).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Premium).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.PurchaseDate).HasColumnType("date");
 
-                entity.Property(e => e.SerialNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.SerialNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Value).HasColumnType("decimal(18, 2)");
 
@@ -2419,9 +2245,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<MotorModel>(entity =>
@@ -2434,9 +2258,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.MotorMake)
                     .WithMany(p => p.MotorModels)
@@ -2455,19 +2277,13 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Make)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Make).HasMaxLength(50);
 
-                entity.Property(e => e.Model)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Model).HasMaxLength(50);
 
                 entity.Property(e => e.PurchaseValue).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.SerialNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.SerialNumber).HasMaxLength(50);
 
                 entity.HasOne(d => d.Motor)
                     .WithMany(p => p.MotorRadios)
@@ -2486,9 +2302,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Payable>(entity =>
@@ -2507,9 +2321,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.PayableDate).HasColumnType("date");
 
-                entity.Property(e => e.Reference)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Reference).HasMaxLength(50);
 
                 entity.Property(e => e.VoidReason).HasMaxLength(50);
 
@@ -2592,9 +2404,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<PaymentMethod>(entity =>
@@ -2607,9 +2417,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<PaymentType>(entity =>
@@ -2622,9 +2430,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Policy>(entity =>
@@ -2685,6 +2491,12 @@ namespace Tilbake.EF.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policy_PortfolioClient");
 
+                entity.HasOne(d => d.Quote)
+                    .WithMany(p => p.Policies)
+                    .HasForeignKey(d => d.QuoteId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Policy_Quote");
+
                 entity.HasOne(d => d.SalesType)
                     .WithMany(p => p.Policies)
                     .HasForeignKey(d => d.SalesTypeId)
@@ -2702,13 +2514,9 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
             });
 
             modelBuilder.Entity<PolicyNumberGenerator>(entity =>
@@ -2794,12 +2602,6 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.PolicyRiskClaims)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PolicyRiskClaim_Claim");
-
                 entity.HasOne(d => d.PolicyRisk)
                     .WithMany(p => p.PolicyRiskClaims)
                     .HasForeignKey(d => d.PolicyRiskId)
@@ -2840,9 +2642,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<PolicyType>(entity =>
@@ -2855,9 +2655,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Portfolio>(entity =>
@@ -2870,11 +2668,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).IsRequired();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<PortfolioAdministrationFee>(entity =>
@@ -3122,13 +2916,9 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
             });
 
             modelBuilder.Entity<PremiumRefund>(entity =>
@@ -3143,11 +2933,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Reason).IsRequired();
-
-                entity.Property(e => e.Reference)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Reference).HasMaxLength(50);
 
                 entity.Property(e => e.ReferenceDate).HasColumnType("date");
 
@@ -3167,12 +2953,6 @@ namespace Tilbake.EF.Persistence.Context
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.PremiumRefundClaims)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PremiumRefundClaim_Claim");
 
                 entity.HasOne(d => d.PremiumRefund)
                     .WithMany(p => p.PremiumRefundClaims)
@@ -3263,8 +3043,6 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).IsRequired();
-
                 entity.Property(e => e.Excess).HasMaxLength(50);
 
                 entity.Property(e => e.Premium).HasColumnType("decimal(18, 2)");
@@ -3315,9 +3093,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<RatingMotor>(entity =>
@@ -3434,9 +3210,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.ReceivableDate).HasColumnType("date");
 
-                entity.Property(e => e.Reference)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Reference).HasMaxLength(50);
 
                 entity.HasOne(d => d.PaymentType)
                     .WithMany(p => p.Receivables)
@@ -3557,9 +3331,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Region>(entity =>
@@ -3572,9 +3344,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<RelationType>(entity =>
@@ -3587,9 +3357,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Repairer>(entity =>
@@ -3609,15 +3377,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
@@ -3663,12 +3427,6 @@ namespace Tilbake.EF.Persistence.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Requisition_ChartOfAccounts");
 
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.Requisitions)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Requisition_Claim");
-
                 entity.HasOne(d => d.Tax)
                     .WithMany(p => p.Requisitions)
                     .HasForeignKey(d => d.TaxId)
@@ -3697,9 +3455,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ResidenceUse>(entity =>
@@ -3712,9 +3468,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Risk>(entity =>
@@ -3818,9 +3572,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.Description).HasMaxLength(100);
             });
 
             modelBuilder.Entity<RoadsideAssist>(entity =>
@@ -3840,15 +3592,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
@@ -3863,9 +3611,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<SalesType>(entity =>
@@ -3878,9 +3624,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<StatedBenefit>(entity =>
@@ -3910,9 +3654,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.TaxDate).HasColumnType("date");
 
@@ -3936,15 +3678,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
@@ -3959,9 +3697,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<TowTruck>(entity =>
@@ -3981,15 +3717,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
@@ -4011,15 +3743,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Fax).HasMaxLength(50);
 
-                entity.Property(e => e.IdNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.IdNumber).HasMaxLength(50);
 
                 entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
@@ -4034,17 +3762,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Make)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Make).HasMaxLength(50);
 
-                entity.Property(e => e.Model)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Model).HasMaxLength(50);
 
-                entity.Property(e => e.RegNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.RegNumber).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Travel>(entity =>
@@ -4053,9 +3775,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Beneficiary)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Beneficiary).HasMaxLength(50);
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
@@ -4063,25 +3783,15 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DepartureDate).HasColumnType("date");
 
-                entity.Property(e => e.Destination)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.Destination).HasMaxLength(100);
 
-                entity.Property(e => e.DoctorName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.DoctorName).HasMaxLength(50);
 
-                entity.Property(e => e.DoctorPhone)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.DoctorPhone).HasMaxLength(50);
 
-                entity.Property(e => e.PassportNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.PassportNumber).HasMaxLength(50);
 
-                entity.Property(e => e.PersonVisited)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.PersonVisited).HasMaxLength(50);
 
                 entity.Property(e => e.ReturnDate).HasColumnType("date");
 
@@ -4104,17 +3814,11 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.LastName).HasMaxLength(50);
 
-                entity.Property(e => e.PassportNumber)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.PassportNumber).HasMaxLength(50);
 
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.TravelBeneficiaries)
@@ -4147,9 +3851,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Reference)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Reference).HasMaxLength(50);
 
                 entity.Property(e => e.ReferenceDate).HasColumnType("date");
 
@@ -4176,12 +3878,6 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.HasOne(d => d.ClaimNumberNavigation)
-                    .WithMany(p => p.ValuationFeeRefundClaims)
-                    .HasForeignKey(d => d.ClaimNumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ValuationFeeRefundClaim_Claim");
-
                 entity.HasOne(d => d.ValuationFeeRefund)
                     .WithMany(p => p.ValuationFeeRefundClaims)
                     .HasForeignKey(d => d.ValuationFeeRefundId)
@@ -4199,9 +3895,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Withdrawal>(entity =>
@@ -4214,9 +3908,7 @@ namespace Tilbake.EF.Persistence.Context
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Reference)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Reference).HasMaxLength(50);
 
                 entity.Property(e => e.ReferenceDate).HasColumnType("date");
 

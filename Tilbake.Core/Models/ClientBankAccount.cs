@@ -18,8 +18,8 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual BankAccount BankAccount { get; set; }
-        public virtual Client Client { get; set; }
+        public virtual BankAccount BankAccount { get; set; } = null!;
+        public virtual Client Client { get; set; } = null!;
         public virtual ICollection<Policy> Policies { get; set; }
     }
 }

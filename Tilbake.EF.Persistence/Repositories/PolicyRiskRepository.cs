@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Core.Models;
-using Tilbake.EF.Persistence.Context;
+using Tilbake.Core.Context;
 using Tilbake.Core.Interfaces;
+using Tilbake.Core.Models;
 
 namespace Tilbake.EF.Persistence.Repositories
 {

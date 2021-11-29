@@ -12,7 +12,6 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Claim ClaimNumberNavigation { get; set; }
-        public virtual ThirdParty ThirdParty { get; set; }
+        public virtual ThirdParty ThirdParty { get; set; } = null!;
     }
 }

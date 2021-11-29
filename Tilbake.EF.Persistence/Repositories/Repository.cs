@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Tilbake.EF.Persistence.Context;
+using Tilbake.Core.Context;
 using Tilbake.Core.Interfaces;
 
 namespace Tilbake.EF.Persistence.Repositories

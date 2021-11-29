@@ -12,7 +12,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Carrier Carrier { get; set; }
-        public virtual Client Client { get; set; }
+        public virtual Carrier Carrier { get; set; } = null!;
+        public virtual Client Client { get; set; } = null!;
     }
 }

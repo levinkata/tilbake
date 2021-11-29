@@ -23,7 +23,7 @@ namespace Tilbake.Core.Models
         public decimal NewEstimateTp { get; set; }
         public bool IsClaimFinalised { get; set; }
         public Guid PayeeId { get; set; }
-        public string InvoiceNumber { get; set; }
+        public string? InvoiceNumber { get; set; }
         public DateTime? InvoiceDate { get; set; }
         public Guid ChartOfAccountsId { get; set; }
         public Guid? AuthorisedById { get; set; }
@@ -33,9 +33,8 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual ChartOfAccount ChartOfAccounts { get; set; }
-        public virtual Claim ClaimNumberNavigation { get; set; }
-        public virtual Tax Tax { get; set; }
+        public virtual ChartOfAccount ChartOfAccounts { get; set; } = null!;
+        public virtual Tax Tax { get; set; } = null!;
         public virtual ICollection<PayableRequisition> PayableRequisitions { get; set; }
     }
 }

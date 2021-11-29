@@ -19,9 +19,9 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Motor Motor { get; set; }
-        public virtual Policy ParentPolicy { get; set; }
-        public virtual Quote ParentQuote { get; set; }
+        public virtual Motor Motor { get; set; } = null!;
+        public virtual Policy? ParentPolicy { get; set; }
+        public virtual Quote ParentQuote { get; set; } = null!;
         public virtual ICollection<Risk> Risks { get; set; }
     }
 }

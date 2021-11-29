@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Tilbake.Core.Models;
-using Tilbake.EF.Persistence.Context;
-using Tilbake.Core.Interfaces;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Tilbake.Core.Context;
+using Tilbake.Core.Interfaces;
+using Tilbake.Core.Models;
 
 namespace Tilbake.EF.Persistence.Repositories
 {

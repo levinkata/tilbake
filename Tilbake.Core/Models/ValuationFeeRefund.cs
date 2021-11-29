@@ -12,7 +12,7 @@ namespace Tilbake.Core.Models
 
         public Guid Id { get; set; }
         public Guid PolicyRiskId { get; set; }
-        public string Reference { get; set; }
+        public string Reference { get; set; } = null!;
         public DateTime ReferenceDate { get; set; }
         public decimal Amount { get; set; }
         public Guid RequestedById { get; set; }
@@ -22,8 +22,8 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual PolicyRisk PolicyRisk { get; set; }
-        public virtual RefundStatus RefundStatus { get; set; }
+        public virtual PolicyRisk PolicyRisk { get; set; } = null!;
+        public virtual RefundStatus RefundStatus { get; set; } = null!;
         public virtual ICollection<ValuationFeeRefundClaim> ValuationFeeRefundClaims { get; set; }
     }
 }

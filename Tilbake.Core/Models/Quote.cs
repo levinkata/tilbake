@@ -8,6 +8,7 @@ namespace Tilbake.Core.Models
         public Quote()
         {
             ExcessBuyBacks = new HashSet<ExcessBuyBack>();
+            Policies = new HashSet<Policy>();
             QuoteItems = new HashSet<QuoteItem>();
             ReceivableQuotes = new HashSet<ReceivableQuote>();
         }
@@ -22,8 +23,8 @@ namespace Tilbake.Core.Models
         public Guid? PolicyTypeId { get; set; }
         public Guid? PaymentMethodId { get; set; }
         public Guid PaymentTypeId { get; set; }
-        public string ClientInfo { get; set; }
-        public string InternalInfo { get; set; }
+        public string? ClientInfo { get; set; }
+        public string? InternalInfo { get; set; }
         public int RunDay { get; set; }
         public bool IsFulfilled { get; set; }
         public bool IsPaid { get; set; }
@@ -33,13 +34,14 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual InsurerBranch InsurerBranch { get; set; }
-        public virtual PaymentMethod PaymentMethod { get; set; }
-        public virtual PolicyType PolicyType { get; set; }
-        public virtual PortfolioClient PortfolioClient { get; set; }
-        public virtual QuoteStatus QuoteStatus { get; set; }
-        public virtual SalesType SalesType { get; set; }
+        public virtual InsurerBranch InsurerBranch { get; set; } = null!;
+        public virtual PaymentMethod? PaymentMethod { get; set; }
+        public virtual PolicyType? PolicyType { get; set; }
+        public virtual PortfolioClient PortfolioClient { get; set; } = null!;
+        public virtual QuoteStatus QuoteStatus { get; set; } = null!;
+        public virtual SalesType? SalesType { get; set; }
         public virtual ICollection<ExcessBuyBack> ExcessBuyBacks { get; set; }
+        public virtual ICollection<Policy> Policies { get; set; }
         public virtual ICollection<QuoteItem> QuoteItems { get; set; }
         public virtual ICollection<ReceivableQuote> ReceivableQuotes { get; set; }
     }

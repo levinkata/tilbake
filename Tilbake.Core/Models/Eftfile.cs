@@ -7,18 +7,18 @@ namespace Tilbake.Core.Models
     {
         public Guid Id { get; set; }
         public Guid PortfolioId { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public int Month { get; set; }
         public int Year { get; set; }
         public DateTime RunDate { get; set; }
         public int TotalEntries { get; set; }
         public decimal TotalAmount { get; set; }
-        public string DocumentPath { get; set; }
+        public string DocumentPath { get; set; } = null!;
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Portfolio Portfolio { get; set; }
+        public virtual Portfolio Portfolio { get; set; } = null!;
     }
 }

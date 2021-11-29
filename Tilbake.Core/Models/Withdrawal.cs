@@ -7,7 +7,7 @@ namespace Tilbake.Core.Models
     {
         public Guid Id { get; set; }
         public Guid PortfolioClientId { get; set; }
-        public string Reference { get; set; }
+        public string Reference { get; set; } = null!;
         public DateTime ReferenceDate { get; set; }
         public Guid RequestedById { get; set; }
         public DateTime WithdrawalDate { get; set; }
@@ -17,6 +17,6 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual PortfolioClient PortfolioClient { get; set; }
+        public virtual PortfolioClient PortfolioClient { get; set; } = null!;
     }
 }

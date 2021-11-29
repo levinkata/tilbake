@@ -17,7 +17,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual PayeeType PayeeType { get; set; }
+        public virtual PayeeType PayeeType { get; set; } = null!;
         public virtual ICollection<PayeeBankAccount> PayeeBankAccounts { get; set; }
     }
 }

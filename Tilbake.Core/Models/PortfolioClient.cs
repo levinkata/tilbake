@@ -24,9 +24,9 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Client Client { get; set; }
-        public virtual ClientStatus ClientStatus { get; set; }
-        public virtual Portfolio Portfolio { get; set; }
+        public virtual Client Client { get; set; } = null!;
+        public virtual ClientStatus ClientStatus { get; set; } = null!;
+        public virtual Portfolio Portfolio { get; set; } = null!;
         public virtual ICollection<Beneficiary> Beneficiaries { get; set; }
         public virtual ICollection<Policy> Policies { get; set; }
         public virtual ICollection<Quote> Quotes { get; set; }

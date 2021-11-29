@@ -12,7 +12,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Invoice Invoice { get; set; }
-        public virtual Receivable Receivable { get; set; }
+        public virtual Invoice Invoice { get; set; } = null!;
+        public virtual Receivable Receivable { get; set; } = null!;
     }
 }

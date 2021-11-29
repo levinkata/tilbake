@@ -15,17 +15,17 @@ namespace Tilbake.Core.Models
         }
 
         public Guid Id { get; set; }
-        public string RegNumber { get; set; }
+        public string RegNumber { get; set; } = null!;
         public Guid BodyTypeId { get; set; }
         public Guid MotorModelId { get; set; }
         public int RegYear { get; set; }
         public Guid DriverTypeId { get; set; }
-        public string EngineNumber { get; set; }
-        public string ChassisNumber { get; set; }
-        public string EngineCapacity { get; set; }
+        public string EngineNumber { get; set; } = null!;
+        public string ChassisNumber { get; set; } = null!;
+        public string EngineCapacity { get; set; } = null!;
         public int OdometerReading { get; set; }
         public int ClaimFreeGroup { get; set; }
-        public string Colour { get; set; }
+        public string Colour { get; set; } = null!;
         public bool IsPrivateOrBusiness { get; set; }
         public bool IsImport { get; set; }
         public bool IsSecurityFitting { get; set; }
@@ -34,17 +34,20 @@ namespace Tilbake.Core.Models
         public bool IsImmobiliserFactoryFitted { get; set; }
         public bool IsAlarm { get; set; }
         public bool IsGearLock { get; set; }
+        public bool IsParkedLockedGarage { get; set; }
+        public bool IsParkedStreet { get; set; }
+        public bool IsSoftRoofTop { get; set; }
         public bool IsExcessBuyBack { get; set; }
         public int DaysOutOfCountry { get; set; }
-        public string FinancialInterest { get; set; }
+        public string? FinancialInterest { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual BodyType BodyType { get; set; }
-        public virtual DriverType DriverType { get; set; }
-        public virtual MotorModel MotorModel { get; set; }
+        public virtual BodyType BodyType { get; set; } = null!;
+        public virtual DriverType DriverType { get; set; } = null!;
+        public virtual MotorModel MotorModel { get; set; } = null!;
         public virtual ICollection<ExcessBuyBack> ExcessBuyBacks { get; set; }
         public virtual ICollection<MotorAccessory> MotorAccessories { get; set; }
         public virtual ICollection<MotorImprovement> MotorImprovements { get; set; }

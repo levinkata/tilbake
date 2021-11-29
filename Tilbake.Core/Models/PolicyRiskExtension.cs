@@ -12,7 +12,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Extension Extension { get; set; }
-        public virtual PolicyRisk PolicyRisk { get; set; }
+        public virtual Extension Extension { get; set; } = null!;
+        public virtual PolicyRisk PolicyRisk { get; set; } = null!;
     }
 }

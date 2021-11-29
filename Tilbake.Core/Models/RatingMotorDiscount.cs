@@ -19,7 +19,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Insurer Insurer { get; set; }
+        public virtual Insurer Insurer { get; set; } = null!;
         public virtual ICollection<PortfolioRatingMotorDiscount> PortfolioRatingMotorDiscounts { get; set; }
     }
 }

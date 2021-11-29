@@ -1,6 +1,6 @@
+using Tilbake.Core.Context;
 using Tilbake.Core.Interfaces;
 using Tilbake.Core.Models;
-using Tilbake.EF.Persistence.Context;
 
 namespace Tilbake.EF.Persistence.Repositories
 {

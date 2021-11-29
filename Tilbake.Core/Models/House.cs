@@ -11,7 +11,7 @@ namespace Tilbake.Core.Models
         }
 
         public Guid Id { get; set; }
-        public string PhysicalAddress { get; set; }
+        public string PhysicalAddress { get; set; } = null!;
         public Guid ResidenceTypeId { get; set; }
         public Guid RoofTypeId { get; set; }
         public Guid WallTypeId { get; set; }
@@ -23,10 +23,10 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual HouseCondition HouseCondition { get; set; }
-        public virtual ResidenceType ResidenceType { get; set; }
-        public virtual RoofType RoofType { get; set; }
-        public virtual WallType WallType { get; set; }
+        public virtual HouseCondition HouseCondition { get; set; } = null!;
+        public virtual ResidenceType ResidenceType { get; set; } = null!;
+        public virtual RoofType RoofType { get; set; } = null!;
+        public virtual WallType WallType { get; set; } = null!;
         public virtual ICollection<Risk> Risks { get; set; }
     }
 }

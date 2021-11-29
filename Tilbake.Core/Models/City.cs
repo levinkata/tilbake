@@ -14,13 +14,13 @@ namespace Tilbake.Core.Models
 
         public Guid Id { get; set; }
         public Guid CountryId { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Country Country { get; set; }
+        public virtual Country Country { get; set; } = null!;
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<Company> Companies { get; set; }
         public virtual ICollection<InsurerBranch> InsurerBranches { get; set; }

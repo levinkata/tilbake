@@ -27,8 +27,8 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual InvoiceStatus InvoiceStatus { get; set; }
-        public virtual Policy Policy { get; set; }
+        public virtual InvoiceStatus InvoiceStatus { get; set; } = null!;
+        public virtual Policy Policy { get; set; } = null!;
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
         public virtual ICollection<ReceivableInvoice> ReceivableInvoices { get; set; }
         public virtual ICollection<Reconcilliation> Reconcilliations { get; set; }

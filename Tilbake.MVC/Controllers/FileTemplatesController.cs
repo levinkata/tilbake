@@ -63,7 +63,7 @@ namespace Tilbake.MVC.Controllers
 
                 var fileTemplateId = fileTemplate.Id;
 
-                await PopulateFileTemplateRecords(fileTemplateId);
+                PopulateFileTemplateRecords(fileTemplateId);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index), new { portfolioId = model.PortfolioId });
             }
@@ -640,7 +640,7 @@ namespace Tilbake.MVC.Controllers
             return View(model);
         }
 
-        public async Task PopulateFileTemplateRecords(Guid fileTemplateId)
+        public void PopulateFileTemplateRecords(Guid fileTemplateId)
         {
             var fileTemplateRecords = new List<FileTemplateRecord>
             {
@@ -656,25 +656,25 @@ namespace Tilbake.MVC.Controllers
                 new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="MaritalStatus",FieldLabel="Marital Status",Position=null,ColumnLength=0,IsKey=false},
                 new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Occupation",FieldLabel="Occupation",Position=null,ColumnLength=0,IsKey=false},
 
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="PolicyNumber",FieldLabel="Policy Number",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="PolicyNumber",FieldLabel="Policy Number",Position=null,ColumnLength=0,IsKey=false},
 
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="PolicyNumber",FieldLabel="Policy Number",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="Amount",FieldLabel="Premium",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="PolicyNumber",FieldLabel="Policy Number",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Premium",TableLabel="Premium",FieldName="Amount",FieldLabel="Premium",Position=null,ColumnLength=0,IsKey=false},
 
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ClaimNumber",FieldLabel="Claim Number",Position=null,ColumnLength=0,IsKey=true},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReportDate",FieldLabel="Report Date",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="IncidentDate",FieldLabel="Incident Date",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="RegisterDate",FieldLabel="Register Date",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReserveInsured",FieldLabel="Reserve Insured",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReserveThirdParty",FieldLabel="Reserve Third Party",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="Excess",FieldLabel="Excess",Position=null,ColumnLength=0,IsKey=false},
-               new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim", FieldName="RecoverFromThirdParty",FieldLabel="Recover From Third Party",Position=null,ColumnLength=0,IsKey=false}
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ClaimNumber",FieldLabel="Claim Number",Position=null,ColumnLength=0,IsKey=true},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReportDate",FieldLabel="Report Date",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="IncidentDate",FieldLabel="Incident Date",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="RegisterDate",FieldLabel="Register Date",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReserveInsured",FieldLabel="Reserve Insured",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="ReserveThirdParty",FieldLabel="Reserve Third Party",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim",FieldName="Excess",FieldLabel="Excess",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Claim",TableLabel="Claim", FieldName="RecoverFromThirdParty",FieldLabel="Recover From Third Party",Position=null,ColumnLength=0,IsKey=false}
             };
 
             _unitOfWork.FileTemplateRecords.AddRange(fileTemplateRecords);

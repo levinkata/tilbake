@@ -20,8 +20,8 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedById { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Client Client { get; set; }
-        public virtual Risk Risk { get; set; }
+        public virtual Client Client { get; set; } = null!;
+        public virtual Risk Risk { get; set; } = null!;
         public virtual ICollection<ClientRiskDocument> ClientRiskDocuments { get; set; }
         public virtual ICollection<PolicyRisk> PolicyRisks { get; set; }
         public virtual ICollection<QuoteItem> QuoteItems { get; set; }

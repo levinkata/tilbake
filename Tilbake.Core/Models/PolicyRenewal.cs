@@ -14,6 +14,6 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Policy Policy { get; set; }
+        public virtual Policy Policy { get; set; } = null!;
     }
 }

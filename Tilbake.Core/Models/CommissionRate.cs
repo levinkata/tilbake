@@ -6,8 +6,8 @@ namespace Tilbake.Core.Models
     public partial class CommissionRate
     {
         public Guid Id { get; set; }
-        public string RiskName { get; set; }
-        public string Description { get; set; }
+        public string RiskName { get; set; } = null!;
+        public string? Description { get; set; }
         public decimal Rate { get; set; }
         public Guid? AddedBy { get; set; }
         public DateTime? DateAdded { get; set; }

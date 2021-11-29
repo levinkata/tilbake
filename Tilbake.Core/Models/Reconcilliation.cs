@@ -16,7 +16,7 @@ namespace Tilbake.Core.Models
         public Guid? ModifiedBy { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Invoice Invoice { get; set; }
-        public virtual PaymentMethod PaymentMethod { get; set; }
+        public virtual Invoice Invoice { get; set; } = null!;
+        public virtual PaymentMethod PaymentMethod { get; set; } = null!;
     }
 }

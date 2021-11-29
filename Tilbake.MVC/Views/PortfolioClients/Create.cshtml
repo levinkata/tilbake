@@ -17,9 +17,8 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="form-floating">
-                            <select asp-for="Client.TitleId" class="form-select" asp-items="@Model.Client.TitleList">
+                            <select asp-for="Client.TitleId" class="form-select" asp-items="@Model.Client.TitleList"></select>
                             <label asp-for="Client.TitleId" class="form-label"></label>
-                            </select>
                         </div>
                     </div>
                     <div class="col-4">
@@ -76,9 +75,8 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="form-floating">
-                            <select asp-for="Client.IdDocumentTypeId" id="IdDocumentTypeId" class="form-select" asp-items="@Model.Client.IdDocumentTypeList">
+                            <select asp-for="Client.IdDocumentTypeId" id="IdDocumentTypeId" class="form-select" asp-items="@Model.Client.IdDocumentTypeList"></select>
                             <label asp-for="Client.IdDocumentTypeId" class="form-label"></label>
-                            </select>
                         </div>
                     </div>
                     <div class="col-4">
@@ -199,7 +197,7 @@
 @*        <div class="col-12 mb-3">
             <partial name="_CreateCarrier" model="Model.Client"/>
         </div>*@
-        <div class="col-12">
+        <div>
             <input type="submit" id="submit" value="Create" class="btn btn-outline-secondary" />
         </div>
     </form>

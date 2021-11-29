@@ -19,7 +19,6 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<IEnumerable<Client>> GetByPortfolioId(Guid portfolioId)
         {
             return await _context.Clients
-                                .Where(e => e.PortfolioClients.All(p => p.PortfolioId == portfolioId))
                                 .Include(c => c.EmailAddresses)
                                 .Include(c => c.MobileNumbers)
                                 .Include(c => c.ClientCarriers)
@@ -30,7 +29,9 @@ namespace Tilbake.EF.Persistence.Repositories
                                 .Include(c => c.MaritalStatus)
                                 .Include(c => c.Occupation)
                                 .Include(c => c.Title)
-                                .OrderBy(n => n.LastName).AsNoTracking().ToListAsync();
+                                .Where(e => e.PortfolioClients.All(p => p.PortfolioId == portfolioId))
+                                .OrderBy(n => n.LastName)
+                                .AsSplitQuery().AsNoTracking().ToListAsync();
         }
 
         public async Task<Client> GetByPortfolioIdAndClientId(Guid portfolioId, Guid clientId)

@@ -42,13 +42,13 @@ namespace Tilbake.MVC.Mapping
             CreateMap<City, CityViewModel>().ReverseMap();
 
             CreateMap<Client, ClientViewModel>()
-                    .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType.Name))
-                    .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
-                    .ForMember(dest => dest.IdDocumentType, opt => opt.MapFrom(src => src.IdDocumentType.Name))
-                    .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name))
-                    .ForMember(dest => dest.MaritalStatus, opt => opt.MapFrom(src => src.MaritalStatus.Name))
-                    .ForMember(dest => dest.Occupation, opt => opt.MapFrom(src => src.Occupation.Name))
-                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Name))
+                    .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType))
+                    .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+                    .ForMember(dest => dest.IdDocumentType, opt => opt.MapFrom(src => src.IdDocumentType))
+                    .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
+                    .ForMember(dest => dest.MaritalStatus, opt => opt.MapFrom(src => src.MaritalStatus))
+                    .ForMember(dest => dest.Occupation, opt => opt.MapFrom(src => src.Occupation))
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                     .ForMember(dest => dest.EmailAddresses, opt => opt.MapFrom(src => src.EmailAddresses))
                     .ForMember(dest => dest.MobileNumbers, opt => opt.MapFrom(src => src.MobileNumbers))
                     .ForMember(dest => dest.ClientCarriers, opt => opt.MapFrom(src => src.ClientCarriers)).ReverseMap();

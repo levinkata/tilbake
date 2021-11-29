@@ -29,7 +29,7 @@ namespace Tilbake.EF.Persistence.Repositories
                                 .Include(c => c.MaritalStatus)
                                 .Include(c => c.Occupation)
                                 .Include(c => c.Title)
-                                .Where(e => e.PortfolioClients.All(p => p.PortfolioId == portfolioId))
+                                .Where(e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId))
                                 .OrderBy(n => n.LastName)
                                 .AsSplitQuery().AsNoTracking().ToListAsync();
         }

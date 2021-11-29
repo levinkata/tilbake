@@ -364,11 +364,8 @@ namespace Tilbake.MVC.Controllers
                 ClientStatusId = Guid.Parse(Constants.DefaultClientStatusId),
                 DateAdded = DateTime.Now
             };
-
-            var client = await _unitOfWork.Clients.GetById(clientId);
-
-            client.PortfolioClients.Add(newPortfolioClient);
-            await _unitOfWork.Clients.Update(client);
+;
+            await _unitOfWork.PortfolioClients.Add(newPortfolioClient);
             await _unitOfWork.CompleteAsync();
             return Json(new { portfolioId, clientId });
         }

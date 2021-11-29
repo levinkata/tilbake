@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
 using Tilbake.Core;
 using Tilbake.Core.Models;
 using Tilbake.MVC.Areas.Identity;
@@ -639,7 +638,6 @@ namespace Tilbake.MVC.Controllers
                 BodyTypeList = MVCHelperExtensions.ToSelectList(bodyTypes, Guid.Empty),
                 BuildingConditionList = MVCHelperExtensions.ToSelectList(buildingConditions, Guid.Empty),
                 CountryList = MVCHelperExtensions.ToSelectList(countries, Guid.Empty),
-                DayList = SelectLists.RegisteredDays(0),
                 DriverTypeList = MVCHelperExtensions.ToSelectList(driverTypes, Guid.Empty),
                 HouseConditionList = MVCHelperExtensions.ToSelectList(houseConditions, Guid.Empty),
                 MotorMakeList = MVCHelperExtensions.ToSelectList(motorMakes, Guid.Empty),
@@ -648,8 +646,7 @@ namespace Tilbake.MVC.Controllers
                 ResidenceUseList = MVCHelperExtensions.ToSelectList(residenceUses, Guid.Empty),
                 RoofTypeList = MVCHelperExtensions.ToSelectList(roofTypes, Guid.Empty),
                 WallTypeList = MVCHelperExtensions.ToSelectList(wallTypes, Guid.Empty),
-                TitleList = MVCHelperExtensions.ToSelectList(titles, Guid.Empty),
-                DateRangeList = SelectLists.RegisteredYears(0)
+                TitleList = MVCHelperExtensions.ToSelectList(titles, Guid.Empty)
             };
 
             return View(model);
@@ -1115,7 +1112,6 @@ namespace Tilbake.MVC.Controllers
             model.PortfolioName = portfolioClient.Portfolio.Name;
             model.InsurerId = insurerId;
             model.TaxRate = taxRate;
-            model.DayList = SelectLists.RegisteredDays(model.RunDay);
             model.QuoteStatusList = MVCHelperExtensions.ToSelectList(quoteStatuses, model.QuoteStatusId);
             model.SalesTypeList = MVCHelperExtensions.ToSelectList(salesTypes, model.SalesTypeId.Value);
             model.PolicyTypeList = MVCHelperExtensions.ToSelectList(policyTypes, model.PolicyTypeId.Value);

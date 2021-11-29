@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
 using Tilbake.Core;
 using Tilbake.Core.Enums;
 using Tilbake.Core.Models;
@@ -357,15 +356,21 @@ namespace Tilbake.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExistingClient(Guid portfolioId, Guid clientId)
         {
-            PortfolioClientViewModel model = new()
+            PortfolioClient newPortfolioClient = new()
             {
+                Id = Guid.NewGuid(),
                 PortfolioId = portfolioId,
-                ClientId = clientId
+                ClientId = clientId,
+                ClientStatusId = Guid.Parse(Constants.DefaultClientStatusId),
+                DateAdded = DateTime.Now
             };
-            var portfolioClient = _mapper.Map<PortfolioClientViewModel, PortfolioClient>(model);
-            await _unitOfWork.PortfolioClients.Add(portfolioClient);
+
+            var client = await _unitOfWork.Clients.GetById(clientId);
+
+            client.PortfolioClients.Add(newPortfolioClient);
+            await _unitOfWork.Clients.Update(client);
             await _unitOfWork.CompleteAsync();
-            return Ok();
+            return Json(new { portfolioId, clientId });
         }
 
         [HttpGet]

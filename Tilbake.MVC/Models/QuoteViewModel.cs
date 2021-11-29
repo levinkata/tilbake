@@ -136,8 +136,6 @@ namespace Tilbake.MVC.Models
         public SelectList BuildingConditionList { get; set; }
         public SelectList CountryList { get; set; }
         public SelectList CoverTypeList { get; set; }
-        public SelectList DateRangeList { get; set; }
-        public SelectList DayList { get; set; }
         public SelectList DriverTypeList { get; set; }
         public SelectList HouseConditionList { get; set; }
         public SelectList InsurerList { get; set; }

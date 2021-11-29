@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Interfaces;
 using Tilbake.Core;
 using Tilbake.Core.Models;
 using Tilbake.MVC.Areas.Identity;
@@ -52,6 +49,19 @@ namespace Tilbake.MVC.Controllers
                 ClientViewModels = clientModel
             };
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetByIdNumber(string idNumber)
+        {
+            var result = await _unitOfWork.Clients.GetByIdNumber(idNumber);
+            if(result != null)
+            {
+                var model = _mapper.Map<Client, ClientViewModel>(result);
+                return Json(new { model.Id, model.FirstName, model.LastName, model.IdNumber, model.ClientNumber });
+            }
+
+            return Json(result);
         }
 
         // GET: Clients/Details/5

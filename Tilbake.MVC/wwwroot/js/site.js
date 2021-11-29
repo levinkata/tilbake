@@ -58,63 +58,63 @@ $('#AddressCountryId').change(function () {
 
 //  JavaScript
 //  Motor Attributes
-const motorForm = document.getElementById('motorModal');
-const regNumber = document.getElementById('RegNumber');
-const engineNumber = document.getElementById('EngineNumber');
-const chassisNumber = document.getElementById('ChassisNumber');
-const motorbtnAdd = document.getElementById('btnAddMotor');
+//const motorForm = document.getElementById('motorModal');
+//const regNumber = document.getElementById('RegNumber');
+//const engineNumber = document.getElementById('EngineNumber');
+//const chassisNumber = document.getElementById('ChassisNumber');
+//const motorbtnAdd = document.getElementById('btnAddMotor');
 
-motorForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+//motorForm.addEventListener('submit', (e) => {
+//    e.preventDefault();
 
-    validateMotorInputs();
-});
+//    validateMotorInputs();
+//});
 
-motorbtnAdd.addEventListener('click', (e) => {
-    e.preventDefault();
+//motorbtnAdd.addEventListener('click', (e) => {
+//    e.preventDefault();
 
-    validateMotorInputs();
-});
+//    validateMotorInputs();
+//});
 
-function validateMotorInputs() {
-    //  Trim to remove whitespaces
-    const regNumberValue = regNumber.value.trim();
-    const engineNumberValue = engineNumber.value.trim();
-    const chassisNumberValue = chassisNumber.value.trim();
+//function validateMotorInputs() {
+//    //  Trim to remove whitespaces
+//    const regNumberValue = regNumber.value.trim();
+//    const engineNumberValue = engineNumber.value.trim();
+//    const chassisNumberValue = chassisNumber.value.trim();
 
-    if (regNumberValue === '') {
-        setErrorFor(regNumber, 'Registration Number cannot be blank');
-    } else {
-        setSuccessFor(regNumber);
-    }
+//    if (regNumberValue === '') {
+//        setErrorFor(regNumber, 'Registration Number cannot be blank');
+//    } else {
+//        setSuccessFor(regNumber);
+//    }
 
-    if (engineNumberValue === '') {
-        setErrorFor(engineNumber, 'Engine Number cannot be blank');
-    } else {
-        setSuccessFor(engineNumber);
-    }
+//    if (engineNumberValue === '') {
+//        setErrorFor(engineNumber, 'Engine Number cannot be blank');
+//    } else {
+//        setSuccessFor(engineNumber);
+//    }
 
-    if (chassisNumberValue === '') {
-        setErrorFor(chassisNumber, 'Chassis Number cannot be blank');
-    } else {
-        setSuccessFor(chassisNumber);
-    }
-}
+//    if (chassisNumberValue === '') {
+//        setErrorFor(chassisNumber, 'Chassis Number cannot be blank');
+//    } else {
+//        setSuccessFor(chassisNumber);
+//    }
+//}
 
-function setErrorFor(input, message) {
-    const formControl = input.parentElement;
-    const small = formControl.querySelector('small');
-    formControl.className = 'form-control error';
-    small.innerText = message;
-}
+//function setErrorFor(input, message) {
+//    const formControl = input.parentElement;
+//    const small = formControl.querySelector('small');
+//    formControl.className = 'form-control error';
+//    small.innerText = message;
+//}
 
-function setSuccessFor(input) {
-    const formControl = input.parentElement;
-    formControl.className = 'form-control success';
-}
+//function setSuccessFor(input) {
+//    const formControl = input.parentElement;
+//    formControl.className = 'form-control success';
+//}
 
-function isEmail(email) {
-    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-        email
-    );
-}
+//function isEmail(email) {
+//    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+//        email
+//    );
+//}

@@ -11,13 +11,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using Tilbake.Application.Services;
 using Tilbake.Core.Context;
 using Tilbake.EF.IoC;
 using Tilbake.MVC.Areas.Identity;
 using Tilbake.MVC.Areas.Identity.Data;
 using Tilbake.MVC.Extensions;
 using Tilbake.MVC.Mapping;
+using Tilbake.MVC.Services;
 using Tilbake.MVC.Validators;
 
 Log.Logger = new LoggerConfiguration()

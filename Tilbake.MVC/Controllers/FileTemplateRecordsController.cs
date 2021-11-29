@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Tilbake.Application.Interfaces;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Tilbake.Core;
+using Tilbake.MVC.Areas.Identity;
 
 namespace Tilbake.MVC.Controllers
 {
-    public class FileTemplateRecordsController : Controller
+    public class FileTemplateRecordsController : BaseController
     {
-        private readonly IFileTemplateService _fileTemplateService;
-        private readonly IFileTemplateRecordService _fileTemplateRecordService;
-
-        public FileTemplateRecordsController(IFileTemplateService fileTemplateService,
-                                            IFileTemplateRecordService fileTemplateRecordService)
+        public FileTemplateRecordsController(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
         {
-            _fileTemplateService = fileTemplateService;
-            _fileTemplateRecordService = fileTemplateRecordService;
+
         }
 
         public IActionResult Index()

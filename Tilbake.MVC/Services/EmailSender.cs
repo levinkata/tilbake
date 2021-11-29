@@ -7,7 +7,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tilbake.Application.Services
+namespace Tilbake.MVC.Services
 {
     public class EmailSender : IEmailSender
     {

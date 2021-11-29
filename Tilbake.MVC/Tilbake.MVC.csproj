@@ -41,7 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tilbake.Application\Tilbake.Application.csproj" />
     <ProjectReference Include="..\Tilbake.Core\Tilbake.Core.csproj" />
     <ProjectReference Include="..\Tilbake.EF.IoC\Tilbake.EF.IoC.csproj" />
     <ProjectReference Include="..\Tilbake.EF.Persistence\Tilbake.EF.Persistence.csproj" />

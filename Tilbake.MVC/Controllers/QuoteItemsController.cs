@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Tilbake.Application.Helpers;
 using Tilbake.Core;
 using Tilbake.Core.Models;
 using Tilbake.MVC.Areas.Identity;

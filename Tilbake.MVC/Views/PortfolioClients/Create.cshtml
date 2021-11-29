@@ -275,7 +275,11 @@
         });
 
         $('#IdNumber').focusout(function() {
-            
+            if(duplicateFound)
+            {
+                $('#IdNumber').val('');
+                ClearDivDuplicate()
+            }
             selectedIdNumber = $(this).val();
             if(selectedIdNumber != null && selectedIdNumber != '') {
                 CheckClient(selectedIdNumber);
@@ -288,17 +292,14 @@
                 
                 $.ajax({
                     url: '@(Url.Action("GetByIdNumber", "Clients"))',
-                    traditional: true,
-                    dataType: "json",
+                    dataType: 'json',
                     type: 'GET',
                     data: { idNumber: idNumber },
                     error: function () {
                         alert("An error occurred.");
                     },
                     success: function (client) {
-                        alert('Success');
                         if(client) {
-                            console.log(client);
                             existingClientId = client.id;
                             if (existingClientId != null && existingClientId != '') {
                                 $('#ClientId').val(existingClientId);
@@ -308,14 +309,26 @@
                                 $('#modalClientNumber').val(client.clientNumber);
                                 duplicateFound = true;
                                 duplicateIdNumber = client.idNumber;
-                                $('#DivDuplicate').toggle('show');
+                                $('#DivDuplicate').show(2000);
                             }
                         } else {
-                            duplicateFound = false;
+                            ClearDivDuplicate();
                         }
                     }
                 });
             }
+        }
+
+        function ClearDivDuplicate() {
+            $('#ClientId').val(null);
+            $('#modalFirstName').val(null);
+            $('#modalLastName').val(null);
+            $('#modalIdNumber').val(null);
+            $('#modalClientNumber').val(null);
+            $('#DivDuplicate').hide('fast');
+            existingClientId = null;
+            duplicateIdNumber = '';
+            duplicateFound = false;
         }
 
         function PostPortfolioClient() {
@@ -324,15 +337,17 @@
                 
                 $.ajax({
                     url: '@(Url.Action("AddExistingClient"))',
-                    type: "POST",
+                    type: 'POST',
                     dataType: "json",
                     data: { portfolioId: portfolioId, clientId: existingClientId },
                     error: function (xhr, status, error) {
                         alert("An error has occured." + error);
                     },
                     success: function (data) {
-                        $('#DivDuplicate').toggle('hide');
-                        window.location.href = "/PortfolioClients/Index?portfolioId=" + portfolioId;
+                        console.log(data);
+                        ClearDivDuplicate();
+                        //window.location.href = "/PortfolioClients/Index?portfolioId=" + portfolioId;
+                        window.location.href = '/PortfolioClients/Search?PortfolioId=' + portfolioId;
                     }
                 });
             }

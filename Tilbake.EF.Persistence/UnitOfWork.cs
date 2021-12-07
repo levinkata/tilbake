@@ -19,6 +19,7 @@ namespace Tilbake.EF.Persistence
             Addresses = new AddressRepository(_context);
             AllRisks = new AllRiskRepository(_context);
             AllRiskSpecifieds = new AllRiskSpecifiedRepository(_context);
+            ApplicationSessions = new ApplicationSessionRepository(_context);
             Audits = new AuditRepository(_context);
             Banks = new BankRepository(_context);
             BankBranches = new BankBranchRepository(_context);
@@ -107,6 +108,7 @@ namespace Tilbake.EF.Persistence
         public IAddressRepository Addresses { get; private set; }
         public IAllRiskRepository AllRisks { get; private set; }
         public IAllRiskSpecifiedRepository AllRiskSpecifieds { get; private set; }
+        public IApplicationSessionRepository ApplicationSessions { get; private set; }
         public IAuditRepository Audits { get; private set; }
         public IBankRepository Banks { get; private set; }
         public IBankBranchRepository BankBranches { get; private set; }

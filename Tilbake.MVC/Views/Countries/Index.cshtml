@@ -13,7 +13,7 @@
 
 @if (Model.Any())
 {
-    <table id="tblCountry" class="display">
+    <table class="table">
         <thead>
             <tr>
                 <th>
@@ -49,13 +49,13 @@
 }
 else
 {
-    <caption>No Records Found</caption>
+    <p>No Records Found</p>
 }
 
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('#tblCountry').DataTable();
+            // Do something here
         });
     </script>
 }

@@ -27,8 +27,19 @@ namespace Tilbake.MVC.Controllers
 
         public async Task<IActionResult> Carousel(Guid id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
             var result = await _unitOfWork.Portfolios.GetById(id);
             var model = _mapper.Map<Portfolio, PortfolioViewModel>(result);
+
+            await _unitOfWork.ApplicationSessions.DeleteByUserId(user.Id);
+            var applicationSessions = new List<ApplicationSession>
+                {
+                    new ApplicationSession { Id = Guid.NewGuid(), Name = "PortfolioId", Value = model.Id.ToString(), UserId = Guid.Parse(user.Id) },
+                    new ApplicationSession { Id = Guid.NewGuid(), Name = "PortfolioName", Value = model.Name, UserId = Guid.Parse(user.Id) }
+                };
+            _unitOfWork.ApplicationSessions.AddRange(applicationSessions);
+            await _unitOfWork.CompleteAsync();
+
             return View(model);
         }
 
@@ -69,6 +80,8 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var portfolio = _mapper.Map<PortfolioViewModel, Portfolio>(model);
+                portfolio.Id = Guid.NewGuid();
+                portfolio.DateAdded = DateTime.Now;
                 await _unitOfWork.Portfolios.Add(portfolio);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,6 +109,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var portfolio = _mapper.Map<PortfolioViewModel, Portfolio>(model);
+                portfolio.DateModified = DateTime.Now;
                 await _unitOfWork.Portfolios.Update(portfolio);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));

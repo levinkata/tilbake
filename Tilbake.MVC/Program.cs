@@ -75,11 +75,9 @@ try
             {
                 options.RegisterValidatorsFromAssemblyContaining<BankValidator>();
                 options.DisableDataAnnotationsValidation = true;
-            })
-            .AddRazorRuntimeCompilation();
+            });
 
-    builder.Services.AddRazorPages()
-            .AddRazorRuntimeCompilation();
+    builder.Services.AddRazorPages();
 
     builder.Services.AddAuthorization(options =>
             {

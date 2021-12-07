@@ -1,0 +1,43 @@
+﻿@model IEnumerable<AddressViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Physical Address
+            </th>
+            <th>
+                Postal Address
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Country
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhysicalAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostalAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City.Country.Name)
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

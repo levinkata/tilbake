@@ -38,6 +38,7 @@ namespace Tilbake.EF.Persistence.Repositories
         {
             return await _context.Clients
                                 .Where(e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId))
+                                .Include(c => c.Addresses)
                                 .Include(c => c.EmailAddresses)
                                 .Include(c => c.MobileNumbers)
                                 .Include(c => c.ClientCarriers)

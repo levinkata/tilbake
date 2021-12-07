@@ -86,18 +86,16 @@ namespace Tilbake.MVC.Models
         [Display(Name = "Mobile Numbers")]
         public List<MobileNumberViewModel> MobileNumbers = new();
 
-        public AddressViewModel? Address { get; set; }
+        public List<AddressViewModel> Addresses = new();
 
         //  SelectLists
-        public SelectList? AddressCountryList { get; set; }
-        public SelectList? CityList { get; set; }
         public SelectList? ClientTypeList { get; set; }
         public SelectList? CountryList { get; set; }
-        public SelectList? EmailAddressList { get; set; }
+        //public SelectList? EmailAddressList { get; set; }
         public SelectList? GenderList { get; set; }
         public SelectList? IdDocumentTypeList { get; set; }
         public SelectList? MaritalStatusList { get; set; }
-        public SelectList? MobileNumberList { get; set; }
+        //public SelectList? MobileNumberList { get; set; }
         public SelectList? OccupationList { get; set; }
         public SelectList? TitleList { get; set; }
         public MultiSelectList? CarrierList { get; set; }

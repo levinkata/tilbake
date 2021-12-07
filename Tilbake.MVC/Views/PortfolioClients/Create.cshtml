@@ -12,7 +12,46 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input asp-for="PortfolioId" type="hidden" />
         <div class="card mb-3">
-            <h5 class="card-header">New Client</h5>
+            
+            <div  class="card-header bg-light pt-3 pb-2">
+                <ul class="nav justify-content-between">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semi-bold" href="#bootstrap-wizard-validation-tab1" data-bs-toggle="tab" data-wizard-step="data-wizard-step">
+                            <span class="nav-item-circle-parent">
+                                <span class="nav-item-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                            <span class="d-none d-md-block mt-1 fs-4">Personal</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semi-bold" href="#bootstrap-wizard-validation-tab2" data-bs-toggle="tab" data-wizard-step="data-wizard-step">
+                            <span class="nav-item-circle-parent">
+                                <span class="nav-item-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                            <span class="d-none d-md-block mt-1 fs-4">Address</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semi-bold" href="#bootstrap-wizard-validation-tab3" data-bs-toggle="tab" data-wizard-step="data-wizard-step">
+                            <span class="nav-item-circle-parent">
+                                <span class="nav-item-circle">
+                                    <svg class="svg-inline--fa fa-dollar-sign fa-w-9" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="dollar-sign" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 512" data-fa-i2svg=""><path fill="currentColor" d="M209.2 233.4l-108-31.6C88.7 198.2 80 186.5 80 173.5c0-16.3 13.2-29.5 29.5-29.5h66.3c12.2 0 24.2 3.7 34.2 10.5 6.1 4.1 14.3 3.1 19.5-2l34.8-34c7.1-6.9 6.1-18.4-1.8-24.5C238 74.8 207.4 64.1 176 64V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48h-2.5C45.8 64-5.4 118.7.5 183.6c4.2 46.1 39.4 83.6 83.8 96.6l102.5 30c12.5 3.7 21.2 15.3 21.2 28.3 0 16.3-13.2 29.5-29.5 29.5h-66.3C100 368 88 364.3 78 357.5c-6.1-4.1-14.3-3.1-19.5 2l-34.8 34c-7.1 6.9-6.1 18.4 1.8 24.5 24.5 19.2 55.1 29.9 86.5 30v48c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-48.2c46.6-.9 90.3-28.6 105.7-72.7 21.5-61.6-14.6-124.8-72.5-141.7z"></path></svg>
+                                    <!-- <span class="fas fa-dollar-sign"></span> Font Awesome fontawesome.com -->
+                                </span>
+                            </span>
+                            <span class="d-none d-md-block mt-1 fs--1">Billing</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-4">
@@ -151,7 +190,7 @@
                         </div>
                     </div> 
                 </div>
-                <div class="row">
+@*                <div class="row">
                     <div class="col-12">
                         <div class="form-floating">
                             <input asp-for="Client.Address.PhysicalAddress" id="PhysicalAddress" class="form-control" />
@@ -159,9 +198,10 @@
                             <span asp-validation-for="Client.Address.PhysicalAddress" class="text-danger"></span>
                         </div>
                     </div>
-                </div>
+                </div>*@
                 <div class="row">
-                    <div class="col-4">
+                    <partial name="_Addresses" model="@Model.Client.Addresses"/>
+@*                    <div class="col-4">
                         <div class="form-floating">
                             <input asp-for="Client.Address.PostalAddress" class="form-control" />
                             <label asp-for="Client.Address.PostalAddress" class="control-label"></label>
@@ -179,7 +219,7 @@
                             <select asp-for="Client.Address.CityId" id="AddressCityId" class="form-select" asp-items="@Model.Client.Address.CityList"></select>
                             <label asp-for="Client.Address.CityId" class="control-label"></label>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
                 <div class="row">
                     <div class="col-12">

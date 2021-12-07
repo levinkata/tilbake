@@ -27,7 +27,13 @@ namespace Tilbake.MVC.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var result = await _unitOfWork.UserPortfolios.GetByUserId(user.Id);
+            if (result == null)
+            {
+                return RedirectToPage("/Identity/Account/Login");
+            }
             var model = _mapper.Map<IEnumerable<Portfolio>, IEnumerable< PortfolioViewModel>>(result);
+
+            await _unitOfWork.ApplicationSessions.DeleteByUserId(user.Id);
             return View(model);
         }
 

@@ -1,0 +1,57 @@
+﻿@model AddressViewModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="form-floating">
+            <input asp-for="PhysicalAddress" id="PhysicalAddress" class="form-control" />
+            <label asp-for="PhysicalAddress" class="control-label"></label>
+            <span asp-validation-for="PhysicalAddress" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class="form-floating">
+            <input asp-for="PostalAddress" class="form-control" />
+            <label asp-for="PostalAddress" class="control-label"></label>
+            <span asp-validation-for="PostalAddress" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-floating">
+            <select asp-for="CountryId" id="AddressCountryId" class ="form-select" asp-items="@Model.CountryList"></select>
+            <label asp-for="CountryId" class="control-label"></label>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-floating">
+            <select asp-for="CityId" id="AddressCityId" class="form-select" asp-items="@Model.CityList"></select>
+            <label asp-for="CityId" class="control-label"></label>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Do something here
+    });
+
+    function FillCountry() {
+        $.ajax({
+            url: '@(Url.Action("GetCountries", "Countries"))',
+            traditional: true,
+            dataType: 'json',
+            type: 'GET',
+            error: function () {
+                alert("An error occurred.");
+            },
+            success: function (countries) {
+                $('#AddressCountryId').empty();   // clear before appending new list
+                $.each(countries, function (index, country) {
+                    $('#AddressCountryId').append($('<option></option>').val(country.id).html(country.name));
+                });
+            }
+        });
+    }
+
+</script>

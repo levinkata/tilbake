@@ -49,6 +49,26 @@ namespace Tilbake.MVC.Controllers
             return View(model);
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> CreateWizard(Guid portfolioId)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var result = await _unitOfWork.ApplicationSessions.GetByUserId(user.Id);
+
+            PortfolioClientViewModel model = new()
+            {
+                PortfolioId = Guid.Parse(result.FirstOrDefault(n => n.Name == "PortfolioId").Value)
+            };
+            ClientViewModel clientModel = new()
+            {
+                PortfolioName = result.FirstOrDefault(n => n.Name == "PortfolioName").Value
+            };
+            model.Client = clientModel;
+
+            return View(model);
+        }
+
         public async Task<IActionResult> ImportBulk(Guid portfolioId, Guid fileTemplateId, FileType fileType, string delimiter)
         {
             var result = await _unitOfWork.Portfolios.GetById(portfolioId);
@@ -96,14 +116,9 @@ namespace Tilbake.MVC.Controllers
 
         [HttpPost, ActionName("LoadBulks")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoadConfirmed(List<ClientBulkViewModel> ViewModels)
+        public async Task<IActionResult> LoadConfirmed(List<ClientBulkViewModel> model)
         {
-            if (ViewModels == null)
-            {
-                throw new ArgumentNullException(nameof(ViewModels));
-            };
-
-            var portfolioId = ViewModels.GroupBy(r => r.PortfolioId).FirstOrDefault().Key;
+            var portfolioId = model.GroupBy(r => r.PortfolioId).FirstOrDefault().Key;
             var portfolio = await _unitOfWork.Portfolios.GetByIdAsync((Guid)portfolioId);
 
             if (ModelState.IsValid)
@@ -116,7 +131,7 @@ namespace Tilbake.MVC.Controllers
                 ModelState.AddModelError("", "Encountered possible error - Model is invalid");
                 ViewBag.PortfolioId = portfolioId;
                 ViewBag.PortfolioName = portfolio.Name;
-                return View(ViewModels);
+                return View(model);
             }
         }
 
@@ -155,7 +170,7 @@ namespace Tilbake.MVC.Controllers
             var result = await _unitOfWork.PortfolioClients.GetByPortfolioIdAndClientId(portfolioId, clientId);
             var model = _mapper.Map<Client, ClientViewModel>(result);
 
-            var cityId = model.Address.CityId;
+            var cityId = model.Addresses.FirstOrDefault().CityId;
             var city = await _unitOfWork.Cities.GetById(cityId);
             var countryId = city.CountryId;
 
@@ -183,8 +198,8 @@ namespace Tilbake.MVC.Controllers
 
             model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
 
-            model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
-            model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
+            //model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            //model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
 
             return View(model);
         }
@@ -210,10 +225,10 @@ namespace Tilbake.MVC.Controllers
                 ClientStatusList = MVCHelperExtensions.ToSelectList(clientStatuses, Guid.Empty)
             };
 
-            AddressViewModel addressViewModel = new()
-            {
-                CountryList = MVCHelperExtensions.ToSelectList(countries, Guid.Empty)
-            };
+            //AddressViewModel addressViewModel = new()
+            //{
+            //    CountryList = MVCHelperExtensions.ToSelectList(countries, Guid.Empty)
+            //};
 
             ClientViewModel clientViewModel = new()
             {
@@ -230,7 +245,7 @@ namespace Tilbake.MVC.Controllers
             };
 
             clientViewModel.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, clientViewModel.CarrierIds);
-            clientViewModel.Address = addressViewModel;
+            //clientViewModel.Addresses = addressViewModel;
             model.Client = clientViewModel;
 
             return View(model);
@@ -263,17 +278,17 @@ namespace Tilbake.MVC.Controllers
                     client.PortfolioClients.Add(portfolioClient);
                     await _unitOfWork.Clients.Add(client);
 
-                    var addressViewModel = model.Client.Address;
+                    //var addressViewModel = model.Client.Address;
 
-                    if (addressViewModel != null)
-                    {
-                        var address = _mapper.Map<AddressViewModel, Address>(addressViewModel);
+                    //if (addressViewModel != null)
+                    //{
+                    //    var address = _mapper.Map<AddressViewModel, Address>(addressViewModel);
 
-                        address.Id = Guid.NewGuid();
-                        address.ClientId = clientId;
-                        address.DateAdded = DateTime.Now;
-                        await _unitOfWork.Addresses.Add(address);
-                    }
+                    //    address.Id = Guid.NewGuid();
+                    //    address.ClientId = clientId;
+                    //    address.DateAdded = DateTime.Now;
+                    //    await _unitOfWork.Addresses.Add(address);
+                    //}
 
                     var emailAddressesViewModels = model.Client.EmailAddresses;
                     if (emailAddressesViewModels.Count > 0)
@@ -347,8 +362,8 @@ namespace Tilbake.MVC.Controllers
             model.Client.TitleList = MVCHelperExtensions.ToSelectList(titles, model.Client.TitleId);
             model.Client.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.Client.CarrierIds);
 
-            model.Client.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
-            model.Client.CityList = MVCHelperExtensions.ToSelectList(cities, model.Client.Address.CityId);
+            //model.Client.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            //model.Client.CityList = MVCHelperExtensions.ToSelectList(cities, model.Client.Address.CityId);
 
             return View(model);
         }
@@ -384,12 +399,12 @@ namespace Tilbake.MVC.Controllers
             var result = await _unitOfWork.PortfolioClients.GetByPortfolioIdAndClientId(portfolioId, clientId);
             var model = _mapper.Map<Client, ClientViewModel>(result);
 
-            var cityId = model.Address.CityId;
-            var city = await _unitOfWork.Cities.GetById(cityId);
-            var countryId = city.CountryId;
+            //var cityId = model.Address.CityId;
+            //var city = await _unitOfWork.Cities.GetById(cityId);
+            //var countryId = city.CountryId;
 
             var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
-            var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
+            //var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
             var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
             var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
             var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
@@ -411,8 +426,8 @@ namespace Tilbake.MVC.Controllers
 
             model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
 
-            model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
-            model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
+            //model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            //model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
 
             return View("EditClient", model);
         }
@@ -429,12 +444,12 @@ namespace Tilbake.MVC.Controllers
                 await _unitOfWork.Clients.Update(client);
 
                 var clientId = client.Id;
-                var addressViewModel = model.Address;
-                var address = _mapper.Map<AddressViewModel, Address>(addressViewModel);
+                //var addressViewModel = model.Address;
+                //var address = _mapper.Map<AddressViewModel, Address>(addressViewModel);
 
-                address.ClientId = clientId;
-                address.DateAdded = DateTime.Now;
-                await _unitOfWork.Addresses.Update(address);
+                //address.ClientId = clientId;
+                //address.DateAdded = DateTime.Now;
+                //await _unitOfWork.Addresses.Update(address);
 
                 var emailAddressesViewModels = model.EmailAddresses;
                 var emailAddresses = _mapper.Map<IEnumerable<EmailAddressViewModel>, IEnumerable<EmailAddress>>(emailAddressesViewModels);
@@ -502,8 +517,8 @@ namespace Tilbake.MVC.Controllers
 
             model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
 
-            model.Address.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Address.CountryId);
-            model.Address.CityList = MVCHelperExtensions.ToSelectList(cities, model.Address.CityId);
+            //model.Address.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Address.CountryId);
+            //model.Address.CityList = MVCHelperExtensions.ToSelectList(cities, model.Address.CityId);
 
             return View("EditClient", model);
         }

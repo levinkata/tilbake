@@ -88,12 +88,12 @@ namespace Tilbake.MVC.Controllers
 
             var model = _mapper.Map<Client, ClientViewModel>(result);
 
-            var cityId = model.Address.CityId;
-            var city = await _unitOfWork.Cities.GetById(cityId);
-            var countryId = city.CountryId;
+            //var cityId = model.Address.CityId;
+            //var city = await _unitOfWork.Cities.GetById(cityId);
+            //var countryId = city.CountryId;
 
             var carriers = await _unitOfWork.Carriers.GetAll(r => r.OrderBy(n => n.Name));
-            var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
+            //var cities = await _unitOfWork.Cities.GetByCountryId(countryId);
             var clientTypes = await _unitOfWork.ClientTypes.GetAll(r => r.OrderBy(n => n.Name));
             var clientStatuses = await _unitOfWork.ClientStatuses.GetAll(r => r.OrderBy(n => n.Name));
             var countries = await _unitOfWork.Countries.GetAll(r => r.OrderBy(n => n.Name));
@@ -114,8 +114,8 @@ namespace Tilbake.MVC.Controllers
 
             model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
 
-            model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
-            model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
+            //model.AddressCountryList = MVCHelperExtensions.ToSelectList(countries, countryId);
+            //model.CityList = MVCHelperExtensions.ToSelectList(cities, cityId);
             return View(model);
         }
 
@@ -175,8 +175,8 @@ namespace Tilbake.MVC.Controllers
 
             model.CarrierList = MVCHelperExtensions.ToMultiSelectList(carriers, model.CarrierIds);
 
-            model.Address.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Address.CountryId);
-            model.Address.CityList = MVCHelperExtensions.ToSelectList(cities, model.Address.CityId);
+            //model.Address.CountryList = MVCHelperExtensions.ToSelectList(countries, model.Address.CountryId);
+            //model.Address.CityList = MVCHelperExtensions.ToSelectList(cities, model.Address.CityId);
 
             return View(model);
         }

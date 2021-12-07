@@ -45,7 +45,7 @@
                     <h6 class="card-title mb-3">Address</h6>
                     <span><i class="fas fa-map-marker-alt"></i></span> 
                 </div>
-                @if (Model.Address != null)
+@*                @if (Model.Address != null)
                 {
                     <p class="card-text text-muted mb-0"><small>@Model.Address.PhysicalAddress</small></p>
                     <p class="card-text text-muted mb-0"><small>@Model.Address.PostalAddress</small></p>
@@ -57,7 +57,7 @@
                     <div class="form-group">
                         <a asp-controller="Addresses" asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" asp-route-clientId="@Model.Id" class="btn btn-outline-dark btn-sm"><i class="fas fa-plus"></i> Add</a>
                     </div>
-                }
+                }*@
             </div>
         </div>
         <div class="card text-center">

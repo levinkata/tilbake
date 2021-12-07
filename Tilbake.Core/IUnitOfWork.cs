@@ -9,6 +9,7 @@ namespace Tilbake.Core
         IAddressRepository Addresses { get; }
         IAllRiskRepository AllRisks { get; }
         IAllRiskSpecifiedRepository AllRiskSpecifieds { get; }
+        IApplicationSessionRepository ApplicationSessions { get; }
         IAuditRepository Audits { get; }
         IBankRepository Banks { get; }
         IBankBranchRepository BankBranches { get; }

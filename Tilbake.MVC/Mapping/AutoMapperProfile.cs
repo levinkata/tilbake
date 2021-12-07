@@ -42,6 +42,7 @@ namespace Tilbake.MVC.Mapping
             CreateMap<City, CityViewModel>().ReverseMap();
 
             CreateMap<Client, ClientViewModel>()
+                    .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses))
                     .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType))
                     .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
                     .ForMember(dest => dest.IdDocumentType, opt => opt.MapFrom(src => src.IdDocumentType))

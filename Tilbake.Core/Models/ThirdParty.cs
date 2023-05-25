@@ -1,29 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tilbake.Core.Models
+namespace Tilbake.Core.Models;
+
+public partial class ThirdParty
 {
-    public partial class ThirdParty
-    {
-        public ThirdParty()
-        {
-            Addresses = new HashSet<Address>();
-            ClaimThirdParties = new HashSet<ClaimThirdParty>();
-        }
+    public Guid Id { get; set; }
 
-        public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string IdNumber { get; set; } = null!;
-        public string? Mobile { get; set; }
-        public string? Phone { get; set; }
-        public string? Fax { get; set; }
-        public string? Email { get; set; }
-        public Guid? AddedById { get; set; }
-        public DateTime? DateAdded { get; set; }
-        public Guid? ModifiedById { get; set; }
-        public DateTime? DateModified { get; set; }
+    public string Name { get; set; } = null!;
 
-        public virtual ICollection<Address> Addresses { get; set; }
-        public virtual ICollection<ClaimThirdParty> ClaimThirdParties { get; set; }
-    }
+    public string IdNumber { get; set; } = null!;
+
+    public string? Mobile { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Fax { get; set; }
+
+    public string? Email { get; set; }
+
+    public Guid? AddedById { get; set; }
+
+    public DateTime? DateAdded { get; set; }
+
+    public Guid? ModifiedById { get; set; }
+
+    public DateTime? DateModified { get; set; }
+
+    public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
+
+    public virtual ICollection<ClaimThirdParty> ClaimThirdParties { get; set; } = new List<ClaimThirdParty>();
 }

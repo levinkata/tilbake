@@ -16,9 +16,9 @@ using Tilbake.MVC.Models;
 namespace Tilbake.MVC.Controllers
 {
     [Authorize]
-    public class ClientDocumentsController : BaseController
+    public class DocumentsController : BaseController
     {
-        public ClientDocumentsController(
+        public DocumentsController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             UserManager<ApplicationUser> userManager) : base(unitOfWork, mapper, userManager)
@@ -26,32 +26,32 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        // GET: ClientDocuments
+        // GET: Documents
         public IActionResult Index(Guid clientId)
         {
             ViewBag.ClientId = clientId;
             return View();
         }
 
-        // GET: ClientDocuments/Details/5
+        // GET: Documents/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            var result = await _unitOfWork.Documents.GetById(id);
             if (result == null)
             {
                 return NotFound();
             }
 
-            var model = _mapper.Map<ClientDocument, ClientDocumentViewModel>(result);
+            var model = _mapper.Map<Document, DocumentViewModel>(result);
             return View(model);
         }
 
-        // GET: ClientDocuments/Create
+        // GET: Documents/Create
         public async Task<IActionResult> Create(Guid portfolioId, Guid clientId)
         {
             var documentTypes = await _unitOfWork.DocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
 
-            ClientDocumentViewModel model = new()
+            DocumentViewModel model = new()
             {
                 ClientId = clientId,
                 PortfolioId = portfolioId,
@@ -61,10 +61,10 @@ namespace Tilbake.MVC.Controllers
             return View(model);
         }
 
-        // POST: ClientDocuments/Create
+        // POST: Documents/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClientDocumentViewModel model)
+        public async Task<IActionResult> Create(DocumentViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace Tilbake.MVC.Controllers
                         await file.CopyToAsync(stream);
                     }
 
-                    var clientDocument = _mapper.Map<ClientDocumentViewModel, ClientDocument>(model);
+                    var clientDocument = _mapper.Map<DocumentViewModel, Document>(model);
                     clientDocument.Id = Guid.NewGuid();
                     clientDocument.FileType = file.ContentType;
                     clientDocument.Extension = extension;
@@ -94,7 +94,7 @@ namespace Tilbake.MVC.Controllers
                     clientDocument.DocumentPath = filePath;
                     clientDocument.DateAdded = DateTime.Now;
 
-                    await _unitOfWork.ClientDocuments.AddAsync(clientDocument);
+                    await _unitOfWork.Documents.AddAsync(clientDocument);
                 }
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Details), "PortfolioClients", new { model.PortfolioId, model.ClientId });
@@ -105,10 +105,10 @@ namespace Tilbake.MVC.Controllers
             return View(model);
         }
 
-        // GET: ClientDocuments/DownloadFile/5
+        // GET: Documents/DownloadFile/5
         public async Task<IActionResult> DownloadFile(Guid id)
         {
-            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            var result = await _unitOfWork.Documents.GetById(id);
             if (result == null)
             {
                 return NotFound();
@@ -123,23 +123,23 @@ namespace Tilbake.MVC.Controllers
             return File(memory, result.FileType, result.Name + result.Extension);
         }
 
-        // GET: ClientDocuments/Edit/5
+        // GET: Documents/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            var result = await _unitOfWork.Documents.GetById(id);
             if (result == null)
             {
                 return NotFound();
             }
 
-            var model = _mapper.Map<ClientDocument, ClientDocumentViewModel>(result);
+            var model = _mapper.Map<Document, DocumentViewModel>(result);
             return View(model);
         }
 
-        // POST: ClientDocuments/Edit/5
+        // POST: Documents/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, ClientDocumentViewModel model)
+        public async Task<IActionResult> Edit(Guid? id, DocumentViewModel model)
         {
             if (id != model.Id)
             {
@@ -148,35 +148,35 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var clientDocument = _mapper.Map<ClientDocumentViewModel, ClientDocument>(model);
+                var clientDocument = _mapper.Map<DocumentViewModel, Document>(model);
                 clientDocument.DateModified = DateTime.Now;
 
-                await _unitOfWork.ClientDocuments.Update(clientDocument);
+                await _unitOfWork.Documents.Update(clientDocument);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
-        // GET: ClientDocuments/Delete/5
+        // GET: Documents/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWork.ClientDocuments.GetById(id);
+            var result = await _unitOfWork.Documents.GetById(id);
             if (result == null)
             {
                 return NotFound();
             }
 
-            var model = _mapper.Map<ClientDocument, ClientDocumentViewModel>(result);
+            var model = _mapper.Map<Document, DocumentViewModel>(result);
             return View(model);
         }
 
-        // POST: ClientDocuments/Delete/5
+        // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(ClientDocumentViewModel model)
+        public IActionResult DeleteConfirmed(DocumentViewModel model)
         {
-            _unitOfWork.ClientDocuments.Delete(model.Id);
+            _unitOfWork.Documents.Delete(model.Id);
             return RedirectToAction(nameof(Details), "PortfolioClients", new { model.ClientId });
         }
     }

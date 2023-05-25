@@ -63,7 +63,7 @@ namespace Tilbake.MVC.Controllers
 
                 invoice.Id = Guid.NewGuid();
                 invoice.Amount = policyRisks.Sum(r => r.Premium);
-                invoice.TaxRate = taxRate;
+                //invoice.TaxRate = taxRate;
                 invoice.TaxAmount = invoice.Amount * taxRate / 100;
                 invoice.ReducingBalance = invoice.Amount;
                 invoice.DateAdded = DateTime.Now;

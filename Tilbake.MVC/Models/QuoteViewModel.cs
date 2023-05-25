@@ -25,8 +25,8 @@ namespace Tilbake.MVC.Models
         [Display(Name = "Insurer Branch")]
         public Guid InsurerBranchId { get; set; }
 
-        [Display(Name = "Sales Type")]
-        public Guid? SalesTypeId { get; set; }
+        //[Display(Name = "Sales Type")]
+        //public Guid? SalesTypeId { get; set; }
 
         [Display(Name = "Policy Type")]
         public Guid? PolicyTypeId { get; set; }
@@ -50,7 +50,7 @@ namespace Tilbake.MVC.Models
         // Other
         [Display(Name = "Insurer")]
         public Guid InsurerId { get ;set; }
-        public decimal TaxRate { get; set; }
+        //public decimal TaxRate { get; set; }
         public string PortfolioName { get; set; }
         public virtual List<QuoteItemViewModel> QuoteItems { get; } = new List<QuoteItemViewModel>();
 
@@ -62,7 +62,7 @@ namespace Tilbake.MVC.Models
         public virtual PolicyTypeViewModel PolicyType { get; set; }
         public virtual PortfolioClientViewModel PortfolioClient { get; set; }
         public virtual QuoteStatusViewModel QuoteStatus { get; set; }
-        public virtual SalesTypeViewModel SalesType { get; set; }
+        //public virtual SalesTypeViewModel SalesType { get; set; }
 
         //  AllRisk - Specified
         [Display(Name = "Sum Insured")]

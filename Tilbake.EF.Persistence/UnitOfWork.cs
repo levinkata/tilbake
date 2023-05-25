@@ -33,7 +33,7 @@ namespace Tilbake.EF.Persistence
             Clients = new ClientRepository(_context);
             ClientBulks = new ClientBulkRepository(_context);
             ClientCarriers = new ClientCarrierRepository(_context);
-            ClientDocuments = new ClientDocumentRepository(_context);
+            Documents = new DocumentRepository(_context);
             ClientRisks = new ClientRiskRepository(_context);
             ClientStatuses = new ClientStatusRepository(_context);
             ClientTypes = new ClientTypeRepository(_context);
@@ -122,7 +122,7 @@ namespace Tilbake.EF.Persistence
         public IClientRepository Clients { get; private set; }
         public IClientBulkRepository ClientBulks { get; private set; }
         public IClientCarrierRepository ClientCarriers { get; private set; }
-        public IClientDocumentRepository ClientDocuments { get; private set; }
+        public IDocumentRepository Documents { get; private set; }
         public IClientRiskRepository ClientRisks { get; private set; }
         public IClientStatusRepository ClientStatuses { get; private set; }
         public IClientTypeRepository ClientTypes { get; private set; }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tilbake.MVC.Models
 {
-    public class ClientDocumentViewModel
+    public class DocumentViewModel
     {
         public Guid Id { get; set; }
         public Guid ClientId { get; set; }

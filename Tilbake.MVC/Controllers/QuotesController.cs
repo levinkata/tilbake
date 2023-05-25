@@ -93,7 +93,7 @@ namespace Tilbake.MVC.Controllers
                 CoverStartDate = DateTime.Now,
                 QuoteNumber = quote.QuoteNumber,
 
-                RunDay = quote.RunDay,
+                //RunDay = quote.RunDay,
                 PaymentMethodList = MVCHelperExtensions.ToSelectList(paymentMethods, Guid.Empty),
                 PolicyStatusList = MVCHelperExtensions.ToSelectList(policyStatuses, Guid.Empty),
                 PolicyTypeList = MVCHelperExtensions.ToSelectList(policyTypes, Guid.Empty),
@@ -142,7 +142,7 @@ namespace Tilbake.MVC.Controllers
                 }
                 _unitOfWork.PolicyRisks.AddRange(policyRisks);
 
-                quote.IsPolicySet = true;
+                quote.IsPolicy = true;
                 _unitOfWork.Quotes.Update(quote.Id, quote);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction("Details", "Quotes", new { Id = model.QuoteId });
@@ -176,7 +176,7 @@ namespace Tilbake.MVC.Controllers
 
             model.PortfolioId = portfolioClient.PortfolioId;
             model.PortfolioName = portfolioClient.Portfolio.Name;
-            model.TaxRate = taxRate;
+            //model.TaxRate = taxRate;
             return View(model);
         }
         
@@ -254,7 +254,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -306,7 +306,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -351,7 +351,7 @@ namespace Tilbake.MVC.Controllers
                             item.QuoteId = quoteId;
                             item.ClientRiskId = clientRiskId;
                             item.DateAdded = DateTime.Now;
-                            item.TaxRate = taxRate;
+                            //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                         }
                     }
@@ -395,7 +395,7 @@ namespace Tilbake.MVC.Controllers
                             item.QuoteId = quoteId;
                             item.ClientRiskId = clientRiskId;
                             item.DateAdded = DateTime.Now;
-                            item.TaxRate = taxRate;
+                            //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                         }
                     }
@@ -439,7 +439,7 @@ namespace Tilbake.MVC.Controllers
                             item.QuoteId = quoteId;
                             item.ClientRiskId = clientRiskId;
                             item.DateAdded = DateTime.Now;
-                            item.TaxRate = taxRate;
+                            //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                         }
                     }
@@ -483,7 +483,7 @@ namespace Tilbake.MVC.Controllers
                             item.QuoteId = quoteId;
                             item.ClientRiskId = clientRiskId;
                             item.DateAdded = DateTime.Now;
-                            item.TaxRate = taxRate;
+                            //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                         }
                     }
@@ -527,7 +527,7 @@ namespace Tilbake.MVC.Controllers
                             item.QuoteId = quoteId;
                             item.ClientRiskId = clientRiskId;
                             item.DateAdded = DateTime.Now;
-                            item.TaxRate = taxRate;
+                            //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                         }
                     }
@@ -578,7 +578,7 @@ namespace Tilbake.MVC.Controllers
                             item.QuoteId = quoteId;
                             item.ClientRiskId = clientRiskId;
                             item.DateAdded = DateTime.Now;
-                            item.TaxRate = taxRate;
+                            //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                         }
                     }
@@ -730,7 +730,7 @@ namespace Tilbake.MVC.Controllers
                                     item.QuoteId = quoteId;
                                     item.ClientRiskId = clientRiskId;
                                     item.DateAdded = DateTime.Now;
-                                    item.TaxRate = taxRate;
+                                    //item.TaxRate = taxRate;
                                     item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                                 }
                             }
@@ -782,7 +782,7 @@ namespace Tilbake.MVC.Controllers
                                     item.QuoteId = quoteId;
                                     item.ClientRiskId = clientRiskId;
                                     item.DateAdded = DateTime.Now;
-                                    item.TaxRate = taxRate;
+                                    //item.TaxRate = taxRate;
                                     item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                                 }
                             }
@@ -827,7 +827,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -871,7 +871,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -915,7 +915,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -959,7 +959,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -1003,7 +1003,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -1054,7 +1054,7 @@ namespace Tilbake.MVC.Controllers
                                 item.QuoteId = quoteId;
                                 item.ClientRiskId = clientRiskId;
                                 item.DateAdded = DateTime.Now;
-                                item.TaxRate = taxRate;
+                                //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
                             }
                         }
@@ -1111,9 +1111,9 @@ namespace Tilbake.MVC.Controllers
             model.PortfolioId = portfolioClient.PortfolioId;
             model.PortfolioName = portfolioClient.Portfolio.Name;
             model.InsurerId = insurerId;
-            model.TaxRate = taxRate;
+            //model.TaxRate = taxRate;
             model.QuoteStatusList = MVCHelperExtensions.ToSelectList(quoteStatuses, model.QuoteStatusId);
-            model.SalesTypeList = MVCHelperExtensions.ToSelectList(salesTypes, model.SalesTypeId.Value);
+            //model.SalesTypeList = MVCHelperExtensions.ToSelectList(salesTypes, model.SalesTypeId.Value);
             model.PolicyTypeList = MVCHelperExtensions.ToSelectList(policyTypes, model.PolicyTypeId.Value);
             model.PaymentMethodList = MVCHelperExtensions.ToSelectList(paymentMethods, model.PaymentMethodId.Value);
             model.InsurerList = MVCHelperExtensions.ToSelectList(insurers, insurerId);
@@ -1149,7 +1149,7 @@ namespace Tilbake.MVC.Controllers
             var insurerBranches = await _unitOfWork.InsurerBranches.GetByInsurerId(model.InsurerId);
 
             model.QuoteStatusList = MVCHelperExtensions.ToSelectList(quoteStatuses, model.QuoteStatusId);
-            model.SalesTypeList = MVCHelperExtensions.ToSelectList(salesTypes, model.SalesTypeId.Value);
+            //model.SalesTypeList = MVCHelperExtensions.ToSelectList(salesTypes, model.SalesTypeId.Value);
             model.PolicyTypeList = MVCHelperExtensions.ToSelectList(policyTypes, model.PolicyTypeId.Value);
             model.PaymentMethodList = MVCHelperExtensions.ToSelectList(paymentMethods, model.PaymentMethodId.Value);
             model.InsurerList = MVCHelperExtensions.ToSelectList(insurers, model.InsurerId);

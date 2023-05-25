@@ -22,7 +22,7 @@ namespace Tilbake.Core
         IClaimStatusRepository ClaimStatuses { get; }
         IClientRepository Clients { get; }
         IClientBulkRepository ClientBulks { get; }
-        IClientDocumentRepository ClientDocuments { get; }
+        IDocumentRepository Documents { get; }
         IClientCarrierRepository ClientCarriers { get; }
         IClientRiskRepository ClientRisks { get; }
         IClientTypeRepository ClientTypes{ get; }

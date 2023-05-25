@@ -2,7 +2,7 @@
 
 namespace Tilbake.Core.Interfaces
 {
-    public interface IClientDocumentRepository : IRepository<ClientDocument>
+    public interface IDocumentRepository : IRepository<Document>
     {
 
     }

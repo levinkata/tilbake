@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tilbake.Core.Models
+namespace Tilbake.Core.Models;
+
+public partial class RoofType
 {
-    public partial class RoofType
-    {
-        public RoofType()
-        {
-            Buildings = new HashSet<Building>();
-            Contents = new HashSet<Content>();
-            Houses = new HashSet<House>();
-        }
+    public Guid Id { get; set; }
 
-        public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
-        public Guid? AddedBy { get; set; }
-        public DateTime? DateAdded { get; set; }
-        public Guid? ModifiedBy { get; set; }
-        public DateTime? DateModified { get; set; }
+    public string Name { get; set; } = null!;
 
-        public virtual ICollection<Building> Buildings { get; set; }
-        public virtual ICollection<Content> Contents { get; set; }
-        public virtual ICollection<House> Houses { get; set; }
-    }
+    public Guid? AddedById { get; set; }
+
+    public DateTime? DateAdded { get; set; }
+
+    public Guid? ModifiedById { get; set; }
+
+    public DateTime? DateModified { get; set; }
+
+    public virtual ICollection<Building> Buildings { get; set; } = new List<Building>();
+
+    public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
+
+    public virtual ICollection<House> Houses { get; set; } = new List<House>();
 }

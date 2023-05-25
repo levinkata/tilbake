@@ -59,8 +59,8 @@ namespace Tilbake.MVC.Mapping
             CreateMap<ClientCarrier, ClientCarrierViewModel>()
                     .ForMember(dest => dest.Carrier, opt => opt.MapFrom(src => src.Carrier)).ReverseMap();
 
-            CreateMap<ClientDocument, ClientDocumentViewModel>()
-                    .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
+            CreateMap<Document, DocumentViewModel>()
+                    //.ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType)).ReverseMap();
 
             CreateMap<ClientRisk, ClientRiskViewModel>().ReverseMap();
@@ -90,8 +90,7 @@ namespace Tilbake.MVC.Mapping
             CreateMap<EmailAddress, EmailAddressViewModel>().ReverseMap();
 
             CreateMap<ExcessBuyBack, ExcessBuyBackViewModel>()
-                    .ForMember(dest => dest.Motor, opt => opt.MapFrom(src => src.Motor))
-                    .ForMember(dest => dest.ParentPolicy, opt => opt.MapFrom(src => src.ParentPolicy)).ReverseMap();
+                    .ForMember(dest => dest.Motor, opt => opt.MapFrom(src => src.Motor)).ReverseMap();
 
             CreateMap<Gender, GenderViewModel>().ReverseMap();
 
@@ -187,8 +186,7 @@ namespace Tilbake.MVC.Mapping
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
                 .ForMember(dest => dest.PolicyType, opt => opt.MapFrom(src => src.PolicyType))
                 .ForMember(dest => dest.QuoteStatus, opt => opt.MapFrom(src => src.QuoteStatus))
-                .ForMember(dest => dest.QuoteItems, opt => opt.MapFrom(src => src.QuoteItems))
-                .ForMember(dest => dest.SalesType, opt => opt.MapFrom(src => src.SalesType)).ReverseMap();
+                .ForMember(dest => dest.QuoteItems, opt => opt.MapFrom(src => src.QuoteItems)).ReverseMap();
 
             CreateMap<QuoteItem, QuoteItemViewModel>()
                 .ForMember(dest => dest.CoverType, opt => opt.MapFrom(src => src.CoverType))
@@ -213,8 +211,8 @@ namespace Tilbake.MVC.Mapping
                 .ForMember(dest => dest.ReceivableInvoices, opt => opt.MapFrom(src => src.ReceivableInvoices))
                 .ForMember(dest => dest.ReceivableDocuments, opt => opt.MapFrom(src => src.ReceivableDocuments)).ReverseMap();
 
-            CreateMap<ReceivableDocument, ReceivableDocumentViewModel>()
-                .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType.Name)).ReverseMap();
+            //CreateMap<ReceivableDocument, ReceivableDocumentViewModel>()
+            //    .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType.Name)).ReverseMap();
 
             CreateMap<ResidenceType, ResidenceTypeViewModel>().ReverseMap();
             CreateMap<ResidenceUse, ResidenceUseViewModel>().ReverseMap();
@@ -227,8 +225,7 @@ namespace Tilbake.MVC.Mapping
 
             CreateMap<Travel, TravelViewModel>()
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.PortfolioClient.Client))
-                .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
-                .ForMember(dest => dest.TravelBeneficiaries, opt => opt.MapFrom(src => src.TravelBeneficiaries)).ReverseMap();
+                .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient)).ReverseMap();
 
             CreateMap<TravelBeneficiary, TravelBeneficiaryViewModel>()
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))

@@ -8,10 +8,10 @@
                     Model.Client.FirstName + " " + 
                     Model.Client.LastName;
 
-    var taxRate = Model.TaxRate;
+    //var taxRate = Model.TaxRate;
     var totalPremium = Model.QuoteItems.Sum(r => r.Premium);
-    var totalTaxAmount = totalPremium * taxRate/100;
-    var quoteTotal = totalPremium + totalTaxAmount;                    
+    //var totalTaxAmount = totalPremium * taxRate/100;
+    //var quoteTotal = totalPremium + totalTaxAmount;                    
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -71,11 +71,7 @@
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="SalesTypeId" class="control-label"></label>
-                            <select asp-for="SalesTypeId" class="form-control" asp-items="Model.SalesTypeList"></select>
-                            <span asp-validation-for="SalesTypeId" class="text-danger"></span>
-                        </div>
+
                     </div>
                     <div class="col-4">
                         <div class="form-group">

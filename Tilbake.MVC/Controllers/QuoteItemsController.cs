@@ -231,7 +231,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 _unitOfWork.QuoteItems.Update(model.QuoteItemId, quoteItem);
@@ -268,7 +268,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 _unitOfWork.QuoteItems.Update(model.QuoteItemId, quoteItem);
@@ -299,7 +299,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 var building = _mapper.Map<BuildingViewModel, Building>(model);
@@ -343,7 +343,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 var content = _mapper.Map<ContentViewModel, Content>(model);
@@ -385,7 +385,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 var house = _mapper.Map<HouseViewModel, House>(model);
@@ -422,7 +422,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 var motor = _mapper.Map<MotorViewModel, Motor>(model);
@@ -459,7 +459,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 var travel = _mapper.Map<TravelViewModel, Travel>(model);
@@ -506,7 +506,7 @@ namespace Tilbake.MVC.Controllers
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
                 quoteItem.DateModified = DateTime.Now;
-                quoteItem.TaxRate = taxRate;
+                //quoteItem.TaxRate = taxRate;
                 quoteItem.TaxAmount = quoteItem.Premium - (quoteItem.Premium / (1 + taxRate / 100));
 
                 _unitOfWork.QuoteItems.Update(model.Id, quoteItem);

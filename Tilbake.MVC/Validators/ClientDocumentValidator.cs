@@ -3,7 +3,7 @@ using Tilbake.MVC.Models;
 
 namespace Tilbake.MVC.Validators
 {
-    public class ClientDocumentValidator : AbstractValidator<ClientDocumentViewModel>
+    public class ClientDocumentValidator : AbstractValidator<DocumentViewModel>
     {
         public ClientDocumentValidator()
         {

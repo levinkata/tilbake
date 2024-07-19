@@ -10,8 +10,8 @@ namespace Tilbake.MVC.Models
     {
         public Guid PortfolioId { get; set; }
         public Guid Id { get; set; }
-        public Guid PortfolioClientId { get; set; }
-        public Guid ClientId { get; set; }
+        public Guid PortfolioCustomerId { get; set; }
+        public Guid CustomerId { get; set; }
 
         [Display(Name = "Quote Number")]
         public int QuoteNumber { get; set; }
@@ -34,8 +34,8 @@ namespace Tilbake.MVC.Models
         [Display(Name = "Payment Method")]
         public Guid? PaymentMethodId { get; set; }
 
-        [Display(Name = "Client Info")]
-        public string ClientInfo { get; set; }
+        [Display(Name = "Customer Info")]
+        public string CustomerInfo { get; set; }
 
         [Display(Name = "Internal Info")]
         public string InternalInfo { get; set; }
@@ -55,12 +55,12 @@ namespace Tilbake.MVC.Models
         public virtual List<QuoteItemViewModel> QuoteItems { get; } = new List<QuoteItemViewModel>();
 
         //  Tables
-        public virtual ClientViewModel Client { get; set; }
+        public virtual CustomerViewModel Customer { get; set; }
         public virtual InsurerViewModel Insurer { get; set; }
         public virtual InsurerBranchViewModel InsurerBranch { get; set; }
         public virtual PaymentMethodViewModel PaymentMethod { get; set; }
         public virtual PolicyTypeViewModel PolicyType { get; set; }
-        public virtual PortfolioClientViewModel PortfolioClient { get; set; }
+        public virtual PortfolioCustomerViewModel PortfolioCustomer { get; set; }
         public virtual QuoteStatusViewModel QuoteStatus { get; set; }
         //public virtual SalesTypeViewModel SalesType { get; set; }
 

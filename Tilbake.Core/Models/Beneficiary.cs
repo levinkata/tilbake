@@ -7,7 +7,7 @@ public partial class Beneficiary
 {
     public Guid Id { get; set; }
 
-    public Guid PortfolioClientId { get; set; }
+    public Guid PortfolioCustomerId { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -25,7 +25,7 @@ public partial class Beneficiary
 
     public DateTime? DateModified { get; set; }
 
-    public virtual PortfolioClient PortfolioClient { get; set; } = null!;
+    public virtual PortfolioCustomer PortfolioCustomer { get; set; } = null!;
 
     public virtual RelationType RelationType { get; set; } = null!;
 }

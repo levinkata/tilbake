@@ -43,7 +43,7 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: Motors/Create
-        public async Task<IActionResult> Create(Guid portfolioClientId)
+        public async Task<IActionResult> Create(Guid portfolioCustomerId)
         {
             var bodyTypes = await _unitOfWork.BodyTypes.GetAll(r => r.OrderBy(n => n.Name));
             var driverTypes = await _unitOfWork.DriverTypes.GetAll(r => r.OrderBy(n => n.Name));
@@ -53,7 +53,7 @@ namespace Tilbake.MVC.Controllers
             
             MotorViewModel model = new()
             {
-                PortfolioClientId = portfolioClientId,
+                PortfolioCustomerId = portfolioCustomerId,
                 BodyTypeList = MVCHelperExtensions.ToSelectList(bodyTypes, Guid.Empty),
                 DriverTypeList = MVCHelperExtensions.ToSelectList(driverTypes, Guid.Empty),
                 MotorMakeList = MVCHelperExtensions.ToSelectList(motorMakes, Guid.Empty),
@@ -75,7 +75,7 @@ namespace Tilbake.MVC.Controllers
 
                 await _unitOfWork.Motors.Add(motor);
                 await _unitOfWork.CompleteAsync();
-                return RedirectToAction(nameof(Index), "PortfolioClient", new { model.PortfolioClientId });
+                return RedirectToAction(nameof(Index), "PortfolioCustomer", new { model.PortfolioCustomerId });
             }
             return View(model);
         }

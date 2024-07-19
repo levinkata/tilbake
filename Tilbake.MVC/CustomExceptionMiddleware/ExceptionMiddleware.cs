@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Serilog;
+// using Serilog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,7 +10,7 @@ namespace Tilbake.MVC.CustomExceptionMiddleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger = Serilog.Log.ForContext<ExceptionMiddleware>();
+        // private readonly ILogger _logger = Serilog.Log.ForContext<ExceptionMiddleware>();
 
         public ExceptionMiddleware(RequestDelegate next)
         {
@@ -25,7 +25,7 @@ namespace Tilbake.MVC.CustomExceptionMiddleware
             }
             catch (Exception ex)
             {
-                _logger.Error($"Something went wrong: {ex.Message}");
+                // _logger.Error($"Something went wrong: {ex.Message}");
                 await HandleGlobalExceptionAsync(httpContext, ex);
             }
         }

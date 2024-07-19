@@ -120,9 +120,9 @@ namespace Tilbake.MVC.Controllers
             var portfolioName = fileTemplate.Portfolio.Name;
             var fileTemplateRecords = await _unitOfWork.FileTemplateRecords.GetTableFileTemplate(fileTemplateId, tableName);
 
-            if (tableName == "Client")
+            if (tableName == "Customer")
             {
-                ClientGiroViewModel model = new()
+                CustomerGiroViewModel model = new()
                 {
                     PortfolioId = portfolioId,
                     PortfolioName = portfolioName,
@@ -145,11 +145,11 @@ namespace Tilbake.MVC.Controllers
                             model.TitleColumnLength = item.ColumnLength;
                             break;
 
-                        case "ClientType":
-                            model.ClientTypeId = item.Id;
-                            model.ClientTypeFieldLabel = item.FieldLabel;
-                            model.ClientTypePosition = item.Position;
-                            model.ClientTypeColumnLength = item.ColumnLength;
+                        case "CustomerType":
+                            model.CustomerTypeId = item.Id;
+                            model.CustomerTypeFieldLabel = item.FieldLabel;
+                            model.CustomerTypePosition = item.Position;
+                            model.CustomerTypeColumnLength = item.ColumnLength;
                             break;
 
                         case "FirstName":
@@ -219,7 +219,7 @@ namespace Tilbake.MVC.Controllers
                             break;
                     }
                 }
-                return View("ClientFileTemplate", model);
+                return View("CustomerFileTemplate", model);
             }
             else if (tableName == "Premium")
             {
@@ -415,22 +415,22 @@ namespace Tilbake.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ClientFileTemplate(ClientGiroViewModel model)
+        public async Task<IActionResult> CustomerFileTemplate(CustomerGiroViewModel model)
         {
 
             if (ModelState.IsValid)
             {
                 var tablename = model.TableName;
-                if (tablename == "Client")
+                if (tablename == "Customer")
                 {
                     var fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.TitleId);
                     fileTemplateRecord.Position = model.TitlePosition;
                     fileTemplateRecord.ColumnLength = model.TitleColumnLength;
                     await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
-                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.ClientTypeId);
-                    fileTemplateRecord.Position = model.ClientTypePosition;
-                    fileTemplateRecord.ColumnLength = model.ClientTypeColumnLength;
+                    fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.CustomerTypeId);
+                    fileTemplateRecord.Position = model.CustomerTypePosition;
+                    fileTemplateRecord.ColumnLength = model.CustomerTypeColumnLength;
                     await _unitOfWork.FileTemplateRecords.Update(fileTemplateRecord);
 
                     fileTemplateRecord = await _unitOfWork.FileTemplateRecords.GetById(model.FirstNameId);
@@ -644,17 +644,17 @@ namespace Tilbake.MVC.Controllers
         {
             var fileTemplateRecords = new List<FileTemplateRecord>
             {
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Title",FieldLabel="Title",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="ClientType",FieldLabel="Client Type",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="BirthDate",FieldLabel="Birth Date",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Gender",FieldLabel="Gender",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Phone",FieldLabel="Phone",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Country",FieldLabel="Country",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="MaritalStatus",FieldLabel="Marital Status",Position=null,ColumnLength=0,IsKey=false},
-                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Client",TableLabel="Client",FieldName="Occupation",FieldLabel="Occupation",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="Title",FieldLabel="Title",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="CustomerType",FieldLabel="Customer Type",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="LastName",FieldLabel="Last Name",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="BirthDate",FieldLabel="Birth Date",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="Gender",FieldLabel="Gender",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="Phone",FieldLabel="Phone",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="Country",FieldLabel="Country",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="MaritalStatus",FieldLabel="Marital Status",Position=null,ColumnLength=0,IsKey=false},
+                new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Customer",TableLabel="Customer",FieldName="Occupation",FieldLabel="Occupation",Position=null,ColumnLength=0,IsKey=false},
 
                 new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="IdNumber",FieldLabel="ID Number",Position=null,ColumnLength=0,IsKey=true},
                 new FileTemplateRecord {Id=Guid.NewGuid(),FileTemplateId=fileTemplateId,TableName="Policy",TableLabel="Policy",FieldName="FirstName",FieldLabel="First Name",Position=null,ColumnLength=0,IsKey=false},

@@ -11,8 +11,8 @@ namespace Tilbake.MVC.Models
         public bool IsScheme { get; set; }
 
 
-        [Display(Name = "Clients")]
-        public int TotalClients { get; set; }
+        [Display(Name = "Customers")]
+        public int TotalCustomers { get; set; }
 
         public string? UserId { get; set; }
     }

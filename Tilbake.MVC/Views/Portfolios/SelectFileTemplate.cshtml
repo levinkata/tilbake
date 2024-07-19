@@ -36,13 +36,13 @@
                     @Html.DisplayFor(modelItem => item.Delimiter)
                 </td>
                 <td>
-                    <a asp-controller="PortfolioClient"
+                    <a asp-controller="PortfolioCustomer"
                        asp-action="ImportBulk"
                        asp-route-portfolioId="@item.PortfolioId"
                        asp-route-fileTemplateId="@item.Id"
                        asp-route-fileType="@item.FileType"
                        asp-route-delimiter="@item.Delimiter">
-                        Clients
+                        Customers
                     </a> |
                     <a asp-controller="PortfolioPolicy"
                        asp-action="ImportPolitikkBulk"
@@ -74,7 +74,7 @@
 </table>
 
 <div>
-    <a asp-controller="PortfolioClient"
+    <a asp-controller="PortfolioCustomer"
        asp-action="Index"
        asp-route-portfolioId="@portfolioId"
        class="btn btn-info">

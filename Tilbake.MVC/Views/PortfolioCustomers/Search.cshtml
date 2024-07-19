@@ -1,0 +1,82 @@
+﻿@model PortfolioCustomerSearchViewModel
+@{
+    ViewData["Title"] = Model.PortfolioName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<br />
+
+<div class="card mb-3">
+    <div class="card-body p-0">
+        <form asp-action="Search" method="get">
+            <input type="hidden" asp-for="PortfolioId" />
+            <div class="input-group">
+                <input type="search" asp-for="SearchString" class="form-control" placeholder="Enter Keywords?">
+                <button class="btn btn-secondary" type="submit" id="SearchButton"><i class="fas fa-search"></i></button>
+            </div>            
+        </form>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div class="col">
+                <h5 class="mb-0 py-2">Customers</h5>
+            </div>
+            <div class="col text-end ps-2">
+                <a asp-action="Create" asp-route-portfolioId="@Model.PortfolioId" class="btn btn-outline-secondary btn-sm">
+                    <span class="fas fa-plus"></span> New
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-sm mb-0 overflow-hidden">
+            <thead>
+                <tr>
+                    <th class="px-3 align-middle">
+                        Customer Number
+                    </th>
+                    <th class="px-3 align-middle">
+                        <strong>First Name</strong>
+                    </th>
+                    <th class="px-3 align-middle">
+                        Last Name
+                    </th>
+                    <th class="px-3 align-middle">
+                        Id Number
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model.Customers) {
+                <tr>
+                    <td class="px-3 align-middle">
+                        @Html.DisplayFor(modelItem => item.CustomerNumber)
+                    </td>
+                    <td class="px-3 align-middle">
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td class="px-3 align-middle">
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td class="px-3 align-middle">
+                        @Html.DisplayFor(modelItem => item.IdNumber)
+                    </td>
+                    <td class="align-middle text-end">
+                        <a asp-action="Details" asp-route-portfolioId="@Model.PortfolioId" asp-route-customerId="@item.Id" class="btn btn-link btn-sm dropdown text-reset"><span class="fas fa-ellipsis-h text-muted"></span></a>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    </div>
+</div>
+<a asp-controller="Portfolios" asp-action="Carousel" asp-route-portfolioId="@Model.PortfolioId">Return</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

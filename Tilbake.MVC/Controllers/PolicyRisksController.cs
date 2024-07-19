@@ -319,7 +319,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var policyRisk = await _unitOfWork.PolicyRisks.GetByIdAsync(model.Id);
-                policyRisk.Description = model.Client.FirstName + " " + model.Client.FirstName;
+                policyRisk.Description = model.Customer.FirstName + " " + model.Customer.FirstName;
 
 
                 _unitOfWork.PolicyRisks.Update(model.PolicyRiskId, policyRisk);

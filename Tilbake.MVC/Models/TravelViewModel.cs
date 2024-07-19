@@ -8,7 +8,7 @@ namespace Tilbake.MVC.Models
     public class TravelViewModel
     {
         public Guid Id { get; set; }
-        public Guid PortfolioClientId { get; set; }
+        public Guid PortfolioCustomerId { get; set; }
         public Guid QuoteItemId { get; set; }
         public Guid QuoteId { get; set; }
         public Guid PolicyRiskId { get; set; }
@@ -40,7 +40,7 @@ namespace Tilbake.MVC.Models
 
         public List<TravelBeneficiaryViewModel> TravelBeneficiaries { get; } = new();
 
-        public ClientViewModel Client { get; set; }
-        public PortfolioClientViewModel PortfolioClient { get; set; }
+        public CustomerViewModel Customer { get; set; }
+        public PortfolioCustomerViewModel PortfolioCustomer { get; set; }
     }
 }

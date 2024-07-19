@@ -30,13 +30,13 @@ namespace Tilbake.EF.Persistence
             Cities = new CityRepository(_context);
             Claimants = new ClaimantRepository(_context);
             ClaimStatuses = new ClaimStatusRepository(_context);
-            Clients = new ClientRepository(_context);
-            ClientBulks = new ClientBulkRepository(_context);
-            ClientCarriers = new ClientCarrierRepository(_context);
+            Customers = new CustomerRepository(_context);
+            CustomerBulks = new CustomerBulkRepository(_context);
+            CustomerCarriers = new CustomerCarrierRepository(_context);
             Documents = new DocumentRepository(_context);
-            ClientRisks = new ClientRiskRepository(_context);
-            ClientStatuses = new ClientStatusRepository(_context);
-            ClientTypes = new ClientTypeRepository(_context);
+            CustomerRisks = new CustomerRiskRepository(_context);
+            CustomerStatuses = new CustomerStatusRepository(_context);
+            CustomerTypes = new CustomerTypeRepository(_context);
             CommissionRates = new CommissionRateRepository(_context);
             Companies = new CompanyRepository(_context);
             Contents = new ContentRepository(_context);
@@ -75,7 +75,7 @@ namespace Tilbake.EF.Persistence
             PolicyTypes = new PolicyTypeRepository(_context);
             Portfolios = new PortfolioRepository(_context);
             PortfolioAdministrationFees = new PortfolioAdministrationFeeRepository(_context);
-            PortfolioClients = new PortfolioClientRepository(_context);
+            PortfolioCustomers = new PortfolioCustomerRepository(_context);
             PortfolioExcessBuyBacks = new PortfolioExcessBuyBackRepository(_context);
             PortfolioPolicyFees = new PortfolioPolicyFeeRepository(_context);
             Premiums = new PremiumRepository(_context);
@@ -119,13 +119,13 @@ namespace Tilbake.EF.Persistence
         public ICityRepository Cities { get; private set; }
         public IClaimantRepository Claimants { get; private set; }
         public IClaimStatusRepository ClaimStatuses { get; private set; }
-        public IClientRepository Clients { get; private set; }
-        public IClientBulkRepository ClientBulks { get; private set; }
-        public IClientCarrierRepository ClientCarriers { get; private set; }
+        public ICustomerRepository Customers { get; private set; }
+        public ICustomerBulkRepository CustomerBulks { get; private set; }
+        public ICustomerCarrierRepository CustomerCarriers { get; private set; }
         public IDocumentRepository Documents { get; private set; }
-        public IClientRiskRepository ClientRisks { get; private set; }
-        public IClientStatusRepository ClientStatuses { get; private set; }
-        public IClientTypeRepository ClientTypes { get; private set; }
+        public ICustomerRiskRepository CustomerRisks { get; private set; }
+        public ICustomerStatusRepository CustomerStatuses { get; private set; }
+        public ICustomerTypeRepository CustomerTypes { get; private set; }
         public ICommissionRateRepository CommissionRates { get; private set; }
         public ICompanyRepository Companies { get; private set; }
         public IContentRepository Contents { get; private set; }
@@ -164,7 +164,7 @@ namespace Tilbake.EF.Persistence
         public IPolicyTypeRepository PolicyTypes { get; private set; }
         public IPortfolioRepository Portfolios { get; private set; }
         public IPortfolioAdministrationFeeRepository PortfolioAdministrationFees { get; private set; }
-        public IPortfolioClientRepository PortfolioClients { get; private set; }
+        public IPortfolioCustomerRepository PortfolioCustomers { get; private set; }
         public IPortfolioExcessBuyBackRepository PortfolioExcessBuyBacks { get; private set; }
         public IPortfolioPolicyFeeRepository PortfolioPolicyFees { get; private set; }
         public IPremiumRepository Premiums { get; private set; }

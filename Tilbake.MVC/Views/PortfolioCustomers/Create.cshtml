@@ -1,0 +1,401 @@
+﻿@model PortfolioCustomerViewModel
+
+@{
+    ViewData["Title"] = Model.Customer.PortfolioName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="d-flex justify-content-center">
+    <form id="CreateForm" asp-action="Create" class="col-md-9">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="PortfolioId" type="hidden" />
+        <div class="card mb-3">
+            
+            <div  class="card-header bg-light pt-3 pb-2">
+                <ul class="nav justify-content-between">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semi-bold" href="#bootstrap-wizard-validation-tab1" data-bs-toggle="tab" data-wizard-step="data-wizard-step">
+                            <span class="nav-item-circle-parent">
+                                <span class="nav-item-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                            <span class="d-none d-md-block mt-1 fs-4">Personal</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semi-bold" href="#bootstrap-wizard-validation-tab2" data-bs-toggle="tab" data-wizard-step="data-wizard-step">
+                            <span class="nav-item-circle-parent">
+                                <span class="nav-item-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                            <span class="d-none d-md-block mt-1 fs-4">Address</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semi-bold" href="#bootstrap-wizard-validation-tab3" data-bs-toggle="tab" data-wizard-step="data-wizard-step">
+                            <span class="nav-item-circle-parent">
+                                <span class="nav-item-circle">
+                                    <svg class="svg-inline--fa fa-dollar-sign fa-w-9" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="dollar-sign" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 512" data-fa-i2svg=""><path fill="currentColor" d="M209.2 233.4l-108-31.6C88.7 198.2 80 186.5 80 173.5c0-16.3 13.2-29.5 29.5-29.5h66.3c12.2 0 24.2 3.7 34.2 10.5 6.1 4.1 14.3 3.1 19.5-2l34.8-34c7.1-6.9 6.1-18.4-1.8-24.5C238 74.8 207.4 64.1 176 64V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48h-2.5C45.8 64-5.4 118.7.5 183.6c4.2 46.1 39.4 83.6 83.8 96.6l102.5 30c12.5 3.7 21.2 15.3 21.2 28.3 0 16.3-13.2 29.5-29.5 29.5h-66.3C100 368 88 364.3 78 357.5c-6.1-4.1-14.3-3.1-19.5 2l-34.8 34c-7.1 6.9-6.1 18.4 1.8 24.5 24.5 19.2 55.1 29.9 86.5 30v48c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-48.2c46.6-.9 90.3-28.6 105.7-72.7 21.5-61.6-14.6-124.8-72.5-141.7z"></path></svg>
+                                    <!-- <span class="fas fa-dollar-sign"></span> Font Awesome fontawesome.com -->
+                                </span>
+                            </span>
+                            <span class="d-none d-md-block mt-1 fs--1">Billing</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.TitleId" class="form-select" asp-items="@Model.Customer.TitleList"></select>
+                            <label asp-for="Customer.TitleId" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.CustomerTypeId" class="form-select" asp-items="@Model.Customer.CustomerTypeList"></select>
+                            <label asp-for="Customer.CustomerTypeId" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Customer.FirstName" class="form-control" />
+                            <label asp-for="Customer.FirstName"></label>
+                            <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Customer.MiddleName" class="form-control" />
+                            <label asp-for="Customer.MiddleName" class="form-label"></label>
+                            <span asp-validation-for="Customer.MiddleName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Customer.LastName" class="form-control" />
+                            <label asp-for="Customer.LastName" class="form-label"></label>
+                            <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Customer.BirthDate" type="date" class="form-control" />
+                            <label asp-for="Customer.BirthDate" class="form-label"></label>
+                            <span asp-validation-for="Customer.BirthDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.GenderId" class="form-select" asp-items="@Model.Customer.GenderList"></select>
+                            <label asp-for="Customer.GenderId" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.CountryId" class="form-select" asp-items="@Model.Customer.CountryList"></select>
+                            <label asp-for="Customer.CountryId" class="form-label"></label>
+                        </div>
+                    </div>                
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.IdDocumentTypeId" id="IdDocumentTypeId" class="form-select" asp-items="@Model.Customer.IdDocumentTypeList"></select>
+                            <label asp-for="Customer.IdDocumentTypeId" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Customer.IdNumber" id="IdNumber" class="form-control text-uppercase"/>
+                            <label asp-for="Customer.IdNumber" id="lblIdNumber" class="form-label"></label>
+                            <span asp-validation-for="Customer.IdNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.MaritalStatusId" class="form-select" asp-items="@Model.Customer.MaritalStatusList"></select>
+                            <label asp-for="Customer.MaritalStatusId" class="form-label"></label>
+                        </div>
+                    </div>                
+                </div>
+                <div class="row border p-3 m-3 bg-danger bg-opacity-10 text-white" id="DivDuplicate" style="display:none">
+                    <div clas="mt-3">
+                        <h6 class="fw-bolder">Customer already exists on the database</h6>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-4">
+                            <div class="form-floating">
+                                <input for="modalFirstName" id="modalFirstName" class="form-control" readonly />
+                                <label for="modalFirstName" class="form-label">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating">
+                                <input for="modalLastName" id="modalLastName" class="form-control" readonly />
+                                <label for="modalLastName" class="form-label">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating">
+                                <input for="modalIdNumber" id="modalIdNumber" class="form-control" readonly />
+                                <label for="modalIdNumber" id="modallblIdNumber" class="form-label">ID Number</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-floating">
+                                <input for="modalCustomerNumber" id="modalCustomerNumber" class="form-control" readonly />
+                                <label for="modalCustomerNumber" class="form-label">Customer Number</label>
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="form-floating mb-3">
+                        <button type="button" id="btnAddCustomer" class="btn btn-primary" onclick="PostPortfolioCustomer()">Use this Record</button>
+                        <button type="button" class="btn btn-secondary" onclick="ResetIdNumber()">Change ID Number</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.OccupationId" class="form-select" asp-items="@Model.Customer.OccupationList"></select>
+                            <label asp-for="Customer.OccupationId" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Customer.Phone" class="form-control" />
+                            <label asp-for="Customer.Phone" class="form-label"></label>
+                            <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="CustomerStatusId" class="form-select" asp-items="@Model.CustomerStatusList"></select>
+                            <label asp-for="CustomerStatusId" class="form-label"></label>
+                        </div>
+                    </div> 
+                </div>
+@*                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input asp-for="Customer.Address.PhysicalAddress" id="PhysicalAddress" class="form-control" />
+                            <label asp-for="Customer.Address.PhysicalAddress" class="control-label"></label>
+                            <span asp-validation-for="Customer.Address.PhysicalAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="row">
+                    <partial name="_Addresses" model="@Model.Customer.Addresses"/>
+@*                    <div class="col-4">
+                        <div class="form-floating">
+                            <input asp-for="Customer.Address.PostalAddress" class="form-control" />
+                            <label asp-for="Customer.Address.PostalAddress" class="control-label"></label>
+                            <span asp-validation-for="Customer.Address.PostalAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.Address.CountryId" id="AddressCountryId" class ="form-select" asp-items="@Model.Customer.Address.CountryList"></select>
+                            <label asp-for="Customer.Address.CountryId" class="control-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating">
+                            <select asp-for="Customer.Address.CityId" id="AddressCityId" class="form-select" asp-items="@Model.Customer.Address.CityList"></select>
+                            <label asp-for="Customer.Address.CityId" class="control-label"></label>
+                        </div>
+                    </div>*@
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <select asp-for="Customer.CarrierIds" multiple aria-label="multiple select" size="8" class="form-select" asp-items="@Model.Customer.CarrierList"></select>
+                            <label asp-for="Customer.CarrierIds" class="control-label"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+@*        <div class="col-12 mb-3">
+            <partial name="_CreateAddress" model="Model.Customer.Address"/>
+        </div>*@
+@*        <div class="col-12 mb-3">
+            <partial name="_CreateCarrier" model="Model.Customer"/>
+        </div>*@
+        <div>
+            <input type="submit" id="submit" value="Create" class="btn btn-outline-secondary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-controller="PortfolioCustomers" asp-action="Index" asp-route-portfolioId="@Model.PortfolioId">Return</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var portfolioId = '@Model.PortfolioId';
+        var existingCustomerId = null;
+        var selectedIdNumber = null;
+        var duplicateFound = false;
+        var duplicateIdNumber ='';
+
+        $(document).ready(function () {
+            //  Do someting here.
+        });
+
+        //$("#CreateForm").submit(function(e) {
+        //  alert( "Handler for .submit() called." );
+        //  console.log($('#PhysicalAddress').val());
+        //  e.preventDefault();
+        //  //return false;
+        //});
+
+        $('#AddressCountryId').change(function () {
+            var selectedCountryId = $('#AddressCountryId option:selected').val();
+
+            if (selectedCountryId != null && selectedCountryId != '') {
+                $.ajax({
+                    url: '@(Url.Action("GetCities", "Cities"))',
+                    traditional: true,
+                    dataType: 'json',
+                    type: 'GET',
+                    data: { countryId: selectedCountryId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (cities) {
+
+                        $('#AddressCityId').empty();   // clear before appending new list
+                        $.each(cities, function (index, city) {
+                            $('#AddressCityId').append($('<option></option>').val(city.id).html(city.name));
+                        });
+                    }
+                });
+            }
+        });
+
+        $('#IdDocumentTypeId').change(function() {
+            selectedIdDocumentTypeId = $(this).val();
+            if(selectedIdDocumentTypeId != null && selectedIdDocumentTypeId != '') {
+                $.ajax({
+                    url: '@(Url.Action("GetIdDocumentType", "IdDocumentTypes"))',
+                    traditional: true,
+                    dataType: "json",
+                    type: 'GET',
+                    data: { id : selectedIdDocumentTypeId },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (IdDocumentType) {
+                        if(IdDocumentType) {
+                            $('#lblIdNumber').text(IdDocumentType.name);
+                            $('#modallblIdNumber').text(IdDocumentType.name);
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#IdNumber').focusout(function() {
+            if(duplicateFound)
+            {
+                $('#IdNumber').val('');
+                ClearDivDuplicate()
+            }
+            selectedIdNumber = $(this).val();
+            if(selectedIdNumber != null && selectedIdNumber != '') {
+                CheckCustomer(selectedIdNumber);
+            }
+        });
+
+        function CheckCustomer(idNumber) {
+            
+            if(idNumber != null && idNumber != '') {
+                
+                $.ajax({
+                    url: '@(Url.Action("GetByIdNumber", "Customers"))',
+                    dataType: 'json',
+                    type: 'GET',
+                    data: { idNumber: idNumber },
+                    error: function () {
+                        alert("An error occurred.");
+                    },
+                    success: function (customer) {
+                        if(customer) {
+                            existingCustomerId = customer.id;
+                            if (existingCustomerId != null && existingCustomerId != '') {
+                                $('#CustomerId').val(existingCustomerId);
+                                $('#modalFirstName').val(customer.firstName);
+                                $('#modalLastName').val(customer.lastName);
+                                $('#modalIdNumber').val(customer.idNumber);
+                                $('#modalCustomerNumber').val(customer.customerNumber);
+                                duplicateFound = true;
+                                duplicateIdNumber = customer.idNumber;
+                                $('#DivDuplicate').show(2000);
+                            }
+                        } else {
+                            ClearDivDuplicate();
+                        }
+                    }
+                });
+            }
+        }
+
+        function ClearDivDuplicate() {
+            $('#CustomerId').val(null);
+            $('#modalFirstName').val(null);
+            $('#modalLastName').val(null);
+            $('#modalIdNumber').val(null);
+            $('#modalCustomerNumber').val(null);
+            $('#DivDuplicate').hide('fast');
+            existingCustomerId = null;
+            duplicateIdNumber = '';
+            duplicateFound = false;
+        }
+
+        function PostPortfolioCustomer() {
+
+            if(existingCustomerId != null && existingCustomerId != '') {
+                
+                $.ajax({
+                    url: '@(Url.Action("AddExistingCustomer"))',
+                    type: 'POST',
+                    dataType: "json",
+                    data: { portfolioId: portfolioId, customerId: existingCustomerId },
+                    error: function (xhr, status, error) {
+                        alert("An error has occured." + error);
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        ClearDivDuplicate();
+                        //window.location.href = "/PortfolioCustomers/Index?portfolioId=" + portfolioId;
+                        window.location.href = '/PortfolioCustomers/Search?PortfolioId=' + portfolioId;
+                    }
+                });
+            }
+        }
+
+        function ResetIdNumber() {
+            $('#DivDuplicate').toggle('hide');
+            $('#IdNumber').val('').focus();
+        }
+    </script>
+}

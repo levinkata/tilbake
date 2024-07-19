@@ -21,9 +21,9 @@ public partial class BankAccount
 
     public virtual BankBranch BankBranch { get; set; } = null!;
 
-    public virtual ICollection<ClientBankAccount> ClientBankAccounts { get; set; } = new List<ClientBankAccount>();
-
     public virtual ICollection<CompanyBankAccount> CompanyBankAccounts { get; set; } = new List<CompanyBankAccount>();
+
+    public virtual ICollection<CustomerBankAccount> CustomerBankAccounts { get; set; } = new List<CustomerBankAccount>();
 
     public virtual ICollection<PayeeBankAccount> PayeeBankAccounts { get; set; } = new List<PayeeBankAccount>();
 }

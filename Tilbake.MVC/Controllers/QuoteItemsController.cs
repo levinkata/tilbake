@@ -453,7 +453,7 @@ namespace Tilbake.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var quoteItem = await _unitOfWork.QuoteItems.GetById(model.QuoteItemId);
-                quoteItem.Description = "Travel - " + model.Client.FirstName + " " + model.Client.LastName;
+                quoteItem.Description = "Travel - " + model.Customer.FirstName + " " + model.Customer.LastName;
 
                 var taxes = await _unitOfWork.Taxes.GetAll(r => r.OrderByDescending(n => n.TaxDate));
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();

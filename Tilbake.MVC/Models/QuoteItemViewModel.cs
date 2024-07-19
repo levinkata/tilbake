@@ -7,7 +7,7 @@ namespace Tilbake.MVC.Models
 {
     public class QuoteItemViewModel
     {
-        public Guid ClientRiskId { get; set; }
+        public Guid CustomerRiskId { get; set; }
         public Guid Id { get; set; }
         public Guid QuoteId { get; set; }
 

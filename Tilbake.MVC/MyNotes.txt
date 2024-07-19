@@ -50,7 +50,7 @@ $ dotnet ef dbcontext scaffold 'Server=den1.mssql7.gear.host;Database=tilbake;Us
 modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
 
     <script>
-        var selectedClientId = '@Model.Id';
+        var selectedCustomerId = '@Model.Id';
 
         $(document).ready(function () {
             LoadAddress();
@@ -88,11 +88,11 @@ modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
         function LoadAddress() {
 
             $.ajax({
-                url: '@(Url.Action("GetByClientId", "Addresses"))',
+                url: '@(Url.Action("GetByCustomerId", "Addresses"))',
                 traditional: true,
                 dataType: "JSON",
                 type: 'GET',
-                data: { clientId: selectedClientId },
+                data: { customerId: selectedCustomerId },
                 error: function () {
                     alert("An error occurred.");
                 },
@@ -131,7 +131,7 @@ modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
                 PhysicalAddress: $('#PhysicalAddress').val(),
                 PhysicalAddress: $('#PostalAddress').val(),
                 CityId: selectedCityId,
-                ClientId: '@Model.Id',
+                CustomerId: '@Model.Id',
                 CompanyId: null,
                 LossAdjusterId: null,
                 RepairerId: null,
@@ -162,3 +162,66 @@ modelBuilder.ApplyConfigurationsFromAssembly(typeof(TilbakeDbContext).Assembly);
         };
     </script>
 
+Serilogs
+ "Serilog": {
+    "MinimumLevel": "Information",
+    "Override": {
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    },
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "outputTemplate": "{Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "Serilogs\\AppLogs.log",
+          "rollingInterval": "Day"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "Serilogs\\AppJSONLogs.json",
+          "rollingInterval": "Day",
+          "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog"
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "configureLogger": {
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "path": "Serilogs\\api.log",
+                  "rollingInterval": "Day",
+                  "outputTemplate": "{Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}"
+                }
+              }
+            ],
+            "Filter": [
+              {
+                "Name": "ByExcluding",
+                "Args": {
+                  "expression": "StartsWith(SourceContext, 'Microsoft.')"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "Enrich": [
+      "FromLogContext",
+      "WithMachineName",
+      "WithProcessId",
+      "WithThreadId"
+    ]
+  }
+}

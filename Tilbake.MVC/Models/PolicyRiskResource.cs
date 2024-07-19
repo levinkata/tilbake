@@ -8,7 +8,7 @@ namespace Tilbake.MVC.Models
     {
         public Guid Id { get; set; }
         public Guid PolicyId { get; set; }
-        public Guid ClientRiskId { get; set; }
+        public Guid CustomerRiskId { get; set; }
 
         [Display(Name = "Cover Type")]
         public Guid CoverTypeId { get; set; }

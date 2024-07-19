@@ -31,9 +31,9 @@ public partial class Document
 
     public virtual ICollection<ClaimDocument> ClaimDocuments { get; set; } = new List<ClaimDocument>();
 
-    public virtual ICollection<ClientDocument> ClientDocuments { get; set; } = new List<ClientDocument>();
+    public virtual ICollection<CustomerDocument> CustomerDocuments { get; set; } = new List<CustomerDocument>();
 
-    public virtual ICollection<ClientRiskDocument> ClientRiskDocuments { get; set; } = new List<ClientRiskDocument>();
+    public virtual ICollection<CustomerRiskDocument> CustomerRiskDocuments { get; set; } = new List<CustomerRiskDocument>();
 
     public virtual DocumentType DocumentType { get; set; } = null!;
 

@@ -7,7 +7,7 @@
 
 
     var quoteDate = @DateTime.Now.Date.ToString("dd/MM/yyyy");
-    var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
+    var FullName = String.IsNullOrEmpty(Model.Customer.FirstName) ? Model.Customer.LastName : Model.Customer.FirstName + " " + Model.Customer.LastName;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -37,7 +37,7 @@
                 <div class="justify-content-between align-items-center row">
                     <div class="col">
                         <h6 class="text-muted">Send to</h6>
-                        <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@Model.PortfolioId", asp-route-clientId="@Model.Client.Id">
+                        <a asp-controller="PortfolioCustomers" asp-action="Details" asp-route-portfolioId="@Model.PortfolioId", asp-route-customerId="@Model.Customer.Id">
                             <h6 class="text-muted">@FullName</h6>
                         </a>
                         <p>
@@ -71,8 +71,8 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label asp-for="ClientInfo" class="control-label"></label>
-                            <input asp-for="ClientInfo" id="ClientInfo" class="form-control" />
+                            <label asp-for="CustomerInfo" class="control-label"></label>
+                            <input asp-for="CustomerInfo" id="CustomerInfo" class="form-control" />
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -849,7 +849,7 @@
             </div>
 
         </div>
-        <a asp-controller="Quotes" asp-action="PortfolioClientQuotes" asp-route-portfolioClientId="@Model.PortfolioClientId">Return</a>
+        <a asp-controller="Quotes" asp-action="PortfolioCustomerQuotes" asp-route-portfolioCustomerId="@Model.PortfolioCustomerId">Return</a>
 
     </div>
 </div>
@@ -1557,8 +1557,8 @@
 
 @section Scripts{
     <script>
-        var portfolioClientId = '@Model.PortfolioClientId';
-        var clientId = '@Model.ClientId';
+        var portfolioCustomerId = '@Model.PortfolioCustomerId';
+        var customerId = '@Model.CustomerId';
         var portfolioId = '@Model.PortfolioId';
         var countryList = '@Model.CountryList';
         var fullName = '@FullName';
@@ -1667,7 +1667,7 @@
         $('#btnAddAllRisk').click(function(e) {
             e.preventDefault();
 
-            var clientRiskId = uuidv4();
+            var customerRiskId = uuidv4();
             var description = 'AllRisk - Unspecified - ' + $('#AllRiskDescription').val();
             var sumInsured = $('#AllRiskSumInsured').val();
             var coverType = $('#AllRiskCoverTypeId option:selected').text();
@@ -1681,14 +1681,14 @@
 
             //  2. Build AllRisk Array to match model class AllRisk
             var allRisk = {
-                Id: clientRiskId,
+                Id: customerRiskId,
                 RiskItemid: riskItemId
             }
             //  3. Build QuoteItem Array to match model class QuoteItem
             var quoteItem = {
                 Id: uuidv4(),
                 QuoteId: quoteId,
-                ClientRiskId: clientRiskId,
+                CustomerRiskId: customerRiskId,
                 CoverTypeId: $('#AllRiskCoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
@@ -1702,19 +1702,19 @@
             quoteItems.push(quoteItem);
             riskItems.push(riskItem);
             
-            AddToCart(clientRiskId, description, coverType, sumInsured);
+            AddToCart(customerRiskId, description, coverType, sumInsured);
             $('#AllRiskModal').modal("hide");
         })
         
         function LoadBuildings() {
-            var clientRiskId = uuidv4();
+            var customerRiskId = uuidv4();
             var description = 'Building - ' + $('#BuildingPhysicalAddress').val();
             var sumInsured = $('#BuildingSumInsured').val();
             var coverType = $('#BuildingCoverTypeId option:selected').text();
 
             //  1. Build House Array to match model class House
             var building = {
-                Id: clientRiskId,
+                Id: customerRiskId,
                 PhysicalAddress: $('#BuildingPhysicalAddress').val(),
                 ResidenceTypeId: $('#BuildingResidenceTypeId option:selected').val(),
                 ResidenceUseId: $('#BuildingResidenceUseId option:selected').val(),
@@ -1743,7 +1743,7 @@
             var quoteItem = {
                 Id: uuidv4(),
                 QuoteId: quoteId,
-                ClientRiskId: clientRiskId,
+                CustomerRiskId: customerRiskId,
                 CoverTypeId: $('#BuildingCoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
@@ -1756,18 +1756,18 @@
             buildings.push(building);
             quoteItems.push(quoteItem);
 
-            AddToCart(clientRiskId, description, coverType, sumInsured);
+            AddToCart(customerRiskId, description, coverType, sumInsured);
         }
 
         function LoadContents() {
-            var clientRiskId = uuidv4();
+            var customerRiskId = uuidv4();
             var description = 'Contents - ' + $('#ContentName').val();
             var sumInsured = $('#ContentSumInsured').val();
             var coverType = $('#ContentCoverTypeId option:selected').text();
 
             //  1. Build Content Array to match model class Building
             var content = {
-                Id: clientRiskId,
+                Id: customerRiskId,
                 RoofTypeId: $('#ContentRoofTypeId option:selected').val(),
                 WallTypeId: $('#ContentWallTypeId option:selected').val(),
                 Name: $('#ContentName').val(),
@@ -1780,7 +1780,7 @@
             var quoteItem = {
                 Id: uuidv4(),
                 QuoteId: quoteId,
-                ClientRiskId: clientRiskId,
+                CustomerRiskId: customerRiskId,
                 CoverTypeId: $('#ContentCoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
@@ -1793,18 +1793,18 @@
             contents.push(content);
             quoteItems.push(quoteItem);
 
-            AddToCart(clientRiskId, description, coverType, sumInsured);
+            AddToCart(customerRiskId, description, coverType, sumInsured);
         }
 
         function LoadHouses() {
-            var clientRiskId = uuidv4();
+            var customerRiskId = uuidv4();
             var description = 'House - ' + $('#HousePhysicalAddress').val();
             var sumInsured = $('#HouseSumInsured').val();
             var coverType = $('#HouseCoverTypeId option:selected').text();
 
             //  1. Build House Array to match model class House
             var house = {
-                Id: clientRiskId,
+                Id: customerRiskId,
                 PhysicalAddress: $('#HousePhysicalAddress').val(),
                 ResidenceTypeId: $('#HouseResidenceTypeId option:selected').val(),
                 RoofTypeId: $('#HouseRoofTypeId option:selected').val(),
@@ -1818,7 +1818,7 @@
             var quoteItem = {
                 Id: uuidv4(),
                 QuoteId: quoteId,
-                ClientRiskId: clientRiskId,
+                CustomerRiskId: customerRiskId,
                 CoverTypeId: $('#HouseCoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
@@ -1831,18 +1831,18 @@
             houses.push(house);
             quoteItems.push(quoteItem);
 
-            AddToCart(clientRiskId, description, coverType, sumInsured);
+            AddToCart(customerRiskId, description, coverType, sumInsured);
         }
 
         function LoadMotors() {
-            var clientRiskId = uuidv4();
+            var customerRiskId = uuidv4();
             var description = 'Motor - ' + $('#RegYear').val() + ' ' + $('#MotorMakeId option:selected').text() + ' ' + $('#RegNumber').val();
             var sumInsured = $('#MotorSumInsured').val();
             var coverType = $('#MotorCoverTypeId option:selected').text();
 
             //  1. Build Motor Array to match model class Motor
             var motor = {
-                Id: clientRiskId,
+                Id: customerRiskId,
                 RegNumber: $('#RegNumber').val(),
                 BodyTypeId: $('#BodyTypeId option:selected').val(),
                 MotorModelId: $('#MotorModelId option:selected').val(),
@@ -1871,7 +1871,7 @@
             var quoteItem = {
                 Id: uuidv4(),
                 QuoteId: quoteId,
-                ClientRiskId: clientRiskId,
+                CustomerRiskId: customerRiskId,
                 CoverTypeId: $('#MotorCoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
@@ -1884,13 +1884,13 @@
             motors.push(motor);
             quoteItems.push(quoteItem);
 
-            AddToCart(clientRiskId, description, coverType, sumInsured);
+            AddToCart(customerRiskId, description, coverType, sumInsured);
         }
 
         $('#btnAddTravel').click(function(e) {
             e.preventDefault();
 
-            var clientRiskId = uuidv4();
+            var customerRiskId = uuidv4();
             var description = 'Travel - ' + fullName;
             var sumInsured = $('#TravelSumInsured').val();
             var coverType = $('#TravelCoverTypeId option:selected').text();
@@ -1898,8 +1898,8 @@
 
             //  1. Build Travel Array to match model class Travel
             var travel = {
-                Id: clientRiskId,
-                PortfolioClientId: portfolioClientId,
+                Id: customerRiskId,
+                PortfolioCustomerId: portfolioCustomerId,
                 PassportNumber: $('#TravelPassportNumber').val(),
                 DepartureDate: $('#TravelDepartureDate').val(),
                 ReturnDate: $('#TravelReturnDate').val(),
@@ -1952,7 +1952,7 @@
 
                 var travelBeneficiary = {
                     Id: uuidv4(),
-                    TravelId: clientRiskId,
+                    TravelId: customerRiskId,
                     TitleId: titleId,
                     FirstName: firstName,
                     LastName: lastName,
@@ -1967,7 +1967,7 @@
             var quoteItem = {
                 Id: uuidv4(),
                 QuoteId: quoteId,
-                ClientRiskId: clientRiskId,
+                CustomerRiskId: customerRiskId,
                 CoverTypeId: $('#TravelCoverTypeId option:selected').val(),
                 Description: description,
                 SumInsured: sumInsured,
@@ -1980,7 +1980,7 @@
             travels.push(travel);
             quoteItems.push(quoteItem);
             
-            AddToCart(clientRiskId, description, coverType, sumInsured);
+            AddToCart(customerRiskId, description, coverType, sumInsured);
             $('#TravelModal').modal("hide");
         })
 
@@ -2012,10 +2012,10 @@
             }
         }
         
-        function AddToCart(clientRiskId, description, coverType, sumInsured) {
+        function AddToCart(customerRiskId, description, coverType, sumInsured) {
 
             $("#ErrorMsg").empty();
-            var cartItem = $('#tblQuote').find('tr[data-client-risk-id=' + clientRiskId + ']');
+            var cartItem = $('#tblQuote').find('tr[data-customer-risk-id=' + customerRiskId + ']');
             if (cartItem.length > 0) {
                 $("#ErrorMsg").removeClass("invisible").addClass("text-danger visible");
                 $("#ErrorMsg").append('<label>Item already in Cart</label>');
@@ -2028,7 +2028,7 @@
 
             cartItem = $('#tblQuote tbody')
                 .append($('<tr>')
-                    .attr({ 'data-client-risk-id': clientRiskId })
+                    .attr({ 'data-customer-risk-id': customerRiskId })
                     .append($('<td>').html(description))
                     .attr({ 'data-description': description })
                     .append($('<td>').html(coverType))
@@ -2038,7 +2038,7 @@
                             .attr('href', '#')
                             .append($('<span>&minus;</span>').addClass('btn btn-danger btn-sm float-right'))
                             .click(function () {
-                                DeleteCart(clientRiskId);
+                                DeleteCart(customerRiskId);
                         })
                     )
                 )
@@ -2051,12 +2051,12 @@
             //  Build Quote Arrat to match model class Quote
             var quote = {
                 Id: quoteId,
-                PortfolioClientId: portfolioClientId,
+                PortfolioCustomerId: portfolioCustomerId,
                 QuoteNumber: 0,
                 QuoteDate: '@DateTime.Now',
                 QuoteStatusId: $('#QuoteStatusId option:selected').val(),
                 InsurerBranchId: insurerBranchId,
-                ClientInfo: $('#ClientInfo').val(),
+                CustomerInfo: $('#CustomerInfo').val(),
                 InternalInfo: $('#InternalInfo').val(),
                 RunDay: 0
             };
@@ -2064,7 +2064,7 @@
             if (quoteItems) {
 
                 QuoteObject = {
-                    ClientId: clientId,
+                    CustomerId: customerId,
                     Quote: quote,
                     QuoteItems: quoteItems,
                     AllRisks: allRisks,
@@ -2088,61 +2088,61 @@
                     },
                     success: function (data) {
                         QuoteObject = [];
-                        window.location.href ='/Quotes/PortfolioClientQuotes?portfolioClientId=' +  portfolioClientId;
+                        window.location.href ='/Quotes/PortfolioCustomerQuotes?portfolioCustomerId=' +  portfolioCustomerId;
                     }
                 });
             }
         }
 
-        function DeleteCart(clientRiskId) {
+        function DeleteCart(customerRiskId) {
             
-            if (clientRiskId) {
-                var cartItem = $('#tblQuote').find('tr[data-client-risk-id=' + clientRiskId + ']');
+            if (customerRiskId) {
+                var cartItem = $('#tblQuote').find('tr[data-customer-risk-id=' + customerRiskId + ']');
                 cartItem.remove();
 
                 if (allRisks.length != 0) {
                     allRisks = allRisks.filter(function (obj) {
-                        return obj.Id !== clientRiskId;
+                        return obj.Id !== customerRiskId;
                     });
                 }
 
                 if (allRiskSpecifieds.length != 0) {
                     allRiskSpecifieds = allRiskSpecifieds.filter(function (obj) {
-                        return obj.Id !== clientRiskId;
+                        return obj.Id !== customerRiskId;
                     });
                 }
 
                 if (buildings.length != 0) {
                     buildings = buildings.filter(function (obj) {
-                        return obj.Id !== clientRiskId;
+                        return obj.Id !== customerRiskId;
                     });
                 }
 
                 if (contents.length != 0) {
                     contents = contents.filter(function (obj) {
-                        return obj.Id !== clientRiskId;
+                        return obj.Id !== customerRiskId;
                     });
                 }
 
                 if (houses.length != 0) {
                     contents = houses.filter(function (obj) {
-                        return obj.Id !== clientRiskId;
+                        return obj.Id !== customerRiskId;
                     });
                 }
 
                 if (motors.length != 0) {
                     motors = motors.filter(function (obj) {
-                        return obj.Id !== clientRiskId;
+                        return obj.Id !== customerRiskId;
                     });
                 }
 
                 if (travels.length != 0) {
                     travels = travels.filter(function (obj) {
-                        return obj.Id !== clientRiskId;
+                        return obj.Id !== customerRiskId;
                     });
 
                     travelBeneficiaries = travelBeneficiaries.filter(function (obj) {
-                        return obj.TravelId !== clientRiskId;
+                        return obj.TravelId !== customerRiskId;
                     });                    
                 }
             }

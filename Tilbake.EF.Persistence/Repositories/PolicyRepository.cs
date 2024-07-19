@@ -16,31 +16,31 @@ namespace Tilbake.EF.Persistence.Repositories
 
         }
 
-        public async Task<IEnumerable<Policy>> GetByPorfolioClientId(Guid portfolioClientId)
+        public async Task<IEnumerable<Policy>> GetByPorfolioCustomerId(Guid portfolioCustomerId)
         {
             return await _context.Policies
-                                .Where(p => p.PortfolioClientId == portfolioClientId)
+                                .Where(p => p.PortfolioCustomerId == portfolioCustomerId)
                                 .Include(p => p.PaymentMethod)
                                 .Include(p => p.PolicyStatus)
                                 .Include(p => p.PolicyType)
                                 .Include(p => p.SalesType)
                                 .Include(p => p.InsurerBranch)
                                 .Include(p => p.InsurerBranch.Insurer)
-                                .Include(p => p.PortfolioClient)
+                                .Include(p => p.PortfolioCustomer)
                                 .OrderByDescending((p => p.CoverStartDate)).AsNoTracking().ToListAsync();
         }
 
-        public async Task<Policy> GetCurrentPolicy(Guid portfolioClientId)
+        public async Task<Policy> GetCurrentPolicy(Guid portfolioCustomerId)
         {
             return await _context.Policies
-                                .Where(e => e.PortfolioClientId == portfolioClientId)
+                                .Where(e => e.PortfolioCustomerId == portfolioCustomerId)
                                 .Include(p => p.PaymentMethod)
                                 .Include(p => p.PolicyStatus)
                                 .Include(p => p.PolicyType)
                                 .Include(p => p.SalesType)
                                 .Include(p => p.InsurerBranch)
                                 .Include(p => p.InsurerBranch.Insurer)
-                                .Include(p => p.PortfolioClient).FirstOrDefaultAsync();
+                                .Include(p => p.PortfolioCustomer).FirstOrDefaultAsync();
         }
     }
 }

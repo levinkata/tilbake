@@ -20,13 +20,13 @@ namespace Tilbake.Core
         ICityRepository Cities { get; }
         IClaimantRepository Claimants { get; }
         IClaimStatusRepository ClaimStatuses { get; }
-        IClientRepository Clients { get; }
-        IClientBulkRepository ClientBulks { get; }
+        ICustomerRepository Customers { get; }
+        ICustomerBulkRepository CustomerBulks { get; }
         IDocumentRepository Documents { get; }
-        IClientCarrierRepository ClientCarriers { get; }
-        IClientRiskRepository ClientRisks { get; }
-        IClientTypeRepository ClientTypes{ get; }
-        IClientStatusRepository ClientStatuses { get; }
+        ICustomerCarrierRepository CustomerCarriers { get; }
+        ICustomerRiskRepository CustomerRisks { get; }
+        ICustomerTypeRepository CustomerTypes{ get; }
+        ICustomerStatusRepository CustomerStatuses { get; }
         ICommissionRateRepository CommissionRates { get; }
         ICompanyRepository Companies { get; }
         IContentRepository Contents { get; }
@@ -65,7 +65,7 @@ namespace Tilbake.Core
         IPolicyTypeRepository PolicyTypes { get; }
         IPortfolioRepository Portfolios { get; }
         IPortfolioAdministrationFeeRepository PortfolioAdministrationFees { get; }
-        IPortfolioClientRepository PortfolioClients { get; }
+        IPortfolioCustomerRepository PortfolioCustomers { get; }
         IPortfolioExcessBuyBackRepository PortfolioExcessBuyBacks { get; }
         IPortfolioPolicyFeeRepository PortfolioPolicyFees { get; }
         IPremiumRepository Premiums { get; }

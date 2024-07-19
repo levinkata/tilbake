@@ -7,7 +7,7 @@ public partial class Travel
 {
     public Guid Id { get; set; }
 
-    public Guid? PortfolioClientId { get; set; }
+    public Guid? PortfolioCustomerId { get; set; }
 
     public string PassportNumber { get; set; } = null!;
 
@@ -33,7 +33,7 @@ public partial class Travel
 
     public DateTime? DateModified { get; set; }
 
-    public virtual PortfolioClient? PortfolioClient { get; set; }
+    public virtual PortfolioCustomer? PortfolioCustomer { get; set; }
 
     public virtual ICollection<Risk> Risks { get; set; } = new List<Risk>();
 

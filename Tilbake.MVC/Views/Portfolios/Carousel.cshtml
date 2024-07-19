@@ -11,20 +11,20 @@
 <div class="card mb-3 p-3">
     <div class="row g-4 row-cols-1 ">
         <div class="col-md-3 p-3">
-            <h6 class="fw-bolder mb-3">Client Management</h6>
+            <h6 class="fw-bolder mb-3">Customer Management</h6>
             <ul>
                 <li>
-                    <a asp-controller="PortfolioClients"
+                    <a asp-controller="PortfolioCustomers"
                         asp-action="Search"
                         asp-route-portfolioId="@Model.Id">
-                        Clients
+                        Customers
                     </a>
                 </li>
                 <li>
-                    <a asp-controller="PortfolioClients"
+                    <a asp-controller="PortfolioCustomers"
                         asp-action="CreateWizard"
                         asp-route-portfolioId="@Model.Id">
-                        New Client
+                        New Customer
                     </a>
                 </li>
                 <li>

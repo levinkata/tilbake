@@ -23,9 +23,9 @@ namespace Tilbake.MVC.Controllers
 
         }
 
-        public async Task<IActionResult> Index(Guid portfolioClientId)
+        public async Task<IActionResult> Index(Guid portfolioCustomerId)
         {
-            var result = await _unitOfWork.Policies.GetByPorfolioClientId(portfolioClientId);
+            var result = await _unitOfWork.Policies.GetByPorfolioCustomerId(portfolioCustomerId);
             var model = _mapper.Map<IEnumerable<Policy>, IEnumerable<PolicyViewModel>>(result);
             return View(model);
         }

@@ -33,17 +33,17 @@ namespace Tilbake.MVC.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> PortfolioClientQuotes(Guid portfolioClientId)
+        public async Task<IActionResult> PortfolioCustomerQuotes(Guid portfolioCustomerId)
         {
-            var result = await _unitOfWork.Quotes.GetByPortfolioClientId(portfolioClientId);
+            var result = await _unitOfWork.Quotes.GetByPortfolioCustomerId(portfolioCustomerId);
             var model = _mapper.Map<IEnumerable<Quote>, IEnumerable<QuoteViewModel>>(result);
-            var portfolioClient = await _unitOfWork.PortfolioClients.GetById(portfolioClientId);
+            var portfolioCustomer = await _unitOfWork.PortfolioCustomers.GetById(portfolioCustomerId);
             
-            ViewBag.PortfolioClientId = portfolioClientId;
-            ViewBag.ClientId = portfolioClient.ClientId;
-            ViewBag.PortfolioId = portfolioClient.PortfolioId;
-            ViewBag.Client = portfolioClient.Client;
-            ViewBag.PortfolioName = portfolioClient.Portfolio.Name;
+            ViewBag.PortfolioCustomerId = portfolioCustomerId;
+            ViewBag.CustomerId = portfolioCustomer.CustomerId;
+            ViewBag.PortfolioId = portfolioCustomer.PortfolioId;
+            ViewBag.Customer = portfolioCustomer.Customer;
+            ViewBag.PortfolioName = portfolioCustomer.Portfolio.Name;
             return View(model);
         }
 
@@ -61,9 +61,9 @@ namespace Tilbake.MVC.Controllers
                     model = model.Where(r => r.QuoteNumber.Equals(quoteNumber));
                 } else
                 {
-                    model = model.Where(r => r.Client.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
-                                            || r.Client.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
-                                            || r.Client.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
+                    model = model.Where(r => r.Customer.LastName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                            || r.Customer.FirstName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                                            || r.Customer.IdNumber.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
                 }
             }
             
@@ -109,13 +109,13 @@ namespace Tilbake.MVC.Controllers
             {
                 var quote = await _unitOfWork.Quotes.GetById(model.QuoteId);
                 var insurerBranchId = quote.InsurerBranchId;
-                var portfolioClientId = quote.PortfolioClientId;
+                var portfolioCustomerId = quote.PortfolioCustomerId;
 
                 var policy = _mapper.Map<PolicyViewModel, Policy>(model);
 
                 policy.Id = Guid.NewGuid();
                 policy.InsurerBranchId = insurerBranchId;
-                policy.PortfolioClientId = portfolioClientId;
+                policy.PortfolioCustomerId = portfolioCustomerId;
                 policy.DateAdded = DateTime.Now;
                 await _unitOfWork.Policies.Add(policy);
 
@@ -129,7 +129,7 @@ namespace Tilbake.MVC.Controllers
                     {
                         Id = Guid.NewGuid(),
                         PolicyId = policyId,
-                        ClientRiskId = item.ClientRiskId,
+                        CustomerRiskId = item.CustomerRiskId,
                         CoverTypeId = item.CoverTypeId,
                         RiskDate = DateTime.Now,
                         SumInsured = item.SumInsured,
@@ -172,10 +172,10 @@ namespace Tilbake.MVC.Controllers
                 return NotFound();
             }
             var model = _mapper.Map<Quote, QuoteViewModel>(result);
-            var portfolioClient = await _unitOfWork.PortfolioClients.GetById(model.PortfolioClientId);
+            var portfolioCustomer = await _unitOfWork.PortfolioCustomers.GetById(model.PortfolioCustomerId);
 
-            model.PortfolioId = portfolioClient.PortfolioId;
-            model.PortfolioName = portfolioClient.Portfolio.Name;
+            model.PortfolioId = portfolioCustomer.PortfolioId;
+            model.PortfolioName = portfolioCustomer.Portfolio.Name;
             //model.TaxRate = taxRate;
             return View(model);
         }
@@ -197,7 +197,7 @@ namespace Tilbake.MVC.Controllers
 
                 var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
-                var clientId = quoteObject.ClientId;
+                var customerId = quoteObject.CustomerId;
 
                 var modelQuote = quoteObject.Quote;
                 var quote = _mapper.Map<QuoteViewModel, Quote>(modelQuote);
@@ -238,21 +238,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == allRiskId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -290,21 +290,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskSpecifiedId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == allRiskSpecifiedId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -335,21 +335,21 @@ namespace Tilbake.MVC.Controllers
 
                         var riskId = risk.Id;
 
-                        ClientRisk clientRisk = new()
+                        CustomerRisk customerRisk = new()
                         {
                             Id = Guid.NewGuid(),
-                            ClientId = clientId,
+                            CustomerId = customerId,
                             RiskId = riskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.ClientRisks.Add(clientRisk);
+                        await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                        var clientRiskId = clientRisk.Id;
+                        var customerRiskId = customerRisk.Id;
 
-                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == buildingId))
+                        foreach (var item in quoteItems.Where(x => x.CustomerRiskId == buildingId))
                         {
                             item.QuoteId = quoteId;
-                            item.ClientRiskId = clientRiskId;
+                            item.CustomerRiskId = customerRiskId;
                             item.DateAdded = DateTime.Now;
                             //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -379,21 +379,21 @@ namespace Tilbake.MVC.Controllers
 
                         var riskId = risk.Id;
 
-                        ClientRisk clientRisk = new()
+                        CustomerRisk customerRisk = new()
                         {
                             Id = Guid.NewGuid(),
-                            ClientId = clientId,
+                            CustomerId = customerId,
                             RiskId = riskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.ClientRisks.Add(clientRisk);
+                        await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                        var clientRiskId = clientRisk.Id;
+                        var customerRiskId = customerRisk.Id;
 
-                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == contentId))
+                        foreach (var item in quoteItems.Where(x => x.CustomerRiskId == contentId))
                         {
                             item.QuoteId = quoteId;
-                            item.ClientRiskId = clientRiskId;
+                            item.CustomerRiskId = customerRiskId;
                             item.DateAdded = DateTime.Now;
                             //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -423,21 +423,21 @@ namespace Tilbake.MVC.Controllers
 
                         var riskId = risk.Id;
 
-                        ClientRisk clientRisk = new()
+                        CustomerRisk customerRisk = new()
                         {
                             Id = Guid.NewGuid(),
-                            ClientId = clientId,
+                            CustomerId = customerId,
                             RiskId = riskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.ClientRisks.Add(clientRisk);
+                        await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                        var clientRiskId = clientRisk.Id;
+                        var customerRiskId = customerRisk.Id;
 
-                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == excessBuyBackId))
+                        foreach (var item in quoteItems.Where(x => x.CustomerRiskId == excessBuyBackId))
                         {
                             item.QuoteId = quoteId;
-                            item.ClientRiskId = clientRiskId;
+                            item.CustomerRiskId = customerRiskId;
                             item.DateAdded = DateTime.Now;
                             //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -467,21 +467,21 @@ namespace Tilbake.MVC.Controllers
 
                         var riskId = risk.Id;
 
-                        ClientRisk clientRisk = new()
+                        CustomerRisk customerRisk = new()
                         {
                             Id = Guid.NewGuid(),
-                            ClientId = clientId,
+                            CustomerId = customerId,
                             RiskId = riskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.ClientRisks.Add(clientRisk);
+                        await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                        var clientRiskId = clientRisk.Id;
+                        var customerRiskId = customerRisk.Id;
 
-                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == houseId))
+                        foreach (var item in quoteItems.Where(x => x.CustomerRiskId == houseId))
                         {
                             item.QuoteId = quoteId;
-                            item.ClientRiskId = clientRiskId;
+                            item.CustomerRiskId = customerRiskId;
                             item.DateAdded = DateTime.Now;
                             //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -511,21 +511,21 @@ namespace Tilbake.MVC.Controllers
 
                         var riskId = risk.Id;
 
-                        ClientRisk clientRisk = new()
+                        CustomerRisk customerRisk = new()
                         {
                             Id = Guid.NewGuid(),
-                            ClientId = clientId,
+                            CustomerId = customerId,
                             RiskId = riskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.ClientRisks.Add(clientRisk);
+                        await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                        var clientRiskId = clientRisk.Id;
+                        var customerRiskId = customerRisk.Id;
 
-                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == motorId))
+                        foreach (var item in quoteItems.Where(x => x.CustomerRiskId == motorId))
                         {
                             item.QuoteId = quoteId;
-                            item.ClientRiskId = clientRiskId;
+                            item.CustomerRiskId = customerRiskId;
                             item.DateAdded = DateTime.Now;
                             //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -562,21 +562,21 @@ namespace Tilbake.MVC.Controllers
 
                         var riskId = risk.Id;
 
-                        ClientRisk clientRisk = new()
+                        CustomerRisk customerRisk = new()
                         {
                             Id = Guid.NewGuid(),
-                            ClientId = clientId,
+                            CustomerId = customerId,
                             RiskId = riskId,
                             DateAdded = DateTime.Now
                         };
-                        await _unitOfWork.ClientRisks.Add(clientRisk);
+                        await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                        var clientRiskId = clientRisk.Id;
+                        var customerRiskId = customerRisk.Id;
 
-                        foreach (var item in quoteItems.Where(x => x.ClientRiskId == travelId))
+                        foreach (var item in quoteItems.Where(x => x.CustomerRiskId == travelId))
                         {
                             item.QuoteId = quoteId;
-                            item.ClientRiskId = clientRiskId;
+                            item.CustomerRiskId = customerRiskId;
                             item.DateAdded = DateTime.Now;
                             //item.TaxRate = taxRate;
                             item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -588,18 +588,18 @@ namespace Tilbake.MVC.Controllers
                 await _unitOfWork.CompleteAsync();
             }
 
-            return Json(new { quoteObject.ClientId });
+            return Json(new { quoteObject.CustomerId });
         }
 
         // GET: Quotes/Create
-        public async Task<IActionResult> Create(Guid portfolioClientId)
+        public async Task<IActionResult> Create(Guid portfolioCustomerId)
         {
             var branchName = "No Insurer Branch";
-            var portfolioClient = await _unitOfWork.PortfolioClients.GetById(portfolioClientId);
-            var clientId = portfolioClient.ClientId;
-            var portfolioId = portfolioClient.PortfolioId;
-            var client = portfolioClient.Client;
-            var clientModel = _mapper.Map<Client, ClientViewModel>(client);
+            var portfolioCustomer = await _unitOfWork.PortfolioCustomers.GetById(portfolioCustomerId);
+            var customerId = portfolioCustomer.CustomerId;
+            var portfolioId = portfolioCustomer.PortfolioId;
+            var customer = portfolioCustomer.Customer;
+            var customerModel = _mapper.Map<Customer, CustomerViewModel>(customer);
 
             var portfolio = await _unitOfWork.Portfolios.GetById(portfolioId);
             
@@ -625,12 +625,12 @@ namespace Tilbake.MVC.Controllers
 
             QuoteViewModel model = new()
             {
-                PortfolioClientId = portfolioClientId,
-                ClientId = clientId,
+                PortfolioCustomerId = portfolioCustomerId,
+                CustomerId = customerId,
                 PortfolioId = portfolioId,
                 InsurerBranchId = insurerBranch.Id,
                 PortfolioName = portfolio.Name,
-                Client = clientModel,
+                Customer = customerModel,
                 QuoteDate = DateTime.Now.Date,
                 
                 CoverTypeList = MVCHelperExtensions.ToSelectList(coverTypes, Guid.Empty),
@@ -673,7 +673,7 @@ namespace Tilbake.MVC.Controllers
 
                     var taxRate = taxes.Select(r => r.TaxRate).FirstOrDefault();
 
-                    var clientId = model.ClientId;
+                    var customerId = model.CustomerId;
 
                     var modelQuote = model.Quote;
                     var quote = _mapper.Map<QuoteViewModel, Quote>(modelQuote);
@@ -714,21 +714,21 @@ namespace Tilbake.MVC.Controllers
 
                                 var riskId = risk.Id;
 
-                                ClientRisk clientRisk = new()
+                                CustomerRisk customerRisk = new()
                                 {
                                     Id = Guid.NewGuid(),
-                                    ClientId = clientId,
+                                    CustomerId = customerId,
                                     RiskId = riskId,
                                     DateAdded = DateTime.Now
                                 };
-                                await _unitOfWork.ClientRisks.Add(clientRisk);
+                                await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                                var clientRiskId = clientRisk.Id;
+                                var customerRiskId = customerRisk.Id;
 
-                                foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskId))
+                                foreach (var item in quoteItems.Where(x => x.CustomerRiskId == allRiskId))
                                 {
                                     item.QuoteId = quoteId;
-                                    item.ClientRiskId = clientRiskId;
+                                    item.CustomerRiskId = customerRiskId;
                                     item.DateAdded = DateTime.Now;
                                     //item.TaxRate = taxRate;
                                     item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -766,21 +766,21 @@ namespace Tilbake.MVC.Controllers
 
                                 var riskId = risk.Id;
 
-                                ClientRisk clientRisk = new()
+                                CustomerRisk customerRisk = new()
                                 {
                                     Id = Guid.NewGuid(),
-                                    ClientId = clientId,
+                                    CustomerId = customerId,
                                     RiskId = riskId,
                                     DateAdded = DateTime.Now
                                 };
-                                await _unitOfWork.ClientRisks.Add(clientRisk);
+                                await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                                var clientRiskId = clientRisk.Id;
+                                var customerRiskId = customerRisk.Id;
 
-                                foreach (var item in quoteItems.Where(x => x.ClientRiskId == allRiskSpecifiedId))
+                                foreach (var item in quoteItems.Where(x => x.CustomerRiskId == allRiskSpecifiedId))
                                 {
                                     item.QuoteId = quoteId;
-                                    item.ClientRiskId = clientRiskId;
+                                    item.CustomerRiskId = customerRiskId;
                                     item.DateAdded = DateTime.Now;
                                     //item.TaxRate = taxRate;
                                     item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -811,21 +811,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == buildingId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == buildingId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -855,21 +855,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == contentId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == contentId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -899,21 +899,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == excessBuyBackId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == excessBuyBackId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -943,21 +943,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == houseId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == houseId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -987,21 +987,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == motorId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == motorId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -1038,21 +1038,21 @@ namespace Tilbake.MVC.Controllers
 
                             var riskId = risk.Id;
 
-                            ClientRisk clientRisk = new()
+                            CustomerRisk customerRisk = new()
                             {
                                 Id = Guid.NewGuid(),
-                                ClientId = clientId,
+                                CustomerId = customerId,
                                 RiskId = riskId,
                                 DateAdded = DateTime.Now
                             };
-                            await _unitOfWork.ClientRisks.Add(clientRisk);
+                            await _unitOfWork.CustomerRisks.Add(customerRisk);
 
-                            var clientRiskId = clientRisk.Id;
+                            var customerRiskId = customerRisk.Id;
 
-                            foreach (var item in quoteItems.Where(x => x.ClientRiskId == travelId))
+                            foreach (var item in quoteItems.Where(x => x.CustomerRiskId == travelId))
                             {
                                 item.QuoteId = quoteId;
-                                item.ClientRiskId = clientRiskId;
+                                item.CustomerRiskId = customerRiskId;
                                 item.DateAdded = DateTime.Now;
                                 //item.TaxRate = taxRate;
                                 item.TaxAmount = item.Premium - (item.Premium / (1 + taxRate / 100));
@@ -1062,7 +1062,7 @@ namespace Tilbake.MVC.Controllers
 
                     _unitOfWork.QuoteItems.AddRange(quoteItems);
                     await _unitOfWork.CompleteAsync();
-                    return RedirectToAction("PortfolioClientQuotes", "Quotes", new { model.Quote.PortfolioClientId });
+                    return RedirectToAction("PortfolioCustomerQuotes", "Quotes", new { model.Quote.PortfolioCustomerId });
                 }
             }
 
@@ -1098,7 +1098,7 @@ namespace Tilbake.MVC.Controllers
                 insurerId = insurerBranch.InsurerId;
             }
 
-            var portfolioClient = await _unitOfWork.PortfolioClients.GetById(model.PortfolioClientId);
+            var portfolioCustomer = await _unitOfWork.PortfolioCustomers.GetById(model.PortfolioCustomerId);
             
             var quoteStatuses = await _unitOfWork.QuoteStatuses.GetAll(r => r.OrderBy(n => n.Name));
             var insurers = await _unitOfWork.Insurers.GetAll(r => r.OrderBy(n => n.Name));
@@ -1107,9 +1107,9 @@ namespace Tilbake.MVC.Controllers
             var paymentMethods = await _unitOfWork.PaymentMethods.GetAll(r => r.OrderBy(n => n.Name));
             var insurerBranches = await _unitOfWork.InsurerBranches.GetByInsurerId(insurerId);
 
-            model.ClientId = portfolioClient.ClientId;
-            model.PortfolioId = portfolioClient.PortfolioId;
-            model.PortfolioName = portfolioClient.Portfolio.Name;
+            model.CustomerId = portfolioCustomer.CustomerId;
+            model.PortfolioId = portfolioCustomer.PortfolioId;
+            model.PortfolioName = portfolioCustomer.Portfolio.Name;
             model.InsurerId = insurerId;
             //model.TaxRate = taxRate;
             model.QuoteStatusList = MVCHelperExtensions.ToSelectList(quoteStatuses, model.QuoteStatusId);
@@ -1183,7 +1183,7 @@ namespace Tilbake.MVC.Controllers
             var result = await _unitOfWork.Quotes.GetById(id);
             await _unitOfWork.Quotes.Delete(id);
 
-            return RedirectToAction(nameof(Details), "PortfolioClients", new { result.PortfolioClientId });
+            return RedirectToAction(nameof(Details), "PortfolioCustomers", new { result.PortfolioCustomerId });
         }
     }
 }

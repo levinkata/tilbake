@@ -8,8 +8,8 @@ namespace Tilbake.MVC.Models
     public class PolicyViewModel
     {
         public Guid Id { get; set; }
-        public Guid PortfolioClientId { get; set; }
-        public Guid ClientId { get; set; }
+        public Guid PortfolioCustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         public Guid QuoteId { get; set; }
 
         [Display(Name = "Policy Number")]
@@ -28,7 +28,7 @@ namespace Tilbake.MVC.Models
         public Guid PaymentMethodId { get; set; }
 
         [Display(Name = "Bank Account")]
-        public Guid ClientBankAccountId { get; set; }
+        public Guid CustomerBankAccountId { get; set; }
 
         [Display(Name = "Insurer Branch")]
         public Guid InsurerBranchId { get; set; }
@@ -124,7 +124,7 @@ namespace Tilbake.MVC.Models
         public SelectList PaymentMethodList { get; set; }
         public SelectList PolicyStatusList { get; set; }
         public SelectList PolicyTypeList { get; set; }
-        public PortfolioClient PortfolioClient { get; set; }
+        public PortfolioCustomer PortfolioCustomer { get; set; }
         public SelectList SalesTypeList { get; set; }
 
 

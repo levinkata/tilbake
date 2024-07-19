@@ -13,7 +13,7 @@ public partial class Address
 
     public Guid? CityId { get; set; }
 
-    public Guid? ClientId { get; set; }
+    public Guid? CustomerId { get; set; }
 
     public Guid? LossAdjusterId { get; set; }
 
@@ -41,7 +41,7 @@ public partial class Address
 
     public virtual City? City { get; set; }
 
-    public virtual Client? Client { get; set; }
+    public virtual Customer? Customer { get; set; }
 
     public virtual LossAdjuster? LossAdjuster { get; set; }
 

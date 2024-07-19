@@ -13,7 +13,7 @@ namespace Tilbake.MVC.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        [Display(Name = "Client Name")]
+        [Display(Name = "Customer Name")]
         public string FullName => String.IsNullOrEmpty(FirstName) ? LastName : FirstName + " " + LastName;
 
         [Display(Name = "Number")]

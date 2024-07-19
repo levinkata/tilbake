@@ -9,7 +9,7 @@ public partial class PolicyRisk
 
     public Guid PolicyId { get; set; }
 
-    public Guid ClientRiskId { get; set; }
+    public Guid CustomerRiskId { get; set; }
 
     public Guid CoverTypeId { get; set; }
 
@@ -41,9 +41,9 @@ public partial class PolicyRisk
 
     public DateTime? DateModified { get; set; }
 
-    public virtual ClientRisk ClientRisk { get; set; } = null!;
-
     public virtual CoverType CoverType { get; set; } = null!;
+
+    public virtual CustomerRisk CustomerRisk { get; set; } = null!;
 
     public virtual ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
 

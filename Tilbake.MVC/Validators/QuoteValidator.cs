@@ -8,7 +8,7 @@ namespace Tilbake.MVC.Validators
 
         public QuoteValidator()
         {
-            RuleFor(p => p.ClientInfo)
+            RuleFor(p => p.CustomerInfo)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .Length(2, 50);

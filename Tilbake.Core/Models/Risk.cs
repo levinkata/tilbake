@@ -53,9 +53,9 @@ public partial class Risk
 
     public virtual Building? Building { get; set; }
 
-    public virtual ICollection<ClientRisk> ClientRisks { get; set; } = new List<ClientRisk>();
-
     public virtual Content? Content { get; set; }
+
+    public virtual ICollection<CustomerRisk> CustomerRisks { get; set; } = new List<CustomerRisk>();
 
     public virtual ElectronicEquipment? ElectronicEquipment { get; set; }
 

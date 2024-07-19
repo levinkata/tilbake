@@ -7,7 +7,7 @@ public partial class Policy
 {
     public Guid Id { get; set; }
 
-    public Guid PortfolioClientId { get; set; }
+    public Guid PortfolioCustomerId { get; set; }
 
     public Guid QuoteId { get; set; }
 
@@ -21,7 +21,7 @@ public partial class Policy
 
     public Guid PaymentMethodId { get; set; }
 
-    public Guid? ClientBankAccountId { get; set; }
+    public Guid? CustomerBankAccountId { get; set; }
 
     public Guid InsurerBranchId { get; set; }
 
@@ -51,7 +51,7 @@ public partial class Policy
 
     public DateTime? DateModified { get; set; }
 
-    public virtual ClientBankAccount? ClientBankAccount { get; set; }
+    public virtual CustomerBankAccount? CustomerBankAccount { get; set; }
 
     public virtual InsurerBranch InsurerBranch { get; set; } = null!;
 
@@ -67,7 +67,7 @@ public partial class Policy
 
     public virtual PolicyType PolicyType { get; set; } = null!;
 
-    public virtual PortfolioClient PortfolioClient { get; set; } = null!;
+    public virtual PortfolioCustomer PortfolioCustomer { get; set; } = null!;
 
     public virtual ICollection<Premium> Premia { get; set; } = new List<Premium>();
 

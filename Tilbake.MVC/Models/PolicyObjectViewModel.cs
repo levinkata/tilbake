@@ -5,7 +5,7 @@ namespace Tilbake.MVC.Models
 {
     public class PolicyObjectViewModel
     {
-        public Guid ClientId { get; set; }
+        public Guid CustomerId { get; set; }
 
         public Policy Policy { get; set; }
         public PolicyRisk[] PolicyRisks { get; set; }

@@ -8,7 +8,7 @@
     var totalPremiumNetTax = totalPremium/(1+ taxRate/100);
     var totalTaxAmount = totalPremium - totalPremiumNetTax;
 
-    var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : Model.Client.FirstName + " " + Model.Client.LastName;
+    var FullName = String.IsNullOrEmpty(Model.Customer.FirstName) ? Model.Customer.LastName : Model.Customer.FirstName + " " + Model.Customer.LastName;
 }
 
 <div class="container mt-3 w-75">
@@ -27,7 +27,7 @@
                     <p>@FullName</p>
                     <p>P O Box 201867</p>
                     <p>Gaborone</p>
-                    <p>Client VAT Number:</p>
+                    <p>Customer VAT Number:</p>
                 </div>
                 <div class="col border lh-1 p-3">
                     <p>Aon Botswana (Pty) Ltd.</p>
@@ -110,7 +110,7 @@
             <div class="row py-3">
                 <div class="row mb-3">
                     <div class="col">
-                        <span class="fw-bolder">Reference:</span> SERETK01 / ST-GAB-@Model.Client.ClientNumber-@Model.QuoteNumber-002
+                        <span class="fw-bolder">Reference:</span> SERETK01 / ST-GAB-@Model.Customer.CustomerNumber-@Model.QuoteNumber-002
                     </div>
                     <div class="col-md-auto">
                         @Model.QuoteDate.ToLongDateString()

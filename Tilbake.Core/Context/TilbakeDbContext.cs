@@ -18,8 +18,6 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<Address> Addresses { get; set; }
 
-    public virtual DbSet<AggregatedCounter> AggregatedCounters { get; set; }
-
     public virtual DbSet<AllRisk> AllRisks { get; set; }
 
     public virtual DbSet<AllRiskSpecified> AllRiskSpecifieds { get; set; }
@@ -90,26 +88,6 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<Claimant> Claimants { get; set; }
 
-    public virtual DbSet<Client> Clients { get; set; }
-
-    public virtual DbSet<ClientBankAccount> ClientBankAccounts { get; set; }
-
-    public virtual DbSet<ClientBulk> ClientBulks { get; set; }
-
-    public virtual DbSet<ClientCarrier> ClientCarriers { get; set; }
-
-    public virtual DbSet<ClientDocument> ClientDocuments { get; set; }
-
-    public virtual DbSet<ClientNumberGenerator> ClientNumberGenerators { get; set; }
-
-    public virtual DbSet<ClientRisk> ClientRisks { get; set; }
-
-    public virtual DbSet<ClientRiskDocument> ClientRiskDocuments { get; set; }
-
-    public virtual DbSet<ClientStatus> ClientStatuses { get; set; }
-
-    public virtual DbSet<ClientType> ClientTypes { get; set; }
-
     public virtual DbSet<CommissionRate> CommissionRates { get; set; }
 
     public virtual DbSet<Company> Companies { get; set; }
@@ -124,11 +102,29 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<ContentItem> ContentItems { get; set; }
 
-    public virtual DbSet<Counter> Counters { get; set; }
-
     public virtual DbSet<Country> Countries { get; set; }
 
     public virtual DbSet<CoverType> CoverTypes { get; set; }
+
+    public virtual DbSet<Customer> Customers { get; set; }
+
+    public virtual DbSet<CustomerBankAccount> CustomerBankAccounts { get; set; }
+
+    public virtual DbSet<CustomerBulk> CustomerBulks { get; set; }
+
+    public virtual DbSet<CustomerCarrier> CustomerCarriers { get; set; }
+
+    public virtual DbSet<CustomerDocument> CustomerDocuments { get; set; }
+
+    public virtual DbSet<CustomerNumberGenerator> CustomerNumberGenerators { get; set; }
+
+    public virtual DbSet<CustomerRisk> CustomerRisks { get; set; }
+
+    public virtual DbSet<CustomerRiskDocument> CustomerRiskDocuments { get; set; }
+
+    public virtual DbSet<CustomerStatus> CustomerStatuses { get; set; }
+
+    public virtual DbSet<CustomerType> CustomerTypes { get; set; }
 
     public virtual DbSet<Document> Documents { get; set; }
 
@@ -141,8 +137,6 @@ public partial class TilbakeDbContext : DbContext
     public virtual DbSet<Eftfile> Eftfiles { get; set; }
 
     public virtual DbSet<ElectronicEquipment> ElectronicEquipments { get; set; }
-
-    public virtual DbSet<ElmahError> ElmahErrors { get; set; }
 
     public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
 
@@ -157,8 +151,6 @@ public partial class TilbakeDbContext : DbContext
     public virtual DbSet<Gender> Genders { get; set; }
 
     public virtual DbSet<Glass> Glasses { get; set; }
-
-    public virtual DbSet<Hash> Hashes { get; set; }
 
     public virtual DbSet<House> Houses { get; set; }
 
@@ -176,6 +168,8 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<InsurerBranch> InsurerBranches { get; set; }
 
+    public virtual DbSet<InterMediate> InterMediates { get; set; }
+
     public virtual DbSet<Invoice> Invoices { get; set; }
 
     public virtual DbSet<InvoiceItem> InvoiceItems { get; set; }
@@ -184,17 +178,9 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<InvoiceStatus> InvoiceStatuses { get; set; }
 
-    public virtual DbSet<Job> Jobs { get; set; }
-
-    public virtual DbSet<JobParameter> JobParameters { get; set; }
-
-    public virtual DbSet<JobQueue> JobQueues { get; set; }
-
     public virtual DbSet<JobTitle> JobTitles { get; set; }
 
     public virtual DbSet<Life> Lives { get; set; }
-
-    public virtual DbSet<List> Lists { get; set; }
 
     public virtual DbSet<LossAdjuster> LossAdjusters { get; set; }
 
@@ -262,7 +248,7 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; }
 
-    public virtual DbSet<PortfolioClient> PortfolioClients { get; set; }
+    public virtual DbSet<PortfolioCustomer> PortfolioCustomers { get; set; }
 
     public virtual DbSet<PortfolioExcessBuyBack> PortfolioExcessBuyBacks { get; set; }
 
@@ -285,6 +271,8 @@ public partial class TilbakeDbContext : DbContext
     public virtual DbSet<PremiumRefund> PremiumRefunds { get; set; }
 
     public virtual DbSet<PremiumRefundClaim> PremiumRefundClaims { get; set; }
+
+    public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<PublicLiability> PublicLiabilities { get; set; }
 
@@ -340,14 +328,6 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<SalesType> SalesTypes { get; set; }
 
-    public virtual DbSet<Schema> Schemas { get; set; }
-
-    public virtual DbSet<Server> Servers { get; set; }
-
-    public virtual DbSet<Set> Sets { get; set; }
-
-    public virtual DbSet<State> States { get; set; }
-
     public virtual DbSet<StatedBenefit> StatedBenefits { get; set; }
 
     public virtual DbSet<Tax> Taxes { get; set; }
@@ -376,9 +356,9 @@ public partial class TilbakeDbContext : DbContext
 
     public virtual DbSet<WorkmanCompensation> WorkmanCompensations { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;TrustServerCertificate=True");
+//     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//         => optionsBuilder.UseSqlServer("Server=den1.mssql7.gear.host;Database=tilbake;User Id=tilbake;Password=Nt7H1wK3X5!~;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -400,9 +380,9 @@ public partial class TilbakeDbContext : DbContext
                 .HasForeignKey(d => d.CityId)
                 .HasConstraintName("FK_Address_City");
 
-            entity.HasOne(d => d.Client).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.ClientId)
-                .HasConstraintName("FK_Address_Client");
+            entity.HasOne(d => d.Customer).WithMany(p => p.Addresses)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("FK_Address_Customer");
 
             entity.HasOne(d => d.LossAdjuster).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.LossAdjusterId)
@@ -427,18 +407,6 @@ public partial class TilbakeDbContext : DbContext
             entity.HasOne(d => d.TracingAgent).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.TracingAgentId)
                 .HasConstraintName("FK_Address_TracingAgent");
-        });
-
-        modelBuilder.Entity<AggregatedCounter>(entity =>
-        {
-            entity.HasKey(e => e.Key).HasName("PK_HangFire_CounterAggregated");
-
-            entity.ToTable("AggregatedCounter", "HangFire");
-
-            entity.HasIndex(e => e.ExpireAt, "IX_HangFire_AggregatedCounter_ExpireAt").HasFilter("([ExpireAt] IS NOT NULL)");
-
-            entity.Property(e => e.Key).HasMaxLength(100);
-            entity.Property(e => e.ExpireAt).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<AllRisk>(entity =>
@@ -685,10 +653,10 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.FirstName).HasMaxLength(50);
             entity.Property(e => e.LastName).HasMaxLength(50);
 
-            entity.HasOne(d => d.PortfolioClient).WithMany(p => p.Beneficiaries)
-                .HasForeignKey(d => d.PortfolioClientId)
+            entity.HasOne(d => d.PortfolioCustomer).WithMany(p => p.Beneficiaries)
+                .HasForeignKey(d => d.PortfolioCustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Beneficiary_PortfolioClient");
+                .HasConstraintName("FK_Beneficiary_PortfolioCustomer");
 
             entity.HasOne(d => d.RelationType).WithMany(p => p.Beneficiaries)
                 .HasForeignKey(d => d.RelationTypeId)
@@ -793,7 +761,7 @@ public partial class TilbakeDbContext : DbContext
 
         modelBuilder.Entity<Claim>(entity =>
         {
-            entity.ToTable("Claim", tb => tb.HasTrigger("Tr_Claim_Audit_Timestamp"));
+            entity.ToTable("Claim", tb => tb.HasTrigger("Tr_Claim_Number"));
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Comment).HasMaxLength(100);
@@ -992,204 +960,6 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Client>(entity =>
-        {
-            entity.ToTable("Client", tb => tb.HasTrigger("Tr_Client_Audit_Timestamp"));
-
-            entity.HasIndex(e => e.IdNumber, "IX_Client").IsUnique();
-
-            entity.HasIndex(e => e.ClientNumber, "IX_Client_ClientNumber").IsUnique();
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.BirthDate).HasColumnType("date");
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-            entity.Property(e => e.FirstName).HasMaxLength(50);
-            entity.Property(e => e.IdNumber).HasMaxLength(50);
-            entity.Property(e => e.LastName).HasMaxLength(100);
-            entity.Property(e => e.MiddleName).HasMaxLength(50);
-            entity.Property(e => e.Phone).HasMaxLength(50);
-
-            entity.HasOne(d => d.ClientType).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.ClientTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_ClientType");
-
-            entity.HasOne(d => d.Country).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.CountryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_Country");
-
-            entity.HasOne(d => d.Gender).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.GenderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_Gender");
-
-            entity.HasOne(d => d.IdDocumentType).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.IdDocumentTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_IdDocumentType");
-
-            entity.HasOne(d => d.MaritalStatus).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.MaritalStatusId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_MaritalStatus");
-
-            entity.HasOne(d => d.Occupation).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.OccupationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_Occupation");
-
-            entity.HasOne(d => d.Title).WithMany(p => p.Clients)
-                .HasForeignKey(d => d.TitleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Client_Title");
-        });
-
-        modelBuilder.Entity<ClientBankAccount>(entity =>
-        {
-            entity.ToTable("ClientBankAccount");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-            entity.HasOne(d => d.BankAccount).WithMany(p => p.ClientBankAccounts)
-                .HasForeignKey(d => d.BankAccountId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientBankAccount_BankAccount");
-
-            entity.HasOne(d => d.Client).WithMany(p => p.ClientBankAccounts)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientBankAccount_Client");
-        });
-
-        modelBuilder.Entity<ClientBulk>(entity =>
-        {
-            entity.ToTable("ClientBulk");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.BirthDate).HasColumnType("date");
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.FirstName).HasMaxLength(50);
-            entity.Property(e => e.IdNumber).HasMaxLength(50);
-            entity.Property(e => e.IsExists).HasDefaultValueSql("((0))");
-            entity.Property(e => e.LastName).HasMaxLength(100);
-            entity.Property(e => e.MiddleName).HasMaxLength(50);
-            entity.Property(e => e.Mobile).HasMaxLength(50);
-            entity.Property(e => e.Phone).HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<ClientCarrier>(entity =>
-        {
-            entity.HasKey(e => new { e.ClientId, e.CarrierId });
-
-            entity.ToTable("ClientCarrier");
-
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Carrier).WithMany(p => p.ClientCarriers)
-                .HasForeignKey(d => d.CarrierId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientCarrier_Carrier");
-
-            entity.HasOne(d => d.Client).WithMany(p => p.ClientCarriers)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientCarrier_Client");
-        });
-
-        modelBuilder.Entity<ClientDocument>(entity =>
-        {
-            entity.HasKey(e => new { e.ClientId, e.DocumentId }).HasName("PK_ClientDocument_1");
-
-            entity.ToTable("ClientDocument");
-
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Client).WithMany(p => p.ClientDocuments)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientDocument_Client");
-
-            entity.HasOne(d => d.Document).WithMany(p => p.ClientDocuments)
-                .HasForeignKey(d => d.DocumentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientDocument_Document");
-        });
-
-        modelBuilder.Entity<ClientNumberGenerator>(entity =>
-        {
-            entity.ToTable("ClientNumberGenerator");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<ClientRisk>(entity =>
-        {
-            entity.ToTable("ClientRisk");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Client).WithMany(p => p.ClientRisks)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientRisk_Client");
-
-            entity.HasOne(d => d.Risk).WithMany(p => p.ClientRisks)
-                .HasForeignKey(d => d.RiskId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientRisk_Risk");
-        });
-
-        modelBuilder.Entity<ClientRiskDocument>(entity =>
-        {
-            entity.HasKey(e => new { e.ClientRiskId, e.DocumentId }).HasName("PK_ClientRiskDocument_1");
-
-            entity.ToTable("ClientRiskDocument");
-
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-
-            entity.HasOne(d => d.ClientRisk).WithMany(p => p.ClientRiskDocuments)
-                .HasForeignKey(d => d.ClientRiskId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientRiskDocument_ClientRisk");
-
-            entity.HasOne(d => d.Document).WithMany(p => p.ClientRiskDocuments)
-                .HasForeignKey(d => d.DocumentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientRiskDocument_Document");
-        });
-
-        modelBuilder.Entity<ClientStatus>(entity =>
-        {
-            entity.ToTable("ClientStatus");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-            entity.Property(e => e.Name).HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<ClientType>(entity =>
-        {
-            entity.ToTable("ClientType");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.DateAdded).HasColumnType("datetime");
-            entity.Property(e => e.DateModified).HasColumnType("datetime");
-            entity.Property(e => e.Name).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<CommissionRate>(entity =>
         {
             entity.ToTable("CommissionRate");
@@ -1317,18 +1087,6 @@ public partial class TilbakeDbContext : DbContext
                 .HasConstraintName("FK_ContentItem_ContentGroupItem");
         });
 
-        modelBuilder.Entity<Counter>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("Counter", "HangFire");
-
-            entity.HasIndex(e => e.Key, "CX_HangFire_Counter").IsClustered();
-
-            entity.Property(e => e.ExpireAt).HasColumnType("datetime");
-            entity.Property(e => e.Key).HasMaxLength(100);
-        });
-
         modelBuilder.Entity<Country>(entity =>
         {
             entity.ToTable("Country");
@@ -1345,6 +1103,224 @@ public partial class TilbakeDbContext : DbContext
         modelBuilder.Entity<CoverType>(entity =>
         {
             entity.ToTable("CoverType");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Customer");
+
+            entity.ToTable("Customer", tb => tb.HasTrigger("Tr_Customer_Number"));
+
+            entity.HasIndex(e => e.IdNumber, "IX_Customer").IsUnique();
+
+            entity.HasIndex(e => e.CustomerNumber, "IX_Customer_CustomerNumber").IsUnique();
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.BirthDate).HasColumnType("date");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.IdNumber).HasMaxLength(50);
+            entity.Property(e => e.LastName).HasMaxLength(100);
+            entity.Property(e => e.MiddleName).HasMaxLength(50);
+            entity.Property(e => e.Phone).HasMaxLength(50);
+
+            entity.HasOne(d => d.Country).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.CountryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_Country");
+
+            entity.HasOne(d => d.CustomerStatus).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.CustomerStatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_CustomerStatus");
+
+            entity.HasOne(d => d.CustomerType).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.CustomerTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_CustomerType");
+
+            entity.HasOne(d => d.Gender).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.GenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_Gender");
+
+            entity.HasOne(d => d.IdDocumentType).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.IdDocumentTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_IdDocumentType");
+
+            entity.HasOne(d => d.MaritalStatus).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.MaritalStatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_MaritalStatus");
+
+            entity.HasOne(d => d.Occupation).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.OccupationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_Occupation");
+
+            entity.HasOne(d => d.Title).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.TitleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_Title");
+        });
+
+        modelBuilder.Entity<CustomerBankAccount>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_CustomerBankAccount");
+
+            entity.ToTable("CustomerBankAccount");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+            entity.HasOne(d => d.BankAccount).WithMany(p => p.CustomerBankAccounts)
+                .HasForeignKey(d => d.BankAccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerBankAccount_BankAccount");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBankAccounts)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerBankAccount_Customer");
+        });
+
+        modelBuilder.Entity<CustomerBulk>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_CustomerBulk");
+
+            entity.ToTable("CustomerBulk");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.BirthDate).HasColumnType("date");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.IdNumber).HasMaxLength(50);
+            entity.Property(e => e.IsExists).HasDefaultValueSql("((0))");
+            entity.Property(e => e.LastName).HasMaxLength(100);
+            entity.Property(e => e.MiddleName).HasMaxLength(50);
+            entity.Property(e => e.Mobile).HasMaxLength(50);
+            entity.Property(e => e.Phone).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<CustomerCarrier>(entity =>
+        {
+            entity.HasKey(e => new { e.CustomerId, e.CarrierId }).HasName("PK_CustomerCarrier");
+
+            entity.ToTable("CustomerCarrier");
+
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Carrier).WithMany(p => p.CustomerCarriers)
+                .HasForeignKey(d => d.CarrierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerCarrier_Carrier");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerCarriers)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerCarrier_Customer");
+        });
+
+        modelBuilder.Entity<CustomerDocument>(entity =>
+        {
+            entity.HasKey(e => new { e.CustomerId, e.DocumentId }).HasName("PK_CustomerDocument_1");
+
+            entity.ToTable("CustomerDocument");
+
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerDocuments)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerDocument_Customer");
+
+            entity.HasOne(d => d.Document).WithMany(p => p.CustomerDocuments)
+                .HasForeignKey(d => d.DocumentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerDocument_Document");
+        });
+
+        modelBuilder.Entity<CustomerNumberGenerator>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_CustomerNumberGenerator");
+
+            entity.ToTable("CustomerNumberGenerator");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<CustomerRisk>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_CustomerRisk");
+
+            entity.ToTable("CustomerRisk");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerRisks)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerRisk_Customer");
+
+            entity.HasOne(d => d.Risk).WithMany(p => p.CustomerRisks)
+                .HasForeignKey(d => d.RiskId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerRisk_Risk");
+        });
+
+        modelBuilder.Entity<CustomerRiskDocument>(entity =>
+        {
+            entity.HasKey(e => new { e.CustomerRiskId, e.DocumentId }).HasName("PK_CustomerRiskDocument_1");
+
+            entity.ToTable("CustomerRiskDocument");
+
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+
+            entity.HasOne(d => d.CustomerRisk).WithMany(p => p.CustomerRiskDocuments)
+                .HasForeignKey(d => d.CustomerRiskId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerRiskDocument_CustomerRisk");
+
+            entity.HasOne(d => d.Document).WithMany(p => p.CustomerRiskDocuments)
+                .HasForeignKey(d => d.DocumentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CustomerRiskDocument_Document");
+        });
+
+        modelBuilder.Entity<CustomerStatus>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_CustomerStatus");
+
+            entity.ToTable("CustomerStatus");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+            entity.Property(e => e.IsVisible).HasDefaultValueSql("((1))");
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<CustomerType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_CustomerType");
+
+            entity.ToTable("CustomerType");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.DateAdded).HasColumnType("datetime");
@@ -1452,25 +1428,6 @@ public partial class TilbakeDbContext : DbContext
                 .HasConstraintName("FK_ElectronicEquipment_RiskItem");
         });
 
-        modelBuilder.Entity<ElmahError>(entity =>
-        {
-            entity.HasKey(e => e.ErrorId).IsClustered(false);
-
-            entity.ToTable("ElmahError");
-
-            entity.HasIndex(e => new { e.Application, e.TimeUtc, e.Sequence }, "IX_ElmahError_App_Time_Seq").IsDescending(false, true, true);
-
-            entity.Property(e => e.ErrorId).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.Application).HasMaxLength(60);
-            entity.Property(e => e.Host).HasMaxLength(50);
-            entity.Property(e => e.Message).HasMaxLength(500);
-            entity.Property(e => e.Sequence).ValueGeneratedOnAdd();
-            entity.Property(e => e.Source).HasMaxLength(60);
-            entity.Property(e => e.TimeUtc).HasColumnType("datetime");
-            entity.Property(e => e.Type).HasMaxLength(100);
-            entity.Property(e => e.User).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<EmailAddress>(entity =>
         {
             entity.ToTable("EmailAddress");
@@ -1480,10 +1437,10 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.DateModified).HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(50);
 
-            entity.HasOne(d => d.Client).WithMany(p => p.EmailAddresses)
-                .HasForeignKey(d => d.ClientId)
+            entity.HasOne(d => d.Customer).WithMany(p => p.EmailAddresses)
+                .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientEmailAddress_Client");
+                .HasConstraintName("FK_CustomerEmailAddress_Customer");
         });
 
         modelBuilder.Entity<ExcessBuyBack>(entity =>
@@ -1568,18 +1525,6 @@ public partial class TilbakeDbContext : DbContext
                 .HasForeignKey(d => d.RiskItemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Glass_RiskItem");
-        });
-
-        modelBuilder.Entity<Hash>(entity =>
-        {
-            entity.HasKey(e => new { e.Key, e.Field }).HasName("PK_HangFire_Hash");
-
-            entity.ToTable("Hash", "HangFire");
-
-            entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Hash_ExpireAt").HasFilter("([ExpireAt] IS NOT NULL)");
-
-            entity.Property(e => e.Key).HasMaxLength(100);
-            entity.Property(e => e.Field).HasMaxLength(100);
         });
 
         modelBuilder.Entity<House>(entity =>
@@ -1718,9 +1663,18 @@ public partial class TilbakeDbContext : DbContext
                 .HasConstraintName("FK_InsurerBranch_Insurer");
         });
 
+        modelBuilder.Entity<InterMediate>(entity =>
+        {
+            entity.ToTable("InterMediate");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Flag).HasDefaultValueSql("((0))");
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<Invoice>(entity =>
         {
-            entity.ToTable("Invoice", tb => tb.HasTrigger("Tr_Invoice_Audit_Timestamp"));
+            entity.ToTable("Invoice", tb => tb.HasTrigger("Tr_Invoice_Number"));
 
             entity.HasIndex(e => e.InvoiceNumber, "IX_Invoice").IsUnique();
 
@@ -1783,45 +1737,6 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Job>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_HangFire_Job");
-
-            entity.ToTable("Job", "HangFire");
-
-            entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Job_ExpireAt").HasFilter("([ExpireAt] IS NOT NULL)");
-
-            entity.HasIndex(e => e.StateName, "IX_HangFire_Job_StateName").HasFilter("([StateName] IS NOT NULL)");
-
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-            entity.Property(e => e.ExpireAt).HasColumnType("datetime");
-            entity.Property(e => e.StateName).HasMaxLength(20);
-        });
-
-        modelBuilder.Entity<JobParameter>(entity =>
-        {
-            entity.HasKey(e => new { e.JobId, e.Name }).HasName("PK_HangFire_JobParameter");
-
-            entity.ToTable("JobParameter", "HangFire");
-
-            entity.Property(e => e.Name).HasMaxLength(40);
-
-            entity.HasOne(d => d.Job).WithMany(p => p.JobParameters)
-                .HasForeignKey(d => d.JobId)
-                .HasConstraintName("FK_HangFire_JobParameter_Job");
-        });
-
-        modelBuilder.Entity<JobQueue>(entity =>
-        {
-            entity.HasKey(e => new { e.Queue, e.Id }).HasName("PK_HangFire_JobQueue");
-
-            entity.ToTable("JobQueue", "HangFire");
-
-            entity.Property(e => e.Queue).HasMaxLength(50);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.FetchedAt).HasColumnType("datetime");
-        });
-
         modelBuilder.Entity<JobTitle>(entity =>
         {
             entity.ToTable("JobTitle");
@@ -1844,19 +1759,6 @@ public partial class TilbakeDbContext : DbContext
                 .HasForeignKey(d => d.RiskItemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Life_RiskItem");
-        });
-
-        modelBuilder.Entity<List>(entity =>
-        {
-            entity.HasKey(e => new { e.Key, e.Id }).HasName("PK_HangFire_List");
-
-            entity.ToTable("List", "HangFire");
-
-            entity.HasIndex(e => e.ExpireAt, "IX_HangFire_List_ExpireAt").HasFilter("([ExpireAt] IS NOT NULL)");
-
-            entity.Property(e => e.Key).HasMaxLength(100);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.ExpireAt).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<LossAdjuster>(entity =>
@@ -1923,10 +1825,10 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.DateModified).HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(50);
 
-            entity.HasOne(d => d.Client).WithMany(p => p.MobileNumbers)
-                .HasForeignKey(d => d.ClientId)
+            entity.HasOne(d => d.Customer).WithMany(p => p.MobileNumbers)
+                .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientMobileNumber_Client");
+                .HasConstraintName("FK_CustomerMobileNumber_Customer");
         });
 
         modelBuilder.Entity<Motor>(entity =>
@@ -2204,7 +2106,7 @@ public partial class TilbakeDbContext : DbContext
 
         modelBuilder.Entity<Policy>(entity =>
         {
-            entity.ToTable("Policy");
+            entity.ToTable("Policy", tb => tb.HasTrigger("Tr_Policy_Number"));
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Comment).HasMaxLength(100);
@@ -2215,9 +2117,9 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.InceptionDate).HasColumnType("date");
             entity.Property(e => e.InsurerPolicyNumber).HasMaxLength(50);
 
-            entity.HasOne(d => d.ClientBankAccount).WithMany(p => p.Policies)
-                .HasForeignKey(d => d.ClientBankAccountId)
-                .HasConstraintName("FK_Policy_ClientBankAccount");
+            entity.HasOne(d => d.CustomerBankAccount).WithMany(p => p.Policies)
+                .HasForeignKey(d => d.CustomerBankAccountId)
+                .HasConstraintName("FK_Policy_CustomerBankAccount");
 
             entity.HasOne(d => d.InsurerBranch).WithMany(p => p.Policies)
                 .HasForeignKey(d => d.InsurerBranchId)
@@ -2239,10 +2141,10 @@ public partial class TilbakeDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Policy_PolicyType");
 
-            entity.HasOne(d => d.PortfolioClient).WithMany(p => p.Policies)
-                .HasForeignKey(d => d.PortfolioClientId)
+            entity.HasOne(d => d.PortfolioCustomer).WithMany(p => p.Policies)
+                .HasForeignKey(d => d.PortfolioCustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Policy_PortfolioClient");
+                .HasConstraintName("FK_Policy_PortfolioCustomer");
 
             entity.HasOne(d => d.SalesType).WithMany(p => p.Policies)
                 .HasForeignKey(d => d.SalesTypeId)
@@ -2301,15 +2203,15 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.SumInsured).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
 
-            entity.HasOne(d => d.ClientRisk).WithMany(p => p.PolicyRisks)
-                .HasForeignKey(d => d.ClientRiskId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PolicyRisk_ClientRisk");
-
             entity.HasOne(d => d.CoverType).WithMany(p => p.PolicyRisks)
                 .HasForeignKey(d => d.CoverTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PolicyRisk_CoverType");
+
+            entity.HasOne(d => d.CustomerRisk).WithMany(p => p.PolicyRisks)
+                .HasForeignKey(d => d.CustomerRiskId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PolicyRisk_CustomerRisk");
 
             entity.HasOne(d => d.Policy).WithMany(p => p.PolicyRisks)
                 .HasForeignKey(d => d.PolicyId)
@@ -2403,30 +2305,32 @@ public partial class TilbakeDbContext : DbContext
                 .HasConstraintName("FK_PortfolioAdministrationFee_Portfolio");
         });
 
-        modelBuilder.Entity<PortfolioClient>(entity =>
+        modelBuilder.Entity<PortfolioCustomer>(entity =>
         {
-            entity.ToTable("PortfolioClient");
+            entity.HasKey(e => e.Id).HasName("PK_PortfolioCustomer");
 
-            entity.HasIndex(e => new { e.PortfolioId, e.ClientId }, "IX_PortfolioClient").IsUnique();
+            entity.ToTable("PortfolioCustomer");
+
+            entity.HasIndex(e => new { e.PortfolioId, e.CustomerId }, "IX_PortfolioCustomer").IsUnique();
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.DateAdded).HasColumnType("datetime");
             entity.Property(e => e.DateModified).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Client).WithMany(p => p.PortfolioClients)
-                .HasForeignKey(d => d.ClientId)
+            entity.HasOne(d => d.Customer).WithMany(p => p.PortfolioCustomers)
+                .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PortfolioClient_Client");
+                .HasConstraintName("FK_PortfolioCustomer_Customer");
 
-            entity.HasOne(d => d.ClientStatus).WithMany(p => p.PortfolioClients)
-                .HasForeignKey(d => d.ClientStatusId)
+            entity.HasOne(d => d.CustomerStatus).WithMany(p => p.PortfolioCustomers)
+                .HasForeignKey(d => d.CustomerStatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PortfolioClient_ClientStatus");
+                .HasConstraintName("FK_PortfolioCustomer_CustomerStatus");
 
-            entity.HasOne(d => d.Portfolio).WithMany(p => p.PortfolioClients)
+            entity.HasOne(d => d.Portfolio).WithMany(p => p.PortfolioCustomers)
                 .HasForeignKey(d => d.PortfolioId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PortfolioClient_Portfolio");
+                .HasConstraintName("FK_PortfolioCustomer_Portfolio");
         });
 
         modelBuilder.Entity<PortfolioExcessBuyBack>(entity =>
@@ -2645,6 +2549,18 @@ public partial class TilbakeDbContext : DbContext
                 .HasConstraintName("FK_PremiumRefundClaim_PremiumRefund");
         });
 
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.ToTable("Product");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.BasePrice).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.DateModified).HasColumnType("datetime");
+            entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<PublicLiability>(entity =>
         {
             entity.ToTable("PublicLiability");
@@ -2661,12 +2577,12 @@ public partial class TilbakeDbContext : DbContext
 
         modelBuilder.Entity<Quote>(entity =>
         {
-            entity.ToTable("Quote", tb => tb.HasTrigger("Tr_Quote_Audit_Timestamp"));
+            entity.ToTable("Quote", tb => tb.HasTrigger("Tr_Quote_Number"));
 
             entity.HasIndex(e => e.QuoteNumber, "IX_Quote").IsUnique();
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.ClientInfo).HasMaxLength(150);
+            entity.Property(e => e.CustomerInfo).HasMaxLength(150);
             entity.Property(e => e.DateAdded).HasColumnType("datetime");
             entity.Property(e => e.DateModified).HasColumnType("datetime");
             entity.Property(e => e.InternalInfo).HasMaxLength(150);
@@ -2675,9 +2591,9 @@ public partial class TilbakeDbContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("date");
 
-            entity.HasOne(d => d.ClientBankAccount).WithMany(p => p.Quotes)
-                .HasForeignKey(d => d.ClientBankAccountId)
-                .HasConstraintName("FK_Quote_ClientBankAccount");
+            entity.HasOne(d => d.CustomerBankAccount).WithMany(p => p.Quotes)
+                .HasForeignKey(d => d.CustomerBankAccountId)
+                .HasConstraintName("FK_Quote_CustomerBankAccount");
 
             entity.HasOne(d => d.InsurerBranch).WithMany(p => p.Quotes)
                 .HasForeignKey(d => d.InsurerBranchId)
@@ -2696,10 +2612,10 @@ public partial class TilbakeDbContext : DbContext
                 .HasForeignKey(d => d.PolicyTypeId)
                 .HasConstraintName("FK_Quote_PolicyType");
 
-            entity.HasOne(d => d.PortfolioClient).WithMany(p => p.Quotes)
-                .HasForeignKey(d => d.PortfolioClientId)
+            entity.HasOne(d => d.PortfolioCustomer).WithMany(p => p.Quotes)
+                .HasForeignKey(d => d.PortfolioCustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Quote_PortfolioClient");
+                .HasConstraintName("FK_Quote_PortfolioCustomer");
 
             entity.HasOne(d => d.QuoteStatus).WithMany(p => p.Quotes)
                 .HasForeignKey(d => d.QuoteStatusId)
@@ -2719,10 +2635,10 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.SumInsured).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
 
-            entity.HasOne(d => d.ClientRisk).WithMany(p => p.QuoteItems)
-                .HasForeignKey(d => d.ClientRiskId)
+            entity.HasOne(d => d.CustomerRisk).WithMany(p => p.QuoteItems)
+                .HasForeignKey(d => d.CustomerRiskId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_QuoteItem_ClientRisk");
+                .HasConstraintName("FK_QuoteItem_CustomerRisk");
 
             entity.HasOne(d => d.CoverType).WithMany(p => p.QuoteItems)
                 .HasForeignKey(d => d.CoverTypeId)
@@ -2974,7 +2890,7 @@ public partial class TilbakeDbContext : DbContext
 
         modelBuilder.Entity<Requisition>(entity =>
         {
-            entity.ToTable("Requisition", tb => tb.HasTrigger("Tr_Requisition_Audit_Timestamp"));
+            entity.ToTable("Requisition", tb => tb.HasTrigger("Tr_Requisition_Number"));
 
             entity.HasIndex(e => e.RequisitionNumber, "IX_Requisition").IsUnique();
 
@@ -3150,58 +3066,6 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Schema>(entity =>
-        {
-            entity.HasKey(e => e.Version).HasName("PK_HangFire_Schema");
-
-            entity.ToTable("Schema", "HangFire");
-
-            entity.Property(e => e.Version).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<Server>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_HangFire_Server");
-
-            entity.ToTable("Server", "HangFire");
-
-            entity.HasIndex(e => e.LastHeartbeat, "IX_HangFire_Server_LastHeartbeat");
-
-            entity.Property(e => e.Id).HasMaxLength(200);
-            entity.Property(e => e.LastHeartbeat).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<Set>(entity =>
-        {
-            entity.HasKey(e => new { e.Key, e.Value }).HasName("PK_HangFire_Set");
-
-            entity.ToTable("Set", "HangFire");
-
-            entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Set_ExpireAt").HasFilter("([ExpireAt] IS NOT NULL)");
-
-            entity.HasIndex(e => new { e.Key, e.Score }, "IX_HangFire_Set_Score");
-
-            entity.Property(e => e.Key).HasMaxLength(100);
-            entity.Property(e => e.Value).HasMaxLength(256);
-            entity.Property(e => e.ExpireAt).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<State>(entity =>
-        {
-            entity.HasKey(e => new { e.JobId, e.Id }).HasName("PK_HangFire_State");
-
-            entity.ToTable("State", "HangFire");
-
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-            entity.Property(e => e.Name).HasMaxLength(20);
-            entity.Property(e => e.Reason).HasMaxLength(100);
-
-            entity.HasOne(d => d.Job).WithMany(p => p.States)
-                .HasForeignKey(d => d.JobId)
-                .HasConstraintName("FK_HangFire_State_Job");
-        });
-
         modelBuilder.Entity<StatedBenefit>(entity =>
         {
             entity.ToTable("StatedBenefit");
@@ -3317,9 +3181,9 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.PersonVisited).HasMaxLength(50);
             entity.Property(e => e.ReturnDate).HasColumnType("date");
 
-            entity.HasOne(d => d.PortfolioClient).WithMany(p => p.Travels)
-                .HasForeignKey(d => d.PortfolioClientId)
-                .HasConstraintName("FK_Travel_PortfolioClient");
+            entity.HasOne(d => d.PortfolioCustomer).WithMany(p => p.Travels)
+                .HasForeignKey(d => d.PortfolioCustomerId)
+                .HasConstraintName("FK_Travel_PortfolioCustomer");
         });
 
         modelBuilder.Entity<TravelMember>(entity =>
@@ -3405,10 +3269,10 @@ public partial class TilbakeDbContext : DbContext
             entity.Property(e => e.ReferenceDate).HasColumnType("date");
             entity.Property(e => e.WithdrawalDate).HasColumnType("date");
 
-            entity.HasOne(d => d.PortfolioClient).WithMany(p => p.Withdrawals)
-                .HasForeignKey(d => d.PortfolioClientId)
+            entity.HasOne(d => d.PortfolioCustomer).WithMany(p => p.Withdrawals)
+                .HasForeignKey(d => d.PortfolioCustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Withdrawal_PortfolioClient");
+                .HasConstraintName("FK_Withdrawal_PortfolioCustomer");
         });
 
         modelBuilder.Entity<WorkmanCompensation>(entity =>

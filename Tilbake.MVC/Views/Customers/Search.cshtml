@@ -1,0 +1,63 @@
+﻿@model CustomerSearchViewModel
+@{
+    ViewData["Title"] = ViewData["PortfolioName"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<br />
+
+<form asp-action="Search" method="get">
+    <div class="form-inline border border-primary justify-content-end text-right">  
+        <label asp-for="SearchString" style="display: block; padding-right: 10px; text-align: right;">Enter search string: </label>        
+        <input type="search" asp-for="SearchString" placeholder="Enter Keywords?" class="form-control" />        
+        <button type="submit" id="SearchButton" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <strong>Customer Number</strong>
+            </th>
+            <th>
+                <strong>First Name</strong>
+            </th>
+            <th>
+                <strong>Last Name</strong>
+            </th>
+            <th>
+                <strong>Id Number</strong>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CustomerViewModels) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdNumber)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

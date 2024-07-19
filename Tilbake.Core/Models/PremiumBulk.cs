@@ -7,7 +7,7 @@ public partial class PremiumBulk
 {
     public Guid Id { get; set; }
 
-    public Guid PortfolioClientId { get; set; }
+    public Guid PortfolioCustomerId { get; set; }
 
     public string IdNumber { get; set; } = null!;
 

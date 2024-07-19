@@ -41,9 +41,9 @@ namespace Tilbake.MVC.Mapping
             CreateMap<Carrier, CarrierViewModel>().ReverseMap();
             CreateMap<City, CityViewModel>().ReverseMap();
 
-            CreateMap<Client, ClientViewModel>()
+            CreateMap<Customer, CustomerViewModel>()
                     .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses))
-                    .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType))
+                    .ForMember(dest => dest.CustomerType, opt => opt.MapFrom(src => src.CustomerType))
                     .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
                     .ForMember(dest => dest.IdDocumentType, opt => opt.MapFrom(src => src.IdDocumentType))
                     .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
@@ -52,20 +52,20 @@ namespace Tilbake.MVC.Mapping
                     .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                     .ForMember(dest => dest.EmailAddresses, opt => opt.MapFrom(src => src.EmailAddresses))
                     .ForMember(dest => dest.MobileNumbers, opt => opt.MapFrom(src => src.MobileNumbers))
-                    .ForMember(dest => dest.ClientCarriers, opt => opt.MapFrom(src => src.ClientCarriers)).ReverseMap();
+                    .ForMember(dest => dest.CustomerCarriers, opt => opt.MapFrom(src => src.CustomerCarriers)).ReverseMap();
 
-            CreateMap<ClientBulk, ClientBulkViewModel>().ReverseMap();
+            CreateMap<CustomerBulk, CustomerBulkViewModel>().ReverseMap();
 
-            CreateMap<ClientCarrier, ClientCarrierViewModel>()
+            CreateMap<CustomerCarrier, CustomerCarrierViewModel>()
                     .ForMember(dest => dest.Carrier, opt => opt.MapFrom(src => src.Carrier)).ReverseMap();
 
             CreateMap<Document, DocumentViewModel>()
-                    //.ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
+                    //.ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType)).ReverseMap();
 
-            CreateMap<ClientRisk, ClientRiskViewModel>().ReverseMap();
-            CreateMap<ClientType, ClientTypeViewModel>().ReverseMap();
-            CreateMap<ClientStatus, ClientStatusViewModel>().ReverseMap();
+            CreateMap<CustomerRisk, CustomerRiskViewModel>().ReverseMap();
+            CreateMap<CustomerType, CustomerTypeViewModel>().ReverseMap();
+            CreateMap<CustomerStatus, CustomerStatusViewModel>().ReverseMap();
             CreateMap<CommissionRate, CommissionRateViewModel>().ReverseMap();
 
             CreateMap<Company, CompanyViewModel>()
@@ -118,8 +118,8 @@ namespace Tilbake.MVC.Mapping
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City.Name)).ReverseMap();
 
             CreateMap<Invoice, InvoiceViewModel>()
-                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Policy.PortfolioClient.Client.FirstName))
-                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Policy.PortfolioClient.Client.LastName))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Policy.PortfolioCustomer.Customer.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Policy.PortfolioCustomer.Customer.LastName))
                 .ForMember(dest => dest.InvoiceStatus, opt => opt.MapFrom(src => src.InvoiceStatus))
                 .ForMember(dest => dest.InvoiceItems, opt => opt.MapFrom(src => src.InvoiceItems)).ReverseMap();
 
@@ -144,10 +144,10 @@ namespace Tilbake.MVC.Mapping
             CreateMap<PaymentType, PaymentTypeViewModel>().ReverseMap();
 
             CreateMap<Policy, PolicyViewModel>()
-                .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.ClientBankAccount.BankAccount.AccountNumber))
+                .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.CustomerBankAccount.BankAccount.AccountNumber))
                 .ForMember(dest => dest.InsurerName, opt => opt.MapFrom(src => src.InsurerBranch.Insurer.Name))
                 .ForMember(dest => dest.InsurerBranch, opt => opt.MapFrom(src => src.InsurerBranch))
-                .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
+                .ForMember(dest => dest.PortfolioCustomer, opt => opt.MapFrom(src => src.PortfolioCustomer))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
                 .ForMember(dest => dest.PolicyStatus, opt => opt.MapFrom(src => src.PolicyStatus))
                 .ForMember(dest => dest.PolicyType, opt => opt.MapFrom(src => src.PolicyType))
@@ -160,14 +160,14 @@ namespace Tilbake.MVC.Mapping
             CreateMap<PolicyType, PolicyTypeViewModel>().ReverseMap();
 
             CreateMap<Portfolio, PortfolioViewModel>()
-                    .ForMember(dest => dest.TotalClients, opt => opt.MapFrom(src => src.PortfolioClients.Count)).ReverseMap();
+                    .ForMember(dest => dest.TotalCustomers, opt => opt.MapFrom(src => src.PortfolioCustomers.Count)).ReverseMap();
 
             CreateMap<PortfolioAdministrationFee, PortfolioAdministrationFeeViewModel>()
                 .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.Insurer)).ReverseMap();
 
-            CreateMap<PortfolioClient, PortfolioClientViewModel>()
-                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
-                .ForMember(dest => dest.ClientStatus, opt => opt.MapFrom(src => src.ClientStatus))
+            CreateMap<PortfolioCustomer, PortfolioCustomerViewModel>()
+                .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
+                .ForMember(dest => dest.CustomerStatus, opt => opt.MapFrom(src => src.CustomerStatus))
                 .ForMember(dest => dest.Portfolio, opt => opt.MapFrom(src => src.Portfolio)).ReverseMap();
 
             CreateMap<PortfolioExcessBuyBack, PortfolioExcessBuyBackViewModel>()
@@ -179,8 +179,8 @@ namespace Tilbake.MVC.Mapping
             CreateMap<Premium, PremiumViewModel>().ReverseMap();
 
             CreateMap<Quote, QuoteViewModel>()
-                .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient))
-                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.PortfolioClient.Client))
+                .ForMember(dest => dest.PortfolioCustomer, opt => opt.MapFrom(src => src.PortfolioCustomer))
+                .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.PortfolioCustomer.Customer))
                 .ForMember(dest => dest.Insurer, opt => opt.MapFrom(src => src.InsurerBranch.Insurer))
                 .ForMember(dest => dest.InsurerBranch, opt => opt.MapFrom(src => src.InsurerBranch))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
@@ -224,8 +224,8 @@ namespace Tilbake.MVC.Mapping
             CreateMap<Title, TitleViewModel>().ReverseMap();
 
             CreateMap<Travel, TravelViewModel>()
-                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.PortfolioClient.Client))
-                .ForMember(dest => dest.PortfolioClient, opt => opt.MapFrom(src => src.PortfolioClient)).ReverseMap();
+                .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.PortfolioCustomer.Customer))
+                .ForMember(dest => dest.PortfolioCustomer, opt => opt.MapFrom(src => src.PortfolioCustomer)).ReverseMap();
 
             CreateMap<TravelBeneficiary, TravelBeneficiaryViewModel>()
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))

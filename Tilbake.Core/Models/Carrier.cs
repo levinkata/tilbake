@@ -17,5 +17,5 @@ public partial class Carrier
 
     public DateTime? DateModified { get; set; }
 
-    public virtual ICollection<ClientCarrier> ClientCarriers { get; set; } = new List<ClientCarrier>();
+    public virtual ICollection<CustomerCarrier> CustomerCarriers { get; set; } = new List<CustomerCarrier>();
 }

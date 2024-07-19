@@ -19,7 +19,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<AllRisk> GetAllRisk(Guid id)
         {
             var result = (from q in _context.PolicyRisks
-                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join c in _context.CustomerRisks on q.CustomerRiskId equals c.Id
                           join r in _context.Risks on c.RiskId equals r.Id
                           join a in _context.AllRisks on r.AllRiskId equals a.Id
                           where q.Id == id && r.AllRiskId != null
@@ -31,7 +31,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<AllRiskSpecified> GetAllRiskSpecified(Guid id)
         {
             var result = (from q in _context.PolicyRisks
-                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join c in _context.CustomerRisks on q.CustomerRiskId equals c.Id
                           join r in _context.Risks on c.RiskId equals r.Id
                           join a in _context.AllRiskSpecifieds on r.AllRiskSpecifiedId equals a.Id
                           where q.Id == id && r.AllRiskSpecifiedId != null
@@ -43,7 +43,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<Building> GetBuilding(Guid id)
         {
             var result = (from q in _context.PolicyRisks
-                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join c in _context.CustomerRisks on q.CustomerRiskId equals c.Id
                           join r in _context.Risks on c.RiskId equals r.Id
                           join a in _context.Buildings on r.BuildingId equals a.Id
                           where q.Id == id && r.BuildingId != null
@@ -62,7 +62,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<Content> GetContent(Guid id)
         {
             var result = (from q in _context.PolicyRisks
-                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join c in _context.CustomerRisks on q.CustomerRiskId equals c.Id
                           join r in _context.Risks on c.RiskId equals r.Id
                           join a in _context.Contents on r.ContentId equals a.Id
                           where q.Id == id && r.ContentId != null
@@ -74,7 +74,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<House> GetHouse(Guid id)
         {
             var result = (from q in _context.PolicyRisks
-                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join c in _context.CustomerRisks on q.CustomerRiskId equals c.Id
                           join r in _context.Risks on c.RiskId equals r.Id
                           join a in _context.Houses on r.HouseId equals a.Id
                           where q.Id == id && r.HouseId != null
@@ -86,7 +86,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<Motor> GetMotor(Guid id)
         {
             var result = (from q in _context.PolicyRisks
-                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join c in _context.CustomerRisks on q.CustomerRiskId equals c.Id
                           join r in _context.Risks on c.RiskId equals r.Id
                           join a in _context.Motors on r.MotorId equals a.Id
                           where q.Id == id && r.MotorId != null
@@ -95,19 +95,19 @@ namespace Tilbake.EF.Persistence.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<decimal> GetPremiumByPortfolioClientId(Guid portfolioClientId)
+        public async Task<decimal> GetPremiumByPortfolioCustomerId(Guid portfolioCustomerId)
         {
             var result = _context.PolicyRisks
-                                        .Where(e => e.Policy.PortfolioClientId == portfolioClientId)
+                                        .Where(e => e.Policy.PortfolioCustomerId == portfolioCustomerId)
                                         .Sum(r => r.Premium);
 
             return await Task.FromResult(result);
         }
 
-        public async Task<decimal> GetSumInsuredByPortfolioClientId(Guid portfolioClientId)
+        public async Task<decimal> GetSumInsuredByPortfolioCustomerId(Guid portfolioCustomerId)
         {
             var result = _context.PolicyRisks
-                                        .Where(e => e.Policy.PortfolioClientId == portfolioClientId)
+                                        .Where(e => e.Policy.PortfolioCustomerId == portfolioCustomerId)
                                         .Sum(r => r.SumInsured);
 
             return await Task.FromResult(result);
@@ -116,7 +116,7 @@ namespace Tilbake.EF.Persistence.Repositories
         public async Task<Travel> GetTravel(Guid id)
         {
             var result = (from q in _context.PolicyRisks
-                          join c in _context.ClientRisks on q.ClientRiskId equals c.Id
+                          join c in _context.CustomerRisks on q.CustomerRiskId equals c.Id
                           join r in _context.Risks on c.RiskId equals r.Id
                           join a in _context.Travels on r.TravelId equals a.Id
                           where q.Id == id && r.TravelId != null

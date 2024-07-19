@@ -1,0 +1,74 @@
+﻿@model IEnumerable<CustomerViewModel>
+@{
+    var portfolioId = ViewBag.PortfolioId;
+}
+<h1>@ViewData["Title"]</h1>
+
+<h4>Customers</h4>
+@if (ViewBag.PortfolioId != null)
+{
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <div class="form-group">
+            <a class="btn btn-primary" asp-controller="PortfolioCustomers" asp-action="Create" asp-route-portfolioId="@ViewBag.PortfolioId">New Customer</a>
+        </div>
+    </div>
+}
+<div class="card mb-3">
+    <div class="card-body">
+        @*<h6 class="card-title mb-3">Customers</h6>*@
+        @if (Model.Any())
+        {
+            <table id="tblCustomer" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.CustomerNumber)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.FirstName)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.LastName)</strong>
+                        </th>
+                        <th>
+                            <strong>@Html.DisplayNameFor(model => model.IdNumber)</strong>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdNumber)
+                            </td>
+                            <td class="justify-content-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="PortfolioCustomers" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-customerId="@item.Id">View</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PortfolioCustomers" asp-action="Edit" asp-route-portfolioId="@portfolioId" asp-route-customerId="@item.Id">Edit</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Print</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PortfolioCustomers" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

@@ -20,7 +20,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await _context.Portfolios
                                 .Where(c => !c.AspnetUserPortfolios
                                 .Any(u => u.AspNetUserId == aspNetUserId))
-                                .Include(c => c.PortfolioClients)
+                                .Include(c => c.PortfolioCustomers)
                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync();
         }
 
@@ -29,7 +29,7 @@ namespace Tilbake.EF.Persistence.Repositories
             return await _context.Portfolios
                                 .Where(c => c.AspnetUserPortfolios
                                 .Any(p => p.AspNetUserId == aspNetUserId))
-                                .Include(c => c.PortfolioClients)
+                                .Include(c => c.PortfolioCustomers)
                                 .OrderBy(n => n.Name).AsNoTracking().ToListAsync();
         } 
     }

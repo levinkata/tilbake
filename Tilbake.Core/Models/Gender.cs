@@ -17,7 +17,7 @@ public partial class Gender
 
     public DateTime? DateModified { get; set; }
 
-    public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
     public virtual ICollection<Driver> Drivers { get; set; } = new List<Driver>();
 }

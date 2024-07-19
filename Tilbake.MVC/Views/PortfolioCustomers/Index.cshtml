@@ -1,0 +1,8 @@
+﻿@model CustomerViewModel
+
+@{
+    ViewData["Title"] = Model.PortfolioName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@await Component.InvokeAsync("Customers", new { portfolioId = Model.PortfolioId })

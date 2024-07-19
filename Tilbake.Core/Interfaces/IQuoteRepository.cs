@@ -8,7 +8,7 @@ namespace Tilbake.Core.Interfaces
     public interface IQuoteRepository : IRepository<Quote>
     {
         Task<IEnumerable<Quote>> GetByPortfolioId(Guid portfolioId);
-        Task<IEnumerable<Quote>> GetByPortfolioClientId(Guid portfolioClientId);
+        Task<IEnumerable<Quote>> GetByPortfolioCustomerId(Guid portfolioCustomerId);
         Task<Quote> GetByQuoteNumberAsync(int quoteNumber);
     }
 }

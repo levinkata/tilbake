@@ -17,5 +17,5 @@ public partial class Title
 
     public DateTime? DateModified { get; set; }
 
-    public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 }

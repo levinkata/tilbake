@@ -3,12 +3,12 @@
     public class Constants
     {
         public const string ClaimFolder = "\\wwwroot\\documents\\claim\\";
-        public const string ClientFolder = "\\wwwroot\\documents\\client\\";
-        public const string ClientRiskFolder = "\\wwwroot\\documents\\clientrisk\\";
+        public const string CustomerFolder = "\\wwwroot\\documents\\customer\\";
+        public const string CustomerRiskFolder = "\\wwwroot\\documents\\customerrisk\\";
         public const string PaymentFolder = "\\wwwroot\\documents\\payment\\";
 
-        //  Client Status
-        public const string DefaultClientStatusId = "29504075-711c-4ee3-bb26-e6679ab37326";
+        //  Customer Status
+        public const string DefaultCustomerStatusId = "29504075-711c-4ee3-bb26-e6679ab37326";
 
         //  Mobile
         public const string DefaultMobile = "99999999";

@@ -4,7 +4,7 @@ namespace Tilbake.MVC.Models
 {
     public class QuoteObjectViewModel
     {
-        public Guid ClientId { get; set; }
+        public Guid CustomerId { get; set; }
 
         public QuoteViewModel Quote { get; set; }
         public QuoteItemViewModel[] QuoteItems  { get; set; }

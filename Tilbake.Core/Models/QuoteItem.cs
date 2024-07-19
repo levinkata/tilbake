@@ -9,7 +9,7 @@ public partial class QuoteItem
 
     public Guid QuoteId { get; set; }
 
-    public Guid ClientRiskId { get; set; }
+    public Guid CustomerRiskId { get; set; }
 
     public Guid CoverTypeId { get; set; }
 
@@ -37,7 +37,7 @@ public partial class QuoteItem
 
     public bool IsExcessRequired { get; set; }
 
-    public virtual ClientRisk ClientRisk { get; set; } = null!;
+    public virtual CustomerRisk CustomerRisk { get; set; } = null!;
 
     public virtual CoverType CoverType { get; set; } = null!;
 

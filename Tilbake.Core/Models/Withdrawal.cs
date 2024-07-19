@@ -7,7 +7,7 @@ public partial class Withdrawal
 {
     public Guid Id { get; set; }
 
-    public Guid PortfolioClientId { get; set; }
+    public Guid PortfolioCustomerId { get; set; }
 
     public string Reference { get; set; } = null!;
 
@@ -27,5 +27,5 @@ public partial class Withdrawal
 
     public DateTime? DateModified { get; set; }
 
-    public virtual PortfolioClient PortfolioClient { get; set; } = null!;
+    public virtual PortfolioCustomer PortfolioCustomer { get; set; } = null!;
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+// using Serilog;
 using System;
 using Tilbake.Core.Context;
 using Tilbake.EF.IoC;
@@ -20,19 +20,19 @@ using Tilbake.MVC.Mapping;
 using Tilbake.MVC.Services;
 using Tilbake.MVC.Validators;
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+// Log.Logger = new LoggerConfiguration()
+//     .WriteTo.Console()
+//     .CreateBootstrapLogger();
 
-Log.Information("Starting up");
+// Log.Information("Starting up");
 
-try
-{
+// try
+// {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((ctx, lc) => lc
-        .WriteTo.Console()
-        .ReadFrom.Configuration(ctx.Configuration));
+    // builder.Host.UseSerilog((ctx, lc) => lc
+    //     .WriteTo.Console()
+    //     .ReadFrom.Configuration(ctx.Configuration));
 
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());  //  Added for Autofac by Levi Nkata
 
@@ -41,7 +41,7 @@ try
     builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacModule()));  //  Added for Autofac by Levi Nkata
 
     // Configure Serilog logging to the console.
-    builder.Logging.AddSerilog();
+    // builder.Logging.AddSerilog();
 
     // Add services to the container.
     var connectionString = builder.Configuration.GetConnectionString("Tilbake");
@@ -112,7 +112,7 @@ try
     // Write streamlined request completion events, instead of the more verbose ones from the framework.
     // To use the default framework request logging instead, remove this line and set the "Microsoft"
     // level in appsettings.json to "Information".
-    app.UseSerilogRequestLogging(); // Added by Levi Nkata 22/11/2021
+    // app.UseSerilogRequestLogging(); // Added by Levi Nkata 22/11/2021
 
     app.UseRouting();
 
@@ -126,13 +126,13 @@ try
     app.MapRazorPages();
 
     app.Run();
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Unhandled exception");
-}
-finally
-{
-    Log.Information("Shut down complete");
-    Log.CloseAndFlush();
-}
+// }
+// catch (Exception ex)
+// {
+//     Log.Fatal(ex, "Unhandled exception");
+// }
+// finally
+// {
+//     Log.Information("Shut down complete");
+//     Log.CloseAndFlush();
+// }

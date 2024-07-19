@@ -27,9 +27,9 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: Documents
-        public IActionResult Index(Guid clientId)
+        public IActionResult Index(Guid customerId)
         {
-            ViewBag.ClientId = clientId;
+            ViewBag.CustomerId = customerId;
             return View();
         }
 
@@ -47,13 +47,13 @@ namespace Tilbake.MVC.Controllers
         }
 
         // GET: Documents/Create
-        public async Task<IActionResult> Create(Guid portfolioId, Guid clientId)
+        public async Task<IActionResult> Create(Guid portfolioId, Guid customerId)
         {
             var documentTypes = await _unitOfWork.DocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
 
             DocumentViewModel model = new()
             {
-                ClientId = clientId,
+                CustomerId = customerId,
                 PortfolioId = portfolioId,
                 DocumentTypeList = MVCHelperExtensions.ToSelectList(documentTypes, Guid.Empty),
             };
@@ -70,7 +70,7 @@ namespace Tilbake.MVC.Controllers
             {
                 var file = model.Document;
 
-                var basePath = Path.Combine(Directory.GetCurrentDirectory() + Constants.ClientFolder);
+                var basePath = Path.Combine(Directory.GetCurrentDirectory() + Constants.CustomerFolder);
                 bool basePathExists = Directory.Exists(basePath);
                 if (!basePathExists) Directory.CreateDirectory(basePath);
 
@@ -85,19 +85,19 @@ namespace Tilbake.MVC.Controllers
                         await file.CopyToAsync(stream);
                     }
 
-                    var clientDocument = _mapper.Map<DocumentViewModel, Document>(model);
-                    clientDocument.Id = Guid.NewGuid();
-                    clientDocument.FileType = file.ContentType;
-                    clientDocument.Extension = extension;
-                    clientDocument.Name = fileName;
-                    clientDocument.DocumentDate = DateTime.Now;
-                    clientDocument.DocumentPath = filePath;
-                    clientDocument.DateAdded = DateTime.Now;
+                    var customerDocument = _mapper.Map<DocumentViewModel, Document>(model);
+                    customerDocument.Id = Guid.NewGuid();
+                    customerDocument.FileType = file.ContentType;
+                    customerDocument.Extension = extension;
+                    customerDocument.Name = fileName;
+                    customerDocument.DocumentDate = DateTime.Now;
+                    customerDocument.DocumentPath = filePath;
+                    customerDocument.DateAdded = DateTime.Now;
 
-                    await _unitOfWork.Documents.AddAsync(clientDocument);
+                    await _unitOfWork.Documents.AddAsync(customerDocument);
                 }
                 await _unitOfWork.CompleteAsync();
-                return RedirectToAction(nameof(Details), "PortfolioClients", new { model.PortfolioId, model.ClientId });
+                return RedirectToAction(nameof(Details), "PortfolioCustomers", new { model.PortfolioId, model.CustomerId });
             }
             var documentTypes = await _unitOfWork.DocumentTypes.GetAll(r => r.OrderBy(n => n.Name));
 
@@ -148,10 +148,10 @@ namespace Tilbake.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var clientDocument = _mapper.Map<DocumentViewModel, Document>(model);
-                clientDocument.DateModified = DateTime.Now;
+                var customerDocument = _mapper.Map<DocumentViewModel, Document>(model);
+                customerDocument.DateModified = DateTime.Now;
 
-                await _unitOfWork.Documents.Update(clientDocument);
+                await _unitOfWork.Documents.Update(customerDocument);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -177,7 +177,7 @@ namespace Tilbake.MVC.Controllers
         public IActionResult DeleteConfirmed(DocumentViewModel model)
         {
             _unitOfWork.Documents.Delete(model.Id);
-            return RedirectToAction(nameof(Details), "PortfolioClients", new { model.ClientId });
+            return RedirectToAction(nameof(Details), "PortfolioCustomers", new { model.CustomerId });
         }
     }
 }

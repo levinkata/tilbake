@@ -17,7 +17,7 @@ namespace Tilbake.MVC.Models
 
         [Display(Name = "City")]
         public Guid CityId { get; set; }
-        public Guid? ClientId { get; set; }
+        public Guid? CustomerId { get; set; }
         public Guid? LossAdjusterId { get; set; }
         public Guid? RepairerId { get; set; }
         public Guid? TracingAgentId { get; set; }

@@ -31,7 +31,7 @@ public partial class Portfolio
 
     public virtual ICollection<PortfolioAdministrationFee> PortfolioAdministrationFees { get; set; } = new List<PortfolioAdministrationFee>();
 
-    public virtual ICollection<PortfolioClient> PortfolioClients { get; set; } = new List<PortfolioClient>();
+    public virtual ICollection<PortfolioCustomer> PortfolioCustomers { get; set; } = new List<PortfolioCustomer>();
 
     public virtual ICollection<PortfolioExcessBuyBack> PortfolioExcessBuyBacks { get; set; } = new List<PortfolioExcessBuyBack>();
 

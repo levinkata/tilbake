@@ -5,7 +5,7 @@ namespace Tilbake.MVC.Models
 {
     public class MobileNumberViewModel : BaseViewModel
     {
-        public Guid ClientId { get; set; }
+        public Guid CustomerId { get; set; }
 
         [Display(Name = "Is primary?")]
         public bool IsPrimary { get; set; }

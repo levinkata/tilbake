@@ -1,0 +1,8 @@
+﻿@{
+    ViewData["Title"] = "All Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*Execute CustomersViewComponent - List all Customer*@
+@await Component.InvokeAsync("Customers", new { portfolioId = Guid.Empty })
+

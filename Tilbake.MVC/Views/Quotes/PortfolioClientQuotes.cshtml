@@ -3,9 +3,9 @@
 @{
     ViewData["Title"] = ViewBag.PortfolioName;
 
-        var FullName = String.IsNullOrEmpty(ViewBag.Client.FirstName) ? ViewBag.Client.LastName : 
-                    ViewBag.Client.FirstName + " " + 
-                    ViewBag.Client.LastName;
+        var FullName = String.IsNullOrEmpty(ViewBag.Customer.FirstName) ? ViewBag.Customer.LastName : 
+                    ViewBag.Customer.FirstName + " " + 
+                    ViewBag.Customer.LastName;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -19,7 +19,7 @@
             </div>
             <div class="col-8 col-sm-auto text-end ps-2">
                 <div>
-                    <a asp-action="Create" asp-route-portfolioClientId="@ViewBag.PortfolioClientId" class="btn btn-outline-secondary btn-sm">
+                    <a asp-action="Create" asp-route-portfolioCustomerId="@ViewBag.PortfolioCustomerId" class="btn btn-outline-secondary btn-sm">
                         <span class="fas fa-plus text-muted"></span> New Quote
                     </a>
                 </div>
@@ -86,7 +86,7 @@
 </div>
 
 <div>
-    <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-clientId="@ViewBag.ClientId">Return</a>
+    <a asp-controller="PortfolioCustomers" asp-action="Details" asp-route-portfolioId="@ViewBag.PortfolioId" asp-route-customerId="@ViewBag.CustomerId">Return</a>
 </div>
 
 @section Scripts {

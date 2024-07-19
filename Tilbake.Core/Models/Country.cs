@@ -21,7 +21,7 @@ public partial class Country
 
     public virtual ICollection<City> Cities { get; set; } = new List<City>();
 
-    public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
     public virtual ICollection<TravelMember> TravelMembers { get; set; } = new List<TravelMember>();
 }

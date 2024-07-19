@@ -9,40 +9,40 @@ using Tilbake.Core.Models;
 
 namespace Tilbake.EF.Persistence.Repositories
 {
-    public class PortfolioClientRepository : Repository<PortfolioClient>, IPortfolioClientRepository
+    public class PortfolioCustomerRepository : Repository<PortfolioCustomer>, IPortfolioCustomerRepository
     {
-        public PortfolioClientRepository(TilbakeDbContext context) : base(context)
+        public PortfolioCustomerRepository(TilbakeDbContext context) : base(context)
         {
 
         }
 
-        public async Task<IEnumerable<Client>> GetByPortfolioId(Guid portfolioId)
+        public async Task<IEnumerable<Customer>> GetByPortfolioId(Guid portfolioId)
         {
-            return await _context.Clients
+            return await _context.Customers
                                 .Include(c => c.EmailAddresses)
                                 .Include(c => c.MobileNumbers)
-                                .Include(c => c.ClientCarriers)
-                                .Include(c => c.ClientType)
+                                .Include(c => c.CustomerCarriers)
+                                .Include(c => c.CustomerType)
                                 .Include(c => c.Country)
                                 .Include(c => c.IdDocumentType)
                                 .Include(c => c.Gender)
                                 .Include(c => c.MaritalStatus)
                                 .Include(c => c.Occupation)
                                 .Include(c => c.Title)
-                                .Where(e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId))
+                                .Where(e => e.PortfolioCustomers.Any(p => p.PortfolioId == portfolioId))
                                 .OrderBy(n => n.LastName)
                                 .AsSplitQuery().AsNoTracking().ToListAsync();
         }
 
-        public async Task<Client> GetByPortfolioIdAndClientId(Guid portfolioId, Guid clientId)
+        public async Task<Customer> GetByPortfolioIdAndCustomerId(Guid portfolioId, Guid customerId)
         {
-            return await _context.Clients
-                                .Where(e => e.PortfolioClients.Any(p => p.PortfolioId == portfolioId && p.ClientId == clientId))
+            return await _context.Customers
+                                .Where(e => e.PortfolioCustomers.Any(p => p.PortfolioId == portfolioId && p.CustomerId == customerId))
                                 .Include(c => c.Addresses)
                                 .Include(c => c.EmailAddresses)
                                 .Include(c => c.MobileNumbers)
-                                .Include(c => c.ClientCarriers)
-                                .Include(c => c.ClientType)
+                                .Include(c => c.CustomerCarriers)
+                                .Include(c => c.CustomerType)
                                 .Include(c => c.Country)
                                 .Include(c => c.IdDocumentType)
                                 .Include(c => c.Gender)
@@ -52,7 +52,7 @@ namespace Tilbake.EF.Persistence.Repositories
                                 .FirstOrDefaultAsync();
         }
 
-        public Task<Client> GetByPortfolioIdAndIdNumber(Guid portfolioId, string idNumber)
+        public Task<Customer> GetByPortfolioIdAndIdNumber(Guid portfolioId, string idNumber)
         {
             throw new NotImplementedException();
         }

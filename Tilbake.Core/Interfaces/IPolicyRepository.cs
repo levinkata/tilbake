@@ -7,7 +7,7 @@ namespace Tilbake.Core.Interfaces
 {
     public interface IPolicyRepository : IRepository<Policy>
     {
-        Task<IEnumerable<Policy>> GetByPorfolioClientId(Guid portfolioClientId);
-        Task<Policy> GetCurrentPolicy(Guid portfolioClientId);
+        Task<IEnumerable<Policy>> GetByPorfolioCustomerId(Guid portfolioCustomerId);
+        Task<Policy> GetCurrentPolicy(Guid portfolioCustomerId);
     }    
 }

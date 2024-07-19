@@ -27,7 +27,7 @@ namespace Tilbake.MVC.Controllers
         // GET: Travels
         public async Task<IActionResult> Index()
         {
-            var result = await _unitOfWork.Travels.GetAll(r => r.OrderBy(n => n.PortfolioClient.Client.LastName));
+            var result = await _unitOfWork.Travels.GetAll(r => r.OrderBy(n => n.PortfolioCustomer.Customer.LastName));
             var model = _mapper.Map<IEnumerable<Travel>, IEnumerable<TravelViewModel>>(result);
             return View(model);
         }

@@ -4,9 +4,9 @@
     ViewData["Title"] = Model.PortfolioName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var FullName = String.IsNullOrEmpty(Model.Client.FirstName) ? Model.Client.LastName : 
-                    Model.Client.FirstName + " " + 
-                    Model.Client.LastName;
+    var FullName = String.IsNullOrEmpty(Model.Customer.FirstName) ? Model.Customer.LastName : 
+                    Model.Customer.FirstName + " " + 
+                    Model.Customer.LastName;
 
     //var taxRate = Model.TaxRate;
     var totalPremium = Model.QuoteItems.Sum(r => r.Premium);
@@ -35,7 +35,7 @@
         <div class="justify-content-between align-items-center row">
             <div class="col">
                 <h6 class="text-muted">Send to</h6>
-                <a asp-controller="PortfolioClients" asp-action="Details" asp-route-portfolioId="@Model.PortfolioClient.PortfolioId", asp-route-clientId="@Model.Client.Id">
+                <a asp-controller="PortfolioCustomers" asp-action="Details" asp-route-portfolioId="@Model.PortfolioCustomer.PortfolioId", asp-route-customerId="@Model.Customer.Id">
                     <h6 class="text-muted">@FullName</h6>
                 </a>
                 <p>
@@ -102,7 +102,7 @@
                 <a asp-action="Quotation" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm">
                     <span class="fas fa-print text-muted"></span> Print
                 </a>
-                <a asp-action="Search" asp-route-portfolioId="@Model.PortfolioClient.PortfolioId" asp-route-searchString="@Model.QuoteNumber" class="btn btn-outline-secondary btn-sm">
+                <a asp-action="Search" asp-route-portfolioId="@Model.PortfolioCustomer.PortfolioId" asp-route-searchString="@Model.QuoteNumber" class="btn btn-outline-secondary btn-sm">
                     <span class="fas fa-arrow-circle-left text-muted"></span> Return
                 </a>                
             </div>
@@ -144,10 +144,10 @@
                 </div>
                 <div class="row">
                     <div class="col-5">
-                        <p class="fw-bolder mb-1">Client Info</p>
+                        <p class="fw-bolder mb-1">Customer Info</p>
                     </div>
                     <div class="col">
-                        @Html.DisplayFor(model => model.ClientInfo)
+                        @Html.DisplayFor(model => model.CustomerInfo)
                     </div>
                 </div>
                 <div class="row">

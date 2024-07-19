@@ -7,7 +7,7 @@ public partial class Quote
 {
     public Guid Id { get; set; }
 
-    public Guid PortfolioClientId { get; set; }
+    public Guid PortfolioCustomerId { get; set; }
 
     public int QuoteNumber { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Quote
 
     public Guid InsurerBranchId { get; set; }
 
-    public string? ClientInfo { get; set; }
+    public string? CustomerInfo { get; set; }
 
     public string? InternalInfo { get; set; }
 
@@ -43,7 +43,7 @@ public partial class Quote
 
     public Guid? PaymentMethodId { get; set; }
 
-    public Guid? ClientBankAccountId { get; set; }
+    public Guid? CustomerBankAccountId { get; set; }
 
     public Guid? PaymentTypeId { get; set; }
 
@@ -57,7 +57,7 @@ public partial class Quote
 
     public DateTime? DateModified { get; set; }
 
-    public virtual ClientBankAccount? ClientBankAccount { get; set; }
+    public virtual CustomerBankAccount? CustomerBankAccount { get; set; }
 
     public virtual InsurerBranch InsurerBranch { get; set; } = null!;
 
@@ -67,7 +67,7 @@ public partial class Quote
 
     public virtual PolicyType? PolicyType { get; set; }
 
-    public virtual PortfolioClient PortfolioClient { get; set; } = null!;
+    public virtual PortfolioCustomer PortfolioCustomer { get; set; } = null!;
 
     public virtual ICollection<QuoteItem> QuoteItems { get; set; } = new List<QuoteItem>();
 
